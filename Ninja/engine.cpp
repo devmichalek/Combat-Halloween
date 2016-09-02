@@ -57,11 +57,16 @@ void Engine::events()
 
         if( core->getState() == 0 ) // if we actually have menu state
         {
-			git_button->handle( core->getEvent() );
-			google_button->handle( core->getEvent() );
-			twitter_button->handle( core->getEvent() );
-			facebook_button->handle( core->getEvent() );
-			menu_play_button->handle( core->getEvent() );
+			if( menu_play_button->getState() != 2 ) // if user didn't click play
+			{
+				git_button->handle( core->getEvent() );
+				google_button->handle( core->getEvent() );
+				twitter_button->handle( core->getEvent() );
+				facebook_button->handle( core->getEvent() );
+				menu_play_button->handle( core->getEvent() );
+			}
+
+			
         }
 
     }
@@ -72,11 +77,37 @@ void Engine::states()
 {
     if( core->getState() == 0 ) // menu state
     {
-		//Fade in
-		menu_background->fadein( 5, 255 );
-		menu_play_button->fadein( 5, 255 );
+		// Fade in
+		if( menu_play_button->getState() != 2 )// if user didn't click play
+		{
+			menu_background->fadein( 5, 255 );
+			git_button->fadein( 5, 255 );
+			google_button->fadein( 5, 255 );
+			twitter_button->fadein( 5, 255 );
+			facebook_button->fadein( 5, 255 );
+			menu_play_button->fadein( 5, 255 );
+		}
 		
 		
+		// Fade out:
+		else if( menu_play_button->getState() == 2 ) // if user clicked play
+		{
+			menu_background->fadeout( 5, 0 );
+			git_button->fadeout( 5, 0 );
+			google_button->fadeout( 5, 0 );
+			twitter_button->fadeout( 5, 0 );
+			facebook_button->fadeout( 5, 0 );
+			menu_play_button->fadeout( 5, 0 );
+		}
+		
+		// Next state
+		if( menu_play_button->nextGameState() )
+		{
+			core->getState() = 1;
+		}
+		
+		
+		// Draw
 		core->getWindow()->draw( menu_background->get() );
 		git_button->draw( *core->getWindow() );
 		google_button->draw( *core->getWindow() );
