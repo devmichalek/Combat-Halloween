@@ -9,6 +9,7 @@ Menu_play_button::Menu_play_button()
 Menu_play_button::~Menu_play_button()
 {
     mySprite.free();
+	myText.free();
 	state = 0;
 }
 
@@ -22,6 +23,19 @@ bool Menu_play_button::load( int screen_w, int bot )
     {
         mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
     }
+	
+	if( !myText.setFont( "menu/KGHAPPY.ttf", 80, 0x82, 0xae, 0x20 ) )
+	{
+		return false;
+	}
+	else if( !myText.setText( "play" ) )
+	{
+		return false;
+	}
+	else
+	{
+		myText.setPosition( screen_w/2 - myText.getWidth()/2 +50, bot +20 );
+	}
 
     return true;
 }
@@ -29,6 +43,7 @@ bool Menu_play_button::load( int screen_w, int bot )
 void Menu_play_button::draw( RenderWindow* &window )
 {
     window->draw( mySprite.get() );
+	window->draw( myText.get() );
 }
 
 void Menu_play_button::handle( Event &event )
@@ -75,9 +90,11 @@ int Menu_play_button::getState()
 void Menu_play_button::fadein( int i, int max )
 {
 	mySprite.fadein( i, max );
+	myText.fadein( i, max );
 }
 
 void Menu_play_button::fadeout( int i, int min )
 {
-	mySprite.fadein( i, min );
+	mySprite.fadeout( i, min );
+	myText.fadeout( i, min );
 }

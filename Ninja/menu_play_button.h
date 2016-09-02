@@ -1,11 +1,13 @@
 #pragma once
 
 #include "sprite.h"
+#include "text.h"
 
 class Menu_play_button
 {
 	int state;
 	MySprite mySprite;
+	MyText myText;
 	
 public:
 	
