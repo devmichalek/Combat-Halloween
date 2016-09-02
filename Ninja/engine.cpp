@@ -10,6 +10,7 @@ Engine::Engine()
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
 	twitter_button = new Link_button( "empty", true );
 	facebook_button = new Link_button( "empty", true );
+	menu_background = new MySprite;
 }
 
 
@@ -22,6 +23,7 @@ void Engine::free()
 	delete google_button;
 	delete twitter_button;
 	delete facebook_button;
+	delete menu_background;
 }
 
 
@@ -34,6 +36,7 @@ bool Engine::load()
 	if( !google_button->load( "menu/google.png", core->getWidth(), git_button->getBot() ) ) 		return false;
 	if( !twitter_button->load( "menu/twitter.png", core->getWidth(), google_button->getBot() ) ) 	return false;
 	if( !facebook_button->load( "menu/facebook.png", core->getWidth(), twitter_button->getBot() ) ) return false;
+	if( !menu_background->load( "menu/background.png" ) )	return false;
 
     return true;
 }
@@ -65,6 +68,7 @@ void Engine::states()
 {
     if( core->getState() == 0 ) // menu state
     {
+		core->getWindow()->draw( menu_background->get() );
 		git_button->draw( *core->getWindow() );
 		google_button->draw( *core->getWindow() );
 		twitter_button->draw( *core->getWindow() );

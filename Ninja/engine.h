@@ -13,6 +13,7 @@ class Engine
 	Link_button* google_button;
 	Link_button* twitter_button;
 	Link_button* facebook_button;
+	MySprite* menu_background;
 
 public:
 
