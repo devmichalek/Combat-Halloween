@@ -31,6 +31,11 @@ public:
 
     void setOffset( int n );
     void setPosition( float x, float y );
+	
+	int getAlpha();
+	void setAlpha( int alpha = 0 );
+	void setColor( int r = 0x00, int g = 0x00, int b = 0x00 );
+	
     void setScale( float s );
 
     Sprite& get();
