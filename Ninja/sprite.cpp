@@ -56,6 +56,7 @@ bool MySprite::load( string path, int nr )
 
     if( !texture.loadFromFile( path ) )
     {
+		printf( "Can't load %s\n", path.c_str() );
         success = false;
     }
     else
@@ -74,6 +75,7 @@ bool MySprite::load( string path, int nr )
             else
             {
                 sprite->setTexture( texture );
+				sprite->setColor( sf::Color( r, g, b, alpha ) );
                 Vector2u sizes = texture.getSize();
                 w = sizes.x;
                 h = sizes.y;
@@ -105,6 +107,7 @@ bool MySprite::load( string path, int nr )
                     rect.height = h;
 
                     sprite[ i ].setTextureRect( rect );
+					sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
                 }
             }
         }
@@ -141,6 +144,74 @@ void MySprite::setPosition( float x, float y )
         }
     }
 }
+
+
+int MySprite::getAlpha()
+{
+	return alpha;
+}
+
+void MySprite::setAlpha( int alpha )
+{
+	if( this->alpha != alpha )
+	{
+		this->alpha = alpha;
+		
+		if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( sf::Color( r, g, b, alpha ) );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+			}
+		}
+	}
+}
+
+void MySprite::setColor( int r, int g, int b )
+{
+	bool change = false;
+	
+	if( this->r != r )
+	{
+		this->r = r;
+		change = true;
+	}
+		
+		
+	if( this->g != g )
+	{
+		change = true;
+		this->g = g;
+	}
+		
+		
+	if( this->b != b )
+	{
+		change = true;
+		this->b = b;
+	}
+	
+	if( change )
+	{
+		if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( sf::Color( r, g, b, alpha ) );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+			}
+		}
+	}
+}
+
+
 
 void MySprite::setScale( float s )
 {
@@ -230,7 +301,7 @@ void MySprite::fadein( int i, int max )
 {
 	if( alpha < max )
 	{
-		alpha -= i;
+		alpha += i;
 		if( alpha > max )
 			alpha = max;
 			
