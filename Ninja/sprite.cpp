@@ -1,7 +1,7 @@
 #include "sprite.h"
 #include "stdio.h"
 
-MySprite::MySprite( int offset )
+MySprite::MySprite( int offset, int alpha )
 {
     w = 0;
     h = 0;
@@ -12,6 +12,9 @@ MySprite::MySprite( int offset )
     nr = -1;
     this->offset = offset;
     sprite = NULL;
+	
+	this->alpha = alpha;
+	r = g = b = 0xFF;
 }
 
 MySprite::~MySprite()
@@ -40,6 +43,9 @@ void MySprite::free()
     }
 
     nr = -1;
+	
+	alpha = 0;
+	r = g = b = 0xFF;
 }
 
 bool MySprite::load( string path, int nr )
@@ -218,5 +224,49 @@ bool MySprite::checkCollision( int x, int y, int w, int h )
 	}
 	
 	return false;
+}
+
+void MySprite::fadein( int i, int max )
+{
+	if( alpha < max )
+	{
+		alpha -= i;
+		if( alpha > max )
+			alpha = max;
+			
+		if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( sf::Color( r, g, b, alpha ) );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+			}
+		}
+	}
+}
+
+void MySprite::fadeout( int i, int min )
+{
+	if( alpha > min )
+	{
+		alpha -= i;
+		if( alpha < min )
+			alpha = min;
+			
+		if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( sf::Color( r, g, b, alpha ) );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+			}
+		}
+	}
 }
 
