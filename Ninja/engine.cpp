@@ -4,13 +4,14 @@
 // Create objects.
 Engine::Engine()
 {
-    core = new Core( 1000, 750 );
+    core = new Core( 1024, 768 );
 	
 	git_button = new Link_button( "https://github.com/Adriqun" );
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
 	twitter_button = new Link_button( "empty", true );
 	facebook_button = new Link_button( "empty", true );
 	menu_background = new MySprite;
+	menu_play_button = new Menu_play_button;
 }
 
 
@@ -24,6 +25,7 @@ void Engine::free()
 	delete twitter_button;
 	delete facebook_button;
 	delete menu_background;
+	delete menu_play_button;
 }
 
 
@@ -37,6 +39,7 @@ bool Engine::load()
 	if( !twitter_button->load( "menu/twitter.png", core->getWidth(), google_button->getBot() ) ) 	return false;
 	if( !facebook_button->load( "menu/facebook.png", core->getWidth(), twitter_button->getBot() ) ) return false;
 	if( !menu_background->load( "menu/background.png" ) )	return false;
+	if( !menu_play_button->load( core->getWidth(), 400 ) )	return false;
 
     return true;
 }
@@ -58,6 +61,7 @@ void Engine::events()
 			google_button->handle( core->getEvent() );
 			twitter_button->handle( core->getEvent() );
 			facebook_button->handle( core->getEvent() );
+			menu_play_button->handle( core->getEvent() );
         }
 
     }
@@ -68,11 +72,17 @@ void Engine::states()
 {
     if( core->getState() == 0 ) // menu state
     {
+		//Fade in
+		menu_background->fadein( 5, 255 );
+		menu_play_button->fadein( 5, 255 );
+		
+		
 		core->getWindow()->draw( menu_background->get() );
 		git_button->draw( *core->getWindow() );
 		google_button->draw( *core->getWindow() );
 		twitter_button->draw( *core->getWindow() );
 		facebook_button->draw( *core->getWindow() );
+		menu_play_button->draw( core->getWindow() );
     }
 }
 
