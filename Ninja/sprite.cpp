@@ -66,7 +66,7 @@ bool MySprite::load( string path, int nr )
         this->nr = nr;
         if( nr == 0 || nr == 1 )
         {
-            sprite = new Sprite;
+            sprite = new sf::Sprite;
             if( sprite == NULL )
             {
                 printf( "Not created sprite! - class MySprite\n" );
@@ -76,14 +76,14 @@ bool MySprite::load( string path, int nr )
             {
                 sprite->setTexture( texture );
 				sprite->setColor( sf::Color( r, g, b, alpha ) );
-                Vector2u sizes = texture.getSize();
+                sf::Vector2u sizes = texture.getSize();
                 w = sizes.x;
                 h = sizes.y;
             }
         }
         else if( nr > 1 )
         {
-            sprite = new Sprite[ nr ];
+            sprite = new sf::Sprite[ nr ];
             if( sprite == NULL )
             {
                 printf( "Not created array of sprite! - class MySprite\n" );
@@ -91,11 +91,11 @@ bool MySprite::load( string path, int nr )
             }
             else
             {
-                Vector2u sizes = texture.getSize();
+                sf::Vector2u sizes = texture.getSize();
                 w = sizes.x / nr;
                 h = sizes.y;
 
-                IntRect rect;
+                sf::IntRect rect;
 
                 for( int i = 0; i < nr; i++ )
                 {
@@ -120,6 +120,34 @@ bool MySprite::load( string path, int nr )
 
 
     return success;
+}
+
+bool MySprite::create( int w, int h )
+{
+	if( !texture.create( w, h ) )
+    {
+		printf( "Not created blank \n" );
+        return false;
+    }
+	else
+	{
+		sprite = new sf::Sprite;
+		if( sprite == NULL )
+		{
+			printf( "Not created sprite! - class MySprite\n" );
+			return false;
+		}
+		else
+		{
+			sprite->setTexture( texture );
+			sprite->setColor( sf::Color( r, g, b, alpha ) );
+			sf::Vector2u sizes = texture.getSize();
+			w = sizes.x;
+			h = sizes.y;
+		}
+	}
+	
+	return true;
 }
 
 void MySprite::setOffset( int n )
@@ -171,7 +199,7 @@ void MySprite::setAlpha( int alpha )
 	}
 }
 
-void MySprite::setColor( int r, int g, int b )
+void MySprite::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	bool change = false;
 	
@@ -213,24 +241,24 @@ void MySprite::setColor( int r, int g, int b )
 
 
 
-void MySprite::setScale( float s )
+void MySprite::setScale( float s, float z )
 {
     scale = s;
 
     if( nr == 0 || nr == 1 )
     {
-        sprite->setScale( s, s );
+        sprite->setScale( s, z );
     }
     else if( nr > 1 )
     {
         for( int i = 0; i < nr; i++ )
         {
-            sprite[ i ].setScale( s, s );
+            sprite[ i ].setScale( s, z );
         }
     }
 }
 
-Sprite& MySprite::get()
+sf::Sprite& MySprite::get()
 {
     if( nr == 0 || nr == 1 )
     {
