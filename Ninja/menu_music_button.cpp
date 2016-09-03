@@ -1,30 +1,33 @@
 #include "menu_music_button.h"
 #include <stdlib.h>
 
-Menu_music_button::Menu_music_button( int scratch_state )
+Menu_music_button::Menu_music_button( bool play )
 {
-    this->scratch_state = scratch_state;
+    state = 0;
 	focus = false;
+	this->play = play;
 }
 
 Menu_music_button::~Menu_music_button()
 {
-    music_button.free();
+    button.free();
 	scratch.free();
+	click.free();
 	
 	focus = false;
-	scratch_state = 0;
+	state = 0;
+	play = true;
 }
 
 bool Menu_music_button::load( string path, int bot )
 {
-    if( !music_button.load( path, 4 ) )
+    if( !button.load( path, 4 ) )
     {
         return false;
     }
     else
     {
-        music_button.setPosition( 10, bot );
+        button.setPosition( 10, bot );
     }
 	
 	if( !scratch.load( "menu/scratch.png" ) )
@@ -36,80 +39,111 @@ bool Menu_music_button::load( string path, int bot )
 		scratch.setPosition( 10, bot );
 	}
 	
+	if( !click.load( "menu/click.wav", 50 ) )
+	{
+		return false;
+	}
+	
 
     return true;
 }
 
-void Menu_music_button::draw( RenderWindow* &window )
+void Menu_music_button::draw( sf::RenderWindow* &window )
 {
-    window->draw( music_button.get() );
+    window->draw( button.get() );
 	
-	if( scratch_state == 1 )
+	if( state == 2 )
 		window->draw( scratch.get() );
 }
 
-void Menu_music_button::handle( Event &event )
+void Menu_music_button::handle( sf::Event &event )
 {
-	int x, y;
-	music_button.setOffset( 0 );
-	
-	if( event.type == Event::MouseMoved )
+	if( button.getAlpha() == 255 )
 	{
-		x = event.mouseMove.x;
-		y = event.mouseMove.y;
-				
-		if( music_button.checkCollision( x, y ) )
+		int x, y;
+		button.setOffset( 0 );
+		
+		if( event.type == sf::Event::MouseMoved )
 		{
-			music_button.setOffset( 1 );
+			x = event.mouseMove.x;
+			y = event.mouseMove.y;
+					
+			if( button.checkCollision( x, y ) )
+			{
+				button.setOffset( 1 );
+			}
+			else
+				focus = false;
 		}
-		else
+		
+		
+		if( event.type == sf::Event::MouseButtonPressed && !focus )
+		{
+			x = event.mouseButton.x;
+			y = event.mouseButton.y;
+					
+			if( button.checkCollision( x, y ) )
+			{
+				focus = true;
+				
+				if( play )
+					click.play();
+					
+				if( state == 0 )
+					state = 1;
+				if( state == 2 )
+					state = 3;
+			}
+		}
+		
+		if( event.type == sf::Event::MouseButtonReleased )
+		{
 			focus = false;
-	}
-	
-	
-	if( event.type == Event::MouseButtonPressed )
-	{
-		x = event.mouseButton.x;
-		y = event.mouseButton.y;
-				
-		if( music_button.checkCollision( x, y ) )
-		{
-			focus = true;
-			if( scratch_state == 0 )
-				scratch_state = 1;
-			else scratch_state = 0;
 		}
+		
+		if( focus )
+			button.setOffset( 2 );
 	}
-	
-	if( event.type == Event::MouseButtonReleased )
-	{
-		focus = false;
-	}
-	
-	if( focus )
-		music_button.setOffset( 2 );
 }
 
 int Menu_music_button::getBot()
 {
-	return music_button.getBot();
+	return button.getBot();
 }
 
-int Menu_music_button::getState()
+bool Menu_music_button::change()
 {
-	return scratch_state;
+	// printf("%d\n", state );
+	if( state == 1 )
+	{
+		state = 2;
+		return true;
+	}
+	
+	if( state == 3 )
+	{
+		state = 0;
+		return true;
+	}
+		
+	return false;
+}
+
+void Menu_music_button::turn()
+{
+	play = !play;
 }
 
 
 
 void Menu_music_button::fadein( int i, int max )
 {
-	music_button.fadein( i, max );
+	button.fadein( i, max );
 	scratch.fadein( i, max );
 }
 
 void Menu_music_button::fadeout( int i, int min )
 {
-	music_button.fadeout( i, min );
+	button.fadeout( i, min );
 	scratch.fadeout( i, min );
 }

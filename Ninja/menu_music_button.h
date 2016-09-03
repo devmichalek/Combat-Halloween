@@ -1,28 +1,37 @@
 #pragma once
 
 #include "sprite.h"
+#include "chunk.h"
 
 
-class Menu_music_button
+class Menu_music_button	// Class for chunk/music button 
 {
-	MySprite music_button;
+	MySprite button;
 	MySprite scratch;
+	
+	// focus on button true/false
 	bool focus;
 	
-	int scratch_state;
+	// music/chunk is on/off
+	int state;
+	
+	// click as sound and play as state
+	bool play;
+	Chunk click;
 	
 public:
 
-	Menu_music_button( int scratch_state = 0 );
+	Menu_music_button( bool play = true );
     ~Menu_music_button();
 
 	bool load( string path, int bot );
-    void draw( RenderWindow* &window );
-    void handle( Event &event );
+    void draw( sf::RenderWindow* &window );
+    void handle( sf::Event &event );
 
 	int getBot();
-	int getState();
+	bool change();
+	void turn();
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int i, int max = 255 );
+	void fadeout( int i, int min = 0 );
 };
