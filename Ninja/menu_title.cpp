@@ -39,7 +39,7 @@ bool Menu_title::load(int screen_w )
     return true;
 }
 
-void Menu_title::draw( RenderWindow &window )
+void Menu_title::draw( sf::RenderWindow &window )
 {
     window.draw( belt.get() );
 	window.draw( title.get() );

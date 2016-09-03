@@ -15,7 +15,7 @@ public:
     ~Menu_title();
 
     bool load( int screen_w );
-    void draw( RenderWindow &window );
+    void draw( sf::RenderWindow &window );
 	
 	int getBot();
 	
