@@ -3,7 +3,6 @@
 #include "SFML/Graphics.hpp"
 #include <string>
 
-using namespace sf;
 using namespace std;
 
 class MySprite
@@ -14,11 +13,11 @@ class MySprite
 
     int nr;
     int offset;
-    Sprite* sprite;
-    Texture texture;
+    sf::Sprite* sprite;
+    sf::Texture texture;
 	
 	int alpha;
-	int r, g, b;
+	sf::Uint8 r, g, b;
 
 public:
 
@@ -28,17 +27,18 @@ public:
     void free();
 
     bool load( string path, int nr = 0 );
+	bool create( int w, int h );
 
     void setOffset( int n );
     void setPosition( float x, float y );
 	
 	int getAlpha();
 	void setAlpha( int alpha = 0 );
-	void setColor( int r = 0x00, int g = 0x00, int b = 0x00 );
+	void setColor( sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
 	
-    void setScale( float s );
+    void setScale( float s, float z = 1 );
 
-    Sprite& get();
+    sf::Sprite& get();
 	
     int getWidth();
     int getHeight();
