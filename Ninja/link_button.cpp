@@ -5,71 +5,108 @@ Link_button::Link_button( string url, bool locked )
 {
     this->locked = locked;
     this->url = url;
+	focus = false;
+	play = true;
 }
 
 Link_button::~Link_button()
 {
-    mySprite.free();
+    button.free();
+	click.free();
+	focus = false;
+	play = true;
 }
 
 bool Link_button::load( string path, int screen_w, int bot )
 {
-    if( !mySprite.load( path, 4 ) )
+    if( !button.load( path, 4 ) )
     {
         return false;
     }
     else
     {
 		if( locked )
-			mySprite.setOffset( 3 );    // locked offset = 3
+			button.setOffset( 3 );    // locked offset = 3
 		
         int border = 10;
-        mySprite.setPosition( screen_w - mySprite.getWidth() - border, bot );
+        button.setPosition( screen_w - button.getWidth() - border, bot );
     }
+	
+	if( !click.load( "menu/click.wav", 50 ) )
+	{
+		return false;
+	}
 
     return true;
 }
 
-void Link_button::draw( RenderWindow &window )
+void Link_button::draw( sf::RenderWindow &window )
 {
-    window.draw( mySprite.get() );
+    window.draw( button.get() );
 }
 
-void Link_button::handle( Event &event )
+void Link_button::handle( sf::Event &event )
 {
-    int x, y;
+	if( !locked && button.getAlpha() == 255 )
+	{
+		int x, y;
+		button.setOffset( 0 );
 
-    if( !locked )
-    {
-        mySprite.setOffset( 0 );
+		if( event.type == sf::Event::MouseMoved )
+		{
+			x = event.mouseMove.x;
+			y = event.mouseMove.y;
+				
+			if( button.checkCollision( x, y ) )
+				button.setOffset( 1 );
+			else
+				focus = false;
+		}
 
-        if( event.type == Event::MouseMoved )
-        {
-            x = event.mouseMove.x;
-            y = event.mouseMove.y;
-			
-			if( mySprite.checkCollision( x, y ) )
-				mySprite.setOffset( 1 );
-        }
-
-        if( event.type == Event::MouseButtonPressed )
-        {
-            x = event.mouseButton.x;
-            y = event.mouseButton.y;
-			
-			if( mySprite.checkCollision( x, y ) )
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			x = event.mouseButton.x;
+			y = event.mouseButton.y;
+				
+			if( button.checkCollision( x, y ) )
 			{
-				mySprite.setOffset( 2 );
+				button.setOffset( 2 );
+					
+				if( play )
+					click.play();
+						
+				focus = true;
 
 				string command = "xdg-open ";
 				command += url.c_str();
 				system( command.c_str() );
 			}
-        }
-    }
+		}
+			
+		if( event.type == sf::Event::MouseButtonReleased )
+			focus = false;
+			
+		if( focus )
+			button.setOffset( 2 );
+	}
 }
 
 int Link_button::getBot()
 {
-	return mySprite.getBot();
+	return button.getBot();
+}
+
+void Link_button::fadein( int i, int max )
+{
+	button.fadein( i, max );
+}
+
+void Link_button::fadeout( int i, int min )
+{
+	button.fadeout( i, min );
+}
+
+void Link_button::turn()
+{
+	play = !play;
 }
