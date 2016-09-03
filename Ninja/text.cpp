@@ -54,7 +54,7 @@ bool MyText::setFont( string path, int size, int r, int g, int b )
         font = NULL;
     }
 	
-	font = new Font;
+	font = new sf::Font;
 	if( !font->loadFromFile( path ) )
 	{
 		printf( "Can't load %s\n", path.c_str() );
@@ -79,11 +79,13 @@ bool MyText::setText( string line )
         text = NULL;
     }
 	
-	text = new Text;
+	text = new sf::Text;
 	text->setString( line );
 	text->setCharacterSize( size );
 	text->setColor( sf::Color( r, g, b, alpha ) );
 	text->setFont( *font );
+	
+	// printf( "%s\n", line.c_str() );
 
 	w = text->getCharacterSize() * line.length();
 	h = text->getCharacterSize();
@@ -102,7 +104,7 @@ void MyText::setPosition( float x, float y )
 }
 
 
-Text& MyText::get()
+sf::Text& MyText::get()
 {
 	return *text;
 }
@@ -145,7 +147,7 @@ void MyText::fadeout( int i, int min )
 	}
 }
 
-void MyText::setColor( int r, int g, int b )
+void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	bool change = false;
 	
