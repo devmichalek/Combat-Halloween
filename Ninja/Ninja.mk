@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Adrian Michalek
-Date                   :=02/09/16
+Date                   :=03/09/16
 CodeLitePath           :="/home/adrian/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -35,7 +35,7 @@ PreprocessOnlySwitch   :=-E
 ObjectsFileList        :="Ninja.txt"
 PCHCompileFlags        :=
 MakeDirCommand         :=mkdir -p
-LinkOptions            :=  -lsfml-window -lsfml-system -lsfml-graphics
+LinkOptions            :=  -lSDL2 -lSDL2_mixer -lsfml-window -lsfml-system -lsfml-graphics
 IncludePath            :=  $(IncludeSwitch). $(IncludeSwitch). 
 IncludePCH             := 
 RcIncludePath          := 
@@ -60,7 +60,8 @@ AS       := as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/sprite.cpp$(ObjectSuffix) $(IntermediateDirectory)/engine.cpp$(ObjectSuffix) $(IntermediateDirectory)/core.cpp$(ObjectSuffix) $(IntermediateDirectory)/link_button.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/sprite.cpp$(ObjectSuffix) $(IntermediateDirectory)/engine.cpp$(ObjectSuffix) $(IntermediateDirectory)/core.cpp$(ObjectSuffix) $(IntermediateDirectory)/link_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_play_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/text.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_title.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_music_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/music.cpp$(ObjectSuffix) \
+	$(IntermediateDirectory)/chunk.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_exit_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/loading.cpp$(ObjectSuffix) 
 
 
 
@@ -130,6 +131,78 @@ $(IntermediateDirectory)/link_button.cpp$(DependSuffix): link_button.cpp
 
 $(IntermediateDirectory)/link_button.cpp$(PreprocessSuffix): link_button.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/link_button.cpp$(PreprocessSuffix) "link_button.cpp"
+
+$(IntermediateDirectory)/menu_play_button.cpp$(ObjectSuffix): menu_play_button.cpp $(IntermediateDirectory)/menu_play_button.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/menu_play_button.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/menu_play_button.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/menu_play_button.cpp$(DependSuffix): menu_play_button.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/menu_play_button.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/menu_play_button.cpp$(DependSuffix) -MM "menu_play_button.cpp"
+
+$(IntermediateDirectory)/menu_play_button.cpp$(PreprocessSuffix): menu_play_button.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/menu_play_button.cpp$(PreprocessSuffix) "menu_play_button.cpp"
+
+$(IntermediateDirectory)/text.cpp$(ObjectSuffix): text.cpp $(IntermediateDirectory)/text.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/text.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/text.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/text.cpp$(DependSuffix): text.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/text.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/text.cpp$(DependSuffix) -MM "text.cpp"
+
+$(IntermediateDirectory)/text.cpp$(PreprocessSuffix): text.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/text.cpp$(PreprocessSuffix) "text.cpp"
+
+$(IntermediateDirectory)/menu_title.cpp$(ObjectSuffix): menu_title.cpp $(IntermediateDirectory)/menu_title.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/menu_title.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/menu_title.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/menu_title.cpp$(DependSuffix): menu_title.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/menu_title.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/menu_title.cpp$(DependSuffix) -MM "menu_title.cpp"
+
+$(IntermediateDirectory)/menu_title.cpp$(PreprocessSuffix): menu_title.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/menu_title.cpp$(PreprocessSuffix) "menu_title.cpp"
+
+$(IntermediateDirectory)/menu_music_button.cpp$(ObjectSuffix): menu_music_button.cpp $(IntermediateDirectory)/menu_music_button.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/menu_music_button.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/menu_music_button.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/menu_music_button.cpp$(DependSuffix): menu_music_button.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/menu_music_button.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/menu_music_button.cpp$(DependSuffix) -MM "menu_music_button.cpp"
+
+$(IntermediateDirectory)/menu_music_button.cpp$(PreprocessSuffix): menu_music_button.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/menu_music_button.cpp$(PreprocessSuffix) "menu_music_button.cpp"
+
+$(IntermediateDirectory)/music.cpp$(ObjectSuffix): music.cpp $(IntermediateDirectory)/music.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/music.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/music.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/music.cpp$(DependSuffix): music.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/music.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/music.cpp$(DependSuffix) -MM "music.cpp"
+
+$(IntermediateDirectory)/music.cpp$(PreprocessSuffix): music.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/music.cpp$(PreprocessSuffix) "music.cpp"
+
+$(IntermediateDirectory)/chunk.cpp$(ObjectSuffix): chunk.cpp $(IntermediateDirectory)/chunk.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/chunk.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/chunk.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/chunk.cpp$(DependSuffix): chunk.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/chunk.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/chunk.cpp$(DependSuffix) -MM "chunk.cpp"
+
+$(IntermediateDirectory)/chunk.cpp$(PreprocessSuffix): chunk.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/chunk.cpp$(PreprocessSuffix) "chunk.cpp"
+
+$(IntermediateDirectory)/menu_log.cpp$(ObjectSuffix): menu_log.cpp $(IntermediateDirectory)/menu_log.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/menu_log.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/menu_log.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/menu_log.cpp$(DependSuffix): menu_log.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/menu_log.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/menu_log.cpp$(DependSuffix) -MM "menu_log.cpp"
+
+$(IntermediateDirectory)/menu_log.cpp$(PreprocessSuffix): menu_log.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/menu_log.cpp$(PreprocessSuffix) "menu_log.cpp"
+
+$(IntermediateDirectory)/menu_exit_log.cpp$(ObjectSuffix): menu_exit_log.cpp $(IntermediateDirectory)/menu_exit_log.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/menu_exit_log.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/menu_exit_log.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/menu_exit_log.cpp$(DependSuffix): menu_exit_log.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/menu_exit_log.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/menu_exit_log.cpp$(DependSuffix) -MM "menu_exit_log.cpp"
+
+$(IntermediateDirectory)/menu_exit_log.cpp$(PreprocessSuffix): menu_exit_log.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/menu_exit_log.cpp$(PreprocessSuffix) "menu_exit_log.cpp"
+
+$(IntermediateDirectory)/loading.cpp$(ObjectSuffix): loading.cpp $(IntermediateDirectory)/loading.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/loading.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/loading.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/loading.cpp$(DependSuffix): loading.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/loading.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/loading.cpp$(DependSuffix) -MM "loading.cpp"
+
+$(IntermediateDirectory)/loading.cpp$(PreprocessSuffix): loading.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/loading.cpp$(PreprocessSuffix) "loading.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)
