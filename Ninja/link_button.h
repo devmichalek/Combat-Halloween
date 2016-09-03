@@ -1,13 +1,20 @@
 #pragma once
 
 #include "sprite.h"
+#include "chunk.h"
 
 class Link_button
 {
     bool locked;
     string url;
-    MySprite mySprite;
-
+    MySprite button;
+	
+	// focus on button true/false
+	bool focus;	
+	
+	// click as sound and play as state
+	bool play;
+	Chunk click;
 
 public:
 
@@ -15,8 +22,13 @@ public:
     ~Link_button();
 
     bool load( string path, int screen_w, int bot = 10 );
-    void draw( RenderWindow &window );
-    void handle( Event &event );
+    void draw( sf::RenderWindow &window );
+	void handle( sf::Event &event );
 	
 	int getBot();
+	
+	void fadein( int i, int max );
+	void fadeout( int i, int min );
+	
+	void turn();	// Turn on/off chunk
 };
