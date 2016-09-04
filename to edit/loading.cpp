@@ -23,38 +23,40 @@ bool Loading::load( int screen_w, int screen_h )
 		success = false;
 	else
 	{
+		text.setAlpha( 255 );
 		text.setPosition( screen_w/2 - text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
 	}
-		
-	if( !background.create( screen_w, screen_h ) )
+	
+	
+	background.setAlpha( 255 );
+	if( !background.create( screen_w, screen_h, 0x15, 0x15, 0x1D ) )
+		success = false;
+	
+	
+	white_bar.setAlpha( 255 );
+	if( !white_bar.create( 300, 50, 0xFF, 0xFF, 0xFF ) )
 		success = false;
 	else
 	{
-		background.setColor( 0x15, 0x15, 0x1D );
+		white_bar.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +15 );
+		//printf( "AFTER %d\n", white_bar.getHeight()/2 );
 	}
 	
-	if( !green_bar.create( 1, 50 ) )
+	green_bar.setAlpha( 255 );
+	if( !green_bar.create( 1, 50, 0x70, 0xB7, 0x59 ) )
 		success = false;
 	else
 	{
-		green_bar.setColor( 0x70, 0xB7, 0x59 );
-		text.setPosition( screen_w/2 - green_bar.getWidth()/2, text.getBot() +10 );
+		green_bar.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +15 );
 	}
 	
-	if( !white_bar.create( 300, 50 ) )
-		success = false;
-	else
-	{
-		white_bar.setColor( 0xFF, 0xFF, 0xFF );
-		text.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +10 );
-	}
 		
 	return success;
 }
 
-void Loading::draw( sf::RenderWindow* &window )
+void Loading::draw( sf::RenderWindow* &window, int range )
 {
-	//green_bar.setScale( state );
+	green_bar.setScale( white_bar.getWidth() *state/range );
 	window->draw( background.get() );
 	window->draw( white_bar.get() );
 	window->draw( green_bar.get() );

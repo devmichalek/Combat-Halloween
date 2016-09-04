@@ -17,6 +17,6 @@ public:
 	~Loading();
 	
 	bool load( int screen_w, int screen_h );
-	void draw( sf::RenderWindow* &window );
+	void draw( sf::RenderWindow* &window, int range );
 	int getState();
 };

@@ -1,8 +1,24 @@
 #include "text.h"
-#include "stdio.h"
+#include <stdio.h>
+#include "color.h"
+
+/*
+template <int num>
+bool bar()
+{
+    static bool flag = true;
+	bool buf = flag;
+	flag = false;
+	return buf;
+}
+*/
 
 MyText::MyText( int alpha )
 {
+	//static int c = 0;
+	state = 0;
+	//c++;
+	
 	w = 0;
     h = 0;
     x = 0;
@@ -57,7 +73,7 @@ bool MyText::setFont( string path, int size, int r, int g, int b )
 	font = new sf::Font;
 	if( !font->loadFromFile( path ) )
 	{
-		printf( "Can't load %s\n", path.c_str() );
+		printf( "%sCan't load%s %s\n", LRED, DEFAULT, path.c_str() );
 		return false;
 	}
 	else
@@ -66,6 +82,9 @@ bool MyText::setFont( string path, int size, int r, int g, int b )
 		this->r = r;
 		this->g = g;
 		this->b = b;
+		
+		printf( "Font: %s, %ssize%s:%d R:%s0x%02x%s G:%s0x%02x%s B:%s0x%02x%s\n",path.c_str(), DGRAY, DEFAULT, size,
+		LMAGENTA, r, DEFAULT, LMAGENTA, g, DEFAULT, LMAGENTA, b, DEFAULT );
 	}
 	
 	return true;
@@ -86,9 +105,14 @@ bool MyText::setText( string line )
 	text->setFont( *font );
 	
 	// printf( "%s\n", line.c_str() );
-
-	w = text->getCharacterSize() * line.length();
-	h = text->getCharacterSize();
+	
+	w = text->getLocalBounds().width;
+	h = text->getLocalBounds().height;
+	
+	// if( bar<state>() )	
+	if( state == 0 )// if it's first loading
+		printf( "Text: %s%s%s w:%s%d%s h:%s%d%s\n", DGRAY, line.c_str(), DEFAULT, LCYAN, w, DEFAULT, LCYAN, h, DEFAULT );
+	state ++;
 	
 	return true;
 }
@@ -116,6 +140,7 @@ bool MyText::checkCollision( int x, int y, int w, int h )
 	{
 		if( y + h > this->y && y < this->y + this->h )
 		{
+			// printf( "collision = %strue%s\n", LGREEN, DEFAULT );
 			return true;
 		}
 	}

@@ -24,7 +24,7 @@ bool Menu_exit_log::load( int screen_w, int screen_h )
 	else
 	{
 		myText.setAlpha( 255 );
-		myText.setPosition( screen_w/2 - myText.getWidth()/2 +80, screen_h/2 - myText.getHeight()/2 -6 );
+		myText.setPosition( screen_w/2 - myText.getWidth()/2, screen_h/2 - myText.getHeight()/2 -6 );
 	}
 	
 	if( !click.load( "menu/click.wav", 50 ) )

@@ -1,6 +1,7 @@
 #include "core.h"
 #include <stdio.h>
 #include <SDL2/SDL_mixer.h>
+#include "color.h"
 
 Core::Core( int state, unsigned width, unsigned height, unsigned FPS )
 {
@@ -10,6 +11,9 @@ Core::Core( int state, unsigned width, unsigned height, unsigned FPS )
     this->FPS = FPS;
     this->width = width;
     this->height = height;
+	
+	printf( "%sFPS%s=%d  %sscreen_width%s=%d  %sscreen_height%s=%d\n", BOLD, DEFAULT, FPS, YELLOW, DEFAULT
+	, width, YELLOW, DEFAULT, height );
 
     window = NULL;
 }
@@ -59,7 +63,7 @@ bool Core::load( string title )
     else
     {
         window->setFramerateLimit( FPS );
-        printf( "Created window!\n" );
+        printf( "%sCreated window!%s\n", WHITEBOLD, DEFAULT );
 
 		if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
 		{

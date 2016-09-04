@@ -7,6 +7,7 @@ using namespace std;
 
 class MyText
 {
+	int state;
 	int w, h;
     int x, y;
 	
