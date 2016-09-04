@@ -12,6 +12,9 @@ Engine::Engine()
 	loading = new Loading;
 	loading->load( core->getWidth(), core->getHeight() );
 	
+	// Create intro object
+	intro = new Intro;
+	
 	// Create menu objects
 	git_button = new Link_button( "https://github.com/Adriqun" );
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
@@ -28,12 +31,15 @@ Engine::Engine()
 	scores_log = new Menu_log;
 	menu_exit = new Menu_exit_log;
 	menu_music = new Music;
+	
+	// Create play objects
+	game_timer = new Game_timer;
 }
 
 
 // Free objects.
 void Engine::free()
-{
+{	
 	delete git_button;
 	delete google_button;
 	delete twitter_button;
@@ -50,6 +56,8 @@ void Engine::free()
 	delete menu_exit;
 	delete menu_music;
 	
+	delete game_timer;
+	
 	delete core;
 }
 
@@ -57,8 +65,7 @@ void Engine::free()
 // Load objects.
 void Engine::load()
 {
-	loading->draw( core->getWindow() );
-	sf::sleep( sf::milliseconds( 500 ) );
+	loading->draw( core->getWindow(), 99 );
 	
 	switch( loading->getState() )
 	{
@@ -101,10 +108,22 @@ void Engine::load()
 		menu_exit->load( core->getWidth(), core->getHeight() );
 		break;
 		
+		case 8:
+		menu_music->load( "menu/Rayman Legends OST - Moving Ground.mp3", 50 );
+		break;
 		
-		default:
+		case 9:
+		intro->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 10:
+		game_timer->load( core->getWidth() );
+		break;
+		
+		
+		case 100:
 		delete loading;
-		core->getState() = 0;
+		core->getState() = -1;	// intro state
 		break;
 			
 	}
@@ -120,6 +139,8 @@ void Engine::events()
         {
             core->isOpen() = false;
         }
+		
+/////////////////////////////////////////////////////////////////////////////////////
 
         if( core->getState() == 0 ) // if we actually have menu state
         {
@@ -146,6 +167,13 @@ void Engine::events()
 				}
 			}
         }
+		
+/////////////////////////////////////////////////////////////////////////////////////
+		
+		if( core->getState() == 1 ) // if we actually have play state
+		{
+			game_timer->handle( core->getEvent() );
+		}
 
     }
 }
@@ -156,6 +184,16 @@ void Engine::states()
 	if( core->getState() == -2 ) // loading state
 	{
 		load();
+	}
+	
+	if( core->getState() == -1 ) // loading state
+	{
+		intro->draw( core->getWindow() );
+		if( intro->isQuit() )
+		{
+			delete intro;
+			core->getState() = 0;
+		}
 	}
 	
     if( core->getState() == 0 ) // menu state
@@ -288,6 +326,13 @@ void Engine::states()
 		if( menu_exit->getState() < 2 )
 			menu_exit->draw( core->getWindow() );
     }
+	
+	if( core->getState() == 1 ) // play state
+    {
+		game_timer->draw( *core->getWindow() );
+		game_timer->count( core->getWidth() );
+		game_timer->fadein( 3 );
+	}
 }
 
 

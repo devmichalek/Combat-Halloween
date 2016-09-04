@@ -2,6 +2,7 @@
 
 #include "core.h"
 #include "loading.h"
+#include "intro.h"
 #include "link_button.h"
 #include "menu_play_button.h"
 #include "menu_title.h"
@@ -9,6 +10,7 @@
 #include "menu_log.h"
 #include "menu_exit_log.h"
 #include "music.h"
+#include "game_timer.h"
 
 class Engine
 {
@@ -17,6 +19,9 @@ class Engine
 	
 	// Loading state
 	Loading* loading;
+	
+	// Intro state
+	Intro* intro;
 	
 	// Menu state
 	Link_button* git_button;
@@ -34,6 +39,9 @@ class Engine
 	Menu_log* scores_log;
 	Menu_exit_log* menu_exit;
 	Music* menu_music;
+	
+	// Play state
+	Game_timer* game_timer;
 
 public:
 

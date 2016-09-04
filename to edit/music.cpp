@@ -1,5 +1,6 @@
 #include "music.h"
 #include <stdio.h>
+#include "color.h"
 
 Music::Music()
 {
@@ -32,12 +33,13 @@ bool Music::load( const char* path, int volume )
     music = Mix_LoadMUS( path );
     if( music == NULL )
     {
-        printf( "Not found music %s\n", path );
+        printf( "%sNot found%s chunk %s\n", LRED, DEFAULT, path );
         printf( "Error %s\n", Mix_GetError() );
         success = false;
     }
     else if( volume != 0 )
     {
+		printf( "%sCorrectly%s load %s\n", CYAN, DEFAULT, path );
 		this->volume = volume;
         Mix_VolumeMusic( volume );
     }

@@ -37,7 +37,7 @@ bool Menu_play_button::load( int screen_w, int bot )
 	}
 	else
 	{
-		myText.setPosition( screen_w/2 - myText.getWidth()/2 +50, bot +20 );
+		myText.setPosition( screen_w/2 - myText.getWidth()/2, bot +20 );
 	}
 	
 	if( !click.load( "menu/click.wav", 50 ) )

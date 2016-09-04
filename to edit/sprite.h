@@ -9,7 +9,6 @@ class MySprite
 {
     int w, h;
     int x, y;
-    float scale;
 
     int nr;
     int offset;
@@ -27,7 +26,7 @@ public:
     void free();
 
     bool load( string path, int nr = 0 );
-	bool create( int w, int h );
+	bool create( int w, int h, sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
 
     void setOffset( int n );
     void setPosition( float x, float y );
@@ -36,7 +35,7 @@ public:
 	void setAlpha( int alpha = 0 );
 	void setColor( sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
 	
-    void setScale( float s, float z = 1 );
+    void setScale( float s = 1, float z = 1 );
 
     sf::Sprite& get();
 	

@@ -33,7 +33,7 @@ bool Menu_title::load(int screen_w )
 	}
 	else
 	{
-		title.setPosition( screen_w/2 - title.getWidth()/2 +70, 15 );
+		title.setPosition( screen_w/2 - title.getWidth()/2, 15 );
 	}
 
     return true;

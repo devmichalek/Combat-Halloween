@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Adrian Michalek
-Date                   :=03/09/16
+Date                   :=04/09/16
 CodeLitePath           :="/home/adrian/.codelite"
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -61,7 +61,7 @@ AS       := as
 ##
 CodeLiteDir:=/usr/share/codelite
 Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/sprite.cpp$(ObjectSuffix) $(IntermediateDirectory)/engine.cpp$(ObjectSuffix) $(IntermediateDirectory)/core.cpp$(ObjectSuffix) $(IntermediateDirectory)/link_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_play_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/text.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_title.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_music_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/music.cpp$(ObjectSuffix) \
-	$(IntermediateDirectory)/chunk.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_exit_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/loading.cpp$(ObjectSuffix) 
+	$(IntermediateDirectory)/chunk.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_exit_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/loading.cpp$(ObjectSuffix) $(IntermediateDirectory)/intro.cpp$(ObjectSuffix) $(IntermediateDirectory)/color.c$(ObjectSuffix) $(IntermediateDirectory)/game_timer.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_bg.cpp$(ObjectSuffix) 
 
 
 
@@ -203,6 +203,38 @@ $(IntermediateDirectory)/loading.cpp$(DependSuffix): loading.cpp
 
 $(IntermediateDirectory)/loading.cpp$(PreprocessSuffix): loading.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/loading.cpp$(PreprocessSuffix) "loading.cpp"
+
+$(IntermediateDirectory)/intro.cpp$(ObjectSuffix): intro.cpp $(IntermediateDirectory)/intro.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/intro.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/intro.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/intro.cpp$(DependSuffix): intro.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/intro.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/intro.cpp$(DependSuffix) -MM "intro.cpp"
+
+$(IntermediateDirectory)/intro.cpp$(PreprocessSuffix): intro.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/intro.cpp$(PreprocessSuffix) "intro.cpp"
+
+$(IntermediateDirectory)/color.c$(ObjectSuffix): color.c $(IntermediateDirectory)/color.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/color.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/color.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/color.c$(DependSuffix): color.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/color.c$(ObjectSuffix) -MF$(IntermediateDirectory)/color.c$(DependSuffix) -MM "color.c"
+
+$(IntermediateDirectory)/color.c$(PreprocessSuffix): color.c
+	$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/color.c$(PreprocessSuffix) "color.c"
+
+$(IntermediateDirectory)/game_timer.cpp$(ObjectSuffix): game_timer.cpp $(IntermediateDirectory)/game_timer.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/game_timer.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/game_timer.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/game_timer.cpp$(DependSuffix): game_timer.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/game_timer.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/game_timer.cpp$(DependSuffix) -MM "game_timer.cpp"
+
+$(IntermediateDirectory)/game_timer.cpp$(PreprocessSuffix): game_timer.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/game_timer.cpp$(PreprocessSuffix) "game_timer.cpp"
+
+$(IntermediateDirectory)/play_bg.cpp$(ObjectSuffix): play_bg.cpp $(IntermediateDirectory)/play_bg.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adrian/.codelite/Workspace_one/Ninja/play_bg.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/play_bg.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/play_bg.cpp$(DependSuffix): play_bg.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/play_bg.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/play_bg.cpp$(DependSuffix) -MM "play_bg.cpp"
+
+$(IntermediateDirectory)/play_bg.cpp$(PreprocessSuffix): play_bg.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/play_bg.cpp$(PreprocessSuffix) "play_bg.cpp"
 
 
 -include $(IntermediateDirectory)/*$(DependSuffix)

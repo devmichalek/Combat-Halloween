@@ -2,6 +2,7 @@
 
 #include "chunk.h"
 #include <stdio.h>
+#include "color.h"
 
 Chunk::Chunk()
 {
@@ -32,12 +33,13 @@ bool Chunk::load( const char* path, int volume )
     chunk = Mix_LoadWAV( path );
     if( chunk == NULL )
     {
-        printf( "Not found chunk %s\n", path );
+        printf( "%sNot found%s chunk %s\n", LRED, DEFAULT, path );
         printf( "Error %s\n", Mix_GetError() );
         success = false;
     }
     else if( volume != 0 )
     {
+		printf( "%sCorrectly%s load %s\n", BLUE, DEFAULT, path );
         Mix_VolumeChunk( chunk, volume );
     }
 

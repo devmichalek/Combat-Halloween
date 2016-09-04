@@ -30,6 +30,14 @@
     <File Name="menu_exit_log.h"/>
     <File Name="loading.cpp"/>
     <File Name="loading.h"/>
+    <File Name="intro.cpp"/>
+    <File Name="intro.h"/>
+    <File Name="color.h"/>
+    <File Name="color.c"/>
+    <File Name="game_timer.cpp"/>
+    <File Name="game_timer.h"/>
+    <File Name="play_bg.cpp"/>
+    <File Name="play_bg.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
