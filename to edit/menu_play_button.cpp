@@ -18,32 +18,14 @@ Menu_play_button::~Menu_play_button()
 
 bool Menu_play_button::load( int screen_w, int bot )
 {
-    if( !mySprite.load( "menu/blankbutton.png", 4 ) )
-    {
-        return false;
-    }
-    else
-    {
-        mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
-    }
+	mySprite.load( "menu/blankbutton.png", 4 );
+	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
-	if( !myText.setFont( "menu/KGHAPPY.ttf", 80, 0x82, 0xae, 0x20 ) )
-	{
-		return false;
-	}
-	else if( !myText.setText( "play" ) )
-	{
-		return false;
-	}
-	else
-	{
-		myText.setPosition( screen_w/2 - myText.getWidth()/2, bot +20 );
-	}
+	myText.setFont( "menu/KGHAPPY.ttf", 80, 0x82, 0xae, 0x20 );
+	myText.setText( "play" );
+	myText.setPosition( screen_w/2 - myText.getWidth()/2, bot +20 );
 	
-	if( !click.load( "menu/click.wav", 50 ) )
-	{
-		return false;
-	}
+	click.load( "menu/click.wav", -1 );
 
     return true;
 }
