@@ -21,28 +21,13 @@ Menu_music_button::~Menu_music_button()
 
 bool Menu_music_button::load( string path, int bot )
 {
-    if( !button.load( path, 4 ) )
-    {
-        return false;
-    }
-    else
-    {
-        button.setPosition( 10, bot );
-    }
+    button.load( path, 4 );
+	button.setPosition( 10, bot );
 	
-	if( !scratch.load( "menu/scratch.png" ) )
-	{
-		return false;
-	}
-	else
-	{
-		scratch.setPosition( 10, bot );
-	}
+	scratch.load( "menu/scratch.png" );
+	scratch.setPosition( 10, bot );
 	
-	if( !click.load( "menu/click.wav", 50 ) )
-	{
-		return false;
-	}
+	click.load( "menu/click.wav", 50 );
 	
 
     return true;
