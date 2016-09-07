@@ -1,12 +1,21 @@
-// Adrian Michalek, 2016.07.10 - class Chunk
+/**
+    chunk.cpp
+    Purpose: class Chunk for wav files based on SDL_mixer
+
+    @author Adrian Michalek
+    @version 2016.09.07
+	@email adrmic98@gmail.com
+*/
+
 
 #include "chunk.h"
-#include <stdio.h>
-#include "color.h"
+#include <stdio.h>	// printf, 
 
 Chunk::Chunk()
 {
     chunk = NULL;
+	volume = 0;
+	path = "";
 }
 
 Chunk::~Chunk()
@@ -21,29 +30,42 @@ void Chunk::free()
         Mix_FreeChunk( chunk );
         chunk = NULL;
     }
+	
+	volume = 0;
+	path = "";
 }
 
 
-bool Chunk::load( const char* path, int volume )
+void Chunk::load( std::string path, int volume )
 {
-    bool success = true;
-
     free();
-
-    chunk = Mix_LoadWAV( path );
-    if( chunk == NULL )
-    {
-        printf( "%sNot found%s chunk %s\n", LRED, DEFAULT, path );
-        printf( "Error %s\n", Mix_GetError() );
-        success = false;
-    }
-    else if( volume != 0 )
-    {
-		printf( "%sCorrectly%s load %s\n", BLUE, DEFAULT, path );
-        Mix_VolumeChunk( chunk, volume );
-    }
-
-    return success;
+	
+	try
+	{
+		chunk = Mix_LoadWAV( path.c_str() );
+		this->path = path;
+		
+		if( chunk == NULL )
+			throw "\n\x1B[91mNot found\x1B[0m chunk " + path + "  Error " + Mix_GetError() + "\n";
+	}
+	catch( std::string msg )
+	{
+		std::cerr << msg << std::endl;
+	}
+	
+    
+    try
+	{
+		Mix_VolumeChunk( chunk, volume );
+		this->volume = volume;
+		
+		if( volume < 0 || volume > 128 )
+			throw "\nVolume \x1B[91mneed to be between\x1B[0m 0 and 128\n";
+	}
+	catch( const char* msg )
+	{
+		std::cerr << msg << std::endl;
+	}
 }
 
 void Chunk::play()
@@ -60,4 +82,9 @@ Mix_Chunk* Chunk::get()
 void Chunk::setVolume( int volume )
 {
     Mix_VolumeChunk( chunk, volume );
+}
+
+std::ostream& Chunk::operator <<( std::ostream& s )
+{
+	return s << "Chunk name: " << path << " volume: " << volume;
 }
