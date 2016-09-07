@@ -3,34 +3,20 @@
 
 bool Menu_exit_log::load( int screen_w, int screen_h )
 {
-    if( !mySprite.load( "menu/exit.png" ) )
-    {
-        return false;
-    }
-    else
-    {
-		mySprite.setAlpha( 255 );
-        mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, screen_h/2 - mySprite.getHeight()/2 );
-    }
+    mySprite.load( "menu/exit.png" );
+	mySprite.setAlpha( 255 );
+	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, screen_h/2 - mySprite.getHeight()/2 );
+
 	
-	if( !myText.setFont( "menu/KGHAPPY.ttf", 33, 0xFF, 0xFF, 0xFF ) )
-	{
-		return false;
-	}
-	else if( !myText.setText( "q-quit  b-back" ) )
-	{
-		return false;
-	}
-	else
-	{
-		myText.setAlpha( 255 );
-		myText.setPosition( screen_w/2 - myText.getWidth()/2, screen_h/2 - myText.getHeight()/2 -6 );
-	}
+	myText.setFont( "menu/KGHAPPY.ttf", 33, 0xFF, 0xFF, 0xFF );
+
+	myText.setText( "q-quit  b-back" );
+
+	myText.setAlpha( 255 );
+	myText.setPosition( screen_w/2 - myText.getWidth()/2, screen_h/2 - myText.getHeight()/2 -6 );
+
 	
-	if( !click.load( "menu/click.wav", 50 ) )
-	{
-		return false;
-	}
+	click.load( "menu/click.wav", 50 );
 
     return true;
 }
