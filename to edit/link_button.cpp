@@ -19,23 +19,15 @@ Link_button::~Link_button()
 
 bool Link_button::load( string path, int screen_w, int bot )
 {
-    if( !button.load( path, 4 ) )
-    {
-        return false;
-    }
-    else
-    {
-		if( locked )
-			button.setOffset( 3 );    // locked offset = 3
+    button.load( path, 4 );
+
+	if( locked )
+		button.setOffset( 3 );    // locked offset = 3
 		
-        int border = 10;
-        button.setPosition( screen_w - button.getWidth() - border, bot );
-    }
+	int border = 10;
+	button.setPosition( screen_w - button.getWidth() - border, bot );
 	
-	if( !click.load( "menu/click.wav", 50 ) )
-	{
-		return false;
-	}
+	click.load( "menu/click.wav", 50 );
 
     return true;
 }
