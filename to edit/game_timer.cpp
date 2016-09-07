@@ -29,24 +29,19 @@ bool Game_timer::load( int screen_w )
 {
 	free();
 	
-	if( !text.setFont( "intro/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF ) )
-		return false;
-	else if( !text.setText( to_string( counter ) ) )
-		return false;
-	else
-		text.setPosition( screen_w - text.getWidth() -10, 10 );
+	text.setFont( "intro/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+
+	text.setText( to_string( counter ) );
+
+	text.setPosition( screen_w - text.getWidth() -10, 10 );
 	
 	max = 30.0;
 	
-	if( !one.load( "pause/0.png" ) )
-		return false;
-	else
-		one.setPosition( 10, 10 );
+	one.load( "pause/0.png" );
+	one.setPosition( 10, 10 );
 		
-	if( !two.load( "pause/1.png" ) )
-		return false;
-	else
-		two.setPosition( 10, 10 );
+	two.load( "pause/1.png" );
+	two.setPosition( 10, 10 );
 	
 	return true;
 }
