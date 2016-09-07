@@ -1,11 +1,21 @@
+/**
+    music.cpp
+    Purpose: class Music to load and play mp3 files based on SDL_mixer
+
+    @author Adrian Michalek
+    @version 2016.09.06
+	@email adrmic98@gmail.com
+*/
+
+
 #include "music.h"
-#include <stdio.h>
-#include "color.h"
+#include <stdio.h>	// printf
 
 Music::Music()
 {
-    music = NULL;
 	volume = 0;
+	path = "";
+    music = NULL;
 }
 
 Music::~Music()
@@ -13,40 +23,50 @@ Music::~Music()
     free();
 }
 
-
 void Music::free()
 {
+	volume = 0;
+	path = "";
+	
     if( music != NULL )
     {
         Mix_FreeMusic( music );
         music = NULL;
     }
-	volume = 0;
 }
 
-bool Music::load( const char* path, int volume )
+
+void Music::load( std::string path, int volume )
 {
-    bool success = true;
-
     free();
-
-    music = Mix_LoadMUS( path );
-    if( music == NULL )
-    {
-        printf( "%sNot found%s chunk %s\n", LRED, DEFAULT, path );
-        printf( "Error %s\n", Mix_GetError() );
-        success = false;
-    }
-    else if( volume != 0 )
-    {
-		printf( "%sCorrectly%s load %s\n", CYAN, DEFAULT, path );
+	
+	try
+	{
+		music = Mix_LoadMUS( path.c_str() );
+		this->path = path;
+		
+		if( music == NULL )
+			throw "\n\x1B[91mNot found\x1B[0m music " + path + "  Error " + Mix_GetError() + "\n";
+	}
+	catch( std::string msg )
+	{
+		std::cerr << msg << std::endl;
+	}
+	
+	
+	try
+	{
+		Mix_VolumeMusic( volume );
 		this->volume = volume;
-        Mix_VolumeMusic( volume );
-    }
-
-    return success;
+		
+		if( volume < 0 || volume > 128 )
+			throw "\nVolume \x1B[91mneed to be between\x1B[0m 0 and 128\n";
+	}
+	catch( const char* msg )
+	{
+		std::cerr << msg << std::endl;
+	}
 }
-
 
 void Music::play()
 {
@@ -55,6 +75,7 @@ void Music::play()
         Mix_PlayMusic( music, -1 );
     }
 }
+
 
 void Music::pause()
 {
@@ -102,4 +123,9 @@ void Music::fadeout( int i, int min )
 Mix_Music* Music::get()
 {
     return music;
+}
+
+std::ostream& Music::operator <<( std::ostream& s )
+{
+	return s << "Chunk name: " << path << " volume: " << volume;
 }
