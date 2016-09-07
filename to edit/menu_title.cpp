@@ -14,27 +14,15 @@ Menu_title::~Menu_title()
 
 bool Menu_title::load(int screen_w )
 {
-    if( !belt.load( "menu/belt.png" ) )
-    {
-        return false;
-    }
-    else
-    {
-        belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
-    }
+    belt.load( "menu/belt.png" );
+	belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
 	
-	if( !title.setFont( "menu/KGHAPPY.ttf", 80, 0x7F, 0x99, 0x95 ) )
-	{
-		return false;
-	}
-	else if( !title.setText( "Ninja" ) )
-	{
-		return false;
-	}
-	else
-	{
-		title.setPosition( screen_w/2 - title.getWidth()/2, 15 );
-	}
+	title.setFont( "menu/KGHAPPY.ttf", 80, 0x7F, 0x99, 0x95 );
+	
+	title.setText( "Ninja" );
+
+
+	title.setPosition( screen_w/2 - title.getWidth()/2, 15 );
 
     return true;
 }
