@@ -37,14 +37,8 @@ Menu_log::~Menu_log()
 
 bool Menu_log::load( string path, int left, int y, int screen_w )
 {
-    if( !button.load( "menu/" + path +".png", 4 ) )
-    {
-        return false;
-    }
-    else
-    {
-        button.setPosition( left, y );
-    }
+    button.load( "messnu/" + path +".png", 4 );
+	button.setPosition( left, y );
 	
 	
 	// if is locked we don't have reason to load futher
@@ -56,21 +50,12 @@ bool Menu_log::load( string path, int left, int y, int screen_w )
 	
 	
 	
-	if( !log.load( "menu/window.png" ) )
-    {
-        return false;
-    }
-    else
-    {
-        log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
-    }
+	log.load( "menu/window.png" );
+	log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
 		
 	
 	
-	if( !click.load( "menu/click.wav", 50 ) )
-	{
-		return false;
-	}
+	click.load( "menu/click.wav", 50 );
 	
 	
 	
@@ -138,14 +123,11 @@ bool Menu_log::load( string path, int left, int y, int screen_w )
 			else if( c > 6 )
 				border -= 5;
 			
-			if( !myText[ c ].setFont( "menu/KGHAPPY.ttf", 28, 0xd5, 0xad, 0x51 ) )
-			{
-				break;
-			}
-			else if( myText[ c ].setText( line ) )
-			{
-				myText[ c ].setPosition( log.getX() +80 - border, height );
-			}
+			myText[ c ].setFont( "menu/KGHAPPY.ttf", 28, 0xd5, 0xad, 0x51 );
+
+			myText[ c ].setText( line );
+
+			myText[ c ].setPosition( log.getX() +80 - border, height );
 			
 			// printf( "x:%d  y:%d\n", myText[ c ].getX(), myText[ c ].getY() );
 			
