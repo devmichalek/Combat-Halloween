@@ -17,38 +17,28 @@ bool Loading::load( int screen_w, int screen_h )
 {
 	bool success = true;
 	
-	if( !text.setFont( "intro/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF ) )
-		success = false;
-	else if( !text.setText( "Loading" ) )
-		success = false;
-	else
-	{
-		text.setAlpha( 255 );
-		text.setPosition( screen_w/2 - text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
-	}
+	text.setFont( "intro/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+
+	text.setText( "Loading" );
+
+
+	text.setAlpha( 255 );
+	text.setPosition( screen_w/2 - text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
+
 	
 	
 	background.setAlpha( 255 );
-	if( !background.create( screen_w, screen_h, 0x15, 0x15, 0x1D ) )
-		success = false;
+	background.create( screen_w, screen_h, 0x15, 0x15, 0x1D );
 	
 	
 	white_bar.setAlpha( 255 );
-	if( !white_bar.create( 300, 50, 0xFF, 0xFF, 0xFF ) )
-		success = false;
-	else
-	{
-		white_bar.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +15 );
-		//printf( "AFTER %d\n", white_bar.getHeight()/2 );
-	}
+	white_bar.create( 300, 50, 0xFF, 0xFF, 0xFF );
+	white_bar.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +15 );
+
 	
 	green_bar.setAlpha( 255 );
-	if( !green_bar.create( 1, 50, 0x70, 0xB7, 0x59 ) )
-		success = false;
-	else
-	{
-		green_bar.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +15 );
-	}
+	green_bar.create( 1, 50, 0x70, 0xB7, 0x59 );
+	green_bar.setPosition( screen_w/2 - white_bar.getWidth()/2, text.getBot() +15 );
 	
 		
 	return success;
