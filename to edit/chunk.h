@@ -14,6 +14,9 @@
 
 class Chunk
 {
+
+protected:	
+
 	Uint8 volume;
 	std::string path;
     Mix_Chunk* chunk;

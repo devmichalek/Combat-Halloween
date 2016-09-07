@@ -9,13 +9,13 @@
 
 
 #include "chunk.h"
-#include <stdio.h>	// printf, 
+#include <stdio.h>	// printf 
 
 Chunk::Chunk()
 {
-    chunk = NULL;
 	volume = 0;
 	path = "";
+    chunk = NULL;
 }
 
 Chunk::~Chunk()
@@ -25,14 +25,14 @@ Chunk::~Chunk()
 
 void Chunk::free()
 {
+	volume = 0;
+	path = "";
+	
     if( chunk != NULL )
     {
         Mix_FreeChunk( chunk );
         chunk = NULL;
     }
-	
-	volume = 0;
-	path = "";
 }
 
 
@@ -83,6 +83,7 @@ void Chunk::setVolume( int volume )
 {
     Mix_VolumeChunk( chunk, volume );
 }
+
 
 std::ostream& Chunk::operator <<( std::ostream& s )
 {
