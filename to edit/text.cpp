@@ -1,31 +1,24 @@
+/**
+    text.cpp
+    Purpose: class MyText to load and draw text
+
+    @author Adrian Michalek
+    @version 2016.09.07
+	@email adrmic98@gmail.com
+*/
+
+
 #include "text.h"
 #include <stdio.h>
-#include "color.h"
-
-/*
-template <int num>
-bool bar()
-{
-    static bool flag = true;
-	bool buf = flag;
-	flag = false;
-	return buf;
-}
-*/
 
 MyText::MyText( int alpha )
 {
-	//static int c = 0;
-	state = 0;
-	//c++;
-	
-	w = 0;
-    h = 0;
-    x = 0;
-    y = 0;
+	w = h = 0;
+    x = y = 0;
 
     font = NULL;
 	text = NULL;
+	
 	size = 0;
 	
 	this->alpha = alpha;
@@ -39,10 +32,8 @@ MyText::~MyText()
 
 void MyText::free()
 {
-	w = 0;
-    h = 0;
-    x = 0;
-    y = 0;
+	w = h = 0;
+    x = y = 0;
 
     if( font != NULL )
     {
@@ -62,7 +53,7 @@ void MyText::free()
 }
 
 	
-bool MyText::setFont( string path, int size, int r, int g, int b )
+void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	if( font != NULL )
     {
@@ -70,27 +61,35 @@ bool MyText::setFont( string path, int size, int r, int g, int b )
         font = NULL;
     }
 	
-	font = new sf::Font;
-	if( !font->loadFromFile( path ) )
+	try
 	{
-		printf( "%sCan't load%s %s\n", LRED, DEFAULT, path.c_str() );
-		return false;
+		font = new sf::Font;
+
+		if( !font->loadFromFile( path ) )
+			throw "\n\x1B[91mNot loaded\x1B[0m " + path + "\n";
 	}
-	else
+	catch( string msg )
 	{
-		this->size = size;
-		this->r = r;
-		this->g = g;
-		this->b = b;
-		
-		printf( "Font: %s, %ssize%s:%d R:%s0x%02x%s G:%s0x%02x%s B:%s0x%02x%s\n",path.c_str(), DGRAY, DEFAULT, size,
-		LMAGENTA, r, DEFAULT, LMAGENTA, g, DEFAULT, LMAGENTA, b, DEFAULT );
+		cerr << msg << endl;
 	}
 	
-	return true;
+	try
+	{
+		this->size = size;
+		if( size < 1 )
+			throw "\n\x1B[91mSize is less than 1!\x1B[0m\n";
+	}
+	catch( const char* msg )
+	{
+		cerr << msg << endl;
+	}
+	
+	this->r = r;
+	this->g = g;
+	this->b = b;
 }
 
-bool MyText::setText( string line )
+void MyText::setText( string line )
 {
 	if( text != NULL )
     {
@@ -98,23 +97,25 @@ bool MyText::setText( string line )
         text = NULL;
     }
 	
-	text = new sf::Text;
-	text->setString( line );
-	text->setCharacterSize( size );
-	text->setColor( sf::Color( r, g, b, alpha ) );
-	text->setFont( *font );
-	
-	// printf( "%s\n", line.c_str() );
-	
-	w = text->getLocalBounds().width;
-	h = text->getLocalBounds().height;
-	
-	// if( bar<state>() )	
-	if( state == 0 )// if it's first loading
-		printf( "Text: %s%s%s w:%s%d%s h:%s%d%s\n", DGRAY, line.c_str(), DEFAULT, LCYAN, w, DEFAULT, LCYAN, h, DEFAULT );
-	state ++;
-	
-	return true;
+	try
+	{
+		text = new sf::Text;
+		
+		if( text == NULL )
+			throw "\nNot created text object\n";
+		
+		text->setString( line );
+		text->setCharacterSize( size );
+		text->setColor( sf::Color( r, g, b, alpha ) );
+		text->setFont( *font );
+		
+		w = text->getLocalBounds().width;
+		h = text->getLocalBounds().height;
+	}
+	catch( const char* msg )
+	{
+		cerr << msg << endl;
+	}
 }
 
 	
@@ -123,8 +124,13 @@ void MyText::setPosition( float x, float y )
 	this->x = x;
 	this->y = y;
 	text->setPosition( x, y );
-	
-	//printf( "%f  %f\n", x, y );
+}
+
+void MyText::setScale( float w, float h )
+{
+	this->w = w;
+	this->h = h;
+	text->setScale( w, h );
 }
 
 
@@ -133,7 +139,6 @@ sf::Text& MyText::get()
 	return *text;
 }
 
-	
 bool MyText::checkCollision( int x, int y, int w, int h )
 {
 	if( x + w > this->x && x < this->x + this->w )
@@ -147,6 +152,7 @@ bool MyText::checkCollision( int x, int y, int w, int h )
 	
 	return false;
 }
+
 
 void MyText::fadein( int i, int max )
 {
@@ -172,6 +178,7 @@ void MyText::fadeout( int i, int min )
 	}
 }
 
+
 void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	bool change = false;
@@ -182,13 +189,11 @@ void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 		change = true;
 	}
 		
-		
 	if( this->g != g )
 	{
 		change = true;
 		this->g = g;
 	}
-		
 		
 	if( this->b != b )
 	{
@@ -196,10 +201,7 @@ void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 		this->b = b;
 	}
 	
-	if( change )
-	{
-		text->setColor( sf::Color( r, g, b, alpha ) );
-	}
+	if( change )	text->setColor( sf::Color( r, g, b, alpha ) );
 }
 
 void MyText::setSize( int size )
@@ -210,6 +212,7 @@ void MyText::setSize( int size )
 		text->setCharacterSize( size );
 	}
 }
+
 
 int MyText::getAlpha()
 {
@@ -225,8 +228,18 @@ void MyText::setAlpha( int alpha )
 	}
 }
 
-	
-	
+
+int MyText::getX()
+{
+    return x;
+}
+
+int MyText::getY()
+{
+    return y;
+}
+
+
 int MyText::getWidth()
 {
     return w;
@@ -236,6 +249,7 @@ int MyText::getHeight()
 {
     return h;
 }
+
 
 int MyText::getLeft()
 {
@@ -247,6 +261,7 @@ int MyText::getRight()
     return x + w;
 }
 
+
 int MyText::getTop()
 {
     return y;
@@ -255,14 +270,4 @@ int MyText::getTop()
 int MyText::getBot()
 {
     return y + h;
-}
-
-int MyText::getX()
-{
-    return x;
-}
-
-int MyText::getY()
-{
-    return y;
 }
