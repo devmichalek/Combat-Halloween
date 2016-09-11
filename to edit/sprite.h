@@ -15,6 +15,8 @@ using namespace std;
 
 class MySprite
 {
+	string ID;	// Universal
+	
     int w, h;
     int x, y;
 
@@ -32,6 +34,11 @@ public:
     MySprite( int start_offset = 0, int alpha = 0 );
     ~MySprite();
     void free();
+	void setID( string name );	// It's easier to find bug
+	
+	#ifdef _WIN32
+	void setColor( int i );
+	#endif
 	
     void load( string path, int nr = 0 );
 	void create( int w, int h, sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );	// Create blank texture
@@ -62,4 +69,6 @@ public:
 	
     int getTop();
     int getBot();
+	
+	std::ostream& operator <<( std::ostream& s );	// Print ID, rect, alpha
 };
