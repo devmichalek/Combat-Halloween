@@ -7,6 +7,7 @@ void clear()
 	printf( "%s", "\x1B[0m" );
 }
 
+/*
 void centre( int w, char* s )
 {
 	unsigned long len = strlen( s );
@@ -19,3 +20,4 @@ void centre( int w, char* s )
 	
 	printf( "%s", s );
 }
+*/
