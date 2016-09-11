@@ -17,6 +17,8 @@ class Music
 	
 protected:
 	
+	std::string ID;	// Universal ID
+	
 	Uint8 volume;
 	std::string path;
     Mix_Music* music;
@@ -26,6 +28,11 @@ public:
     Music();
     ~Music();
     void free();	// Delete objects
+	void setID( std::string name );	// Easier to find bugs
+	
+	#ifdef _WIN32
+	void setColor( int i );
+	#endif
 	
     void load( std::string path, int volume = 0 );
     void play();
@@ -37,5 +44,5 @@ public:
 	void fadeout( int i = 1, int min = 0 );
 
     inline Mix_Music* get();
-	std::ostream& operator <<( std::ostream& s );	// Print path and volume
+	std::ostream& operator <<( std::ostream& s );	// Print ID, path and volume
 };
