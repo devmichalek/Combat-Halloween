@@ -1,8 +1,8 @@
 #pragma once
 
-#include "sprite.h"
-#include "text.h"
-#include "chunk.h"
+#include "templates/sprite.h"
+#include "templates/text.h"
+#include "templates/chunk.h"
 
 class Menu_play_button
 {
@@ -21,7 +21,7 @@ public:
 	Menu_play_button();
     ~Menu_play_button();
 
-    bool load( int screen_w, int bot );
+    void load( int screen_w, int bot );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
