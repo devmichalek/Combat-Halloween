@@ -3,7 +3,7 @@
     Purpose: class MyText to load and draw text
 
     @author Adrian Michalek
-    @version 2016.09.07
+    @version 2016.09.09
 	@email adrmic98@gmail.com
 */
 
@@ -16,6 +16,8 @@ using namespace std;
 
 class MyText
 {
+	string ID;	// Universal
+	
 	int w, h;
     int x, y;
 	
@@ -32,6 +34,11 @@ public:
 	MyText( int alpha = 0 );
 	~MyText();
 	void free();
+	void setID( string name );		// To find bugs
+	
+	#ifdef _WIN32
+	void setColor( int i );
+	#endif
 	
 	void setFont( string path, int size = 1, sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
 	void setText( string line );
@@ -62,4 +69,6 @@ public:
 	
     int getTop();
     int getBot();
+	
+	std::ostream& operator <<( std::ostream& s );	// Print ID, rect and alpha
 };
