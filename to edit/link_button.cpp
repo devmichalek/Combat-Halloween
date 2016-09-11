@@ -17,8 +17,9 @@ Link_button::~Link_button()
 	play = true;
 }
 
-bool Link_button::load( string path, int screen_w, int bot )
+void Link_button::load( string path, int screen_w, int bot )
 {
+	button.setID( "link_button-" + path );
     button.load( path, 4 );
 
 	if( locked )
@@ -27,9 +28,8 @@ bool Link_button::load( string path, int screen_w, int bot )
 	int border = 10;
 	button.setPosition( screen_w - button.getWidth() - border, bot );
 	
+	click.setID( "link_button-" + path );
 	click.load( "menu/click.wav", 50 );
-
-    return true;
 }
 
 void Link_button::draw( sf::RenderWindow &window )
