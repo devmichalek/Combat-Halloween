@@ -1,43 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="Ninja" InternalType="Console">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
+  </Plugins>
   <Description/>
   <Dependencies/>
   <VirtualDirectory Name="src">
     <File Name="main.cpp"/>
-    <File Name="sprite.h"/>
-    <File Name="sprite.cpp"/>
-    <File Name="engine.h"/>
-    <File Name="engine.cpp"/>
-    <File Name="core.h"/>
-    <File Name="core.cpp"/>
-    <File Name="link_button.cpp"/>
-    <File Name="link_button.h"/>
-    <File Name="menu_play_button.cpp"/>
-    <File Name="menu_play_button.h"/>
-    <File Name="text.cpp"/>
-    <File Name="text.h"/>
-    <File Name="menu_title.cpp"/>
-    <File Name="menu_title.h"/>
-    <File Name="menu_music_button.cpp"/>
-    <File Name="menu_music_button.h"/>
-    <File Name="music.h"/>
-    <File Name="music.cpp"/>
-    <File Name="chunk.h"/>
-    <File Name="chunk.cpp"/>
-    <File Name="menu_log.cpp"/>
-    <File Name="menu_log.h"/>
-    <File Name="menu_exit_log.cpp"/>
-    <File Name="menu_exit_log.h"/>
-    <File Name="loading.cpp"/>
-    <File Name="loading.h"/>
-    <File Name="intro.cpp"/>
-    <File Name="intro.h"/>
-    <File Name="color.h"/>
     <File Name="color.c"/>
-    <File Name="game_timer.cpp"/>
-    <File Name="game_timer.h"/>
-    <File Name="play_bg.cpp"/>
-    <File Name="play_bg.h"/>
+    <File Name="color.h"/>
+    <File Name="core.cpp"/>
+    <File Name="core.h"/>
+    <File Name="engine.cpp"/>
+    <File Name="engine.h"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -56,6 +33,7 @@
       <Linker Options="-lSDL2;-lSDL2_mixer;-lsfml-window;-lsfml-system;-lsfml-graphics" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -95,6 +73,7 @@
       <Linker Options="" Required="yes"/>
       <ResourceCompiler Options="" Required="no"/>
       <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <BuildSystem Name="Default"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>
@@ -127,6 +106,42 @@
       </Completion>
     </Configuration>
   </Settings>
-  <Dependencies Name="Debug"/>
-  <Dependencies Name="Release"/>
+  <VirtualDirectory Name="start">
+    <File Name="start/intro.cpp"/>
+    <File Name="start/intro.h"/>
+    <File Name="start/loading.cpp"/>
+    <File Name="start/loading.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="menu">
+    <File Name="menu/link_button.cpp"/>
+    <File Name="menu/link_button.h"/>
+    <File Name="menu/menu_exit_log.cpp"/>
+    <File Name="menu/menu_exit_log.h"/>
+    <File Name="menu/menu_log.cpp"/>
+    <File Name="menu/menu_log.h"/>
+    <File Name="menu/menu_music_button.cpp"/>
+    <File Name="menu/menu_music_button.h"/>
+    <File Name="menu/menu_play_button.cpp"/>
+    <File Name="menu/menu_play_button.h"/>
+    <File Name="menu/menu_title.cpp"/>
+    <File Name="menu/menu_title.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="templates">
+    <File Name="templates/chunk.cpp"/>
+    <File Name="templates/chunk.h"/>
+    <File Name="templates/music.cpp"/>
+    <File Name="templates/music.h"/>
+    <File Name="templates/sprite.cpp"/>
+    <File Name="templates/sprite.h"/>
+    <File Name="templates/text.cpp"/>
+    <File Name="templates/text.h"/>
+  </VirtualDirectory>
+  <VirtualDirectory Name="play">
+    <File Name="play/game_timer.cpp"/>
+    <File Name="play/game_timer.h"/>
+    <File Name="play/play_bg.cpp"/>
+    <File Name="play/play_bg.h"/>
+    <File Name="play/play_exit_log.cpp"/>
+    <File Name="play/play_exit_log.h"/>
+  </VirtualDirectory>
 </CodeLite_Project>
