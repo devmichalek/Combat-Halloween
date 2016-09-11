@@ -1,16 +1,16 @@
 #pragma once
 
 #include "core.h"
-#include "loading.h"
-#include "intro.h"
-#include "link_button.h"
-#include "menu_play_button.h"
-#include "menu_title.h"
-#include "menu_music_button.h"
-#include "menu_log.h"
-#include "menu_exit_log.h"
-#include "music.h"
-#include "game_timer.h"
+#include "start/loading.h"
+#include "start/intro.h"
+#include "menu/link_button.h"
+#include "menu/menu_play_button.h"
+#include "menu/menu_title.h"
+#include "menu/menu_music_button.h"
+#include "menu/menu_log.h"
+#include "menu/menu_exit_log.h"
+#include "templates/music.h"
+#include "play/game_timer.h"
 
 class Engine
 {

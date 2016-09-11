@@ -20,7 +20,7 @@ Engine::Engine()
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
 	twitter_button = new Link_button( "empty", true );
 	facebook_button = new Link_button( "empty", true );
-	menu_background = new MySprite;
+	menu_background = new MySprite;	menu_background->setID( "engine-menu_background" );
 	menu_play_button = new Menu_play_button;
 	menu_title = new Menu_title;
 	menu_music_button = new Menu_music_button;
@@ -30,7 +30,7 @@ Engine::Engine()
 	settings_log = new Menu_log( true );
 	scores_log = new Menu_log;
 	menu_exit = new Menu_exit_log;
-	menu_music = new Music;
+	menu_music = new Music; menu_music->setID( "engine-menu_music" );
 	
 	// Create play objects
 	game_timer = new Game_timer;
