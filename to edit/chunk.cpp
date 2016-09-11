@@ -9,10 +9,15 @@
 
 
 #include "chunk.h"
-#include <stdio.h>	// printf 
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 Chunk::Chunk()
 {
+	ID = "";
+	
 	volume = 0;
 	path = "";
     chunk = NULL;
@@ -35,7 +40,13 @@ void Chunk::free()
     }
 }
 
+void Chunk::setID( std::string name )
+{
+	ID = name;
+}
 
+
+#ifdef __linux__
 void Chunk::load( std::string path, int volume )
 {
     free();
@@ -46,7 +57,7 @@ void Chunk::load( std::string path, int volume )
 		this->path = path;
 		
 		if( chunk == NULL )
-			throw "\n\x1B[91mNot found\x1B[0m chunk " + path + "  Error " + Mix_GetError() + "\n";
+			throw "ID: " + ID + " \x1B[91mnot found\x1B[0m chunk " + path + "  Error " + Mix_GetError();
 	}
 	catch( std::string msg )
 	{
@@ -60,13 +71,66 @@ void Chunk::load( std::string path, int volume )
 		this->volume = volume;
 		
 		if( volume < 0 || volume > 128 )
-			throw "\nVolume \x1B[91mneed to be between\x1B[0m 0 and 128\n";
+			throw "ID: " + ID + " file: "+ path + ": volume \x1B[91mneed to be between\x1B[0m 0 and 128";
 	}
-	catch( const char* msg )
+	catch( std::string msg )
 	{
 		std::cerr << msg << std::endl;
 	}
 }
+
+#elif _WIN32
+void Chunk::setColor( int i )
+{
+	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
+	SetConsoleTextAttribute( h, i );
+}
+
+void Chunk::load( std::string path, int volume )
+{
+    free();
+	
+	try
+	{
+		chunk = Mix_LoadWAV( path.c_str() );
+		this->path = path;
+		
+		if( chunk == NULL )
+		{
+			throw "ID: " + ID + " ";
+			setColor( 12 );
+			throw "not found";
+			setColor( 7 );
+			throw " chunk " + path + "  Error " + Mix_GetError();
+		}
+	}
+	catch( std::string msg )
+	{
+		std::cerr << msg << std::endl;
+	}
+	
+    
+    try
+	{
+		Mix_VolumeChunk( chunk, volume );
+		this->volume = volume;
+		
+		if( volume < 0 || volume > 128 )
+		{
+			throw "ID: " + ID + " file: "+ path + ": volume ";
+			setColor( 12 );
+			throw "need to be between";
+			setColor( 7 );
+			throw " 0 and 128";
+		}
+	}
+	catch( std::string msg )
+	{
+		std::cerr << msg << std::endl;
+	}
+}
+#endif
+
 
 void Chunk::play()
 {
@@ -87,5 +151,5 @@ void Chunk::setVolume( int volume )
 
 std::ostream& Chunk::operator <<( std::ostream& s )
 {
-	return s << "Chunk name: " << path << " volume: " << volume;
+	return s << "ID: " << ID << " chunk name: " << path << " volume: " << volume;
 }
