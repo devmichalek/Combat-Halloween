@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sprite.h"
-#include "chunk.h"
+#include "templates/sprite.h"
+#include "templates/chunk.h"
 
 
 class Menu_music_button	// Class for chunk/music button 
@@ -24,7 +24,7 @@ public:
 	Menu_music_button( bool play = true );
     ~Menu_music_button();
 
-	bool load( string path, int bot );
+	void load( string path, int bot );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 

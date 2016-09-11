@@ -19,18 +19,18 @@ Menu_music_button::~Menu_music_button()
 	play = true;
 }
 
-bool Menu_music_button::load( string path, int bot )
+void Menu_music_button::load( string path, int bot )
 {
+	button.setID( "menu_music_button-button" );
     button.load( path, 4 );
 	button.setPosition( 10, bot );
 	
+	scratch.setID( "menu_music_button-scratch" );
 	scratch.load( "menu/scratch.png" );
 	scratch.setPosition( 10, bot );
 	
+	click.setID( "menu_music_button-click" );
 	click.load( "menu/click.wav", 50 );
-	
-
-    return true;
 }
 
 void Menu_music_button::draw( sf::RenderWindow* &window )
