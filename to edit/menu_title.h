@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sprite.h"
-#include "text.h"
+#include "templates/sprite.h"
+#include "templates/text.h"
 
 
 class Menu_title
@@ -14,7 +14,7 @@ public:
 	Menu_title();
     ~Menu_title();
 
-    bool load( int screen_w );
+    void load( int screen_w );
     void draw( sf::RenderWindow &window );
 	
 	int getBot();

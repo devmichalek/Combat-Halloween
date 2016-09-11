@@ -12,19 +12,16 @@ Menu_title::~Menu_title()
 	title.free();
 }
 
-bool Menu_title::load(int screen_w )
+void Menu_title::load( int screen_w )
 {
+	belt.setID( "menu_title-belt" );
     belt.load( "menu/belt.png" );
 	belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
 	
+	title.setID( "menu_title-title" );
 	title.setFont( "menu/KGHAPPY.ttf", 80, 0x7F, 0x99, 0x95 );
-	
 	title.setText( "Ninja" );
-
-
 	title.setPosition( screen_w/2 - title.getWidth()/2, 15 );
-
-    return true;
 }
 
 void Menu_title::draw( sf::RenderWindow &window )
