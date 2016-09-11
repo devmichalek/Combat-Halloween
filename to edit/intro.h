@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sprite.h"
-#include "text.h"
+#include "templates/sprite.h"
+#include "templates/text.h"
 
 class Intro
 {
@@ -18,7 +18,7 @@ public:
 	Intro();
 	~Intro();
 	
-	bool load( int screen_w, int screen_h );
+	void load( int screen_w, int screen_h );
 	void draw( sf::RenderWindow* &window );
 	bool isQuit();
 };
