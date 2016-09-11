@@ -1,24 +1,21 @@
 #include "menu_exit_log.h"
 
 
-bool Menu_exit_log::load( int screen_w, int screen_h )
+void Menu_exit_log::load( int screen_w, int screen_h )
 {
+	mySprite.setID( "menu_exit_log-mySprite" );
     mySprite.load( "menu/exit.png" );
 	mySprite.setAlpha( 255 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, screen_h/2 - mySprite.getHeight()/2 );
 
-	
+	mySprite.setID( "menu_exit_log-myText" );
 	myText.setFont( "menu/KGHAPPY.ttf", 33, 0xFF, 0xFF, 0xFF );
-
 	myText.setText( "q-quit  b-back" );
-
 	myText.setAlpha( 255 );
 	myText.setPosition( screen_w/2 - myText.getWidth()/2, screen_h/2 - myText.getHeight()/2 -6 );
 
-	
+	mySprite.setID( "menu_exit_log-click" );
 	click.load( "menu/click.wav", 50 );
-
-    return true;
 }
 
 void Menu_exit_log::handle( sf::Event &event )
