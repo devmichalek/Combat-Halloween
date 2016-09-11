@@ -1,7 +1,7 @@
 #pragma once
 
-#include "sprite.h"
-#include "chunk.h"
+#include "templates/sprite.h"
+#include "templates/chunk.h"
 
 class Link_button
 {
@@ -21,7 +21,7 @@ public:
     Link_button( string url, bool locked = false );
     ~Link_button();
 
-    bool load( string path, int screen_w, int bot = 10 );
+    void load( string path, int screen_w, int bot = 10 );
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
 	
