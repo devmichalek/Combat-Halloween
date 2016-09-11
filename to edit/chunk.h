@@ -9,13 +9,15 @@
 
 
 #pragma once
-#include <SDL2/SDL_mixer.h>		// Mix_Chunk, Mix_FreeChunk, Mix_GetError, Mix_VolumeChunk
-#include <iostream>				// string, cerr, <<
+#include <SDL2/SDL_mixer.h>
+#include <iostream>
 
 class Chunk
 {
 
 protected:	
+
+	std::string ID;	// Universal
 
 	Uint8 volume;
 	std::string path;
@@ -26,6 +28,11 @@ public:
     Chunk();
     ~Chunk();
 	void free();	// Delete objects
+	void setID( std::string name );	// To easier find bugs
+	
+	#ifdef _WIN32
+	void setColor( int i );
+	#endif
 
     void load( std::string path, int volume = 0 );
     void play();
@@ -33,5 +40,5 @@ public:
     inline Mix_Chunk* get();
     void setVolume( int volume );
 	
-	std::ostream& operator <<( std::ostream& s );	// Print path and volume
+	std::ostream& operator <<( std::ostream& s );	// Print ID, path and volume
 };
