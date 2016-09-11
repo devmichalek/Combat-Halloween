@@ -9,10 +9,15 @@
 
 
 #include "text.h"
-#include <stdio.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 MyText::MyText( int alpha )
 {
+	ID = "";
+	
 	w = h = 0;
     x = y = 0;
 
@@ -52,7 +57,13 @@ void MyText::free()
 	r = g = b = 0xFF;
 }
 
-	
+void MyText::setID( string name )
+{
+	ID = name;
+}
+
+
+#ifdef __linux__
 void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	if( font != NULL )
@@ -66,7 +77,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 		font = new sf::Font;
 
 		if( !font->loadFromFile( path ) )
-			throw "\n\x1B[91mNot loaded\x1B[0m " + path + "\n";
+			throw "ID: " + ID + " \x1B[91mnot loaded\x1B[0m " + path;
 	}
 	catch( string msg )
 	{
@@ -77,9 +88,9 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 	{
 		this->size = size;
 		if( size < 1 )
-			throw "\n\x1B[91mSize is less than 1!\x1B[0m\n";
+			throw "ID: " + ID + " \x1B[91msize is less than 1!\x1B[0m";
 	}
-	catch( const char* msg )
+	catch( string msg )
 	{
 		cerr << msg << endl;
 	}
@@ -88,6 +99,61 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 	this->g = g;
 	this->b = b;
 }
+#elif _WIN32
+void MyText::setColor( int i )
+{
+	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
+	SetConsoleTextAttribute( h, i );
+}
+
+void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
+{
+	if( font != NULL )
+    {
+        delete font;
+        font = NULL;
+    }
+	
+	try
+	{
+		font = new sf::Font;
+
+		if( !font->loadFromFile( path ) )
+		{
+			throw "ID: " + ID + " ";
+			setColor( 12 );
+			throw "not loaded";
+			setColor( 7 );
+			throw " " + path;
+		}
+	}
+	catch( string msg )
+	{
+		cerr << msg << endl;
+	}
+	
+	try
+	{
+		this->size = size;
+		if( size < 1 )
+		{
+			throw "ID: " + ID + " ";
+			setColor( 12 );
+			throw "size is less than 1!";
+			setColor( 7 );
+		}
+	}
+	catch( string msg )
+	{
+		cerr << msg << endl;
+	}
+	
+	this->r = r;
+	this->g = g;
+	this->b = b;
+}
+#endif
+
 
 void MyText::setText( string line )
 {
@@ -102,7 +168,7 @@ void MyText::setText( string line )
 		text = new sf::Text;
 		
 		if( text == NULL )
-			throw "\nNot created text object\n";
+			throw "ID: " + ID + " not created text object";
 		
 		text->setString( line );
 		text->setCharacterSize( size );
@@ -112,12 +178,11 @@ void MyText::setText( string line )
 		w = text->getLocalBounds().width;
 		h = text->getLocalBounds().height;
 	}
-	catch( const char* msg )
+	catch( string msg )
 	{
 		cerr << msg << endl;
 	}
 }
-
 	
 void MyText::setPosition( float x, float y )
 {
@@ -270,4 +335,9 @@ int MyText::getTop()
 int MyText::getBot()
 {
     return y + h;
+}
+
+std::ostream& MyText::operator <<( std::ostream& s )
+{
+	return s << "ID: " << ID << " x: " << x << " y: " << y << " w: " << w << " h: " << h << " alpha: " << alpha;
 }
