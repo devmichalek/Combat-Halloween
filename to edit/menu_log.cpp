@@ -35,9 +35,10 @@ Menu_log::~Menu_log()
 	locked = false;
 }
 
-bool Menu_log::load( string path, int left, int y, int screen_w )
+void Menu_log::load( string path, int left, int y, int screen_w )
 {
-    button.load( "messnu/" + path +".png", 4 );
+	button.setID( "menu_log-button" );
+    button.load( "menu/" + path + ".png", 4 );
 	button.setPosition( left, y );
 	
 	
@@ -45,103 +46,93 @@ bool Menu_log::load( string path, int left, int y, int screen_w )
 	if( locked )
 	{
 		button.setOffset( 3 );
-		return true;
-	}
-	
-	
-	
-	log.load( "menu/window.png" );
-	log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
-		
-	
-	
-	click.load( "menu/click.wav", 50 );
-	
-	
-	
-	
-	// file
-	fstream file;
-	
-	
-	
-	file.open( "menu/" + path + ".txt", ios::in );
-	if( !file.good() )
-	{
-		printf( "Can not load %s.txt\n", path.c_str() );
 	}
 	else
 	{
-		// line
-		string line;
+		log.setID( "menu_log-log" );
+		log.load( "menu/window.png" );
+		log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
+			
 		
-		// how many lines
-		int line_counter = 0;
+		click.setID( "menu_log-click" );
+		click.load( "menu/click.wav", 50 );
 		
-		//printf( "test1" );
-		while( getline( file, line ) )
+		// file
+		fstream file;
+		
+		file.open( "menu/" + path + ".txt", ios::in );
+		if( !file.good() )
 		{
-			line_counter ++;
+			printf( "Can not load %s.txt\n", path.c_str() );
+		}
+		else
+		{
+			// line
+			string line;
+			
+			// how many lines
+			int line_counter = 0;
+			
+			//printf( "test1" );
+			while( getline( file, line ) )
+			{
+				line_counter ++;
+			}
+			
+			nr = line_counter;
+			//printf( "%d\n", nr );
+		}
+		file.close();
+		
+		
+		file.open( "menu/" + path + ".txt", ios::in );
+		if( file.bad() )
+		{
+			printf( "Can not load %s.txt\n", path.c_str() );
+		}
+		else
+		{
+			// create array
+			myText = new MyText[ nr ];
+			
+			// line
+			string line;
+			
+			// counter
+			int c = 0;
+			
+			int height = log.getTop() +52;
+			int border = 0;
+			
+			//printf( "%d\n", nr );
+			
+			while( getline( file, line ) )
+			{
+				// printf( "%d\n", line.length() );
+				// printf( "%s\n", line.c_str() );
+				
+				if( c < 5 )
+					border += 5;
+				else if( c > 6 )
+					border -= 5;
+				
+				click.setID( "menu_log-myText" );
+				myText[ c ].setFont( "menu/KGHAPPY.ttf", 28, 0xd5, 0xad, 0x51 );
+				myText[ c ].setText( line );
+				myText[ c ].setPosition( log.getX() +80 - border, height );
+				
+				// printf( "x:%d  y:%d\n", myText[ c ].getX(), myText[ c ].getY() );
+				
+				height += myText[ c ].getHeight();
+				c ++;
+			}
+			 
+			
+			
 		}
 		
-		nr = line_counter;
-		//printf( "%d\n", nr );
+		file.close();
 	}
-	file.close();
-	
-	
-	// printf( "test2" );
-	
-	file.open( "menu/" + path + ".txt", ios::in );
-	if( file.bad() )
-	{
-		printf( "Can not load %s.txt\n", path.c_str() );
-	}
-	else
-	{
-		// create array
-		myText = new MyText[ nr ];
-		
-		// line
-		string line;
-		
-		// counter
-		int c = 0;
-		
-		int height = log.getTop() +52;
-		int border = 0;
-		
-		//printf( "%d\n", nr );
-		
-		while( getline( file, line ) )
-		{
-			// printf( "%d\n", line.length() );
-			// printf( "%s\n", line.c_str() );
-			
-			if( c < 5 )
-				border += 5;
-			else if( c > 6 )
-				border -= 5;
-			
-			myText[ c ].setFont( "menu/KGHAPPY.ttf", 28, 0xd5, 0xad, 0x51 );
-
-			myText[ c ].setText( line );
-
-			myText[ c ].setPosition( log.getX() +80 - border, height );
-			
-			// printf( "x:%d  y:%d\n", myText[ c ].getX(), myText[ c ].getY() );
-			
-			height += myText[ c ].getHeight();
-			c ++;
-		}
-		 
-		
-		
-	}
-	file.close();
-	
-	
-    return true;
 }
 
 void Menu_log::draw( sf::RenderWindow* &window )

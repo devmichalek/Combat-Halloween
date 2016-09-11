@@ -1,8 +1,8 @@
 #pragma once
 
-#include "sprite.h"
-#include "text.h"
-#include "chunk.h"
+#include "templates/sprite.h"
+#include "templates/text.h"
+#include "templates/chunk.h"
 
 class Menu_log
 {
@@ -25,7 +25,7 @@ public:
 	Menu_log( bool locked = false );
     ~Menu_log();
 
-    bool load( string path, int left, int y, int screen_w );
+    void load( string path, int left, int y, int screen_w );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
