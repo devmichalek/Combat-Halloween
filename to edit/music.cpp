@@ -9,10 +9,15 @@
 
 
 #include "music.h"
-#include <stdio.h>	// printf
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 Music::Music()
 {
+	ID = "";
+	
 	volume = 0;
 	path = "";
     music = NULL;
@@ -35,7 +40,13 @@ void Music::free()
     }
 }
 
+void Music::setID( std::string name )
+{
+	ID = name;
+}
 
+
+#ifdef __linux__
 void Music::load( std::string path, int volume )
 {
     free();
@@ -46,7 +57,7 @@ void Music::load( std::string path, int volume )
 		this->path = path;
 		
 		if( music == NULL )
-			throw "\n\x1B[91mNot found\x1B[0m music " + path + "  Error " + Mix_GetError() + "\n";
+			throw "ID: " + ID + " \x1B[91mnot found\x1B[0m music " + path + "  Error " + Mix_GetError();
 	}
 	catch( std::string msg )
 	{
@@ -59,14 +70,67 @@ void Music::load( std::string path, int volume )
 		Mix_VolumeMusic( volume );
 		this->volume = volume;
 		
-		if( volume < 0 || volume > 128 )
-			throw "\nVolume \x1B[91mneed to be between\x1B[0m 0 and 128\n";
+		if( this->volume < 0 || this->volume > 128 )
+			throw "ID: " + ID + " file: " + path + ": volume \x1B[91mneed to be between\x1B[0m 0 and 128";
 	}
 	catch( const char* msg )
 	{
 		std::cerr << msg << std::endl;
 	}
 }
+
+#elif _WIN32
+void Music::setColor( int i )
+{
+	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
+	SetConsoleTextAttribute( h, i );
+}
+
+void Music::load( std::string path, int volume )
+{
+    free();
+	
+	try
+	{
+		music = Mix_LoadMUS( path.c_str() );
+		this->path = path;
+		
+		if( music == NULL )
+		{
+			throw "ID: " + ID + " ";
+			setColor( 12 );
+			throw "not found";
+			setColor( 7 );
+			throw " music " + path + "  Error " + Mix_GetError();
+		}
+	}
+	catch( std::string msg )
+	{
+		std::cerr << msg << std::endl;
+	}
+	
+	
+	try
+	{
+		Mix_VolumeMusic( volume );
+		this->volume = volume;
+		
+		if( this->volume < 0 || this->volume > 128 )
+		{
+			throw "ID: " + ID + " file: " + path + ": volume ";
+			setColor( 12 );
+			throw "need to be between";
+			setColor( 7 );
+			throw " 0 and 128";
+		}
+	}
+	catch( const char* msg )
+	{
+		std::cerr << msg << std::endl;
+	}
+}
+#endif
+
 
 void Music::play()
 {
@@ -127,5 +191,5 @@ Mix_Music* Music::get()
 
 std::ostream& Music::operator <<( std::ostream& s )
 {
-	return s << "Chunk name: " << path << " volume: " << volume;
+	return s << "ID: " << ID << " music name: " << path << " volume: " << volume;
 }
