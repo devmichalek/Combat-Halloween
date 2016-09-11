@@ -29,6 +29,6 @@
 #define LREDBOLD "\x1B[31;1m"
 
 void clear();
-void centre( int w, char* s );
+// void centre( int w, char* s );
 
 #endif // TEXT_H
