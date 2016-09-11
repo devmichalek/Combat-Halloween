@@ -16,18 +16,19 @@ Menu_play_button::~Menu_play_button()
 	click.free();
 }
 
-bool Menu_play_button::load( int screen_w, int bot )
+void Menu_play_button::load( int screen_w, int bot )
 {
+	mySprite.setID( "menu_play_button-mySprite" );
 	mySprite.load( "menu/blankbutton.png", 4 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
+	myText.setID( "menu_play_button-myText" );
 	myText.setFont( "menu/KGHAPPY.ttf", 80, 0x82, 0xae, 0x20 );
 	myText.setText( "play" );
 	myText.setPosition( screen_w/2 - myText.getWidth()/2, bot +20 );
 	
-	click.load( "menu/click.wav", -1 );
-
-    return true;
+	click.setID( "menu_play_button-click" );
+	click.load( "menu/click.wav", 50 );
 }
 
 void Menu_play_button::draw( sf::RenderWindow* &window )
