@@ -27,10 +27,11 @@ Engine::Engine()
 	menu_chunk_button = new Menu_music_button( false );
 	author_log = new Menu_log;
 	game_log = new Menu_log( true );
-	settings_log = new Menu_log( true );
+	settings_log = new Menu_log( false, false );
 	scores_log = new Menu_log;
 	menu_exit = new Menu_exit_log;
 	menu_music = new Music; menu_music->setID( "engine-menu_music" );
+	music_volume = new Music_volume;
 	
 	// Create play objects
 	game_timer = new Game_timer;
@@ -55,6 +56,7 @@ void Engine::free()
 	delete scores_log;
 	delete menu_exit;
 	delete menu_music;
+	delete music_volume;
 	
 	delete game_timer;
 	
@@ -120,6 +122,10 @@ void Engine::load()
 		game_timer->load( core->getWidth() );
 		break;
 		
+		case 11:
+		music_volume->load( core->getWidth(), core->getHeight(), "Music" );
+		break;
+		
 		
 		case 100:
 		delete loading;
@@ -160,10 +166,12 @@ void Engine::events()
 						menu_chunk_button->handle( core->getEvent() );
 					}
 					
-					if( author_log->getState() != 2 )
+					if( author_log->getState() != 2 && settings_log->getState() != 2 )
 						scores_log->handle( core->getEvent() );
-					if( scores_log->getState() != 2 )	
+					if( scores_log->getState() != 2 && settings_log->getState() != 2  )	
 						author_log->handle( core->getEvent() );
+					if( scores_log->getState() != 2 && author_log->getState() != 2  )	
+						settings_log->handle( core->getEvent() );
 				}
 			}
         }
@@ -218,6 +226,7 @@ void Engine::states()
 			menu_play_button->turn();
 			author_log->turn();
 			scores_log->turn();
+			settings_log->turn();
 			menu_exit->turn();
 		}
 		
@@ -306,7 +315,7 @@ void Engine::states()
 		// Draw
 		core->getWindow()->draw( menu_background->get() );
 		menu_title->draw( *core->getWindow() );
-		if( author_log->getState() != 2 && scores_log->getState() != 2 ) // if user didn't click logs
+		if( author_log->getState() != 2 && scores_log->getState() != 2 && settings_log->getState() != 2 ) // if user didn't click logs
 		{
 			git_button->draw( *core->getWindow() );
 			google_button->draw( *core->getWindow() );
@@ -315,13 +324,14 @@ void Engine::states()
 			menu_play_button->draw( core->getWindow() );
 			menu_music_button->draw( core->getWindow() );
 			menu_chunk_button->draw( core->getWindow() );
-			settings_log->draw( core->getWindow() );
 			game_log->draw( core->getWindow() );
 		}
-		if( author_log->getState() != 2 )
+		if( author_log->getState() != 2 && settings_log->getState() != 2 )
 			scores_log->draw( core->getWindow() );
-		if( scores_log->getState() != 2 )
+		if( scores_log->getState() != 2 && settings_log->getState() != 2 )
 			author_log->draw( core->getWindow() );
+		if( scores_log->getState() != 2 && author_log->getState() != 2 )
+			settings_log->draw( core->getWindow() );
 		
 		if( menu_exit->getState() < 2 )
 			menu_exit->draw( core->getWindow() );
