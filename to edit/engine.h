@@ -9,6 +9,7 @@
 #include "menu/menu_music_button.h"
 #include "menu/menu_log.h"
 #include "menu/menu_exit_log.h"
+#include "menu/music_volume.h"
 #include "templates/music.h"
 #include "play/game_timer.h"
 
@@ -39,6 +40,7 @@ class Engine
 	Menu_log* scores_log;
 	Menu_exit_log* menu_exit;
 	Music* menu_music;
+	Music_volume* music_volume;
 	
 	// Play state
 	Game_timer* game_timer;
