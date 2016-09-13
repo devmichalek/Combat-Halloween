@@ -332,6 +332,12 @@ void Engine::states()
 			author_log->draw( core->getWindow() );
 		if( scores_log->getState() != 2 && author_log->getState() != 2 )
 			settings_log->draw( core->getWindow() );
+			
+		if( settings_log->getState() == 2 )
+		{
+			music_volume->draw( core->getWindow() );
+		}
+			
 		
 		if( menu_exit->getState() < 2 )
 			menu_exit->draw( core->getWindow() );
