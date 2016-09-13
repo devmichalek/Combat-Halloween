@@ -26,7 +26,7 @@ public:
     ~Menu_log();
 
     void load( string path, int left, int y, int screen_w );
-    void draw( sf::RenderWindow* &window );
+    void draw( sf::RenderWindow* &window, bool render_log = true );
     void handle( sf::Event &event );
 	
 	int getRight();
