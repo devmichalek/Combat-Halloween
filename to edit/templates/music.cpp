@@ -179,7 +179,7 @@ void Music::fadeout( int i, int min )
 		volume -= i;
 		if( volume < min )
 			volume = min;
-		printf( "%d\n", volume );
+		//printf( "%d\n", volume );
 		Mix_VolumeMusic( volume );
 	}
 }
