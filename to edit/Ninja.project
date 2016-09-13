@@ -15,6 +15,7 @@
     <File Name="core.h"/>
     <File Name="engine.cpp"/>
     <File Name="engine.h"/>
+    <File Name="menu/music_volume.cpp"/>
   </VirtualDirectory>
   <Settings Type="Executable">
     <GlobalSettings>
@@ -125,6 +126,7 @@
     <File Name="menu/menu_play_button.h"/>
     <File Name="menu/menu_title.cpp"/>
     <File Name="menu/menu_title.h"/>
+    <File Name="menu/music_volume.h"/>
   </VirtualDirectory>
   <VirtualDirectory Name="templates">
     <File Name="templates/chunk.cpp"/>
@@ -144,4 +146,6 @@
     <File Name="play/play_exit_log.cpp"/>
     <File Name="play/play_exit_log.h"/>
   </VirtualDirectory>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
 </CodeLite_Project>
