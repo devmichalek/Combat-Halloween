@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Adrian Michalek
-Date                   :=11/09/16
+Date                   :=13/09/16
 CodeLitePath           :=/home/adr/.codelite
 LinkerName             :=g++
 SharedObjectLinkerName :=g++ -shared -fPIC
@@ -60,8 +60,9 @@ AS       := as
 ## User defined environment variables
 ##
 CodeLiteDir:=/usr/share/codelite
-Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/color.c$(ObjectSuffix) $(IntermediateDirectory)/core.cpp$(ObjectSuffix) $(IntermediateDirectory)/engine.cpp$(ObjectSuffix) $(IntermediateDirectory)/start_intro.cpp$(ObjectSuffix) $(IntermediateDirectory)/start_loading.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_link_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_exit_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_music_button.cpp$(ObjectSuffix) \
-	$(IntermediateDirectory)/menu_menu_play_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_title.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_chunk.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_music.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_sprite.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_text.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_game_timer.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_play_bg.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_play_exit_log.cpp$(ObjectSuffix) 
+Objects0=$(IntermediateDirectory)/main.cpp$(ObjectSuffix) $(IntermediateDirectory)/color.c$(ObjectSuffix) $(IntermediateDirectory)/core.cpp$(ObjectSuffix) $(IntermediateDirectory)/engine.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_music_volume.cpp$(ObjectSuffix) $(IntermediateDirectory)/start_intro.cpp$(ObjectSuffix) $(IntermediateDirectory)/start_loading.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_link_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_exit_log.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_log.cpp$(ObjectSuffix) \
+	$(IntermediateDirectory)/menu_menu_music_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_play_button.cpp$(ObjectSuffix) $(IntermediateDirectory)/menu_menu_title.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_chunk.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_music.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_sprite.cpp$(ObjectSuffix) $(IntermediateDirectory)/templates_text.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_game_timer.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_play_bg.cpp$(ObjectSuffix) $(IntermediateDirectory)/play_play_exit_log.cpp$(ObjectSuffix) \
+	
 
 
 
@@ -123,6 +124,14 @@ $(IntermediateDirectory)/engine.cpp$(DependSuffix): engine.cpp
 
 $(IntermediateDirectory)/engine.cpp$(PreprocessSuffix): engine.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/engine.cpp$(PreprocessSuffix)engine.cpp
+
+$(IntermediateDirectory)/menu_music_volume.cpp$(ObjectSuffix): menu/music_volume.cpp $(IntermediateDirectory)/menu_music_volume.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adr/Dokumenty/C++ workspace/Ninja/menu/music_volume.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/menu_music_volume.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/menu_music_volume.cpp$(DependSuffix): menu/music_volume.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/menu_music_volume.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/menu_music_volume.cpp$(DependSuffix) -MM menu/music_volume.cpp
+
+$(IntermediateDirectory)/menu_music_volume.cpp$(PreprocessSuffix): menu/music_volume.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/menu_music_volume.cpp$(PreprocessSuffix)menu/music_volume.cpp
 
 $(IntermediateDirectory)/start_intro.cpp$(ObjectSuffix): start/intro.cpp $(IntermediateDirectory)/start_intro.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adr/Dokumenty/C++ workspace/Ninja/start/intro.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/start_intro.cpp$(ObjectSuffix) $(IncludePath)
