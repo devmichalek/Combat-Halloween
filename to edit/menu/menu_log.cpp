@@ -135,11 +135,11 @@ void Menu_log::load( string path, int left, int y, int screen_w )
 	}
 }
 
-void Menu_log::draw( sf::RenderWindow* &window )
+void Menu_log::draw( sf::RenderWindow* &window, bool render_log )
 {
 	if( state < 2 )
 		window->draw( button.get() );
-	else if( !locked )
+	else if( !locked && render_log )
 	{
 		window->draw( log.get() );
 		for( int i = 0; i < nr; i ++ )
