@@ -1,2 +1,2 @@
-# Ninja2
-C++, SFML
+##Introduction
+Work in progress...
