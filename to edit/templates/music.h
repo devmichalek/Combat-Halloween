@@ -19,7 +19,7 @@ protected:
 	
 	std::string ID;	// Universal ID
 	
-	Uint8 volume;
+	int volume;
 	std::string path;
     Mix_Music* music;
 

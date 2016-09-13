@@ -9,6 +9,7 @@
 
 
 #include "music.h"
+#include <stdio.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -178,7 +179,7 @@ void Music::fadeout( int i, int min )
 		volume -= i;
 		if( volume < min )
 			volume = min;
-		
+		printf( "%d\n", volume );
 		Mix_VolumeMusic( volume );
 	}
 }
