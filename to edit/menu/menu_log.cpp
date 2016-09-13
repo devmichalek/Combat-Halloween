@@ -3,7 +3,7 @@
 #include <fstream>
 #include <stdio.h>
 
-Menu_log::Menu_log( bool locked )
+Menu_log::Menu_log( bool locked, bool win )
 {
     state = 0;
 	nr = 0;
@@ -11,6 +11,7 @@ Menu_log::Menu_log( bool locked )
 	play = true;
 	
 	this->locked = locked;
+	this->win = win;
 }
 
 Menu_log::~Menu_log()
@@ -41,11 +42,15 @@ void Menu_log::load( string path, int left, int y, int screen_w )
     button.load( "menu/" + path + ".png", 4 );
 	button.setPosition( left, y );
 	
-	
 	// if is locked we don't have reason to load futher
 	if( locked )
 	{
 		button.setOffset( 3 );
+	}
+	else if( !win )
+	{
+		click.setID( "menu_log-click" );
+		click.load( "menu/click.wav", 50 );
 	}
 	else
 	{
@@ -53,7 +58,6 @@ void Menu_log::load( string path, int left, int y, int screen_w )
 		log.load( "menu/window.png" );
 		log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
 			
-		
 		click.setID( "menu_log-click" );
 		click.load( "menu/click.wav", 50 );
 		
@@ -135,11 +139,11 @@ void Menu_log::load( string path, int left, int y, int screen_w )
 	}
 }
 
-void Menu_log::draw( sf::RenderWindow* &window, bool render_log )
+void Menu_log::draw( sf::RenderWindow* &window )
 {
 	if( state < 2 )
 		window->draw( button.get() );
-	else if( !locked && render_log )
+	else if( !locked && win )
 	{
 		window->draw( log.get() );
 		for( int i = 0; i < nr; i ++ )
@@ -225,7 +229,7 @@ void Menu_log::fadein( int i, int max )
 {
 	button.fadein( i, max );
 	
-	if( !locked )
+	if( !locked && win )
 	{
 		log.fadein( i, max );
 		for( int j = 0; j < nr; j ++ )
@@ -239,7 +243,7 @@ void Menu_log::fadeout( int i, int min )
 {
 	button.fadeout( i, min );
 	
-	if( !locked )
+	if( !locked && win )
 	{
 		log.fadeout( i, min );
 		for( int j = 0; j < nr; j ++ )

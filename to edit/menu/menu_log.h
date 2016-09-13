@@ -20,13 +20,16 @@ class Menu_log
 	// if that log is not ready
 	bool locked;
 	
+	// if we don't want to render window texture
+	bool win;
+	
 public:
 	
-	Menu_log( bool locked = false );
+	Menu_log( bool locked = false, bool win = true );
     ~Menu_log();
 
     void load( string path, int left, int y, int screen_w );
-    void draw( sf::RenderWindow* &window, bool render_log = true );
+    void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
 	int getRight();
