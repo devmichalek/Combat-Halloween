@@ -173,32 +173,52 @@ void MySprite::load( string path, int nr )
 	}
 }
 
-void MySprite::create( int w, int h, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
+void MySprite::create( int w, int h, sf::Color color )
 {
+	free();
+	
 	try
 	{	
 		if( w < 0 )
+		{
 			throw "ID: " + ID + " \x1B[91mwidth is less than 0\x1B[0m";
+		}
 		if( h < 0 )
+		{
 			throw "ID: " + ID + " \x1B[91mheight is less than 0\x1B[0m";
+		}
 		
-		if( !texture.create( w, h ) )
+		texture = new sf::Texture;
+		if( texture == NULL )
+		{
+			throw "ID: " + ID + " \x1B[91mnot created\x1B[0m texture!";
+		}
+		else if( !texture.create( w, h ) )
+		{
 			throw "ID: " + ID + " \x1B[91mnot created blank texture\x1B[0m";
-			
-		sf::Uint8* pixels = new sf::Uint8[ w * h * 4 ];
-		for( int i = 0; i < w*h*4; i += 4 )
-		{
-			pixels[ i ] = r;
-			pixels[ i +1 ] = g;
-			pixels[ i +2 ] = b;
-			pixels[ i +3 ] = alpha;
 		}
-		
-		nr = -2;
-		texture.update( pixels );
-		
-		delete [] pixels;
-		pixels = NULL;
+		else
+		{
+			
+			pixels = new sf::Uint8[ w * h * 4 ];
+			if( pixels == NULL )
+			{
+				throw "ID: " + ID + " \x1B[91mnot created\x1B[0m array of pixels!";
+			}
+			else
+			{
+				for( int i = 0; i < w*h*4; i += 4 )
+				{
+					pixels[ i ] = color.r;
+					pixels[ i +1 ] = color.g;
+					pixels[ i +2 ] = color.b;
+					pixels[ i +3 ] = color.a;
+				}
+			}
+			
+			nr = 0;
+			texture.update( pixels );
+		}
 	}
 	catch( string msg )
 	{
@@ -211,171 +231,17 @@ void MySprite::create( int w, int h, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 	{
 		sprite = new sf::Sprite;
 		if( sprite == NULL )
+		{
 			throw "ID: " + ID + " \x1B[91mnot created\x1B[0m sprite!";
-			
-		sprite->setTexture( texture );
-		this->w = texture.getSize().x;
-		this->h = texture.getSize().y;
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-}
-
-#elif _WIN32
-void MySprite::setColor( int i )
-{
-	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
-	SetConsoleTextAttribute( h, i );
-}
-
-void MySprite::load( string path, int nr )
-{
-    free();
-	
-	try
-	{	
-		if( !texture.loadFromFile( path ) )
-		{
-			throw "ID: " + ID + " ";
-			setColor( 12 );
-			throw "not loaded";
-			setColor( 7 );
-			throw " " + path;
 		}
-		texture.setSmooth( true );
-		
-		this->nr = nr;
-		if( nr < 0 )
+		else
 		{
-			throw "ID: " + ID + " ";
-			setColor( 12 );
-			throw "number is less than 0";
-			setColor( 7 );
-		}
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-    
-
-	if( nr == 0 || nr == 1 )
-	{
-		try
-		{
-			sprite = new sf::Sprite;
-			if( sprite == NULL )
-			{
-				throw "ID: " + ID + " ";
-				setColor( 12 );
-				throw "not created";
-				setColor( 7 );
-				throw " sprite!";
-			}
-				
 			sprite->setTexture( texture );
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
-			
-			w = texture.getSize().x;
-			h = texture.getSize().y;
+			rect.width = w;
+			rect.height = h;
 		}
-		catch( string msg )
-		{
-			cerr << msg << endl;
-		}
-	}
-	else if( nr > 1 )
-	{
-		try
-		{
-			sprite = new sf::Sprite[ nr ];
-			if( sprite == NULL )
-			{
-				throw "ID: " + ID + " ";
-				setColor( 12 );
-				throw "not created";
-				setColor( 7 );
-				throw " array of sprite!";
-			}
-				
-			w = texture.getSize().x / nr;
-			h = texture.getSize().y;
-			
-			sf::IntRect rect;
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setTexture( texture);
-
-				rect.left = i * w;
-				rect.top = 0;
-				rect.width = w;
-				rect.height = h;
-
-				sprite[ i ].setTextureRect( rect );
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
-			}
-		}
-		catch( string msg )
-		{
-			cerr << msg << endl;
-		}
-	}
-}
-
-void MySprite::create( int w, int h, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
-{
-	try
-	{	
-		
-		if( w < 0 )
-			throw "ID: " + ID + " width is less than 0";
-		if( h < 0 )
-			throw "ID: " + ID + " height is less than 0";
-		
-		if( !texture.create( w, h ) )
-			throw "ID: " + ID + " not created blank texture";
-			
-		sf::Uint8* pixels = new sf::Uint8[ w * h * 4 ];
-		for( int i = 0; i < w*h*4; i += 4 )
-		{
-			pixels[ i ] = r;
-			pixels[ i +1 ] = g;
-			pixels[ i +2 ] = b;
-			pixels[ i +3 ] = alpha;
-		}
-		
-		nr = -2;
-		texture.update( pixels );
-		
-		delete [] pixels;
-		pixels = NULL;
 	}
 	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-	
-	
-
-	try
-	{
-		sprite = new sf::Sprite;
-		if( sprite == NULL )
-		{
-			throw "ID: " + ID + " ";
-			setColor( 12 );
-			throw "not created";
-			setColor( 7 );
-			throw " sprite!";
-		}
-			
-		sprite->setTexture( texture );
-		this->w = texture.getSize().x;
-		this->h = texture.getSize().y;
-	}
-	catch( const char* msg )
 	{
 		cerr << msg << endl;
 	}
@@ -383,10 +249,6 @@ void MySprite::create( int w, int h, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 #endif
 
 
-void MySprite::setOffset( int n )
-{
-    offset = n;
-}
 
 void MySprite::setPosition( float x, float y )
 {
@@ -490,15 +352,7 @@ void MySprite::setScale( float s, float z )
 }
 
 
-sf::Sprite& MySprite::get()
-{
-    if( nr == 0 || nr == 1 )
-    {
-        return *sprite;
-    }
 
-    return sprite[ offset ];
-}
 
 bool MySprite::checkCollision( int x, int y, int w, int h )
 {
@@ -573,50 +427,100 @@ void MySprite::fadeout( int i, int min )
 }
 
 
+sf::Uint8 MySprite::getAlpha()
+{
+	return color.a;
+}
+
+void MySprite::setAlpha( sf::Uint8 a = 0 )
+{
+	if( color.a != a )
+	{
+		color.a = a;
+		
+		if( nr == 0 )
+		{
+			
+		}
+		else if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( sf::Color( r, g, b, alpha ) );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+			}
+		}
+	}
+}
+
+
 int MySprite::getX()
 {
-    return x;
+    return rect.x;
 }
 
 int MySprite::getY()
 {
-    return y;
+    return rect.y;
 }
-
 
 int MySprite::getWidth()
 {
-    return w;
+    return rect.width;
 }
 int MySprite::getHeight()
 {
-    return h;
+    return rect.height;
 }
 
 
 int MySprite::getLeft()
 {
-    return x;
+    return rect.x;
 }
 
 int MySprite::getRight()
 {
-    return x + w;
+    return rect.x + rect.width;
 }
-
 
 int MySprite::getTop()
 {
-    return y;
+    return rect.y;
 }
 
 int MySprite::getBot()
 {
-    return y + h;
+    return rect.y + rect.height;
+}
+
+
+void MySprite::setOffset( int n )
+{
+    offset = n;
+}
+
+int MySprite::getOffset()
+{
+	return offset;
+}
+
+
+sf::Sprite& MySprite::get()
+{
+    if( nr == 0 || nr == 1 )
+    {
+        return *sprite;
+    }
+	
+    return sprite[ offset ];
 }
 
 std::ostream& MySprite::operator <<( std::ostream& s )
 {
-	return s << "ID: " << ID << " x: " << x << " y: " << y << " w: " << w << " h: " << h << " alpha: " << alpha;
+	return s << "ID: " << ID << " x: " << rect.x << " y: " << rect.y << " w: " << rect.width << " h: " << rect.height << " alpha: " << color.a;
 }
 
