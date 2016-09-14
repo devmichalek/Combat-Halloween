@@ -17,23 +17,22 @@ class MySprite
 {
 	string ID;				// Identity
 	
-	sf::Uint8* pixels;		// Pixels
+	
 	sf::IntRect rect;		// Rectangle
 	sf::Color color;		// Color
 	
     int nr;					// How many offset's, 0 = blank texture, 1 = loaded image, > 1 image with offsets
     int offset;				// Topical offset
 	
+	sf::Uint8* pixels;
     sf::Sprite* sprite;
     sf::Texture* texture;
 	
 public:
 
-    MySprite( string ID = "", int offset = 0 );
+    MySprite( string ID = "" );
     ~MySprite();
     void free();
-	
-	void setID( string name );	// It's easier to find bug
 	
 	#ifdef _WIN32
 	void setColor( int i );
