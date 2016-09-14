@@ -14,7 +14,7 @@
 #include <windows.h>
 #endif
 
-MySprite::MySprite( string ID, int offset )
+MySprite::MySprite( string ID )
 {
 	this->ID = ID;
 	
@@ -22,13 +22,18 @@ MySprite::MySprite( string ID, int offset )
 	rect.height = 0;
 	rect.left = 0;
 	rect.right = 0;
+	
+	color.r = 0xFF;
+	color.g = 0xFF;
+	color.b = 0xFF;
+	color.a = 0xFF;
 
     nr = 0;
-    this->offset = offset;
+    offset = 0;
 	
+	pixels = NULL;
     sprite = NULL;
-	
-	r = g = b = 0xFF;
+	texture = NULL;
 }
 
 MySprite::~MySprite()
@@ -38,10 +43,23 @@ MySprite::~MySprite()
 
 void MySprite::free()
 {
-    w = h = 0;
-    x = y = 0;
+    rect.width = 0;
+	rect.height = 0;
+	rect.left = 0;
+	rect.right = 0;
+	
+	color.r = 0xFF;
+	color.g = 0xFF;
+	color.b = 0xFF;
+	color.a = 0xFF;
+	
+	if( pixels != NULL )
+    {
+        delete [] pixels;
+        pixels = NULL;
+    }
 
-    if( nr == 0 || nr == 1 || nr == -2 )
+    if( nr == 0 || nr == 1 )
     {
         delete sprite;
         sprite = NULL;
@@ -52,16 +70,16 @@ void MySprite::free()
         sprite = NULL;
     }
 	
-	nr = -1;
-
-	alpha = 0;
-	r = g = b = 0xFF;
+	if( texture != NULL )
+    {
+        delete texture;
+        texture = NULL;
+    }
+	
+	nr = 0;
+    offset = 0;
 }
 
-void MySprite::setID( string name )
-{
-	ID = name;
-}
 
 
 #ifdef __linux__
