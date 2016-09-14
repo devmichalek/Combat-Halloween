@@ -5,17 +5,18 @@
 
 class Music_volume
 {
-	sf::Uint8 volume;
+	int volume;
+	int last_volume;
 	MySprite green_bar;
 	MySprite white_bar;	// background
 	MyText text;		// music || chunk, volume
 	
 public:
 	
-	Music_volume( sf::Uint8 vol = 0 );
+	Music_volume( int vol = 0 );
 	~Music_volume();
 	
-	void load( int screen_w, int screen_h );
+	void load( int screen_w, int screen_h, string str );
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 };
