@@ -88,14 +88,26 @@ void MySprite::load( string path, int nr )
     free();
 	
 	try
-	{	
-		if( !texture.loadFromFile( path ) )
+	{
+		texture = new sf::Texture;
+		if( texture == NULL )
+		{
+			throw "ID: " + ID + " \x1B[91mnot created\x1B[0m texture!";
+		}
+		else if( !texture->loadFromFile( path ) )
+		{
 			throw "ID: " + ID + " \x1B[91mnot loaded\x1B[0m " + path;
-		texture.setSmooth( true );
-		
-		this->nr = nr;
-		if( nr < 0 )
-			throw "ID: " + ID + " \x1B[91mnumber is less than 0\x1B[0m";
+		}
+		else
+		{
+			texture.setSmooth( true );
+			
+			this->nr = nr;
+			if( nr < 1 )
+			{
+				throw "ID: " + ID + " \x1B[91mnumber is less than 1\x1B[0m";
+			}
+		}
 	}
 	catch( string msg )
 	{
@@ -103,19 +115,22 @@ void MySprite::load( string path, int nr )
 	}
     
 
-	if( nr == 0 || nr == 1 )
+	if( nr == 1 )
 	{
 		try
 		{
 			sprite = new sf::Sprite;
 			if( sprite == NULL )
+			{
 				throw "ID: " + ID + " \x1B[91mnot created\x1B[0m sprite!";
-				
-			sprite->setTexture( texture );
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
-			
-			w = texture.getSize().x;
-			h = texture.getSize().y;
+			}
+			else
+			{
+				sprite->setTexture( texture );
+				sprite->setColor( color );
+				rect.width = texture.getSize().x;
+				rect.height = texture.getSize().y;
+			}
 		}
 		catch( string msg )
 		{
@@ -128,23 +143,27 @@ void MySprite::load( string path, int nr )
 		{
 			sprite = new sf::Sprite[ nr ];
 			if( sprite == NULL )
+			{
 				throw "ID: " + ID + " \x1B[91mnot created\x1B[0m array of sprite!";
-				
-			w = texture.getSize().x / nr;
-			h = texture.getSize().y;
+			}
+			else
+			{
+				rect.width = texture.getSize().x / nr;
+				rect.height = texture.getSize().y;
+			}
 			
-			sf::IntRect rect;
+			sf::IntRect _rect;
 			for( int i = 0; i < nr; i++ )
 			{
 				sprite[ i ].setTexture( texture);
 
-				rect.left = i * w;
-				rect.top = 0;
-				rect.width = w;
-				rect.height = h;
+				_rect.left = i * rect.width;
+				_rect.top = 0;
+				_rect.width = rect.width;
+				_rect.height = rect.height;
 
-				sprite[ i ].setTextureRect( rect );
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+				sprite[ i ].setTextureRect( _rect );
+				sprite[ i ].setColor( color );
 			}
 		}
 		catch( string msg )
