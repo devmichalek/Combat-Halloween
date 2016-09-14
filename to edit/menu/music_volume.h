@@ -13,10 +13,13 @@ class Music_volume
 	
 public:
 	
-	Music_volume( int vol = 0 );
+	Music_volume( int volume = 1 );
 	~Music_volume();
 	
 	void load( int screen_w, int screen_h, string str );
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
+	
+	void fadein( int i, int max );
+	void fadeout( int i, int min );
 };
