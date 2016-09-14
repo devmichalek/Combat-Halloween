@@ -14,19 +14,20 @@
 #include <windows.h>
 #endif
 
-MySprite::MySprite( int start_offset, int alpha )
+MySprite::MySprite( string ID, int offset )
 {
-	ID = "";
+	this->ID = ID;
 	
-    w = h = 0;
-    x = y = 0;
+    rect.width = 0;
+	rect.height = 0;
+	rect.left = 0;
+	rect.right = 0;
 
-    nr = -1;
-    offset = start_offset;
+    nr = 0;
+    this->offset = offset;
 	
     sprite = NULL;
 	
-	this->alpha = alpha;
 	r = g = b = 0xFF;
 }
 
@@ -40,7 +41,7 @@ void MySprite::free()
     w = h = 0;
     x = y = 0;
 
-    if( nr == 0 || nr == 1 )
+    if( nr == 0 || nr == 1 || nr == -2 )
     {
         delete sprite;
         sprite = NULL;
@@ -156,7 +157,7 @@ void MySprite::create( int w, int h, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 			pixels[ i +3 ] = alpha;
 		}
 		
-		nr = 0;
+		nr = -2;
 		texture.update( pixels );
 		
 		delete [] pixels;
@@ -308,7 +309,7 @@ void MySprite::create( int w, int h, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 			pixels[ i +3 ] = alpha;
 		}
 		
-		nr = 0;
+		nr = -2;
 		texture.update( pixels );
 		
 		delete [] pixels;
@@ -483,8 +484,15 @@ void MySprite::fadein( int i, int max )
 		alpha += i;
 		if( alpha > max )
 			alpha = max;
-			
-		if( nr == 0 || nr == 1 )
+		
+		if( nr == -2 )
+		{
+			for( int i = 0; i < w*h*4; i += 4 )
+			{
+				//pixels[ i +3 ] = alpha;
+			}
+		}
+		else if( nr == 0 || nr == 1 )
 		{
 			sprite->setColor( sf::Color( r, g, b, alpha ) );
 		}
@@ -506,7 +514,14 @@ void MySprite::fadeout( int i, int min )
 		if( alpha < min )
 			alpha = min;
 			
-		if( nr == 0 || nr == 1 )
+		if( nr == -2 )
+		{
+			for( int i = 0; i < w*h*4; i += 4 )
+			{
+				pixels[ i +3 ] = alpha;
+			}
+		}
+		else if( nr == 0 || nr == 1 )
 		{
 			sprite->setColor( sf::Color( r, g, b, alpha ) );
 		}

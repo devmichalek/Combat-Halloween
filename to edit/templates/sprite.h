@@ -15,25 +15,24 @@ using namespace std;
 
 class MySprite
 {
-	string ID;	// Universal
+	string ID;				// Identity
 	
-    int w, h;
-    int x, y;
-
-    int nr;
-    int offset;
+	sf::Uint8* pixels;		// Pixels
+	sf::IntRect rect;		// Rectangle
+	sf::Color color;		// Color
+	
+    int nr;					// How many offset's, 0 = blank texture, 1 = loaded image, > 1 image with offsets
+    int offset;				// Topical offset
 	
     sf::Sprite* sprite;
-    sf::Texture texture;
+    sf::Texture* texture;
 	
-	int alpha;
-	sf::Uint8 r, g, b;
-
 public:
 
-    MySprite( int start_offset = 0, int alpha = 0 );
+    MySprite( string ID = "", int offset = 0 );
     ~MySprite();
     void free();
+	
 	void setID( string name );	// It's easier to find bug
 	
 	#ifdef _WIN32
