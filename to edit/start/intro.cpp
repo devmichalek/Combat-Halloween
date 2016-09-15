@@ -2,26 +2,16 @@
 
 Intro::Intro()
 {
-	nr = 0;
-	quit = false;
-	
 	bg = NULL;
 	shuriken = NULL;
 	text = NULL;
+	
+	nr = 0;
+	quit = false;
 }
 
 Intro::~Intro()
 {
-	if( text != NULL )
-	{
-		for( int i = 0; i < nr; i++ )
-			text[ i ].free();
-		
-		delete [] text;
-		text = NULL;
-		nr = 0;
-	}
-	
 	if( bg != NULL )
 	{
 		delete bg;
@@ -34,6 +24,16 @@ Intro::~Intro()
 		shuriken->free();
 	}
 	
+	if( text != NULL )
+	{
+		for( int i = 0; i < nr; i++ )
+			text[ i ].free();
+		
+		delete [] text;
+		text = NULL;
+		nr = 0;
+	}
+	
 	quit = false;
 }
 
@@ -43,7 +43,7 @@ void Intro::load( int screen_w, int screen_h )
 	shuriken = new MySprite( "intro-shuriken" );	// set ID
 	shuriken->load( "intro/shuriken.png" );
 	
-	bg = new MySprite( "intro-background" );
+	bg = new MySprite( "intro-background" );		// set ID
 	bg->setAlpha( 255 );
 	bg->create( screen_w, screen_h, sf::Color( 0x15, 0x15, 0x1D ) );
 		
