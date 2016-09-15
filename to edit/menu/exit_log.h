@@ -1,12 +1,12 @@
 #pragma once
 
-#include "menu_play_button.h"
+#include "play_button.h"
 
-class Exit_log :public Exit_log
+class Exit_log :public Play_button
 {
 
 public:
-	using::Exit_log::Exit_log;
+	using::Play_button::Play_button;
 	
 	void load( int screen_w, int screen_h );
 	void draw( sf::RenderWindow* &window );
