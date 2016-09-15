@@ -2,17 +2,16 @@
 
 Intro::Intro()
 {
-	//c = 0;
 	nr = 0;
 	quit = false;
+	
+	bg = NULL;
+	shuriken = NULL;
 	text = NULL;
 }
 
 Intro::~Intro()
 {
-	bg.free();
-	shuriken.free();
-	
 	if( text != NULL )
 	{
 		for( int i = 0; i < nr; i++ )
@@ -23,18 +22,30 @@ Intro::~Intro()
 		nr = 0;
 	}
 	
+	if( bg != NULL )
+	{
+		delete bg;
+		bg->free();
+	}
+	
+	if( shuriken != NULL )
+	{
+		delete shuriken;
+		shuriken->free();
+	}
+	
 	quit = false;
 }
 
 	
 void Intro::load( int screen_w, int screen_h )
 {
-	shuriken.setID( "intro-shuriken" ); // name of class and name of object
-	shuriken.load( "intro/shuriken.png" );
+	shuriken = new MySprite( "intro-shuriken" );	// set ID
+	shuriken->load( "intro/shuriken.png" );
 	
-	bg.setID( "intro-background" );
-	bg.setAlpha( 255 );
-	bg.create( screen_w, screen_h, 0x15, 0x15, 0x1D );
+	bg = new MySprite( "intro-background" );
+	bg->setAlpha( 255 );
+	bg->create( screen_w, screen_h, sf::Color( 0x15, 0x15, 0x1D ) );
 		
 	
 	nr = 4;
@@ -52,8 +63,8 @@ void Intro::load( int screen_w, int screen_h )
 	text[ 1 ].setID( "intro-text[1]" );
 	text[ 1 ].setFont( "intro/Jaapokki-Regular.otf", 37, 0x70, 0xB7, 0x59 );
 	text[ 1 ].setText( "Ninja" );
-	text[ 1 ].setPosition( screen_w/2 - text[ 1 ].getWidth()/2 - shuriken.getWidth() -10, screen_h/2 - text[ 1 ].getHeight()/2 );
-	shuriken.setPosition( text[ 1 ].getRight() + 10, screen_h/2 - shuriken.getHeight()/2 +10 );
+	text[ 1 ].setPosition( screen_w/2 - text[ 1 ].getWidth()/2 - shuriken->getWidth() -10, screen_h/2 - text[ 1 ].getHeight()/2 );
+	shuriken->setPosition( text[ 1 ].getRight() + 10, screen_h/2 - shuriken->getHeight()/2 +10 );
 	
 	
 	
@@ -75,7 +86,7 @@ void Intro::load( int screen_w, int screen_h )
 
 void Intro::draw( sf::RenderWindow* &window )
 {
-	window->draw( bg.get() );
+	window->draw( bg->get() );
 	if( text[ 0 ].getAlpha() < 255 )
 	{
 		text[ 0 ].fadein( 3, 255 );
@@ -85,10 +96,10 @@ void Intro::draw( sf::RenderWindow* &window )
 	else if( text[ 1 ].getAlpha() < 255 )
 	{
 		text[ 1 ].fadein( 3, 255 );
-		shuriken.fadein( 3, 255 );
+		shuriken->fadein( 3, 255 );
 		
 		window->draw( text[ 1 ].get() );
-		window->draw( shuriken.get() );
+		window->draw( shuriken->get() );
 	}
 	else if( text[ 2 ].getAlpha() < 255 )
 	{
