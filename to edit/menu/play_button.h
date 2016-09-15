@@ -4,12 +4,12 @@
 #include "templates/text.h"
 #include "templates/chunk.h"
 
-class Menu_play_button
+class Play_button
 {
 
 protected:
 	int state;
-	MySprite mySprite;
+	MySprite* mySprite;
 	MyText myText;
 	
 	// click as sound and play as state
@@ -18,8 +18,8 @@ protected:
 	
 public:
 	
-	Menu_play_button();
-    ~Menu_play_button();
+	Play_button();
+    ~Play_button();
 
     void load( int screen_w, int bot );
     void draw( sf::RenderWindow* &window );
