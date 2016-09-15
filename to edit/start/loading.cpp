@@ -2,15 +2,17 @@
 
 Loading::Loading()
 {
-	state = 0;
-	
 	background = NULL;
 	green_bar = NULL;
 	white_bar = NULL;
+	
+	state = 0;
 }
 
 Loading::~Loading()
 {
+	text.free();
+	
 	if( background != NULL )
 	{
 		delete background;
@@ -28,8 +30,6 @@ Loading::~Loading()
 		delete green_bar;
 		green_bar = NULL;
 	}
-
-	text.free();
 }
 	
 void Loading::load( int screen_w, int screen_h )
