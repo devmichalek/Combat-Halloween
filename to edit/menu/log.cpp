@@ -1,9 +1,9 @@
-#include "menu_log.h"
+#include "log.h"
 #include <stdlib.h>
 #include <fstream>
 #include <stdio.h>
 
-Menu_log::Menu_log( bool locked, bool win )
+Log::Log( bool locked, bool win )
 {
     state = 0;
 	nr = 0;
@@ -12,12 +12,24 @@ Menu_log::Menu_log( bool locked, bool win )
 	
 	this->locked = locked;
 	this->win = win;
+	
+	button = NULL;
+	log = NULL;
 }
 
-Menu_log::~Menu_log()
+Log::~Log()
 {
-    button.free();
-	log.free();
+	if( button != NULL )
+	{
+		delete button;
+		button = NULL;
+	}
+	
+	if( log != NULL )
+	{
+		delete log;
+		log = NULL;
+	}
 	
 	if( myText != NULL )
 	{
@@ -36,29 +48,29 @@ Menu_log::~Menu_log()
 	locked = false;
 }
 
-void Menu_log::load( string path, int left, int y, int screen_w )
+void Log::load( string path, int left, int y, int screen_w )
 {
-	button.setID( "menu_log-button" );
-    button.load( "menu/" + path + ".png", 4 );
-	button.setPosition( left, y );
+	button = new MySprite( "Log-button" );
+    button->load( "menu/" + path + ".png", 4 );
+	button->setPosition( left, y );
 	
 	// if is locked we don't have reason to load futher
 	if( locked )
 	{
-		button.setOffset( 3 );
+		button->setOffset( 3 );
 	}
 	else if( !win )
 	{
-		click.setID( "menu_log-click" );
+		click.setID( "Log-click" );
 		click.load( "menu/click.wav", 50 );
 	}
 	else
 	{
-		log.setID( "menu_log-log" );
-		log.load( "menu/window.png" );
-		log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
+		log = new MySprite( "Log-log" );
+		log->load( "menu/window.png" );
+		log->setPosition( screen_w/2 - log->getWidth()/2, y-300 );
 			
-		click.setID( "menu_log-click" );
+		click.setID( "Log-click" );
 		click.load( "menu/click.wav", 50 );
 		
 		// file
@@ -105,7 +117,7 @@ void Menu_log::load( string path, int left, int y, int screen_w )
 			// counter
 			int c = 0;
 			
-			int height = log.getTop() +52;
+			int height = log->getTop() +52;
 			int border = 0;
 			
 			//printf( "%d\n", nr );
@@ -120,10 +132,10 @@ void Menu_log::load( string path, int left, int y, int screen_w )
 				else if( c > 6 )
 					border -= 5;
 				
-				click.setID( "menu_log-myText" );
+				click.setID( "Log-myText" );
 				myText[ c ].setFont( "menu/KGHAPPY.ttf", 28, 0xd5, 0xad, 0x51 );
 				myText[ c ].setText( line );
-				myText[ c ].setPosition( log.getX() +80 - border, height );
+				myText[ c ].setPosition( log->getX() +80 - border, height );
 				
 				// printf( "x:%d  y:%d\n", myText[ c ].getX(), myText[ c ].getY() );
 				
@@ -139,13 +151,13 @@ void Menu_log::load( string path, int left, int y, int screen_w )
 	}
 }
 
-void Menu_log::draw( sf::RenderWindow* &window )
+void Log::draw( sf::RenderWindow* &window )
 {
 	if( state < 2 )
-		window->draw( button.get() );
+		window->draw( button->get() );
 	else if( !locked && win )
 	{
-		window->draw( log.get() );
+		window->draw( log->get() );
 		for( int i = 0; i < nr; i ++ )
 		{
 			window->draw( myText[ i ].get() );
@@ -155,25 +167,25 @@ void Menu_log::draw( sf::RenderWindow* &window )
 	// printf( "%d\n", nr );
 }
 
-void Menu_log::handle( sf::Event &event )
+void Log::handle( sf::Event &event )
 {
 	static bool rel = false;
 	
-	if( button.getAlpha() == 255 && !locked )
+	if( button->getAlpha() == 255 && !locked )
 	{
 		if( state != 2 )
 		{
 			int x, y;
-			button.setOffset( 0 );
+			button->setOffset( 0 );
 			
 			if( event.type == sf::Event::MouseMoved )
 			{
 				x = event.mouseMove.x;
 				y = event.mouseMove.y;
 					
-				if( button.checkCollision( x, y ) && state != 2 )
+				if( button->checkCollision( x, y ) && state != 2 )
 				{
-					button.setOffset( 1 );
+					button->setOffset( 1 );
 					state = 1;
 				}
 			}
@@ -183,9 +195,9 @@ void Menu_log::handle( sf::Event &event )
 				x = event.mouseButton.x;
 				y = event.mouseButton.y;
 					
-				if( button.checkCollision( x, y ) )
+				if( button->checkCollision( x, y ) )
 				{
-					button.setOffset( 2 );
+					button->setOffset( 2 );
 					
 					if( play )
 						click.play();
@@ -214,24 +226,24 @@ void Menu_log::handle( sf::Event &event )
 	}
 }
 
-int Menu_log::getRight()
+int Log::getRight()
 {
-	return button.getRight();
+	return button->getRight();
 }
 
-int Menu_log::getState()
+int Log::getState()
 {
 	return state;
 }
 
 
-void Menu_log::fadein( int i, int max )
+void Log::fadein( int i, int max )
 {
-	button.fadein( i, max );
+	button->fadein( i, max );
 	
 	if( !locked && win )
 	{
-		log.fadein( i, max );
+		log->fadein( i, max );
 		for( int j = 0; j < nr; j ++ )
 		{
 			myText[ j ].fadein( i, max );
@@ -239,13 +251,13 @@ void Menu_log::fadein( int i, int max )
 	}
 }
 
-void Menu_log::fadeout( int i, int min )
+void Log::fadeout( int i, int min )
 {
-	button.fadeout( i, min );
+	button->fadeout( i, min );
 	
 	if( !locked && win )
 	{
-		log.fadeout( i, min );
+		log->fadeout( i, min );
 		for( int j = 0; j < nr; j ++ )
 		{
 			myText[ j ].fadeout( i, min );
@@ -253,7 +265,7 @@ void Menu_log::fadeout( int i, int min )
 	}
 }
 
-void Menu_log::turn()
+void Log::turn()
 {
 	if( !locked )
 		play = !play;
