@@ -7,8 +7,8 @@ class Music_volume
 {
 	int volume;
 	int last_volume;
-	MySprite green_bar;
-	MySprite white_bar;	// background
+	MySprite* green_bar;
+	MySprite* white_bar;	// background
 	MyText text;		// music || chunk, volume
 	
 public:
