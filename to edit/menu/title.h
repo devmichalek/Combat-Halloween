@@ -4,15 +4,15 @@
 #include "templates/text.h"
 
 
-class Menu_title
+class Title
 {
-	MySprite belt;
+	MySprite* belt;
 	MyText title;
 	
 public:
 	
-	Menu_title();
-    ~Menu_title();
+	Title();
+    ~Title();
 
     void load( int screen_w );
     void draw( sf::RenderWindow &window );
