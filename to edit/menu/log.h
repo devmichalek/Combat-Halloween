@@ -4,11 +4,11 @@
 #include "templates/text.h"
 #include "templates/chunk.h"
 
-class Menu_log
+class Log
 {
 	int state;
-	MySprite button;
-	MySprite log;
+	MySprite* button;
+	MySprite* log;
 	
 	int nr;	// how many text textures
 	MyText* myText;
@@ -25,8 +25,8 @@ class Menu_log
 	
 public:
 	
-	Menu_log( bool locked = false, bool win = true );
-    ~Menu_log();
+	Log( bool locked = false, bool win = true );
+    ~Log();
 
     void load( string path, int left, int y, int screen_w );
     void draw( sf::RenderWindow* &window );
