@@ -184,6 +184,17 @@ void Music::fadeout( int i, int min )
 	}
 }
 
+void Music::setVolume( int volume )
+{
+	this->volume = volume;
+	Mix_VolumeMusic( volume );
+}
+
+int Music::getVolume()
+{
+	return volume;
+}
+
 
 Mix_Music* Music::get()
 {
