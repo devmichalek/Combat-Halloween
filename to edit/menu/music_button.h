@@ -31,6 +31,7 @@ public:
 	int getBot();
 	bool change();
 	void turn();
+	void setVolume( sf::Uint8 volume );
 	
 	void fadein( int i, int max = 255 );
 	void fadeout( int i, int min = 0 );
