@@ -259,3 +259,8 @@ void Log::turn()
 	if( !locked )
 		play = !play;
 }
+
+void Log::setVolume( sf::Uint8 volume )
+{
+	click.setVolume( volume );
+}
