@@ -4,7 +4,7 @@
 #include "templates/chunk.h"
 
 
-class Menu_music_button	// Class for chunk/music button 
+class Music_button	// Class for chunk/music button 
 {
 	MySprite button;
 	MySprite scratch;
@@ -21,8 +21,8 @@ class Menu_music_button	// Class for chunk/music button
 	
 public:
 
-	Menu_music_button( bool play = true );
-    ~Menu_music_button();
+	Music_button( bool play = true );
+    ~Music_button();
 
 	void load( string path, int bot );
     void draw( sf::RenderWindow* &window );
