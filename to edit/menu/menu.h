@@ -11,7 +11,6 @@
 
 class Menu
 {
-	int width, height;
 	int state;
 	
 	// Menu objects
@@ -19,18 +18,19 @@ class Menu
 	Link_button* google_button;
 	Link_button* twitter_button;
 	Link_button* facebook_button;
-	MySprite* menu_background;
-	Play_button* menu_play_button;
-	Title* menu_title;
-	Music_button* menu_music_button;
-	Music_button* menu_chunk_button;
+	MySprite* background;
+	Play_button* play_button;
+	Title* title;
+	Music_button* music_button;
+	Music_button* chunk_button;
 	Log* author_log;
 	Log* game_log;
 	Log* settings_log;
 	Log* scores_log;
-	Exit_log* menu_exit;
-	Music* menu_music;
+	Exit_log* exit;
+	Music* music;
 	Music_volume* music_volume;
+	Music_volume* chunk_volume;
 	
 public:
 	
