@@ -14,26 +14,27 @@
 #include <windows.h>
 #endif
 
-MySprite::MySprite( string ID )
-{
-	this->ID = ID;
-	
-    rect.width = 0;
-	rect.height = 0;
-	rect.left = 0;
-	rect.right = 0;
-	
-	color.r = 0xFF;
-	color.g = 0xFF;
-	color.b = 0xFF;
-	color.a = 0xFF;
 
-    nr = 0;
-    offset = 0;
+MySprite::MySprite()
+{
+	name = "";
 	
 	pixels = NULL;
     sprite = NULL;
 	texture = NULL;
+	
+	color.r = 0xFF;
+	color.g = 0xFF;
+	color.b = 0xFF;
+	color.a = 0x00;
+	
+    rect.width = 0;
+	rect.height = 0;
+	rect.left = 0;
+	rect.top = 0;
+	
+    nr = 0;
+    offset = 0;
 }
 
 MySprite::~MySprite()
@@ -43,15 +44,7 @@ MySprite::~MySprite()
 
 void MySprite::free()
 {
-    rect.width = 0;
-	rect.height = 0;
-	rect.left = 0;
-	rect.right = 0;
-	
-	color.r = 0xFF;
-	color.g = 0xFF;
-	color.b = 0xFF;
-	color.a = 0xFF;
+	name = "";
 	
 	if( pixels != NULL )
     {
@@ -76,8 +69,23 @@ void MySprite::free()
         texture = NULL;
     }
 	
+	color.r = 0xFF;
+	color.g = 0xFF;
+	color.b = 0xFF;
+	color.a = 0x00;
+	
+    rect.width = 0;
+	rect.height = 0;
+	rect.left = 0;
+	rect.top = 0;
+	
 	nr = 0;
     offset = 0;
+}
+
+void MySprite::setName( string name )
+{
+	this->name = name;
 }
 
 
@@ -92,21 +100,18 @@ void MySprite::load( string path, int nr )
 		texture = new sf::Texture;
 		if( texture == NULL )
 		{
-			throw "ID: " + ID + " \x1B[91mnot created\x1B[0m texture!";
+			throw name + " \x1B[91mnot created\x1B[0m texture";
 		}
 		else if( !texture->loadFromFile( path ) )
 		{
-			throw "ID: " + ID + " \x1B[91mnot loaded\x1B[0m " + path;
+			throw name + " \x1B[91mnot loaded\x1B[0m " + path;
 		}
 		else
 		{
-			texture.setSmooth( true );
+			texture->setSmooth( true );
 			
-			this->nr = nr;
-			if( nr < 1 )
-			{
-				throw "ID: " + ID + " \x1B[91mnumber is less than 1\x1B[0m";
-			}
+			if( nr < 1 )	throw name + " \x1B[91mnumber is less than 1\x1B[0m";
+			else			this->nr = nr;
 		}
 	}
 	catch( string msg )
@@ -122,14 +127,14 @@ void MySprite::load( string path, int nr )
 			sprite = new sf::Sprite;
 			if( sprite == NULL )
 			{
-				throw "ID: " + ID + " \x1B[91mnot created\x1B[0m sprite!";
+				throw name + " \x1B[91mnot created\x1B[0m sprite";
 			}
 			else
 			{
-				sprite->setTexture( texture );
+				sprite->setTexture( *texture );
 				sprite->setColor( color );
-				rect.width = texture.getSize().x;
-				rect.height = texture.getSize().y;
+				rect.width = texture->getSize().x;
+				rect.height = texture->getSize().y;
 			}
 		}
 		catch( string msg )
@@ -144,25 +149,19 @@ void MySprite::load( string path, int nr )
 			sprite = new sf::Sprite[ nr ];
 			if( sprite == NULL )
 			{
-				throw "ID: " + ID + " \x1B[91mnot created\x1B[0m array of sprite!";
+				throw name + " \x1B[91mnot created\x1B[0m array of sprite";
 			}
 			else
 			{
-				rect.width = texture.getSize().x / nr;
-				rect.height = texture.getSize().y;
+				rect.width = texture->getSize().x / nr;
+				rect.height = texture->getSize().y;
 			}
 			
-			sf::IntRect _rect;
+			sf::IntRect r;	// temporary rectangle
 			for( int i = 0; i < nr; i++ )
 			{
-				sprite[ i ].setTexture( texture);
-
-				_rect.left = i * rect.width;
-				_rect.top = 0;
-				_rect.width = rect.width;
-				_rect.height = rect.height;
-
-				sprite[ i ].setTextureRect( _rect );
+				sprite[ i ].setTexture( *texture );
+				sprite[ i ].setTextureRect( sf::IntRect( i * rect.width, 0, rect.width, rect.height ) );
 				sprite[ i ].setColor( color );
 			}
 		}
@@ -181,21 +180,21 @@ void MySprite::create( int w, int h, sf::Color color )
 	{	
 		if( w < 0 )
 		{
-			throw "ID: " + ID + " \x1B[91mwidth is less than 0\x1B[0m";
+			throw name + " \x1B[91mwidth is less than 0\x1B[0m";
 		}
 		if( h < 0 )
 		{
-			throw "ID: " + ID + " \x1B[91mheight is less than 0\x1B[0m";
+			throw name + " \x1B[91mheight is less than 0\x1B[0m";
 		}
 		
 		texture = new sf::Texture;
 		if( texture == NULL )
 		{
-			throw "ID: " + ID + " \x1B[91mnot created\x1B[0m texture!";
+			throw name + " \x1B[91mnot created\x1B[0m texture";
 		}
-		else if( !texture.create( w, h ) )
+		else if( !texture->create( w, h ) )
 		{
-			throw "ID: " + ID + " \x1B[91mnot created blank texture\x1B[0m";
+			throw name + " \x1B[91mnot created blank texture\x1B[0m";
 		}
 		else
 		{
@@ -203,21 +202,24 @@ void MySprite::create( int w, int h, sf::Color color )
 			pixels = new sf::Uint8[ w * h * 4 ];
 			if( pixels == NULL )
 			{
-				throw "ID: " + ID + " \x1B[91mnot created\x1B[0m array of pixels!";
+				throw name + " \x1B[91mnot created\x1B[0m array of pixels";
 			}
 			else
 			{
+				this->color = color;
+				this->color.a = 0x00;
+				
 				for( int i = 0; i < w*h*4; i += 4 )
 				{
 					pixels[ i ] = color.r;
 					pixels[ i +1 ] = color.g;
 					pixels[ i +2 ] = color.b;
-					pixels[ i +3 ] = color.a;
+					pixels[ i +3 ] = this->color.a;
 				}
 			}
 			
 			nr = 0;
-			texture.update( pixels );
+			texture->update( pixels );
 		}
 	}
 	catch( string msg )
@@ -232,11 +234,11 @@ void MySprite::create( int w, int h, sf::Color color )
 		sprite = new sf::Sprite;
 		if( sprite == NULL )
 		{
-			throw "ID: " + ID + " \x1B[91mnot created\x1B[0m sprite!";
+			throw name + " \x1B[91mnot created\x1B[0m sprite";
 		}
 		else
 		{
-			sprite->setTexture( texture );
+			sprite->setTexture( *texture );
 			rect.width = w;
 			rect.height = h;
 		}
@@ -250,10 +252,15 @@ void MySprite::create( int w, int h, sf::Color color )
 
 
 
+
+
+
+
+
 void MySprite::setPosition( float x, float y )
 {
-    this->x = x;
-    this->y = y;
+    this->rect.left = x;
+    this->rect.top = y;
 
     if( nr == 0 || nr == 1 )
     {
@@ -268,85 +275,70 @@ void MySprite::setPosition( float x, float y )
     }
 }
 
-
-int MySprite::getAlpha()
-{
-	return alpha;
-}
-
-void MySprite::setAlpha( int alpha )
-{
-	if( this->alpha != alpha )
-	{
-		this->alpha = alpha;
-		// printf( "new %salpha%s=%d\n", DGRAY, DEFAULT, this->alpha );
-		
-		if( nr == 0 || nr == 1 )
-		{
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
-		}
-		else if( nr > 1 )
-		{
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
-			}
-		}
-	}
-}
-
-
-void MySprite::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
+void MySprite::setColor( sf::Color color )
 {
 	bool change = false;
+	if( this->color.r != color.r )
+	{
+		this->color.r = color.r;
+		change = true;
+	}
 	
-	if( this->r != r )
+	if( this->color.g != color.g )
 	{
-		this->r = r;
+		this->color.g = color.g;
 		change = true;
 	}
-		
-		
-	if( this->g != g )
+	
+	if( this->color.b != color.b )
 	{
+		this->color.b = color.b;
 		change = true;
-		this->g = g;
-	}
-		
-		
-	if( this->b != b )
-	{
-		change = true;
-		this->b = b;
 	}
 	
 	if( change )
 	{
-		if( nr == 0 || nr == 1 )
+		if( nr == 0 )
 		{
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
+			if( pixels != NULL )
+			{
+				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
+				{
+					pixels[ i ] = color.r;
+					pixels[ i +1 ] = color.g;
+					pixels[ i +2 ] = color.b;
+				}
+				
+				texture->update( pixels );
+				sprite->setTexture( *texture );
+				
+			}
+		}
+		else if( nr == 1 )
+		{
+			sprite->setColor( this->color );
 		}
 		else if( nr > 1 )
 		{
 			for( int i = 0; i < nr; i++ )
 			{
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+				sprite[ i ].setColor( this->color );
 			}
 		}
 	}
 }
 
-void MySprite::setScale( float s, float z )
+void MySprite::setScale( float x, float y )
 {
     if( nr == 0 || nr == 1 )
     {
-        sprite->setScale( s, z );
+        sprite->setScale( x, y );
     }
     else if( nr > 1 )
     {
         for( int i = 0; i < nr; i++ )
         {
-            sprite[ i ].setScale( s, z );
+            sprite[ i ].setScale( x, y );
         }
     }
 }
@@ -354,11 +346,12 @@ void MySprite::setScale( float s, float z )
 
 
 
+
 bool MySprite::checkCollision( int x, int y, int w, int h )
 {
-	if( x + w > this->x && x < this->x + this->w )
+	if( x + w > rect.left && x < rect.left + rect.width )
 	{
-		if( y + h > this->y && y < this->y + this->h )
+		if( y + h > rect.top && y < rect.top + rect.height )
 		{
 			return true;
 		}
@@ -370,28 +363,36 @@ bool MySprite::checkCollision( int x, int y, int w, int h )
 
 void MySprite::fadein( int i, int max )
 {
-	if( alpha < max )
+	if( color.a < max )
 	{
-		alpha += i;
+		int alpha = color.a + i;
 		if( alpha > max )
 			alpha = max;
+		color.a = alpha;
 		
-		if( nr == -2 )
+		if( nr == 0 )
 		{
-			for( int i = 0; i < w*h*4; i += 4 )
+			if( pixels != NULL )
 			{
-				//pixels[ i +3 ] = alpha;
+				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
+				{
+					pixels[ i +3 ] = color.a;
+				}
+				
+				texture->update( pixels );
+				sprite->setTexture( *texture );
+				
 			}
 		}
-		else if( nr == 0 || nr == 1 )
+		else if( nr == 1 )
 		{
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
+			sprite->setColor( color );
 		}
 		else if( nr > 1 )
 		{
 			for( int i = 0; i < nr; i++ )
 			{
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+				sprite[ i ].setColor( color );
 			}
 		}
 	}
@@ -399,28 +400,37 @@ void MySprite::fadein( int i, int max )
 
 void MySprite::fadeout( int i, int min )
 {
-	if( alpha > min )
+	if( color.a > min )
 	{
-		alpha -= i;
+		int alpha = color.a - i;
 		if( alpha < min )
 			alpha = min;
-			
-		if( nr == -2 )
+		color.a = alpha;
+
+		
+		if( nr == 0 )
 		{
-			for( int i = 0; i < w*h*4; i += 4 )
+			if( pixels != NULL )
 			{
-				pixels[ i +3 ] = alpha;
+				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
+				{
+					pixels[ i +3 ] = color.a;
+				}
+				
+				texture->update( pixels );
+				sprite->setTexture( *texture );
+				
 			}
 		}
-		else if( nr == 0 || nr == 1 )
+		else if( nr == 1 )
 		{
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
+			sprite->setColor( color );
 		}
 		else if( nr > 1 )
 		{
 			for( int i = 0; i < nr; i++ )
 			{
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+				sprite[ i ].setColor( color );
 			}
 		}
 	}
@@ -432,7 +442,7 @@ sf::Uint8 MySprite::getAlpha()
 	return color.a;
 }
 
-void MySprite::setAlpha( sf::Uint8 a = 0 )
+void MySprite::setAlpha( sf::Uint8 a )
 {
 	if( color.a != a )
 	{
@@ -440,17 +450,27 @@ void MySprite::setAlpha( sf::Uint8 a = 0 )
 		
 		if( nr == 0 )
 		{
-			
+			if( pixels != NULL )
+			{
+				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
+				{
+					pixels[ i +3 ] = color.a;
+				}
+				
+				texture->update( pixels );
+				sprite->setTexture( *texture );
+				
+			}
 		}
-		else if( nr == 0 || nr == 1 )
+		else if( nr == 1 )
 		{
-			sprite->setColor( sf::Color( r, g, b, alpha ) );
+			sprite->setColor( color );
 		}
 		else if( nr > 1 )
 		{
 			for( int i = 0; i < nr; i++ )
 			{
-				sprite[ i ].setColor( sf::Color( r, g, b, alpha ) );
+				sprite[ i ].setColor( color );
 			}
 		}
 	}
@@ -459,12 +479,12 @@ void MySprite::setAlpha( sf::Uint8 a = 0 )
 
 int MySprite::getX()
 {
-    return rect.x;
+    return rect.left;
 }
 
 int MySprite::getY()
 {
-    return rect.y;
+    return rect.top;
 }
 
 int MySprite::getWidth()
@@ -479,22 +499,22 @@ int MySprite::getHeight()
 
 int MySprite::getLeft()
 {
-    return rect.x;
+    return rect.left;
 }
 
 int MySprite::getRight()
 {
-    return rect.x + rect.width;
+    return rect.left + rect.width;
 }
 
 int MySprite::getTop()
 {
-    return rect.y;
+    return rect.top;
 }
 
 int MySprite::getBot()
 {
-    return rect.y + rect.height;
+    return rect.top + rect.height;
 }
 
 
@@ -521,6 +541,6 @@ sf::Sprite& MySprite::get()
 
 std::ostream& MySprite::operator <<( std::ostream& s )
 {
-	return s << "ID: " << ID << " x: " << rect.x << " y: " << rect.y << " w: " << rect.width << " h: " << rect.height << " alpha: " << color.a;
+	return s << name << " x: " << rect.left << " y: " << rect.top << " w: " << rect.width << " h: " << rect.height << " alpha: " << color.a;
 }
 
