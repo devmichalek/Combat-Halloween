@@ -5,18 +5,14 @@ Link_button::Link_button( string url, bool locked )
 {
     this->locked = locked;
     this->url = url;
-	button = NULL;
+
 	focus = false;
 	play = true;
 }
 
 Link_button::~Link_button()
 {
-	if( button != NULL )
-	{
-		delete button;
-		button->free();
-	}
+	button.free();
 	
 	click.free();
 	focus = false;
@@ -25,13 +21,13 @@ Link_button::~Link_button()
 
 void Link_button::load( string path, int screen_w, int bot )
 {
-	button = new MySprite( "link_button-" + path );
-    button->load( path, 4 );
+	button.setName( "link_button-" + path );
+    button.load( path, 4 );
 
 	if( locked )
-		button->setOffset( 3 );    // locked offset = 3
+		button.setOffset( 3 );    // locked offset = 3
 		
-	button->setPosition( screen_w - button->getWidth() - 10, bot );
+	button.setPosition( screen_w - button.getWidth() - 10, bot );
 	
 	click.setID( "link_button-" + path );
 	click.load( "menu/click.wav", 50 );
@@ -39,23 +35,23 @@ void Link_button::load( string path, int screen_w, int bot )
 
 void Link_button::draw( sf::RenderWindow &window )
 {
-    window.draw( button->get() );
+    window.draw( button.get() );
 }
 
 void Link_button::handle( sf::Event &event )
 {
-	if( !locked && button->getAlpha() == 255 )
+	if( !locked && button.getAlpha() == 255 )
 	{
 		int x, y;
-		button->setOffset( 0 );
+		button.setOffset( 0 );
 
 		if( event.type == sf::Event::MouseMoved )
 		{
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button->checkCollision( x, y ) )
-				button->setOffset( 1 );
+			if( button.checkCollision( x, y ) )
+				button.setOffset( 1 );
 			else
 				focus = false;
 		}
@@ -65,9 +61,9 @@ void Link_button::handle( sf::Event &event )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( button->checkCollision( x, y ) )
+			if( button.checkCollision( x, y ) )
 			{
-				button->setOffset( 2 );
+				button.setOffset( 2 );
 					
 				if( play )
 					click.play();
@@ -84,23 +80,23 @@ void Link_button::handle( sf::Event &event )
 			focus = false;
 			
 		if( focus )
-			button->setOffset( 2 );
+			button.setOffset( 2 );
 	}
 }
 
 int Link_button::getBot()
 {
-	return button->getBot();
+	return button.getBot();
 }
 
 void Link_button::fadein( int i, int max )
 {
-	button->fadein( i, max );
+	button.fadein( i, max );
 }
 
 void Link_button::fadeout( int i, int min )
 {
-	button->fadeout( i, min );
+	button.fadeout( i, min );
 }
 
 void Link_button::turn()

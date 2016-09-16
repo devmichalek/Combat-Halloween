@@ -8,8 +8,9 @@ class Play_button
 {
 
 protected:
+
 	int state;
-	MySprite* mySprite;
+	MySprite mySprite;
 	MyText myText;
 	
 	// click as sound and play as state

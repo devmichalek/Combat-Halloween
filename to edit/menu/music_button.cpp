@@ -1,17 +1,18 @@
-#include "menu_music_button.h"
+#include "music_button.h"
 #include <stdlib.h>
 
-Menu_music_button::Menu_music_button( bool play )
+Music_button::Music_button( bool play )
 {
     state = 0;
 	focus = false;
 	this->play = play;
 }
 
-Menu_music_button::~Menu_music_button()
+Music_button::~Music_button()
 {
-    button.free();
+	button.free();
 	scratch.free();
+	
 	click.free();
 	
 	focus = false;
@@ -19,21 +20,21 @@ Menu_music_button::~Menu_music_button()
 	play = true;
 }
 
-void Menu_music_button::load( string path, int bot )
+void Music_button::load( string path, int bot )
 {
-	button.setID( "menu_music_button-button" );
+	button.setName( "Music_button-button" );
     button.load( path, 4 );
 	button.setPosition( 10, bot );
 	
-	scratch.setID( "menu_music_button-scratch" );
+	scratch.setName( "Music_button-scratch" );
 	scratch.load( "menu/scratch.png" );
 	scratch.setPosition( 10, bot );
 	
-	click.setID( "menu_music_button-click" );
+	click.setID( "Music_button-click" );
 	click.load( "menu/click.wav", 50 );
 }
 
-void Menu_music_button::draw( sf::RenderWindow* &window )
+void Music_button::draw( sf::RenderWindow* &window )
 {
     window->draw( button.get() );
 	
@@ -41,7 +42,7 @@ void Menu_music_button::draw( sf::RenderWindow* &window )
 		window->draw( scratch.get() );
 }
 
-void Menu_music_button::handle( sf::Event &event )
+void Music_button::handle( sf::Event &event )
 {
 	if( button.getAlpha() == 255 )
 	{
@@ -91,12 +92,12 @@ void Menu_music_button::handle( sf::Event &event )
 	}
 }
 
-int Menu_music_button::getBot()
+int Music_button::getBot()
 {
 	return button.getBot();
 }
 
-bool Menu_music_button::change()
+bool Music_button::change()
 {
 	// printf("%d\n", state );
 	if( state == 1 )
@@ -114,20 +115,20 @@ bool Menu_music_button::change()
 	return false;
 }
 
-void Menu_music_button::turn()
+void Music_button::turn()
 {
 	play = !play;
 }
 
 
 
-void Menu_music_button::fadein( int i, int max )
+void Music_button::fadein( int i, int max )
 {
 	button.fadein( i, max );
 	scratch.fadein( i, max );
 }
 
-void Menu_music_button::fadeout( int i, int min )
+void Music_button::fadeout( int i, int min )
 {
 	button.fadeout( i, min );
 	scratch.fadeout( i, min );

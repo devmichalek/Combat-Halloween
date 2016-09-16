@@ -5,19 +5,13 @@ Play_button::Play_button()
 {
     state = 0;
 	play = true;
-	
-	mySprite = NULL;
 }
 
 Play_button::~Play_button()
 {
-	if( mySprite != NULL )
-	{
-		delete mySprite;
-		mySprite = NULL;
-	}
-
+	mySprite.free();
 	myText.free();
+	
 	state = 0;
 	play = true;
 	click.free();
@@ -25,9 +19,9 @@ Play_button::~Play_button()
 
 void Play_button::load( int screen_w, int bot )
 {
-	mySprite = new MySprite( "Play_button-mySprite" );
-	mySprite->load( "menu/blankbutton.png", 4 );
-	mySprite->setPosition( screen_w/2 - mySprite->getWidth()/2, bot );
+	mySprite.setName( "play_button-mySprite" );
+	mySprite.load( "menu/blankbutton.png", 4 );
+	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
 	myText.setID( "Play_button-myText" );
 	myText.setFont( "menu/KGHAPPY.ttf", 80, 0x82, 0xae, 0x20 );
@@ -40,25 +34,25 @@ void Play_button::load( int screen_w, int bot )
 
 void Play_button::draw( sf::RenderWindow* &window )
 {
-    window->draw( mySprite->get() );
+    window->draw( mySprite.get() );
 	window->draw( myText.get() );
 }
 
 void Play_button::handle( sf::Event &event )
 {
-	if( state != 2 && mySprite->getAlpha() == 255 )
+	if( state != 2 && mySprite.getAlpha() == 255 )
 	{
 		int x, y;
-		mySprite->setOffset( 0 );
+		mySprite.setOffset( 0 );
 		
 		if( event.type == sf::Event::MouseMoved )
 		{
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( mySprite->checkCollision( x, y ) && state != 2 )
+			if( mySprite.checkCollision( x, y ) && state != 2 )
 			{
-				mySprite->setOffset( 1 );
+				mySprite.setOffset( 1 );
 				state = 1;
 			}
 		}
@@ -68,9 +62,9 @@ void Play_button::handle( sf::Event &event )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( mySprite->checkCollision( x, y ) )
+			if( mySprite.checkCollision( x, y ) )
 			{
-				mySprite->setOffset( 2 );
+				mySprite.setOffset( 2 );
 				
 				if( play )
 					click.play();
@@ -83,12 +77,12 @@ void Play_button::handle( sf::Event &event )
 
 int Play_button::getBot()
 {
-	return mySprite->getBot();
+	return mySprite.getBot();
 }
 
 int Play_button::getX()
 {
-	return mySprite->getX();
+	return mySprite.getX();
 }
 
 int Play_button::getState()
@@ -98,7 +92,7 @@ int Play_button::getState()
 
 bool Play_button::nextGameState()
 {
-	if( state == 2 && mySprite->getAlpha() == 0 )
+	if( state == 2 && mySprite.getAlpha() == 0 )
 		return true;
 	
 	return false;
@@ -106,13 +100,13 @@ bool Play_button::nextGameState()
 
 void Play_button::fadein( int i, int max )
 {
-	mySprite->fadein( i, max );
+	mySprite.fadein( i, max );
 	myText.fadein( i, max );
 }
 
 void Play_button::fadeout( int i, int min )
 {
-	mySprite->fadeout( i, min );
+	mySprite.fadeout( i, min );
 	myText.fadeout( i, min );
 }
 
