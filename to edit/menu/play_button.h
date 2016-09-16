@@ -35,4 +35,5 @@ public:
 	void fadeout( int i, int min );
 	
 	void turn();	// Turn on/off chunk
+	void setVolume( sf::Uint8 volume );
 };
