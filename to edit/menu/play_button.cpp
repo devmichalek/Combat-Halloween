@@ -23,12 +23,12 @@ void Play_button::load( int screen_w, int bot )
 	mySprite.load( "menu/blankbutton.png", 4 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
-	myText.setID( "Play_button-myText" );
+	myText.setID( "play_button-myText" );
 	myText.setFont( "menu/KGHAPPY.ttf", 80, 0x82, 0xae, 0x20 );
 	myText.setText( "play" );
 	myText.setPosition( screen_w/2 - myText.getWidth()/2, bot +20 );
 	
-	click.setID( "Play_button-click" );
+	click.setID( "play_button-click" );
 	click.load( "menu/click.wav", 50 );
 }
 
@@ -113,4 +113,9 @@ void Play_button::fadeout( int i, int min )
 void Play_button::turn()
 {
 	play = !play;
+}
+
+void Play_button::setVolume( sf::Uint8 volume )
+{
+	click.setVolume( volume );
 }
