@@ -42,6 +42,9 @@ public:
 	
 	void fadein( int i = 1, int max = 128 );
 	void fadeout( int i = 1, int min = 0 );
+	
+	void setVolume( int volume );
+	int getVolume();
 
     inline Mix_Music* get();
 	std::ostream& operator <<( std::ostream& s );	// Print ID, path and volume
