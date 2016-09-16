@@ -6,7 +6,7 @@
 
 class Title
 {
-	MySprite* belt;
+	MySprite belt;
 	MyText title;
 	
 public:
