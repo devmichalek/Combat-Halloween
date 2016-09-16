@@ -22,15 +22,15 @@ Music_button::~Music_button()
 
 void Music_button::load( string path, int bot )
 {
-	button.setName( "Music_button-button" );
+	button.setName( "music_button-button" );
     button.load( path, 4 );
 	button.setPosition( 10, bot );
 	
-	scratch.setName( "Music_button-scratch" );
+	scratch.setName( "music_button-scratch" );
 	scratch.load( "menu/scratch.png" );
 	scratch.setPosition( 10, bot );
 	
-	click.setID( "Music_button-click" );
+	click.setID( "music_button-click" );
 	click.load( "menu/click.wav", 50 );
 }
 
@@ -120,6 +120,10 @@ void Music_button::turn()
 	play = !play;
 }
 
+void Music_button::setVolume( sf::Uint8 volume )
+{
+	click.setVolume( volume );
+}
 
 
 void Music_button::fadein( int i, int max )
