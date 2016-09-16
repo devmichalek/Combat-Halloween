@@ -5,8 +5,8 @@
 
 class Intro
 {
-	MySprite* bg;	// background
-	MySprite* shuriken;	// shuriken image
+	MySprite bg;		// background
+	MySprite shuriken;	// shuriken image
 	MyText* text;
 	
 	int nr;		// how many text objects
