@@ -341,3 +341,8 @@ std::ostream& MyText::operator <<( std::ostream& s )
 {
 	return s << "ID: " << ID << " x: " << x << " y: " << y << " w: " << w << " h: " << h << " alpha: " << alpha;
 }
+
+void MyText::reloadPosition()
+{
+	text->setPosition( x, y );
+}
