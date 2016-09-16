@@ -1,6 +1,6 @@
 /**
     sprite.h
-    Purpose: class MySprite to load and draw textures
+    Purpose: class MySprite to load and draw sprites
 
     @author Adrian Michalek
     @version 2016.09.05
@@ -15,40 +15,37 @@ using namespace std;
 
 class MySprite
 {
-	string ID;				// Identity
-	
-	sf::IntRect rect;		// Rectangle
-	sf::Color color;		// Color
-	
-    int nr;					// How many offset's, 0 = blank texture, 1 = loaded image, > 1 image with offsets
-    int offset;				// Topical offset
+	string name;	// Identity
 	
 	sf::Uint8* pixels;
     sf::Sprite* sprite;
     sf::Texture* texture;
 	
+	sf::Color color;
+	sf::IntRect rect;
+	
+    int nr;					// How many offset's, 0 = blank texture, 1 = loaded image, > 1 image with offsets
+    int offset;				// Topical offset
+	
+	
 public:
 
-    MySprite( string ID = "" );
+    MySprite();
     ~MySprite();
     void free();
+	void setName( string name );
 	
 	
-	
-    void load( string path, int nr = 0 );
+    void load( string path, int nr = 1 );
 	void create( int w, int h, sf::Color color );	// Create blank texture
 	
 	
-	
     void setPosition( float x, float y );
-	
-	
 	void setColor( sf::Color color );
-    void setScale( float s = 1, float z = 1 );
+    void setScale( float x = 1, float y = 1 );
 	
 	
 	bool checkCollision( int x, int y, int w = 0, int h = 0 );
-	
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
 	
