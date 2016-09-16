@@ -103,3 +103,8 @@ void Link_button::turn()
 {
 	play = !play;
 }
+
+void Link_button::setVolume( sf::Uint8 volume )
+{
+	click.setVolume( volume );
+}
