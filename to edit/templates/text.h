@@ -71,4 +71,5 @@ public:
     int getBot();
 	
 	std::ostream& operator <<( std::ostream& s );	// Print ID, rect and alpha
+	void reloadPosition();
 };
