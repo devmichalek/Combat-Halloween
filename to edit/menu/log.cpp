@@ -12,24 +12,13 @@ Log::Log( bool locked, bool win )
 	
 	this->locked = locked;
 	this->win = win;
-	
-	button = NULL;
-	log = NULL;
 }
 
 Log::~Log()
 {
-	if( button != NULL )
-	{
-		delete button;
-		button = NULL;
-	}
-	
-	if( log != NULL )
-	{
-		delete log;
-		log = NULL;
-	}
+	button.free();
+
+	log.free();
 	
 	if( myText != NULL )
 	{
@@ -50,27 +39,27 @@ Log::~Log()
 
 void Log::load( string path, int left, int y, int screen_w )
 {
-	button = new MySprite( "Log-button" );
-    button->load( "menu/" + path + ".png", 4 );
-	button->setPosition( left, y );
+	button.setName( "log-button" );
+    button.load( "menu/" + path + ".png", 4 );
+	button.setPosition( left, y );
 	
 	// if is locked we don't have reason to load futher
 	if( locked )
 	{
-		button->setOffset( 3 );
+		button.setOffset( 3 );
 	}
 	else if( !win )
 	{
-		click.setID( "Log-click" );
+		click.setID( "log-click" );
 		click.load( "menu/click.wav", 50 );
 	}
 	else
 	{
-		log = new MySprite( "Log-log" );
-		log->load( "menu/window.png" );
-		log->setPosition( screen_w/2 - log->getWidth()/2, y-300 );
+		log.setName( "log-log" );
+		log.load( "menu/window.png" );
+		log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
 			
-		click.setID( "Log-click" );
+		click.setID( "log-click" );
 		click.load( "menu/click.wav", 50 );
 		
 		// file
@@ -117,7 +106,7 @@ void Log::load( string path, int left, int y, int screen_w )
 			// counter
 			int c = 0;
 			
-			int height = log->getTop() +52;
+			int height = log.getTop() +52;
 			int border = 0;
 			
 			//printf( "%d\n", nr );
@@ -135,7 +124,7 @@ void Log::load( string path, int left, int y, int screen_w )
 				click.setID( "Log-myText" );
 				myText[ c ].setFont( "menu/KGHAPPY.ttf", 28, 0xd5, 0xad, 0x51 );
 				myText[ c ].setText( line );
-				myText[ c ].setPosition( log->getX() +80 - border, height );
+				myText[ c ].setPosition( log.getX() +80 - border, height );
 				
 				// printf( "x:%d  y:%d\n", myText[ c ].getX(), myText[ c ].getY() );
 				
@@ -154,10 +143,10 @@ void Log::load( string path, int left, int y, int screen_w )
 void Log::draw( sf::RenderWindow* &window )
 {
 	if( state < 2 )
-		window->draw( button->get() );
+		window->draw( button.get() );
 	else if( !locked && win )
 	{
-		window->draw( log->get() );
+		window->draw( log.get() );
 		for( int i = 0; i < nr; i ++ )
 		{
 			window->draw( myText[ i ].get() );
@@ -171,21 +160,21 @@ void Log::handle( sf::Event &event )
 {
 	static bool rel = false;
 	
-	if( button->getAlpha() == 255 && !locked )
+	if( button.getAlpha() == 255 && !locked )
 	{
 		if( state != 2 )
 		{
 			int x, y;
-			button->setOffset( 0 );
+			button.setOffset( 0 );
 			
 			if( event.type == sf::Event::MouseMoved )
 			{
 				x = event.mouseMove.x;
 				y = event.mouseMove.y;
 					
-				if( button->checkCollision( x, y ) && state != 2 )
+				if( button.checkCollision( x, y ) && state != 2 )
 				{
-					button->setOffset( 1 );
+					button.setOffset( 1 );
 					state = 1;
 				}
 			}
@@ -195,9 +184,9 @@ void Log::handle( sf::Event &event )
 				x = event.mouseButton.x;
 				y = event.mouseButton.y;
 					
-				if( button->checkCollision( x, y ) )
+				if( button.checkCollision( x, y ) )
 				{
-					button->setOffset( 2 );
+					button.setOffset( 2 );
 					
 					if( play )
 						click.play();
@@ -228,7 +217,7 @@ void Log::handle( sf::Event &event )
 
 int Log::getRight()
 {
-	return button->getRight();
+	return button.getRight();
 }
 
 int Log::getState()
@@ -239,11 +228,11 @@ int Log::getState()
 
 void Log::fadein( int i, int max )
 {
-	button->fadein( i, max );
+	button.fadein( i, max );
 	
 	if( !locked && win )
 	{
-		log->fadein( i, max );
+		log.fadein( i, max );
 		for( int j = 0; j < nr; j ++ )
 		{
 			myText[ j ].fadein( i, max );
@@ -253,11 +242,11 @@ void Log::fadein( int i, int max )
 
 void Log::fadeout( int i, int min )
 {
-	button->fadeout( i, min );
+	button.fadeout( i, min );
 	
 	if( !locked && win )
 	{
-		log->fadeout( i, min );
+		log.fadeout( i, min );
 		for( int j = 0; j < nr; j ++ )
 		{
 			myText[ j ].fadeout( i, min );

@@ -3,10 +3,10 @@
 
 void Exit_log::load( int screen_w, int screen_h )
 {
-	mySprite = new MySprite( "menu_exit_log-mySprite" );
-    mySprite->load( "menu/exit.png" );
-	mySprite->setAlpha( 255 );
-	mySprite->setPosition( screen_w/2 - mySprite->getWidth()/2, screen_h/2 - mySprite->getHeight()/2 );
+	mySprite.setName( "menu_exit_log-mySprite" );
+    mySprite.load( "menu/exit.png" );
+	mySprite.setAlpha( 255 );
+	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, screen_h/2 - mySprite.getHeight()/2 );
 
 	myText.setID( "menu_exit_log-myText" );
 	myText.setFont( "menu/KGHAPPY.ttf", 33, 0xFF, 0xFF, 0xFF );
@@ -53,7 +53,7 @@ void Exit_log::draw( sf::RenderWindow* &window )
 {
 	if( state > 0 )
 	{
-		window->draw( mySprite->get() );
+		window->draw( mySprite.get() );
 		window->draw( myText.get() );
 	}
 }

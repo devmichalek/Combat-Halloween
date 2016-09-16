@@ -7,7 +7,7 @@ class Link_button
 {
     bool locked;
     string url;
-    MySprite* button;
+    MySprite button;
 	
 	// focus on button true/false
 	bool focus;	

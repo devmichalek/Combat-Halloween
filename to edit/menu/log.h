@@ -7,8 +7,8 @@
 class Log
 {
 	int state;
-	MySprite* button;
-	MySprite* log;
+	MySprite button;
+	MySprite log;
 	
 	int nr;	// how many text textures
 	MyText* myText;
