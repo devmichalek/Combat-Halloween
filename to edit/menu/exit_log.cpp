@@ -36,11 +36,12 @@ void Exit_log::handle( sf::Event &event )
 		}
 		else if( event.key.code == sf::Keyboard::B )
 		{
-			if( play )
-				click.play();
-			
 			if( state == 1 )
+			{
+				if( play )
+					click.play();
 				state = 0;
+			}
 		}
 	}
 	else if( event.type == sf::Event::KeyReleased )
