@@ -7,6 +7,7 @@
 #include "menu/log.h"
 #include "menu/exit_log.h"
 #include "menu/music_volume.h"
+#include "menu/keyboard.h"
 #include "templates/music.h"
 
 class Menu
@@ -31,6 +32,7 @@ class Menu
 	Music* music;
 	Music_volume* music_volume;
 	Music_volume* chunk_volume;
+	Keyboard* keyboard;
 	
 public:
 	

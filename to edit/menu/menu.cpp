@@ -22,6 +22,7 @@ Menu::Menu()
 	music = new Music; music->setID( "engine-music" );
 	music_volume = new Music_volume( 64 );
 	chunk_volume = new Music_volume( 50 );
+	keyboard = new Keyboard;
 }
 
 Menu::~Menu()
@@ -47,6 +48,8 @@ void Menu::free()
 	delete exit;
 	delete music;
 	delete music_volume;
+	delete chunk_volume;
+	delete keyboard;
 }
 
 	
@@ -76,8 +79,10 @@ void Menu::load( int screen_width, int screen_height )
 	
 	music->load( "menu/Rayman Legends OST - Moving Ground.mp3", 50 );
 	
-	music_volume->load( screen_width, screen_height/2 - 200, "Music" );
+	music_volume->load( screen_width, screen_height/2 - 100, "Music" );
 	chunk_volume->load( screen_width, music_volume->getBot() + 25, "Sound" );
+	
+	keyboard->load( screen_width, chunk_volume->getBot() );
 	
 	//Set start volume
 	git_button->setVolume( chunk_volume->getVolume() );
@@ -123,6 +128,7 @@ void Menu::handle( sf::Event &event )
 				{
 					music_volume->handle( event );
 					chunk_volume->handle( event );
+					keyboard->handle( event );
 				}
 			}
 		}
@@ -201,6 +207,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadein( 2, 255 );
 		chunk_volume->fadein( 2, 255 );
 		scores_log->fadein( 2, 255 );
+		keyboard->fadein( 2, 255 );
 	}
 	// Fade out:
 	else if( play_button->getState() == 2 ) // if user clicked play
@@ -221,6 +228,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadeout( 3, 0 );
 		chunk_volume->fadeout( 3, 0 );
 		scores_log->fadeout( 3, 0 );
+		keyboard->fadeout( 3, 0 );
 	}
 	else if( exit->getState() == 1 ) // if user clicked exit
 	{
@@ -240,6 +248,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadeout( 2, 170 );
 		chunk_volume->fadeout( 2, 170 );
 		scores_log->fadeout( 2, 170 );
+		keyboard->fadeout( 2, 170 );
 	}
 	else
 	{
@@ -259,6 +268,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadeout( 3, 0 );
 		chunk_volume->fadeout( 3, 0 );
 		scores_log->fadeout( 3, 0 );
+		keyboard->fadeout( 3, 0 );
 		if( background->getAlpha() == 0 )
 			state = 1;
 	}
@@ -304,6 +314,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		music_volume->draw( window );
 		chunk_volume->draw( window );
+		keyboard->draw( *window );
 	}
 			
 		
