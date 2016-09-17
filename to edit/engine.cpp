@@ -11,6 +11,7 @@ Engine::Engine()
 	loading->load( core->getWidth(), core->getHeight() );
 	
 	intro = new Intro;
+	
 	menu = new Menu;
 	
 	// Create play objects
@@ -20,8 +21,11 @@ Engine::Engine()
 
 // Free objects.
 void Engine::free()
-{	
-	delete menu;
+{
+	if( loading != NULL )	delete loading;
+	if( intro != NULL )		delete intro;
+	if( menu != NULL )		delete menu;
+	
 	delete game_timer;
 	delete core;
 }
@@ -34,20 +38,21 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
-		case 9:
+		case 1:
 		intro->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 10:
-		game_timer->load( core->getWidth() );
+		case 2:
+		menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 1:
-		menu->load( core->getWidth(), core->getHeight() );
+		case 3:
+		game_timer->load( core->getWidth() );
 		break;
 
 		case 100:
 		delete loading;
+		loading = NULL;
 		core->getState() = -1;	// intro state
 		break;
 			
@@ -94,6 +99,7 @@ void Engine::states()
 		if( intro->isQuit() )
 		{
 			delete intro;
+			intro = NULL;
 			core->getState() = 0;
 		}
 	}
@@ -108,6 +114,8 @@ void Engine::states()
 		}
 		else if( menu->nextState() )
 		{
+			delete menu;
+			menu = NULL;
 			core->getState() = 1;
 		}
     }

@@ -206,9 +206,9 @@ sf::Text& MyText::get()
 
 bool MyText::checkCollision( int x, int y, int w, int h )
 {
-	if( x + w > this->x && x < this->x + this->w )
+	if( x > this->x && x < this->x + this->w + w )
 	{
-		if( y + h > this->y && y < this->y + this->h )
+		if( y > this->y && y < this->y + this->h + h )
 		{
 			// printf( "collision = %strue%s\n", LGREEN, DEFAULT );
 			return true;
