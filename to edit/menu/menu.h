@@ -33,6 +33,7 @@ class Menu
 	Music_volume* music_volume;
 	Music_volume* chunk_volume;
 	Keyboard* keyboard;
+	MyText* version;
 	
 public:
 	

@@ -23,6 +23,7 @@ Menu::Menu()
 	music_volume = new Music_volume( 64 );
 	chunk_volume = new Music_volume( 50 );
 	keyboard = new Keyboard;
+	version = new MyText;
 }
 
 Menu::~Menu()
@@ -50,6 +51,7 @@ void Menu::free()
 	delete music_volume;
 	delete chunk_volume;
 	delete keyboard;
+	delete version;
 }
 
 	
@@ -83,6 +85,10 @@ void Menu::load( int screen_width, int screen_height )
 	chunk_volume->load( screen_width, music_volume->getBot() + 25, "Sound" );
 	
 	keyboard->load( screen_width, chunk_volume->getBot() );
+	
+	version->setFont( "menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
+	version->setText( "alpha 1.0.0" );
+	version->setPosition( screen_width - version->getWidth(), screen_height - version->getHeight() -7 );
 	
 	//Set start volume
 	git_button->setVolume( chunk_volume->getVolume() );
@@ -208,6 +214,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->fadein( 2, 255 );
 		scores_log->fadein( 2, 255 );
 		keyboard->fadein( 2, 255 );
+		version->fadein( 2, 255 );
 	}
 	// Fade out:
 	else if( play_button->getState() == 2 ) // if user clicked play
@@ -229,6 +236,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->fadeout( 3, 0 );
 		scores_log->fadeout( 3, 0 );
 		keyboard->fadeout( 3, 0 );
+		version->fadeout( 3, 0 );
 	}
 	else if( exit->getState() == 1 ) // if user clicked exit
 	{
@@ -249,6 +257,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->fadeout( 2, 170 );
 		scores_log->fadeout( 2, 170 );
 		keyboard->fadeout( 2, 170 );
+		version->fadeout( 2, 170 );
 	}
 	else
 	{
@@ -269,6 +278,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->fadeout( 3, 0 );
 		scores_log->fadeout( 3, 0 );
 		keyboard->fadeout( 3, 0 );
+		version->fadeout( 3, 0 );
 		if( background->getAlpha() == 0 )
 			state = 1;
 	}
@@ -290,6 +300,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	// Draw
 	window->draw( background->get() );
 	title->draw( *window );
+	window->draw( version->get() );
 	
 	if( author_log->getState() != 2 && scores_log->getState() != 2 && settings_log->getState() != 2 ) // if user didn't click logs
 	{
