@@ -9,6 +9,7 @@
 
 
 #include "sprite.h"
+#include <fstream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -499,7 +500,6 @@ int MySprite::getX()
 {
     return rect.left;
 }
-
 int MySprite::getY()
 {
     return rect.top;
@@ -519,7 +519,6 @@ int MySprite::getLeft()
 {
     return rect.left;
 }
-
 int MySprite::getRight()
 {
     return rect.left + rect.width;
@@ -529,7 +528,6 @@ int MySprite::getTop()
 {
     return rect.top;
 }
-
 int MySprite::getBot()
 {
     return rect.top + rect.height;
@@ -540,7 +538,6 @@ void MySprite::setOffset( int n )
 {
     offset = n;
 }
-
 int MySprite::getOffset()
 {
 	return offset;
@@ -560,5 +557,141 @@ sf::Sprite& MySprite::get()
 std::ostream& MySprite::operator <<( std::ostream& s )
 {
 	return s << name << " x: " << rect.left << " y: " << rect.top << " w: " << rect.width << " h: " << rect.height << " alpha: " << color.a;
+}
+
+void MySprite::createMap( string name, string path )
+{
+	fstream file;
+	
+	file.open( name.c_str(), std::ios::out | std::ios::app );
+	if( file.bad() )
+	{
+		printf( "Can not create file %s\n", name.c_str() );
+	}
+	else
+	{
+		try
+		{
+			sf::Texture tex;
+			if( !tex.loadFromFile( path ) )
+			{
+				throw name + " \x1B[91mnot loaded\x1B[0m " + path;
+			}
+			else
+			{
+				tex.setSmooth( true );
+				
+				sf::Image image = tex.copyToImage();
+				int w = tex.getSize().x;
+				int h = tex.getSize().y;
+				
+				file << w << " " << h << "\n";
+				// printf( "%d %d\n", w, h );
+				
+				// int counter = 0;
+				// Following red, green, blue, alpha of texture
+				for( int i = 0; i < h; i++ )
+				{
+					for( int j = 0; j < w; j++ )
+					{
+						file << static_cast <int> ( image.getPixel( i, j ).r ) << " ";
+						file << static_cast <int> ( image.getPixel( i, j ).g ) << " ";
+						file << static_cast <int> ( image.getPixel( i, j ).b ) << " ";
+						file << static_cast <int> ( image.getPixel( i, j ).a ) << "\n";
+						// counter += 4;
+					}
+				}
+				
+				// printf( "Counter %d\n", counter );
+			}
+		}
+		catch( string msg )
+		{
+			cerr << msg << endl;
+		}
+		
+	}
+}
+
+void MySprite::loadMap( string path )
+{
+	free();
+	
+	fstream file;
+	
+	file.open( path.c_str(), std::ios::in );
+	if( file.bad() )
+	{
+		printf( "Can not load file %s\n", path.c_str() );
+	}
+	else
+	{
+		file >> rect.width;
+		file >> rect.height;
+		
+		// printf( "%d %d", rect.width, rect.height );
+		
+		try
+		{
+			texture = new sf::Texture;
+			if( texture == NULL )
+			{
+				throw name + " \x1B[91mnot created\x1B[0m texture";
+			}
+			else if( !texture->create( rect.width, rect.height ) )
+			{
+				throw name + " \x1B[91mnot created blank texture\x1B[0m";
+			}
+			else
+			{
+				pixels = new sf::Uint8[ rect.width * rect.height * 4 ];
+				if( pixels == NULL )
+				{
+					throw name + " \x1B[91mnot created\x1B[0m array of pixels";
+				}
+				else
+				{
+					this->color = color;
+					this->color.a = 0x00;
+					
+					int led;
+					// int counter = 0;
+					for( int i = 0; i < rect.width*rect.height*4; i ++ )
+					{
+						file >> led;
+						pixels[ i ] = static_cast <sf::Uint8> ( led );
+						// counter ++;
+					}
+					
+					// printf( "Counter %d\n", counter );
+				}
+				
+				nr = 0;
+				texture->update( pixels );
+			}
+		}
+		catch( string msg )
+		{
+			cerr << msg << endl;
+		}
+		
+		
+		try
+		{
+			sprite = new sf::Sprite;
+			if( sprite == NULL )
+			{
+				throw name + " \x1B[91mnot created\x1B[0m sprite";
+			}
+			else
+			{
+				sprite->setTexture( *texture );
+			}
+		}
+		catch( string msg )
+		{
+			cerr << msg << endl;
+		}
+	}
 }
 

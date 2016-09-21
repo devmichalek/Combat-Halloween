@@ -69,4 +69,7 @@ public:
 	
 	sf::Sprite& get();
 	std::ostream& operator <<( std::ostream& s );	// Print ID, rect, alpha
+	
+	void createMap( string name, string path );	// Create map file -> list of pixels
+	void loadMap( string path );	// Load map file -> list of pixels
 };
