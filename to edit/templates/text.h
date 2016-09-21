@@ -44,6 +44,7 @@ public:
 	void setText( string line );
 	
 	void setPosition( float x, float y );
+	void center( int w, int h, int wm = 0, int hm = 0 );
     void setScale( float w, float h );
 
     sf::Text& get();
