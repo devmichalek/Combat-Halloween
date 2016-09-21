@@ -20,7 +20,7 @@ void Loading::load( int screen_w, int screen_h )
 	text.setFont( "intro/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "Loading" );
 	text.setAlpha( 255 );
-	text.setPosition( screen_w/2 - text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
+	text.center( screen_w, screen_h );
 
 	
 	background.setName( "loading-background" );
