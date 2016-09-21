@@ -275,6 +275,24 @@ void MySprite::setPosition( float x, float y )
     }
 }
 
+void MySprite::center( int w, int h, int wm, int hm )
+{
+	rect.left = w/2 - rect.width/2 + wm;
+    rect.top = h/2 - rect.height/2 + hm;
+
+    if( nr == 0 || nr == 1 )
+    {
+        sprite->setPosition( rect.left, rect.top );
+    }
+    else if( nr > 1 )
+    {
+        for( int i = 0; i < nr; i++ )
+        {
+            sprite[ i ].setPosition( rect.left, rect.top );
+        }
+    }
+}
+
 void MySprite::setColor( sf::Color color )
 {
 	bool change = false;

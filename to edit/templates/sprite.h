@@ -41,6 +41,7 @@ public:
 	
 	
     void setPosition( float x, float y );
+	void center( int w, int h, int wm = 0, int hm = 0 );
 	void setColor( sf::Color color );
     void setScale( float x = 1, float y = 1 );
 	
