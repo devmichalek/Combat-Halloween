@@ -191,6 +191,14 @@ void MyText::setPosition( float x, float y )
 	text->setPosition( x, y );
 }
 
+void MyText::center( int w, int h, int wm, int hm )
+{
+	this->x = w/2 - this->w/2 + wm;
+    this->y = h/2 - this->h/2 + hm;
+
+	text->setPosition( x, y );
+}
+
 void MyText::setScale( float w, float h )
 {
 	this->w = w;
