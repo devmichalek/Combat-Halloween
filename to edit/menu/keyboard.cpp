@@ -8,7 +8,6 @@ Keyboard::Keyboard()
     text_nr = 0;
 	text = NULL;
 	
-	sprite_offset = 0;
 	focus = 0;
 	
 	keys = NULL;
@@ -28,18 +27,13 @@ Keyboard::~Keyboard()
 		text = NULL;
 		text_nr = 0;
 	}
-	
-	sprite.free();
-	sprite_offset = 0;
-	shuriken.free();
+
 	rect.free();
 	focus = 0;
 	
 	delete [] keys;
 	keys = NULL;
 	keys_nr = 0;
-	
-	information.free();
 }
 
 void Keyboard::load( int screen_w, int bot )
@@ -101,8 +95,6 @@ void Keyboard::load( int screen_w, int bot )
 	text[ 15 ].setPosition( 300, text[ 12 ].getBot() + 6 );
 	
 	
-	sprite.load( "hero/0.png", 8 );
-	shuriken.load( "hero/shuriken.png" );
 	rect.create( 1, 1, sf::Color( 0x00, 0x00, 0x00 ) );
 	rect.setAlpha( 35 );
 	
@@ -114,11 +106,6 @@ void Keyboard::load( int screen_w, int bot )
 	keys[ 3 ] = 72;
 	keys[ 4 ] = 1;
 	keys[ 5 ] = 15;
-	
-	information.setFont( "intro/Jaapokki-Regular.otf", 30, 0xCC, 0x00, 0x00 );
-	information.setText( "Good to know: \"you can't set used keys\"" );
-	information.setPosition( 20, text[ 8 ].getBot() -30 - information.getHeight() );
-	information.setAlpha( 25 );
 }
 
 void Keyboard::draw( sf::RenderWindow &window )
@@ -128,33 +115,11 @@ void Keyboard::draw( sf::RenderWindow &window )
 		window.draw( text[ i ].get() );
 	}
 	
-	// Move
-	if( sprite_offset > 3 * 2 )
-		sprite_offset = 0;
-	sprite_offset ++;
-	sprite.setOffset( sprite_offset / 2 );
-	sprite.setPosition( 550, text[ 8 ].getBot() -5 );
-	window.draw( sprite.get() );
-	
-	// Jump
-	sprite.setOffset( 5 );
-	sprite.setPosition( sprite.getRight() + 10, text[ 8 ].getBot() -5 );
-	window.draw( sprite.get() );
-	
-	// Attack
-	sprite.setOffset( 6 );
-	sprite.setPosition( sprite.getRight() + 10, text[ 8 ].getBot() -5 );
-	shuriken.setPosition( sprite.getRight() + 10, sprite.getTop() + shuriken.getHeight() );
-	window.draw( sprite.get() );
-	window.draw( shuriken.get() );
-	
 	//Rect
 	if( focus != 0 )
 	{
 		window.draw( rect.get() );
 	}
-	
-	window.draw( information.get() );
 }
 
 void Keyboard::handle( sf::Event &event )
@@ -309,10 +274,6 @@ void Keyboard::fadein( int j, int max )
 	{
 		text[ i ].fadein( j, max );
 	}
-	
-	sprite.fadein( j, max );
-	shuriken.fadein( j, max );
-	information.fadein( j, max );
 }
 
 void Keyboard::fadeout( int j, int min )
@@ -322,10 +283,7 @@ void Keyboard::fadeout( int j, int min )
 		text[ i ].fadeout( j, min );
 	}
 	
-	sprite.fadeout( j, min );
-	shuriken.fadeout( j, min );
 	rect.fadeout( j, min );
-	information.fadeout( j, min );
 }
 
 int* Keyboard::getHeroKeys()
