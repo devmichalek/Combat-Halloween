@@ -559,7 +559,8 @@ std::ostream& MySprite::operator <<( std::ostream& s )
 	return s << name << " x: " << rect.left << " y: " << rect.top << " w: " << rect.width << " h: " << rect.height << " alpha: " << color.a;
 }
 
-void MySprite::createMap( string name, string path )
+/*
+void MySprite::createTxt( string name, string path )
 {
 	fstream file;
 	
@@ -585,7 +586,7 @@ void MySprite::createMap( string name, string path )
 				int w = tex.getSize().x;
 				int h = tex.getSize().y;
 				
-				file << w << " " << h << "\n";
+				file << std::to_string( w ) << " " << std::to_string( h ) << "\n";
 				// printf( "%d %d\n", w, h );
 				
 				// int counter = 0;
@@ -594,10 +595,10 @@ void MySprite::createMap( string name, string path )
 				{
 					for( int j = 0; j < w; j++ )
 					{
-						file << static_cast <int> ( image.getPixel( i, j ).r ) << " ";
-						file << static_cast <int> ( image.getPixel( i, j ).g ) << " ";
-						file << static_cast <int> ( image.getPixel( i, j ).b ) << " ";
-						file << static_cast <int> ( image.getPixel( i, j ).a ) << "\n";
+						file << std::to_string( static_cast <int> ( image.getPixel( i, j ).r ) ) << " ";
+						file << std::to_string( static_cast <int> ( image.getPixel( i, j ).g ) ) << " ";
+						file << std::to_string( static_cast <int> ( image.getPixel( i, j ).b ) ) << " ";
+						file << std::to_string( static_cast <int> ( image.getPixel( i, j ).a ) ) << " ";
 						// counter += 4;
 					}
 				}
@@ -613,7 +614,7 @@ void MySprite::createMap( string name, string path )
 	}
 }
 
-void MySprite::loadMap( string path )
+void MySprite::loadTxt( string path )
 {
 	free();
 	
@@ -695,3 +696,4 @@ void MySprite::loadMap( string path )
 	}
 }
 
+*/
