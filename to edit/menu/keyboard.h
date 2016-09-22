@@ -8,18 +8,12 @@ class Keyboard
 	int text_nr;
 	MyText* text;
 	
-	MySprite sprite;
-	int sprite_offset;
-	MySprite shuriken;
-	
 	MySprite rect;
 	
 	int focus;
 	
 	int* keys;
 	int keys_nr;
-	
-	MyText information;
 	
 public:
 
