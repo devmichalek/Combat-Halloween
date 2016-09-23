@@ -13,6 +13,10 @@
 class Menu
 {
 	int state;
+	bool playmusic;
+	bool playchunk;
+	sf::Uint8 musicvolume;
+	sf::Uint8 chunkvolume;
 	
 	// Menu objects
 	Link_button* git_button;
@@ -48,4 +52,9 @@ public:
 	
 	bool isQuit();
 	bool nextState();
+	
+	bool musicOn();
+	bool chunkOn();
+	sf::Uint8 getChunkVolume();
+	sf::Uint8 getMusicVolume();
 };

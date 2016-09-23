@@ -4,13 +4,13 @@
 #include "templates/text.h"
 #include "templates/chunk.h"
 
-class Music_volume
+class Music_volume // music || chunk, volume
 {
 	int volume;
 	int last_volume;
 	MySprite green_bar;
 	MySprite white_bar;	// background
-	MyText text;		// music || chunk, volume
+	MyText text;		
 	MyText percent;
 	
 	// click as sound and play as state
