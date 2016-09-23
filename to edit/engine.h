@@ -4,7 +4,7 @@
 #include "loading/loading.h"
 #include "intro/intro.h"
 #include "menu/menu.h"
-#include "play/game_timer.h"
+#include "level/levelmenu.h"
 
 class Engine
 {
@@ -12,9 +12,7 @@ class Engine
 	Loading* loading;
 	Intro* intro;
 	Menu* menu;
-	
-	//play
-	Game_timer* game_timer;
+	Level_menu* level_menu;
 
 public:
 
