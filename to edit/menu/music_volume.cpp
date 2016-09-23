@@ -20,6 +20,7 @@ Music_volume::~Music_volume()
 	text.free();
 	percent.free();
 	click.free();
+	
 	play = true;
 }
 
