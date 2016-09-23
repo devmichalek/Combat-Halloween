@@ -349,6 +349,9 @@ void MySprite::setColor( sf::Color color )
 
 void MySprite::setScale( float x, float y )
 {
+	rect.width *= x;
+	rect.height *= y;
+	
     if( nr == 0 || nr == 1 )
     {
         sprite->setScale( x, y );
@@ -696,4 +699,8 @@ void MySprite::loadTxt( string path )
 	}
 }
 
+  
+ 
+
+	
 */
