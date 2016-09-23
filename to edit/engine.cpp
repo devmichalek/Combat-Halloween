@@ -4,7 +4,7 @@
 // Create objects.
 Engine::Engine()
 {
-    core = new Core( -2, 1024, 768 );
+    core = new Core( -2, 1000, 750 );
     core->load( "Ninja" );
 	
 	loading = new Loading;
@@ -14,8 +14,7 @@ Engine::Engine()
 	
 	menu = new Menu;
 	
-	// Create play objects
-	game_timer = new Game_timer;
+	level_menu = new Level_menu;
 }
 
 
@@ -25,8 +24,8 @@ void Engine::free()
 	if( loading != NULL )	delete loading;
 	if( intro != NULL )		delete intro;
 	if( menu != NULL )		delete menu;
+	if( level_menu != NULL )		delete level_menu;
 	
-	delete game_timer;
 	delete core;
 }
 
@@ -47,7 +46,7 @@ void Engine::load()
 		break;
 		
 		case 3:
-		game_timer->load( core->getWidth() );
+		level_menu->load( core->getWidth(), core->getHeight() );
 		break;
 
 		case 100:
@@ -75,9 +74,9 @@ void Engine::events()
 			menu->handle( core->getEvent() );
         }
 		
-		if( core->getState() == 1 ) // if we actually have play state
+		if( core->getState() == 1 ) // select level state
 		{
-			game_timer->handle( core->getEvent() );
+			level_menu->handle( core->getEvent() );
 		}
 
     }
@@ -114,18 +113,25 @@ void Engine::states()
 		}
 		else if( menu->nextState() )
 		{
-			delete menu;
-			menu = NULL;
+			level_menu->setStartPackage( menu->chunkOn(), menu->musicOn(), menu->getChunkVolume(), menu->getMusicVolume() );
 			core->getState() = 1;
 		}
     }
 	
-	// play state
+	// select level state
 	if( core->getState() == 1 )
     {
-		game_timer->draw( *core->getWindow() );
-		game_timer->count( core->getWidth() );
-		game_timer->fadein( 3 );
+		level_menu->draw( core->getWindow() );
+		if( level_menu->isQuit() )
+		{
+			core->isOpen() = false;
+		}
+		else if( level_menu->nextState() )
+		{
+			delete level_menu;
+			level_menu = NULL;
+			core->getState() = 2;
+		}
 	}
 }
 
