@@ -5,7 +5,13 @@
 class Select
 {
 	int money;	// your money
-	int* open;	// list of open levels
+	vector <int> open;	// vector of open levels
+	
+	MyText level_name;
+	MyText cost;
+	MySprite coin;
+	MyText wallet;
+	MyText info;
 	
 	int nr; // how many levels we have
 	Level* level;

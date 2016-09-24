@@ -9,6 +9,7 @@ Level_menu::Level_menu()
 	chunkvolume = 0;
 	
 	select = new Select;
+	background = new MySprite;
 }
 
 Level_menu::~Level_menu()
@@ -25,6 +26,7 @@ void Level_menu::free()
 	chunkvolume = 0;
 	
 	delete select;
+	delete background;
 }
 
 void Level_menu::setStartPackage( bool a, bool b, sf::Uint8 cv, sf::Uint8 mv )
@@ -38,6 +40,7 @@ void Level_menu::setStartPackage( bool a, bool b, sf::Uint8 cv, sf::Uint8 mv )
 void Level_menu::load( int screen_w, int screen_h )
 {
 	select->load( screen_w, screen_h );
+	background->load( "menu/background.png" );
 	
 	// Set music
 	
@@ -63,9 +66,11 @@ void Level_menu::handle( sf::Event &event )
 
 void Level_menu::draw( sf::RenderWindow* &window )
 {
+	window->draw( background->get() );
 	select->draw( window );
 	
 	select->fadein( 3, 255 );
+	background->fadein( 3, 255 );
 }
 
 	
