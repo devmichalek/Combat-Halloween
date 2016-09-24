@@ -7,7 +7,7 @@
 class Level
 {
 	int cost;
-	int name;
+	string name;
 	bool clicked;
 	bool locked;
 	
@@ -25,15 +25,12 @@ public:
 	Level();
 	~Level();
 	
-	void load( int name, int cost );
+	void load( string name, int cost );
 	void setXY( int x, int y );
 	
 	void draw( sf::RenderWindow* &window );
-	void handle( sf::Event &event, int& money );
-	
-	void buy( int& money );
-	int getName();
-	
+	sf::Uint8 handle( sf::Event &event, int& money );
+
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
 	
@@ -45,4 +42,10 @@ public:
 	int getX();
 	int getY();
 	sf::Uint8 getAlpha();
+	
+	int getCost();
+	string getName();
+	
+	void unlock();
+	bool islocked();
 };
