@@ -9,14 +9,15 @@
 #include "menu/music_volume.h"
 #include "menu/keyboard.h"
 #include "templates/music.h"
+#include "menu/setkeyboard.h"
 
 class Menu
 {
 	int state;
 	bool playmusic;
 	bool playchunk;
-	sf::Uint8 musicvolume;
-	sf::Uint8 chunkvolume;
+	sf::Uint8 musicvolume_value;
+	sf::Uint8 chunkvolume_value;
 	
 	// Menu objects
 	Link_button* git_button;
@@ -38,6 +39,7 @@ class Menu
 	Music_volume* chunk_volume;
 	Keyboard* keyboard;
 	MyText* version;
+	Setkeyboard* setkeyboard;
 	
 public:
 	
