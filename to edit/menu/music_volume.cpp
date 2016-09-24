@@ -2,11 +2,14 @@
 #include <string> 
 
 
-Music_volume::Music_volume( int volume )
+Music_volume::Music_volume( float volume )
 {
 	this->volume = volume;
 	last_volume = volume;
 	play = true;
+	
+	plus_focus = false;
+	minus_focus = false;
 }
 
 Music_volume::~Music_volume()
@@ -14,14 +17,16 @@ Music_volume::~Music_volume()
 	volume = 1;
 	last_volume = 1;
 	
-	green_bar.free();
-	white_bar.free();
+	plus.free();
+	minus.free();
 
 	text.free();
 	percent.free();
 	click.free();
 	
 	play = true;
+	plus_focus = false;
+	minus_focus = false;
 }
 
 	
@@ -32,19 +37,22 @@ void Music_volume::load( int screen_w, int y, string str )
 	text.setText( str );
 	text.setPosition( 20, y );
 	
-	white_bar.setName( "music_volume-white_bar" );
-	white_bar.create( 128*3, 40, sf::Color( 0xFF, 0xFF, 0xFF, 0x00 ) );
-	white_bar.setPosition( 150, y );
 	
-	green_bar.setName( "music_volume-green_bar" );
-	green_bar.create( 1, 40, sf::Color( 0x70, 230 - 128 + volume, 0x59 ) );
-	green_bar.setPosition( 150, y ); // screen_h/2 - green_bar.getHeight()/2
-	green_bar.setScale( volume * 3 );
+	minus.setName( "music_volume-minus" );
+	minus.load( "menu/minus.png", 4 );
+	minus.setPosition( 150, y -text.getHeight()/2 );
+	minus.setScale( 0.4, 0.4 );
+	
+	plus.setName( "music_volume-plus" );
+	plus.load( "menu/plus.png", 4 );
+	plus.setPosition( minus.getRight(), y -text.getHeight()/2 );
+	plus.setScale( 0.4, 0.4 );
+	
 	
 	percent.setID( "music_volume-percent" );
 	percent.setFont( "intro/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
-	percent.setText( std::to_string( volume*100/128 ) + "%" );
-	percent.setPosition( white_bar.getRight() + 10, y );
+	percent.setText( std::to_string( static_cast<int>( volume*100/128 ) ) + "%" );
+	percent.setPosition( plus.getRight() + 10, y );
 	
 	click.setID( "music_volume-click" );
 	click.load( "menu/click.wav", 50 );
@@ -52,50 +60,115 @@ void Music_volume::load( int screen_w, int y, string str )
 
 void Music_volume::draw( sf::RenderWindow* &window )
 {
-	window->draw( white_bar.get() );
-	window->draw( green_bar.get() );
+	if( plus_focus )
+	{
+		if( volume <= 128 - 1.28 )
+			volume += 1.28;
+		plus.setOffset( 2 );
+	}
+	else if( minus_focus )
+	{
+		if( volume >= 1.28 )
+			volume -= 1.28;
+		minus.setOffset( 2 );
+	}
+	
+	
+	window->draw( plus.get() );
+	window->draw( minus.get() );
+
 	window->draw( text.get() );
 	window->draw( percent.get() );
 	
 	if( last_volume != volume )
 	{
 		last_volume = volume;
-		green_bar.setScale( volume * 3 );
-		percent.setText( std::to_string( volume*100/128 ) + "%" );
+		percent.setText( std::to_string( static_cast<int>( volume*100/128 ) ) + "%" );
 		percent.reloadPosition();
 	}
 }
 
 void Music_volume::handle( sf::Event &event )
 {
-	if( event.type == sf::Event::MouseButtonPressed )
+	plus.setOffset( 0 );
+	minus.setOffset( 0 );
+	int x, y;
+	
+	if( event.type == sf::Event::MouseMoved )
 	{
-		int x = event.mouseButton.x;
-		int y = event.mouseButton.y;
-			
-		if( white_bar.checkCollision( x, y ) )
+		x = event.mouseMove.x;
+		y = event.mouseMove.y;
+		
+		if( plus.checkCollision( x, y ) )
 		{
-			volume = ( x - white_bar.getX() ) / 3;
+			plus.setOffset( 1 );
+		}
+		else
+		{
+			plus_focus = false;
+		}
+		
+		if( minus.checkCollision( x, y ) )
+		{
+			minus.setOffset( 1 );
+		}
+		else
+		{
+			minus_focus = false;
+		}
+	}
+	
+	else if( event.type == sf::Event::MouseButtonPressed )
+	{
+		x = event.mouseButton.x;
+		y = event.mouseButton.y;
+			
+		if( plus.checkCollision( x, y ) )
+		{
 			if( play )
 				click.play();
+				
+			if( volume <= 128 - 1.28 )
+				volume += 1.28;
 			
-			green_bar.setColor( sf::Color( 0x70, 230 - 128 + volume, 0x59 ) );
+			plus_focus = true;
 		}
+		else
+			plus_focus = false;
+			
+		if( minus.checkCollision( x, y ) )
+		{
+			if( play )
+				click.play();
+				
+			if( volume >= 1.28 )
+				volume -= 1.28;
+			
+			minus_focus = true;
+		}
+		else
+			minus_focus = false;
+	}
+	
+	else if( event.type == sf::Event::MouseButtonReleased )
+	{
+		minus_focus = false;
+		plus_focus = false;
 	}
 }
 
 void Music_volume::fadein( int i, int max )
 {
-	white_bar.fadein( i, max );
-	green_bar.fadein( i, max );
+	plus.fadein( i, max );
+	minus.fadein( i, max );
 	text.fadein( i, max );
 	percent.fadein( i, max );
 }
 
 void Music_volume::fadeout( int i, int min )
 {
-	white_bar.fadeout( i, min );
-	green_bar.fadeout( i, min );
+	plus.fadeout( i, min );
+	minus.fadeout( i, min );
 	text.fadeout( i, min );
 	percent.fadeout( i, min );
 }
@@ -104,7 +177,7 @@ void Music_volume::fadeout( int i, int min )
 
 int Music_volume::getBot()
 {
-	return white_bar.getBot();
+	return plus.getBot();
 }
 
 void Music_volume::turn()
@@ -132,4 +205,9 @@ bool Music_volume::changeVolume()
 sf::Uint8 Music_volume::getVolume()
 {
 	return volume;
+}
+
+int Music_volume::getRight()
+{
+	return percent.getRight();
 }
