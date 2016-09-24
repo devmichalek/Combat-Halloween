@@ -4,12 +4,12 @@
 #include "templates/text.h"
 #include "templates/chunk.h"
 
-class Music_volume // music || chunk, volume
+class Music_volume
 {
-	int volume;
+	float volume;
 	int last_volume;
-	MySprite green_bar;
-	MySprite white_bar;	// background
+	MySprite plus;
+	MySprite minus;	// background
 	MyText text;		
 	MyText percent;
 	
@@ -17,9 +17,13 @@ class Music_volume // music || chunk, volume
 	bool play;
 	Chunk click;
 	
+	// hover
+	bool plus_focus;
+	bool minus_focus;
+	
 public:
 	
-	Music_volume( int volume = 1 );
+	Music_volume( float volume = 1 );
 	~Music_volume();
 	
 	void load( int screen_w, int y, string str );
@@ -35,4 +39,6 @@ public:
 	
 	bool changeVolume();
 	sf::Uint8 getVolume();
+	
+	int getRight();
 };
