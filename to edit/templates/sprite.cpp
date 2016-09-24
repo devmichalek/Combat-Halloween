@@ -20,7 +20,6 @@ MySprite::MySprite()
 {
 	name = "";
 	
-	pixels = NULL;
     sprite = NULL;
 	texture = NULL;
 	
@@ -46,12 +45,6 @@ MySprite::~MySprite()
 void MySprite::free()
 {
 	name = "";
-	
-	if( pixels != NULL )
-    {
-        delete [] pixels;
-        pixels = NULL;
-    }
 
     if( nr == 0 || nr == 1 )
     {
@@ -173,7 +166,7 @@ void MySprite::load( string path, int nr )
 	}
 }
 
-void MySprite::create( int w, int h, sf::Color color )
+void MySprite::create( int w, int h )
 {
 	free();
 	
@@ -200,25 +193,11 @@ void MySprite::create( int w, int h, sf::Color color )
 		else
 		{
 			
-			pixels = new sf::Uint8[ w * h * 4 ];
-			if( pixels == NULL )
+			sf::Uint8 pixels[ w * h * 4 ];
+			for( int i = 0; i < w*h*4; i++ )
 			{
-				throw name + " \x1B[91mnot created\x1B[0m array of pixels";
+				pixels[ i ] = 0xFF;
 			}
-			else
-			{
-				this->color = color;
-				this->color.a = 0x00;
-				
-				for( int i = 0; i < w*h*4; i += 4 )
-				{
-					pixels[ i ] = color.r;
-					pixels[ i +1 ] = color.g;
-					pixels[ i +2 ] = color.b;
-					pixels[ i +3 ] = this->color.a;
-				}
-			}
-			
 			nr = 0;
 			texture->update( pixels );
 		}
@@ -317,23 +296,7 @@ void MySprite::setColor( sf::Color color )
 	
 	if( change )
 	{
-		if( nr == 0 )
-		{
-			if( pixels != NULL )
-			{
-				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
-				{
-					pixels[ i ] = color.r;
-					pixels[ i +1 ] = color.g;
-					pixels[ i +2 ] = color.b;
-				}
-				
-				texture->update( pixels );
-				sprite->setTexture( *texture );
-				
-			}
-		}
-		else if( nr == 1 )
+		if( nr == 0 || nr == 1 )
 		{
 			sprite->setColor( this->color );
 		}
@@ -392,21 +355,7 @@ void MySprite::fadein( int i, int max )
 			alpha = max;
 		color.a = alpha;
 		
-		if( nr == 0 )
-		{
-			if( pixels != NULL )
-			{
-				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
-				{
-					pixels[ i +3 ] = color.a;
-				}
-				
-				texture->update( pixels );
-				sprite->setTexture( *texture );
-				
-			}
-		}
-		else if( nr == 1 )
+		if( nr == 0 || nr == 1 )
 		{
 			sprite->setColor( color );
 		}
@@ -429,22 +378,7 @@ void MySprite::fadeout( int i, int min )
 			alpha = min;
 		color.a = alpha;
 
-		
-		if( nr == 0 )
-		{
-			if( pixels != NULL )
-			{
-				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
-				{
-					pixels[ i +3 ] = color.a;
-				}
-				
-				texture->update( pixels );
-				sprite->setTexture( *texture );
-				
-			}
-		}
-		else if( nr == 1 )
+		if( nr == 0 || nr == 1 )
 		{
 			sprite->setColor( color );
 		}
@@ -470,21 +404,7 @@ void MySprite::setAlpha( sf::Uint8 a )
 	{
 		color.a = a;
 		
-		if( nr == 0 )
-		{
-			if( pixels != NULL )
-			{
-				for( int i = 0; i < rect.width*rect.height*4; i += 4 )
-				{
-					pixels[ i +3 ] = color.a;
-				}
-				
-				texture->update( pixels );
-				sprite->setTexture( *texture );
-				
-			}
-		}
-		else if( nr == 1 )
+		if( nr == 0 || nr == 1 )
 		{
 			sprite->setColor( color );
 		}
@@ -698,9 +618,4 @@ void MySprite::loadTxt( string path )
 		}
 	}
 }
-
-  
- 
-
-	
 */

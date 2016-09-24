@@ -17,7 +17,6 @@ class MySprite
 {
 	string name;	// Identity
 	
-	sf::Uint8* pixels;
     sf::Sprite* sprite;
     sf::Texture* texture;
 	
@@ -37,7 +36,7 @@ public:
 	
 	
     void load( string path, int nr = 1 );
-	void create( int w, int h, sf::Color color );	// Create blank texture
+	void create( int w, int h );	// Create blank texture
 	
 	
     void setPosition( float x, float y );
@@ -69,7 +68,4 @@ public:
 	
 	sf::Sprite& get();
 	std::ostream& operator <<( std::ostream& s );	// Print ID, rect, alpha
-	
-	// void createTxt( string name, string path );	// Create file -> list of pixels
-	// void loadTxt( string path );	// Load map file -> list of pixels
 };
