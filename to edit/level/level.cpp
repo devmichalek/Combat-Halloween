@@ -5,9 +5,9 @@ Level::Level()
 	cost = 0;
 	name = -1;
 	clicked = false;
-	locked = false;
 	focus = false;
 	play = true;
+	locked = true;
 }
 
 Level::~Level()
@@ -15,21 +15,21 @@ Level::~Level()
 	cost = 0;
 	name = -1;
 	clicked = false;
-	locked = false;
 	focus = false;
 	play = true;
+	locked = true;
 	
 	sprite.free();
 	click.free();
 }
 
 	
-void Level::load( int name, int cost )
+void Level::load( string name, int cost )
 {
 	this->name = name;
 	this->cost = cost;
 	
-	sprite.setName( "level-" + to_string( name ) );
+	sprite.setName( "level-" + name );
 	sprite.load( "level select/level.png", 4 );
 	sprite.setScale( 0.6, 0.6 );
 	
@@ -65,12 +65,15 @@ void Level::draw( sf::RenderWindow* &window )
 	//window->draw( coin.get() );
 }
 
-void Level::handle( sf::Event &event, int& money )
+sf::Uint8 Level::handle( sf::Event &event, int& money )
 {
-	if( !locked && sprite.getAlpha() == 0xFF )
+	bool correct = false;
+	if( sprite.getAlpha() == 0xFF )
 	{
 		int x, y;
-		sprite.setOffset( 0 );
+		
+		if( !locked )
+			sprite.setOffset( 0 );
 
 		if( event.type == sf::Event::MouseMoved )
 		{
@@ -78,11 +81,18 @@ void Level::handle( sf::Event &event, int& money )
 			y = event.mouseMove.y;
 				
 			if( sprite.checkCollision( x, y ) )
-				sprite.setOffset( 1 );
+			{
+				correct = true;
+				if( !locked )
+				{
+					sprite.setOffset( 1 );
+				}
+			}
 			else
 				focus = false;
 		}
-
+		
+		clicked = false;
 		if( event.type == sf::Event::MouseButtonPressed )
 		{
 			x = event.mouseButton.x;
@@ -90,43 +100,49 @@ void Level::handle( sf::Event &event, int& money )
 				
 			if( sprite.checkCollision( x, y ) )
 			{
-				sprite.setOffset( 2 );
+				if( money >= cost )
+				{
+					money -= cost;
+					cost = 0;
+					locked = false;
+				}
+				
+				if( !locked )
+				{
+					sprite.setOffset( 2 );
+					focus = true;
+				}
 					
 				if( play )
 					click.play();
-						
-				focus = true;
+					
 				clicked = true;
 			}
 		}
 			
 		if( event.type == sf::Event::MouseButtonReleased )
+		{
 			focus = false;
+		}
+			
 			
 		if( focus )
 			sprite.setOffset( 2 );
 	}
-}
-
 	
-void Level::buy( int& money )
-{
-	if( cost != 0 )
-	{
-		if( money >= cost );
-		{
-			money -= cost;
-			cost = 0;
-		}
-	}
+	
+	if( clicked )
+		return 2;
+	if( correct )
+		return 1;
+		
+	return 0;
 }
 
-int Level::getName()
+
+string Level::getName()
 {
-	if( cost == 0 );
-		return name;
-		
-	return -1;
+	return name;
 }
 
 void Level::fadein( int i, int max )
@@ -178,4 +194,20 @@ int Level::getY()
 sf::Uint8 Level::getAlpha()
 {
 	return sprite.getAlpha();
+}
+
+int Level::getCost()
+{
+	return cost;
+}
+
+void Level::unlock()
+{
+	locked = false;
+	cost = 0;
+}
+
+bool Level::islocked()
+{
+	return locked;
 }
