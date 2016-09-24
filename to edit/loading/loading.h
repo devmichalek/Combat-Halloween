@@ -7,9 +7,10 @@ class Loading
 {
 	MyText text;
 	MySprite background;
-	MySprite green_bar;
-	MySprite white_bar;
 	int state;
+	
+	int counter;
+	MySprite progress_bar;
 	
 public:
 	
