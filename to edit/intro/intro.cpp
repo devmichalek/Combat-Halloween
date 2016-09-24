@@ -33,7 +33,8 @@ void Intro::load( int screen_w, int screen_h )
 	shuriken.load( "intro/shuriken.png" );
 	
 	bg.setName( "intro-background" );
-	bg.create( screen_w, screen_h, sf::Color( 0x15, 0x15, 0x1D ) );
+	bg.create( screen_w, screen_h );
+	bg.setColor( sf::Color( 0x15, 0x15, 0x1D ) );
 	bg.setAlpha( 0xFF );
 		
 	
