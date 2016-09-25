@@ -9,14 +9,15 @@
 
 
 #include "sprite.h"
-#include <fstream>
+// #include <fstream>
+#include <typeinfo>
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
 
-MySprite::MySprite()
+MySprite::MySprite( int x, int y, sf::Uint8 alpha )
 {
 	name = "";
 	
@@ -26,12 +27,12 @@ MySprite::MySprite()
 	color.r = 0xFF;
 	color.g = 0xFF;
 	color.b = 0xFF;
-	color.a = 0x00;
+	color.a = alpha;
 	
-    rect.width = 0;
-	rect.height = 0;
-	rect.left = 0;
-	rect.top = 0;
+    width = 0;
+	height = 0;
+	left = x;
+	top = y;
 	
     nr = 0;
     offset = 0;
@@ -68,21 +69,28 @@ void MySprite::free()
 	color.b = 0xFF;
 	color.a = 0x00;
 	
-    rect.width = 0;
-	rect.height = 0;
-	rect.left = 0;
-	rect.top = 0;
+    width = 0;
+	height = 0;
+	left = 0;
+	top = 0;
 	
 	nr = 0;
     offset = 0;
 }
 
-void MySprite::setName( string name )
+
+
+
+
+sf::Sprite& MySprite::get()
 {
-	this->name = name;
+    if( nr == 0 || nr == 1 )
+    {
+        return *sprite;
+    }
+	
+    return sprite[ offset ];
 }
-
-
 
 #ifdef __linux__
 void MySprite::load( string path, int nr )
@@ -127,8 +135,8 @@ void MySprite::load( string path, int nr )
 			{
 				sprite->setTexture( *texture );
 				sprite->setColor( color );
-				rect.width = texture->getSize().x;
-				rect.height = texture->getSize().y;
+				width = texture->getSize().x;
+				height = texture->getSize().y;
 			}
 		}
 		catch( string msg )
@@ -147,15 +155,15 @@ void MySprite::load( string path, int nr )
 			}
 			else
 			{
-				rect.width = texture->getSize().x / nr;
-				rect.height = texture->getSize().y;
+				width = texture->getSize().x / nr;
+				height = texture->getSize().y;
 			}
 			
 			sf::IntRect r;	// temporary rectangle
 			for( int i = 0; i < nr; i++ )
 			{
 				sprite[ i ].setTexture( *texture );
-				sprite[ i ].setTextureRect( sf::IntRect( i * rect.width, 0, rect.width, rect.height ) );
+				sprite[ i ].setTextureRect( sf::IntRect( i * width, 0, width, height ) );
 				sprite[ i ].setColor( color );
 			}
 		}
@@ -219,8 +227,8 @@ void MySprite::create( int w, int h )
 		else
 		{
 			sprite->setTexture( *texture );
-			rect.width = w;
-			rect.height = h;
+			width = w;
+			height = h;
 		}
 	}
 	catch( string msg )
@@ -234,13 +242,10 @@ void MySprite::create( int w, int h )
 
 
 
-
-
-
 void MySprite::setPosition( float x, float y )
 {
-    this->rect.left = x;
-    this->rect.top = y;
+    left = x;
+    top = y;
 
     if( nr == 0 || nr == 1 )
     {
@@ -255,22 +260,114 @@ void MySprite::setPosition( float x, float y )
     }
 }
 
-void MySprite::center( int w, int h, int wm, int hm )
+void MySprite::center( int x, int y, int w, int h )
 {
-	rect.left = w/2 - rect.width/2 + wm;
-    rect.top = h/2 - rect.height/2 + hm;
+	left = w/2 - width/2 + x;
+    top = h/2 - height/2 + y;
 
     if( nr == 0 || nr == 1 )
     {
-        sprite->setPosition( rect.left, rect.top );
+        sprite->setPosition( left, top );
     }
     else if( nr > 1 )
     {
         for( int i = 0; i < nr; i++ )
         {
-            sprite[ i ].setPosition( rect.left, rect.top );
+            sprite[ i ].setPosition( left, top );
         }
     }
+}
+
+
+
+
+
+std::ostream& MySprite::operator <<( std::ostream& str )
+{
+	std::string result = "";
+	result += name;
+	result += " x: " + left;
+	result += " y: " + top;
+	result += " w: " + width;
+	result += " h: " + height;
+	result += " alpha: " + color.a;
+	
+	return str << result;
+}
+
+bool MySprite::operator ==( MySprite& mySprite )
+{
+	if( width == mySprite.getWidth() && height == mySprite.getHeight() )
+	{
+		if( color == mySprite.getColor() )
+		{
+			if( name == mySprite.getName() )
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool MySprite::operator >( MySprite& mySprite )
+{
+	if( width > mySprite.getWidth() && height > mySprite.getHeight() )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool MySprite::operator >=( MySprite& mySprite )
+{
+	if( width >= mySprite.getWidth() && height >= mySprite.getHeight() )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool MySprite::operator <( MySprite& mySprite )
+{
+	if( width < mySprite.getWidth() && height < mySprite.getHeight() )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool MySprite::operator <=( MySprite& mySprite )
+{
+	if( width <= mySprite.getWidth() && height <= mySprite.getHeight() )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+
+
+
+/*
+const string& MySprite::getTypeId()
+{
+	string str = typeid( nr ).name;
+	
+	return str;
+}
+*/
+
+
+
+sf::Color MySprite::getColor()
+{
+	return color;
 }
 
 void MySprite::setColor( sf::Color color )
@@ -308,41 +405,6 @@ void MySprite::setColor( sf::Color color )
 			}
 		}
 	}
-}
-
-void MySprite::setScale( float x, float y )
-{
-	rect.width *= x;
-	rect.height *= y;
-	
-    if( nr == 0 || nr == 1 )
-    {
-        sprite->setScale( x, y );
-    }
-    else if( nr > 1 )
-    {
-        for( int i = 0; i < nr; i++ )
-        {
-            sprite[ i ].setScale( x, y );
-        }
-    }
-}
-
-
-
-
-
-bool MySprite::checkCollision( int x, int y, int w, int h )
-{
-	if( x + w > rect.left && x < rect.left + rect.width )
-	{
-		if( y + h > rect.top && y < rect.top + rect.height )
-		{
-			return true;
-		}
-	}
-	
-	return false;
 }
 
 
@@ -419,68 +481,59 @@ void MySprite::setAlpha( sf::Uint8 a )
 }
 
 
-int MySprite::getX()
-{
-    return rect.left;
-}
-int MySprite::getY()
-{
-    return rect.top;
-}
-
-int MySprite::getWidth()
-{
-    return rect.width;
-}
-int MySprite::getHeight()
-{
-    return rect.height;
-}
-
-
-int MySprite::getLeft()
-{
-    return rect.left;
-}
-int MySprite::getRight()
-{
-    return rect.left + rect.width;
-}
-
-int MySprite::getTop()
-{
-    return rect.top;
-}
-int MySprite::getBot()
-{
-    return rect.top + rect.height;
-}
-
-
-void MySprite::setOffset( int n )
-{
-    offset = n;
-}
 int MySprite::getOffset()
 {
 	return offset;
 }
 
-
-sf::Sprite& MySprite::get()
+void MySprite::setOffset( int n )
 {
+    offset = n;
+}
+
+
+void MySprite::setScale( float x, float y )
+{
+	width *= x;
+	height *= y;
+	
     if( nr == 0 || nr == 1 )
     {
-        return *sprite;
+        sprite->setScale( x, y );
     }
-	
-    return sprite[ offset ];
+    else if( nr > 1 )
+    {
+        for( int i = 0; i < nr; i++ )
+        {
+            sprite[ i ].setScale( x, y );
+        }
+    }
 }
 
-std::ostream& MySprite::operator <<( std::ostream& s )
+bool MySprite::checkCollision( int x, int y, int w, int h )
 {
-	return s << name << " x: " << rect.left << " y: " << rect.top << " w: " << rect.width << " h: " << rect.height << " alpha: " << color.a;
+	if( x + w > left && x < left + width )
+	{
+		if( y + h > top && y < top + height )
+		{
+			return true;
+		}
+	}
+	
+	return false;
 }
+
+
+std::string MySprite::getName()
+{
+	return name;
+}
+
+void MySprite::setName( std::string name )
+{
+	this->name = name;
+}
+
 
 /*
 void MySprite::createTxt( string name, string path )
