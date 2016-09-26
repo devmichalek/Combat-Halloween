@@ -6,8 +6,8 @@
 
 struct DoubleKey
 {
-	int one;
-	int two;
+	int a;
+	int b;
 };
 
 class Setkeyboard
@@ -23,8 +23,9 @@ public:
 
 	Setkeyboard();
     ~Setkeyboard();
+	DoubleKey addKey( int a, int b );
 
-    void load( int bot );
+    void load( int left, int right, int bot );
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
 
@@ -40,79 +41,79 @@ enum  	Key {
   A = 0, 
   B, 
   C, 
-  D, 
+  D, // 3
   E, 
   F, 
   G, 
   H, 
   I, 
   J, 
-  K, 
+  K, // 10
   L, 
   M, 
   N, 
   O, 
-  P, 
+  P, // 15
   Q, 
   R, 
   S, 
   T, 
-  U, 
+  U, // 20
   V, 
   W, 
   X, 
   Y, 
-  Z, 
+  Z, // 25
   Num0, 
   Num1, 
   Num2, 
   Num3, 
-  Num4, 
+  Num4, // 30
   Num5, 
   Num6, 
   Num7, 
   Num8, 
-  Num9, 
+  Num9, // 35
   Escape, 
   LControl, 
   LShift, 
   LAlt, 
-  LSystem, 
+  LSystem, // 40
   RControl, 
   RShift, 
   RAlt, 
   RSystem, 
-  Menu, 
+  Menu, // 45
   LBracket, 
   RBracket, 
   SemiColon, 
   Comma, 
-  Period, 
+  Period,  // 50
   Quote, 
   Slash, 
   BackSlash, 
   Tilde, 
-  Equal, 
+  Equal, // 55
   Dash, 
   Space, 
   Return, 
   BackSpace, 
-  Tab, 
+  Tab, // 60
   PageUp, 
   PageDown, 
   End, 
   Home, 
-  Insert, 
+  Insert, // 65
   Delete, 
   Add, 
   Subtract, 
   Multiply, 
-  Divide, 
-  Left, 
-  Right, 
-  Up, 
-  Down, 
-  Numpad0, 
+  Divide, // 70
+  Left, // 71
+  Right, // 72
+  Up, // 73
+  Down, // 74 
+  Numpad0, // 75
   Numpad1, 
   Numpad2, 
   Numpad3, 

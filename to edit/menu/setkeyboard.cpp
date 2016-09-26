@@ -28,7 +28,16 @@ Setkeyboard::~Setkeyboard()
 	focus = 0;
 }
 
-void Setkeyboard::load( int bot )
+DoubleKey Setkeyboard::addKey( int a, int b )
+{
+	DoubleKey doubleKey;
+	doubleKey.a = a;
+	doubleKey.b = b;
+	
+	return  doubleKey;
+}
+
+void Setkeyboard::load( int left, int right, int bot )
 {
 	nr = 22;
 	text = new MyText[ nr ];
@@ -48,9 +57,9 @@ void Setkeyboard::load( int bot )
 	text[ 5 ].setText( "up" );
 	
 	text[ 6 ].setText( "Slide left" );
-	text[ 7 ].setText( "left" );
+	text[ 7 ].setText( "down + left" );
 	text[ 8 ].setText( "Slide right" );
-	text[ 9 ].setText( "left" );
+	text[ 9 ].setText( "down + right" );
 	
 	text[ 10 ].setText( "Climb" );
 	text[ 11 ].setText( "z + up" );
@@ -68,24 +77,43 @@ void Setkeyboard::load( int bot )
 	text[ 21 ].setText( "x + up" );
 	
 	
-	text[ 0 ].setPosition( 20, bot );
-	text[ 1 ].setPosition( 400, bot );
-	for( int i = 2; i < nr -1; i += 2 )
+	text[ 0 ].setPosition( left, bot );
+	text[ 1 ].setPosition( 250, bot );
+	for( int i = 2; i < 10; i += 2 )
 	{
-		text[ i ].setPosition( 20, text[ i -2 ].getBot() + 10 );
-		text[ i +1 ].setPosition( 400, text[ i -2 ].getBot() + 10 );
+		text[ i ].setPosition( left, text[ i -2 ].getBot() + 10 );
+		text[ i +1 ].setPosition( 250, text[ i -2 ].getBot() + 10 );
 	}
 	
-	// printf( "%d  %d\n", text[ 0 ].getX(), text[ 0 ].getY() );
+	text[ 10 ].setPosition( right +120, bot -5 );
+	text[ 11 ].setPosition( right +350, bot -5 );
+	for( int i = 12; i < nr -1; i += 2 )
+	{
+		text[ i ].setPosition( right +120, text[ i -2 ].getBot() + 10 );
+		text[ i +1 ].setPosition( right +350, text[ i -2 ].getBot() + 10 );
+	}
+	
 
-	/*
-	keys[ 0 ] = 73;	// Up
-	keys[ 1 ] = 57; // Escape
-	keys[ 2 ] = 71; // Left
-	keys[ 3 ] = 72; // Right
-	keys[ 4 ] = 1;	// B
-	keys[ 5 ] = 15; // P
-	 * */
+	keys.push_back( addKey( 71, -1 ) ); // right
+	keys.push_back( addKey( 72, -1 ) ); // left
+	
+	keys.push_back( addKey( 73, -1 ) ); // up
+	
+	keys.push_back( addKey( 74, 71 ) ); // down + left
+	keys.push_back( addKey( 74, 72 ) ); // down + right
+	
+	keys.push_back( addKey( 25, 73 ) ); // z + up
+	keys.push_back( addKey( 25, 74 ) ); // z + down
+	
+	keys.push_back( addKey( 2, -1 ) ); // c
+	keys.push_back( addKey( 2, 73 ) ); // c + up
+	
+	keys.push_back( addKey( 23, -1 ) ); // x
+	keys.push_back( addKey( 23, 73 ) ); // x + up
+	
+	keys.push_back( addKey( 57, -1 ) ); // Escape
+	keys.push_back( addKey( 1, -1 ) ); // b
+	keys.push_back( addKey( 15, -1 ) ); // p
 }
 
 
