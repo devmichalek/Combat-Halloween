@@ -12,8 +12,8 @@ class Core
     bool open;
     unsigned FPS;
 
-    unsigned width;
-    unsigned height;
+    int width;
+    int height;
 
     sf::Event event;
     sf::Color color;
@@ -42,6 +42,6 @@ public:
     bool& isOpen();     // get or set open window
 
 
-    unsigned getWidth();
-    unsigned getHeight();
+    int& getWidth();
+    int& getHeight();
 };
