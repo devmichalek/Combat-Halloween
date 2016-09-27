@@ -29,6 +29,7 @@ Menu::Menu()
 	keyboard = new Keyboard;
 	version = new MyText;
 	setkeyboard = new Setkeyboard;
+	information = new Information;
 }
 
 Menu::~Menu()
@@ -63,6 +64,7 @@ void Menu::free()
 	delete keyboard;
 	delete version;
 	delete setkeyboard;
+	delete information;
 }
 
 	
@@ -92,16 +94,17 @@ void Menu::load( int screen_width, int screen_height )
 	
 	music->load( "menu/Rayman Legends OST - Moving Ground.mp3", 50 );
 	
-	music_volume->load( screen_width, screen_height/2 - 100, "Music" );
-	chunk_volume->load( screen_width, music_volume->getBot() + 25, "Sound" );
+	music_volume->load( 100, screen_height/2 - 100, "Music" );
+	chunk_volume->load( 100, music_volume->getBot() + 25, "Sound" );
 	
 	keyboard->load( music_volume->getRight(), screen_height/2 - 100 );
 	
 	version->setFont( "menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "alpha 1.0.5" );
+	version->setText( "alpha 1.1.2" );
 	version->setPosition( screen_width - version->getWidth() - 3, screen_height - version->getHeight() -7 );
 	
-	setkeyboard->load( screen_height/2 + 30 );
+	setkeyboard->load( 100, music_volume->getRight(), screen_height/2 + 100 );
+	information->load( screen_height );
 	
 	//Set start volume
 	git_button->setVolume( chunk_volume->getVolume() );
@@ -150,6 +153,7 @@ void Menu::handle( sf::Event &event )
 				{
 					music_volume->handle( event );
 					chunk_volume->handle( event );
+					setkeyboard->handle( event );
 				}
 			}
 		}
@@ -235,6 +239,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadein( 2, 255 );
 		version->fadein( 2, 255 );
 		setkeyboard->fadein( 2, 255 );
+		information->fadein( 2, 255 );
 	}
 	// Fade out:
 	else if( play_button->getState() == 2 ) // if user clicked play
@@ -258,6 +263,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( 3, 0 );
 		version->fadeout( 3, 0 );
 		setkeyboard->fadeout( 3, 0 );
+		information->fadeout( 3, 0 );
 	}
 	else if( exit->getState() == 1 ) // if user clicked exit
 	{
@@ -280,6 +286,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( 2, 170 );
 		version->fadeout( 2, 170 );
 		setkeyboard->fadeout( 2, 170 );
+		information->fadeout( 2, 170 );
 	}
 	else
 	{
@@ -302,6 +309,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( 3, 0 );
 		version->fadeout( 3, 0 );
 		setkeyboard->fadeout( 3, 0 );
+		information->fadeout( 3, 0 );
 		if( background->getAlpha() == 0 )
 		{
 			state = 1;
@@ -353,6 +361,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->draw( window );
 		keyboard->draw( *window );
 		setkeyboard->draw( *window );
+		information->draw( *window );
 	}
 			
 		
