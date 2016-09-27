@@ -3,7 +3,7 @@
     Purpose: class MyText to load and draw text
 
     @author Adrian Michalek
-    @version 2016.09.09
+    @version 2016.09.01
 	@email adrmic98@gmail.com
 */
 
@@ -11,6 +11,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <iostream>
+#include "templates/border.h"
 
 using namespace std;
 
@@ -50,8 +51,8 @@ public:
     sf::Text& get();
 	bool checkCollision( int x, int y, int w = 0, int h = 0 );
 	
-	void fadein( int i = 1, int max = 255 );
-	void fadeout( int i = 1, int min = 255 );
+	void fadein( int v = 1, int max = 255 );
+	void fadeout( int v = 1, int min = 0 );
 	
 	void setColor( sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
 	void setSize( int size = 1 );

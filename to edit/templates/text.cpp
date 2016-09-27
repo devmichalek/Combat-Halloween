@@ -227,11 +227,11 @@ bool MyText::checkCollision( int x, int y, int w, int h )
 }
 
 
-void MyText::fadein( int i, int max )
+void MyText::fadein( int v, int max )
 {
 	if( alpha < max )
 	{
-		alpha += i;
+		alpha += v;
 		if( alpha > max )
 			alpha = max;
 
@@ -239,11 +239,11 @@ void MyText::fadein( int i, int max )
 	}
 }
 
-void MyText::fadeout( int i, int min )
+void MyText::fadeout( int v, int min )
 {
 	if( alpha > min )
 	{
-		alpha -= i;
+		alpha -= v;
 		if( alpha < min )
 			alpha = min;
 
