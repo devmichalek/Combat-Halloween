@@ -9,6 +9,14 @@ Setkeyboard::Setkeyboard()
 	text = NULL;
 	
 	focus = 0;
+	which = -1;
+	
+	add = 0;
+	remove = 0;
+	addMode = 0;
+	
+	banNr = 0;
+	bannedKeys = NULL;
 }
 
 Setkeyboard::~Setkeyboard()
@@ -26,6 +34,18 @@ Setkeyboard::~Setkeyboard()
 	}
 	
 	focus = 0;
+	which = -1;
+	
+	add = 0;
+	remove = 0;
+	addMode = 0;
+	
+	if( bannedKeys != NULL )
+	{
+		delete [] bannedKeys;
+		bannedKeys = NULL;
+		banNr = 0;
+	}
 }
 
 DoubleKey Setkeyboard::addKey( int a, int b )
@@ -35,6 +55,42 @@ DoubleKey Setkeyboard::addKey( int a, int b )
 	doubleKey.b = b;
 	
 	return  doubleKey;
+}
+
+
+string Setkeyboard::getName( int n )
+{
+	string name = "";
+	
+	if( n <= 25 )	// from A to Z
+	{
+		// in ASCII 97 means letter 'a'
+		name = static_cast <char> ( n + 97 );
+	}
+	else
+	{
+		switch( n )
+		{
+			case 71: name = "left";	 	break;
+			case 72: name = "right";	break;
+			case 73: name = "up";		break;
+			case 74: name = "down";		break;
+			
+			case 57: name = "space";	break;
+			case 58: name = "return";	break;
+			
+			case 37: name = "l ctrl";	break;
+			case 41: name = "r ctrl";	break;
+			
+			case 38: name = "l shift";	break;
+			case 42: name = "r shift";	break;
+			
+			case 39: name = "l alt";	break;
+			case 43: name = "r alt";	break;
+		}
+	}
+	
+	return name;
 }
 
 void Setkeyboard::load( int left, int right, int bot )
@@ -94,8 +150,8 @@ void Setkeyboard::load( int left, int right, int bot )
 	}
 	
 
-	keys.push_back( addKey( 71, -1 ) ); // right
-	keys.push_back( addKey( 72, -1 ) ); // left
+	keys.push_back( addKey( 71, -1 ) ); // left
+	keys.push_back( addKey( 72, -1 ) ); // right
 	
 	keys.push_back( addKey( 73, -1 ) ); // up
 	
@@ -111,9 +167,17 @@ void Setkeyboard::load( int left, int right, int bot )
 	keys.push_back( addKey( 23, -1 ) ); // x
 	keys.push_back( addKey( 23, 73 ) ); // x + up
 	
-	keys.push_back( addKey( 57, -1 ) ); // Escape
-	keys.push_back( addKey( 1, -1 ) ); // b
-	keys.push_back( addKey( 15, -1 ) ); // p
+	actual_keys = keys;
+	
+	add = 67;
+	remove = 68;
+	
+	banNr = 4;
+	bannedKeys = new int[ banNr ];
+	bannedKeys[ 0 ] = 1;
+	bannedKeys[ 1 ] = 15;
+	bannedKeys[ 2 ] = 16;
+	bannedKeys[ 3 ] = 36;
 }
 
 
@@ -124,28 +188,150 @@ void Setkeyboard::draw( sf::RenderWindow &window )
 		window.draw( text[ i ].get() );
 	}
 }
-/*
+
 void Setkeyboard::handle( sf::Event &event )
 {
-	int x, y;
+	if( which != -1 )
+	{
+		static bool rel = false;
+		
+		if( event.type == sf::Event::KeyPressed && !rel )
+		{
+			if( addMode == 1 )
+			{
+				sf::Uint8 code = event.key.code;
+				bool success = false;
+				
+				if( code > -1 && code <= 25 )
+					success = true;
+				else if( code >= 71 && code <= 74 )
+					success = true;
+				else if( code >= 37 && code <= 43 )
+					success = true;
+					
+				for( int i = 0; i < banNr; i++ )
+				{
+					if( code == bannedKeys[ i ] )
+					{
+						success = false;
+						break;
+					}
+				}
+				
+				if( success )
+				{
+					if( actual_keys[ which/2 ].a < 0 )
+					{
+						actual_keys[ which/2 ].a = event.key.code;
+						text[ which +1 ].setText( getName( event.key.code ) );
+						text[ which +1 ].reloadPosition();
+					}
+					else if( actual_keys[ which/2 ].b < 0 )
+					{
+						actual_keys[ which/2 ].b = event.key.code;
+						text[ which +1 ].setText( getName( actual_keys[ which/2 ].a ) + " + " + getName( event.key.code ) );
+						text[ which +1 ].reloadPosition();
+					}
+				}
+			}
+			
+			if( event.key.code == remove ) // '-'
+			{
+				if( actual_keys[ which/2 ].b != -1 )
+				{
+					actual_keys[ which/2 ].b = -1;
+				}
+				else if( actual_keys[ which/2 ].a != -1 )
+					actual_keys[ which/2 ].a = -1;
+				
+				
+				if( actual_keys[ which/2 ].isEmpty() )
+				{
+					text[ which +1 ].setText( "-" );
+					text[ which +1 ].reloadPosition();
+				}
+				else if( actual_keys[ which/2 ].a != -1 )
+				{
+					text[ which +1 ].setText( getName( actual_keys[ which/2 ].a ) );
+					text[ which +1 ].reloadPosition();
+				}
+				
+				
+				// printf( "key nr %d, text nr %d\n", which/2, which +1 );
+				
+				text[ which ].setColor( 0x8C, 0x00, 0x1A );
+				addMode = 0;
+			}
+			else if( event.key.code == add ) // '+'
+			{
+				if( actual_keys[ which/2 ].oneIsFree() )
+				{
+					addMode = 1;
+					text[ which ].setColor( 0x8C, 0xA9, 0x3E );
+				}
+				else
+				{
+					addMode = 0;
+				}
+			}
+			
+			rel = true;
+		}
+		else if( event.type == sf::Event::KeyReleased )
+		{
+			rel = false;
+		}
+	}
 	
 	if( event.type == sf::Event::MouseButtonPressed )
 	{
-		focus = 0;
-		x = event.mouseButton.x;
-		y = event.mouseButton.y;
-		
-		int add = 10;
-		for( int i = 8; i <= 14; i += 2 )
+		for( unsigned i = 0; i < actual_keys.size(); i++ )
 		{
-			if( text[ i ].checkCollision( x, y, 0, add  ) || text[ i + 1 ].checkCollision( x, y, 0, add ) )
+			if( actual_keys[ i ].isEmpty() )
 			{
-				focus = i;
-				rect.setPosition( text[ i ].getX(), text[ i ].getY() );
-				rect.setScale( text[ i + 1 ].getRight() - text[ i ].getX(), text[ 8 ].getHeight() + add );
+				actual_keys[ i ] = keys[ i ];
+				string newName = "";
+				
+				newName += getName( actual_keys[ i ].a );
+					
+				if( actual_keys[ i ].b > -1 )
+					newName +=  " + " + getName( actual_keys[ i ].b );
+				
+				text[ i*2 +1 ].setText( newName );
+				text[ i*2 +1 ].reloadPosition();
+				
+				// printf( "text nr %d\n", i*2 );
 			}
 		}
+		
+		which = -1;
+		int x = event.mouseButton.x;
+		int y = event.mouseButton.y;
+		
+		for( int i = 0; i < nr; i += 2 )
+		{
+			if( text[ i ].checkCollision( x, y, 0, 5 ) )
+			{
+				which = i;
+				break;
+			}
+		}
+		
+		for( int i = 0; i < nr; i += 2 )
+		{
+			text[ i ].setColor( 0xFF, 0xFF, 0xFF );
+		}
+		
+		if( which != -1 )
+		{
+			text[ which ].setColor( 0xFF, 0xDE, 0x00 );
+		}
 	}
+}
+/*
+void Setkeyboard::handle( sf::Event &event )
+{
+
 	
 	if( focus != 0 )
 	{
@@ -180,93 +366,6 @@ void Setkeyboard::handle( sf::Event &event )
 					}
 				}
 				
-				// Left
-				if( event.key.code == 71 )
-				{
-					keys[ (focus -8) /2 ] = 71;
-					text[ focus +1 ].setText( "left" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// Right
-				else if( event.key.code == 72 )
-				{
-					keys[ (focus -8) /2 ] = 72;
-					text[ focus +1 ].setText( "right" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// Up
-				else if( event.key.code == 73 )
-				{
-					keys[ (focus -8) /2 ] = 73;
-					text[ focus +1 ].setText( "up" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// Down
-				else if( event.key.code == 74 )
-				{
-					keys[ (focus -8) /2 ] = 74;
-					text[ focus +1 ].setText( "down" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// Space
-				else if( event.key.code == 57 )
-				{
-					keys[ (focus -8) /2 ] = 57;
-					text[ focus +1 ].setText( "space" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// Return
-				else if( event.key.code == 58 )
-				{
-					keys[ (focus -8) /2 ] = 58;
-					text[ focus +1 ].setText( "return" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// LAlt
-				else if( event.key.code == 39 )
-				{
-					keys[ (focus -8) /2 ] = 39;
-					text[ focus +1 ].setText( "L alt" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				// RAlt
-				else if( event.key.code == 43 )
-				{
-					keys[ (focus -8) /2 ] = 43;
-					text[ focus +1 ].setText( "R alt" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				
-				// LControl
-				else if( event.key.code == 37 )
-				{
-					keys[ (focus -8) /2 ] = 37;
-					text[ focus +1 ].setText( "L control" );
-					text[ focus +1 ].reloadPosition();
-				}
-				
-				
-				// RControl
-				else if( event.key.code == 41 )
-				{
-					keys[ (focus -8) /2 ] = 41;
-					text[ focus +1 ].setText( "R control" );
-					text[ focus +1 ].reloadPosition();
-				}
-			}
-		}
-		else if( event.type == sf::Event::KeyReleased )
-		{
-			rel = false;
-		}
 	}
 }
 */
@@ -287,18 +386,8 @@ void Setkeyboard::fadeout( int j, int min )
 	}
 }
 
-/*
-string* Setkeyboard::getHeroKeys()
-{
- 
 
-	string* array = new string [ 4 ];
-	
-	for( int i = 0; i < nr; i ++ )
-	{
-		array[ i ] = to_string( keys[ i ] );
-	}
-	
-	return array;
+vector <DoubleKey> Setkeyboard::getHeroKeys()
+{
+	return actual_keys;
 }
-*/

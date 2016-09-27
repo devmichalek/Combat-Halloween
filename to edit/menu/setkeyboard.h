@@ -2,13 +2,10 @@
 
 #include "templates/text.h"
 #include "templates/sprite.h"
+#include "menu/doublekey.h"
 #include <vector>
 
-struct DoubleKey
-{
-	int a;
-	int b;
-};
+
 
 class Setkeyboard
 {
@@ -17,13 +14,24 @@ class Setkeyboard
 	
 	int focus;
 	
-	vector <DoubleKey> keys; // used keys
+	vector <DoubleKey> keys; // basic keys
+	vector <DoubleKey> actual_keys;	// used keys
+	
+	int which;	// -1 = nothing was clicked;
+	
+	sf::Uint8 add;	// by which key you can add info?
+	sf::Uint8 remove;	// by which key you can insert info?
+	sf::Uint8 addMode; // state
+	
+	int banNr;
+	int* bannedKeys;
 	
 public:
 
 	Setkeyboard();
     ~Setkeyboard();
 	DoubleKey addKey( int a, int b );
+	string getName( int n );
 
     void load( int left, int right, int bot );
     void draw( sf::RenderWindow &window );
@@ -32,7 +40,7 @@ public:
 	void fadein( int j, int max );
 	void fadeout( int j, int min );
 	
-	string* getHeroKeys();
+	vector <DoubleKey> getHeroKeys();
 };
 
 /*
