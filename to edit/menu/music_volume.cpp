@@ -30,17 +30,17 @@ Music_volume::~Music_volume()
 }
 
 	
-void Music_volume::load( int screen_w, int y, string str )
+void Music_volume::load( int left, int y, string str )
 {
 	text.setID( "music_volume-text" );
 	text.setFont( "intro/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	text.setText( str );
-	text.setPosition( 20, y );
+	text.setPosition( left, y );
 	
 	
 	minus.setName( "music_volume-minus" );
 	minus.load( "menu/minus.png", 4 );
-	minus.setPosition( 150, y -text.getHeight()/2 );
+	minus.setPosition( left +120, y -text.getHeight()/2 );
 	minus.setScale( 0.4, 0.4 );
 	
 	plus.setName( "music_volume-plus" );
