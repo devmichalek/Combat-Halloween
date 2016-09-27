@@ -3,21 +3,21 @@
     Purpose: class MySprite to load and draw sprites
 
     @author Adrian Michalek
-    @version 2016.09.05
+    @version 2016.09.22
 	@email adrmic98@gmail.com
 */
 
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "templates/border.h"
+#include "templates/color.h"
 #include <iostream>
 
 using namespace std;
 
-class MySprite :public Border
+class MySprite :public Border, public Color
 {
 	string name;		// Identity
-	sf::Color color;
     sf::Sprite* sprite;
     sf::Texture* texture;
 	
@@ -53,13 +53,10 @@ public:
 	// const string& getTypeId();
 	
 	
-	sf::Color getColor();
+	void fadein( int v = 1, int max = 255 );
+	void fadeout( int v = 1, int min = 0 );
+	
 	void setColor( sf::Color color );
-	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
-	
-	sf::Uint8 getAlpha();
 	void setAlpha( sf::Uint8 a = 0 );
 	
 	int getOffset();

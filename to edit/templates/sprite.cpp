@@ -365,10 +365,53 @@ const string& MySprite::getTypeId()
 
 
 
-sf::Color MySprite::getColor()
+
+void MySprite::fadein( int v, int max )
 {
-	return color;
+	if( color.a < max )
+	{
+		int alpha = color.a + v;
+		if( alpha > max )
+			alpha = max;
+		color.a = alpha;
+		
+		if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( color );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( color );
+			}
+		}
+	}
 }
+
+void MySprite::fadeout( int v, int min )
+{
+	if( color.a > min )
+	{
+		int alpha = color.a - v;
+		if( alpha < min )
+			alpha = min;
+		color.a = alpha;
+
+		if( nr == 0 || nr == 1 )
+		{
+			sprite->setColor( color );
+		}
+		else if( nr > 1 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( color );
+			}
+		}
+	}
+}
+
 
 void MySprite::setColor( sf::Color color )
 {
@@ -405,59 +448,6 @@ void MySprite::setColor( sf::Color color )
 			}
 		}
 	}
-}
-
-
-void MySprite::fadein( int i, int max )
-{
-	if( color.a < max )
-	{
-		int alpha = color.a + i;
-		if( alpha > max )
-			alpha = max;
-		color.a = alpha;
-		
-		if( nr == 0 || nr == 1 )
-		{
-			sprite->setColor( color );
-		}
-		else if( nr > 1 )
-		{
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setColor( color );
-			}
-		}
-	}
-}
-
-void MySprite::fadeout( int i, int min )
-{
-	if( color.a > min )
-	{
-		int alpha = color.a - i;
-		if( alpha < min )
-			alpha = min;
-		color.a = alpha;
-
-		if( nr == 0 || nr == 1 )
-		{
-			sprite->setColor( color );
-		}
-		else if( nr > 1 )
-		{
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setColor( color );
-			}
-		}
-	}
-}
-
-
-sf::Uint8 MySprite::getAlpha()
-{
-	return color.a;
 }
 
 void MySprite::setAlpha( sf::Uint8 a )
