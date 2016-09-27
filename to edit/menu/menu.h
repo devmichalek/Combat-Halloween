@@ -10,6 +10,7 @@
 #include "menu/keyboard.h"
 #include "templates/music.h"
 #include "menu/setkeyboard.h"
+#include "menu/information.h"
 
 class Menu
 {
@@ -40,6 +41,7 @@ class Menu
 	Keyboard* keyboard;
 	MyText* version;
 	Setkeyboard* setkeyboard;
+	Information* information;
 	
 public:
 	
