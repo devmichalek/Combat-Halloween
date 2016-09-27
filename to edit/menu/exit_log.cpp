@@ -6,7 +6,7 @@ void Exit_log::load( int screen_w, int screen_h )
 	mySprite.setName( "menu_exit_log-mySprite" );
     mySprite.load( "menu/exit.png" );
 	mySprite.setAlpha( 255 );
-	mySprite.center( screen_w, screen_h );
+	mySprite.center( 0, 0, screen_w, screen_h );
 
 	myText.setID( "menu_exit_log-myText" );
 	myText.setFont( "menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
