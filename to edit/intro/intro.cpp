@@ -27,7 +27,7 @@ Intro::~Intro()
 }
 
 	
-void Intro::load( int screen_w, int screen_h )
+void Intro::load( const int &screen_w, const int &screen_h )
 {
 	shuriken.setName( "intro-shuriken" );
 	shuriken.load( "intro/shuriken.png" );

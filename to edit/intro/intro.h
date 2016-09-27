@@ -17,7 +17,7 @@ public:
 	Intro();
 	~Intro();
 	
-	void load( int screen_w, int screen_h );
+	void load( const int &screen_w, const int &screen_h );
 	void draw( sf::RenderWindow* &window );
 	bool isQuit();
 };
