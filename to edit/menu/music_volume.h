@@ -26,7 +26,7 @@ public:
 	Music_volume( float volume = 1 );
 	~Music_volume();
 	
-	void load( int screen_w, int y, string str );
+	void load( int left, int y, string str );
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	
