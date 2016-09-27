@@ -15,7 +15,7 @@ Loading::~Loading()
 	counter = 0;
 }
 	
-void Loading::load( int screen_w, int screen_h )
+void Loading::load( const int &screen_w, const int &screen_h )
 {
 	text.setID( "loading-text" );
 	text.setFont( "intro/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
@@ -36,7 +36,7 @@ void Loading::load( int screen_w, int screen_h )
 	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, text.getBot() +15 );
 }
 
-void Loading::draw( sf::RenderWindow* &window, int range )
+void Loading::draw( sf::RenderWindow* &window )
 {
 	window->draw( background.get() );
 	
