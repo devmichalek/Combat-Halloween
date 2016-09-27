@@ -33,7 +33,7 @@ void Engine::free()
 // Load objects.
 void Engine::load()
 {
-	loading->draw( core->getWindow(), 99 );
+	loading->draw( core->getWindow() );
 	
 	switch( loading->getState() )
 	{
@@ -115,6 +115,8 @@ void Engine::states()
 		{
 			level_menu->setStartPackage( menu->chunkOn(), menu->musicOn(), menu->getChunkVolume(), menu->getMusicVolume() );
 			core->getState() = 1;
+			delete menu;
+			menu = NULL;
 		}
     }
 	

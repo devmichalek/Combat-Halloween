@@ -135,12 +135,12 @@ bool& Core::isOpen()
 
 
 
-unsigned Core::getWidth()
+int& Core::getWidth()
 {
     return width;
 }
 
-unsigned Core::getHeight()
+int& Core::getHeight()
 {
     return height;
 }
