@@ -23,4 +23,6 @@ public:
     int getRight();
     int getTop();
     int getBot();
+	
+	bool checkCollision( int x, int y, int w = 0, int h = 0 );
 };
