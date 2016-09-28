@@ -2,9 +2,9 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "templates/chunk.h"
+#include "menu/parentchunk.h"
 
-class Music_volume
+class Music_volume :public Parentchunk
 {
 	float volume;
 	int last_volume;
@@ -13,9 +13,6 @@ class Music_volume
 	MyText text;		
 	MyText percent;
 	
-	// click as sound and play as state
-	bool play;
-	Chunk click;
 	
 	// hover
 	bool plus_focus;
@@ -34,8 +31,6 @@ public:
 	void fadeout( int i, int min );
 	
 	int getBot();
-	void turn();	// Turn on/off chunk
-	void setVolume( sf::Uint8 volume );
 	
 	bool changeVolume();
 	sf::Uint8 getVolume();

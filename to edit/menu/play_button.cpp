@@ -110,12 +110,8 @@ void Play_button::fadeout( int i, int min )
 	myText.fadeout( i, min );
 }
 
-void Play_button::turn()
+void Play_button::setState( int s )
 {
-	play = !play;
-}
-
-void Play_button::setVolume( sf::Uint8 volume )
-{
-	click.setVolume( volume );
+	mySprite.setOffset( 0 );
+	state = s;
 }

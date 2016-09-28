@@ -1,6 +1,27 @@
 #include "setkeyboard.h"
 #include <stdio.h>
 #include <string>
+#include <fstream>
+
+int Setkeyboard::strToInt(string s)
+{
+    bool m=false;
+    int tmp=0;
+    int i=0;
+    if(s[0]=='-')
+    {
+          i++;
+          m = true;
+    }
+	
+    while(i<s.size())
+    {
+      tmp = 10*tmp+s[i]-48;
+      i++;
+    }
+	
+    return m ? -tmp : tmp;   
+}
 
 
 Setkeyboard::Setkeyboard()
@@ -8,7 +29,7 @@ Setkeyboard::Setkeyboard()
     nr = 0;
 	text = NULL;
 	
-	focus = 0;
+	focus = false;
 	which = -1;
 	
 	add = 0;
@@ -17,6 +38,7 @@ Setkeyboard::Setkeyboard()
 	
 	banNr = 0;
 	bannedKeys = NULL;
+	save.free();
 }
 
 Setkeyboard::~Setkeyboard()
@@ -33,7 +55,7 @@ Setkeyboard::~Setkeyboard()
 		nr = 0;
 	}
 	
-	focus = 0;
+	focus = false;
 	which = -1;
 	
 	add = 0;
@@ -93,6 +115,14 @@ string Setkeyboard::getName( int n )
 	return name;
 }
 
+void Setkeyboard::loadButton( int screen_w, int screen_h )
+{
+	save.setName( "setkeyboard-save" );
+	save.load( "menu/save.png", 4 );
+	save.setScale( 0.5, 0.5 );
+	save.setPosition( screen_w - save.getWidth() -30, screen_h/2 -80 );
+}
+
 void Setkeyboard::load( int left, int right, int bot )
 {
 	nr = 22;
@@ -101,36 +131,89 @@ void Setkeyboard::load( int left, int right, int bot )
 	for( int i = 0; i < nr; i++ )
 	{
 		text[ i ].setID( "keyboard-text nr " + std::to_string( i ) );
-		text[ i ].setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+		text[ i ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	}
+
+	// load default keys
+	fstream file;
+	
+	file.open( "menu/keyboard_default.txt" );
+	if( file.bad() )
+	{
+		printf( "Can not load %s\n", "menu/keyboard_default.map" );
+	}
+	else
+	{
+		// printf( "something" );
+		int a = -2, b = -2;
+		string buf;
+		while( file >> buf )
+		{
+			if( a != -2 )
+			{
+				b = strToInt( buf );
+				keys.push_back( addKey( a, b ) );
+				a = -2;
+			}
+			else
+				a = strToInt( buf );
+		}
+	}
+	file.close();
+	
+	// load temporary keys
+	file.open( "menu/keyboard_temporary.txt" );
+	if( file.bad() )
+	{
+		printf( "Can not load %s\n", "menu/keyboard_temporary.map" );
+	}
+	else
+	{
+		// printf( "something" );
+		int a = -2, b = -2;
+		string buf;
+		while( file >> buf )
+		{
+			if( a != -2 )
+			{
+				b = strToInt( buf );
+				actual_keys.push_back( addKey( a, b ) );
+				a = -2;
+			}
+			else
+				a = strToInt( buf );
+		}
+		
+		for( int i = 1; i < nr; i += 2 )
+		{
+			string newName = "";
+			newName += getName( actual_keys[ (i-1) / 2 ].a );
+			if( actual_keys[ (i-1) / 2 ].b != -1 )
+				newName += " + " + getName( actual_keys[ (i-1) / 2 ].b );
+				
+			text[ i ].setText( newName );
+		}
+	}
+	file.close();
+	
+	
 	
 	text[ 0 ].setText( "Move left" );
-	text[ 1 ].setText( "left" );
 	text[ 2 ].setText( "Move right" );
-	text[ 3 ].setText( "right" );
 	
 	text[ 4 ].setText( "Jump" );
-	text[ 5 ].setText( "up" );
 	
 	text[ 6 ].setText( "Slide left" );
-	text[ 7 ].setText( "down + left" );
 	text[ 8 ].setText( "Slide right" );
-	text[ 9 ].setText( "down + right" );
 	
 	text[ 10 ].setText( "Climb" );
-	text[ 11 ].setText( "z + up" );
 	text[ 12 ].setText( "Go down" );
-	text[ 13 ].setText( "z + down" );
 	
 	text[ 14 ].setText( "Attack" );
-	text[ 15 ].setText( "c" );
 	text[ 16 ].setText( "Jump attack" );
-	text[ 17 ].setText( "c + up" );
 	
 	text[ 18 ].setText( "Throw" );
-	text[ 19 ].setText( "x" );
 	text[ 20 ].setText( "Jump throw" );
-	text[ 21 ].setText( "x + up" );
 	
 	
 	text[ 0 ].setPosition( left, bot );
@@ -149,26 +232,6 @@ void Setkeyboard::load( int left, int right, int bot )
 		text[ i +1 ].setPosition( right +350, text[ i -2 ].getBot() + 10 );
 	}
 	
-
-	keys.push_back( addKey( 71, -1 ) ); // left
-	keys.push_back( addKey( 72, -1 ) ); // right
-	
-	keys.push_back( addKey( 73, -1 ) ); // up
-	
-	keys.push_back( addKey( 74, 71 ) ); // down + left
-	keys.push_back( addKey( 74, 72 ) ); // down + right
-	
-	keys.push_back( addKey( 25, 73 ) ); // z + up
-	keys.push_back( addKey( 25, 74 ) ); // z + down
-	
-	keys.push_back( addKey( 2, -1 ) ); // c
-	keys.push_back( addKey( 2, 73 ) ); // c + up
-	
-	keys.push_back( addKey( 23, -1 ) ); // x
-	keys.push_back( addKey( 23, 73 ) ); // x + up
-	
-	actual_keys = keys;
-	
 	add = 67;
 	remove = 68;
 	
@@ -178,6 +241,9 @@ void Setkeyboard::load( int left, int right, int bot )
 	bannedKeys[ 1 ] = 15;
 	bannedKeys[ 2 ] = 16;
 	bannedKeys[ 3 ] = 36;
+	
+	click.setID( "play_button-click" );
+	click.load( "menu/click.wav", 50 );
 }
 
 
@@ -187,6 +253,8 @@ void Setkeyboard::draw( sf::RenderWindow &window )
 	{
 		window.draw( text[ i ].get() );
 	}
+	
+	window.draw( save.get() );
 }
 
 void Setkeyboard::handle( sf::Event &event )
@@ -283,6 +351,7 @@ void Setkeyboard::handle( sf::Event &event )
 		}
 	}
 	
+	save.setOffset( 0 );
 	if( event.type == sf::Event::MouseButtonPressed )
 	{
 		for( unsigned i = 0; i < actual_keys.size(); i++ )
@@ -326,49 +395,39 @@ void Setkeyboard::handle( sf::Event &event )
 		{
 			text[ which ].setColor( 0xFF, 0xDE, 0x00 );
 		}
-	}
-}
-/*
-void Setkeyboard::handle( sf::Event &event )
-{
-
-	
-	if( focus != 0 )
-	{
-		static bool rel = false;
-		if( event.type == sf::Event::KeyPressed && !rel )
+		
+		if( save.checkCollision( x, y ) )
 		{
-			rel = true;
-			bool success = true;
-			for( int i = 0; i < keys_nr; i++ )
-			{
-				if( event.key.code == keys[ i ] )
-					success = false;
-			}
+			fstream file;
+			file.open( "menu/keyboard_temporary.txt", std::ios::out );
 			
-			if( success )
+			for( unsigned i = 0; i < actual_keys.size(); i++ )
 			{
-				for( int i = 0; i <= 25; i++ ) // from A ... Z
-				{
-					// b and p is used for back and pause
-					if( event.key.code == i ) 
-					{
-						// printf( "%d -- %d\n", (focus -8) /2, i );
-						keys[ (focus -8) /2 ] = i;
-						
-						std::string str = "";
-						str += static_cast <char> ( i +97 );
-
-						text[ focus +1 ].setText( str );
-						text[ focus +1 ].reloadPosition();
-						
-						break;
-					}
-				}
-				
+				file << to_string( actual_keys[ i ].a ) + "\n";
+				file << to_string( actual_keys[ i ].b ) + "\n";
+			}
+			save.setOffset( 2 );
+			focus = true;
+			
+			if( play )
+				click.play();
+		}
 	}
+	else if( event.type == sf::Event::MouseMoved )
+	{
+		int x = event.mouseMove.x;
+		int y = event.mouseMove.y;
+		if( save.checkCollision( x, y ) )
+			save.setOffset( 1 );
+		else
+			focus = false;
+	}
+	else if( event.type == sf::Event::MouseButtonReleased )
+		focus = false;
+		
+	if( focus )
+		save.setOffset( 2 );
 }
-*/
 
 void Setkeyboard::fadein( int j, int max )
 {
@@ -376,6 +435,8 @@ void Setkeyboard::fadein( int j, int max )
 	{
 		text[ i ].fadein( j, max );
 	}
+	
+	save.fadein( j, max );
 }
 
 void Setkeyboard::fadeout( int j, int min )
@@ -384,6 +445,8 @@ void Setkeyboard::fadeout( int j, int min )
 	{
 		text[ i ].fadeout( j, min );
 	}
+	
+	save.fadeout( j, min );
 }
 
 

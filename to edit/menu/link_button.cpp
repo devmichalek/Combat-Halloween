@@ -98,13 +98,3 @@ void Link_button::fadeout( int i, int min )
 {
 	button.fadeout( i, min );
 }
-
-void Link_button::turn()
-{
-	play = !play;
-}
-
-void Link_button::setVolume( sf::Uint8 volume )
-{
-	click.setVolume( volume );
-}

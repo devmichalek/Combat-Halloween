@@ -3,16 +3,15 @@
 #include "templates/text.h"
 #include "templates/sprite.h"
 #include "menu/doublekey.h"
+#include "menu/parentchunk.h"
 #include <vector>
 
 
 
-class Setkeyboard
+class Setkeyboard :public Parentchunk
 {
 	int nr;
 	MyText* text;
-	
-	int focus;
 	
 	vector <DoubleKey> keys; // basic keys
 	vector <DoubleKey> actual_keys;	// used keys
@@ -26,13 +25,18 @@ class Setkeyboard
 	int banNr;
 	int* bannedKeys;
 	
+	MySprite save;
+	
 public:
+
+	int strToInt( string s );
 
 	Setkeyboard();
     ~Setkeyboard();
 	DoubleKey addKey( int a, int b );
 	string getName( int n );
-
+	
+	void loadButton( int screen_w, int screen_h );
     void load( int left, int right, int bot );
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
