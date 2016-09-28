@@ -63,7 +63,6 @@ public:
 	void setOffset( int n );
 	
 	void setScale( float x = 1, float y = 1 );
-	bool checkCollision( int x, int y, int w = 0, int h = 0 );
 	
 	string getName();
 	void setName( string name );
