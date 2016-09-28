@@ -6,7 +6,6 @@ class Play
 {
 	int state;
 	
-	MySprite background;
 	
 public:
 
