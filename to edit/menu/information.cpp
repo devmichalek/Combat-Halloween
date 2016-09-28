@@ -38,13 +38,13 @@ void Information::load( int screen_h )
 	{
 		text[ i ].setID( "information-text nr " + std::to_string( i ) );
 		if( i != 1 || i != 3 || i != 5 )
-			text[ i ].setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+			text[ i ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	}
 	//8Ca93e
 	//8c001a
-	text[ 5 ].setFont( "intro/Jaapokki-Regular.otf", 25, 0x8C, 0x00, 0x1A );
-	text[ 1 ].setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xDE, 0x00 );
-	text[ 3 ].setFont( "intro/Jaapokki-Regular.otf", 25, 0x8C, 0xA9, 0x3E );
+	text[ 5 ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x8C, 0x00, 0x1A );
+	text[ 1 ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xDE, 0x00 );
+	text[ 3 ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x8C, 0xA9, 0x3E );
 	
 	text[ 0 ].setText( "instructions: " );
 	text[ 1 ].setText( "click on" );

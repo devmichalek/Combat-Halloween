@@ -1,20 +1,16 @@
 #pragma once
 
 #include "templates/sprite.h"
-#include "templates/chunk.h"
+#include "menu/parentchunk.h"
 
-class Link_button
+class Link_button :public Parentchunk
 {
-    bool locked;
     string url;
+	
+protected:
+	
+	bool locked;
     MySprite button;
-	
-	// focus on button true/false
-	bool focus;	
-	
-	// click as sound and play as state
-	bool play;
-	Chunk click;
 
 public:
 
@@ -29,7 +25,4 @@ public:
 	
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
-	
-	void turn();	// Turn on/off chunk
-	void setVolume( sf::Uint8 volume );
 };

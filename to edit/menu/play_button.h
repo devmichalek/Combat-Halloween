@@ -2,9 +2,9 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "templates/chunk.h"
+#include "menu/parentchunk.h"
 
-class Play_button
+class Play_button :public Parentchunk
 {
 
 protected:
@@ -12,10 +12,6 @@ protected:
 	int state;
 	MySprite mySprite;
 	MyText myText;
-	
-	// click as sound and play as state
-	bool play;
-	Chunk click;
 	
 public:
 	
@@ -34,6 +30,5 @@ public:
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
 	
-	void turn();	// Turn on/off chunk
-	void setVolume( sf::Uint8 volume );
+	void setState( int s );
 };

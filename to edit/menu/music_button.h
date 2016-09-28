@@ -1,23 +1,16 @@
 #pragma once
 
 #include "templates/sprite.h"
-#include "templates/chunk.h"
+#include "menu/parentchunk.h"
 
 
-class Music_button	// Class for chunk/music button 
+class Music_button :public Parentchunk	// Class for chunk/music button 
 {
 	MySprite button;
 	MySprite scratch;
 	
-	// focus on button true/false
-	bool focus;
-	
 	// music/chunk is on/off
 	int state;
-	
-	// click as sound and play as state
-	bool play;
-	Chunk click;
 	
 public:
 
@@ -30,9 +23,7 @@ public:
 
 	int getBot();
 	bool change();
-	void turn();
-	void setVolume( sf::Uint8 volume );
-	
+
 	void fadein( int i, int max = 255 );
 	void fadeout( int i, int min = 0 );
 };

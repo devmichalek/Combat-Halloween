@@ -2,9 +2,9 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "templates/chunk.h"
+#include "menu/parentchunk.h"
 
-class Log
+class Log :public Parentchunk
 {
 	int state;
 	MySprite button;
@@ -12,10 +12,6 @@ class Log
 	
 	int nr;	// how many text textures
 	MyText* myText;
-	
-	// click as sound and play as state
-	bool play;
-	Chunk click;
 	
 	// if that log is not ready
 	bool locked;
@@ -37,7 +33,4 @@ public:
 	
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
-	
-	void turn();	// Turn on/off chunk
-	void setVolume( sf::Uint8 volume );
 };
