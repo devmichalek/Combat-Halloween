@@ -54,3 +54,17 @@ int Border::getBot()
 {
     return top + height;
 }
+
+
+bool Border::checkCollision( int x, int y, int w, int h )
+{
+	if( x + w > left && x < left + width )
+	{
+		if( y + h > top && y < top + height )
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
