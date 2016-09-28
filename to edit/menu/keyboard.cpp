@@ -32,7 +32,7 @@ void Keyboard::load( int right, int top )
 	for( int i = 0; i < text_nr; i++ )
 	{
 		text[ i ].setID( "keyboard-text nr " + std::to_string( i ) );
-		text[ i ].setFont( "intro/Jaapokki-Regular.otf", 25, 0x98, 0x98, 0x98 );
+		text[ i ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x98, 0x98, 0x98 );
 	}
 	
 	

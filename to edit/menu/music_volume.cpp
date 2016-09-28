@@ -33,7 +33,7 @@ Music_volume::~Music_volume()
 void Music_volume::load( int left, int y, string str )
 {
 	text.setID( "music_volume-text" );
-	text.setFont( "intro/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
+	text.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	text.setText( str );
 	text.setPosition( left, y );
 	
@@ -50,7 +50,7 @@ void Music_volume::load( int left, int y, string str )
 	
 	
 	percent.setID( "music_volume-percent" );
-	percent.setFont( "intro/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
+	percent.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	percent.setText( std::to_string( static_cast<int>( volume*100/128 ) ) + "%" );
 	percent.setPosition( plus.getRight() + 10, y );
 	
@@ -178,16 +178,6 @@ void Music_volume::fadeout( int i, int min )
 int Music_volume::getBot()
 {
 	return plus.getBot();
-}
-
-void Music_volume::turn()
-{
-	play = !play;
-}
-
-void Music_volume::setVolume( sf::Uint8 volume )
-{
-	click.setVolume( volume );
 }
 
 

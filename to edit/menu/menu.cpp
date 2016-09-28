@@ -104,6 +104,7 @@ void Menu::load( int screen_width, int screen_height )
 	version->setPosition( screen_width - version->getWidth() - 3, screen_height - version->getHeight() -7 );
 	
 	setkeyboard->load( 100, music_volume->getRight(), screen_height/2 + 100 );
+	setkeyboard->loadButton( screen_width, screen_height );
 	information->load( screen_height );
 	
 	//Set start volume
@@ -118,6 +119,7 @@ void Menu::load( int screen_width, int screen_height )
 	exit->setVolume( chunk_volume->getVolume() );
 	music_volume->setVolume( chunk_volume->getVolume() );
 	chunk_volume->setVolume( chunk_volume->getVolume() );
+	setkeyboard->setVolume( chunk_volume->getVolume() );
 	
 	chunkvolume_value = chunk_volume->getVolume();
 	musicvolume_value = music_volume->getVolume();
@@ -163,7 +165,8 @@ void Menu::handle( sf::Event &event )
 	
 void Menu::draw( sf::RenderWindow* &window )
 {
-	music->play();
+	if( playmusic )
+		music->play();
 		
 		
 		
@@ -187,6 +190,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		exit->turn();
 		music_volume->turn();
 		chunk_volume->turn();
+		setkeyboard->turn(); 
 		playchunk = !playchunk;
 	}
 	
@@ -212,6 +216,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->setVolume( chunk_volume->getVolume() );
 		chunk_volume->setVolume( chunk_volume->getVolume() );
 		chunkvolume_value = chunk_volume->getVolume();
+		setkeyboard->setVolume( chunk_volume->getVolume() );
 	}
 	
 	
@@ -324,6 +329,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( play_button->nextGameState() )
 	{
 		music->halt();
+		play_button->setState( 0 );
 		state = 2;
 	}
 		
@@ -383,6 +389,7 @@ bool Menu::nextState()
 {
 	if( state == 2 )
 	{
+		state = 0;
 		return true;
 	}
 	

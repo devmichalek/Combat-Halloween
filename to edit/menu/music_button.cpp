@@ -115,16 +115,6 @@ bool Music_button::change()
 	return false;
 }
 
-void Music_button::turn()
-{
-	play = !play;
-}
-
-void Music_button::setVolume( sf::Uint8 volume )
-{
-	click.setVolume( volume );
-}
-
 
 void Music_button::fadein( int i, int max )
 {
