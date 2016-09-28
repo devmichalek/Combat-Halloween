@@ -3,7 +3,7 @@
     Purpose: class MySprite to load and draw textures
 
     @author Adrian Michalek
-    @version 2016.09.05
+    @version 2016.09.22
 	@email adrmic98@gmail.com
 */
 
@@ -500,18 +500,7 @@ void MySprite::setScale( float x, float y )
     }
 }
 
-bool MySprite::checkCollision( int x, int y, int w, int h )
-{
-	if( x + w > left && x < left + width )
-	{
-		if( y + h > top && y < top + height )
-		{
-			return true;
-		}
-	}
-	
-	return false;
-}
+
 
 
 std::string MySprite::getName()
