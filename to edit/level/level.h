@@ -2,23 +2,21 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "templates/chunk.h"
+#include "menu/parentchunk.h"
 
-class Level
+class Level :public Parentchunk
 {
 	int cost;
 	string name;
-	bool clicked;
-	bool locked;
 	
-	// focus on button true/false
-	bool focus;
+	sf::Uint8 state;
+
 	
-	MySprite sprite;
+	MySprite one;
+	MySprite two;
 	
-	// click as sound and play as state
-	bool play;
-	Chunk click;
+	Chunk lock;	// sound
+	Chunk unlocking;
 	
 public:
 	
@@ -29,23 +27,21 @@ public:
 	void setXY( int x, int y );
 	
 	void draw( sf::RenderWindow* &window );
-	sf::Uint8 handle( sf::Event &event, int& money );
+	sf::Uint8 handle( sf::Event &event, int& money );	// unlock during drawing
 
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
 	
-	void turn();	// Turn on/off chunk
-	void setVolume( sf::Uint8 volume );
+	int getCost();
+	string getName();
+	
+	void unlock(); // before draw
+	bool isReady();
 	
 	int getWidth();
 	int getHeight();
 	int getX();
 	int getY();
-	sf::Uint8 getAlpha();
 	
-	int getCost();
-	string getName();
-	
-	void unlock();
-	bool islocked();
+	void setVolume( sf::Uint8 volume );
 };
