@@ -1,6 +1,6 @@
 #include "select.h"
 #include <stdio.h>
-#include <fstream>
+#include "templates/file.h"
 
 Select::Select()
 {
@@ -9,6 +9,7 @@ Select::Select()
 	nr = 0;
 	
 	counter = 0;
+	state = -1;
 }
 
 Select::~Select()
@@ -29,6 +30,7 @@ Select::~Select()
 	coin.free();
 	wallet.free();
 	info.free();
+	state = -1;
 }
 
 void Select::load( int screen_w, int screen_h )
@@ -111,12 +113,12 @@ void Select::load( int screen_w, int screen_h )
 	}
 	
 	level_name.setID( "select-level_name" );
-	level_name.setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+	level_name.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	level_name.setText( "Name: -" );
 	level_name.setPosition( 10, 10 );
 	
 	cost.setID( "select-cost" );
-	cost.setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+	cost.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	cost.setText( "Cost: 0" );
 	cost.setPosition( 10, level_name.getBot() + 10 );
 	
@@ -126,12 +128,12 @@ void Select::load( int screen_w, int screen_h )
 	coin.setPosition( cost.getRight() + 10, cost.getTop() );
 	
 	info.setID( "select-info" );
-	info.setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+	info.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	info.setText( "Info: -" );
 	info.setPosition( 500, 10 );
 	
 	wallet.setID( "select-wallet" );
-	wallet.setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+	wallet.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	wallet.setText( "Wallet: "  + to_string( money ) );
 	wallet.setPosition( 500, info.getBot() + 10 );
 }
@@ -162,7 +164,7 @@ void Select::handle( sf::Event &event )
 	
 	for( int i = 0; i < nr; i++ )
 	{
-		if( level[ i ].handle( event, money ) == 1 )
+		if( level[ i ].handle( event, money ) == 1 ) // mouse moved
 		{
 			level_name.setText( "Name: " + level[ i ].getName() );
 			cost.setText( "Cost: " + to_string( level[ i ].getCost() ) );
@@ -176,13 +178,44 @@ void Select::handle( sf::Event &event )
 		{
 			level_name.setText( "Name: " + level[ i ].getName() );
 			if( level[ i ].getCost() == 0 )
-				info.setText( "Info: You bought it!" );
+				info.setText( "Info: Click to play!" );
 			else if( level[ i ].getCost() > money )
 			{
 				info.setText( "Info: You don't have enough money!" );
 				cost.setText( "Cost: " + to_string( level[ i ].getCost() ) );
 			}
 				
+		}
+		else if( level[ i ].handle( event, money ) == 3 ) // mouse clicked
+		{
+			level_name.setText( "Name: " + level[ i ].getName() );
+			cost.setText( "Cost: " + to_string( level[ i ].getCost() ) );
+			
+			if( level[ i ].getCost() <= money )
+			{
+				info.setText( "Info: Click to buy!" );
+				
+				fstream file;
+				file.open( "level select/money.map", std::ios::out );
+				file << money;
+				file.close();
+				
+				
+				
+				open.push_back( i );
+				file.open( "level select/levels.map", std::ios::out );
+				for( unsigned i = 0; i < open.size(); i++ )
+				{
+					file << open[ i ] << "\n";
+				}
+				file.close();
+			}
+			else
+				info.setText( "Info: You don't have enough money!" );
+		}
+		else if( level[ i ].handle( event, money ) == 4 ) // mouse clicked
+		{
+			state = i;
 		}
 	}
 	
@@ -200,7 +233,7 @@ void Select::fadein( int i, int max )
 {
 	level[ counter ].fadein( i +12, max );
 	
-	if( level[ counter ].getAlpha() == 255 && counter <= nr -1 )
+	if( level[ counter ].isReady() && counter < nr -1 )
 		counter ++;
 		
 	level_name.fadein( i, max );
@@ -239,4 +272,9 @@ void Select::setVolume( sf::Uint8 volume )
 	{
 		level[ j ].setVolume( volume );
 	}
+}
+
+int Select::nextState()
+{
+	return state;
 }
