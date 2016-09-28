@@ -9,25 +9,29 @@
 
 
 #include "text.h"
+#include <iostream>
 
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-MyText::MyText( int alpha )
+MyText::MyText( int x, int y, sf::Uint8 alpha )
 {
 	ID = "";
 	
-	w = h = 0;
-    x = y = 0;
+	width = height = 0;
+    left = x;
+	top = y;
 
     font = NULL;
 	text = NULL;
 	
 	size = 0;
 	
-	this->alpha = alpha;
-	r = g = b = 0xFF;
+	color.r = 0xFF;
+	color.g = 0xFF;
+	color.b = 0xFF;
+	color.a = alpha;
 }
 
 MyText::~MyText()
@@ -37,8 +41,8 @@ MyText::~MyText()
 
 void MyText::free()
 {
-	w = h = 0;
-    x = y = 0;
+	width = height = 0;
+    left = top = 0;
 
     if( font != NULL )
     {
@@ -53,8 +57,11 @@ void MyText::free()
     }
 	
 	size = 0;
-	alpha = 0;
-	r = g = b = 0xFF;
+	
+	color.r = 0xFF;
+	color.g = 0xFF;
+	color.b = 0xFF;
+	color.a = 0x00;
 }
 
 void MyText::setID( string name )
@@ -95,9 +102,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 		cerr << msg << endl;
 	}
 	
-	this->r = r;
-	this->g = g;
-	this->b = b;
+	this->color = sf::Color( r, g, b, 0x00 );
 }
 #elif _WIN32
 void MyText::setColor( int i )
@@ -148,9 +153,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 		cerr << msg << endl;
 	}
 	
-	this->r = r;
-	this->g = g;
-	this->b = b;
+	this->color = sf::Color( r, g, b, 0x00 );
 }
 #endif
 
@@ -172,11 +175,11 @@ void MyText::setText( string line )
 		
 		text->setString( line );
 		text->setCharacterSize( size );
-		text->setColor( sf::Color( r, g, b, alpha ) );
+		text->setColor( color );
 		text->setFont( *font );
 		
-		w = text->getLocalBounds().width;
-		h = text->getLocalBounds().height;
+		width = text->getLocalBounds().width;
+		height = text->getLocalBounds().height;
 	}
 	catch( string msg )
 	{
@@ -186,23 +189,25 @@ void MyText::setText( string line )
 	
 void MyText::setPosition( float x, float y )
 {
-	this->x = x;
-	this->y = y;
-	text->setPosition( x, y );
+	this->left = x;
+	this->top = y;
+	
+	text->setPosition( left, top );
 }
 
 void MyText::center( int w, int h, int wm, int hm )
 {
-	this->x = w/2 - this->w/2 + wm;
-    this->y = h/2 - this->h/2 + hm;
+	this->left = w/2 - this->width/2 + wm;
+    this->top = h/2 - this->height/2 + hm;
 
-	text->setPosition( x, y );
+	text->setPosition( left, top );
 }
 
 void MyText::setScale( float w, float h )
 {
-	this->w = w;
-	this->h = h;
+	this->width = w;
+	this->height = h;
+	
 	text->setScale( w, h );
 }
 
@@ -212,42 +217,30 @@ sf::Text& MyText::get()
 	return *text;
 }
 
-bool MyText::checkCollision( int x, int y, int w, int h )
-{
-	if( x > this->x && x < this->x + this->w + w )
-	{
-		if( y > this->y && y < this->y + this->h + h )
-		{
-			// printf( "collision = %strue%s\n", LGREEN, DEFAULT );
-			return true;
-		}
-	}
-	
-	return false;
-}
-
 
 void MyText::fadein( int v, int max )
 {
-	if( alpha < max )
+	if( color.a < max )
 	{
-		alpha += v;
+		int alpha = color.a +v;
 		if( alpha > max )
 			alpha = max;
+		color.a = alpha;
 
-		text->setColor( sf::Color( r, g, b, alpha ) );
+		text->setColor( color );
 	}
 }
 
 void MyText::fadeout( int v, int min )
 {
-	if( alpha > min )
+	if( color.a > min )
 	{
-		alpha -= v;
+		int alpha = color.a -v;
 		if( alpha < min )
 			alpha = min;
+		color.a = alpha;
 
-		text->setColor( sf::Color( r, g, b, alpha ) );
+		text->setColor( color );
 	}
 }
 
@@ -255,26 +248,26 @@ void MyText::fadeout( int v, int min )
 void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	bool change = false;
-	
-	if( this->r != r )
+	if( this->color.r != r )
 	{
-		this->r = r;
+		this->color.r = r;
 		change = true;
-	}
-		
-	if( this->g != g )
-	{
-		change = true;
-		this->g = g;
-	}
-		
-	if( this->b != b )
-	{
-		change = true;
-		this->b = b;
 	}
 	
-	if( change )	text->setColor( sf::Color( r, g, b, alpha ) );
+	if( this->color.g != g )
+	{
+		this->color.g = g;
+		change = true;
+	}
+	
+	if( this->color.b != b )
+	{
+		this->color.b = b;
+		change = true;
+	}
+	
+	if( change )
+		text->setColor( this->color );
 }
 
 void MyText::setSize( int size )
@@ -287,70 +280,23 @@ void MyText::setSize( int size )
 }
 
 
-int MyText::getAlpha()
-{
-	return alpha;
-}
 
-void MyText::setAlpha( int alpha )
+void MyText::setAlpha( sf::Uint8 alpha )
 {
-	if( this->alpha != alpha )
+	if( this->color.a != alpha )
 	{
-		this->alpha = alpha;
-		text->setColor( sf::Color( r, g, b, alpha ) );
+		this->color.a = alpha;
+		text->setColor( color );
 	}
 }
 
 
-int MyText::getX()
-{
-    return x;
-}
-
-int MyText::getY()
-{
-    return y;
-}
-
-
-int MyText::getWidth()
-{
-    return w;
-}
-
-int MyText::getHeight()
-{
-    return h;
-}
-
-
-int MyText::getLeft()
-{
-    return x;
-}
-
-int MyText::getRight()
-{
-    return x + w;
-}
-
-
-int MyText::getTop()
-{
-    return y;
-}
-
-int MyText::getBot()
-{
-    return y + h;
-}
-
 std::ostream& MyText::operator <<( std::ostream& s )
 {
-	return s << "ID: " << ID << " x: " << x << " y: " << y << " w: " << w << " h: " << h << " alpha: " << alpha;
+	return s << "ID: " << ID << " x: " << left << " y: " << top << " w: " << width << " h: " << height << " alpha: " << color.a;
 }
 
 void MyText::reloadPosition()
 {
-	text->setPosition( x, y );
+	text->setPosition( left, top );
 }
