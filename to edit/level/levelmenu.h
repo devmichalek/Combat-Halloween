@@ -1,10 +1,13 @@
 #pragma once
 
 #include "level/select.h"
+#include "templates/music.h"
+#include "level/backtomenu.h"
 
 class Level_menu
 {
 	int state;
+	int which_level;
 	bool playmusic;
 	bool playchunk;
 	sf::Uint8 musicvolume;
@@ -12,6 +15,8 @@ class Level_menu
 	
 	Select* select;
 	MySprite* background;
+	Music* music;
+	Backtomenu* backtomenu;
 	
 public:
 
@@ -27,9 +32,11 @@ public:
 	
 	bool isQuit();
 	bool nextState();
+	bool backToMenu();
 	
 	bool musicOn();
 	bool chunkOn();
 	sf::Uint8 getChunkVolume();
 	sf::Uint8 getMusicVolume();
+	int getLevel();
 };

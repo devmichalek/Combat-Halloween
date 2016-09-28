@@ -17,6 +17,8 @@ class Select
 	Level* level;
 	int counter; // fadein gradually
 	
+	int state;
+	
 public:
 	
 	Select();
@@ -31,4 +33,6 @@ public:
 	
 	void turn();	// Turn on/off chunk
 	void setVolume( sf::Uint8 volume );
+	
+	int nextState();
 };
