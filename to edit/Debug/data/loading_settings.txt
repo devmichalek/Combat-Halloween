@@ -1,0 +1,13 @@
+data/fonts/Jaapokki-Regular.otf
+40 255 255 255 255
+data/sprites/loading/progress_bar.png
+8 255
+21 21 29 255
+
+
+Template:
+font_path
+font_size font_red font_green font_blue font_alpha
+sprite_path
+sprite_offsets sprite_alpha
+bg_red bg_green bg_blue bg_alpha

@@ -1,0 +1,14 @@
+data/sprites/intro/shuriken.png
+21 21 29 255
+data/fonts/Jaapokki-Regular.otf
+37
+255 255 255
+112 183 89
+
+Template:
+sprite_path
+bg_red bg_green bg_blue bg_alpha
+font_path
+font_size
+#1 font_red font_green font_blue
+#2 font_red font_green font_blue
