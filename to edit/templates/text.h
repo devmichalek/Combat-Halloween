@@ -10,29 +10,23 @@
 
 #pragma once
 #include "SFML/Graphics.hpp"
-#include <iostream>
 #include "templates/border.h"
+#include "templates/color.h"
 
 using namespace std;
 
-class MyText
+class MyText :public Border, public Color
 {
 	string ID;	// Universal
-	
-	int w, h;
-    int x, y;
 	
 	sf::Font* font;
 	sf::Text* text;
 	
 	int size;
 	
-	int alpha;
-	sf::Uint8 r, g, b;
-	
 public:
 	
-	MyText( int alpha = 0 );
+	MyText( int x = 0, int y = 0, sf::Uint8 alpha = 0x00 );
 	~MyText();
 	void free();
 	void setID( string name );		// To find bugs
@@ -49,7 +43,6 @@ public:
     void setScale( float w, float h );
 
     sf::Text& get();
-	bool checkCollision( int x, int y, int w = 0, int h = 0 );
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
@@ -57,20 +50,7 @@ public:
 	void setColor( sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
 	void setSize( int size = 1 );
 	
-	int getAlpha();
-	void setAlpha( int alpha = 0 );
-	
-	int getX();
-	int getY();
-	
-	int getWidth();
-    int getHeight();
-	
-    int getLeft();
-    int getRight();
-	
-    int getTop();
-    int getBot();
+	void setAlpha( sf::Uint8 alpha = 0 );
 	
 	std::ostream& operator <<( std::ostream& s );	// Print ID, rect and alpha
 	void reloadPosition();
