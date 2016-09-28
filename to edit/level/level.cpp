@@ -3,24 +3,29 @@
 Level::Level()
 {
 	cost = 0;
-	name = -1;
-	clicked = false;
+	name = "";
+
+	state = 0;
+	
+	// sound states
 	focus = false;
 	play = true;
-	locked = true;
 }
 
 Level::~Level()
 {
 	cost = 0;
-	name = -1;
-	clicked = false;
+	name = "";
+
+	state = 0;
+	
 	focus = false;
 	play = true;
-	locked = true;
 	
-	sprite.free();
+	one.free();
+	two.free();
 	click.free();
+	unlocking.free();
 }
 
 	
@@ -29,185 +34,227 @@ void Level::load( string name, int cost )
 	this->name = name;
 	this->cost = cost;
 	
-	sprite.setName( "level-" + name );
-	sprite.load( "level select/level.png", 4 );
-	sprite.setScale( 0.6, 0.6 );
+	one.setName( "level-" + name );
+	one.load( "level select/level.png", 4 );
+	one.setScale( 0.6, 0.6 );
 	
-	//text.setID( "level-text" );
-	//text.setFont( "intro/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
-	//text.setText( "cost" );
+	two.setName( "level-2" + name );
+	two.load( "level select/level.png", 4 );
+	two.setScale( 0.6, 0.6 );
 	
-	//coin.setName( "level-coin" );
-	//coin.load( "level select/coin.png" );
-	
+
 	if( cost != 0 )
 	{
-		sprite.setOffset( 3 );
-		locked = true;
+		one.setOffset( 3 );
+		state = 0;
 	}
+
 	
 	click.setID( "level-click" );
 	click.load( "menu/click.wav", 50 );
+	
+	lock.setID( "level-lock" );
+	lock.load( "level select/lock.wav", 50 );
+	
+	unlocking.setID( "level-unlocking" );
+	unlocking.load( "level select/unlock.wav", 50 );
 }
 
 void Level::setXY( int x, int y )
 {
-	sprite.setPosition( x, y );
-	//text.setPosition( sprite.getLeft(), sprite.getTop() -5 -text.getHeight() );
-	//coin.setPosition( sprite.getRight() -coin.getWidth(), sprite.getTop() -5 -coin.getHeight() );
+	one.setPosition( x, y );
+	two.setPosition( x, y );
 }
 
 	
 void Level::draw( sf::RenderWindow* &window )
 {
-	window->draw( sprite.get() );
-	//window->draw( text.get() );
-	//window->draw( coin.get() );
+	window->draw( two.get() );
+	window->draw( one.get() );
+	
+	if( state == 1 )
+	{
+		one.fadeout( 3 );
+		
+		if( one.getAlpha() == 0x00 )
+			state = 2;
+	}
+	
 }
 
 sf::Uint8 Level::handle( sf::Event &event, int& money )
 {
-	bool correct = false;
-	if( sprite.getAlpha() == 0xFF )
+	int x, y;
+	sf::Uint8 result = 0;
+	
+	if( one.getAlpha() == 0xFF )	// state == 0
 	{
-		int x, y;
-		
-		if( !locked )
-			sprite.setOffset( 0 );
-
-		if( event.type == sf::Event::MouseMoved )
-		{
-			x = event.mouseMove.x;
-			y = event.mouseMove.y;
-				
-			if( sprite.checkCollision( x, y ) )
-			{
-				correct = true;
-				if( !locked )
-				{
-					sprite.setOffset( 1 );
-				}
-			}
-			else
-				focus = false;
-		}
-		
-		clicked = false;
 		if( event.type == sf::Event::MouseButtonPressed )
 		{
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( sprite.checkCollision( x, y ) )
+			if( one.checkCollision( x, y ) )
 			{
 				if( money >= cost )
 				{
 					money -= cost;
 					cost = 0;
-					locked = false;
-				}
-				
-				if( !locked )
-				{
-					sprite.setOffset( 2 );
-					focus = true;
-				}
+					state = 1;
+					result = 3;
 					
+					if( play )
+						unlocking.play();
+				}
+				else
+				{
+					if( play )
+						lock.play();
+				}
+			}
+		}
+		else if( event.type == sf::Event::MouseMoved )
+		{
+			x = event.mouseMove.x;
+			y = event.mouseMove.y;
+			if( one.checkCollision( x, y ) )
+			{
+				result = 1;
+			}
+		}
+	}
+	else if( state == 2 )
+	{
+		two.setOffset( 0 );
+		
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			x = event.mouseButton.x;
+			y = event.mouseButton.y;
+				
+			if( two.checkCollision( x, y ) )
+			{
 				if( play )
 					click.play();
 					
-				clicked = true;
+				focus = true;
+				result = 4;
 			}
 		}
-			
-		if( event.type == sf::Event::MouseButtonReleased )
+		
+		else if( event.type == sf::Event::MouseMoved )
 		{
-			focus = false;
+			x = event.mouseMove.x;
+			y = event.mouseMove.y;
+				
+			if( two.checkCollision( x, y ) )
+			{
+				two.setOffset( 1 );
+				result = 2;
+			}
+			else
+				focus = false;
 		}
-			
+		
+		else if( event.type == sf::Event::MouseButtonReleased )
+			focus = false;
 			
 		if( focus )
-			sprite.setOffset( 2 );
+			two.setOffset( 2 );
 	}
-	
-	
-	if( clicked )
-		return 2;
-	if( correct )
-		return 1;
-		
-	return 0;
+
+	return result;
 }
 
 
-string Level::getName()
-{
-	return name;
-}
+
+
+
+
+
+
+
 
 void Level::fadein( int i, int max )
 {
-	sprite.fadein( i, max );
-	//text.fadein( i, max );
-	//coin.fadein( i, max );
+	if( state == 0 )
+	{
+		one.fadein( i, max );
+		if( one.getAlpha() == max )
+			two.setAlpha( max );
+	}
 }
 
 void Level::fadeout( int i, int min )
 {
-	sprite.fadeout( i, min );
-	//text.fadeout( i, min );
-	//coin.fadeout( i, min );
+	one.fadeout( i, min );
+	
+	if( one.getAlpha() > 0 )
+		two.fadeout( i+4, min );
+	else
+		two.fadeout( i, min );
 }
 
 
 
-void Level::turn()
-{
-	play = !play;
-}
 
-void Level::setVolume( sf::Uint8 volume )
-{
-	click.setVolume( volume );
-}
 
-int Level::getWidth()
-{
-	return sprite.getWidth();
-}
-
-int Level::getHeight()
-{
-	return sprite.getHeight();
-}
-
-int Level::getX()
-{
-	return sprite.getX();
-}
-
-int Level::getY()
-{
-	return sprite.getY();
-}
-
-sf::Uint8 Level::getAlpha()
-{
-	return sprite.getAlpha();
-}
 
 int Level::getCost()
 {
 	return cost;
 }
 
-void Level::unlock()
+string Level::getName()
 {
-	locked = false;
-	cost = 0;
+	return name;
 }
 
-bool Level::islocked()
+void Level::unlock()
 {
-	return locked;
+	cost = 0;
+	state = 2;
+	two.setAlpha( 0xFF );
+	one.setAlpha( 0x00 );
+}
+
+bool Level::isReady()
+{
+	if( state == 2 )
+		return true;
+	else if( state == 0 && one.getAlpha() == 0xFF )
+		return true;
+		
+	return false;
+}
+
+
+
+
+
+
+int Level::getWidth()
+{
+	return one.getWidth();
+}
+
+int Level::getHeight()
+{
+	return one.getHeight();
+}
+
+int Level::getX()
+{
+	return one.getX();
+}
+
+int Level::getY()
+{
+	return one.getY();
+}
+
+void Level::setVolume( sf::Uint8 volume )
+{
+	click.setVolume( volume );
+	lock.setVolume( volume );
 }
