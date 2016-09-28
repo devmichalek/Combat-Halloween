@@ -1,20 +1,24 @@
 #include "core.h"
 #include <stdio.h>
 #include <SDL2/SDL_mixer.h>
+#include "templates/file.h"
 
 #ifdef __linux__
-Core::Core( int state, unsigned width, unsigned height, unsigned FPS )
+Core::Core()
 {
-    this->state = state;
+	File file;
+	file.load( "data/core_settings.txt" );
+    state = file.i(3);
     open = true;
 
-    this->FPS = FPS;
-    this->width = width;
-    this->height = height;
+    FPS = file.i(2);
+    width = file.i(0);
+    height = file.i(1);
 	
 	printf( "\x1B[1mFPS\x1B[0m=%d  \x1B[33mscreen_width\x1B[0m=%d  \x1B[33mscreen_height\x1B[0m=%d\n", FPS, width, height );
 
     window = NULL;
+	file.free();
 }
 #endif
 
