@@ -21,7 +21,7 @@ class Core
 
 public:
 
-    Core();
+    Core( int w, int h, int state, int FPS = 60 );
     ~Core();
 
     void free();
