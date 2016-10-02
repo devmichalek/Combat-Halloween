@@ -4,18 +4,18 @@
 void Exit_log::load( int screen_w, int screen_h )
 {
 	mySprite.setName( "menu_exit_log-mySprite" );
-    mySprite.load( "menu/exit.png" );
+    mySprite.load( "data/sprites/menu/exit.png" );
 	mySprite.setAlpha( 255 );
 	mySprite.center( 0, 0, screen_w, screen_h );
 
 	myText.setID( "menu_exit_log-myText" );
-	myText.setFont( "menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
+	myText.setFont( "data/fonts/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
 	myText.setText( "q-quit  b-back" );
 	myText.setAlpha( 255 );
 	myText.center( screen_w, screen_h, 0, -6 );
 
 	click.setID( "menu_exit_log-click" );
-	click.load( "menu/click.wav", 50 );
+	click.load( "data/sounds/click.wav", 50 );
 }
 
 void Exit_log::handle( sf::Event &event )

@@ -11,15 +11,10 @@
 #include "templates/music.h"
 #include "menu/setkeyboard.h"
 #include "menu/information.h"
+#include "state.h"
 
 class Menu
 {
-	int state;
-	bool playmusic;
-	bool playchunk;
-	sf::Uint8 musicvolume_value;
-	sf::Uint8 chunkvolume_value;
-	
 	// Menu objects
 	Link_button* git_button;
 	Link_button* google_button;
@@ -42,6 +37,7 @@ class Menu
 	MyText* version;
 	Setkeyboard* setkeyboard;
 	Information* information;
+	State* state;
 	
 public:
 	
@@ -57,8 +53,6 @@ public:
 	bool isQuit();
 	bool nextState();
 	
-	bool musicOn();
-	bool chunkOn();
-	sf::Uint8 getChunkVolume();
-	sf::Uint8 getMusicVolume();
+	State* getState();
+	void set( State* state );
 };

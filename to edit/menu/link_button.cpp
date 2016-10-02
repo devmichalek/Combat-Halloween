@@ -30,7 +30,7 @@ void Link_button::load( string path, int screen_w, int bot )
 	button.setPosition( screen_w - button.getWidth() - 10, bot );
 	
 	click.setID( "link_button-" + path );
-	click.load( "menu/click.wav", 50 );
+	click.load( "data/sounds/click.wav", 50 );
 }
 
 void Link_button::draw( sf::RenderWindow &window )

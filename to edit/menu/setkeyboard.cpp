@@ -118,7 +118,7 @@ string Setkeyboard::getName( int n )
 void Setkeyboard::loadButton( int screen_w, int screen_h )
 {
 	save.setName( "setkeyboard-save" );
-	save.load( "menu/save.png", 4 );
+	save.load( "data/sprites/menu/save.png", 4 );
 	save.setScale( 0.5, 0.5 );
 	save.setPosition( screen_w - save.getWidth() -30, screen_h/2 -80 );
 }
@@ -137,10 +137,10 @@ void Setkeyboard::load( int left, int right, int bot )
 	// load default keys
 	fstream file;
 	
-	file.open( "menu/keyboard_default.txt" );
+	file.open( "data/txt/menu/keyboard_default.txt" );
 	if( file.bad() )
 	{
-		printf( "Can not load %s\n", "menu/keyboard_default.map" );
+		printf( "Can not load %s\n", "data/txt/menu/keyboard_default.txt" );
 	}
 	else
 	{
@@ -162,10 +162,10 @@ void Setkeyboard::load( int left, int right, int bot )
 	file.close();
 	
 	// load temporary keys
-	file.open( "menu/keyboard_temporary.txt" );
+	file.open( "data/txt/menu/keyboard_temporary.txt" );
 	if( file.bad() )
 	{
-		printf( "Can not load %s\n", "menu/keyboard_temporary.map" );
+		printf( "Can not load %s\n", "data/txt/menu/keyboard_temporary.txt" );
 	}
 	else
 	{
@@ -242,8 +242,8 @@ void Setkeyboard::load( int left, int right, int bot )
 	bannedKeys[ 2 ] = 16;
 	bannedKeys[ 3 ] = 36;
 	
-	click.setID( "play_button-click" );
-	click.load( "menu/click.wav", 50 );
+	click.setID( "setkeyboard-click" );
+	click.load( "data/sounds//click.wav", 50 );
 }
 
 
