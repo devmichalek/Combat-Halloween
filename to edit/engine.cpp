@@ -4,7 +4,7 @@
 // Create objects.
 Engine::Engine()
 {
-    core = new Core();
+    core = new Core( 1000, 750, -2 );
     core->load( "Ninja" );
 	
 	loading = new Loading;
@@ -113,13 +113,7 @@ void Engine::states()
 		}
 		else if( menu->nextState() )
 		{
-			if( level_menu == NULL )
-			{
-				level_menu = new Level_menu;
-				level_menu->load( core->getWidth(), core->getHeight() );
-			}
-			
-			level_menu->setStartPackage( menu->musicOn(), menu->chunkOn(), menu->getChunkVolume(), menu->getMusicVolume() );
+			level_menu->set( menu->getState() );
 			core->getState() = 1;
 		}
     }
@@ -134,22 +128,11 @@ void Engine::states()
 		}
 		else if( level_menu->nextState() )
 		{
-			delete level_menu;
-			level_menu = NULL;
 			core->getState() = 2;
 		}
 		else if( level_menu->backToMenu() )
 		{
-			if( menu == NULL )
-			{
-				menu = new Menu;
-				menu->load( core->getWidth(), core->getHeight() );
-			}
-			
 			core->getState() = 0;
-			
-			delete level_menu;
-			level_menu = NULL;
 		}
 	}
 }
