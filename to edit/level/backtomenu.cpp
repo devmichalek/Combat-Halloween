@@ -4,7 +4,7 @@
 void Backtomenu::load( int screen_w )
 {
 	button.setName( "link_button-backtomenu" );
-    button.load( "menu/backtomenu.png", 4 );
+    button.load( "data/sprites/menu/backtomenu.png", 4 );
 
 	if( locked )
 		button.setOffset( 3 );    // locked offset = 3
@@ -12,8 +12,8 @@ void Backtomenu::load( int screen_w )
 	button.setScale( 0.5, 0.5 );
 	button.setPosition( screen_w - button.getWidth() -20, 20 );
 	
-	click.setID( "link_button-backtomenu" );
-	click.load( "menu/click.wav", 50 );
+	click.setID( "backtomenu-click" );
+	click.load( "data/sounds//click.wav", 50 );
 	
 	state = 0;
 }
@@ -59,6 +59,11 @@ void Backtomenu::handle( sf::Event &event )
 		if( focus )
 			button.setOffset( 2 );
 	}
+}
+
+void Backtomenu::setState( int here )
+{
+	state = here;
 }
 
 int Backtomenu::getState()
