@@ -39,12 +39,12 @@ void Music_volume::load( int left, int y, string str )
 	
 	
 	minus.setName( "music_volume-minus" );
-	minus.load( "menu/minus.png", 4 );
+	minus.load( "data/sprites/menu/minus.png", 4 );
 	minus.setPosition( left +120, y -text.getHeight()/2 );
 	minus.setScale( 0.4, 0.4 );
 	
 	plus.setName( "music_volume-plus" );
-	plus.load( "menu/plus.png", 4 );
+	plus.load( "data/sprites/menu/plus.png", 4 );
 	plus.setPosition( minus.getRight(), y -text.getHeight()/2 );
 	plus.setScale( 0.4, 0.4 );
 	
@@ -55,7 +55,7 @@ void Music_volume::load( int left, int y, string str )
 	percent.setPosition( plus.getRight() + 10, y );
 	
 	click.setID( "music_volume-click" );
-	click.load( "menu/click.wav", 50 );
+	click.load( "data/sounds/click.wav", 50 );
 }
 
 void Music_volume::draw( sf::RenderWindow* &window )

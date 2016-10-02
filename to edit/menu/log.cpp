@@ -40,7 +40,7 @@ Log::~Log()
 void Log::load( string path, int left, int y, int screen_w )
 {
 	button.setName( "log-button" );
-    button.load( "menu/" + path + ".png", 4 );
+    button.load( "data/sprites/menu/" + path + ".png", 4 );
 	button.setPosition( left, y );
 	
 	// if is locked we don't have reason to load futher
@@ -51,21 +51,21 @@ void Log::load( string path, int left, int y, int screen_w )
 	else if( !win )
 	{
 		click.setID( "log-click" );
-		click.load( "menu/click.wav", 50 );
+		click.load( "data/sounds/click.wav", 50 );
 	}
 	else
 	{
 		log.setName( "log-log" );
-		log.load( "menu/window.png" );
+		log.load( "data/sprites/menu/window.png" );
 		log.setPosition( screen_w/2 - log.getWidth()/2, y-300 );
 			
 		click.setID( "log-click" );
-		click.load( "menu/click.wav", 50 );
+		click.load( "data/sounds/click.wav", 50 );
 		
 		// file
 		fstream file;
 		
-		file.open( "menu/" + path + ".txt", ios::in );
+		file.open( "data/txt/menu/" + path + ".txt", ios::in );
 		if( !file.good() )
 		{
 			printf( "Can not load %s.txt\n", path.c_str() );
@@ -90,7 +90,7 @@ void Log::load( string path, int left, int y, int screen_w )
 		file.close();
 		
 		
-		file.open( "menu/" + path + ".txt", ios::in );
+		file.open( "data/txt/menu/" + path + ".txt", ios::in );
 		if( file.bad() )
 		{
 			printf( "Can not load %s.txt\n", path.c_str() );
@@ -122,7 +122,7 @@ void Log::load( string path, int left, int y, int screen_w )
 					border -= 5;
 				
 				myText[ c ].setID( "log-myText" );
-				myText[ c ].setFont( "menu/BADABB__.TTF", 33, 0xd5, 0xad, 0x51 );
+				myText[ c ].setFont( "data/fonts/BADABB__.TTF", 33, 0xd5, 0xad, 0x51 );
 				myText[ c ].setText( line );
 				myText[ c ].setPosition( log.getX() +80 - border, height );
 				
