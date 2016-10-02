@@ -12,5 +12,7 @@ public:
 	
 	void load( int screen_w );
 	void handle( sf::Event &event );
+	
+	void setState( int here );
 	int getState();
 };

@@ -2,14 +2,7 @@
 
 Level_menu::Level_menu()
 {
-	state = 0;
-	which_level = -1;
-	playmusic = true;
-	playchunk = true;
-	musicvolume = 0;
-	chunkvolume = 0;
-	
-	select = new Select;
+	state = new State;
 	background = new MySprite;
 	music = new Music;
 	backtomenu = new Backtomenu( "", false );
@@ -22,74 +15,59 @@ Level_menu::~Level_menu()
 
 void Level_menu::free()
 {
-	state = 0;
-	playmusic = true;
-	playchunk = true;
-	musicvolume = 0;
-	chunkvolume = 0;
-	
-	delete select;
 	delete background;
 	delete music;
 	delete backtomenu;
 }
 
-void Level_menu::setStartPackage( bool a, bool b, sf::Uint8 cv, sf::Uint8 mv )
+void Level_menu::set( State* state )
 {
-	playmusic = a;
-	playchunk = b;
-	chunkvolume = cv;
-	musicvolume = mv;
+	this->state = state;
+	state->state = 0;
 	
 	// Set chunks
-	if( !playchunk )
+	if( !state->cSwitch )
 	{
-		select->turn();
 		backtomenu->turn();
 	}
 	
 	// Set music volume
-	music->setVolume( musicvolume );
+	music->setVolume( state->mVolume );
 	
 	// Set chunk volume
-	select->setVolume( chunkvolume );
-	backtomenu->setVolume( chunkvolume );
+	backtomenu->setVolume( state->cVolume );
 }
 	
 void Level_menu::load( int screen_w, int screen_h )
 {
-	select->load( screen_w, screen_h );
-	background->load( "menu/background.png" );
-	music->load( "level select/Rayman Legends OST - Mysterious Swamps .mp3" );
+	background->load( "data/sprites/menu/background.png" );
+	music->load( "data/music/Rayman Legends OST - Mysterious Swamps .mp3" );
 	backtomenu->load( screen_w );
 }
 
 
 void Level_menu::handle( sf::Event &event )
 {
-	select->handle( event );
 	backtomenu->handle( event );
 }
 
 void Level_menu::draw( sf::RenderWindow* &window )
 {
-	if( playmusic )
+	if( state->mSwitch )
 		music->play();
 	
 	window->draw( background->get() );
-	select->draw( window );
+
 	backtomenu->draw( *window );
 	
-	if( backtomenu->getState() == 0 && select->nextState() == -1 )
+	if( backtomenu->getState() == 0 )
 	{
-		select->fadein( 3, 255 );
 		background->fadein( 3, 255 );
-		music->fadein( 1, musicvolume );
+		music->fadein( 1, state->mVolume );
 		backtomenu->fadein( 3, 255 );
 	}
 	else if( backtomenu->getState() == 1 )
 	{
-		select->fadeout( 3, 0 );
 		background->fadeout( 3 );
 		music->fadeout( 3 );
 		backtomenu->fadeout( 3, 0 );
@@ -97,21 +75,7 @@ void Level_menu::draw( sf::RenderWindow* &window )
 		if( background->getAlpha() == 0 )
 		{
 			music->halt();
-			state = 2;
-		}
-	}
-	else if( select->nextState() != -1 )
-	{
-		select->fadeout( 3, 0 );
-		background->fadeout( 3 );
-		music->fadeout( 3 );
-		backtomenu->fadeout( 3, 0 );
-		
-		if( background->getAlpha() == 0 )
-		{
-			which_level = select->nextState();
-			music->halt();
-			state = 1;
+			state->state = 2;
 		}
 	}
 }
@@ -119,7 +83,7 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	
 bool Level_menu::isQuit()
 {
-	if( state == 3 )
+	if( state->state == 3 )
 	{
 		return true;
 	}
@@ -129,7 +93,7 @@ bool Level_menu::isQuit()
 
 bool Level_menu::nextState()
 {
-	if( state == 1 )
+	if( state->state == 1 )
 	{
 		return true;
 	}
@@ -139,36 +103,12 @@ bool Level_menu::nextState()
 
 bool Level_menu::backToMenu()
 {
-	if( state == 2 )
+	if( state->state == 2 )
+	{
+		state->state = 0;
+		backtomenu->setState( 0 );
 		return true;
+	}
 		
 	return false;
-}
-
-
-
-bool Level_menu::musicOn()
-{
-	return playmusic;
-}
-
-bool Level_menu::chunkOn()
-{
-	return playchunk;
-}
-
-sf::Uint8 Level_menu::getChunkVolume()
-{
-	return chunkvolume;
-}
-
-sf::Uint8 Level_menu::getMusicVolume()
-{
-	return musicvolume;
-}
-
-int Level_menu::getLevel()
-{
-	// printf( "%d\n", which_level );
-	return which_level;
 }
