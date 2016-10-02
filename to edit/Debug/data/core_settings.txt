@@ -1,8 +1,0 @@
-1000 750
-60
--2
-
-Template:
-screen_width screen_height
-FPS
-start_state
