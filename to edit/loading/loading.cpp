@@ -1,5 +1,4 @@
 #include "loading.h"
-#include "templates/file.h"
 
 Loading::Loading()
 {
@@ -25,30 +24,25 @@ void Loading::free()
 	
 void Loading::load( const int &screen_w, const int &screen_h )
 {
-	File file;
-	file.load( "data/loading_settings.txt" );
+	max = 8;
 	
 	text.setID( "loading-text" );
-	
-	text.setFont( file.s(0), file.i(1), file.i(2), file.i(3), file.i(4) );
+	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 255, 255, 255 );
 	text.setText( "Loading " + to_string( state ) + "%"  );
-	text.setAlpha( file.i(5) );
+	text.setAlpha( 0xFF );
 	text.center( screen_w, screen_h );
 
 	
 	progress_bar.setName( "loading-progress_bar" );
-	progress_bar.load( file.s(6), file.i(7) );
-	progress_bar.setAlpha( file.i(8) );
+	progress_bar.load( "data/sprites/loading/progress_bar.png", max );
+	progress_bar.setAlpha( 0xFF );
 	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, text.getBot() +15 );
 	
 	
 	background.setName( "loading-background" );
 	background.create( screen_w, screen_h );
-	background.setColor( sf::Color( file.i(9), file.i(10), file.i(11) ) );
-	background.setAlpha( file.i(12) );
-	
-	max = file.i(7);
-	file.free();
+	background.setColor( sf::Color( 21, 21, 29 ) );
+	background.setAlpha( 0xFF );
 }
 
 void Loading::draw( sf::RenderWindow* &window )
