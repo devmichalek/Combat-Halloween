@@ -27,11 +27,11 @@ void Music_button::load( string path, int bot )
 	button.setPosition( 10, bot );
 	
 	scratch.setName( "music_button-scratch" );
-	scratch.load( "menu/scratch.png" );
+	scratch.load( "data/sprites/menu/scratch.png" );
 	scratch.setPosition( 10, bot );
 	
 	click.setID( "music_button-click" );
-	click.load( "menu/click.wav", 50 );
+	click.load( "data/sounds/click.wav", 50 );
 }
 
 void Music_button::draw( sf::RenderWindow* &window )

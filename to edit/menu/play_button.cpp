@@ -20,16 +20,16 @@ Play_button::~Play_button()
 void Play_button::load( int screen_w, int bot )
 {
 	mySprite.setName( "play_button-mySprite" );
-	mySprite.load( "menu/blankbutton.png", 4 );
+	mySprite.load( "data/sprites/menu/blankbutton.png", 4 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
 	myText.setID( "play_button-myText" );
-	myText.setFont( "menu/BADABB__.TTF", 130, 0x82, 0xae, 0x20 );
+	myText.setFont( "data/fonts/BADABB__.TTF", 130, 0x82, 0xae, 0x20 );
 	myText.setText( "play" );
 	myText.setPosition( screen_w/2 - myText.getWidth()/2 +10, bot -5 );
 	
 	click.setID( "play_button-click" );
-	click.load( "menu/click.wav", 50 );
+	click.load( "data/sounds/click.wav", 50 );
 }
 
 void Play_button::draw( sf::RenderWindow* &window )

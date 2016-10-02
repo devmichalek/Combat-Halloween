@@ -15,11 +15,11 @@ Title::~Title()
 void Title::load( int screen_w )
 {
 	belt.setName( "title-belt" );
-    belt.load( "menu/belt.png" );
+    belt.load( "data/sprites/menu/belt.png" );
 	belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
 	
 	title.setID( "title-title" );
-	title.setFont( "menu/BADABB__.TTF", 110, 0x7F, 0x99, 0x95 );
+	title.setFont( "data/fonts/BADABB__.TTF", 110, 0x7F, 0x99, 0x95 );
 	title.setText( "Ninja" );
 	title.setPosition( screen_w/2 - title.getWidth()/2, -8 );
 }

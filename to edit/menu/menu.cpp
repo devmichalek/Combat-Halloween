@@ -2,12 +2,6 @@
 
 Menu::Menu()
 {
-	state = 0;
-	playmusic = true;
-	playchunk = true;
-	musicvolume_value = 0;
-	chunkvolume_value = 0;
-	
 	// Create menu objects
 	git_button = new Link_button( "https://github.com/Adriqun" );
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
@@ -30,6 +24,7 @@ Menu::Menu()
 	version = new MyText;
 	setkeyboard = new Setkeyboard;
 	information = new Information;
+	state = new State( 0, true, true, 0, 0 );
 }
 
 Menu::~Menu()
@@ -39,11 +34,6 @@ Menu::~Menu()
 
 void Menu::free()
 {
-	playmusic = true;
-	playchunk = true;
-	musicvolume_value = 0;
-	chunkvolume_value = 0;
-	
 	delete git_button;
 	delete google_button;
 	delete twitter_button;
@@ -65,25 +55,26 @@ void Menu::free()
 	delete version;
 	delete setkeyboard;
 	delete information;
+	delete state;
 }
 
 	
 	
 void Menu::load( int screen_width, int screen_height )
 {
-	git_button->load( "menu/git.png", screen_width );
-	google_button->load( "menu/google.png", screen_width, git_button->getBot() );
-	twitter_button->load( "menu/twitter.png", screen_width, google_button->getBot() );
-	facebook_button->load( "menu/facebook.png", screen_width, twitter_button->getBot() );
+	git_button->load( "data/sprites/menu/git.png", screen_width );
+	google_button->load( "data/sprites/menu/google.png", screen_width, git_button->getBot() );
+	twitter_button->load( "data/sprites/menu/twitter.png", screen_width, google_button->getBot() );
+	facebook_button->load( "data/sprites/menu/facebook.png", screen_width, twitter_button->getBot() );
 	
-	background->load( "menu/background.png" );
+	background->load( "data/sprites/menu/background.png" );
 	
 	play_button->load( screen_width, 400 );
 	
 	title->load( screen_width );
 	
-	music_button->load( "menu/music.png", 10 );
-	chunk_button->load( "menu/chunk.png", music_button->getBot() );
+	music_button->load( "data/sprites/menu/music.png", 10 );
+	chunk_button->load( "data/sprites/menu/chunk.png", music_button->getBot() );
 	
 	author_log->load( "author", play_button->getX() +5, play_button->getBot() +10, screen_width );
 	game_log->load( "game", author_log->getRight(), play_button->getBot() +10, screen_width );
@@ -92,14 +83,15 @@ void Menu::load( int screen_width, int screen_height )
 	
 	exit->load( screen_width, screen_height );
 	
-	music->load( "menu/Rayman Legends OST - Moving Ground.mp3", 50 );
+	music->load( "data/music/Rayman Legends OST - Moving Ground.mp3", 50 );
 	
 	music_volume->load( 100, screen_height/2 - 100, "Music" );
 	chunk_volume->load( 100, music_volume->getBot() + 25, "Sound" );
 	
 	keyboard->load( music_volume->getRight(), screen_height/2 - 100 );
 	
-	version->setFont( "menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
+	version->setID( "menu-version-text" );
+	version->setFont( "data/fonts/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
 	version->setText( "alpha 1.1.2" );
 	version->setPosition( screen_width - version->getWidth() - 3, screen_height - version->getHeight() -7 );
 	
@@ -121,8 +113,8 @@ void Menu::load( int screen_width, int screen_height )
 	chunk_volume->setVolume( chunk_volume->getVolume() );
 	setkeyboard->setVolume( chunk_volume->getVolume() );
 	
-	chunkvolume_value = chunk_volume->getVolume();
-	musicvolume_value = music_volume->getVolume();
+	state->cVolume = chunk_volume->getVolume();
+	state->mVolume = music_volume->getVolume();
 }
 
 
@@ -165,8 +157,11 @@ void Menu::handle( sf::Event &event )
 	
 void Menu::draw( sf::RenderWindow* &window )
 {
-	if( playmusic )
+	if( state->mSwitch )
+	{
 		music->play();
+	}
+		
 		
 		
 		
@@ -174,7 +169,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( music_button->change() )
 	{
 		music->pause();
-		playmusic = !playmusic;
+		state->mSwitch = !state->mSwitch;
 	}
 	// Turn off/on chunks
 	if( chunk_button->change() )
@@ -191,14 +186,14 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->turn();
 		chunk_volume->turn();
 		setkeyboard->turn(); 
-		playchunk = !playchunk;
+		state->cSwitch = !state->cSwitch;
 	}
 	
 	// Set music volume
 	if( music_volume->changeVolume() )
 	{
 		music->setVolume( music_volume->getVolume() );
-		musicvolume_value = music_volume->getVolume();
+		state->mVolume = music_volume->getVolume();
 	}
 	
 	// Set chunk volume
@@ -215,7 +210,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		exit->setVolume( chunk_volume->getVolume() );
 		music_volume->setVolume( chunk_volume->getVolume() );
 		chunk_volume->setVolume( chunk_volume->getVolume() );
-		chunkvolume_value = chunk_volume->getVolume();
+		state->cVolume = chunk_volume->getVolume();
 		setkeyboard->setVolume( chunk_volume->getVolume() );
 	}
 	
@@ -317,7 +312,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		information->fadeout( 3, 0 );
 		if( background->getAlpha() == 0 )
 		{
-			state = 1;
+			state->state = 1;
 		}
 	}
 	
@@ -330,7 +325,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		music->halt();
 		play_button->setState( 0 );
-		state = 2;
+		state->state = 2;
 	}
 		
 	
@@ -377,7 +372,7 @@ void Menu::draw( sf::RenderWindow* &window )
 
 bool Menu::isQuit()
 {
-	if( state == 1 )
+	if( state->state == 1 )
 	{
 		return true;
 	}
@@ -387,32 +382,16 @@ bool Menu::isQuit()
 
 bool Menu::nextState()
 {
-	if( state == 2 )
+	if( state->state == 2 )
 	{
-		state = 0;
+		state->state = 0;
 		return true;
 	}
 	
 	return false;
 }
 
-bool Menu::musicOn()
+State* Menu::getState()
 {
-	return playmusic;
+	return state;
 }
-
-bool Menu::chunkOn()
-{
-	return playchunk;
-}
-
-sf::Uint8 Menu::getChunkVolume()
-{
-	return chunkvolume_value;
-}
-
-sf::Uint8 Menu::getMusicVolume()
-{
-	return musicvolume_value;
-}
-
