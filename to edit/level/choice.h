@@ -6,12 +6,20 @@
 
 class Choice :public Parentchunk
 {
-	MySprite sprite;
+	MySprite button;
 	MyText text;
-	MyText number;
-	sf::Uint8 counter;
+	MyText information;
 	
+	int counter;
 	int result;
+	int chosen;
+	
+	int nr;	// number of worlds
+	MySprite* world;
+	
+	MySprite frame;
+	
+	bool exit;
 	
 public:
 	
@@ -22,9 +30,10 @@ public:
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int j, int max );
+	void fadeout( int j, int min );
 	
-	bool isReady();
 	int getResult();
+	bool nextState();
+	int getAlpha();
 };

@@ -4,59 +4,115 @@
 
 Choice::Choice()
 {
-	// empty
-	counter = 0;
+	counter = -1;
+	result = -1;
+	chosen = -1;
+	nr = 0;
+	world = NULL;
+	exit = false;
 }
 
 Choice::~Choice()
 {
-	sprite.free();
+	button.free();
 	text.free();
-	number.free();
-	counter = 0;
+	information.free();
+	
 	click.free();
+	
+	if( world != NULL )
+	{
+		for( int i = 0; i < nr; i ++ )
+			world[ i ].free();
+		
+		delete [] world;
+		world = NULL;
+		nr = 0;
+	}
+	
+	counter -1;
+	result -1;
+	chosen = -1;
+	exit = false;
+	
+	frame.free();
 }
 
 
 void Choice::load( int screen_w, int screen_h )
 {
+	button.setName( "choice-button" );
+	button.load( "data/sprites/level/random.png", 4 );
+	button.setScale( 0.4, 0.4 );
+	
 	text.setID( "choice-text" );
-	text.setFont( "data/fonts/Jaapokki-Regular.otf", 50, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "Click to random world!" );
-	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 - 40 );
+	text.setPosition( screen_w/2 -text.getWidth()/2 -button.getWidth(), screen_h/2 - text.getHeight()/2 -80 );
+	button.setPosition( text.getRight() +10, text.getY() -5 );
 	
-	sprite.setName( "choice-sprite" );
-	sprite.load( "data/sprites/level/random.png", 4 );
-	sprite.setScale( 0.4, 0.4 );
-	sprite.setPosition( screen_w/2 -sprite.getWidth()/2 -100, screen_h/2 - sprite.getHeight()/2 );
 	
-	number.setID( "choice-number" );
-	number.setFont( "data/fonts/Jaapokki-Regular.otf", 37, 0xFF, 0xFF, 0xFF );
-	number.setText( "number" );
-	number.setPosition( screen_w/2 -number.getWidth()/2, screen_h/2 - number.getHeight()/2 );
+	information.setID( "choice-information" );
+	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	information.setText( "Tip: Following worlds will be generated randomly." );
+	information.setPosition( 10, screen_h - information.getHeight() - 10 );
+	
+	
+	// worlds
+	nr = 4;
+	world = new MySprite[ nr ];
+	
+	for( int i = 0; i < nr; i ++ )
+	{
+		world[ i ].setName( "choice-world[ " + to_string( i ) + " ]" );
+		world[ i ].load( "data/sprites/level/" + to_string( i ) + ".png" );
+		world[ i ].setScale( 0.2, 0.2 );
+	}
+	
+	int w = world[ 0 ].getWidth()*4 + 15*4;
+	
+	world[ 0 ].setPosition( screen_w/2 - w/2, button.getY() +90 );
+	world[ 1 ].setPosition( world[ 0 ].getRight() + 15, button.getY() +90 );
+	world[ 2 ].setPosition( world[ 1 ].getRight() + 15, button.getY() +90 );
+	world[ 3 ].setPosition( world[ 2 ].getRight() + 15, button.getY() +90 );
+	
+
 	
 	click.setID( "choice-click" );
 	click.load( "data/sounds/click.wav", 50 );
 	
-	srand( time( NULL ) );
+	frame.setName( "choice-frame" );
+	frame.load( "data/sprites/level/frame.png" );
+	frame.setScale( 0.2, 0.2 );
+	frame.setPosition( -1000, -1000 );
 }
 
 void Choice::handle( sf::Event &event )
 {
-	if( sprite.getAlpha() == 255 && counter == 0 )
+	chosen = -1;
+	
+	if( button.getAlpha() == 255 && counter == -1 )
 	{
 		int x, y;
-		sprite.setOffset( 0 );
+		button.setOffset( 0 );
 
 		if( event.type == sf::Event::MouseMoved )
 		{
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( sprite.checkCollision( x, y ) )
-				sprite.setOffset( 1 );
+			if( button.checkCollision( x, y ) )
+				button.setOffset( 1 );
 			else
 				focus = false;
+				
+			for( int i = 0; i < nr; i++ )
+			{
+				if( world[ i ].checkCollision( x, y ) )
+					chosen = i;
+				else
+					frame.setPosition( -1000, -1000 );
+			}
 		}
 
 		if( event.type == sf::Event::MouseButtonPressed )
@@ -64,16 +120,25 @@ void Choice::handle( sf::Event &event )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( sprite.checkCollision( x, y ) )
+			if( button.checkCollision( x, y ) )
 			{
-				sprite.setOffset( 2 );
+				button.setOffset( 2 );
 					
 				if( play )
 					click.play();
 						
 				focus = true;
-				counter = 1;
+				counter = 0;
 				
+			}
+			
+			for( int i = 0; i < nr; i++ )
+			{
+				if( world[ i ].checkCollision( x, y ) )
+				{
+					result = i;
+					exit = true;
+				}
 			}
 		}
 			
@@ -81,42 +146,78 @@ void Choice::handle( sf::Event &event )
 			focus = false;
 			
 		if( focus )
-			sprite.setOffset( 2 );
+			button.setOffset( 2 );
 	}
 }
 
 void Choice::draw( sf::RenderWindow &window )
 {
 	window.draw( text.get() );
-	window.draw( sprite.get() );
-	window.draw( number.get() );
+	window.draw( button.get() );
+	window.draw( information.get() );
 	
-	if( counter > 0 && counter < 250 )
+	for( int i = 0; i < nr; i ++ )
 	{
-		result = rand()%100000 +1;
-		number.setText( to_string( result ) );
-		number.reloadPosition();
+		window.draw( world[ i ].get() );
+	}
+	
+	if( world[ 0 ].getAlpha() > 99 && !exit )
+	for( int i = 0; i < nr; i ++ )
+	{
+		if( i != result && i != chosen )
+			world[ i ].setAlpha( 100 );
+		else
+		{
+			world[ i ].setAlpha( 255 );
+			frame.setPosition( world[ i ].getX(), world[ i ].getY() );
+		}
+			
+	}
+	
+	if( counter > -1 && counter < 150 )
+	{
+		if( counter %4 == 0 )
+			result = rand()%4;
 		counter ++;
+	}
+	if( counter == 150 )
+		exit = true;
+		
+	window.draw( frame.get() );
+}
+
+void Choice::fadein( int j, int max )
+{
+	frame.fadein( j, max );
+	text.fadein( j, max );
+	button.fadein( j, max );
+	information.fadein( j, max );
+	
+	for( int i = 0; i < nr; i ++ )
+		world[ i ].fadein( j, 100 );
+}
+
+void Choice::fadeout( int j, int min )
+{
+	text.fadeout( j, min );
+	button.fadeout( j, min );
+	information.fadeout( j, min );
+	frame.fadeout( j, min );
+
+	if( result != -1 )
+		world[ result ].fadeout( j, min );
+		
+
+	if( text.getAlpha() < 100 )
+	{
+		for( int i = 0; i < nr; i ++ )
+			world[ i ].fadeout( j, min );
 	}
 }
 
-void Choice::fadein( int i, int max )
+bool Choice::nextState()
 {
-	text.fadein( i, max );
-	sprite.fadein( i, max );
-	number.fadein( i, max );
-}
-
-void Choice::fadeout( int i, int min )
-{
-	text.fadeout( i, min );
-	sprite.fadeout( i, min );
-	number.fadeout( i, min );
-}
-
-bool Choice::isReady()
-{
-	if( counter > 250 )
+	if( counter == 150 || counter == -1 && result != -1 )
 		return true;
 		
 	return false;
@@ -125,4 +226,9 @@ bool Choice::isReady()
 int Choice::getResult()
 {
 	return result;
+}
+
+int Choice::getAlpha()
+{
+	return text.getAlpha();
 }
