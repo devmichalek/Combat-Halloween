@@ -55,4 +55,6 @@ public:
 	
 	State* getState();
 	void set( State* state );
+	
+	void reloadMusic();
 };
