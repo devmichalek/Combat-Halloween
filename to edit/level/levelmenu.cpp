@@ -53,7 +53,7 @@ void Level_menu::load( int screen_w, int screen_h )
 
 void Level_menu::handle( sf::Event &event )
 {
-	if( !choice->isReady() )
+	if( !choice->nextState() )
 	{
 		backtomenu->handle( event );
 		choice->handle( event );
@@ -69,35 +69,35 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	backtomenu->draw( *window );
 	choice->draw( *window );
 	
-	if( backtomenu->getState() == 0 && !choice->isReady() )
+	if( backtomenu->getState() == 0 && !choice->nextState() )
 	{
 		background->fadein( 3, 255 );
 		music->fadein( 1, state->mVolume );
 		backtomenu->fadein( 3, 255 );
 		choice->fadein( 3, 255 );
 	}
-	else if( backtomenu->getState() == 1 && !choice->isReady() )
+	else if( backtomenu->getState() == 1 && !choice->nextState() )
 	{
 		background->fadeout( 3 );
 		music->fadeout( 3 );
 		backtomenu->fadeout( 3, 0 );
 		choice->fadeout( 3, 0 );
 		
-		if( background->getAlpha() == 0 )
+		if( choice->getAlpha() == 0 )
 		{
 			music->halt();
 			backtomenu->setState( 0 );
 			state->state = 2;
 		}
 	}
-	else if( choice->isReady() )
+	else if( choice->nextState() )
 	{
 		background->fadeout( 3 );
 		music->fadeout( 3 );
 		backtomenu->fadeout( 3, 0 );
 		choice->fadeout( 3, 0 );
 		
-		if( background->getAlpha() == 0 )
+		if( choice->getAlpha() == 0 )
 		{
 			music->halt();
 			state->state = 1;
