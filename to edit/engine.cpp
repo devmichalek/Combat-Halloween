@@ -115,6 +115,9 @@ void Engine::states()
 		{
 			level_menu->set( menu->getState() );
 			core->getState() = 1;
+			menu->reloadMusic();
+			Mix_HaltMusic();
+			level_menu->reloadMusic();
 		}
     }
 	
