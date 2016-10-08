@@ -220,7 +220,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	// Fade in
 	if( play_button->getState() != 2 && exit->getState() == 0 )// if user didn't click play
 	{
-		music->fadein( 2, music_volume->getVolume() );
+		music->fadein( 1, music_volume->getVolume() );
 		background->fadein( 2, 255 );
 		git_button->fadein( 2, 255 );
 		google_button->fadein( 2, 255 );
@@ -394,4 +394,9 @@ bool Menu::nextState()
 State* Menu::getState()
 {
 	return state;
+}
+
+void Menu::reloadMusic()
+{
+	music->reload();
 }
