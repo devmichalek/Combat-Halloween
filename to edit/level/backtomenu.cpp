@@ -64,6 +64,7 @@ void Backtomenu::handle( sf::Event &event )
 void Backtomenu::setState( int here )
 {
 	state = here;
+	button.setOffset( here );
 }
 
 int Backtomenu::getState()
