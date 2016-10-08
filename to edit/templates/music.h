@@ -35,6 +35,7 @@ public:
 	#endif
 	
     void load( std::string path, int volume = 0 );
+	void reload();
     void play();
 	
     void pause();
