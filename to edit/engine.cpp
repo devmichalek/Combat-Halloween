@@ -1,5 +1,7 @@
 #include "engine.h"
 #include <stdio.h>
+#include <time.h>
+#include <cstdlib>
 
 // Create objects.
 Engine::Engine()
@@ -48,11 +50,15 @@ void Engine::load()
 		case 3:
 		level_menu->load( core->getWidth(), core->getHeight() );
 		break;
+		
+		case 99:
+		srand( time( NULL ) );
+		break;
 
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = 0;	// intro state
+		core->getState() = 1;	// intro state
 		break;
 			
 	}
