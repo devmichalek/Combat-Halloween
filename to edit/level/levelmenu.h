@@ -2,6 +2,7 @@
 
 #include "templates/music.h"
 #include "level/backtomenu.h"
+#include "level/choice.h"
 #include "state.h"
 
 class Level_menu
@@ -10,6 +11,7 @@ class Level_menu
 	MySprite* background;
 	Music* music;
 	Backtomenu* backtomenu;
+	Choice* choice;
 	
 public:
 
@@ -28,4 +30,6 @@ public:
 	bool isQuit();
 	bool nextState();
 	bool backToMenu();
+	
+	void reloadMusic();
 };
