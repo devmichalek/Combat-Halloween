@@ -399,7 +399,7 @@ void Setkeyboard::handle( sf::Event &event )
 		if( save.checkCollision( x, y ) )
 		{
 			fstream file;
-			file.open( "menu/keyboard_temporary.txt", std::ios::out );
+			file.open( "data/txt/menu/keyboard_temporary.txt", std::ios::out );
 			
 			for( unsigned i = 0; i < actual_keys.size(); i++ )
 			{
