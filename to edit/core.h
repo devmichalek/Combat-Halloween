@@ -42,6 +42,6 @@ public:
     bool& isOpen();     // get or set open window
 
 
-    int& getWidth();
-    int& getHeight();
+    const int& getWidth();
+    const int& getHeight();
 };
