@@ -135,12 +135,12 @@ bool& Core::isOpen()
 
 
 
-int& Core::getWidth()
+const int& Core::getWidth()
 {
     return width;
 }
 
-int& Core::getHeight()
+const int& Core::getHeight()
 {
     return height;
 }
