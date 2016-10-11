@@ -47,7 +47,7 @@ void Choice::load( int screen_w, int screen_h )
 	
 	text.setID( "choice-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
-	text.setText( "Click to random world!" );
+	text.setText( "Choose world or " );
 	text.setPosition( screen_w/2 -text.getWidth()/2 -button.getWidth(), screen_h/2 - text.getHeight()/2 -80 );
 	button.setPosition( text.getRight() +10, text.getY() -5 );
 	
