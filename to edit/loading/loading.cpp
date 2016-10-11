@@ -20,10 +20,13 @@ void Loading::free()
 	progress_bar.free();
 	counter = 0;
 	max = 0;
+	state = 0;
 }
 	
 void Loading::load( const int &screen_w, const int &screen_h )
 {
+	free();
+	
 	max = 8;
 	
 	text.setID( "loading-text" );
