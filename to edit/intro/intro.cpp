@@ -10,6 +10,11 @@ Intro::Intro()
 
 Intro::~Intro()
 {
+	free();
+}
+
+void Intro::free()
+{
 	bg.free();
 	shuriken.free();
 
@@ -20,15 +25,17 @@ Intro::~Intro()
 		
 		delete [] text;
 		text = NULL;
-		nr = 0;
 	}
 	
+	nr = 0;
 	quit = false;
 }
 
 	
 void Intro::load( const int &screen_w, const int &screen_h )
 {
+	free();
+	
 	shuriken.setName( "intro-shuriken" );
 	shuriken.load( "data/sprites/intro/shuriken.png" );
 	
