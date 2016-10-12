@@ -220,7 +220,7 @@ int Log::getRight()
 	return button.getRight();
 }
 
-int Log::getState()
+const int& Log::getState() const
 {
 	return state;
 }
