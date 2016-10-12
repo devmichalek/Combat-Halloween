@@ -58,7 +58,7 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = 1;	// intro state
+		core->getState() = -1;	// intro state
 		break;
 			
 	}
@@ -96,6 +96,7 @@ void Engine::states()
 	{
 		load();
 	}
+	
 
 	// intro state
 	if( core->getState() == -1 )
