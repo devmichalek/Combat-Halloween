@@ -92,7 +92,7 @@ void Menu::load( int screen_width, int screen_height )
 	
 	version->setID( "menu-version-text" );
 	version->setFont( "data/fonts/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 08.10.2016" );
+	version->setText( "latest edition 12.10.2016" );
 	version->setPosition( screen_width - version->getWidth() - 3, screen_height - version->getHeight() -7 );
 	
 	setkeyboard->load( 100, music_volume->getRight(), screen_height/2 + 100 );
@@ -226,12 +226,12 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadein( 2, 255 );
 		twitter_button->fadein( 2, 255 );
 		facebook_button->fadein( 2, 255 );
-		play_button->fadein( 2, 255 );
-		title->fadein( 2, 255 );
+		play_button->fadein( 2 );
+		title->fadein( 2 );
 		music_button->fadein( 2, 255 );
 		chunk_button->fadein( 2, 255 );
-		author_log->fadein( 2, 255 );
-		game_log->fadein( 2, 255 );
+		author_log->fadein( 2 );
+		game_log->fadein( 2 );
 		settings_log->fadein( 2, 255 );
 		music_volume->fadein( 2, 255 );
 		chunk_volume->fadein( 2, 255 );
@@ -250,12 +250,12 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadeout( 3, 0 );
 		twitter_button->fadeout( 3, 0 );
 		facebook_button->fadeout( 3, 0 );
-		play_button->fadeout( 3, 0 );
-		title->fadeout( 3, 0 );
+		play_button->fadeout( 3 );
+		title->fadeout( 3 );
 		music_button->fadeout( 3, 0 );
 		chunk_button->fadeout( 3, 0 );
-		author_log->fadeout( 3, 0 );
-		game_log->fadeout( 3, 0 );
+		author_log->fadeout( 3 );
+		game_log->fadeout( 3 );
 		settings_log->fadeout( 3, 0 );
 		music_volume->fadeout( 3, 0 );
 		chunk_volume->fadeout( 3, 0 );
@@ -296,12 +296,12 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadeout( 3, 0 );
 		twitter_button->fadeout( 3, 0 );
 		facebook_button->fadeout( 3, 0 );
-		play_button->fadeout( 3, 0 );
-		title->fadeout( 3, 0 );
+		play_button->fadeout( 3 );
+		title->fadeout( 3 );
 		music_button->fadeout( 3, 0 );
 		chunk_button->fadeout( 3, 0 );
-		author_log->fadeout( 3, 0 );
-		game_log->fadeout( 3, 0 );
+		author_log->fadeout( 3 );
+		game_log->fadeout( 3 );
 		settings_log->fadeout( 3, 0 );
 		music_volume->fadeout( 3, 0 );
 		chunk_volume->fadeout( 3, 0 );
