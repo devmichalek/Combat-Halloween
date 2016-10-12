@@ -68,7 +68,7 @@ void Loading::draw( sf::RenderWindow* &window )
 	}
 }
 
-int Loading::getState()
+const int& Loading::getState() const
 {
 	return state;
 }
