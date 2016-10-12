@@ -33,7 +33,7 @@ public:
     void free();	// Delete everything
 	
 	
-	sf::Sprite& get();						// Return sprite
+	const sf::Sprite& get() const;						// Return sprite
     void load( string path, int nr = 1 );	// Load texture
 	void create( int w, int h );			// Create blank texture
 	
@@ -59,11 +59,11 @@ public:
 	void setColor( sf::Color color );
 	void setAlpha( sf::Uint8 a = 0 );
 	
-	int getOffset();
+	const int& getOffset() const;
 	void setOffset( int n );
 	
 	void setScale( float x = 1, float y = 1 );
 	
-	string getName();
+	const string& getName() const;
 	void setName( string name );
 };
