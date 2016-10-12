@@ -113,7 +113,7 @@ void Intro::draw( sf::RenderWindow* &window )
 	}
 }
 
-bool Intro::isQuit()
+const bool& Intro::isQuit() const
 {
 	return quit;
 }
