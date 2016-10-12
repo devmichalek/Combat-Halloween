@@ -9,48 +9,48 @@ void Border::set( int x, int y, int w, int h )
 }
 
 
-int Border::getX()
+const int& Border::getX() const
 {
     return left;
 }
 
-int Border::getY()
+const int& Border::getY() const
 {
     return top;
 }
 
 
 
-int Border::getWidth()
+const int& Border::getWidth() const
 {
     return width;
 }
 
-int Border::getHeight()
+const int& Border::getHeight() const
 {
     return height;
 }
 
 
 
-int Border::getLeft()
+const int& Border::getLeft() const
 {
     return left;
 }
 
-int Border::getRight()
+const int Border::getRight() const
 {
     return left + width;
 }
 
 
 
-int Border::getTop()
+const int& Border::getTop() const
 {
     return top;
 }
 
-int Border::getBot()
+const int Border::getBot() const
 {
     return top + height;
 }
