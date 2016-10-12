@@ -9,7 +9,7 @@ class Loading
 	MySprite background;	// bg
 	int state;		// show percents
 	
-	int counter;	// to set offsets
+	mutable int counter;	// to set offsets
 	int max;		// how many offset's
 	MySprite progress_bar;	// animation
 	
@@ -22,5 +22,5 @@ public:
 	void load( const int &screen_w, const int &screen_h );	// load textures
 	void draw( sf::RenderWindow* &window );	// render textures
 	
-	int getState();
+	const int& getState() const; // getter
 };
