@@ -9,8 +9,8 @@ class Play_button :public Parentchunk
 
 protected:
 
-	int state;
-	MySprite mySprite;
+	mutable int state;
+	mutable MySprite mySprite;
 	MyText myText;
 	
 public:
@@ -22,13 +22,13 @@ public:
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
-	int getBot();
-	int getX();
-	int getState();
-	bool nextGameState();
+	const int getBot() const;
+	const int getX() const;
+	const int& getState() const;
+	bool nextGameState() const;
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int i = 1, int max = 255 );
+	void fadeout( int i = 1, int min = 0 );
 	
-	void setState( int s );
+	void setState( const int s );	// mutator
 };
