@@ -108,17 +108,17 @@ void Core::display()
     window->display();
 }
 
-void Core::setVisible( bool visible )
+void Core::setVisible( const bool& visible )
 {
     window->setVisible( visible );
 }
 
-void Core::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b, sf::Uint8 a )
+void Core::setColor( const sf::Color& color )
 {
-    color.r = r;
-    color.g = g;
-    color.b = b;
-    color.a = a;
+    this->color.r = color.r;
+    this->color.g = color.g;
+    this->color.b = color.b;
+    this->color.a = color.a;
 }
 
 
@@ -135,12 +135,12 @@ bool& Core::isOpen()
 
 
 
-const int& Core::getWidth()
+const int& Core::getWidth() const
 {
     return width;
 }
 
-const int& Core::getHeight()
+const int& Core::getHeight() const
 {
     return height;
 }

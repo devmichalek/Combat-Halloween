@@ -27,21 +27,21 @@ public:
     void free();
     bool load( string title = "" );
 
-    sf::Event& getEvent();
+	sf::Event& getEvent();	// getter
     sf::RenderWindow*& getWindow();
 
 
     void clear();
     void display();
 
-    void setVisible( bool visible );
-    void setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b, sf::Uint8 a = 0xFF );
+    void setVisible( const bool& visible );
+    void setColor( const sf::Color& color );
 
 
     int& getState();    // get or set state, e.g. from intro to menu
     bool& isOpen();     // get or set open window
 
 
-    const int& getWidth();
-    const int& getHeight();
+    const int& getWidth() const;
+    const int& getHeight() const;
 };
