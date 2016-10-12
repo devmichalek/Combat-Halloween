@@ -21,7 +21,7 @@ public:
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
 	
-	int getBot();
+	int getBot();	// getter
 	
 	void fadein( int i, int max );
 	void fadeout( int i, int min );
