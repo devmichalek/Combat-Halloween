@@ -82,7 +82,7 @@ void MySprite::free()
 
 
 
-sf::Sprite& MySprite::get()
+const sf::Sprite& MySprite::get() const
 {
     if( nr == 0 || nr == 1 )
     {
@@ -471,7 +471,7 @@ void MySprite::setAlpha( sf::Uint8 a )
 }
 
 
-int MySprite::getOffset()
+const int& MySprite::getOffset() const
 {
 	return offset;
 }
@@ -503,7 +503,7 @@ void MySprite::setScale( float x, float y )
 
 
 
-std::string MySprite::getName()
+const std::string& MySprite::getName() const
 {
 	return name;
 }
