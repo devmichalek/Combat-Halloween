@@ -20,5 +20,5 @@ public:
 	
 	void load( const int &screen_w, const int &screen_h );	// load
 	void draw( sf::RenderWindow* &window );	// render
-	bool isQuit();	// tell us when we can stop rendering intro
+	const bool& isQuit() const;	// tell us when we can stop rendering intro / accessor
 };
