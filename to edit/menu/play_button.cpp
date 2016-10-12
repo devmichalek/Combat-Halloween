@@ -75,22 +75,22 @@ void Play_button::handle( sf::Event &event )
 	}
 }
 
-int Play_button::getBot()
+const int Play_button::getBot() const
 {
 	return mySprite.getBot();
 }
 
-int Play_button::getX()
+const int Play_button::getX() const
 {
 	return mySprite.getX();
 }
 
-int Play_button::getState()
+const int& Play_button::getState() const
 {
 	return state;
 }
 
-bool Play_button::nextGameState()
+bool Play_button::nextGameState() const
 {
 	if( state == 2 && mySprite.getAlpha() == 0 )
 		return true;
@@ -110,7 +110,7 @@ void Play_button::fadeout( int i, int min )
 	myText.fadeout( i, min );
 }
 
-void Play_button::setState( int s )
+void Play_button::setState( const  int s )
 {
 	mySprite.setOffset( 0 );
 	state = s;
