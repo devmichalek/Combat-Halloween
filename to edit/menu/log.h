@@ -29,8 +29,8 @@ public:
     void handle( sf::Event &event );
 	
 	int getRight();
-	int getState();
+	const int& getState() const;
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int i = 1, int max = 255 );
+	void fadeout( int i = 1, int min = 0 );
 };
