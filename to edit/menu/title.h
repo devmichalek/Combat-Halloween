@@ -14,11 +14,11 @@ public:
 	Title();
     ~Title();
 
-    void load( int screen_w );
+    void load( const int& screen_w );
     void draw( sf::RenderWindow &window );
 	
-	int getBot();
+	const int& getBot();	// accessor
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int i = 1, int max = 255 );
+	void fadeout( int i = 1, int min = 0 );
 };

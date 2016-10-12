@@ -12,7 +12,7 @@ Title::~Title()
 	title.free();
 }
 
-void Title::load( int screen_w )
+void Title::load( const int& screen_w )
 {
 	belt.setName( "title-belt" );
     belt.load( "data/sprites/menu/belt.png" );
@@ -31,7 +31,7 @@ void Title::draw( sf::RenderWindow &window )
 }
 
 
-int Title::getBot()
+const int& Title::getBot()
 {
 	return belt.getBot();
 }
