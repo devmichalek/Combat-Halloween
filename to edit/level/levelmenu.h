@@ -32,4 +32,7 @@ public:
 	bool backToMenu();
 	
 	void reloadMusic();
+	int getMap();
+	
+	void resetChoice();
 };

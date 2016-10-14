@@ -22,6 +22,11 @@ void Level_menu::free()
 	delete choice;
 }
 
+State* Level_menu::getState()
+{
+	return state;
+}
+
 void Level_menu::set( State* state )
 {
 	this->state = state;
@@ -142,4 +147,14 @@ bool Level_menu::backToMenu()
 void Level_menu::reloadMusic()
 {
 	music->reload();
+}
+
+int Level_menu::getMap()
+{
+	return choice->getResult();
+}
+
+void Level_menu::resetChoice()
+{
+	choice->reset();
 }
