@@ -30,8 +30,8 @@ Choice::~Choice()
 		nr = 0;
 	}
 	
-	counter -1;
-	result -1;
+	counter = -1;
+	result = -1;
 	chosen = -1;
 	exit = false;
 	
@@ -217,7 +217,7 @@ void Choice::fadeout( int j, int min )
 
 bool Choice::nextState()
 {
-	if( counter == 150 || counter == -1 && result != -1 )
+	if( ( counter == 150 || counter == -1 ) && result != -1 )
 		return true;
 		
 	return false;
@@ -231,4 +231,14 @@ int Choice::getResult()
 int Choice::getAlpha()
 {
 	return text.getAlpha();
+}
+
+
+
+void Choice::reset()
+{
+	counter = -1;
+	result = -1;
+	chosen = -1;
+	exit = false;
 }

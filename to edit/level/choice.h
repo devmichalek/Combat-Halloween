@@ -36,4 +36,6 @@ public:
 	int getResult();
 	bool nextState();
 	int getAlpha();
+	
+	void reset();
 };
