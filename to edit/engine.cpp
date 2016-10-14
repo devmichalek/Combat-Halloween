@@ -17,6 +17,10 @@ Engine::Engine()
 	menu = new Menu;
 	
 	level_menu = new Level_menu;
+	
+	character_menu = new Character_menu;
+	
+	play_wood = new Play_wood;
 }
 
 
@@ -27,6 +31,8 @@ void Engine::free()
 	if( intro != NULL )		delete intro;
 	if( menu != NULL )		delete menu;
 	if( level_menu != NULL )		delete level_menu;
+	if( character_menu != NULL )	delete character_menu;
+	if( play_wood != NULL )	delete play_wood;
 	
 	delete core;
 }
@@ -39,16 +45,24 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
-		case 1:
+		case 5:
 		intro->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 2:
+		case 15:
 		menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 3:
+		case 22:
 		level_menu->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 35:
+		character_menu->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 70:
+		play_wood->load( core->getWidth(), core->getHeight() );
 		break;
 		
 		case 99:
@@ -58,9 +72,8 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = -1;	// intro state
+		core->getState() = 2;	// intro state
 		break;
-			
 	}
 }
 
@@ -84,7 +97,16 @@ void Engine::events()
 		{
 			level_menu->handle( core->getEvent() );
 		}
-
+		
+		if( core->getState() == 2 ) // choose character state
+		{
+			character_menu->handle( core->getEvent() );
+		}
+		
+		if( core->getState() == 4 ) // wood state
+		{
+			play_wood->handle( core->getEvent() );
+		}
     }
 }
 
@@ -120,8 +142,9 @@ void Engine::states()
 		}
 		else if( menu->nextState() )
 		{
-			level_menu->set( menu->getState() );
 			core->getState() = 1;
+			level_menu->set( menu->getState() );
+			
 			menu->reloadMusic();
 			Mix_HaltMusic();
 			level_menu->reloadMusic();
@@ -139,11 +162,42 @@ void Engine::states()
 		else if( level_menu->nextState() )
 		{
 			core->getState() = 2;
+			character_menu->set( level_menu->getState() );
+			
+			level_menu->reloadMusic();
+			Mix_HaltMusic();
+			character_menu->reloadMusic();
 		}
 		else if( level_menu->backToMenu() )
 		{
 			core->getState() = 0;
 		}
+	}
+	
+	// character state
+	if( core->getState() == 2 )
+	{
+		character_menu->draw( core->getWindow() );
+		if( character_menu->nextState() )
+		{
+			core->getState() = level_menu->getMap() +3;
+			character_menu->reloadMusic();
+			Mix_HaltMusic();
+		}
+		else if( character_menu->backToMenu() )
+		{
+			core->getState() = 1;
+			level_menu->resetChoice();
+		}
+	}
+	
+	
+	
+	
+	// wood state
+	if( core->getState() == 4 )
+	{
+		play_wood->draw( core->getWindow() );
 	}
 }
 
