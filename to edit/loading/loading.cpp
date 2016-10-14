@@ -26,7 +26,6 @@ void Loading::free()
 void Loading::load( const int &screen_w, const int &screen_h )
 {
 	free();
-	
 	max = 8;
 	
 	text.setID( "loading-text" );
