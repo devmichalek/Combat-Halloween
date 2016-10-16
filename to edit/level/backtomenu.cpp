@@ -49,7 +49,11 @@ void Backtomenu::handle( sf::Event &event )
 					click.play();
 						
 				focus = true;
-				state = 1;
+				
+				if( state == 1 )
+					state = 2;
+				else if( state == 0 )
+					state = -1;
 			}
 		}
 			
@@ -64,7 +68,6 @@ void Backtomenu::handle( sf::Event &event )
 void Backtomenu::setState( int here )
 {
 	state = here;
-	button.setOffset( here );
 }
 
 int Backtomenu::getState()
