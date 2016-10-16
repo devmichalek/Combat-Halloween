@@ -7,6 +7,7 @@ Level_menu::Level_menu()
 	music = new Music;
 	backtomenu = new Backtomenu( "", false );
 	choice = new Choice;
+	character = new Character;
 }
 
 Level_menu::~Level_menu()
@@ -20,6 +21,7 @@ void Level_menu::free()
 	delete music;
 	delete backtomenu;
 	delete choice;
+	delete character;
 }
 
 State* Level_menu::getState()
@@ -53,15 +55,22 @@ void Level_menu::load( int screen_w, int screen_h )
 	music->load( "data/music/Rayman Legends OST - Mysterious Swamps .mp3" );
 	backtomenu->load( screen_w );
 	choice->load( screen_w, screen_h );
+	character->load( screen_w, screen_h );
 }
 
 
 void Level_menu::handle( sf::Event &event )
 {
-	if( !choice->nextState() )
+	if( !choice->isChosen() && backtomenu->getState() == 0 )
 	{
-		backtomenu->handle( event );
 		choice->handle( event );
+	}
+	else if( !character->nextState() )
+	{
+		if( backtomenu->getState() == 1 )
+			character->handle( event );
+			
+		backtomenu->handle( event );
 	}
 }
 
@@ -70,23 +79,35 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	if( state->mSwitch && state->state == 0 )
 		music->play();
 	
+	if( backtomenu->getState() == 0 )
+	if( choice->isChosen() )
+	{
+		character->move( -20, 0 );
+		if( choice->move( -20, -1000 ) )
+			backtomenu->setState( 1 );
+	}
+	
 	window->draw( background->get() );
 	backtomenu->draw( *window );
 	choice->draw( *window );
+	character->draw( window );
 	
-	if( backtomenu->getState() == 0 && !choice->nextState() )
+	if( backtomenu->getState() == 0 )
 	{
 		background->fadein( 3, 255 );
 		music->fadein( 1, state->mVolume );
 		backtomenu->fadein( 3, 255 );
 		choice->fadein( 3, 255 );
+		character->fadein( 3, 255 );
 	}
-	else if( backtomenu->getState() == 1 && !choice->nextState() )
+	
+	else if( backtomenu->getState() == -1 )
 	{
 		background->fadeout( 3 );
 		music->fadeout( 3 );
 		backtomenu->fadeout( 3, 0 );
 		choice->fadeout( 3, 0 );
+		character->fadeout( 3, 0 );
 		
 		if( choice->getAlpha() == 0 )
 		{
@@ -95,17 +116,33 @@ void Level_menu::draw( sf::RenderWindow* &window )
 			state->state = 2;
 		}
 	}
-	else if( choice->nextState() )
+	
+	else if( backtomenu->getState() == 1 )
 	{
-		background->fadeout( 3 );
-		music->fadeout( 3 );
-		backtomenu->fadeout( 3, 0 );
-		choice->fadeout( 3, 0 );
-		
-		if( choice->getAlpha() == 0 )
+		if( character->nextState() )
 		{
-			music->halt();
-			state->state = 1;
+			background->fadeout( 3 );
+			music->fadeout( 3 );
+			backtomenu->fadeout( 3, 0 );
+			choice->fadeout( 3, 0 );
+			character->fadeout( 3, 0 );
+			
+			if( choice->getAlpha() == 0 )
+			{
+				music->halt();
+				backtomenu->setState( 0 );
+				state->state = 1;
+			}
+		}
+	}
+	
+	else if( backtomenu->getState() == 2 )
+	{
+		character->move( 20, 1000 );
+		if( choice->move( 20, 0 ) )
+		{
+			choice->reset();
+			backtomenu->setState( 0 );
 		}
 	}
 }
@@ -154,7 +191,7 @@ int Level_menu::getMap()
 	return choice->getResult();
 }
 
-void Level_menu::resetChoice()
+int Level_menu::getCharacter()
 {
-	choice->reset();
+	return character->getResult();
 }
