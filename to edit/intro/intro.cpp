@@ -36,8 +36,9 @@ void Intro::load( const int &screen_w, const int &screen_h )
 {
 	free();
 	
-	shuriken.setName( "intro-shuriken" );
-	shuriken.load( "data/sprites/intro/shuriken.png" );
+	shuriken.setName( "intro-kunai" );
+	shuriken.load( "data/sprites/hero/kunai.png" );
+	shuriken.setScale( 0.7, 0.7 );
 	
 	bg.setName( "intro-background" );
 	bg.create( screen_w, screen_h );
@@ -61,7 +62,7 @@ void Intro::load( const int &screen_w, const int &screen_h )
 	text[ 1 ].setID( "intro-text[1]" );
 	text[ 1 ].setFont( "data/fonts/Jaapokki-Regular.otf", 37, 112, 183, 89 );
 	text[ 1 ].setText( "Ninja" );
-	text[ 1 ].setPosition( screen_w/2 - text[ 1 ].getWidth()/2 - shuriken.getWidth() -10, screen_h/2 - text[ 1 ].getHeight()/2 );
+	text[ 1 ].setPosition( screen_w/2 - text[ 1 ].getWidth()/2 -40, screen_h/2 - text[ 1 ].getHeight()/2 );
 	shuriken.setPosition( text[ 1 ].getRight() + 10, screen_h/2 - shuriken.getHeight()/2 +10 );
 	
 	
