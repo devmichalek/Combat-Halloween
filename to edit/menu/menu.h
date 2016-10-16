@@ -11,7 +11,7 @@
 #include "templates/music.h"
 #include "menu/setkeyboard.h"
 #include "menu/information.h"
-#include "state.h"
+#include "templates/state.h"
 
 class Menu
 {
