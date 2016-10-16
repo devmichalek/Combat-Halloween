@@ -7,9 +7,11 @@ Choice::Choice()
 	counter = -1;
 	result = -1;
 	chosen = -1;
+	
 	nr = 0;
 	world = NULL;
-	exit = false;
+	
+	range = 0;
 }
 
 Choice::~Choice()
@@ -33,9 +35,10 @@ Choice::~Choice()
 	counter = -1;
 	result = -1;
 	chosen = -1;
-	exit = false;
 	
 	frame.free();
+	
+	range = 0;
 }
 
 
@@ -54,7 +57,7 @@ void Choice::load( int screen_w, int screen_h )
 	
 	information.setID( "choice-information" );
 	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
-	information.setText( "Tip: Following worlds will be generated randomly." );
+	information.setText( "Tip: Following worlds will be generate randomly." );
 	information.setPosition( 10, screen_h - information.getHeight() - 10 );
 	
 	
@@ -85,6 +88,8 @@ void Choice::load( int screen_w, int screen_h )
 	frame.load( "data/sprites/level/frame.png" );
 	frame.setScale( 0.2, 0.2 );
 	frame.setPosition( -1000, -1000 );
+	
+	range = 0;
 }
 
 void Choice::handle( sf::Event &event )
@@ -137,7 +142,6 @@ void Choice::handle( sf::Event &event )
 				if( world[ i ].checkCollision( x, y ) )
 				{
 					result = i;
-					exit = true;
 				}
 			}
 		}
@@ -161,7 +165,7 @@ void Choice::draw( sf::RenderWindow &window )
 		window.draw( world[ i ].get() );
 	}
 	
-	if( world[ 0 ].getAlpha() > 99 && !exit )
+	if( world[ 0 ].getAlpha() > 99 )
 	for( int i = 0; i < nr; i ++ )
 	{
 		if( i != result && i != chosen )
@@ -180,8 +184,6 @@ void Choice::draw( sf::RenderWindow &window )
 			result = rand()%4;
 		counter ++;
 	}
-	if( counter == 150 )
-		exit = true;
 		
 	window.draw( frame.get() );
 }
@@ -215,14 +217,6 @@ void Choice::fadeout( int j, int min )
 	}
 }
 
-bool Choice::nextState()
-{
-	if( ( counter == 150 || counter == -1 ) && result != -1 )
-		return true;
-		
-	return false;
-}
-
 int Choice::getResult()
 {
 	return result;
@@ -233,6 +227,14 @@ int Choice::getAlpha()
 	return text.getAlpha();
 }
 
+bool Choice::isChosen()
+{
+	if( ( counter == 150 || counter == -1 ) && result != -1 )
+		return true;
+		
+	return false;
+}
+
 
 
 void Choice::reset()
@@ -240,5 +242,39 @@ void Choice::reset()
 	counter = -1;
 	result = -1;
 	chosen = -1;
-	exit = false;
+}
+
+bool Choice::move( int vel, int ran )
+{
+	static bool continue_;
+	continue_ = false;
+	
+	if( vel < 0 )
+	{
+		if( range > ran )
+			continue_ = true;
+	}
+	else if( vel > 0 )
+	{
+		if( range < ran )
+			continue_ = true;
+	}
+	
+	if( continue_ )
+	{
+		range += vel;
+		button.setPosition( button.getX() +vel, button.getY() );
+		text.setPosition( text.getX() +vel, text.getY() );
+		information.setPosition( information.getX() +vel, information.getY() );
+		frame.setPosition( frame.getX() +vel, frame.getY() );
+		for( int i = 0; i < nr; i++ )
+			world[ i ].setPosition( world[ i ].getX() +vel, world[ i ].getY() );
+	}
+	else
+		range = ran;
+		
+	if( range == ran )
+		return true;
+		
+	return false;
 }
