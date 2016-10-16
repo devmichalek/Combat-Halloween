@@ -3,7 +3,8 @@
 #include "templates/music.h"
 #include "level/backtomenu.h"
 #include "level/choice.h"
-#include "state.h"
+#include "templates/state.h"
+#include "level/character.h"
 
 class Level_menu
 {
@@ -12,6 +13,7 @@ class Level_menu
 	Music* music;
 	Backtomenu* backtomenu;
 	Choice* choice;
+	Character* character;
 	
 public:
 
@@ -32,7 +34,7 @@ public:
 	bool backToMenu();
 	
 	void reloadMusic();
-	int getMap();
 	
-	void resetChoice();
+	int getMap();
+	int getCharacter();
 };
