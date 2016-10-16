@@ -8,18 +8,21 @@ class Choice :public Parentchunk
 {
 	MySprite button;
 	MyText text;
-	MyText information;
-	
-	int counter;
-	int result;
-	int chosen;
 	
 	int nr;	// number of worlds
 	MySprite* world;
 	
 	MySprite frame;
 	
-	bool exit;
+	MyText information;
+	
+	
+	int counter; // random
+	int result;	// ended result
+	int chosen;	// if user moved on the one of images
+	
+	// To move - animation
+	int range;
 	
 public:
 	
@@ -34,8 +37,10 @@ public:
 	void fadeout( int j, int min );
 	
 	int getResult();
-	bool nextState();
 	int getAlpha();
+	bool isChosen();
 	
 	void reset();
+	
+	bool move( int vel, int ran );	// move horizontal
 };
