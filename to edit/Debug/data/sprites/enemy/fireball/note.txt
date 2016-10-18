@@ -1,0 +1,3 @@
+offsets
+die 6
+move 5
