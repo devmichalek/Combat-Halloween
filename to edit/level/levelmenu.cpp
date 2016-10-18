@@ -69,9 +69,9 @@ void Level_menu::handle( sf::Event &event )
 	{
 		if( backtomenu->getState() == 1 )
 			character->handle( event );
-			
-		backtomenu->handle( event );
 	}
+	
+	backtomenu->handle( event );
 }
 
 void Level_menu::draw( sf::RenderWindow* &window )
