@@ -1,0 +1,4 @@
+offsets
+attack 4
+idle 6
+appear / disappear 6
