@@ -1,0 +1,4 @@
+offsets
+attack 13
+appear / disappear 12
+walk / idle 8
