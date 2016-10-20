@@ -8,6 +8,7 @@ class Engine
     Core* core;
 	MySprite* leftSide;
 
+
 public:
 
     Engine();
