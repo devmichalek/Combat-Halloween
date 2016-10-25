@@ -3,7 +3,6 @@
 Play_wood::Play_wood()
 {
 	state = new State;
-	bg = new MySprite;
 	hero = new Hero;
 }
 
@@ -15,15 +14,12 @@ Play_wood::~Play_wood()
 void Play_wood::free()
 {
 	delete state;
-	delete bg;
 	delete hero;
 }
 
 	
 void Play_wood::load( int screen_w, int screen_h )
 {
-	bg->setName( "wood-bg" );
-	bg->load( "data/sprites/play/1.png" );
 	hero->load( screen_w, screen_h );
 	//...
 }
@@ -36,10 +32,8 @@ void Play_wood::handle( sf::Event &event )
 
 void Play_wood::draw( sf::RenderWindow* &window )
 {
-	window->draw( bg->get() );
 	hero->draw( window );
 	
-	bg->fadein( 2 );
 	hero->fadein( 2 );
 }
 
