@@ -1,13 +1,12 @@
 #pragma once
 
-#include "state.h"
+#include "templates/state.h"
 #include "templates/sprite.h"
 #include "hero/hero.h"
 
 class Play_wood
 {
 	State* state;
-	MySprite* bg;
 	Hero* hero;
 	
 public:
