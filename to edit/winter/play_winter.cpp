@@ -1,0 +1,106 @@
+#include "winter/play_winter.h"
+
+Play_winter::Play_winter()
+{
+	state = new State;
+	hero = new Hero;
+}
+
+Play_winter::~Play_winter()
+{
+	free();
+}
+
+void Play_winter::free()
+{
+	delete state;
+	delete hero;
+}
+
+	
+void Play_winter::load( int screen_w, int screen_h )
+{
+	hero->load( screen_w, screen_h );
+	//...
+}
+
+
+void Play_winter::handle( sf::Event &event )
+{
+	hero->handle( event );
+}
+
+void Play_winter::draw( sf::RenderWindow* &window )
+{
+	hero->draw( window );
+	
+	hero->fadein( 2 );
+}
+
+	
+State* Play_winter::getState()
+{
+	return state;
+}
+
+void Play_winter::set( State* state )
+{
+	this->state = state;
+	state->state = 0;
+	
+	/*
+	// Set chunks
+	if( !state->cSwitch )
+	{
+		backtomenu->turn();
+		choice->turn();
+	}
+	
+	// Set music volume
+	music->setVolume( state->mVolume );
+	
+	// Set chunk volume
+	backtomenu->setVolume( state->cVolume );
+	choice->setVolume( state->cVolume );
+	*/
+}
+
+	
+bool Play_winter::isQuit()
+{
+	if( state->state == 3 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Play_winter::nextState()
+{
+	if( state->state == 1 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Play_winter::backToLevel()
+{
+	if( state->state == 2 )
+	{
+		state->state = 0;
+		// backtomenu->setState( 0 );
+		return true;
+	}
+		
+	return false;
+}
+
+	
+void Play_winter::reloadMusic()
+{
+	// music->reload();
+}
+
