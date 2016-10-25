@@ -9,6 +9,7 @@ class Play_wood
 	State* state;
 	Hero* hero;
 	
+	
 public:
 
 	Play_wood();
