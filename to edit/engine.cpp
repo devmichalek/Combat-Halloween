@@ -19,6 +19,9 @@ Engine::Engine()
 	level_menu = new Level_menu;
 	
 	play_wood = new Play_wood;
+	play_halloween = new Play_halloween;
+	play_desert = new Play_desert;
+	play_winter = new Play_winter;
 }
 
 
@@ -30,6 +33,9 @@ void Engine::free()
 	if( menu != NULL )		delete menu;
 	if( level_menu != NULL )		delete level_menu;
 	if( play_wood != NULL )	delete play_wood;
+	if( play_halloween != NULL )	delete play_halloween;
+	if( play_desert != NULL )	delete play_desert;
+	if( play_winter != NULL )	delete play_winter;
 	
 	delete core;
 }
@@ -58,6 +64,18 @@ void Engine::load()
 		play_wood->load( core->getWidth(), core->getHeight() );
 		break;
 		
+		case 78:
+		play_halloween->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 91:
+		play_desert->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 92:
+		play_winter->load( core->getWidth(), core->getHeight() );
+		break;
+		
 		case 99:
 		srand( time( NULL ) );
 		break;
@@ -65,7 +83,7 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = 0;	// intro state
+		core->getState() = -1;	// intro state
 		break;
 	}
 }
@@ -91,9 +109,24 @@ void Engine::events()
 			level_menu->handle( core->getEvent() );
 		}
 		
+		if( core->getState() == 2 ) // winter state
+		{
+			play_winter->handle( core->getEvent() );
+		}
+		
 		if( core->getState() == 3 ) // wood state
 		{
 			play_wood->handle( core->getEvent() );
+		}
+		
+		if( core->getState() == 4 ) // desert state
+		{
+			play_desert->handle( core->getEvent() );
+		}
+		
+		if( core->getState() == 5 ) // halloween state
+		{
+			play_halloween->handle( core->getEvent() );
 		}
     }
 }
@@ -149,7 +182,7 @@ void Engine::states()
 		}
 		else if( level_menu->nextState() )
 		{
-			core->getState() = level_menu->getMap() +3;
+			core->getState() = level_menu->getMap() +2;
 			
 			level_menu->reloadMusic();
 			Mix_HaltMusic();
@@ -160,10 +193,28 @@ void Engine::states()
 		}
 	}
 	
+	// winter state
+	if( core->getState() == 3 )
+	{
+		play_winter->draw( core->getWindow() );
+	}
+	
 	// wood state
 	if( core->getState() == 3 )
 	{
 		play_wood->draw( core->getWindow() );
+	}
+	
+	// desert state
+	if( core->getState() == 3 )
+	{
+		play_desert->draw( core->getWindow() );
+	}
+	
+	// halloween state
+	if( core->getState() == 3 )
+	{
+		play_halloween->draw( core->getWindow() );
 	}
 }
 
