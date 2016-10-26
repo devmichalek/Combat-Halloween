@@ -7,6 +7,7 @@ class Play_desert
 {
 	State* state;
 	Hero* hero;
+	MySprite* bg;
 	
 public:
 
