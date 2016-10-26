@@ -4,6 +4,7 @@ Play_halloween::Play_halloween()
 {
 	state = new State;
 	hero = new Hero;
+	bg = new MySprite();
 }
 
 Play_halloween::~Play_halloween()
@@ -15,12 +16,15 @@ void Play_halloween::free()
 {
 	delete state;
 	delete hero;
+	delete bg;
 }
 
 	
 void Play_halloween::load( int screen_w, int screen_h )
 {
 	hero->load( screen_w, screen_h );
+	bg->setName( "play_desert-bg" );
+	bg->load( "data/sprites/play/0.png" );
 	//...
 }
 
@@ -32,8 +36,10 @@ void Play_halloween::handle( sf::Event &event )
 
 void Play_halloween::draw( sf::RenderWindow* &window )
 {
+	window->draw( bg->get() );
 	hero->draw( window );
 	
+	bg->fadein( 2 );
 	hero->fadein( 2 );
 }
 
