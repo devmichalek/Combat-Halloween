@@ -4,6 +4,7 @@ Play_desert::Play_desert()
 {
 	state = new State;
 	hero = new Hero;
+	bg = new MySprite;
 }
 
 Play_desert::~Play_desert()
@@ -15,12 +16,15 @@ void Play_desert::free()
 {
 	delete state;
 	delete hero;
+	delete bg;
 }
 
 	
 void Play_desert::load( int screen_w, int screen_h )
 {
 	hero->load( screen_w, screen_h );
+	bg->setName( "play_desert-bg" );
+	bg->load( "data/sprites/play/3.png" );
 	//...
 }
 
@@ -32,8 +36,10 @@ void Play_desert::handle( sf::Event &event )
 
 void Play_desert::draw( sf::RenderWindow* &window )
 {
+	window->draw( bg->get() );
 	hero->draw( window );
 	
+	bg->fadein( 2 );
 	hero->fadein( 2 );
 }
 
