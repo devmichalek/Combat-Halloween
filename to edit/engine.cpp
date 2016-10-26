@@ -194,7 +194,7 @@ void Engine::states()
 	}
 	
 	// winter state
-	if( core->getState() == 3 )
+	if( core->getState() == 2 )
 	{
 		play_winter->draw( core->getWindow() );
 	}
@@ -206,13 +206,13 @@ void Engine::states()
 	}
 	
 	// desert state
-	if( core->getState() == 3 )
+	if( core->getState() == 4 )
 	{
 		play_desert->draw( core->getWindow() );
 	}
 	
 	// halloween state
-	if( core->getState() == 3 )
+	if( core->getState() == 5 )
 	{
 		play_halloween->draw( core->getWindow() );
 	}
