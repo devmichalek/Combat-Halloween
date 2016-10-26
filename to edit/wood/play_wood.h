@@ -8,7 +8,7 @@ class Play_wood
 {
 	State* state;
 	Hero* hero;
-	
+	MySprite* bg;
 	
 public:
 
