@@ -4,6 +4,7 @@ Play_winter::Play_winter()
 {
 	state = new State;
 	hero = new Hero;
+	bg = new MySprite;
 }
 
 Play_winter::~Play_winter()
@@ -15,12 +16,15 @@ void Play_winter::free()
 {
 	delete state;
 	delete hero;
+	delete bg;
 }
 
 	
 void Play_winter::load( int screen_w, int screen_h )
 {
 	hero->load( screen_w, screen_h );
+	bg->setName( "play_desert-bg" );
+	bg->load( "data/sprites/play/2.png" );
 	//...
 }
 
@@ -32,8 +36,10 @@ void Play_winter::handle( sf::Event &event )
 
 void Play_winter::draw( sf::RenderWindow* &window )
 {
+	window->draw( bg->get() );
 	hero->draw( window );
 	
+	bg->fadein( 2 );
 	hero->fadein( 2 );
 }
 
