@@ -7,6 +7,7 @@ class Play_halloween
 {
 	State* state;
 	Hero* hero;
+	MySprite* bg;
 	
 public:
 
