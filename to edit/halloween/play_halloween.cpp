@@ -22,10 +22,21 @@ void Play_halloween::free()
 	
 void Play_halloween::load( int screen_w, int screen_h )
 {
-	hero->load( screen_w, screen_h );
 	bg->setName( "play_desert-bg" );
 	bg->load( "data/sprites/play/0.png" );
 	//...
+}
+
+void Play_halloween::setHero( int screen_w, int screen_h, int type )
+{
+	if( type == 0 )
+	{
+		hero->load( screen_w, screen_h, "data/sprites/hero/0/" );
+	}
+	else
+	{
+		hero->load( screen_w, screen_h, "data/sprites/hero/1/" );
+	}
 }
 
 
