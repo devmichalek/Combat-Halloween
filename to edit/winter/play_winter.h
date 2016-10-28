@@ -16,6 +16,7 @@ public:
     void free();
 	
     void load( int screen_w, int screen_h );
+	void setHero( int screen_w, int screen_h, int type );
 
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
