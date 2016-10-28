@@ -33,10 +33,13 @@ public:
 	~Hero();
 	void free();
 	
-	void load( int screen_w, int y );
+	void load( int& screen_w, int& y, string path );
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
+	
+	void moveLeft();
+	void moveRight();
 };
