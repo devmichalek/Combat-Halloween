@@ -1,13 +1,14 @@
 #pragma once
 
 #include "templates/state.h"
+#include "templates/moving_bg.h"
 #include "hero/hero.h"
 
 class Play_desert
 {
 	State* state;
 	Hero* hero;
-	MySprite* bg;
+	Moving_bg* bg;
 	
 public:
 
@@ -16,6 +17,7 @@ public:
     void free();
 	
     void load( int screen_w, int screen_h );
+	void setHero( int screen_w, int screen_h, int type );
 
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
