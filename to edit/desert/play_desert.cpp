@@ -4,7 +4,7 @@ Play_desert::Play_desert()
 {
 	state = new State;
 	hero = new Hero;
-	bg = new MySprite;
+	bg = new Moving_bg;
 }
 
 Play_desert::~Play_desert()
@@ -22,10 +22,20 @@ void Play_desert::free()
 	
 void Play_desert::load( int screen_w, int screen_h )
 {
-	hero->load( screen_w, screen_h );
-	bg->setName( "play_desert-bg" );
 	bg->load( "data/sprites/play/3.png" );
 	//...
+}
+
+void Play_desert::setHero( int screen_w, int screen_h, int type )
+{
+	if( type == 0 )
+	{
+		hero->load( screen_w, screen_h, "data/sprites/hero/0/" );
+	}
+	else
+	{
+		hero->load( screen_w, screen_h, "data/sprites/hero/1/" );
+	}
 }
 
 
@@ -36,7 +46,7 @@ void Play_desert::handle( sf::Event &event )
 
 void Play_desert::draw( sf::RenderWindow* &window )
 {
-	window->draw( bg->get() );
+	bg->draw( window );
 	hero->draw( window );
 	
 	bg->fadein( 2 );
