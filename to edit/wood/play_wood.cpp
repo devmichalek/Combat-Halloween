@@ -4,7 +4,7 @@ Play_wood::Play_wood()
 {
 	state = new State;
 	hero = new Hero;
-	bg = new MySprite;
+	bg = new Moving_bg;
 }
 
 Play_wood::~Play_wood()
@@ -22,10 +22,19 @@ void Play_wood::free()
 	
 void Play_wood::load( int screen_w, int screen_h )
 {
-	hero->load( screen_w, screen_h );
-	bg->setName( "play_wood-bg" );
 	bg->load( "data/sprites/play/1.png" );
-	//...
+}
+
+void Play_wood::setHero( int screen_w, int screen_h, int type )
+{
+	if( type == 0 )
+	{
+		hero->load( screen_w, screen_h, "data/sprites/hero/0/" );
+	}
+	else
+	{
+		hero->load( screen_w, screen_h, "data/sprites/hero/1/" );
+	}
 }
 
 
@@ -36,7 +45,7 @@ void Play_wood::handle( sf::Event &event )
 
 void Play_wood::draw( sf::RenderWindow* &window )
 {
-	window->draw( bg->get() );
+	bg->draw( window );
 	hero->draw( window );
 	
 	bg->fadein( 2 );
