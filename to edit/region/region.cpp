@@ -32,8 +32,12 @@ void Region::load( string path )
 	}
 	else
 	{
+		string line;
 		
+		file >> line;
 	}
+	
+	file.close();
 }
 
 void Region::draw( sf::RenderWindow* &window )
@@ -49,10 +53,10 @@ void Region::handle( sf::Event &event )
 	
 void Region::fadein( int v, int max )
 {
-	region.fadein( v, max );
+	picture.fadein( v, max );
 }
 
 void Region::fadeout( int v, int min )
 {
-	region.fadeout( v, min );
+	picture.fadeout( v, min );
 }
