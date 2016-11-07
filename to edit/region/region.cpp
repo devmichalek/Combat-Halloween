@@ -1,4 +1,5 @@
 #include "region/region.h"
+#include <fstream>
 
 Region::Region()
 {
@@ -20,7 +21,19 @@ void Region::free()
 void Region::load( string path )
 {
 	picture.setName( "region-" + path );
+	picture.load( path + ".png" );
 	
+	fstream file; // to set x and y of picture
+	file.open( path + ".txt" );
+	
+	if( file.bad() )
+	{
+		printf( "Not loaded %s\n", path.c_str() );
+	}
+	else
+	{
+		
+	}
 }
 
 void Region::draw( sf::RenderWindow* &window )
@@ -34,12 +47,12 @@ void Region::handle( sf::Event &event )
 }
 
 	
-void Region::fadein( int v = 1, int max = 255 )
+void Region::fadein( int v, int max )
 {
-	
+	region.fadein( v, max );
 }
 
-void Region::fadeout( int v = 1, int min = 0 )
+void Region::fadeout( int v, int min )
 {
-	
+	region.fadeout( v, min );
 }
