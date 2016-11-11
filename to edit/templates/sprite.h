@@ -25,6 +25,9 @@ class MySprite :public Border, public Color
     int nr;		// How many offset's, 0 = blank texture, 1 = loaded image, 1 < image with offsets
     int offset;	// Topical offset
 	
+	int safe_width;
+	int safe_height;
+	
 	
 public:
 

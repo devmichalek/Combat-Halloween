@@ -29,8 +29,8 @@ MySprite::MySprite( int x, int y, sf::Uint8 alpha )
 	color.b = 0xFF;
 	color.a = alpha;
 	
-    width = 0;
-	height = 0;
+    safe_width = width = 0;
+	safe_height = height = 0;
 	left = x;
 	top = y;
 	
@@ -69,8 +69,8 @@ void MySprite::free()
 	color.b = 0xFF;
 	color.a = 0x00;
 	
-    width = 0;
-	height = 0;
+    safe_width = width = 0;
+	safe_height = height = 0;
 	left = 0;
 	top = 0;
 	
@@ -135,8 +135,8 @@ void MySprite::load( string path, int nr )
 			{
 				sprite->setTexture( *texture );
 				sprite->setColor( color );
-				width = texture->getSize().x;
-				height = texture->getSize().y;
+				safe_width = width = texture->getSize().x;
+				safe_height = height = texture->getSize().y;
 			}
 		}
 		catch( string msg )
@@ -155,8 +155,8 @@ void MySprite::load( string path, int nr )
 			}
 			else
 			{
-				width = texture->getSize().x / nr;
-				height = texture->getSize().y;
+				safe_width = width = texture->getSize().x / nr;
+				safe_height = height = texture->getSize().y;
 			}
 			
 			sf::IntRect r;	// temporary rectangle
@@ -227,8 +227,8 @@ void MySprite::create( int w, int h )
 		else
 		{
 			sprite->setTexture( *texture );
-			width = w;
-			height = h;
+			safe_width = width = w;
+			safe_height = height = h;
 		}
 	}
 	catch( string msg )
@@ -484,8 +484,8 @@ void MySprite::setOffset( int n )
 
 void MySprite::setScale( float x, float y )
 {
-	width *= x;
-	height *= y;
+	width = safe_width * x;
+	height = safe_height * y;
 	
     if( nr == 0 || nr == 1 )
     {
