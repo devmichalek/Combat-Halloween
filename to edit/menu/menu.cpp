@@ -92,7 +92,7 @@ void Menu::load( int screen_width, int screen_height )
 	
 	version->setID( "menu-version-text" );
 	version->setFont( "data/fonts/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 28.10.2016" );
+	version->setText( "latest edition 11.11.2016" );
 	version->setPosition( screen_width - version->getWidth() - 3, screen_height - version->getHeight() -7 );
 	
 	setkeyboard->load( 100, music_volume->getRight(), screen_height/2 + 100 );
