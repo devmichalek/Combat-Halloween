@@ -6,7 +6,7 @@
 // Create objects.
 Engine::Engine()
 {
-    core = new Core( 1000, 750, -2 );
+    core = new Core( 1000, 750, -2, 120 );
     core->load( "Ninja" );
 	
 	loading = new Loading;
@@ -48,35 +48,35 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
-		case 5:
+		case 1:
 		intro->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 15:
+		case 2:
 		menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 22:
+		case 3:
 		level_menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 70:
+		case 4:
 		play_wood->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 78:
+		case 5:
 		play_halloween->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 91:
+		case 6:
 		play_desert->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 92:
+		case 7:
 		play_winter->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 99:
+		case 8:
 		srand( time( NULL ) );
 		break;
 
@@ -183,6 +183,11 @@ void Engine::states()
 		else if( level_menu->nextState() )
 		{
 			core->getState() = level_menu->getMap() +2;
+			
+			if( core->getState() == 2 ) play_winter->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+			else if( core->getState() == 3 ) play_wood->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+			else if( core->getState() == 4 ) play_desert->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+			else if( core->getState() == 5 ) play_halloween->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
 			
 			level_menu->reloadMusic();
 			Mix_HaltMusic();
