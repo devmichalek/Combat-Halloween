@@ -69,11 +69,11 @@ void Character::draw( sf::RenderWindow* &window )
 	window->draw( two.get() );
 	
 	offset ++;
-	if( offset == how_many *3 )
+	if( offset == how_many *6 )
 		offset = 0;
 		
-	one.setOffset( offset /3 );
-	two.setOffset( offset /3 );
+	one.setOffset( offset /6 );
+	two.setOffset( offset /6 );
 	
 	window->draw( text.get() );
 	window->draw( information.get() );
