@@ -1,6 +1,7 @@
 #pragma once
 
 #include "templates/sprite.h"
+#include <vector>
 
 class Hero
 {
@@ -11,6 +12,10 @@ class Hero
 	
 	int nr;
 	MySprite* sprite;
+	
+	vector<int*> keys;
+	int vel;
+	bool right;
 	
 	enum Activity
 	{
@@ -28,6 +33,8 @@ class Hero
 	};
 	
 public:
+
+	int strToInt( string s );
 	
 	Hero();
 	~Hero();
@@ -42,4 +49,5 @@ public:
 	
 	void moveLeft();
 	void moveRight();
+	void jump();
 };
