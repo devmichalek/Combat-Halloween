@@ -51,6 +51,9 @@ void Play_desert::draw( sf::RenderWindow* &window )
 	
 	bg->fadein( 2 );
 	hero->fadein( 2 );
+	
+	hero->moveLeft();
+	hero->moveRight();
 }
 
 	
