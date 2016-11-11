@@ -6,7 +6,7 @@
 // Create objects.
 Engine::Engine()
 {
-    core = new Core( 1000, 750, -2, 120 );
+    core = new Core( 1000, 750, -2, 120 );	// new FPS
     core->load( "Ninja" );
 	
 	loading = new Loading;
