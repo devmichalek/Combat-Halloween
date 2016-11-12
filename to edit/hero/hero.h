@@ -17,6 +17,12 @@ class Hero
 	int vel;
 	bool right;
 	
+	bool jump_is_active;
+	int jump_counter;
+	int jump_line;
+	
+	int gravity;
+	
 	enum Activity
 	{
 		IDLE = 0,

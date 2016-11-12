@@ -36,6 +36,10 @@ Hero::Hero()
 	
 	vel = 0;
 	right = true;
+	
+	jump_is_active = false;
+	jump_counter = 0;
+	jump_line = 0;
 }
 
 Hero::~Hero()
@@ -73,6 +77,10 @@ void Hero::free()
 	
 	vel = 0;
 	right = true;
+	
+	jump_is_active = false;
+	jump_counter = 0;
+	jump_line = 0;
 }
 
 	
