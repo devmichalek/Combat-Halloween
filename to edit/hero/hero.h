@@ -53,7 +53,7 @@ public:
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
 	
-	void moveLeft();
-	void moveRight();
+	bool moveLeft();
+	bool moveRight();
 	void jump();
 };

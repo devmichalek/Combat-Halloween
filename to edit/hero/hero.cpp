@@ -132,6 +132,7 @@ void Hero::load( int& screen_w, int& y, string path )
 	file.close();
 	
 	vel = 1;
+	jump_line = off_const*delay + 10*delay; // need to be more than off_const*delay
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -141,7 +142,10 @@ void Hero::draw( sf::RenderWindow* &window )
 	
 	offset ++;
 	if( offset == off_const *delay )
+	{
 		offset = 0;
+		jump_is_active = false;
+	}
 		
 	which = IDLE;
 }
@@ -170,38 +174,15 @@ void Hero::fadeout( int v, int min )
 	}
 }
 
-void Hero::moveLeft()
+bool Hero::moveLeft()
 {
-	if( keys[ 0 ][ 1 ] == -1 )
+	bool act = false;
+	
+	if( !jump_is_active )
 	{
-		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 0 ] ) ) )
+		if( keys[ 0 ][ 1 ] == -1 )
 		{
-			which = RUN;
-			
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setScale( -0.25, 0.25 );
-				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
-			}
-
-			if( right )
-			{
-				//printf( "%d\n", sprite[ 1 ].getX() );
-				//printf( "%d\n", sprite[ 1 ].getWidth() );
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setPosition( sprite[ i ].getX() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
-				}
-				right = false;
-				//printf( "%d\n", sprite[ 1 ].getX() );
-			}
-		}
-	}
-	else
-	{
-		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 0 ] ) ) )
-		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 1 ] ) ) )
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 0 ] ) ) )
 			{
 				which = RUN;
 				
@@ -210,49 +191,61 @@ void Hero::moveLeft()
 					sprite[ i ].setScale( -0.25, 0.25 );
 					sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
 				}
-				
+
 				if( right )
 				{
+					//printf( "%d\n", sprite[ 1 ].getX() );
+					//printf( "%d\n", sprite[ 1 ].getWidth() );
 					for( int i = 0; i < nr; i++ )
 					{
-						sprite[ i ].setPosition( sprite[ i ].getRight() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
+						sprite[ i ].setPosition( sprite[ i ].getX() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
 					}
 					right = false;
+					//printf( "%d\n", sprite[ 1 ].getX() );
+				}
+				act = true;
+			}
+		}
+		else
+		{
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 0 ] ) ) )
+			{
+				if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 1 ] ) ) )
+				{
+					which = RUN;
+					
+					for( int i = 0; i < nr; i++ )
+					{
+						sprite[ i ].setScale( -0.25, 0.25 );
+						sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
+					}
+					
+					if( right )
+					{
+						for( int i = 0; i < nr; i++ )
+						{
+							sprite[ i ].setPosition( sprite[ i ].getRight() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
+						}
+						right = false;
+					}
+					act = true;
 				}
 			}
 		}
 	}
+	
+	return act;
 }
 
-void Hero::moveRight()
+bool Hero::moveRight()
 {
-	if( keys[ 1 ][ 1 ] == -1 )
+	bool act = false;
+	
+	if( !jump_is_active )
 	{
-		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 0 ] ) ) )
+		if( keys[ 1 ][ 1 ] == -1 )
 		{
-			which = RUN;
-			
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setScale( 0.25, 0.25 );
-				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
-			}
-			
-			if( !right )
-			{
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setPosition( sprite[ i ].getX() - sprite[ i ].getWidth(), sprite[ i ].getY() );
-				}
-				right = true;
-			}
-		}
-	}
-	else
-	{
-		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 0 ] ) ) )
-		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 1 ] ) ) )
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 0 ] ) ) )
 			{
 				which = RUN;
 				
@@ -270,12 +263,93 @@ void Hero::moveRight()
 					}
 					right = true;
 				}
+				
+				act = true;
+			}
+		}
+		else
+		{
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 0 ] ) ) )
+			{
+				if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 1 ] ) ) )
+				{
+					which = RUN;
+					
+					for( int i = 0; i < nr; i++ )
+					{
+						sprite[ i ].setScale( 0.25, 0.25 );
+						sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
+					}
+					
+					if( !right )
+					{
+						for( int i = 0; i < nr; i++ )
+						{
+							sprite[ i ].setPosition( sprite[ i ].getX() - sprite[ i ].getWidth(), sprite[ i ].getY() );
+						}
+						right = true;
+					}
+					
+					act = true;
+				}
 			}
 		}
 	}
+	
+	return act;
 }
 
 void Hero::jump()
 {
+	if( !jump_is_active && jump_counter == 0 )
+	{
+		if( keys[ 2 ][ 1 ] == -1 )
+		{
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 2 ][ 0 ] ) ) )
+			{
+				jump_is_active = true;
+				offset = 0;
+				jump_counter = 1;
+			}
+		}
+		else
+		{
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 2 ][ 0 ] ) ) )
+			{
+				if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 2 ][ 1 ] ) ) )
+				{
+					jump_is_active = true;
+					offset = 0;
+					jump_counter = 1;
+				}
+			}
+		}
+	}
+	else if( jump_counter < off_const*delay )
+	{
+		which = JUMP;
+		
+		if( right )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2, sprite[ i ].getY() );
+			}
+		}
+		else
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2, sprite[ i ].getY() );
+			}
+		}
+	}
 	
+	
+		
+	if( jump_counter >= jump_line )
+		jump_counter = 0;
+	else if( jump_counter > 0 )
+		jump_counter++;
+		
 }
