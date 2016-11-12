@@ -51,8 +51,9 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	bg->fadein( 2 );
 	hero->fadein( 2 );
 	
-	hero->moveLeft();
-	hero->moveRight();
+	if( hero->moveLeft() ) {}
+	else { hero->moveRight(); }
+	hero->jump();
 }
 
 	
