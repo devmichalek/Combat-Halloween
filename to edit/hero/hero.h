@@ -21,6 +21,10 @@ class Hero
 	int jump_counter;
 	int jump_line;
 	
+	bool attack_is_active;
+	int attack_counter;
+	int attack_line;
+	
 	int gravity;
 	
 	enum Activity
