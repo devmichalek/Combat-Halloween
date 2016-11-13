@@ -41,6 +41,8 @@ class Hero
 public:
 
 	int strToInt( string s );
+	bool keyIsOn( int a );
+	bool keysAreOn( int a, int b );
 	
 	Hero();
 	~Hero();
@@ -56,4 +58,5 @@ public:
 	bool moveLeft();
 	bool moveRight();
 	void jump();
+	void attack();
 };

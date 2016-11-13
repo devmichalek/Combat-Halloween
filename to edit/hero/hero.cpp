@@ -3,9 +3,9 @@
 
 int Hero::strToInt( string s )
 {
-    bool m=false;
-    int tmp=0;
-    int i=0;
+    bool m = false;
+    int tmp = 0;
+    unsigned i = 0;
 	
     if(s[0]=='-')
     {
@@ -20,6 +20,29 @@ int Hero::strToInt( string s )
     }
 	
     return m ? -tmp : tmp;   
+}
+
+bool Hero::keyIsOn( int a )
+{
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Hero::keysAreOn( int a, int b )
+{
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( b ) ) )
+		{
+			return true;
+		}
+	}
+	
+	return false;
 }
 
 Hero::Hero()
@@ -182,7 +205,7 @@ bool Hero::moveLeft()
 	{
 		if( keys[ 0 ][ 1 ] == -1 )
 		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 0 ] ) ) )
+			if( keyIsOn( keys[ 0 ][ 0 ] ) )
 			{
 				which = RUN;
 				
@@ -194,24 +217,20 @@ bool Hero::moveLeft()
 
 				if( right )
 				{
-					//printf( "%d\n", sprite[ 1 ].getX() );
-					//printf( "%d\n", sprite[ 1 ].getWidth() );
 					for( int i = 0; i < nr; i++ )
 					{
 						sprite[ i ].setPosition( sprite[ i ].getX() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
 					}
 					right = false;
-					//printf( "%d\n", sprite[ 1 ].getX() );
 				}
+				
 				act = true;
 			}
 		}
 		else
 		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 0 ] ) ) )
+			if( keysAreOn( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) )
 			{
-				if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 0 ][ 1 ] ) ) )
-				{
 					which = RUN;
 					
 					for( int i = 0; i < nr; i++ )
@@ -228,8 +247,8 @@ bool Hero::moveLeft()
 						}
 						right = false;
 					}
+					
 					act = true;
-				}
 			}
 		}
 	}
@@ -245,7 +264,7 @@ bool Hero::moveRight()
 	{
 		if( keys[ 1 ][ 1 ] == -1 )
 		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 0 ] ) ) )
+			if( keyIsOn( keys[ 1 ][ 0 ] ) )
 			{
 				which = RUN;
 				
@@ -269,10 +288,8 @@ bool Hero::moveRight()
 		}
 		else
 		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 0 ] ) ) )
+			if( keysAreOn( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) )
 			{
-				if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 1 ][ 1 ] ) ) )
-				{
 					which = RUN;
 					
 					for( int i = 0; i < nr; i++ )
@@ -291,7 +308,6 @@ bool Hero::moveRight()
 					}
 					
 					act = true;
-				}
 			}
 		}
 	}
@@ -305,7 +321,7 @@ void Hero::jump()
 	{
 		if( keys[ 2 ][ 1 ] == -1 )
 		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 2 ][ 0 ] ) ) )
+			if( keyIsOn( keys[ 2 ][ 0 ] ) )
 			{
 				jump_is_active = true;
 				offset = 0;
@@ -314,14 +330,11 @@ void Hero::jump()
 		}
 		else
 		{
-			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 2 ][ 0 ] ) ) )
+			if( keysAreOn( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) )
 			{
-				if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 2 ][ 1 ] ) ) )
-				{
 					jump_is_active = true;
 					offset = 0;
 					jump_counter = 1;
-				}
 			}
 		}
 	}
@@ -352,4 +365,29 @@ void Hero::jump()
 	else if( jump_counter > 0 )
 		jump_counter++;
 		
+}
+
+void Hero::attack()
+{
+	if( keys[ 7 ][ 1 ] == -1 )
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 7 ][ 0 ] ) ) )
+		{
+			jump_is_active = true;
+			offset = 0;
+			jump_counter = 1;
+		}
+	}
+	else
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 7 ][ 0 ] ) ) )
+		{
+			if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ 7 ][ 1 ] ) ) )
+			{
+				jump_is_active = true;
+				offset = 0;
+				jump_counter = 1;
+			}
+		}
+	}
 }
