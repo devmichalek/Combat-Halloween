@@ -169,7 +169,7 @@ void Hero::load( int& screen_w, int& y, string path )
 	attack_line = off_const*delay + 8*delay; // need to be more than off_const*delay
 	
 	
-	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 7 );
+	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -184,8 +184,6 @@ void Hero::draw( sf::RenderWindow* &window )
 		jump_is_active = false;
 		attack_is_active = false;
 	}
-	
-	which = IDLE;
 }
 
 void Hero::handle( sf::Event &event )
@@ -330,6 +328,11 @@ bool Hero::moveRight()
 	return act;
 }
 
+void Hero::idle()
+{
+	which = IDLE;
+}
+
 void Hero::jump()
 {
 	if( !jump_is_active && jump_counter == 0 )
@@ -382,57 +385,35 @@ void Hero::jump()
 		
 }
 
-void Hero::attack()
+bool Hero::attack()
 {
-	if( !attack_is_active && attack_counter == 0 )
+	if( !attack_is_active && !jump_is_active )
 	{
-		if( keys[ 7 ][ 1 ] == -1 )
+		if( (keys[ 7 ][ 1 ] == -1 && keyIsOn( keys[ 7 ][ 0 ] )) || keysAreOn( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
 		{
-			if( keyIsOn( keys[ 7 ][ 0 ] ) )
+			attack_is_active = true;
+			offset = 0;
+			attack_counter = 1;
+			
+			if( !right )
 			{
-				attack_is_active = true;
-				
-				if( !jump_is_active )
-					offset = 0;
-					
-				attack_counter = 1;
-				
-				/*
-				if( right )
-				{
-					for( int i = 0; i < nr; i++ )
-					{
-						sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -= );
-					}
-				}
-				 */
-			}
-		}
-		else
-		{
-			if( keysAreOn( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
-			{
-				attack_is_active = true;
-				
-				if( !jump_is_active )
-					offset = 0;
-					
-				attack_counter = 1;
+				// printf( "b %d\n", sprite[ ATTACK ].getX() );
+				sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
+				// printf( "a %d\n", sprite[ ATTACK ].getX() );
 			}
 		}
 	}
-	else if( attack_counter < off_const*delay )
+	else if( attack_is_active )
 	{
 		which = ATTACK;
-		
-		if( jump_is_active )
-			which = JUMP_ATTACK;
+	}
+	else
+	{
+		if( !right )
+		{
+			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX() + 44, sprite[ ATTACK ].getY() );
+		}
 	}
 	
-	
-		
-	if( attack_counter >= attack_line )
-		attack_counter = 0;
-	else if( attack_counter > 0 )
-		attack_counter++;
+	return attack_is_active;
 }
