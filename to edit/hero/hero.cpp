@@ -166,7 +166,7 @@ void Hero::load( int& screen_w, int& y, string path )
 	
 	vel = 1;
 	jump_line = off_const*delay + 10*delay; // need to be more than off_const*delay
-	attack_line = off_const*delay + 8*delay; // need to be more than off_const*delay
+	attack_line = off_const*delay + 2*delay; // need to be more than off_const*delay
 	
 	
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
@@ -333,7 +333,7 @@ void Hero::idle()
 	which = IDLE;
 }
 
-void Hero::jump()
+bool Hero::jump()
 {
 	if( !jump_is_active && jump_counter == 0 )
 	{
@@ -383,11 +383,13 @@ void Hero::jump()
 	else if( jump_counter > 0 )
 		jump_counter++;
 		
+	
+	return jump_is_active;	
 }
 
 bool Hero::attack()
 {
-	if( !attack_is_active && !jump_is_active )
+	if( !attack_is_active && attack_counter == 0 && !jump_is_active )
 	{
 		if( (keys[ 7 ][ 1 ] == -1 && keyIsOn( keys[ 7 ][ 0 ] )) || keysAreOn( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
 		{
@@ -413,6 +415,15 @@ bool Hero::attack()
 		{
 			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX() + 44, sprite[ ATTACK ].getY() );
 		}
+	}
+	
+	if( attack_counter >= attack_line )
+	{
+		attack_counter = 0;
+	}
+	else if( attack_counter > 0 )
+	{
+		attack_counter ++;
 	}
 	
 	return attack_is_active;

@@ -62,6 +62,6 @@ public:
 	bool moveLeft();
 	bool moveRight();
 	void idle();
-	void jump();
+	bool jump();
 	bool attack();
 };
