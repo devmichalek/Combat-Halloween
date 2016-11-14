@@ -3,65 +3,76 @@
 #include "templates/sprite.h"
 #include <vector>
 
+enum
+{
+	IDLE = 0,
+	RUN,
+	THROW,
+	ATTACK,
+	SLIDE,
+	CLIMB,
+	GLIDE,
+	JUMP,
+	JUMP_ATTACK,
+	JUMP_THROW,
+	DEAD,
+	STRENGTH = 10
+};
+
+class Activity
+{
+	
+public:
+	int line;
+	int counter;
+	bool active;
+	
+	Activity();
+	~Activity();
+	void free();
+	void summarize();
+};
+
+
+
 class Hero
 {
-	int which;	// which activity is actual
-	int offset;	// counter
-	int delay;
-	const volatile int off_const=0; 	// const how many offsets we have
-	
-	int nr;
+	int nr;	// Tell us how many sprites we have.
 	MySprite* sprite;
 	
-	vector<int*> keys;
-	int vel;
-	bool right;
+	int vel;	// Velocity.
+	int which;	// Which activity is active.
+	int offset;	// Which offset is active.
+	int delay;
+	bool right;	// Direction.
+	int gravity;	// Force of gravity.
 	
-	bool jump_is_active;
-	int jump_counter;
-	int jump_line;
+	vector <int*> keys; // Which keys are responsible for particular activity.
 	
-	bool attack_is_active;
-	int attack_counter;
-	int attack_line;
-	
-	int gravity;
-	
-	enum Activity
-	{
-		IDLE = 0,
-		RUN,
-		THROW,
-		ATTACK,
-		SLIDE,
-		CLIMB,
-		GLIDE,
-		JUMP,
-		JUMP_ATTACK,
-		JUMP_THROW,
-		DEAD
-	};
+	Activity j;	// Jump.
+	Activity a; // Attack.
+
 	
 public:
 
+	void fadein( int v = 1, int max = 255 );
+	void fadeout( int v = 1, int min = 0 );
+
 	int strToInt( string s );
-	bool keyIsOn( int a );
-	bool keysAreOn( int a, int b );
+	bool checkKey( int a );
+	bool checkKeys( int a, int b );
 	
 	Hero();
 	~Hero();
 	void free();
 	
 	void load( int& screen_w, int& y, string path );
-	void draw( sf::RenderWindow* &window );
-	void handle( sf::Event &event );
+	void draw( sf::RenderWindow* &window );	
 	
-	void fadein( int v = 1, int max = 255 );
-	void fadeout( int v = 1, int min = 0 );
-	
+	void idle();
 	bool moveLeft();
 	bool moveRight();
-	void idle();
+	
 	bool jump();
 	bool attack();
 };

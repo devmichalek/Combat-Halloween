@@ -1,74 +1,100 @@
 #include "hero/hero.h"
 #include <fstream>
 
+Activity::Activity()
+{
+	line = 0;
+	counter = 0;
+	active = false;
+}
+
+Activity::~Activity()
+{
+	free();
+}
+
+void Activity::free()
+{
+	line = 0;
+	counter = 0;
+	active = false;
+}
+
+void Activity::summarize()
+{
+	if( counter >= line )	counter = 0;
+	else if( counter > 0 )	counter++;
+}
+
+
+
+
+void Hero::fadein( int v, int max )
+{
+	for( int i = 0; i < nr; i++ )
+		sprite[ i ].fadein( v, max );
+}
+
+void Hero::fadeout( int v, int min )
+{
+	for( int i = 0; i < nr; i++ )
+		sprite[ i ].fadeout( v, min );
+}
+
+
 int Hero::strToInt( string s )
 {
     bool m = false;
     int tmp = 0;
     unsigned i = 0;
 	
-    if(s[0]=='-')
+    if (s[ 0 ] == '-' )
     {
           i++;
           m = true;
     }
 	
-    while(i<s.size())
+    while( i < s.size() )
     {
-      tmp = 10*tmp+s[i]-48;
+      tmp = 10*tmp+s[ i ] -48;
       i++;
     }
 	
     return m ? -tmp : tmp;   
 }
 
-bool Hero::keyIsOn( int a )
+bool Hero::checkKey( int a )
 {
 	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
-	{
 		return true;
-	}
 	
 	return false;
 }
 
-bool Hero::keysAreOn( int a, int b )
+bool Hero::checkKeys( int a, int b )
 {
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
-	{
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) && b == -1 )
+		return true;
+	else if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
 		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( b ) ) )
-		{
 			return true;
-		}
-	}
-	
 	return false;
 }
+
 
 
 
 Hero::Hero()
 {
-	which = 0;
-	offset = 0;
-	delay = 0;
-	
 	nr = 0;
 	sprite = NULL;
 	
-	int &wr = const_cast <int&> ( off_const ); 
-	wr = 10;
-	
 	vel = 0;
+	which = 0;
+	offset = 0;
+	delay = 0;
 	right = true;
-	
-	jump_is_active = false;
-	jump_counter = 0;
-	jump_line = 0;
-	
-	attack_is_active = false;
-	attack_counter = 0;
-	attack_line = 0;
+	gravity = 0;
 }
 
 Hero::~Hero()
@@ -78,10 +104,6 @@ Hero::~Hero()
 
 void Hero::free()
 {
-	which = 0;
-	offset = 0;
-	delay = 0;
-	
 	if( sprite != NULL )
 	{
 		for( int i = 0; i < nr; i ++ )
@@ -93,7 +115,14 @@ void Hero::free()
 		sprite = NULL;
 		nr = 0;
 	}
-
+	
+	vel = 0;
+	which = 0;
+	offset = 0;
+	delay = 0;
+	right = true;
+	gravity = 0;
+	
 	for( unsigned i = 0; i < keys.size(); i++ )
 	{
 		if( keys[ i ] != NULL )
@@ -104,39 +133,31 @@ void Hero::free()
 	}
 	keys.clear();
 	
-	vel = 0;
-	right = true;
-	
-	jump_is_active = false;
-	jump_counter = 0;
-	jump_line = 0;
-	
-	attack_is_active = false;
-	attack_counter = 0;
-	attack_line = 0;
+	j.free();
+	a.free();
 }
+
+
 
 	
 void Hero::load( int& screen_w, int& y, string path )
 {
 	free();
-	//printf( "--%d--\n", off_const );
-	delay = 6;
 	
-	nr = DEAD +1;
+	
+	nr = STRENGTH +1;
 	sprite = new MySprite [ nr ];
-	
-	// set name, load, set scale, set start position
 	for( int i = 0; i < nr; i++ )
 	{
 		sprite[ i ].setName( "hero-sprite nr " + to_string( i ) );
-		sprite[ i ].load( path + to_string( i ) + ".png", off_const );
+		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
 		sprite[ i ].setScale( 0.25, 0.25 );
 		sprite[ i ].setPosition( 10, y -sprite[ i ].getHeight() -124 );
 	}
+	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
+	
 	
 	fstream file;
-	
 	file.open( "data/txt/menu/keyboard_temporary.txt" );
 	if( file.bad() )
 	{
@@ -145,286 +166,160 @@ void Hero::load( int& screen_w, int& y, string path )
 	else
 	{
 		string line;
-		
-		for( int i = 0; i < 11; i ++ ) // 11 types of action
+		for( int i = 0; i < nr; i ++ )
 		{
 			int* arrow;
 			keys.push_back( arrow );
 			keys[ i ] = new int[ 2 ];
 			
-			file >> line;
-			keys[ i ][ 0 ] = strToInt( line );
-			// printf( "%d\n", key[ 0 ] );
-			
-			file >> line;
-			keys[ i ][ 1 ] = strToInt( line );
-			// printf( "%d\n", key[ 1 ] );
+			file >> line;	keys[ i ][ 0 ] = strToInt( line );
+			file >> line;	keys[ i ][ 1 ] = strToInt( line );
 		}
 	}
-	
 	file.close();
 	
+	
 	vel = 1;
-	jump_line = off_const*delay + 10*delay; // need to be more than off_const*delay
-	attack_line = off_const*delay + 2*delay; // need to be more than off_const*delay
+	which = IDLE;
+	offset = 0;
+	delay = 6;
+	right = true;
+	gravity = 1;
 	
 	
-	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
+	j.line = STRENGTH*delay + 10*delay;
+	a.line = STRENGTH*delay + 2*delay;
 }
 
 void Hero::draw( sf::RenderWindow* &window )
 {
 	window->draw( sprite[ which ].get() );
+	
 	sprite[ which ].setOffset( offset /delay );
 	
 	offset ++;
-	if( offset == off_const *delay )
+	if( offset == STRENGTH *delay )
 	{
 		offset = 0;
-		jump_is_active = false;
-		attack_is_active = false;
+		
+		j.active = false;
+		a.active = false;
 	}
 }
 
-void Hero::handle( sf::Event &event )
-{
-	
-}
 
 
-
-
-void Hero::fadein( int v, int max )
-{
-	for( int i = 0; i < nr; i++ )
-	{
-		sprite[ i ].fadein( v, max );
-	}
-}
-
-void Hero::fadeout( int v, int min )
-{
-	for( int i = 0; i < nr; i++ )
-	{
-		sprite[ i ].fadeout( v, min );
-	}
-}
-
-bool Hero::moveLeft()
-{
-	bool act = false;
-	
-	if( !jump_is_active && !attack_is_active )
-	{
-		if( keys[ 0 ][ 1 ] == -1 )
-		{
-			if( keyIsOn( keys[ 0 ][ 0 ] ) )
-			{
-				which = RUN;
-				
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setScale( -0.25, 0.25 );
-					sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
-				}
-
-				if( right )
-				{
-					for( int i = 0; i < nr; i++ )
-					{
-						sprite[ i ].setPosition( sprite[ i ].getX() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
-					}
-					right = false;
-				}
-				
-				act = true;
-			}
-		}
-		else
-		{
-			if( keysAreOn( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) )
-			{
-				which = RUN;
-				
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setScale( -0.25, 0.25 );
-					sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
-				}
-				
-				if( right )
-				{
-					for( int i = 0; i < nr; i++ )
-					{
-						sprite[ i ].setPosition( sprite[ i ].getRight() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
-					}
-					right = false;
-				}
-				
-				act = true;
-			}
-		}
-	}
-	
-	return act;
-}
-
-bool Hero::moveRight()
-{
-	bool act = false;
-	
-	if( !jump_is_active && !attack_is_active )
-	{
-		if( keys[ 1 ][ 1 ] == -1 )
-		{
-			if( keyIsOn( keys[ 1 ][ 0 ] ) )
-			{
-				which = RUN;
-				
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setScale( 0.25, 0.25 );
-					sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
-				}
-				
-				if( !right )
-				{
-					for( int i = 0; i < nr; i++ )
-					{
-						sprite[ i ].setPosition( sprite[ i ].getX() - sprite[ i ].getWidth(), sprite[ i ].getY() );
-					}
-					right = true;
-				}
-				
-				act = true;
-			}
-		}
-		else
-		{
-			if( keysAreOn( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) )
-			{
-				which = RUN;
-				
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setScale( 0.25, 0.25 );
-					sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
-				}
-				
-				if( !right )
-				{
-					for( int i = 0; i < nr; i++ )
-					{
-						sprite[ i ].setPosition( sprite[ i ].getX() - sprite[ i ].getWidth(), sprite[ i ].getY() );
-					}
-					right = true;
-				}
-				
-				act = true;
-			}
-		}
-	}
-	
-	return act;
-}
 
 void Hero::idle()
 {
 	which = IDLE;
 }
 
+bool Hero::moveLeft()
+{
+	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) )
+	{
+		which = RUN;
+		
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setScale( -0.25, 0.25 );
+			sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
+		}
+		
+		if( right )
+		{
+			for( int i = 0; i < nr; i++ )
+				sprite[ i ].setPosition( sprite[ i ].getX() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
+				
+			right = false;
+		}
+		
+		return true;
+	}
+	
+	return false;
+}
+
+bool Hero::moveRight()
+{
+	if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) )
+	{
+		which = RUN;
+		
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setScale( 0.25, 0.25 );
+			sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
+		}
+		
+		if( !right )
+		{
+			for( int i = 0; i < nr; i++ )
+				sprite[ i ].setPosition( sprite[ i ].getX() - sprite[ i ].getWidth(), sprite[ i ].getY() );
+				
+			right = true;
+		}
+		
+		return true;
+	}
+	
+	return false;
+}
+
+
+
 bool Hero::jump()
 {
-	if( !jump_is_active && jump_counter == 0 )
+	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) )
 	{
-		if( keys[ 2 ][ 1 ] == -1 )
-		{
-			if( keyIsOn( keys[ 2 ][ 0 ] ) )
-			{
-				jump_is_active = true;
-				offset = 0;
-				jump_counter = 1;
-			}
-		}
-		else
-		{
-			if( keysAreOn( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) )
-			{
-				jump_is_active = true;
-				offset = 0;
-				jump_counter = 1;
-			}
-		}
+			offset = 0;
+			j.counter = 1;
+			j.active = true;
 	}
-	else if( jump_counter < off_const*delay )
+	else if( j.active )
 	{
 		which = JUMP;
 		
 		if( right )
 		{
 			for( int i = 0; i < nr; i++ )
-			{
 				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2, sprite[ i ].getY() );
-			}
 		}
 		else
 		{
 			for( int i = 0; i < nr; i++ )
-			{
 				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2, sprite[ i ].getY() );
-			}
 		}
 	}
 	
+	j.summarize();
 	
-		
-	if( jump_counter >= jump_line )
-		jump_counter = 0;
-	else if( jump_counter > 0 )
-		jump_counter++;
-		
-	
-	return jump_is_active;	
+	return j.active;	
 }
 
 bool Hero::attack()
 {
-	if( !attack_is_active && attack_counter == 0 && !jump_is_active )
+	if( a.counter == 0 && checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
 	{
-		if( (keys[ 7 ][ 1 ] == -1 && keyIsOn( keys[ 7 ][ 0 ] )) || keysAreOn( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
-		{
-			attack_is_active = true;
-			offset = 0;
-			attack_counter = 1;
-			
-			if( !right )
-			{
-				// printf( "b %d\n", sprite[ ATTACK ].getX() );
-				sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
-				// printf( "a %d\n", sprite[ ATTACK ].getX() );
-			}
-		}
+		offset = 0;
+		a.counter = 1;
+		a.active = true;
+		
+		if( !right )
+			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
 	}
-	else if( attack_is_active )
+	else if( a.active )
 	{
 		which = ATTACK;
 	}
 	else
 	{
 		if( !right )
-		{
 			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX() + 44, sprite[ ATTACK ].getY() );
-		}
 	}
 	
-	if( attack_counter >= attack_line )
-	{
-		attack_counter = 0;
-	}
-	else if( attack_counter > 0 )
-	{
-		attack_counter ++;
-	}
+	a.summarize();
 	
-	return attack_is_active;
+	return a.active;
 }
