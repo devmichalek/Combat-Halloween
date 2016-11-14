@@ -51,7 +51,7 @@ class Hero
 	
 	Activity j;	// Jump.
 	Activity a; // Attack.
-
+	Activity c; // Climb.
 	
 public:
 
@@ -72,7 +72,7 @@ public:
 	void idle();
 	bool moveLeft();
 	bool moveRight();
-	
 	bool jump();
 	bool attack();
+	bool climb();
 };

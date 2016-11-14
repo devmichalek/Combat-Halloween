@@ -135,6 +135,7 @@ void Hero::free()
 	
 	j.free();
 	a.free();
+	c.free();
 }
 
 
@@ -189,6 +190,7 @@ void Hero::load( int& screen_w, int& y, string path )
 	
 	j.line = STRENGTH*delay + 10*delay;
 	a.line = STRENGTH*delay + 2*delay;
+	c.line = STRENGTH*delay + 2*delay;
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -267,8 +269,6 @@ bool Hero::moveRight()
 	return false;
 }
 
-
-
 bool Hero::jump()
 {
 	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) )
@@ -299,6 +299,32 @@ bool Hero::jump()
 }
 
 bool Hero::attack()
+{
+	if( a.counter == 0 && checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
+	{
+		offset = 0;
+		a.counter = 1;
+		a.active = true;
+		
+		if( !right )
+			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
+	}
+	else if( a.active )
+	{
+		which = ATTACK;
+	}
+	else
+	{
+		if( !right )
+			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX() + 44, sprite[ ATTACK ].getY() );
+	}
+	
+	a.summarize();
+	
+	return a.active;
+}
+
+bool Hero::climb()
 {
 	if( a.counter == 0 && checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
 	{
