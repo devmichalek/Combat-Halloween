@@ -42,7 +42,7 @@ void Play_winter::setHero( int screen_w, int screen_h, int type )
 
 void Play_winter::handle( sf::Event &event )
 {
-	hero->handle( event );
+	// hero->handle( event );
 }
 
 void Play_winter::draw( sf::RenderWindow* &window )
@@ -53,8 +53,7 @@ void Play_winter::draw( sf::RenderWindow* &window )
 	bg->fadein( 2 );
 	hero->fadein( 2 );
 	
-	if( hero->attack() ) {}
-	else if( hero->jump() ) {}
+	if( hero->attack() || hero->jump() ) {}
 	else if( hero->moveLeft() ) {}
 	else if( hero->moveRight() ) {}
 	else hero->idle();
