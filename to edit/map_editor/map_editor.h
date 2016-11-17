@@ -4,6 +4,7 @@
 
 class Map_editor
 {
+	int state;
 	Choose_map* ch_m;
 	
 public:
