@@ -21,4 +21,6 @@ public:
     void load( int screen_w );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
+	
+	int chosenMap();
 };
