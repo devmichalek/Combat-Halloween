@@ -2,7 +2,7 @@
 
 Choose_map::Choose_map()
 {
-	state = 0;
+	state = -1;
 	nr = 0;
 	sprite = NULL;
 }
@@ -14,7 +14,7 @@ Choose_map::~Choose_map()
 
 void Choose_map::free()
 {
-	state = 0;
+	state = -1;
 	
 	if( sprite != NULL )
 	{
@@ -68,5 +68,23 @@ void Choose_map::draw( sf::RenderWindow* &window )
 
 void Choose_map::handle( sf::Event &event )
 {
-	
+	if( event.type == sf::Event::MouseButtonPressed )
+	{
+		int x = event.mouseButton.x;
+		int y = event.mouseButton.y;
+		
+		for( int i = 0; i < nr; i++ )
+		{
+			if( sprite[ i ].checkCollision( x, y ) )
+			{
+				state = i;
+				// printf( "%d\n", i );
+			}
+		}
+	}
+}
+
+int Choose_map::chosenMap()
+{
+	return state;
 }
