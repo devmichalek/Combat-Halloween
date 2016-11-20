@@ -10,7 +10,7 @@ class Palette
 	int nr;
 	MySprite* block;
 
-	
+	MySprite bar;
 	
 public:
 	
@@ -18,7 +18,7 @@ public:
     ~Palette();
 	void free();
 
-    void load( int screen_w );
+    void load( int screen_w, int screen_h, int num );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 };
