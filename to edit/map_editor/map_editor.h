@@ -1,11 +1,15 @@
 #pragma once
 
 #include "map_editor/choose_map.h"
+#include "map_editor/palette.h"
 
 class Map_editor
 {
 	int state;
+	int w, h;
+	
 	Choose_map* ch_m;
+	Palette* palette;
 	
 public:
 	
