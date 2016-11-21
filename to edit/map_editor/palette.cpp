@@ -81,5 +81,39 @@ void Palette::draw( sf::RenderWindow* &window )
 
 void Palette::handle( sf::Event &event )
 {
-	
+	int x, y;
+
+	for( int i = 0; i < nr; i ++ )
+	{
+		block[ i ].setAlpha( 100 );
+	}
+
+	if( event.type == sf::Event::MouseMoved )
+	{
+		x = event.mouseMove.x;
+		y = event.mouseMove.y;
+		
+		for( int i = 0; i < nr; i ++ )
+		{
+			if( block[ i ].checkCollision( x, y ) )
+			{
+				block[ i ].setAlpha( 150 );
+				break;
+			}
+		}
+	}
+
+	if( event.type == sf::Event::MouseButtonPressed )
+	{
+		x = event.mouseButton.x;
+		y = event.mouseButton.y;
+			
+		for( int i = 0; i < nr; i ++ )
+		{
+			if( block[ i ].checkCollision( x, y ) )
+			{
+				break;
+			}
+		}
+	}
 }
