@@ -12,6 +12,8 @@ class Palette
 
 	MySprite bar;
 	
+	int which;
+	
 public:
 	
 	Palette();
