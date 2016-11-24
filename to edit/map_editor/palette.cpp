@@ -7,6 +7,10 @@ Palette::Palette()
 	folder_name = "";
 	nr = 0;
 	block = NULL;
+	
+	which = -1;
+	x = -1;
+	y = -1;
 }
 
 Palette::~Palette()
@@ -25,6 +29,10 @@ void Palette::free()
 	
 	folder_name = "";
 	bar.free();
+	
+	which = -1;
+	x = -1;
+	y = -1;
 }
 
 
@@ -72,46 +80,63 @@ void Palette::load( int screen_w, int screen_h, int num )
 void Palette::draw( sf::RenderWindow* &window )
 {
 	window->draw( bar.get() );
-	
+	   
 	for( int i = 0; i < nr; i ++ )
 	{
 		window->draw( block[ i ].get() );
+	}
+	
+	if( which != -1 )
+	{
+		int tx = block[ which ].getX();
+		int ty = block[ which ].getY();
+		
+		block[ which ].center( x, y, 0, 0 );
+		window->draw( block[ which ].get() );
+		block[ which ].setPosition( tx, ty );
 	}
 }
 
 void Palette::handle( sf::Event &event )
 {
-	int x, y;
+	int mx, my;
 
 	for( int i = 0; i < nr; i ++ )
 	{
 		block[ i ].setAlpha( 100 );
 	}
+	bar.setColor( sf::Color( 0xCC, 0xCC, 0xCC ) );
 
 	if( event.type == sf::Event::MouseMoved )
 	{
-		x = event.mouseMove.x;
-		y = event.mouseMove.y;
+		x = mx = event.mouseMove.x;
+		y = my = event.mouseMove.y;
 		
 		for( int i = 0; i < nr; i ++ )
 		{
-			if( block[ i ].checkCollision( x, y ) )
+			if( block[ i ].checkCollision( mx, my ) )
 			{
 				block[ i ].setAlpha( 150 );
 				break;
 			}
 		}
+		
+		if( bar.checkCollision( mx, my ) )
+		{
+			bar.setColor( sf::Color( 0xCC, 0xCC, 88 ) );
+		}
 	}
 
 	if( event.type == sf::Event::MouseButtonPressed )
 	{
-		x = event.mouseButton.x;
-		y = event.mouseButton.y;
+		x = mx = event.mouseButton.x;
+		y = my = event.mouseButton.y;
 			
 		for( int i = 0; i < nr; i ++ )
 		{
-			if( block[ i ].checkCollision( x, y ) )
+			if( block[ i ].checkCollision( mx, my ) )
 			{
+				which = i;
 				break;
 			}
 		}

@@ -13,6 +13,7 @@ class Palette
 	MySprite bar;
 	
 	int which;
+	int x, y;
 	
 public:
 	
