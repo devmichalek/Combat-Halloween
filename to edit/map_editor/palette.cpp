@@ -33,11 +33,18 @@ void Palette::free()
 	which = -1;
 	x = -1;
 	y = -1;
+	
+	del.free();
+	save.free();
 }
 
 
 void Palette::load( int screen_w, int screen_h, int num )
 {
+	folder_name = "data/txt/map/";
+	folder_name += to_string( num );
+	printf( "%s\n", folder_name.c_str() );
+	
 	bar.setName( "palette-bar" );
 	bar.create( width, screen_h );
 	bar.setColor( sf::Color( 0xCC, 0xCC, 0xCC ) );
@@ -47,7 +54,6 @@ void Palette::load( int screen_w, int screen_h, int num )
 	else if( num == 1 )	nr = 31;
 	else if( num == 2 )	nr = 28;
 	else				nr = 30;
-	
 	
 	block = new MySprite[ nr ];
 	
@@ -75,6 +81,18 @@ void Palette::load( int screen_w, int screen_h, int num )
 			block[ i ].setPosition( block[ j -1 ].getX(), block[ i -1 ].getBot() +5 );
 		}
 	}
+	
+	del.setID( "palette -del" );
+	del.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	del.setText( "delete" );
+	del.setPosition( width +100, screen_h - del.getHeight() -20 );
+	del.setAlpha( 255 );
+	
+	save.setID( "palette -del" );
+	save.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	save.setText( "save" );
+	save.setPosition( del.getRight() +30, del.getY() );
+	save.setAlpha( 255 );
 }
 
 void Palette::draw( sf::RenderWindow* &window )
@@ -95,6 +113,9 @@ void Palette::draw( sf::RenderWindow* &window )
 		window->draw( block[ which ].get() );
 		block[ which ].setPosition( tx, ty );
 	}
+	
+	window->draw( del.get() );
+	window->draw( save.get() );
 }
 
 void Palette::handle( sf::Event &event )

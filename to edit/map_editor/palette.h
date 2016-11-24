@@ -15,6 +15,9 @@ class Palette
 	int which;
 	int x, y;
 	
+	MyText del;
+	MyText save;
+	
 public:
 	
 	Palette();
