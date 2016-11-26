@@ -36,7 +36,7 @@ public:
     void free();	// Delete everything
 	
 	
-	const sf::Sprite& get() const;						// Return sprite
+	const sf::Sprite& get() const;			// Return sprite
     void load( string path, int nr = 1 );	// Load texture
 	void create( int w, int h );			// Create blank texture
 	
