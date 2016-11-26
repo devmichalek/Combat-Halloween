@@ -88,3 +88,8 @@ int Choose_map::chosenMap()
 {
 	return state;
 }
+
+void Choose_map::resetState()
+{
+	state = -1;
+}
