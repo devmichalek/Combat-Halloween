@@ -4,8 +4,11 @@
 Map_editor::Map_editor()
 {
 	state = 0;
+	
 	ch_m = NULL;
 	palette = NULL;
+	saveLog = NULL;
+	brickXY = NULL;
 	
 	w = h = 0;
 }
@@ -13,8 +16,12 @@ Map_editor::Map_editor()
 Map_editor::~Map_editor()
 {
 	state = 0;
+	
 	delete ch_m;
 	delete palette;
+	delete saveLog;
+	delete brickXY;
+	
 	w = h = 0;
 }
 
@@ -27,6 +34,11 @@ void Map_editor::load( int screen_w, int screen_h )
 	palette = new Palette;
 	w = screen_w;
 	h = screen_h;
+	
+	saveLog = new SaveLog;
+	
+	brickXY = new BrickXY;
+	brickXY->load( screen_w, screen_h );
 }
 
 void Map_editor::draw( sf::RenderWindow* &window )
@@ -39,12 +51,34 @@ void Map_editor::draw( sf::RenderWindow* &window )
 		{
 			state = 1;
 			palette->load( w, h, ch_m->chosenMap() );
+			saveLog->load( w, h, palette->getFolder() );
 		}
 	}
 	
 	if( state == 1 )
 	{
+		brickXY->draw( window );
 		palette->draw( window );
+		
+		if( palette->saveIsOn() )
+			saveLog->draw( window );
+			
+		brickXY->drawXY( window );
+		
+		if( palette->chosenIsOn() )
+			brickXY->getImag( palette->getDisX(), palette->getDisY() );
+	}
+	
+	if( palette->backtomenu() )
+	{
+		delete palette;
+		palette = new Palette;
+		
+		delete saveLog;
+		saveLog = new SaveLog;
+		
+		state = 0;
+		ch_m->resetState();
 	}
 }
 
@@ -57,6 +91,11 @@ void Map_editor::handle( sf::Event &event )
 	
 	if( state == 1 )
 	{
-		
+		if( palette->saveIsOn() )
+			saveLog->handle( event );
+		else
+			brickXY->handle( event );
+			
+		palette->handle( event );
 	}
 }

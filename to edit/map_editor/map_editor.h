@@ -2,6 +2,8 @@
 
 #include "map_editor/choose_map.h"
 #include "map_editor/palette.h"
+#include "map_editor/saveLog.h"
+#include "map_editor/brickXY.h"
 
 class Map_editor
 {
@@ -10,6 +12,8 @@ class Map_editor
 	
 	Choose_map* ch_m;
 	Palette* palette;
+	SaveLog* saveLog;
+	BrickXY* brickXY;
 	
 public:
 	
