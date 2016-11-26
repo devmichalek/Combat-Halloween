@@ -23,4 +23,5 @@ public:
     void handle( sf::Event &event );
 	
 	int chosenMap();
+	void resetState();
 };
