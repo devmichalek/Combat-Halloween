@@ -22,6 +22,8 @@ class BrickXY
 	
 	bool action;
 	
+	int chosen;
+	
 public:
 	
 	BrickXY();
@@ -34,4 +36,5 @@ public:
     void handle( sf::Event &event );
 	
 	void getImag( int imx, int imy );
+	int getPlatform();
 };

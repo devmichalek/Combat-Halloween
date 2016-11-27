@@ -14,6 +14,8 @@ BrickXY::BrickXY()
 	realXY = "x: -1  y: -1";
 	imagXY = "w: 0  h: 0";
 	action = false;
+	
+	chosen = 0;
 }
 
 BrickXY::~BrickXY()
@@ -42,6 +44,8 @@ void BrickXY::free()
 	real.free();
 	imag.free();
 	action = false;
+	
+	chosen = 0;
 }
 
 
@@ -68,7 +72,7 @@ void BrickXY::load( int screen_w, int screen_h )
 	
 	brick[ brick_nr -1 ].setName( "BrickXY-dot" );
 	brick[ brick_nr -1 ].create( 1, 1 );
-	brick[ brick_nr -1 ].setColor( sf::Color( 0, 0, 0 ) );
+	brick[ brick_nr -1 ].setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 	brick[ brick_nr -1 ].setAlpha( 0xFF );
 	
 	
@@ -96,12 +100,21 @@ void BrickXY::draw( sf::RenderWindow* &window )
 	}
 		
 	// Draw points
-	for( int i = brick[ 0 ].getLeft(); i < brick[ 0 ].getRight(); i += 2 )	// our x
+	for( int i = brick[ 0 ].getLeft(); i < brick[ 0 ].getRight() +150; i += 2 )	// our x
 	{
 		for( int j = screen_h; j > 0; j -= width ) // our y
 		{
 			brick[ brick_nr -1 ].setPosition( i, j );
 			window->draw( brick[ brick_nr -1 ].get() );
+		}
+	}
+	
+	for( int i = 26; i < 33; i++ ) // 0 ... 6
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( i ) ) )
+		{
+			// printf( "%d\n", i );
+			chosen = i -26;
 		}
 	}
 }
@@ -132,7 +145,10 @@ void BrickXY::handle( sf::Event &event )
 {
 	for( int i = 0; i < brick_nr -1; i ++ )
 	{
-		brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 0xCC ) );
+		if( chosen -1 != -1 && chosen == i )
+			brick[ i ].setColor( sf::Color( 0x33, 0x66, 0x99 ) );
+		else
+			brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 0xCC ) );
 	}
 
 	if( event.type == sf::Event::MouseMoved )
@@ -145,7 +161,11 @@ void BrickXY::handle( sf::Event &event )
 		{
 			if( brick[ i ].checkCollision( x, y )  )
 			{
-				brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 88 ) );
+				if( i != chosen )
+				{
+					brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 88 ) );
+					// printf( "%d %d\n", i, chosen );
+				}
 			}
 		}
 	}
@@ -160,7 +180,8 @@ void BrickXY::handle( sf::Event &event )
 		{
 			if( brick[ i ].checkCollision( x, y )  )
 			{
-				brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 88 ) );
+				if( i != chosen )
+					brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 88 ) );
 			}
 		}
 	}
@@ -170,7 +191,8 @@ void BrickXY::handle( sf::Event &event )
 		{
 			if( brick[ i ].checkCollision( x, y )  )
 			{
-				brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 88 ) );
+				if( i != chosen )
+					brick[ i ].setColor( sf::Color( 0xCC, 0xCC, 88 ) );
 			}
 		}
 	}
@@ -180,4 +202,9 @@ void BrickXY::getImag( int imx, int imy )
 {
 	this->imx = imx;
 	this->imy = imy;
+}
+
+int BrickXY::getPlatform()
+{
+	return chosen;
 }
