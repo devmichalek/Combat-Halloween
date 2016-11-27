@@ -51,7 +51,7 @@ void Map_editor::draw( sf::RenderWindow* &window )
 		{
 			state = 1;
 			palette->load( w, h, ch_m->chosenMap() );
-			saveLog->load( w, h, palette->getFolder() );
+			saveLog->load( w, h, palette->getPath() );
 		}
 	}
 	
@@ -60,16 +60,21 @@ void Map_editor::draw( sf::RenderWindow* &window )
 		brickXY->draw( window );
 		palette->draw( window );
 		
-		if( palette->saveIsOn() )
+		if( palette->saveModeIsOn() )
+		{
+			saveLog->supplyData( palette->getData() );
+			saveLog->supplyPlatform( brickXY->getPlatform() );
 			saveLog->draw( window );
+		}
+			
 			
 		brickXY->drawXY( window );
 		
-		if( palette->chosenIsOn() )
+		if( palette->isChosen() )
 			brickXY->getImag( palette->getDisX(), palette->getDisY() );
 	}
 	
-	if( palette->backtomenu() )
+	if( palette->backToMenu() )
 	{
 		delete palette;
 		palette = new Palette;
@@ -91,7 +96,7 @@ void Map_editor::handle( sf::Event &event )
 	
 	if( state == 1 )
 	{
-		if( palette->saveIsOn() )
+		if( palette->saveModeIsOn() )
 			saveLog->handle( event );
 		else
 			brickXY->handle( event );
