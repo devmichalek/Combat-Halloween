@@ -16,6 +16,24 @@
 #include <windows.h>
 #endif
 
+void MySprite::operator =( MySprite& mysprite )
+{
+	name = mysprite.getName();
+	sprite = new sf::Sprite;
+	*sprite = mysprite.get();
+	offset = mysprite.getOffset();
+	nr = mysprite.getNr();
+	safe_width = mysprite.getSafe_width();
+	safe_height = mysprite.getSafe_height();
+	color = mysprite.getColor();
+	color.a = mysprite.getAlpha();
+	
+	width = mysprite.getWidth();
+	height = mysprite.getHeight();
+	left = mysprite.getLeft();
+	top = mysprite.getTop();
+}
+
 
 MySprite::MySprite( int x, int y, sf::Uint8 alpha )
 {
@@ -349,6 +367,21 @@ bool MySprite::operator <=( MySprite& mySprite )
 	}
 	
 	return false;
+}
+
+int MySprite::getNr()
+{
+	return nr;
+}
+
+int MySprite::getSafe_width()
+{
+	return safe_width;
+}
+
+int MySprite::getSafe_height()
+{
+	return safe_height;
 }
 
 

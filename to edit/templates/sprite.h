@@ -31,6 +31,8 @@ class MySprite :public Border, public Color
 	
 public:
 
+	void operator =( MySprite& mysprite );
+
     MySprite( int x = 0, int y = 0, sf::Uint8 alpha = 0x00 );
     ~MySprite();
     void free();	// Delete everything
@@ -64,6 +66,10 @@ public:
 	
 	const int& getOffset() const;
 	void setOffset( int n );
+	
+	int getNr();
+	int getSafe_width();
+	int getSafe_height();
 	
 	void setScale( float x = 1, float y = 1 );
 	
