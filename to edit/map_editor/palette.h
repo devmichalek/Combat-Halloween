@@ -2,27 +2,36 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
+#include <vector>
 
 class Palette
 {
-	string folder_name;
-	int width; // width of typical block
-	
 	int nr;
 	MySprite* block;
-	
-	int which;
-	int x, y;
 	
 	int text_nr;
 	MyText* text;
 	
-	bool chosenOn;
-	bool deleteOn;
-	bool saveOn;
+	int which;
+	int x, y;
+	
+	string path;
+	string data;
+	
+	int width; // width of typical block
+	int screen_w;
+	int screen_h;
+	
+	bool chosen;
+	bool cut;
+	bool save;
 	bool back;
+	bool fix;
 	
 	int disX, disY;// displacement
+	
+	vector <MySprite*> v;
+	vector <int> v_t;
 	
 public:
 	
@@ -30,15 +39,18 @@ public:
     ~Palette();
 	void free();
 
-    void load( int screen_w, int screen_h, int num );
+    void load( int screen_w, int screen_h, int number );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
-	bool backtomenu();
-	string getFolder();
-	bool saveIsOn();
 	
 	int getDisX();
 	int getDisY();
-	bool chosenIsOn();
+	
+	bool backToMenu();
+	bool saveModeIsOn();
+	bool isChosen();
+	
+	string getPath();
+	string getData();
 };
