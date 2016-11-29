@@ -326,9 +326,10 @@ void Palette::handle( sf::Event &event )
 			data = "";
 			for( unsigned i = 0; i < v.size(); i ++ )
 			{
-				data += to_string( v_t[ i ] );
+				data += "#";
+				data += to_string( v_t[ i ] ) + " ";
 				data += to_string( v[ i ]->getX() ) + " ";
-				data += to_string( v[ i ]->getY() ) +"/n";
+				data += to_string( v[ i ]->getY() );
 			}
 		}
 	}
