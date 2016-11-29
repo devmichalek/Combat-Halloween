@@ -196,7 +196,7 @@ void SaveLog::saveAsFile()
 	{
 		printf( "Created file\n" );
 		file << data;
-		file << to_string( platform );
+		// file << to_string( platform ); 29.11.2016 
 	}
 	else
 	{
