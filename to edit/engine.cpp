@@ -79,9 +79,11 @@ void Engine::load()
 		play_winter->load( core->getWidth(), core->getHeight() );
 		break;
 		
+		/*
 		case 8:
 		map_editor->load( core->getWidth(), core->getHeight() );
 		break;
+		*/
 		
 		case 9:
 		srand( time( NULL ) );
@@ -90,7 +92,7 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = -3;	// intro state
+		core->getState() = 1;	// intro state
 		break;
 	}
 }
