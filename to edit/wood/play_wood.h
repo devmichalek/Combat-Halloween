@@ -3,12 +3,14 @@
 #include "templates/state.h"
 #include "templates/moving_bg.h"
 #include "hero/hero.h"
+#include "random_block.h"
 
 class Play_wood
 {
 	State* state;
 	Hero* hero;
 	Moving_bg* bg;
+	Random_block* random_block;
 		
 public:
 
