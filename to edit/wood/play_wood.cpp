@@ -5,6 +5,7 @@ Play_wood::Play_wood()
 	state = new State;
 	hero = new Hero;
 	bg = new Moving_bg;
+	random_block = new Random_block;
 }
 
 Play_wood::~Play_wood()
@@ -17,12 +18,14 @@ void Play_wood::free()
 	delete state;
 	delete hero;
 	delete bg;
+	delete random_block;
 }
 
 	
 void Play_wood::load( int screen_w, int screen_h )
 {
 	bg->load( "data/sprites/play/1.png" );
+	random_block->load( screen_w, screen_h, 1 );
 }
 
 void Play_wood::setHero( int screen_w, int screen_h, int type )
@@ -45,11 +48,14 @@ void Play_wood::handle( sf::Event &event )
 
 void Play_wood::draw( sf::RenderWindow* &window )
 {
+	// bg->move( 2 );
+	
 	bg->draw( window );
 	hero->draw( window );
 	
 	bg->fadein( 2 );
 	hero->fadein( 2 );
+	random_block->draw( window );
 
 	if( hero->attack() || hero->jump() ) {}
 	else if( hero->moveLeft() ) {}
