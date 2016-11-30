@@ -72,6 +72,9 @@ void Moving_bg::draw( sf::RenderWindow* &window )
 		{
 			two.setPosition( one.getLeft() -two.getWidth(), 0 );
 		}
+		
+		one.setPosition( one.getX() +vel, 0 );
+		two.setPosition( two.getX() +vel, 0 );
 	}
 	
 	else if( direction == 2 ) // right
@@ -85,6 +88,9 @@ void Moving_bg::draw( sf::RenderWindow* &window )
 		{
 			two.setPosition( one.getRight(), 0 );
 		}
+		
+		one.setPosition( one.getX() -vel, 0 );
+		two.setPosition( two.getX() -vel, 0 );
 	}
 	
 	// printf( "1: %d, 2: %d\n", one.getX(), two.getX() );
