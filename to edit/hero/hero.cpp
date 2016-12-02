@@ -362,6 +362,62 @@ bool Hero::climb()
 	return a.active;
 }
 
+void Hero::reverse()
+{
+	if( move )
+	{
+		if( right )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
+			}
+		}
+		else
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
+			}
+		}
+	}
+	else if( j.active )
+	{
+		if( right )
+		{
+			for( int i = 0; i < nr; i++ )
+				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2, sprite[ i ].getY() );
+		}
+		else
+		{
+			for( int i = 0; i < nr; i++ )
+				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2, sprite[ i ].getY() );
+		}
+	}
+}
+
+
+
+
+void Hero::gravitation()
+{
+	for( int i = 0; i < nr; i++ )
+	{
+		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -gravity );
+	}
+}
+
+void Hero::weightlessness()
+{
+	for( int i = 0; i < nr; i++ )
+	{
+		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +gravity );
+	}
+}
+
+
+
+
 const int Hero::getX()
 {
 	int x;
@@ -434,7 +490,7 @@ const int Hero::getW()
 		w = sprite[ ATTACK ].getWidth();
 	}
 
-	return y;
+	return w;
 }
 
 const int Hero::getH()
