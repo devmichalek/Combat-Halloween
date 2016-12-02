@@ -34,5 +34,5 @@ public:
 	void draw( sf::RenderWindow* &window );
 	void positioning();
 	
-	void checkCollision( int x, int y, int w, int h );
+	bool checkCollision( int x, int y, int w, int h );
 };
