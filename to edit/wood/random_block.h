@@ -33,4 +33,6 @@ public:
 	void load( int screen_w, int screen_h, int number );
 	void draw( sf::RenderWindow* &window );
 	void positioning();
+	
+	void checkCollision( int x, int y, int w, int h );
 };

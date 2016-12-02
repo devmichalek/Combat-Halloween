@@ -1,5 +1,10 @@
 #include "wood/random_block.h"
 
+void Random_block::checkCollision( int x, int y, int w, int h )
+{
+	
+}
+
 Block::Block()
 {
 	nr = x = y = 0;
