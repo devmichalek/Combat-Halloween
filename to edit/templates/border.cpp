@@ -68,3 +68,20 @@ bool Border::checkCollision( int x, int y, int w, int h )
 	
 	return false;
 }
+
+bool Border::catchCollision( int x, int y, int w, int h )
+{
+	if( x + w > left )
+		return true;
+	
+	else if( x < left + width )
+		return true;
+		
+	else if( y + h > top )
+		return true;
+		
+	else if( y < top + height )
+		return true;
+	
+	return false;
+}
