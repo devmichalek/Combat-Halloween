@@ -362,7 +362,7 @@ bool Hero::climb()
 	return a.active;
 }
 
-int Hero::getX()
+const int Hero::getX()
 {
 	int x;
 	
@@ -387,7 +387,7 @@ int Hero::getX()
 	return x;
 }
 
-int Hero::getY()
+const int Hero::getY()
 {
 	int y;
 	

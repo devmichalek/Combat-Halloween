@@ -79,6 +79,6 @@ public:
 	bool attack();
 	bool climb();
 	
-	int getX();
-	int getY();
+	const int getX();
+	const int getY();
 };
