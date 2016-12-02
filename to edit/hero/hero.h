@@ -47,6 +47,9 @@ class Hero
 	bool right;	// Direction.
 	int gravity;	// Force of gravity.
 	
+	bool move;
+	bool idle_;
+	
 	vector <int*> keys; // Which keys are responsible for particular activity.
 	
 	Activity j;	// Jump.
@@ -75,4 +78,7 @@ public:
 	bool jump();
 	bool attack();
 	bool climb();
+	
+	int getX();
+	int getY();
 };
