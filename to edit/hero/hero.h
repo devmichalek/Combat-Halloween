@@ -78,6 +78,10 @@ public:
 	bool jump();
 	bool attack();
 	bool climb();
+	void reverse();
+	
+	void gravitation();
+	void weightlessness();
 	
 	const int getX();
 	const int getY();
