@@ -56,11 +56,19 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	bg->fadein( 2 );
 	hero->fadein( 2 );
 	random_block->draw( window );
+	
+	hero->gravitation();
+	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
+		hero->weightlessness();
+
 
 	if( hero->attack() || hero->jump() ) {}
 	else if( hero->moveLeft() ) {}
 	else if( hero->moveRight() ) {}
 	else hero->idle();
+	
+	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
+		hero->reverse();
 }
 
 	
