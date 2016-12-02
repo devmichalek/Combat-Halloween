@@ -1,8 +1,14 @@
 #include "wood/random_block.h"
 
-void Random_block::checkCollision( int x, int y, int w, int h )
+bool Random_block::checkCollision( int x, int y, int w, int h )
 {
+	for( unsigned i = 0; i < envelope.size(); i++ )
+	{
+		if( block[ envelope[ i ]->nr ].checkCollision( x, y, w, h ) )
+			return true;
+	}
 	
+	return false;
 }
 
 Block::Block()
