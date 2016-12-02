@@ -95,6 +95,9 @@ Hero::Hero()
 	delay = 0;
 	right = true;
 	gravity = 0;
+	
+	move = false;
+	idle_ = false;
 }
 
 Hero::~Hero()
@@ -123,6 +126,9 @@ void Hero::free()
 	right = true;
 	gravity = 0;
 	
+	move = false;
+	idle_ = false;
+	
 	for( unsigned i = 0; i < keys.size(); i++ )
 	{
 		if( keys[ i ] != NULL )
@@ -140,7 +146,6 @@ void Hero::free()
 
 
 
-	
 void Hero::load( int& screen_w, int& y, string path )
 {
 	free();
@@ -153,7 +158,7 @@ void Hero::load( int& screen_w, int& y, string path )
 		sprite[ i ].setName( "hero-sprite nr " + to_string( i ) );
 		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
 		sprite[ i ].setScale( 0.25, 0.25 );
-		sprite[ i ].setPosition( 10, y -sprite[ i ].getHeight() -124 );
+		sprite[ i ].setPosition( 10, y -sprite[ i ].getHeight() -130 );
 	}
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
 	
@@ -207,6 +212,8 @@ void Hero::draw( sf::RenderWindow* &window )
 		j.active = false;
 		a.active = false;
 	}
+	
+	idle_ = false;
 }
 
 
@@ -214,6 +221,7 @@ void Hero::draw( sf::RenderWindow* &window )
 
 void Hero::idle()
 {
+	idle_ = true;
 	which = IDLE;
 }
 
@@ -237,9 +245,11 @@ bool Hero::moveLeft()
 			right = false;
 		}
 		
+		move = true;
 		return true;
 	}
 	
+	move = false;
 	return false;
 }
 
@@ -263,9 +273,11 @@ bool Hero::moveRight()
 			right = true;
 		}
 		
+		move = true;
 		return true;
 	}
 	
+	move = false;
 	return false;
 }
 
@@ -348,4 +360,54 @@ bool Hero::climb()
 	a.summarize();
 	
 	return a.active;
+}
+
+int Hero::getX()
+{
+	int x;
+	
+	if( move )
+	{
+		x = sprite[ RUN ].getX();
+	}
+	else if( idle_ )
+	{
+		x = sprite[ IDLE ].getX();
+	}
+	else if( j.active )
+	{
+		x = sprite[ JUMP ].getX();
+	}
+	
+	else if( a.active )
+	{
+		x = sprite[ ATTACK ].getX();
+	}
+	
+	return x;
+}
+
+int Hero::getY()
+{
+	int y;
+	
+	if( move )
+	{
+		y = sprite[ RUN ].getY();
+	}
+	else if( idle_ )
+	{
+		y = sprite[ IDLE ].getY();
+	}
+	else if( j.active )
+	{
+		y = sprite[ JUMP ].getY();
+	}
+	
+	else if( a.active )
+	{
+		y = sprite[ ATTACK ].getY();
+	}
+
+	return y;
 }
