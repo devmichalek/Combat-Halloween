@@ -81,4 +81,6 @@ public:
 	
 	const int getX();
 	const int getY();
+	const int getW();
+	const int getH();
 };

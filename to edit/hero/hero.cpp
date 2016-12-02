@@ -411,3 +411,53 @@ const int Hero::getY()
 
 	return y;
 }
+
+const int Hero::getW()
+{
+	int w;
+	
+	if( move )
+	{
+		w = sprite[ RUN ].getWidth();
+	}
+	else if( idle_ )
+	{
+		w = sprite[ IDLE ].getWidth();
+	}
+	else if( j.active )
+	{
+		w = sprite[ JUMP ].getWidth();
+	}
+	
+	else if( a.active )
+	{
+		w = sprite[ ATTACK ].getWidth();
+	}
+
+	return y;
+}
+
+const int Hero::getH()
+{
+	int h;
+	
+	if( move )
+	{
+		h = sprite[ RUN ].getHeight();
+	}
+	else if( idle_ )
+	{
+		h = sprite[ IDLE ].getHeight();
+	}
+	else if( j.active )
+	{
+		h = sprite[ JUMP ].getHeight();
+	}
+	
+	else if( a.active )
+	{
+		h = sprite[ ATTACK ].getHeight();
+	}
+
+	return h;
+}
