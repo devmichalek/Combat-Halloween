@@ -85,3 +85,25 @@ bool Border::catchCollision( int x, int y, int w, int h )
 	
 	return false;
 }
+
+bool Border::catchHorizontally( int x, int w )
+{
+	if( x + w > left )
+		return true;
+	
+	else if( x < left + width )
+		return true;
+	
+	return false;
+}
+
+bool Border::catchVertically( int y, int h )
+{
+	if( y + h > top )
+		return true;
+		
+	else if( y < top + height )
+		return true;
+		
+	return false;
+}
