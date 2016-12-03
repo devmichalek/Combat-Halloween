@@ -97,7 +97,6 @@ Hero::Hero()
 	gravity = 0;
 	
 	move = false;
-	idle_ = false;
 }
 
 Hero::~Hero()
@@ -127,7 +126,6 @@ void Hero::free()
 	gravity = 0;
 	
 	move = false;
-	idle_ = false;
 	
 	for( unsigned i = 0; i < keys.size(); i++ )
 	{
@@ -158,7 +156,7 @@ void Hero::load( int& screen_w, int& y, string path )
 		sprite[ i ].setName( "hero-sprite nr " + to_string( i ) );
 		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
 		sprite[ i ].setScale( 0.25, 0.25 );
-		sprite[ i ].setPosition( 10, y -sprite[ i ].getHeight() -130 );
+		sprite[ i ].setPosition( 10, y -sprite[ i ].getHeight() -300 );
 	}
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
 	
@@ -212,8 +210,6 @@ void Hero::draw( sf::RenderWindow* &window )
 		j.active = false;
 		a.active = false;
 	}
-	
-	idle_ = false;
 }
 
 
@@ -221,7 +217,7 @@ void Hero::draw( sf::RenderWindow* &window )
 
 void Hero::idle()
 {
-	idle_ = true;
+	move = false;
 	which = IDLE;
 }
 
@@ -249,7 +245,6 @@ bool Hero::moveLeft()
 		return true;
 	}
 	
-	move = false;
 	return false;
 }
 
@@ -277,7 +272,6 @@ bool Hero::moveRight()
 		return true;
 	}
 	
-	move = false;
 	return false;
 }
 
@@ -401,6 +395,13 @@ void Hero::reverse()
 
 void Hero::gravitation()
 {
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
+	for( int i = 0; i < nr; i++ )
+	{
+		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +gravity );
+	}
+	
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 1 ) ) )
 	for( int i = 0; i < nr; i++ )
 	{
 		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -gravity );
@@ -411,7 +412,7 @@ void Hero::weightlessness()
 {
 	for( int i = 0; i < nr; i++ )
 	{
-		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +gravity );
+		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -gravity );
 	}
 }
 
@@ -426,18 +427,22 @@ const int Hero::getX()
 	{
 		x = sprite[ RUN ].getX();
 	}
-	else if( idle_ )
-	{
-		x = sprite[ IDLE ].getX();
-	}
 	else if( j.active )
 	{
 		x = sprite[ JUMP ].getX();
 	}
-	
 	else if( a.active )
 	{
 		x = sprite[ ATTACK ].getX();
+	}
+	else
+	{
+		x = sprite[ IDLE ].getX();
+	}
+	
+	if( !right )
+	{
+		x += sprite[ IDLE ].getWidth();
 	}
 	
 	return x;
@@ -451,18 +456,17 @@ const int Hero::getY()
 	{
 		y = sprite[ RUN ].getY();
 	}
-	else if( idle_ )
-	{
-		y = sprite[ IDLE ].getY();
-	}
 	else if( j.active )
 	{
 		y = sprite[ JUMP ].getY();
 	}
-	
 	else if( a.active )
 	{
 		y = sprite[ ATTACK ].getY();
+	}
+	else
+	{
+		y = sprite[ IDLE ].getY();
 	}
 
 	return y;
@@ -476,19 +480,21 @@ const int Hero::getW()
 	{
 		w = sprite[ RUN ].getWidth();
 	}
-	else if( idle_ )
-	{
-		w = sprite[ IDLE ].getWidth();
-	}
 	else if( j.active )
 	{
 		w = sprite[ JUMP ].getWidth();
 	}
-	
 	else if( a.active )
 	{
 		w = sprite[ ATTACK ].getWidth();
 	}
+	else
+	{
+		w = sprite[ IDLE ].getWidth();
+	}
+	
+	if( w < 0 )
+		w = -w;
 
 	return w;
 }
@@ -501,18 +507,17 @@ const int Hero::getH()
 	{
 		h = sprite[ RUN ].getHeight();
 	}
-	else if( idle_ )
-	{
-		h = sprite[ IDLE ].getHeight();
-	}
 	else if( j.active )
 	{
 		h = sprite[ JUMP ].getHeight();
 	}
-	
 	else if( a.active )
 	{
 		h = sprite[ ATTACK ].getHeight();
+	}
+	else
+	{
+		h = sprite[ IDLE ].getHeight();
 	}
 
 	return h;
