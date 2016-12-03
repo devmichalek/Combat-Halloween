@@ -72,9 +72,6 @@ bool Border::checkCollision( int x, int y, int w, int h )
 
 bool Border::catchCollision( int x, int y, int w, int h )
 {
-	printf( "x %d  y %d  w %d  h %d\n", x, y, w, h );
-	// printf( "left %d  top %d  right %d  bot %d\n", left, top, left+width, top+height );
-	
 	if( y + h <= top )
         return false;
 
@@ -86,10 +83,6 @@ bool Border::catchCollision( int x, int y, int w, int h )
 
     if( x >= left + width )
         return false;
-	
-	static int a = 0;
-	a++;
-	printf( "collision %d\n", a );
 
     return true;
 }
