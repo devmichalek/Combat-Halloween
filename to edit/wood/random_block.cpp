@@ -99,7 +99,12 @@ void Random_block::positioning()
 	
 	// first block
 	envelope[ 0 ]->nr = 0;
-	envelope[ 0 ]->x = 200;
-	envelope[ 0 ]->y = 500;
+	envelope[ 0 ]->x = 0;
+	envelope[ 0 ]->y = screen_h -block[ envelope[ 0 ]->nr ].getHeight();
 	envelope[ 0 ]->line = true;
+}
+
+int Random_block::getScreenWidth()
+{
+	return screen_w;
 }
