@@ -43,8 +43,8 @@ class Hero
 	MySprite* sprite;
 	
 	
-	int vel;		// Velocity.
-	int vel_value;	// Value of velocity set at start.
+	float vel;		// Velocity.
+	float vel_value;	// Value of velocity set at start.
 	int grav;		// Force of gravity.
 	bool allow_jump;	// If champion stands at the block then can jump.
 	
@@ -89,7 +89,9 @@ public:
 	bool move();
 	bool jump();
 	bool attack();
-	void reverse();
+	
+	void reverseJump();
+	void reverseMove();
 	
 	void gravitation();
 	void weightlessness();
