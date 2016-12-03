@@ -7,7 +7,7 @@ int Setkeyboard::strToInt(string s)
 {
     bool m=false;
     int tmp=0;
-    int i=0;
+    unsigned i=0;
     if(s[0]=='-')
     {
           i++;
