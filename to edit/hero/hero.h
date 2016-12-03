@@ -53,9 +53,7 @@ class Hero
 	
 	int vel;		// Velocity.
 	int vel_value;	// Value of velocity set at start.
-	int grav;		// Force of gravity.
-	int grav_value;	// Value of gravity set at start.
-	
+	int grav;		// Force of gravity.	
 	
 	int which;		// Which activity is active.
 	int offset;		// Which offset is active.
