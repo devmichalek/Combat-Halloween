@@ -1,4 +1,5 @@
 #include "templates/border.h"
+#include <stdio.h>
 
 void Border::set( int x, int y, int w, int h )
 {
@@ -71,20 +72,28 @@ bool Border::checkCollision( int x, int y, int w, int h )
 
 bool Border::catchCollision( int x, int y, int w, int h )
 {
-	if( x + w > left )
-		return true;
+	printf( "x %d  y %d  w %d  h %d\n", x, y, w, h );
+	// printf( "left %d  top %d  right %d  bot %d\n", left, top, left+width, top+height );
 	
-	else if( x < left + width )
-		return true;
-		
-	else if( y + h > top )
-		return true;
-		
-	else if( y < top + height )
-		return true;
+	if( y + h <= top )
+        return false;
+
+    if( y >= top + height )
+        return false;
+
+    if( x + w <= left )
+        return false;
+
+    if( x >= left + width )
+        return false;
 	
-	return false;
+	static int a = 0;
+	a++;
+	printf( "collision %d\n", a );
+
+    return true;
 }
+
 
 bool Border::catchHorizontally( int x, int w )
 {
