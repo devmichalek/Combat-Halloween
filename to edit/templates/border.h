@@ -26,7 +26,4 @@ public:
     const int getBot() const;
 	
 	bool checkCollision( int x, int y, int w = 0, int h = 0 );
-	bool catchCollision( int x, int y, int w = 0, int h = 0 );
-	bool catchHorizontally( int x, int w = 0 );
-	bool catchVertically( int y, int h = 0 );
 };

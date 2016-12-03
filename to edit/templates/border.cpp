@@ -59,19 +59,6 @@ const int Border::getBot() const
 
 bool Border::checkCollision( int x, int y, int w, int h )
 {
-	if( x + w > left && x < left + width )
-	{
-		if( y + h > top && y < top + height )
-		{
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-bool Border::catchCollision( int x, int y, int w, int h )
-{
 	if( y + h <= top )
         return false;
 
@@ -85,27 +72,4 @@ bool Border::catchCollision( int x, int y, int w, int h )
         return false;
 
     return true;
-}
-
-
-bool Border::catchHorizontally( int x, int w )
-{
-	if( x + w > left )
-		return true;
-	
-	else if( x < left + width )
-		return true;
-	
-	return false;
-}
-
-bool Border::catchVertically( int y, int h )
-{
-	if( y + h > top )
-		return true;
-		
-	else if( y < top + height )
-		return true;
-		
-	return false;
 }
