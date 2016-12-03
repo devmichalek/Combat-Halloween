@@ -48,27 +48,42 @@ void Play_wood::handle( sf::Event &event )
 
 void Play_wood::draw( sf::RenderWindow* &window )
 {
-	// bg->move( 2 );
-	
-	bg->draw( window );
-	hero->draw( window );
-	
 	bg->fadein( 2 );
 	hero->fadein( 2 );
+	
+	bg->draw( window );
+	
+	random_block->drawBG( window );
+	hero->draw( window );
 	random_block->draw( window );
+	
 	
 	hero->gravitation();
 	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
 		hero->weightlessness();
 
+	if( hero->attack() ) {}
+	else if( hero->jump() )
+	{
+		for( ;; )
+		{
+			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+				hero->reverseJump();
+			else
+				break;
+		}
+	}
+	else if( hero->move() )
+	{
+		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+		hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+			hero->reverseMove();
+	}
+	else
+		hero->idle();
 
-	if( hero->attack() || hero->jump() ) {}
-	else if( hero->moveLeft() ) {}
-	else if( hero->moveRight() ) {}
-	else hero->idle();
 	
-	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
-		hero->reverse();
 }
 
 	
