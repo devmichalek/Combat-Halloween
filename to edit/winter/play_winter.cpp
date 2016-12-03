@@ -53,10 +53,12 @@ void Play_winter::draw( sf::RenderWindow* &window )
 	bg->fadein( 2 );
 	hero->fadein( 2 );
 	
+	/*
 	if( hero->attack() || hero->jump() ) {}
 	else if( hero->moveLeft() ) {}
 	else if( hero->moveRight() ) {}
 	else hero->idle();
+	*/
 }
 
 	
