@@ -39,14 +39,6 @@ class Hero
 	};
 	
 	
-	// we need all widths because of scale ( minus etc. )
-	int WIDTH_IDLE;
-	int WIDTH_RUN;
-	int WIDTH_JUMP;
-	int WIDTH_ATTACK;
-	float SCALE;
-	
-	
 	int nr;	// Tell us how many sprites we have.
 	MySprite* sprite;
 	
@@ -60,8 +52,9 @@ class Hero
 	int delay;		// To mould for FPS.
 	
 	
-	bool right;		// Direction.
+	int right;		// Direction.
 	bool moving;
+	float SCALE;
 	
 	
 	vector <int*> keys; // Which keys are responsible for particular activity.
@@ -70,6 +63,11 @@ class Hero
 	Activity j;	// Jump.
 	Activity a; // Attack.
 	Activity c; // Climb.
+	
+	int* x;
+	int* y;
+	int* w;
+	int* h;
 	
 public:
 
@@ -84,7 +82,7 @@ public:
 	~Hero();
 	void free();
 	
-	void load( int& screen_w, int& y, string path );
+	void load( int& screen_w, int& posY, string path );
 	void draw( sf::RenderWindow* &window );	
 	
 	void idle();
