@@ -42,6 +42,8 @@ void Hero::fadeout( int v, int min )
 }
 
 
+
+
 int Hero::strToInt( string s )
 {
     bool m = false;
@@ -86,17 +88,30 @@ bool Hero::checkKeys( int a, int b )
 
 Hero::Hero()
 {
+	WIDTH_IDLE = 0;
+	WIDTH_RUN = 0;
+	WIDTH_JUMP = 0;
+	WIDTH_ATTACK = 0;
+	SCALE = 0;
+	
+	
 	nr = 0;
 	sprite = NULL;
 	
+	
 	vel = 0;
+	vel_value = 0;
+	gravity = 0;
+	grav_value = 0;
+	
+	
 	which = 0;
 	offset = 0;
 	delay = 0;
-	right = true;
-	gravity = 0;
 	
-	move = false;
+	
+	right = true;
+	moving = false;
 }
 
 Hero::~Hero()
@@ -106,6 +121,13 @@ Hero::~Hero()
 
 void Hero::free()
 {
+	WIDTH_IDLE = 0;
+	WIDTH_RUN = 0;
+	WIDTH_JUMP = 0;
+	WIDTH_ATTACK = 0;
+	SCALE = 0;
+	
+	
 	if( sprite != NULL )
 	{
 		for( int i = 0; i < nr; i ++ )
@@ -118,14 +140,21 @@ void Hero::free()
 		nr = 0;
 	}
 	
+	
 	vel = 0;
+	vel_value = 0;
+	gravity = 0;
+	grav_value = 0;
+	
+	
 	which = 0;
 	offset = 0;
 	delay = 0;
-	right = true;
-	gravity = 0;
 	
-	move = false;
+	
+	right = true;
+	moving = false;
+	
 	
 	for( unsigned i = 0; i < keys.size(); i++ )
 	{
@@ -135,7 +164,11 @@ void Hero::free()
 			keys[ i ] = NULL;
 		}
 	}
+	
+	
 	keys.clear();
+	
+	
 	
 	j.free();
 	a.free();
@@ -148,19 +181,33 @@ void Hero::load( int& screen_w, int& y, string path )
 {
 	free();
 	
+	// 	Set sprites.
+	SCALE = 0.25;
+	
+	int startX = 10;
+	int startY = y -sprite[ i ].getHeight() -300;
 	
 	nr = STRENGTH +1;
 	sprite = new MySprite [ nr ];
+	
 	for( int i = 0; i < nr; i++ )
 	{
-		sprite[ i ].setName( "hero-sprite nr " + to_string( i ) );
+		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
-		sprite[ i ].setScale( 0.25, 0.25 );
-		sprite[ i ].setPosition( 10, y -sprite[ i ].getHeight() -300 );
+		sprite[ i ].setScale( SCALE, SCALE );
+		sprite[ i ].setPosition( startX, startY );
 	}
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
 	
+	WIDTH_IDLE = sprite[ IDLE ].getWidth();
+	WIDTH_RUN = sprite[ RUN ].getWidth();
+	WIDTH_JUMP = sprite[ JUMP ].getWidth();
+	WIDTH_ATTACK = sprite[ ATTACK ].getWidth();
 	
+	
+	
+	
+	// Set keys.
 	fstream file;
 	file.open( "data/txt/menu/keyboard_temporary.txt" );
 	if( file.bad() )
@@ -183,14 +230,30 @@ void Hero::load( int& screen_w, int& y, string path )
 	file.close();
 	
 	
-	vel = 1;
+	
+	
+	
+	// Set other valuables
+	vel_value = 1;
+	vel = vel_value;
+	
+	vel_grav = 1;
+	grav = vel_grav;
+	
+	
+	
+	
+	
+	// Start sprites
 	which = IDLE;
 	offset = 0;
 	delay = 6;
+	
 	right = true;
-	gravity = 1;
+	moving = false;
 	
 	
+	// How much will it last
 	j.line = STRENGTH*delay + 10*delay;
 	a.line = STRENGTH*delay + 2*delay;
 	c.line = STRENGTH*delay + 2*delay;
@@ -217,11 +280,10 @@ void Hero::draw( sf::RenderWindow* &window )
 
 void Hero::idle()
 {
-	move = false;
 	which = IDLE;
 }
 
-bool Hero::moveLeft()
+bool Hero::move()
 {
 	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) )
 	{
@@ -229,7 +291,7 @@ bool Hero::moveLeft()
 		
 		for( int i = 0; i < nr; i++ )
 		{
-			sprite[ i ].setScale( -0.25, 0.25 );
+			sprite[ i ].setScale( -SCALE, SCALE );
 			sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
 		}
 		
@@ -241,22 +303,16 @@ bool Hero::moveLeft()
 			right = false;
 		}
 		
-		move = true;
+		moving = true;
 		return true;
 	}
-	
-	return false;
-}
-
-bool Hero::moveRight()
-{
-	if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) )
+	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) )
 	{
 		which = RUN;
 		
 		for( int i = 0; i < nr; i++ )
 		{
-			sprite[ i ].setScale( 0.25, 0.25 );
+			sprite[ i ].setScale( SCALE, SCALE );
 			sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
 		}
 		
@@ -268,9 +324,11 @@ bool Hero::moveRight()
 			right = true;
 		}
 		
-		move = true;
+		moving = true;
 		return true;
 	}
+	else
+		moving = false;
 	
 	return false;
 }
@@ -279,9 +337,9 @@ bool Hero::jump()
 {
 	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) )
 	{
-			offset = 0;
-			j.counter = 1;
-			j.active = true;
+		offset = 0;
+		j.counter = 1;
+		j.active = true;
 	}
 	else if( j.active )
 	{
@@ -330,35 +388,10 @@ bool Hero::attack()
 	return a.active;
 }
 
-bool Hero::climb()
-{
-	if( a.counter == 0 && checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
-	{
-		offset = 0;
-		a.counter = 1;
-		a.active = true;
-		
-		if( !right )
-			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
-	}
-	else if( a.active )
-	{
-		which = ATTACK;
-	}
-	else
-	{
-		if( !right )
-			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX() + 44, sprite[ ATTACK ].getY() );
-	}
-	
-	a.summarize();
-	
-	return a.active;
-}
 
 void Hero::reverse()
 {
-	if( move )
+	if( moving )
 	{
 		if( right )
 		{
@@ -423,7 +456,7 @@ const int Hero::getX()
 {
 	int x;
 	
-	if( move )
+	if( moving )
 	{
 		x = sprite[ RUN ].getX();
 	}
@@ -452,7 +485,7 @@ const int Hero::getY()
 {
 	int y;
 	
-	if( move )
+	if( moving )
 	{
 		y = sprite[ RUN ].getY();
 	}
@@ -476,7 +509,7 @@ const int Hero::getW()
 {
 	int w;
 	
-	if( move )
+	if( moving )
 	{
 		w = sprite[ RUN ].getWidth();
 	}
@@ -503,7 +536,7 @@ const int Hero::getH()
 {
 	int h;
 	
-	if( move )
+	if( moving )
 	{
 		h = sprite[ RUN ].getHeight();
 	}
