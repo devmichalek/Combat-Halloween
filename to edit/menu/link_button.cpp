@@ -70,7 +70,7 @@ void Link_button::handle( sf::Event &event )
 						
 				focus = true;
 
-				string command = "xdg-open ";
+				string command = "sensible-browser ";
 				command += url.c_str();
 				system( command.c_str() );
 			}

@@ -13,7 +13,7 @@ protected:
     MySprite button;
 
 public:
-
+	
     Link_button( string url, bool locked = false );
     ~Link_button();
 
