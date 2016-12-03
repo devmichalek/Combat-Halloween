@@ -52,7 +52,8 @@ class Hero
 	int delay;		// To mould for FPS.
 	
 	
-	int right;		// Direction.
+	bool right;		// Direction.
+	int flag;		// For direction.
 	bool moving;
 	float SCALE;
 	

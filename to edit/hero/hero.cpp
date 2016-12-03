@@ -102,7 +102,8 @@ Hero::Hero()
 	delay = 0;
 	
 	
-	right = 0;
+	right = false;
+	flag = false;
 	moving = false;
 	SCALE = 0;
 	
@@ -143,7 +144,8 @@ void Hero::free()
 	delay = 0;
 	
 	
-	right = 0;
+	right = false;
+	flag = false;
 	moving = false;
 	SCALE = 0;
 	
@@ -209,6 +211,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setPosition( 100, posY -sprite[ i ].getHeight() -300 );
 	}
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
+	sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
 
 	x = new int [ nr ];
 	y = new int [ nr ];
@@ -303,24 +306,26 @@ bool Hero::move()
 	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) ) // move left
 	{
 		which = RUN;
+		flag = true;
 		
 		for( int i = 0; i < nr; i++ )
 		{
 			sprite[ i ].setScale( -SCALE, SCALE );
 			sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
-			
-			x[ i ] = sprite[ i ].getX();
-			y[ i ] = sprite[ i ].getY();
 		}
 		
 		if( right )
 		{
+			sprite[ RUN ].setPosition( sprite[ IDLE ].getX() + ( sprite[ RUN ].getWidth()*-1 ), sprite[ RUN ].getY() );
+			
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() + (sprite[ i ].getWidth()*-1), sprite[ i ].getY() );
-				
+			{
+				if( i != RUN )
+					sprite[ i ].setPosition( sprite[ i ].getX() + ( sprite[ i ].getWidth()*-1 ), sprite[ i ].getY() );
+			}
+			
 			right = false;
 		}
-
 		
 		moving = true;
 		return true;
@@ -333,15 +338,20 @@ bool Hero::move()
 		{
 			sprite[ i ].setScale( SCALE, SCALE );
 			sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
-			x[ i ] = sprite[ i ].getX();
-			y[ i ] = sprite[ i ].getY();
 		}
 		
 		if( !right )
 		{
-			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() - sprite[ i ].getWidth(), sprite[ i ].getY() );
-				
+			if( flag )
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setPosition( sprite[ i ].getX() - ( sprite[ i ].getWidth() ), sprite[ i ].getY() );
+				}
+			}
+			
+			sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
+			
 			right = true;
 		}
 		
