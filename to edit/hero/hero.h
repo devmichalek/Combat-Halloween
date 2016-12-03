@@ -3,21 +3,6 @@
 #include "templates/sprite.h"
 #include <vector>
 
-enum
-{
-	IDLE = 0,
-	RUN,
-	THROW,
-	ATTACK,
-	SLIDE,
-	CLIMB,
-	GLIDE,
-	JUMP,
-	JUMP_ATTACK,
-	JUMP_THROW,
-	DEAD,
-	STRENGTH = 10
-};
 
 class Activity
 {
@@ -37,19 +22,52 @@ public:
 
 class Hero
 {
+	enum
+	{
+		IDLE = 0,
+		RUN,
+		THROW,
+		ATTACK,
+		SLIDE,
+		CLIMB,
+		GLIDE,
+		JUMP,
+		JUMP_ATTACK,
+		JUMP_THROW,
+		DEAD,
+		STRENGTH = 10
+	};
+	
+	
+	// we need all widths because of scale ( minus etc. )
+	int WIDTH_IDLE;
+	int WIDTH_RUN;
+	int WIDTH_JUMP;
+	int WIDTH_ATTACK;
+	float SCALE;
+	
+	
 	int nr;	// Tell us how many sprites we have.
 	MySprite* sprite;
 	
-	int vel;	// Velocity.
-	int which;	// Which activity is active.
-	int offset;	// Which offset is active.
-	int delay;
-	bool right;	// Direction.
-	int gravity;	// Force of gravity.
 	
-	bool move;
+	int vel;		// Velocity.
+	int vel_value;	// Value of velocity set at start.
+	int grav;		// Force of gravity.
+	int grav_value;	// Value of gravity set at start.
+	
+	
+	int which;		// Which activity is active.
+	int offset;		// Which offset is active.
+	int delay;		// To mould for FPS.
+	
+	
+	bool right;		// Direction.
+	bool moving;
+	
 	
 	vector <int*> keys; // Which keys are responsible for particular activity.
+	
 	
 	Activity j;	// Jump.
 	Activity a; // Attack.
@@ -72,11 +90,9 @@ public:
 	void draw( sf::RenderWindow* &window );	
 	
 	void idle();
-	bool moveLeft();
-	bool moveRight();
+	bool move();
 	bool jump();
 	bool attack();
-	bool climb();
 	void reverse();
 	
 	void gravitation();
