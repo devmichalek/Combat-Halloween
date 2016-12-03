@@ -4,7 +4,7 @@ bool Random_block::checkCollision( int x, int y, int w, int h )
 {
 	for( unsigned i = 0; i < envelope.size(); i++ )
 	{
-		if( block[ envelope[ i ]->nr ].catchCollision( x, y, w, h ) )
+		if( block[ envelope[ i ]->nr ].checkCollision( x, y, w, h ) )
 			return true;
 	}
 	
@@ -99,7 +99,7 @@ void Random_block::positioning()
 	
 	// first block
 	envelope[ 0 ]->nr = 0;
-	envelope[ 0 ]->x = 0;
-	envelope[ 0 ]->y = screen_h -block[ 0 ].getHeight();
+	envelope[ 0 ]->x = 200;
+	envelope[ 0 ]->y = 500;
 	envelope[ 0 ]->line = true;
 }
