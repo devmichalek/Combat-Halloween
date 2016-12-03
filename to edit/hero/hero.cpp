@@ -191,7 +191,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
 		sprite[ i ].setScale( SCALE, SCALE );
-		sprite[ i ].setPosition( 64, posY -sprite[ i ].getHeight() -128 );
+		sprite[ i ].setPosition( 45, posY -sprite[ i ].getHeight() -130 );
 	}
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
 	sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
@@ -356,12 +356,12 @@ bool Hero::jump()
 		if( right )
 		{
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2, sprite[ i ].getY() );
+				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2 +1, sprite[ i ].getY() );
 		}
 		else
 		{
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2, sprite[ i ].getY() );
+				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2 -1, sprite[ i ].getY() );
 		}
 	}
 	
@@ -378,17 +378,11 @@ bool Hero::attack()
 		a.counter = 1;
 		a.active = true;
 		
-		if( !right )
-			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
+		sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
 	}
 	else if( a.active )
 	{
 		which = ATTACK;
-	}
-	else
-	{
-		if( !right )
-			sprite[ ATTACK ].setPosition( sprite[ RUN ].getX() + 44, sprite[ ATTACK ].getY() );
 	}
 	
 	a.summarize();
@@ -397,39 +391,44 @@ bool Hero::attack()
 }
 
 
-void Hero::reverse()
+
+
+
+void Hero::reverseJump()
+{
+	if( j.active )
+	{
+		if( right )
+		{
+			for( int i = 0; i < nr; i++ )
+				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
+		}
+		else
+		{
+			for( int i = 0; i < nr; i++ )
+				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
+		}
+	}
+}
+
+void Hero::reverseMove()
 {
 	if( moving )
 	{
 		if( right )
 		{
 			for( int i = 0; i < nr; i++ )
-			{
 				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
-			}
 		}
 		else
 		{
 			for( int i = 0; i < nr; i++ )
-			{
 				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
-			}
-		}
-	}
-	else if( j.active )
-	{
-		if( right )
-		{
-			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2, sprite[ i ].getY() );
-		}
-		else
-		{
-			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2, sprite[ i ].getY() );
 		}
 	}
 }
+
+
 
 
 
@@ -464,23 +463,15 @@ const int Hero::getX()
 {
 	int x;
 	
-	if( moving )
+	if( moving || j.active )
 	{
 		x = sprite[ IDLE ].getX();
 		if( !right )
 			x -= w[ IDLE ];
 	}
-	else if( j.active )
-	{
-		x = sprite[ JUMP ].getX();
-		if( !right )
-			x -= w[ JUMP ];
-	}
 	else if( a.active )
 	{
-		x = sprite[ ATTACK ].getX();
-		if( !right )
-			x -= w[ IDLE ];
+		x = sprite[ IDLE ].getX();
 	}
 	else
 	{
@@ -519,49 +510,10 @@ const int Hero::getY()
 
 const int Hero::getW()
 {
-	int width;
-	
-	if( moving )
-	{
-		width = w[ RUN ];
-	}
-	else if( j.active )
-	{
-		width = w[ JUMP ];
-	}
-	else if( a.active )
-	{
-		width = w[ ATTACK ];
-	}
-	else
-	{
-		width = w[ IDLE ];
-	}
-	
-
-	return width;
+	return w[ IDLE ];
 }
 
 const int Hero::getH()
 {
-	int h;
-	
-	if( moving )
-	{
-		h = sprite[ RUN ].getHeight();
-	}
-	else if( j.active )
-	{
-		h = sprite[ JUMP ].getHeight();
-	}
-	else if( a.active )
-	{
-		h = sprite[ ATTACK ].getHeight();
-	}
-	else
-	{
-		h = sprite[ IDLE ].getHeight();
-	}
-
-	return h;
+	return sprite[ IDLE ].getHeight();
 }
