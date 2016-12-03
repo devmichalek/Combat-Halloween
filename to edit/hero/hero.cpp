@@ -95,6 +95,7 @@ Hero::Hero()
 	vel = 0;
 	vel_value = 0;
 	grav = 0;
+	allow_jump = false;
 	
 	
 	which = 0;
@@ -107,11 +108,7 @@ Hero::Hero()
 	moving = false;
 	SCALE = 0;
 	
-	
-	x = NULL;
-	y = NULL;
 	w = NULL;
-	h = NULL;
 }
 
 Hero::~Hero()
@@ -137,6 +134,7 @@ void Hero::free()
 	vel = 0;
 	vel_value = 0;
 	grav = 0;
+	allow_jump = false;
 	
 	
 	which = 0;
@@ -168,26 +166,11 @@ void Hero::free()
 	a.free();
 	c.free();
 	
-	
-	if( x == NULL )
-	{
-		delete [] x;
-		x = NULL;
-	}
-	if( y == NULL )
-	{
-		delete [] y;
-		y = NULL;
-	}
+
 	if( w == NULL )
 	{
 		delete [] w;
 		w = NULL;
-	}
-	if( h == NULL )
-	{
-		delete [] h;
-		h = NULL;
 	}
 }
 
@@ -208,21 +191,15 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
 		sprite[ i ].setScale( SCALE, SCALE );
-		sprite[ i ].setPosition( 100, posY -sprite[ i ].getHeight() -300 );
+		sprite[ i ].setPosition( 64, posY -sprite[ i ].getHeight() -128 );
 	}
 	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
 	sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
 
-	x = new int [ nr ];
-	y = new int [ nr ];
 	w = new int [ nr ];
-	h = new int [ nr ];
 	for( int i = 0; i < nr; i++ )
 	{
-		x[ i ] = sprite[ i ].getX();
-		y[ i ] = sprite[ i ].getY();
 		w[ i ] = sprite[ i ].getWidth();
-		h[ i ] = sprite[ i ].getHeight();
 	}
 	
 	
@@ -366,7 +343,7 @@ bool Hero::move()
 
 bool Hero::jump()
 {
-	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) )
+	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && allow_jump )
 	{
 		offset = 0;
 		j.counter = 1;
@@ -459,17 +436,15 @@ void Hero::reverse()
 
 void Hero::gravitation()
 {
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
-	for( int i = 0; i < nr; i++ )
+	if( !j.active )
 	{
-		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +grav );
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +grav );
+		}
 	}
-	
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 1 ) ) )
-	for( int i = 0; i < nr; i++ )
-	{
-		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -grav );
-	}
+
+	allow_jump = false;
 }
 
 void Hero::weightlessness()
@@ -478,6 +453,8 @@ void Hero::weightlessness()
 	{
 		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -grav );
 	}
+	
+	allow_jump = true;
 }
 
 
@@ -489,9 +466,9 @@ const int Hero::getX()
 	
 	if( moving )
 	{
-		x = sprite[ RUN ].getX();
+		x = sprite[ IDLE ].getX();
 		if( !right )
-			x -= w[ RUN ];
+			x -= w[ IDLE ];
 	}
 	else if( j.active )
 	{

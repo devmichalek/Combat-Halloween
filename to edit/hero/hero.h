@@ -45,7 +45,9 @@ class Hero
 	
 	int vel;		// Velocity.
 	int vel_value;	// Value of velocity set at start.
-	int grav;		// Force of gravity.	
+	int grav;		// Force of gravity.
+	bool allow_jump;	// If champion stands at the block then can jump.
+	
 	
 	int which;		// Which activity is active.
 	int offset;		// Which offset is active.
@@ -65,10 +67,7 @@ class Hero
 	Activity a; // Attack.
 	Activity c; // Climb.
 	
-	int* x;
-	int* y;
-	int* w;
-	int* h;
+	int* w; // widths of sprites
 	
 public:
 
