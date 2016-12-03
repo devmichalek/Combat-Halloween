@@ -35,4 +35,5 @@ public:
 	void positioning();
 	
 	bool checkCollision( int x, int y, int w, int h );
+	int getScreenWidth();
 };
