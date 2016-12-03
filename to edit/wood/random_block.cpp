@@ -1,21 +1,10 @@
 #include "wood/random_block.h"
 
-bool Random_block::checkCollisionH( int x, int w )
+bool Random_block::checkCollision( int x, int y, int w, int h )
 {
 	for( unsigned i = 0; i < envelope.size(); i++ )
 	{
-		if( block[ envelope[ i ]->nr ].catchHorizontally( x, w ) )
-			return true;
-	}
-	
-	return false;
-}
-
-bool Random_block::checkCollisionV( int y, int h )
-{
-	for( unsigned i = 0; i < envelope.size(); i++ )
-	{
-		if( block[ envelope[ i ]->nr ].catchVertically( y, h ) )
+		if( block[ envelope[ i ]->nr ].catchCollision( x, y, w, h ) )
 			return true;
 	}
 	
