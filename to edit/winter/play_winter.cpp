@@ -5,6 +5,7 @@ Play_winter::Play_winter()
 	state = new State;
 	hero = new Hero;
 	bg = new MySprite;
+	random_block = new Random_block;
 }
 
 Play_winter::~Play_winter()
@@ -17,14 +18,15 @@ void Play_winter::free()
 	delete state;
 	delete hero;
 	delete bg;
+	delete random_block;
 }
 
 	
 void Play_winter::load( int screen_w, int screen_h )
 {
-	bg->setName( "play_desert-bg" );
+	bg->setName( "play_winter-bg" );
 	bg->load( "data/sprites/play/2.png" );
-	//...
+	random_block->load( screen_w, screen_h, 2 );
 }
 
 void Play_winter::setHero( int screen_w, int screen_h, int type )
@@ -47,18 +49,45 @@ void Play_winter::handle( sf::Event &event )
 
 void Play_winter::draw( sf::RenderWindow* &window )
 {
-	window->draw( bg->get() );
-	hero->draw( window );
-	
 	bg->fadein( 2 );
 	hero->fadein( 2 );
 	
-	/*
-	if( hero->attack() || hero->jump() ) {}
-	else if( hero->moveLeft() ) {}
-	else if( hero->moveRight() ) {}
-	else hero->idle();
-	*/
+	window->draw( bg->get() );
+	
+	random_block->drawBG( window );
+	hero->draw( window );
+	random_block->draw( window );
+	
+	
+	hero->gravitation();
+	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
+		hero->weightlessness();
+
+	if( hero->attack() ) {}
+	else if( hero->jump() )
+	{
+		for( ;; )
+		{
+			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+				hero->reverseJump();
+			else
+				break;
+		}
+	}
+	else if( hero->move() )
+	{
+		for( ;; )
+		{
+			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+				hero->reverseMove();
+			else
+				break;
+		}
+	}
+	else
+		hero->idle();
 }
 
 	
