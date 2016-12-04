@@ -1,26 +1,9 @@
 #pragma once
 
 #include "templates/sprite.h"
+#include "wood/block.h"
+#include "wood/law.h"
 #include <vector>
-
-class Block
-{
-public:
-	int nr;
-	int x, y;
-	bool line;
-	
-	Block();
-};
-
-class Law
-{
-public:
-	int nr;
-	bool law;
-	
-	Law( int nr, bool law = true );
-};
 
 class Random_block
 {
@@ -28,6 +11,9 @@ class Random_block
 	MySprite* block;
 	
 	vector < vector <Law*> > rules_right;
+	vector < vector <Law*> > rules_left;
+	vector < vector <Law*> > rules_bot;
+	vector < vector <Law*> > rules_top;
 	
 	int width;
 	int screen_w;
@@ -53,4 +39,7 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	void ruleRightSide();
+	void ruleLeftSide();
+	void ruleBotSide();
+	void ruleTopSide();
 };
