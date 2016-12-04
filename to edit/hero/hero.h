@@ -1,23 +1,9 @@
 #pragma once
 
 #include "templates/sprite.h"
+#include "hero/activity.h"
+#include "wood/block.h"
 #include <vector>
-
-
-class Activity
-{
-	
-public:
-	int line;
-	int counter;
-	bool active;
-	
-	Activity();
-	~Activity();
-	void free();
-	void summarize();
-};
-
 
 
 class Hero
@@ -83,7 +69,7 @@ public:
 	void free();
 	
 	void load( int& screen_w, int& posY, string path );
-	void draw( sf::RenderWindow* &window );	
+	void draw( sf::RenderWindow* &window );
 	
 	void idle();
 	bool move();
