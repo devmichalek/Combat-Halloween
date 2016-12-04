@@ -5,6 +5,7 @@ Play_desert::Play_desert()
 	state = new State;
 	hero = new Hero;
 	bg = new Moving_bg;
+	random_block = new Random_block;
 }
 
 Play_desert::~Play_desert()
@@ -17,13 +18,14 @@ void Play_desert::free()
 	delete state;
 	delete hero;
 	delete bg;
+	delete random_block;
 }
 
 	
 void Play_desert::load( int screen_w, int screen_h )
 {
 	bg->load( "data/sprites/play/3.png" );
-	//...
+	random_block->load( screen_w, screen_h, 3 );
 }
 
 void Play_desert::setHero( int screen_w, int screen_h, int type )
@@ -46,18 +48,45 @@ void Play_desert::handle( sf::Event &event )
 
 void Play_desert::draw( sf::RenderWindow* &window )
 {
-	bg->draw( window );
-	hero->draw( window );
-	
 	bg->fadein( 2 );
 	hero->fadein( 2 );
 	
-	/*
-	if( hero->attack() || hero->jump() ) {}
-	else if( hero->moveLeft() ) {}
-	else if( hero->moveRight() ) {}
-	else hero->idle();
-	*/
+	bg->draw( window );
+	
+	random_block->drawBG( window );
+	hero->draw( window );
+	random_block->draw( window );
+	
+	
+	hero->gravitation();
+	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
+		hero->weightlessness();
+
+	if( hero->attack() ) {}
+	else if( hero->jump() )
+	{
+		for( ;; )
+		{
+			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+				hero->reverseJump();
+			else
+				break;
+		}
+	}
+	else if( hero->move() )
+	{
+		for( ;; )
+		{
+			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+				hero->reverseMove();
+			else
+				break;
+		}
+	}
+	else
+		hero->idle();
 }
 
 	
