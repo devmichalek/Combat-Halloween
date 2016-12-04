@@ -2,12 +2,14 @@
 
 #include "templates/state.h"
 #include "hero/hero.h"
+#include "wood/random_block.h"
 
 class Play_winter
 {
 	State* state;
 	Hero* hero;
 	MySprite* bg;
+	Random_block* random_block;
 	
 public:
 
