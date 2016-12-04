@@ -76,14 +76,17 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	}
 	else if( hero->move() )
 	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
-		hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
-			hero->reverseMove();
+		for( ;; )
+		{
+			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
+			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
+				hero->reverseMove();
+			else
+				break;
+		}
 	}
 	else
 		hero->idle();
-
-	
 }
 
 	
