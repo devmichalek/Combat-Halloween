@@ -109,6 +109,9 @@ void Random_block::load( int screen_w, int screen_h, int number )
 	}
 	
 	ruleRightSide();
+	ruleLeftSide();
+	ruleBotSide();
+	ruleTopSide( number );
 	
 	// start
 	positioning();
@@ -141,7 +144,7 @@ void Random_block::drawBG( sf::RenderWindow* &window )
 void Random_block::positioning()
 {
 	envelope.push_back( new Block() );
-	envelope[ 0 ]->nr = 2;
+	envelope[ 0 ]->nr = 4;
 	envelope[ 0 ]->x = 0;
 	envelope[ 0 ]->y = screen_h -width;
 	envelope[ 0 ]->line = true;
@@ -149,30 +152,27 @@ void Random_block::positioning()
 	
 	
 	envelope.push_back( new Block() );
-	envelope[ 1 ]->nr = 10;
+	envelope[ 1 ]->nr = 16;
 	envelope[ 1 ]->x = 128;
-	envelope[ 1 ]->y = screen_h -width*2;
-	envelope[ 1 ]->line = true;
+	envelope[ 1 ]->y = screen_h -width;
+	envelope[ 1 ]->line = false;
 	
 	envelope.push_back( new Block() );
-	envelope[ 2 ]->nr = 14;
-	envelope[ 2 ]->x = 128;
-	envelope[ 2 ]->y = screen_h -width;
+	envelope[ 2 ]->nr = 2;
+	envelope[ 2 ]->x = 256;
+	envelope[ 2 ]->y = screen_h -width*2;
 	envelope[ 2 ]->line = true;
 	
-	
-	
 	envelope.push_back( new Block() );
-	envelope[ 3 ]->nr = 10;
+	envelope[ 3 ]->nr = 2;
 	envelope[ 3 ]->x = 256;
-	envelope[ 3 ]->y = screen_h -width*2;
+	envelope[ 3 ]->y = screen_h -width*3;
 	envelope[ 3 ]->line = true;
 	
-	
 	envelope.push_back( new Block() );
-	envelope[ 4 ]->nr = 10;
+	envelope[ 4 ]->nr = 2;
 	envelope[ 4 ]->x = 256;
-	envelope[ 4 ]->y = screen_h -width;
+	envelope[ 4 ]->y = screen_h -width*4;
 	envelope[ 4 ]->line = true;
 }
 
@@ -180,6 +180,8 @@ int Random_block::getScreenWidth()
 {
 	return screen_w;
 }
+
+
 
 void Random_block::ruleRightSide()
 {
@@ -463,13 +465,15 @@ void Random_block::ruleBotSide()
 	rules_bot.push_back( temporary );
 }
 
-void Random_block::ruleTopSide()
+void Random_block::ruleTopSide( int number )
 {
 	vector <Law*> temporary;
 	
-	// 0
-	temporary.clear();
-	temporary.push_back( new Law( -1 ) );
-	rules_top.push_back( temporary );
-	
+	if( number == 1 )
+	{
+		// 0
+		temporary.clear();
+		temporary.push_back( new Law( -1 ) );
+		rules_top.push_back( temporary );
+	}
 }
