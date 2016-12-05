@@ -125,7 +125,7 @@ void Setkeyboard::loadButton( int screen_w, int screen_h )
 
 void Setkeyboard::load( int left, int right, int bot )
 {
-	nr = 22;
+	nr = 20;
 	text = new MyText[ nr ];
 	
 	for( int i = 0; i < nr; i++ )
@@ -203,17 +203,16 @@ void Setkeyboard::load( int left, int right, int bot )
 	
 	text[ 4 ].setText( "Jump" );
 	
-	text[ 6 ].setText( "Slide left" );
-	text[ 8 ].setText( "Slide right" );
+	text[ 6 ].setText( "Slide" );
 	
-	text[ 10 ].setText( "Climb" );
-	text[ 12 ].setText( "Go down" );
+	text[ 8 ].setText( "Climb" );
+	text[ 10 ].setText( "Go down" );
 	
-	text[ 14 ].setText( "Attack" );
-	text[ 16 ].setText( "Jump attack" );
+	text[ 12 ].setText( "Attack" );
+	text[ 14 ].setText( "Jump attack" );
 	
-	text[ 18 ].setText( "Throw" );
-	text[ 20 ].setText( "Jump throw" );
+	text[ 16 ].setText( "Throw" );
+	text[ 18 ].setText( "Jump throw" );
 	
 	
 	text[ 0 ].setPosition( left, bot );
@@ -262,7 +261,6 @@ void Setkeyboard::handle( sf::Event &event )
 	if( which != -1 )
 	{
 		static bool rel = false;
-		
 		if( event.type == sf::Event::KeyPressed && !rel )
 		{
 			if( addMode == 1 )
