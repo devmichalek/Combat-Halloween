@@ -68,7 +68,10 @@ Hero::Hero()
 	vel = 0;
 	vel_value = 0;
 	grav = 0;
+	
 	allow_jump = false;
+	glide = false;
+	slide = false;
 	
 	
 	which = 0;
@@ -107,7 +110,10 @@ void Hero::free()
 	vel = 0;
 	vel_value = 0;
 	grav = 0;
+	
 	allow_jump = false;
+	glide = false;
+	slide = false;
 	
 	
 	which = 0;
@@ -154,7 +160,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 	free();
 	
 	// 	Set sprites.
-	SCALE = 0.25;
+	SCALE = 0.5;
 
 	nr = STRENGTH +1;
 	sprite = new MySprite [ nr ];
@@ -164,9 +170,10 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
 		sprite[ i ].setScale( SCALE, SCALE );
-		sprite[ i ].setPosition( 45, posY -sprite[ i ].getHeight() -130 );
+		sprite[ i ].setPosition( 45, posY -sprite[ i ].getHeight() -500 );
 	}
-	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() + 10 );
+	sprite[ IDLE ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() -4 );
+	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() +7 );
 	sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
 
 	w = new int [ nr ];
@@ -248,14 +255,43 @@ void Hero::draw( sf::RenderWindow* &window )
 
 void Hero::idle()
 {
-	which = IDLE;
+	if( !glide )
+	{
+		// printf( "sth" );
+		grav = 2;
+		which = IDLE;
+	}
 }
 
 bool Hero::move()
 {
-	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) ) // move left
+	// slide
+	if( checkKeys( keys[ 3 ][ 0 ], keys[ 3 ][ 1 ] ) ) // slide left
 	{
-		which = RUN;
+		if( !glide )
+		{
+			slide = true;
+			moving = true;
+			which = SLIDE;
+		}
+	}
+	else
+	{
+		slide = false;
+		moving = false;
+	}
+		
+		
+	
+	// move
+	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) || ( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) && slide ) ) // move left
+	{
+		if( !glide )
+		{
+			if( !slide )
+				which = RUN;
+		}
+
 		flag = true;
 		
 		for( int i = 0; i < nr; i++ )
@@ -278,11 +314,15 @@ bool Hero::move()
 		}
 		
 		moving = true;
-		return true;
 	}
-	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) ) // move right
+	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) || ( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) ) ) // move right
 	{
-		which = RUN;
+		if( !glide )
+		{
+			if( !slide )
+				which = RUN;
+		}
+			
 		
 		for( int i = 0; i < nr; i++ )
 		{
@@ -306,17 +346,14 @@ bool Hero::move()
 		}
 		
 		moving = true;
-		return true;
 	}
-	else
-		moving = false;
 	
-	return false;
+	return moving;
 }
 
 bool Hero::jump()
 {
-	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && allow_jump )
+	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && allow_jump && !glide )
 	{
 		offset = 0;
 		j.counter = 1;
@@ -345,7 +382,7 @@ bool Hero::jump()
 
 bool Hero::attack()
 {
-	if( a.counter == 0 && checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) )
+	if( a.counter == 0 && checkKeys( keys[ 6 ][ 0 ], keys[ 6 ][ 1 ] ) && !glide )
 	{
 		offset = 0;
 		a.counter = 1;
@@ -427,8 +464,15 @@ void Hero::weightlessness()
 	}
 	
 	allow_jump = true;
+	glide = false;
 }
 
+void Hero::gliding()
+{
+	glide = true;
+	which = GLIDE;
+	grav = 1;
+}
 
 
 
@@ -445,6 +489,10 @@ const int Hero::getX()
 	else if( a.active )
 	{
 		x = sprite[ IDLE ].getX();
+	}
+	else if( glide )
+	{
+		x = sprite[ GLIDE ].getX();
 	}
 	else
 	{
@@ -469,10 +517,6 @@ const int Hero::getY()
 	{
 		y = sprite[ JUMP ].getY();
 	}
-	else if( a.active )
-	{
-		y = sprite[ ATTACK ].getY();
-	}
 	else
 	{
 		y = sprite[ IDLE ].getY();
@@ -483,6 +527,12 @@ const int Hero::getY()
 
 const int Hero::getW()
 {
+	if( slide )
+		return w[ SLIDE ];
+	else if( j.active )
+		return w[ JUMP ] -10;
+	else if( glide )
+		return w[ GLIDE ];
 	return w[ IDLE ];
 }
 

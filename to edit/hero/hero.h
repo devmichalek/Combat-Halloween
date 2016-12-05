@@ -1,6 +1,5 @@
 #pragma once
 
-#include "templates/sprite.h"
 #include "hero/activity.h"
 #include "wood/block.h"
 #include <vector>
@@ -32,7 +31,11 @@ class Hero
 	float vel;		// Velocity.
 	float vel_value;	// Value of velocity set at start.
 	int grav;		// Force of gravity.
+	int grav_counter;
+	
 	bool allow_jump;	// If champion stands at the block then can jump.
+	bool glide;	// If champion is falling
+	bool slide;	// If champion is sliding
 	
 	
 	int which;		// Which activity is active.
@@ -81,6 +84,9 @@ public:
 	
 	void gravitation();
 	void weightlessness();
+	void gliding();
+	
+	
 	
 	const int getX();
 	const int getY();
