@@ -36,11 +36,11 @@ void Character::free()
 void Character::load( int screen_w, int screen_h )
 {
 	one.setName( "character-one" );
-	one.load( "data/sprites/hero/0/0.png", 10 );
+	one.load( "data/sprites/hero/0/choose/0.png", 10 );
 	one.center( screen_w, 100, screen_w/2, screen_h );
 	
 	two.setName( "character-two" );
-	two.load( "data/sprites/hero/1/0.png", 10 );
+	two.load( "data/sprites/hero/1/choose/0.png", 10 );
 	two.setScale( 0.93, 0.93 );
 	two.center( screen_w + screen_w/2, 100, screen_w/2, screen_h ); //RUDA <3
 	
