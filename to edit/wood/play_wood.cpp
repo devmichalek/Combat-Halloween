@@ -61,7 +61,9 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	hero->gravitation();
 	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
 		hero->weightlessness();
-
+	else
+		hero->gliding();
+	
 	if( hero->attack() ) {}
 	else if( hero->jump() )
 	{
@@ -86,7 +88,9 @@ void Play_wood::draw( sf::RenderWindow* &window )
 		}
 	}
 	else
+	{
 		hero->idle();
+	}
 }
 
 	
