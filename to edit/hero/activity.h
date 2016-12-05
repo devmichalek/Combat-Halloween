@@ -1,12 +1,13 @@
 #pragma once
 
+#include "templates/sprite.h"
 
 class Activity
 {
 	
 public:
-	int line;
-	int counter;
+	sf::Uint8 line;
+	sf::Uint8 counter;
 	bool active;
 	
 	Activity();
