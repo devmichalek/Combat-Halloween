@@ -2,15 +2,15 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 
-class Log :public Parentchunk
+class Log :public Click
 {
 	int state;
 	MySprite button;
 	MySprite log;
 	
-	int nr;	// how many text textures
+	sf::Uint8 nr;	// how many text textures
 	MyText* myText;
 	
 	// if that log is not ready
