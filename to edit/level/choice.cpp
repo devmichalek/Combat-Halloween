@@ -24,7 +24,7 @@ Choice::~Choice()
 	
 	if( world != NULL )
 	{
-		for( int i = 0; i < nr; i ++ )
+		for( sf::Uint8 i = 0; i < nr; i ++ )
 			world[ i ].free();
 		
 		delete [] world;
@@ -65,7 +65,7 @@ void Choice::load( int screen_w, int screen_h )
 	nr = 4;
 	world = new MySprite[ nr ];
 	
-	for( int i = 0; i < nr; i ++ )
+	for( sf::Uint8 i = 0; i < nr; i ++ )
 	{
 		world[ i ].setName( "choice-world[ " + to_string( i ) + " ]" );
 		world[ i ].load( "data/sprites/level/" + to_string( i ) + ".png" );
@@ -111,7 +111,7 @@ void Choice::handle( sf::Event &event )
 			else
 				focus = false;
 				
-			for( int i = 0; i < nr; i++ )
+			for( sf::Uint8 i = 0; i < nr; i++ )
 			{
 				if( world[ i ].checkCollision( x, y ) )
 					chosen = i;
@@ -222,7 +222,7 @@ int Choice::getResult()
 	return result;
 }
 
-int Choice::getAlpha()
+sf::Uint8 Choice::getAlpha()
 {
 	return text.getAlpha();
 }
