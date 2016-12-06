@@ -15,7 +15,7 @@ Loading::~Loading()
 void Loading::free()
 {
 	text.free();
-	background.free();
+	bg.free();
 	
 	progress_bar.free();
 	counter = 0;
@@ -41,15 +41,15 @@ void Loading::load( const int &screen_w, const int &screen_h )
 	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, text.getBot() +15 );
 	
 	
-	background.setName( "loading-background" );
-	background.create( screen_w, screen_h );
-	background.setColor( sf::Color( 21, 21, 29 ) );
-	background.setAlpha( 0xFF );
+	bg.setName( "loading-background" );
+	bg.create( screen_w, screen_h );
+	bg.setColor( sf::Color( 21, 21, 29 ) );
+	bg.setAlpha( 0xFF );
 }
 
 void Loading::draw( sf::RenderWindow* &window )
 {
-	window->draw( background.get() );
+	window->draw( bg.get() );
 	
 	window->draw( text.get() );
 	text.setText( "Loading " + to_string( state ) + "%" );
@@ -67,7 +67,7 @@ void Loading::draw( sf::RenderWindow* &window )
 	}
 }
 
-const int& Loading::getState() const
+const sf::Uint8& Loading::getState() const
 {
 	return state;
 }
