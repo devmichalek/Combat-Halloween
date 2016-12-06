@@ -9,7 +9,7 @@ class Intro
 	MySprite shuriken;	// shuriken image
 	MyText* text;	// some sentences
 	
-	int nr;		// how many text objects
+	sf::Uint8 nr;		// how many text objects
 	bool quit;
 	
 public:
