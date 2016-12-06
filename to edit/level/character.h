@@ -1,10 +1,10 @@
 #pragma once
 
 #include "templates/sprite.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 #include "templates/text.h"
 
-class Character :public Parentchunk
+class Character :public Click
 {
 	MySprite one;
 	MySprite two;
@@ -35,8 +35,8 @@ public:
 	bool nextState();
 	int getResult();
 	
-	void fadein( int j, int max );
-	void fadeout( int j, int min );
+	void fadein( int j = 1, int max = 255 );
+	void fadeout( int j = 1, int min = 0 );
 	
 	int getAlpha();
 	bool move( int vel, int ran );	// move horizontal
