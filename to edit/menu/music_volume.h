@@ -2,12 +2,12 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 
-class Music_volume :public Parentchunk
+class Music_volume :public Click
 {
 	float volume;
-	int last_volume;
+	sf::Uint8 last_volume;
 	MySprite plus;
 	MySprite minus;	// background
 	MyText text;		
@@ -27,8 +27,8 @@ public:
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int i = 1, int max = 255 );
+	void fadeout( int i = 1, int min = 0 );
 	
 	int getBot();
 	
