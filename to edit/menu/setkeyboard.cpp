@@ -235,7 +235,7 @@ void Setkeyboard::load( int left, int right, int bot )
 	remove = 68;
 	
 	banNr = 4;
-	bannedKeys = new int[ banNr ];
+	bannedKeys = new sf::Uint8[ banNr ];
 	bannedKeys[ 0 ] = 1;
 	bannedKeys[ 1 ] = 15;
 	bannedKeys[ 2 ] = 16;
