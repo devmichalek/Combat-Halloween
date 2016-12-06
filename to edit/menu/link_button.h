@@ -1,9 +1,9 @@
 #pragma once
 
 #include "templates/sprite.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 
-class Link_button :public Parentchunk
+class Link_button :public Click
 {
     string url;
 	
@@ -23,6 +23,6 @@ public:
 	
 	int getBot();	// getter
 	
-	void fadein( int i, int max );
-	void fadeout( int i, int min );
+	void fadein( int i = 1, int max = 255 );
+	void fadeout( int i = 1, int min = 0 );
 };
