@@ -2,14 +2,14 @@
 
 #include "templates/sprite.h"
 #include "templates/text.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 
-class Play_button :public Parentchunk
+class Play_button :public Click
 {
 
 protected:
 
-	mutable int state;
+	mutable sf::Uint8 state;
 	mutable MySprite mySprite;
 	MyText myText;
 	
@@ -24,7 +24,7 @@ public:
 	
 	const int getBot() const;
 	const int getX() const;
-	const int& getState() const;
+	const sf::Uint8& getState() const;
 	bool nextGameState() const;
 	
 	void fadein( int i = 1, int max = 255 );
