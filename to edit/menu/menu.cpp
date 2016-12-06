@@ -221,49 +221,49 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( play_button->getState() != 2 && exit->getState() == 0 )// if user didn't click play
 	{
 		music->fadein( 1, music_volume->getVolume() );
-		background->fadein( 2, 255 );
-		git_button->fadein( 2, 255 );
-		google_button->fadein( 2, 255 );
-		twitter_button->fadein( 2, 255 );
-		facebook_button->fadein( 2, 255 );
+		background->fadein( 2 );
+		git_button->fadein( 2 );
+		google_button->fadein( 2 );
+		twitter_button->fadein( 2 );
+		facebook_button->fadein( 2 );
 		play_button->fadein( 2 );
 		title->fadein( 2 );
-		music_button->fadein( 2, 255 );
-		chunk_button->fadein( 2, 255 );
+		music_button->fadein( 2 );
+		chunk_button->fadein( 2 );
 		author_log->fadein( 2 );
 		game_log->fadein( 2 );
-		settings_log->fadein( 2, 255 );
-		music_volume->fadein( 2, 255 );
-		chunk_volume->fadein( 2, 255 );
-		scores_log->fadein( 2, 255 );
-		keyboard->fadein( 2, 255 );
-		version->fadein( 2, 255 );
-		setkeyboard->fadein( 2, 255 );
-		information->fadein( 2, 255 );
+		settings_log->fadein( 2 );
+		music_volume->fadein( 2 );
+		chunk_volume->fadein( 2 );
+		scores_log->fadein( 2 );
+		keyboard->fadein( 2 );
+		version->fadein( 2 );
+		setkeyboard->fadein( 2 );
+		information->fadein( 2 );
 	}
 	// Fade out:
 	else if( play_button->getState() == 2 ) // if user clicked play
 	{
-		music->fadeout( 1, 0 );
-		background->fadeout( 3, 0 );
-		git_button->fadeout( 3, 0 );
-		google_button->fadeout( 3, 0 );
-		twitter_button->fadeout( 3, 0 );
-		facebook_button->fadeout( 3, 0 );
+		music->fadeout( 1 );
+		background->fadeout( 3 );
+		git_button->fadeout( 3 );
+		google_button->fadeout( 3 );
+		twitter_button->fadeout( 3 );
+		facebook_button->fadeout( 3 );
 		play_button->fadeout( 3 );
 		title->fadeout( 3 );
-		music_button->fadeout( 3, 0 );
-		chunk_button->fadeout( 3, 0 );
+		music_button->fadeout( 3 );
+		chunk_button->fadeout( 3 );
 		author_log->fadeout( 3 );
 		game_log->fadeout( 3 );
-		settings_log->fadeout( 3, 0 );
-		music_volume->fadeout( 3, 0 );
-		chunk_volume->fadeout( 3, 0 );
-		scores_log->fadeout( 3, 0 );
-		keyboard->fadeout( 3, 0 );
-		version->fadeout( 3, 0 );
-		setkeyboard->fadeout( 3, 0 );
-		information->fadeout( 3, 0 );
+		settings_log->fadeout( 3 );
+		music_volume->fadeout( 3 );
+		chunk_volume->fadeout( 3 );
+		scores_log->fadeout( 3 );
+		keyboard->fadeout( 3 );
+		version->fadeout( 3 );
+		setkeyboard->fadeout( 3 );
+		information->fadeout( 3 );
 	}
 	else if( exit->getState() == 1 ) // if user clicked exit
 	{
@@ -290,26 +290,26 @@ void Menu::draw( sf::RenderWindow* &window )
 	}
 	else
 	{
-		music->fadeout( 3, 0 );
-		background->fadeout( 3, 0 );
-		git_button->fadeout( 3, 0 );
-		google_button->fadeout( 3, 0 );
-		twitter_button->fadeout( 3, 0 );
-		facebook_button->fadeout( 3, 0 );
+		music->fadeout( 3 );
+		background->fadeout( 3 );
+		git_button->fadeout( 3 );
+		google_button->fadeout( 3 );
+		twitter_button->fadeout( 3 );
+		facebook_button->fadeout( 3 );
 		play_button->fadeout( 3 );
 		title->fadeout( 3 );
-		music_button->fadeout( 3, 0 );
-		chunk_button->fadeout( 3, 0 );
+		music_button->fadeout( 3 );
+		chunk_button->fadeout( 3 );
 		author_log->fadeout( 3 );
 		game_log->fadeout( 3 );
-		settings_log->fadeout( 3, 0 );
-		music_volume->fadeout( 3, 0 );
-		chunk_volume->fadeout( 3, 0 );
-		scores_log->fadeout( 3, 0 );
-		keyboard->fadeout( 3, 0 );
-		version->fadeout( 3, 0 );
-		setkeyboard->fadeout( 3, 0 );
-		information->fadeout( 3, 0 );
+		settings_log->fadeout( 3 );
+		music_volume->fadeout( 3 );
+		chunk_volume->fadeout( 3 );
+		scores_log->fadeout( 3 );
+		keyboard->fadeout( 3 );
+		version->fadeout( 3 );
+		setkeyboard->fadeout( 3 );
+		information->fadeout( 3 );
 		if( background->getAlpha() == 0 )
 		{
 			state->state = 1;
