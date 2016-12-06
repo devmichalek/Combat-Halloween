@@ -1,16 +1,16 @@
 #pragma once
 
 #include "templates/sprite.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 
-
-class Music_button :public Parentchunk	// Class for chunk/music button 
+// Class for chunk/music button
+class Music_button :public Click
 {
 	MySprite button;
 	MySprite scratch;
 	
 	// music/chunk is on/off
-	int state;
+	sf::Uint8 state;
 	
 public:
 
