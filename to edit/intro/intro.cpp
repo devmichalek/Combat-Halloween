@@ -20,8 +20,10 @@ void Intro::free()
 
 	if( text != NULL )
 	{
-		for( int i = 0; i < nr; i++ )
+		for( sf::Uint8 i = 0; i < nr; i++ )
+		{
 			text[ i ].free();
+		}
 		
 		delete [] text;
 		text = NULL;
@@ -86,24 +88,24 @@ void Intro::load( const int &screen_w, const int &screen_h )
 void Intro::draw( sf::RenderWindow* &window )
 {
 	window->draw( bg.get() );
-	if( text[ 0 ].getAlpha() < 255 )
+	if( text[ 0 ].getAlpha() < 0xFF )
 	{
-		text[ 0 ].fadein( 3 );
+		text[ 0 ].fadein( 1 );
 		
 		window->draw( text[ 0 ].get() );
 	}
-	else if( text[ 1 ].getAlpha() < 255 )
+	else if( text[ 1 ].getAlpha() < 0xFF )
 	{
-		text[ 1 ].fadein( 3 );
-		shuriken.fadein( 3 );
+		text[ 1 ].fadein( 1 );
+		shuriken.fadein( 1 );
 		
 		window->draw( text[ 1 ].get() );
 		window->draw( shuriken.get() );
 	}
-	else if( text[ 2 ].getAlpha() < 255 )
+	else if( text[ 2 ].getAlpha() < 0xFF )
 	{
-		text[ 2 ].fadein( 3 );
-		text[ 3 ].fadein( 3 );
+		text[ 2 ].fadein( 1 );
+		text[ 3 ].fadein( 1 );
 		
 		window->draw( text[ 2 ].get() );
 		window->draw( text[ 3 ].get() );
