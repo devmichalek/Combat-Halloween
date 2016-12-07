@@ -57,7 +57,7 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	hero->draw( window );
 	random_block->draw( window );
 	
-	
+	/*
 	hero->gravitation();
 	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
 		hero->weightlessness();
@@ -91,6 +91,7 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	{
 		hero->idle();
 	}
+	*/
 }
 
 	
