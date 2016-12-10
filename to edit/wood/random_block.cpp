@@ -155,7 +155,7 @@ void Random_block::positioning()
 	envelope[ 1 ]->nr = 16;
 	envelope[ 1 ]->x = 128;
 	envelope[ 1 ]->y = screen_h -width;
-	envelope[ 1 ]->line = false;
+	envelope[ 1 ]->line = true;
 	
 	envelope.push_back( new Block() );
 	envelope[ 2 ]->nr = 2;
