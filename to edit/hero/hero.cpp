@@ -2,89 +2,27 @@
 #include <fstream>
 
 
-void Hero::fadein( int v, int max )
-{
-	for( int i = 0; i < nr; i++ )
-		sprite[ i ].fadein( v, max );
-}
-
-void Hero::fadeout( int v, int min )
-{
-	for( int i = 0; i < nr; i++ )
-		sprite[ i ].fadeout( v, min );
-}
-
-
-
-
-int Hero::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if (s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp+s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
-
-bool Hero::checkKey( int a )
-{
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
-		return true;
-	
-	return false;
-}
-
-bool Hero::checkKeys( int a, int b )
-{
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) && b == -1 )
-		return true;
-	else if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
-		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( b ) ) )
-			return true;
-	return false;
-}
-
-
-
-
 Hero::Hero()
 {
-	nr = 0;
 	sprite = NULL;
-	
-	
-	vel = 0;
-	vel_value = 0;
-	grav = 0;
-	
-	allow_jump = false;
-	glide = false;
-	slide = false;
-	
 	
 	which = 0;
 	offset = 0;
 	delay = 0;
 	
 	
-	right = false;
-	flag = false;
-	moving = false;
-	SCALE = 0;
+	vel = 0;
+	jVel = 0;
+	grav = 0;
+	scale = 0;
 	
-	w = NULL;
+	
+	flag = false;
+	right = false;
+	
+	glide = false;
+	
+	slide = false;
 }
 
 Hero::~Hero()
@@ -103,29 +41,11 @@ void Hero::free()
 		
 		delete [] sprite;
 		sprite = NULL;
-		nr = 0;
 	}
-	
-	
-	vel = 0;
-	vel_value = 0;
-	grav = 0;
-	
-	allow_jump = false;
-	glide = false;
-	slide = false;
-	
 	
 	which = 0;
 	offset = 0;
 	delay = 0;
-	
-	
-	right = false;
-	flag = false;
-	moving = false;
-	SCALE = 0;
-	
 	
 	for( unsigned i = 0; i < keys.size(); i++ )
 	{
@@ -136,21 +56,22 @@ void Hero::free()
 		}
 	}
 	
-	
 	keys.clear();
 	
+	vel = 0;
+	jVel = 0;
+	grav = 0;
+	scale = 0;
 	
+	flag = false;
+	right = false;
 	
-	j.free();
+	glide = false;
+	
+	slide = false;
+	
 	a.free();
-	c.free();
-	
-
-	if( w == NULL )
-	{
-		delete [] w;
-		w = NULL;
-	}
+	ja.free();
 }
 
 
@@ -159,29 +80,25 @@ void Hero::load( int& screen_w, int& posY, string path )
 {
 	free();
 	
-	// 	Set sprites.
-	SCALE = 0.5;
-
-	nr = STRENGTH +1;
+	// 	Set scale.
+	scale = 0.5;
+	
+	// Create array.
 	sprite = new MySprite [ nr ];
 	
 	for( int i = 0; i < nr; i++ )
 	{
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
-		sprite[ i ].load( path + to_string( i ) + ".png", STRENGTH );
-		sprite[ i ].setScale( SCALE, SCALE );
+		sprite[ i ].load( path + to_string( i ) + ".png", nr -1 );
+		sprite[ i ].setScale( scale, scale );
 		sprite[ i ].setPosition( 45, posY -sprite[ i ].getHeight() -500 );
 	}
-	sprite[ IDLE ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() -4 );
-	sprite[ ATTACK ].setPosition( sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() +7 );
-	sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
-
-	w = new int [ nr ];
-	for( int i = 0; i < nr; i++ )
-	{
-		w[ i ] = sprite[ i ].getWidth();
-	}
+	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() + ( sprite[ JUMP_ATTACK ].getHeight() - sprite[ IDLE ].getHeight() ) );
 	
+	// Start values.
+	which = IDLE;
+	offset = 0;
+	delay = 6;
 	
 	
 	// Set keys.
@@ -210,28 +127,18 @@ void Hero::load( int& screen_w, int& posY, string path )
 	
 	
 	
-	// Set other valuables
-	vel_value = 1;
-	vel = vel_value;
-	grav = 2;
-	
-	
-	
-	
-	
-	// Start sprites
-	which = IDLE;
-	offset = 0;
-	delay = 6;
-	
+	// Set other values
+	vel = 1;
+	jVel = vel*2;
+	grav = 1;
 	right = true;
-	moving = false;
 	
 	
-	// How much will it last
-	j.line = STRENGTH*delay + 10*delay;
-	a.line = STRENGTH*delay + 2*delay;
-	c.line = STRENGTH*delay + 2*delay;
+
+	// Duration
+	j.setLine( (nr-1)*delay + 10*delay );
+	a.setLine( (nr-1)*delay + 2*delay );
+	ja.setLine( j.getLine() );
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -241,13 +148,15 @@ void Hero::draw( sf::RenderWindow* &window )
 	sprite[ which ].setOffset( offset /delay );
 	
 	offset ++;
-	if( offset == STRENGTH *delay )
+	if( offset == (nr-1) *delay )
 	{
 		offset = 0;
-		
-		j.active = false;
-		a.active = false;
-	}	
+		j.setActive( false );
+		a.setActive( false );
+		ja.setActive( false );
+	}
+	
+	// printf( "X %d   Y %d  W %d   H %d\n", getX(), getY(), getW(), getH() );
 }
 
 
@@ -255,78 +164,63 @@ void Hero::draw( sf::RenderWindow* &window )
 
 void Hero::idle()
 {
-	if( !glide )
+	if( !glide  && !slide )
 	{
-		// printf( "sth" );
-		grav = 2;
 		which = IDLE;
 	}
 }
 
 bool Hero::move()
 {
-	// slide
-	if( checkKeys( keys[ 3 ][ 0 ], keys[ 3 ][ 1 ] ) ) // slide left
+	// move left
+	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) )
 	{
-		if( !glide )
+		if( !glide && !slide )
 		{
-			slide = true;
-			moving = true;
-			which = SLIDE;
+			which = RUN;
 		}
-	}
-	else
-	{
-		slide = false;
-		moving = false;
-	}
 		
-		
-	
-	// move
-	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) || ( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) && slide ) ) // move left
-	{
-		if( !glide )
-		{
-			if( !slide )
-				which = RUN;
-		}
-
 		flag = true;
 		
 		for( int i = 0; i < nr; i++ )
 		{
-			sprite[ i ].setScale( -SCALE, SCALE );
+			sprite[ i ].setScale( -scale, scale );
 			sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
 		}
 		
 		if( right )
 		{
-			sprite[ RUN ].setPosition( sprite[ IDLE ].getX() + ( sprite[ RUN ].getWidth()*-1 ), sprite[ RUN ].getY() );
-			
 			for( int i = 0; i < nr; i++ )
 			{
-				if( i != RUN )
-					sprite[ i ].setPosition( sprite[ i ].getX() + ( sprite[ i ].getWidth()*-1 ), sprite[ i ].getY() );
+				if( i != IDLE )
+				{
+					sprite[ i ].setPosition( sprite[ IDLE ].getX() + ( sprite[ i ].getWidth()*-1 ), sprite[ i ].getY() );
+				}
 			}
+			
+			sprite[ IDLE ].setPosition( sprite[ IDLE ].getX() + ( sprite[ IDLE ].getWidth()*-1 ), sprite[ IDLE ].getY() );
+			sprite[ ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
+			sprite[ GLIDE ].center( sprite[ IDLE ].getX(), sprite[ IDLE ].getY(), sprite[ IDLE ].getWidth(), sprite[ IDLE ].getHeight() );
+			sprite[ SLIDE ].setPosition( sprite[ IDLE ].getX(), sprite[ SLIDE ].getY() );
+			sprite[ JUMP_ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ JUMP_ATTACK ].getY() );
 			
 			right = false;
 		}
 		
-		moving = true;
+		return true;
 	}
-	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) || ( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) ) ) // move right
+	
+	// move right
+	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) ) 
 	{
-		if( !glide )
+		if( !glide && !slide )
 		{
-			if( !slide )
-				which = RUN;
+			which = RUN;
 		}
-			
 		
 		for( int i = 0; i < nr; i++ )
 		{
-			sprite[ i ].setScale( SCALE, SCALE );
+			sprite[ i ].setScale( scale, scale );
 			sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
 		}
 		
@@ -340,203 +234,320 @@ bool Hero::move()
 				}
 			}
 			
-			sprite[ RUN ].setPosition( sprite[ IDLE ].getX() - ( sprite[ RUN ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ RUN ].getY() );
+			for( int i = 0; i < nr; i++ )
+			{
+				if( i != IDLE )
+				{
+					sprite[ i ].setPosition( sprite[ IDLE ].getX() - ( sprite[ i ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ i ].getY() );
+				}
+			}
 			
+			sprite[ ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
+			sprite[ GLIDE ].center( sprite[ IDLE ].getX(), sprite[ IDLE ].getY(), sprite[ IDLE ].getWidth(), sprite[ IDLE ].getHeight() );
+			sprite[ SLIDE ].setPosition( sprite[ IDLE ].getX(), sprite[ SLIDE ].getY() );
+			sprite[ JUMP_ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ JUMP_ATTACK ].getY() );
+				
 			right = true;
 		}
 		
-		moving = true;
+		return true;
 	}
 	
-	return moving;
+	return false;
 }
 
 bool Hero::jump()
 {
-	if( j.counter == 0 && checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && allow_jump && !glide )
+	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide )
 	{
 		offset = 0;
-		j.counter = 1;
-		j.active = true;
+		j.start();
+		j.setActive( true );
+		which = JUMP;
 	}
-	else if( j.active )
+	
+	if( j.isActive() )
 	{
 		which = JUMP;
 		
 		if( right )
 		{
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() +vel*2 +1, sprite[ i ].getY() );
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() +jVel, sprite[ i ].getY() );
+			}
 		}
 		else
 		{
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() -vel*2 -1, sprite[ i ].getY() );
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() -jVel, sprite[ i ].getY() );
+			}
 		}
 	}
 	
-	j.summarize();
+	j.check();
 	
-	return j.active;	
+	return j.isActive();	
 }
 
 bool Hero::attack()
 {
-	if( a.counter == 0 && checkKeys( keys[ 6 ][ 0 ], keys[ 6 ][ 1 ] ) && !glide )
+	if( checkKeys( keys[ 5 ][ 0 ], keys[ 5 ][ 1 ] ) && a.Do() && !glide && !j.isActive() )
 	{
 		offset = 0;
-		a.counter = 1;
-		a.active = true;
-		
-		sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ ATTACK ].getY() );
+		a.start();
+		a.setActive( true );
+		which = ATTACK;
+		sprite[ ATTACK ].setPosition( sprite[ RUN ].getX(), sprite[ RUN ].getY() +2 );
 	}
-	else if( a.active )
+	
+	if( a.isActive() )
 	{
 		which = ATTACK;
 	}
 	
-	a.summarize();
+	a.check();
 	
-	return a.active;
+	return a.isActive();
 }
 
-
-
-
-
-void Hero::reverseJump()
+void Hero::gliding()
 {
-	if( j.active )
+	which = GLIDE;
+}
+
+void Hero::sliding()
+{
+	if( checkKeys( keys[ 3 ][ 0 ], keys[ 3 ][ 1 ] ) )
 	{
+		if( !glide )
+		{
+			slide = true;
+			which = SLIDE;
+		}
+	}
+	else
+	{
+		slide = false;
+	}
+}
+
+bool Hero::jumpAttack()
+{
+	if( checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) && ja.Do() && !glide && !j.isActive() && !a.isActive() )
+	{
+		offset = 0;
+		ja.start();
+		ja.setActive( true );
+		which = JUMP_ATTACK;
+	}
+	
+	if( ja.isActive() )
+	{
+		which = JUMP_ATTACK;
+		
 		if( right )
 		{
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() +jVel, sprite[ i ].getY() );
+			}
 		}
 		else
 		{
 			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() -jVel, sprite[ i ].getY() );
+			}
 		}
 	}
+	
+	ja.check();
+	
+	return ja.isActive();
 }
 
-void Hero::reverseMove()
+
+
+void Hero::undoMove()
 {
-	if( moving )
+	// undo move right
+	if( right )
 	{
-		if( right )
+		for( int i = 0; i < nr; i++ )
 		{
-			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
+			sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
 		}
-		else
+	}
+	
+	// undo move left
+	else
+	{
+		for( int i = 0; i < nr; i++ )
 		{
-			for( int i = 0; i < nr; i++ )
-				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
+			sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
 		}
 	}
 }
 
-
-
+void Hero::undoJump()
+{
+	if( right )
+	{
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setPosition( sprite[ i ].getX() -jVel, sprite[ i ].getY() );
+		}
+	}
+	else
+	{
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setPosition( sprite[ i ].getX() +jVel, sprite[ i ].getY() );
+		}
+	}
+}
 
 
 
 void Hero::gravitation()
 {
-	if( !j.active )
+	if( !j.isActive() )
 	{
 		for( int i = 0; i < nr; i++ )
 		{
 			sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +grav );
 		}
+		
+		glide = true;
 	}
-
-	allow_jump = false;
+	else
+	{
+		glide = false;
+	}
 }
 
 void Hero::weightlessness()
 {
+	glide = false;
 	for( int i = 0; i < nr; i++ )
 	{
 		sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -grav );
 	}
-	
-	allow_jump = true;
-	glide = false;
 }
 
-void Hero::gliding()
-{
-	glide = true;
-	which = GLIDE;
-	grav = 1;
-}
 
 
 
 const int Hero::getX()
 {
-	int x;
+	int x = 0;
 	
-	if( moving || j.active )
-	{
-		x = sprite[ IDLE ].getX();
-		if( !right )
-			x -= w[ IDLE ];
-	}
-	else if( a.active )
-	{
-		x = sprite[ IDLE ].getX();
-	}
-	else if( glide )
+	x = sprite[ IDLE ].getX();
+	
+	if( which == GLIDE )
 	{
 		x = sprite[ GLIDE ].getX();
 	}
-	else
+	
+	if( !right )
 	{
-		x = sprite[ IDLE ].getX();
-		if( !right )
-			x -= w[ IDLE ];
+		x -= getW();
 	}
-
 	
 	return x;
 }
 
 const int Hero::getY()
 {
-	int y;
+	int y = 0;
 	
-	if( moving )
-	{
-		y = sprite[ RUN ].getY();
-	}
-	else if( j.active )
-	{
-		y = sprite[ JUMP ].getY();
-	}
-	else
-	{
-		y = sprite[ IDLE ].getY();
-	}
-
+	y = sprite[ IDLE ].getY();
+	
 	return y;
 }
 
 const int Hero::getW()
 {
-	if( slide )
-		return w[ SLIDE ];
-	else if( j.active )
-		return w[ JUMP ] -10;
-	else if( glide )
-		return w[ GLIDE ];
-	return w[ IDLE ];
+	int w = 0;
+	
+	w = sprite[ IDLE ].getWidth();
+	
+	if( which == GLIDE )
+	{
+		w = sprite[ GLIDE ].getWidth();
+	}
+	
+	if( w < 0 )
+	{
+		w = -w;
+	}
+	
+	return w;
 }
 
 const int Hero::getH()
 {
-	return sprite[ IDLE ].getHeight();
+	int h = 0;
+	
+	h = sprite[ IDLE ].getHeight();
+	
+	return h;
+}
+
+
+void Hero::fadein( int v, int max )
+{
+	for( int i = 0; i < nr; i++ )
+	{
+		sprite[ i ].fadein( v, max );
+	}
+}
+
+void Hero::fadeout( int v, int min )
+{
+	for( int i = 0; i < nr; i++ )
+	{
+		sprite[ i ].fadeout( v, min );
+	}
+}
+
+
+int Hero::strToInt( string s )
+{
+    bool m = false;
+    int tmp = 0;
+    unsigned i = 0;
+	
+    if (s[ 0 ] == '-' )
+    {
+          i++;
+          m = true;
+    }
+	
+    while( i < s.size() )
+    {
+      tmp = 10*tmp+s[ i ] -48;
+      i++;
+    }
+	
+    return m ? -tmp : tmp;   
+}
+
+bool Hero::checkKeys( int a, int b )
+{
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) && b == -1 )
+	{
+		return true;
+	}
+	else if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( a ) ) )
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( b ) ) )
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
