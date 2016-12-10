@@ -41,5 +41,5 @@ public:
 	void ruleRightSide();
 	void ruleLeftSide();
 	void ruleBotSide();
-	void ruleTopSide();
+	void ruleTopSide( int number );
 };
