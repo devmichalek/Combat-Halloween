@@ -39,6 +39,8 @@ Setkeyboard::Setkeyboard()
 	banNr = 0;
 	bannedKeys = NULL;
 	save.free();
+	
+	lastChosen = -1;
 }
 
 Setkeyboard::~Setkeyboard()
@@ -68,6 +70,8 @@ Setkeyboard::~Setkeyboard()
 		bannedKeys = NULL;
 		banNr = 0;
 	}
+	
+	lastChosen = -1;
 }
 
 DoubleKey Setkeyboard::addKey( int a, int b )
@@ -76,7 +80,7 @@ DoubleKey Setkeyboard::addKey( int a, int b )
 	doubleKey.a = a;
 	doubleKey.b = b;
 	
-	return  doubleKey;
+	return doubleKey;
 }
 
 
@@ -125,7 +129,7 @@ void Setkeyboard::loadButton( int screen_w, int screen_h )
 
 void Setkeyboard::load( int left, int right, int bot )
 {
-	nr = 20;
+	nr = 18;
 	text = new MyText[ nr ];
 	
 	for( int i = 0; i < nr; i++ )
@@ -206,26 +210,25 @@ void Setkeyboard::load( int left, int right, int bot )
 	text[ 6 ].setText( "Slide" );
 	
 	text[ 8 ].setText( "Climb" );
-	text[ 10 ].setText( "Go down" );
 	
-	text[ 12 ].setText( "Attack" );
-	text[ 14 ].setText( "Jump attack" );
+	text[ 10 ].setText( "Attack" );
+	text[ 12 ].setText( "Jump attack" );
 	
-	text[ 16 ].setText( "Throw" );
-	text[ 18 ].setText( "Jump throw" );
+	text[ 14 ].setText( "Throw" );
+	text[ 16 ].setText( "Jump throw" );
 	
 	
 	text[ 0 ].setPosition( left, bot );
 	text[ 1 ].setPosition( 250, bot );
-	for( int i = 2; i < 10; i += 2 )
+	for( int i = 2; i < 8; i += 2 )
 	{
 		text[ i ].setPosition( left, text[ i -2 ].getBot() + 10 );
 		text[ i +1 ].setPosition( 250, text[ i -2 ].getBot() + 10 );
 	}
 	
-	text[ 10 ].setPosition( right +120, bot -5 );
-	text[ 11 ].setPosition( right +350, bot -5 );
-	for( int i = 12; i < nr -1; i += 2 )
+	text[ 8 ].setPosition( right +120, bot -5 );
+	text[ 9 ].setPosition( right +350, bot -5 );
+	for( int i = 10; i < nr -1; i += 2 )
 	{
 		text[ i ].setPosition( right +120, text[ i -2 ].getBot() + 10 );
 		text[ i +1 ].setPosition( right +350, text[ i -2 ].getBot() + 10 );
@@ -273,6 +276,8 @@ void Setkeyboard::handle( sf::Event &event )
 				else if( code >= 71 && code <= 74 )
 					success = true;
 				else if( code >= 37 && code <= 43 )
+					success = true;
+				else if( code == 57 || code == 58 )
 					success = true;
 					
 				for( int i = 0; i < banNr; i++ )
@@ -375,14 +380,57 @@ void Setkeyboard::handle( sf::Event &event )
 		int x = event.mouseButton.x;
 		int y = event.mouseButton.y;
 		
+		if( lastChosen != -1 )
+		{
+			// printf( "%d\n", lastChosen );
+			bool error = false;
+
+			for( unsigned m = 0; m < actual_keys.size(); m++ )
+			{
+				//printf( "A1 %d  B1 %d    A2 %d  B2 %d\n", actual_keys[ lastChosen ].a, actual_keys[ lastChosen ].b, actual_keys[ m ].a, actual_keys[ m ].b );
+				if( lastChosen == m )
+				{
+					continue;
+				}
+				else if( actual_keys[ lastChosen ].a == actual_keys[ m ].a && actual_keys[ lastChosen ].b == actual_keys[ m ].b )
+				{
+					error = true;
+					break;
+				}
+				else if( actual_keys[ lastChosen ].a == actual_keys[ m ].b && actual_keys[ lastChosen ].b == actual_keys[ m ].a )
+				{
+					error = true;
+					break;
+				}
+			}
+			
+			if( error )
+			{
+				actual_keys[ lastChosen ] = keys[ lastChosen ];
+				
+				string newName = "";
+				newName += getName( actual_keys[ lastChosen ].a );
+				if( actual_keys[ lastChosen ].b > -1 )
+					newName +=  " + " + getName( actual_keys[ lastChosen ].b );
+				
+				text[ lastChosen *2 +1 ].setText( newName );
+				text[ lastChosen *2 +1 ].reloadPosition();
+			}
+			
+			lastChosen = -1;
+		}
+		
 		for( int i = 0; i < nr; i += 2 )
 		{
 			if( text[ i ].checkCollision( x, y, 0, 5 ) )
 			{
 				which = i;
+				lastChosen = which/2;
 				break;
 			}
 		}
+		
+		
 		
 		for( int i = 0; i < nr; i += 2 )
 		{
