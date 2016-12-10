@@ -3,14 +3,14 @@
 #include "templates/text.h"
 #include "templates/sprite.h"
 #include "menu/doublekey.h"
-#include "menu/parentchunk.h"
+#include "menu/click.h"
 #include <vector>
 
 
 
-class Setkeyboard :public Parentchunk
+class Setkeyboard :public Click
 {
-	int nr;
+	sf::Uint8 nr;
 	MyText* text;
 	
 	vector <DoubleKey> keys; // basic keys
@@ -22,8 +22,10 @@ class Setkeyboard :public Parentchunk
 	sf::Uint8 remove;	// by which key you can insert info?
 	sf::Uint8 addMode; // state
 	
-	int banNr;
-	int* bannedKeys;
+	sf::Uint8 banNr;
+	sf::Uint8* bannedKeys;
+	
+	int lastChosen;
 	
 	MySprite save;
 	
@@ -41,8 +43,8 @@ public:
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
 
-	void fadein( int j, int max );
-	void fadeout( int j, int min );
+	void fadein( int j = 1, int max = 255 );
+	void fadeout( int j = 1, int min = 0 );
 	
 	vector <DoubleKey> getHeroKeys();
 };
