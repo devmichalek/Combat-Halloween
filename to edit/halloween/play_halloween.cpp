@@ -58,36 +58,52 @@ void Play_halloween::draw( sf::RenderWindow* &window )
 	hero->draw( window );
 	random_block->draw( window );
 	
-	
+	// Y
 	hero->gravitation();
 	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
+	{
 		hero->weightlessness();
+	}
+	else
+	{
+		hero->gliding();
+	}
+	
 
-	if( hero->attack() ) {}
+	// X
+	hero->sliding();
+	if( hero->jumpAttack() )
+	{
+		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
+			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
+			hero->getX() < 0 )
+		{
+			hero->undoJump();
+		}
+	}
+	else if( hero->attack() ) {}
 	else if( hero->jump() )
 	{
-		for( ;; )
+		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
+			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
+			hero->getX() < 0 )
 		{
-			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
-			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
-				hero->reverseJump();
-			else
-				break;
+			hero->undoJump();
 		}
 	}
 	else if( hero->move() )
 	{
-		for( ;; )
+		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
+			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
+			hero->getX() < 0 )
 		{
-			if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), 
-			hero->getH() ) || hero->getX() < 0 || hero->getX() > random_block->getScreenWidth() )
-				hero->reverseMove();
-			else
-				break;
+			hero->undoMove();
 		}
 	}
 	else
+	{
 		hero->idle();
+	}
 }
 
 	
