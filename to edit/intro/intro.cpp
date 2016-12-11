@@ -51,35 +51,31 @@ void Intro::load( const int &screen_w, const int &screen_h )
 	nr = 4;
 	text = new MyText[ nr ];
 	
+	for( int i = 0; i < nr; i ++ )
+	{
+		text[ i ].setName( "intro-text[" + to_string(i) + "]" );
+	}
+	
 	// WHEN NOTHING...
-	text[ 0 ].setID( "intro-text[0]" );
 	text[ 0 ].setFont( "data/fonts/Jaapokki-Regular.otf", 37, 255, 255, 255 );
 	text[ 0 ].setText( "When nothing makes sense..." );
 	text[ 0 ].center( screen_w, screen_h );
 
-
-
 	
 	// NINJA
-	text[ 1 ].setID( "intro-text[1]" );
 	text[ 1 ].setFont( "data/fonts/Jaapokki-Regular.otf", 37, 112, 183, 89 );
 	text[ 1 ].setText( "Ninja" );
 	text[ 1 ].setPosition( screen_w/2 - text[ 1 ].getWidth()/2 -40, screen_h/2 - text[ 1 ].getHeight()/2 );
 	shuriken.setPosition( text[ 1 ].getRight() + 10, screen_h/2 - shuriken.getHeight()/2 +10 );
 	
 	
-	
-	
 	// ADRIAN MICHALEK
-	text[ 2 ].setID( "intro-text[2]" );
 	text[ 2 ].setFont( "data/fonts/Jaapokki-Regular.otf", 37, 255, 255, 255 );
 	text[ 2 ].setText( "Adrian Michalek" );
 	text[ 2 ].center( screen_w, screen_h );
 
-	
-	
+
 	// PRODUCED ...
-	text[ 3 ].setID( "intro-text[3]" );
 	text[ 3 ].setFont( "data/fonts/Jaapokki-Regular.otf", 37, 112, 183, 89 );
 	text[ 3 ].setText( "produced by" );
 	text[ 3 ].center( screen_w, screen_h, 0, -text[ 2 ].getHeight()-10 );
