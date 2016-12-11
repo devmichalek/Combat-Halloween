@@ -28,7 +28,7 @@ void Loading::load( const int &screen_w, const int &screen_h )
 	free();
 	max = 8;
 	
-	text.setID( "loading-text" );
+	text.setName( "loading-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 255, 255, 255 );
 	text.setText( "Loading " + to_string( state ) + "%"  );
 	text.setAlpha( 0xFF );
