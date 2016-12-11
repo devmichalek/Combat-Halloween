@@ -23,7 +23,7 @@ void Play_button::load( int screen_w, int bot )
 	mySprite.load( "data/sprites/menu/blankbutton.png", 4 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
-	myText.setID( "play_button-myText" );
+	myText.setName( "play_button-myText" );
 	myText.setFont( "data/fonts/BADABB__.TTF", 130, 0x82, 0xae, 0x20 );
 	myText.setText( "play" );
 	myText.setPosition( screen_w/2 - myText.getWidth()/2 +10, bot -5 );
@@ -85,7 +85,7 @@ const int Play_button::getX() const
 	return mySprite.getX();
 }
 
-const int& Play_button::getState() const
+const sf::Uint8& Play_button::getState() const
 {
 	return state;
 }

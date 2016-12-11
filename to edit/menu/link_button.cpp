@@ -40,7 +40,7 @@ void Link_button::draw( sf::RenderWindow &window )
 
 void Link_button::handle( sf::Event &event )
 {
-	if( !locked && button.getAlpha() == 255 )
+	if( !locked && button.getAlpha() == 0xFF )
 	{
 		int x, y;
 		button.setOffset( 0 );

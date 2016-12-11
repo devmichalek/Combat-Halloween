@@ -32,7 +32,7 @@ Music_volume::~Music_volume()
 	
 void Music_volume::load( int left, int y, string str )
 {
-	text.setID( "music_volume-text" );
+	text.setName( "music_volume-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	text.setText( str );
 	text.setPosition( left, y );
@@ -49,7 +49,7 @@ void Music_volume::load( int left, int y, string str )
 	plus.setScale( 0.4, 0.4 );
 	
 	
-	percent.setID( "music_volume-percent" );
+	percent.setName( "music_volume-percent" );
 	percent.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	percent.setText( std::to_string( static_cast<int>( volume*100/128 ) ) + "%" );
 	percent.setPosition( plus.getRight() + 10, y );

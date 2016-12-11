@@ -121,7 +121,7 @@ void Log::load( string path, int left, int y, int screen_w )
 				else if( c > 6 )
 					border -= 5;
 				
-				myText[ c ].setID( "log-myText" );
+				myText[ c ].setName( "log-myText" );
 				myText[ c ].setFont( "data/fonts/BADABB__.TTF", 33, 0xd5, 0xad, 0x51 );
 				myText[ c ].setText( line );
 				myText[ c ].setPosition( log.getX() +80 - border, height );
