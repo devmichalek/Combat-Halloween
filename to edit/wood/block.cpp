@@ -3,5 +3,6 @@
 Block::Block()
 {
 	nr = x = y = 0;
-	line = false;
+	line = true;
+	bg = false;
 }
