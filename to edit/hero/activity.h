@@ -24,4 +24,5 @@ public:
 	
 	void setLine( sf::Uint8 nr );
 	sf::Uint8 getLine();
+	sf::Uint8 getCounter();
 };
