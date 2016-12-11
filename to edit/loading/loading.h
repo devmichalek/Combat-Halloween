@@ -22,5 +22,5 @@ public:
 	void load( const int &screen_w, const int &screen_h );		// load textures
 	void draw( sf::RenderWindow* &window );						// render textures
 	
-	const sf::Uint8& getState() const; 								// getter
+	const sf::Uint8& getState() const; 							// getter
 };
