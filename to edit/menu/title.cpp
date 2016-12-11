@@ -18,7 +18,7 @@ void Title::load( const int& screen_w )
     belt.load( "data/sprites/menu/belt.png" );
 	belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
 	
-	title.setID( "title-title" );
+	title.setName( "title-title" );
 	title.setFont( "data/fonts/BADABB__.TTF", 110, 0x7F, 0x99, 0x95 );
 	title.setText( "Ninja" );
 	title.setPosition( screen_w/2 - title.getWidth()/2, -8 );

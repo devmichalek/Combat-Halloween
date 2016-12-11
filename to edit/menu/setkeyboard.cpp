@@ -134,7 +134,7 @@ void Setkeyboard::load( int left, int right, int bot )
 	
 	for( int i = 0; i < nr; i++ )
 	{
-		text[ i ].setID( "keyboard-text nr " + std::to_string( i ) );
+		text[ i ].setName( "keyboard-text nr " + std::to_string( i ) );
 		text[ i ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	}
 

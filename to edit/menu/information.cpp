@@ -36,7 +36,7 @@ void Information::load( int screen_h )
 	
 	for( int i = 0; i < nr; i ++ )
 	{
-		text[ i ].setID( "information-text nr " + std::to_string( i ) );
+		text[ i ].setName( "information-text nr " + std::to_string( i ) );
 		if( i != 1 || i != 3 || i != 5 )
 			text[ i ].setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	}

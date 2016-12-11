@@ -44,7 +44,7 @@ void Music_button::draw( sf::RenderWindow* &window )
 
 void Music_button::handle( sf::Event &event )
 {
-	if( button.getAlpha() == 255 )
+	if( button.getAlpha() == 0xFF )
 	{
 		int x, y;
 		button.setOffset( 0 );
