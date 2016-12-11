@@ -74,3 +74,8 @@ sf::Uint8 Activity::getLine()
 {
 	return line;
 }
+
+sf::Uint8 Activity::getCounter()
+{
+	return counter;
+}
