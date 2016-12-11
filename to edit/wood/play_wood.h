@@ -4,6 +4,7 @@
 #include "templates/moving_bg.h"
 #include "hero/hero.h"
 #include "wood/random_block.h"
+#include "hero/kunai.h"
 
 class Play_wood
 {
@@ -11,6 +12,7 @@ class Play_wood
 	Hero* hero;
 	Moving_bg* bg;
 	Random_block* random_block;
+	Kunai* kunai;
 		
 public:
 
