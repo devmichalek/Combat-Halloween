@@ -47,12 +47,12 @@ void Character::load( int screen_w, int screen_h )
 	click.setID( "music_button-click" );
 	click.load( "data/sounds/click.wav", 50 );
 	
-	text.setID( "character-text" );
+	text.setName( "character-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 50, 255, 255, 255 );
 	text.setText( "Choose character" );
 	text.center( screen_w, screen_h/2 -40, screen_w );
 	
-	information.setID( "choice-information" );
+	information.setName( "choice-information" );
 	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Playing will start if you choose the character." );
 	information.setPosition( screen_w + 10, screen_h - information.getHeight() - 10 );

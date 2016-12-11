@@ -48,14 +48,14 @@ void Choice::load( int screen_w, int screen_h )
 	button.load( "data/sprites/level/random.png", 4 );
 	button.setScale( 0.4, 0.4 );
 	
-	text.setID( "choice-text" );
+	text.setName( "choice-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "Choose world or " );
 	text.setPosition( screen_w/2 -text.getWidth()/2 -button.getWidth(), screen_h/2 - text.getHeight()/2 -80 );
 	button.setPosition( text.getRight() +10, text.getY() -5 );
 	
 	
-	information.setID( "choice-information" );
+	information.setName( "choice-information" );
 	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Following worlds will be generate randomly." );
 	information.setPosition( 10, screen_h - information.getHeight() - 10 );
