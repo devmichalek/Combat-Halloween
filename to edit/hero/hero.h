@@ -47,9 +47,12 @@ class Hero
 	bool slide;
 	
 	
-	Activity j;	// Jump.
-	Activity a;	// Attack.
-	Activity ja; // Jump and attack.
+	Activity j;		// Jump.
+	Activity a;		// Attack.
+	Activity ja;	// Jump and attack.
+	Activity t;		// Throw.
+	Activity jt;	// Jump and throw.
+	Activity c;		// Climb.
 	
 public:
 
@@ -69,6 +72,19 @@ public:
 	void gliding();
 	void sliding();
 	bool jumpAttack();
+	bool jumpThrow();
+	
+	bool climbing();
+	void allowClimbing();
+	void banClimbing();
+	void newPosition();
+	void goUpAndDown();
+	
+	bool throwing();
+	bool throwed();
+	int getThrowVel();
+	const int getThrowX();
+	const int getThrowY();
 
 	void undoMove();
 	void undoJump();
@@ -87,4 +103,6 @@ public:
 	
 	int strToInt( string s );
 	bool checkKeys( int a, int b );
+	
+	int getDirection();
 };
