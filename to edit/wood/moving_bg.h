@@ -7,8 +7,10 @@ class Moving_bg
 	MySprite one;
 	MySprite two;
 	
-	int vel;
+	float vel;
 	int direction;
+	
+	float x1, x2;
 	
 public:
 	
