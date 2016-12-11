@@ -10,12 +10,12 @@
 
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "templates/border.h"
+#include "templates/rect.h"
 #include "templates/color.h"
 
 using namespace std;
 
-class MyText :public Border, public Color
+class MyText :public Rect, public Color
 {
 	string ID;	// Universal
 	
@@ -29,7 +29,7 @@ public:
 	MyText( int x = 0, int y = 0, sf::Uint8 alpha = 0x00 );
 	~MyText();
 	void free();
-	void setID( string name );		// To find bugs
+	void setName( string name );		// To find bugs
 	
 	#ifdef _WIN32
 	void setColor( int i );

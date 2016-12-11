@@ -9,13 +9,13 @@
 
 #pragma once
 #include "SFML/Graphics.hpp"
-#include "templates/border.h"
+#include "templates/rect.h"
 #include "templates/color.h"
 #include <iostream>
 
 using namespace std;
 
-class MySprite :public Border, public Color
+class MySprite :public Rect, public Color
 {
 	string name;		// Identity
     sf::Sprite* sprite;
