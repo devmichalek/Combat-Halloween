@@ -20,6 +20,7 @@ class Random_block
 	int screen_h;
 	
 	vector <Block*> envelope;
+	vector <Block*> ladders;
 	
 public:
 	
@@ -33,6 +34,8 @@ public:
 	void positioning();
 	
 	bool checkCollision( int x, int y, int w, int h );
+	bool checkLadder( int x, int y, int w, int h );
+	
 	int getScreenWidth();
 	
 	void fadein( int v = 1, int max = 255 );
