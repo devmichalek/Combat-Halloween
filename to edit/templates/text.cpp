@@ -64,7 +64,7 @@ void MyText::free()
 	color.a = 0x00;
 }
 
-void MyText::setID( string name )
+void MyText::setName( string name )
 {
 	ID = name;
 }
