@@ -11,8 +11,6 @@
 #include "desert/play_desert.h"
 #include "winter/play_winter.h"
 
-#include "map_editor/map_editor.h"
-
 class Engine
 {
     Core* core;
@@ -25,8 +23,6 @@ class Engine
 	Play_halloween* play_halloween;
 	Play_desert* play_desert;
 	Play_winter* play_winter;
-	
-	Map_editor* map_editor;
 
 public:
 
