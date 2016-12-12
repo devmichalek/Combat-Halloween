@@ -7,6 +7,8 @@ Play_wood::Play_wood()
 	bg = new Moving_bg;
 	random_block = new Random_block;
 	kunai = new Kunai;
+	heart = new Heart;
+	golem = new Golem;
 }
 
 Play_wood::~Play_wood()
@@ -21,6 +23,8 @@ void Play_wood::free()
 	delete bg;
 	delete random_block;
 	delete kunai;
+	delete heart;
+	delete golem;
 }
 
 	
@@ -29,6 +33,9 @@ void Play_wood::load( int screen_w, int screen_h )
 	bg->load( "data/sprites/play/1.png" );
 	random_block->load( screen_w, screen_h, 1 );
 	kunai->load();
+	heart->load();
+	golem->load();
+	golem->setXY( 400, screen_h -128 );
 }
 
 void Play_wood::setHero( int screen_w, int screen_h, int type )
@@ -51,121 +58,22 @@ void Play_wood::handle( sf::Event &event )
 
 void Play_wood::draw( sf::RenderWindow* &window )
 {
-	// Y
-	hero->gravitation();
-	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
-	{
-		hero->weightlessness();
-	}
-	else
-	{
-		hero->gliding();
-	}
-	
-	
-	// destroy kunai
-	for( unsigned i = 0; i < kunai->getNr(); i++ )
-	{
-		if( random_block->checkCollision( kunai->getX( i ), kunai->getY( i ), kunai->getW(), kunai->getH() ) ||
-		kunai->getX( i ) + kunai->getW()> random_block->getScreenWidth() ||
-		kunai->getX( i ) < 0 )
-		{
-			kunai->destroy( i );
-		}
-	}
-	
-
-	// X
-	hero->sliding();
-	
-	if( hero->climbing() )
-	{
-		if( random_block->checkLadder( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
-		{
-			if( !random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
-			{
-				hero->newPosition();
-			}
-			
-			hero->allowClimbing();
-		}
-	}
-	
-	if( random_block->checkLadder( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
-	{
-		hero->goUpAndDown();
-	}
-	else
-	{
-		hero->banClimbing();
-	}
-	
-	if( hero->jumpThrow() )
-	{
-		if( hero->throwed() )
-		{
-			kunai->throwing( hero->getThrowX(), hero->getThrowY(), hero->getThrowVel() );
-		}
-		
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoJump();
-		}
-	}
-	else if( hero->jumpAttack() )
-	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoJump();
-		}
-	}
-	else if( hero->throwing() )
-	{
-		if( hero->throwed() )
-		{
-			kunai->throwing( hero->getThrowX(), hero->getThrowY(), hero->getThrowVel() );
-		}
-	}
-	else if( hero->attack() ) {}
-	else if( hero->jump() )
-	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoJump();
-		}
-	}
-	else if( hero->move() )
-	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoMove();
-		}
-	}
-	else
-	{
-		hero->idle();
-	}
-	
-	bg->move( hero->getDirection() );
+	mechanics();
 	
 	bg->fadein( 2 );
 	random_block->fadein( 2 );
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
+	heart->fadein( 2 );
+	golem->fadein( 2 );
 	
 	bg->draw( window );
 	random_block->drawBG( window );
 	hero->draw( window );
 	kunai->draw( window );
+	golem->draw( window );
 	random_block->draw( window );
+	heart->draw( window );
 }
 
 	
