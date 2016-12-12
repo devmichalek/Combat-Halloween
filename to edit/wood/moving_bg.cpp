@@ -1,4 +1,4 @@
-#include "templates/moving_bg.h"
+#include "wood/moving_bg.h"
 
 Moving_bg::Moving_bg()
 {
