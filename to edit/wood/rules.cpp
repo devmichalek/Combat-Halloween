@@ -313,5 +313,6 @@ void Random_block::ruleTopSide( int number )
 		temporary.clear();
 		temporary.push_back( new Law( -1 ) );
 		rules_top.push_back( temporary );
+		
 	}
 }
