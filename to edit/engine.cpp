@@ -22,8 +22,6 @@ Engine::Engine()
 	play_halloween = new Play_halloween;
 	play_desert = new Play_desert;
 	play_winter = new Play_winter;
-	
-	map_editor = new Map_editor;
 }
 
 
@@ -38,7 +36,6 @@ void Engine::free()
 	if( play_halloween != NULL )	delete play_halloween;
 	if( play_desert != NULL )	delete play_desert;
 	if( play_winter != NULL )	delete play_winter;
-	if( map_editor != NULL ) 	delete map_editor;
 	
 	delete core;
 }
@@ -79,20 +76,14 @@ void Engine::load()
 		play_winter->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		/*
 		case 8:
-		map_editor->load( core->getWidth(), core->getHeight() );
-		break;
-		*/
-		
-		case 9:
 		srand( time( NULL ) );
 		break;
 
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = 1;	// intro state
+		core->getState() = 1;	// intro state = -1
 		break;
 	}
 }
@@ -106,11 +97,6 @@ void Engine::events()
         if( core->getEvent().type == sf::Event::Closed )
         {
             core->isOpen() = false;
-        }
-		
-		if( core->getState() == -3 ) // if we currently creating maps
-        {
-			map_editor->handle( core->getEvent() );
         }
 
         if( core->getState() == 0 ) // if we currently have menu state
@@ -148,12 +134,6 @@ void Engine::events()
 // Render objects.
 void Engine::states()
 {
-	// map editor
-	if( core->getState() == -3 )
-	{
-		map_editor->draw( core->getWindow() );
-	}
-	
 	// loading state
 	if( core->getState() == -2 )
 	{
