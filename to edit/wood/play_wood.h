@@ -1,10 +1,12 @@
 #pragma once
 
 #include "templates/state.h"
-#include "templates/moving_bg.h"
+#include "wood/moving_bg.h"
 #include "hero/hero.h"
 #include "wood/random_block.h"
 #include "hero/kunai.h"
+#include "hero/heart.h"
+#include "enemy/golem.h"
 
 class Play_wood
 {
@@ -13,6 +15,8 @@ class Play_wood
 	Moving_bg* bg;
 	Random_block* random_block;
 	Kunai* kunai;
+	Heart* heart;
+	Golem* golem;
 		
 public:
 
@@ -21,11 +25,10 @@ public:
     void free();
 	
     void load( int screen_w, int screen_h );
-	void setHero( int screen_w, int screen_h, int type );
-
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
+	void setHero( int screen_w, int screen_h, int type );
 	State* getState();
 	void set( State* state );
 	
@@ -34,4 +37,6 @@ public:
 	bool backToLevel();
 	
 	void reloadMusic();
+	
+	void mechanics();
 };
