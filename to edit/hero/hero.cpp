@@ -8,14 +8,20 @@ void Hero::idle()
 	}
 }
 
-bool Hero::move()
+bool Hero::move( sf::Uint8 test )
 {
 	// move left
-	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) && !c.isActive() )
+	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) || test == 1 )
 	{
-		if( !glide && !slide )
+		if( !glide && !slide && !c.isActive() )
 		{
 			which = RUN;
+		}
+		else if( c.isActive() )
+		{
+			offset ++;
+			if( offset == (nr-1) *delay )
+				offset = 0;
 		}
 		
 		flag = true;
@@ -32,15 +38,16 @@ bool Hero::move()
 			{
 				if( i != IDLE )
 				{
-					sprite[ i ].setPosition( sprite[ IDLE ].getX() + ( sprite[ i ].getWidth()*-1 ), sprite[ i ].getY() );
+					sprite[ i ].setPosition( sprite[ IDLE ].getX() + sprite[ i ].getWidth(), sprite[ i ].getY() );
 				}
 			}
 			
-			sprite[ IDLE ].setPosition( sprite[ IDLE ].getX() + ( sprite[ IDLE ].getWidth()*-1 ), sprite[ IDLE ].getY() );
+			sprite[ IDLE ].setPosition( sprite[ IDLE ].getX() + sprite[ IDLE ].getWidth(), sprite[ IDLE ].getY() );
 			sprite[ ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
 			sprite[ SLIDE ].setPosition( sprite[ IDLE ].getX(), sprite[ SLIDE ].getY() );
 			sprite[ JUMP_ATTACK ].setPosition( sprite[ IDLE ].getX() +30, sprite[ JUMP_ATTACK ].getY() );
-			sprite[ CLIMB ].setPosition( sprite[ IDLE ].getX() +sprite[ IDLE ].getWidth() +15, sprite[ CLIMB ].getY() );
+			sprite[ THROW ].setPosition( sprite[ THROW ].getX() -11, sprite[ IDLE ].getY() -1 );
+			sprite[ CLIMB ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
 			
 			right = false;
 		}
@@ -49,11 +56,17 @@ bool Hero::move()
 	}
 	
 	// move right
-	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) && !c.isActive() ) 
+	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) || test == 2 ) 
 	{
-		if( !glide && !slide )
+		if( !glide && !slide && !c.isActive() )
 		{
 			which = RUN;
+		}
+		else if( c.isActive() )
+		{
+			offset ++;
+			if( offset == (nr-1) *delay )
+				offset = 0;
 		}
 		
 		for( int i = 0; i < nr; i++ )
@@ -83,7 +96,8 @@ bool Hero::move()
 			sprite[ ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
 			sprite[ SLIDE ].setPosition( sprite[ IDLE ].getX(), sprite[ SLIDE ].getY() );
 			sprite[ JUMP_ATTACK ].setPosition( sprite[ IDLE ].getX() -30, sprite[ JUMP_ATTACK ].getY() );
-			sprite[ CLIMB ].setPosition( sprite[ IDLE ].getRight() -15, sprite[ CLIMB ].getY() );
+			sprite[ THROW ].setPosition( sprite[ THROW ].getX() +11, sprite[ IDLE ].getY() -1 );
+			sprite[ CLIMB ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
 			
 			right = true;
 		}
@@ -96,15 +110,12 @@ bool Hero::move()
 
 bool Hero::jump()
 {
-	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide )
+	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide && !c.isActive() )
 	{
-		if( !c.isActive() )
-		{
-			offset = 0;
-			j.start();
-			j.setActive( true );
-			which = JUMP;
-		}
+		offset = 0;
+		j.start();
+		j.setActive( true );
+		which = JUMP;
 	}
 	
 	if( j.isActive() )
@@ -249,95 +260,34 @@ bool Hero::jumpThrow()
 
 
 
-bool Hero::climbing()
+void Hero::climbing()
 {
-	c.check();
-	if( checkKeys( keys[ 4 ][ 0 ], keys[ 4 ][ 1 ] ) && c.Do() )
+	if( checkKeys( keys[ 4 ][ 0 ], keys[ 4 ][ 1 ] ) && !j.isActive() && !ja.isActive() && !jt.isActive() && !glide && !t.isActive() && !a.isActive() )
 	{
-		c.start();
-		return true;
+		which = CLIMB;
+		slide = false;
+		c.setActive( true );
+		offset ++;
+		
+		for( int i = 0; i < nr; i++ )
+			sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -vel );
+		
+		if( offset == (nr-1) *delay )
+			offset = 0;
 	}
-	
-	return false;
 }
 
-void Hero::allowClimbing()
-{
-	if( !glide )
-	{
-		slide = false;
-		c.setActive( !c.isActive() );
-		which = CLIMB;
-	}
-}
 
 void Hero::banClimbing()
 {
-	if( !glide )
-	{
-		slide = false;
-		c.setActive( false );
-		j.start();
-	}
-}
-
-void Hero::newPosition()
-{
-	if( c.isActive() )
-	{
-		if( right )
-		{
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setPosition( sprite[ i ].getX() +sprite[ IDLE ].getWidth(), sprite[ i ].getY() );
-			}
-		}
-		else
-		{
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setPosition( sprite[ i ].getX() -sprite[ IDLE ].getWidth(), sprite[ i ].getY() );
-			}
-		}
-	}
-}
-
-void Hero::goUpAndDown()
-{
-	if( checkKeys( keys[ 3 ][ 0 ], keys[ 3 ][ 1 ] ) )
-	{
-		if( c.isActive() )
-		{
-			offset ++;
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() +vel );
-			}
-		}
-	}
-	else if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide )
-	{
-		if( c.isActive() )
-		{
-			offset ++;
-			for( int i = 0; i < nr; i++ )
-			{
-				sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -vel );
-			}
-		}
-	}
-	
-	if( offset == (nr-1) *delay )
-	{
-		offset = 0;
-	}
+	c.setActive( false );
 }
 
 
 
 bool Hero::throwing()
 {
-	if( checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) && t.Do() && !glide && !j.isActive() && !a.isActive() && !c.isActive() )
+	if( checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) && !t.isActive() && !glide && !j.isActive() && !a.isActive() && !c.isActive() )
 	{
 		offset = 0;
 		t.start();

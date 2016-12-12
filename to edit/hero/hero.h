@@ -66,7 +66,7 @@ public:
 	
 	
 	void idle();
-	bool move();
+	bool move( sf::Uint8 test = 0 );
 	bool jump();
 	bool attack();
 	void gliding();
@@ -74,11 +74,8 @@ public:
 	bool jumpAttack();
 	bool jumpThrow();
 	
-	bool climbing();
-	void allowClimbing();
+	void climbing();
 	void banClimbing();
-	void newPosition();
-	void goUpAndDown();
 	
 	bool throwing();
 	bool throwed();
