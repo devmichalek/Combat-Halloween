@@ -18,7 +18,7 @@ public:
 	void start( int vel, int startX, int startY );
 	void go();
 	
-	void reset();
+	void destroy();
 	
 	int getX();
 	int getY();
