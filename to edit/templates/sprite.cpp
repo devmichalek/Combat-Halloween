@@ -517,9 +517,6 @@ void MySprite::setOffset( int n )
 
 void MySprite::setScale( float x, float y )
 {
-	width = safe_width * x;
-	height = safe_height * y;
-	
     if( nr == 0 || nr == 1 )
     {
         sprite->setScale( x, y );
@@ -531,6 +528,12 @@ void MySprite::setScale( float x, float y )
             sprite[ i ].setScale( x, y );
         }
     }
+	
+	if( x < 0 ) x = -x;
+	if( y < 0 ) y = -y;
+	
+	width = safe_width * x;
+	height = safe_height * y;
 }
 
 
