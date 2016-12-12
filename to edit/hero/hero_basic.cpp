@@ -96,7 +96,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", nr -1 );
 		sprite[ i ].setScale( scale, scale );
-		sprite[ i ].setPosition( 45, posY -sprite[ i ].getHeight() -200 );
+		sprite[ i ].setPosition( 160, posY -sprite[ i ].getHeight() -200 );
 	}
 	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() + ( sprite[ JUMP_ATTACK ].getHeight() - sprite[ IDLE ].getHeight() ) );
 	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +5, sprite[ THROW ].getY() );
@@ -149,6 +149,10 @@ void Hero::load( int& screen_w, int& posY, string path )
 	t.setLine( (nr-1)*delay + 2*delay );
 	jt.setLine( (nr-1)*delay + 2*delay );
 	c.setLine( nr/2*delay );
+	
+	move( 2 );
+	move( 1 );
+	move( 2 );
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -248,33 +252,16 @@ const int Hero::getX()
 
 const int Hero::getY()
 {
-	int y = 0;
-	
-	y = sprite[ IDLE ].getY();
-	
-	return y;
+	return sprite[ IDLE ].getY();
 }
 
 const int Hero::getW()
 {
-	int w = 0;
-	
-	w = sprite[ IDLE ].getWidth();
-	
-	if( w < 0 )
-	{
-		w = -w;
-	}
-	
-	return w;
+	return sprite[ IDLE ].getWidth();
 }
 
 const int Hero::getH()
 {
-	int h = 0;
-	
-	h = sprite[ IDLE ].getHeight();
-	
-	return h;
+	return sprite[ IDLE ].getHeight();
 }
 
