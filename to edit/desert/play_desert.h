@@ -1,9 +1,12 @@
 #pragma once
 
 #include "templates/state.h"
-#include "templates/moving_bg.h"
+#include "wood/moving_bg.h"
 #include "hero/hero.h"
 #include "wood/random_block.h"
+#include "hero/kunai.h"
+#include "hero/heart.h"
+#include "enemy/golem.h"
 
 class Play_desert
 {
@@ -11,6 +14,9 @@ class Play_desert
 	Hero* hero;
 	Moving_bg* bg;
 	Random_block* random_block;
+	Kunai* kunai;
+	Heart* heart;
+	Golem* golem;
 	
 public:
 
