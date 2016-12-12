@@ -82,6 +82,9 @@ int Kunai::getX( int which )
 {
 	int x = b[ which ]->getX();
 	
+	if( b[ which]->getVel() > 0 )
+		x -= getW();
+	
 	return x;
 }
 
@@ -92,13 +95,7 @@ int Kunai::getY( int which )
 
 int Kunai::getW()
 {
-	/*
-	int w = sprite.getWidth();
-	if( w < 0 )
-		w = -w;
-	*/
-		
-	return 1;
+	return sprite.getWidth();
 }
 
 int Kunai::getH()
@@ -108,7 +105,7 @@ int Kunai::getH()
 
 void Kunai::destroy( int which )
 {
-	b[ which ]->reset();
+	b[ which ]->destroy();
 }
 
 void Kunai::fadein( int v, int max )
