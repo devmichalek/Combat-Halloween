@@ -41,7 +41,7 @@ void Bit::go()
 		x += vel;
 }
 	
-void Bit::reset()
+void Bit::destroy()
 {
 	active = false;
 	x = y = 0;
