@@ -4,7 +4,8 @@ class Law
 {
 public:
 	int nr;
-	bool law;
+	bool line;
+	bool bg;
 	
-	Law( int nr, bool law = true );
+	Law( int nr, bool line = true, bool bg = false );
 };
