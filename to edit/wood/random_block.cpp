@@ -101,7 +101,7 @@ void Random_block::draw( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < envelope.size(); i++ )
 	{
-		if( envelope[ i ]->bg )
+		if( !envelope[ i ]->bg )
 		{
 			block[ envelope[ i ]->nr ].setPosition( envelope[ i ]->x, envelope[ i ]->y );
 			window->draw( block[ envelope[ i ]->nr ].get() );
@@ -113,7 +113,7 @@ void Random_block::drawBG( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < envelope.size(); i++ )
 	{
-		if( !envelope[ i ]->bg )
+		if( envelope[ i ]->bg )
 		{
 			block[ envelope[ i ]->nr ].setPosition( envelope[ i ]->x, envelope[ i ]->y );
 			window->draw( block[ envelope[ i ]->nr ].get() );
@@ -129,36 +129,13 @@ void Random_block::drawBG( sf::RenderWindow* &window )
 
 void Random_block::positioning()
 {
-	envelope.push_back( new Block() );
-	envelope[ envelope.size()-1 ]->nr = 4;
-	envelope[ envelope.size()-1 ]->x = 0;
-	envelope[ envelope.size()-1 ]->y = screen_h -width;
-
-	envelope.push_back( new Block() );
-	envelope[ envelope.size()-1 ]->nr = 3;
-	envelope[ envelope.size()-1 ]->x = width;
-	envelope[ envelope.size()-1 ]->y = screen_h -width;
-	
-	envelope.push_back( new Block() );
-	envelope[ envelope.size()-1 ]->nr = 14;
-	envelope[ envelope.size()-1 ]->x = width*2;
-	envelope[ envelope.size()-1 ]->y = screen_h -width;
-	
-	envelope.push_back( new Block() );
-	envelope[ envelope.size()-1 ]->nr = 10;
-	envelope[ envelope.size()-1 ]->x = width*2;
-	envelope[ envelope.size()-1 ]->y = screen_h -width*2;
-	
-	
-	ladders.push_back( new Block() );
-	ladders[ ladders.size()-1 ]->nr = 31;
-	ladders[ ladders.size()-1 ]->x = width*2 -5;
-	ladders[ ladders.size()-1 ]->y = screen_h -width -block[ 31 ].getHeight();
-	
-	ladders.push_back( new Block() );
-	ladders[ ladders.size()-1 ]->nr = 31;
-	ladders[ ladders.size()-1 ]->x = 0;
-	ladders[ ladders.size()-1 ]->y = screen_h -width -block[ 31 ].getHeight();
+	for( int i = 0; i < 8; i ++ )
+	{
+		envelope.push_back( new Block() );
+		envelope[ envelope.size()-1 ]->nr = 1;
+		envelope[ envelope.size()-1 ]->x = width *i;
+		envelope[ envelope.size()-1 ]->y = screen_h -width;
+	}
 }
 
 bool Random_block::checkCollision( int x, int y, int w, int h )
@@ -183,7 +160,7 @@ bool Random_block::checkLadder( int x, int y, int w, int h )
 	for( unsigned i = 0; i < ladders.size(); i++ )
 	{
 		block[ ladders[ i ]->nr ].setPosition( ladders[ i ]->x, ladders[ i ]->y );
-		if( block[ ladders[ i ]->nr ].checkCollision( x, y, w, h ) )
+		if( block[ ladders[ i ]->nr ].checkCollision( x, y -50, w, h ) )
 		{
 			return true;
 		}
