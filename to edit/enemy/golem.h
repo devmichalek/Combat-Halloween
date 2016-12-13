@@ -30,12 +30,14 @@ class Golem
 	
 	MySprite life_bar;
 	float life;
-	float hit;
 	
 	float strength;
 	
 	int hit_counter;
 	bool right;
+	
+	int attack_counter;
+	int attack_line;
 	
 public:
 	
@@ -50,6 +52,7 @@ public:
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
 	
-	void fitX( int x );
-	bool checkCollision( int x, int y, int w, int h );
+	void matchX( int x, int w );
+	bool checkHit( int x, int y, int w, int h, float damage );
+	bool allowAttack( int x, int y, int w, int h );
 };
