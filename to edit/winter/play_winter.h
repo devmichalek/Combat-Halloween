@@ -37,4 +37,6 @@ public:
 	bool backToLevel();
 	
 	void reloadMusic();
+	
+	void mechanics();
 };
