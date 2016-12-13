@@ -6,6 +6,9 @@ Play_halloween::Play_halloween()
 	hero = new Hero;
 	bg = new MySprite;
 	random_block = new Random_block;
+	kunai = new Kunai;
+	heart = new Heart;
+	golem = new Golem;
 }
 
 Play_halloween::~Play_halloween()
@@ -19,6 +22,9 @@ void Play_halloween::free()
 	delete hero;
 	delete bg;
 	delete random_block;
+	delete kunai;
+	delete heart;
+	delete golem;
 }
 
 	
@@ -27,6 +33,10 @@ void Play_halloween::load( int screen_w, int screen_h )
 	bg->setName( "play_halloween-bg" );
 	bg->load( "data/sprites/play/0.png" );
 	random_block->load( screen_w, screen_h, 0 );
+	kunai->load();
+	heart->load();
+	golem->load();
+	golem->setXY( 400, screen_h -128 );
 }
 
 void Play_halloween::setHero( int screen_w, int screen_h, int type )
@@ -49,61 +59,22 @@ void Play_halloween::handle( sf::Event &event )
 
 void Play_halloween::draw( sf::RenderWindow* &window )
 {
+	mechanics();
+	
 	bg->fadein( 2 );
+	random_block->fadein( 2 );
 	hero->fadein( 2 );
+	kunai->fadein( 2 );
+	heart->fadein( 2 );
+	golem->fadein( 2 );
 	
 	window->draw( bg->get() );
-	
 	random_block->drawBG( window );
 	hero->draw( window );
+	kunai->draw( window );
+	golem->draw( window );
 	random_block->draw( window );
-	
-	// Y
-	hero->gravitation();
-	if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) )
-	{
-		hero->weightlessness();
-	}
-	else
-	{
-		hero->gliding();
-	}
-	
-
-	// X
-	hero->sliding();
-	if( hero->jumpAttack() )
-	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoJump();
-		}
-	}
-	else if( hero->attack() ) {}
-	else if( hero->jump() )
-	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoJump();
-		}
-	}
-	else if( hero->move() )
-	{
-		if( random_block->checkCollision( hero->getX(), hero->getY(), hero->getW(), hero->getH() ) ||
-			hero->getX() + hero->getW()> random_block->getScreenWidth() ||
-			hero->getX() < 0 )
-		{
-			hero->undoMove();
-		}
-	}
-	else
-	{
-		hero->idle();
-	}
+	heart->draw( window );
 }
 
 	

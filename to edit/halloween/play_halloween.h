@@ -3,6 +3,9 @@
 #include "templates/state.h"
 #include "hero/hero.h"
 #include "wood/random_block.h"
+#include "hero/kunai.h"
+#include "hero/heart.h"
+#include "enemy/golem.h"
 
 class Play_halloween
 {
@@ -10,6 +13,9 @@ class Play_halloween
 	Hero* hero;
 	MySprite* bg;
 	Random_block* random_block;
+	Kunai* kunai;
+	Heart* heart;
+	Golem* golem;
 	
 public:
 
@@ -31,4 +37,6 @@ public:
 	bool backToLevel();
 	
 	void reloadMusic();
+	
+	void mechanics();
 };
