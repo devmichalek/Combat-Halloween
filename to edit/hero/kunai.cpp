@@ -31,6 +31,7 @@ void Kunai::load()
 	
 	sprite.setName( "kunai-sprite" );
 	sprite.load( "data/sprites/hero/0.png" );
+	// sprite.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
 	
 	for( int i = 0; i < 6; i++ )
 	{
