@@ -143,6 +143,8 @@ bool Hero::jump()
 	return j.isActive();	
 }
 
+
+
 bool Hero::attack()
 {
 	if( checkKeys( keys[ 5 ][ 0 ], keys[ 5 ][ 1 ] ) && a.Do() && !glide && !j.isActive() && !c.isActive() )
@@ -163,6 +165,32 @@ bool Hero::attack()
 	
 	return a.isActive();
 }
+
+bool Hero::hit()
+{
+	if( offset == 7 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+int Hero::getTrueW()
+{
+	return sprite[ which ].getWidth();
+}
+
+int Hero::getTrueX()
+{
+	if( !right )
+	{
+		return sprite[ which ].getX() - getTrueW();
+	}
+		
+	return sprite[ which ].getX();
+}
+
 
 void Hero::gliding()
 {
@@ -329,10 +357,10 @@ const int Hero::getThrowX()
 {
 	if( right )
 	{
-		return sprite[ IDLE ].getX() + 20;
+		return sprite[ IDLE ].getX() + 30;
 	}
 	
-	return sprite[ IDLE ].getX() - 20;
+	return sprite[ IDLE ].getX() - 30;
 }
 	
 const int Hero::getThrowY()

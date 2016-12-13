@@ -68,7 +68,13 @@ public:
 	void idle();
 	bool move( sf::Uint8 test = 0 );
 	bool jump();
+	
 	bool attack();
+	bool hit();
+	
+	int getTrueW();
+	int getTrueX();
+	
 	void gliding();
 	void sliding();
 	bool jumpAttack();
