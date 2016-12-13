@@ -21,8 +21,10 @@ Golem::Golem()
 	right = false;
 	
 	life = 0;
-	hit = 0;
 	strength = 0;
+	
+	attack_counter = 0;
+	attack_line = 0;
 }
 
 Golem::~Golem()
@@ -73,8 +75,10 @@ void Golem::free()
 	right = false;
 	
 	life = 0;
-	hit = 0;
 	strength = 0;
+	
+	attack_counter = 0;
+	attack_line = 0;
 }
 
 	
@@ -107,8 +111,8 @@ void Golem::load()
 	life_bar.setColor( sf::Color( 0xFF, 0x66, 0x66 ) );
 	
 	life = 1;
-	hit = 0.03;
-	strength = 0.05;
+	attack_counter = 0;
+	attack_line = 100;
 }
 
 void Golem::setXY( int x, int y )
@@ -132,6 +136,13 @@ void Golem::setXY( int x, int y )
 
 void Golem::draw( sf::RenderWindow* &window )
 {
+	if( life <= 0 && state < 3 )
+	{
+		state = 3;
+		offset = 0;
+		which = 3;
+	}
+	
 	if( state == 1 )
 	{
 		sprite[ which ].setOffset( offset/delay );
@@ -176,6 +187,11 @@ void Golem::draw( sf::RenderWindow* &window )
 				sprite[ i ].setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 			}
 		}
+		
+		if( attack_counter == attack_line )
+			attack_counter = 0;
+		else if( attack_counter > 0 )
+			attack_counter ++;
 	}
 	else if( state == 3 )
 	{
@@ -207,52 +223,55 @@ void Golem::fadeout( int v, int min )
 	life_bar.fadeout( v, min );
 }
 
-void Golem::fitX( int x )
+void Golem::matchX( int x, int w )
 {
-	if( x > centerX )
+	if( state == 2 )
 	{
-		for( int i = 0; i < nr; i++ )
+		if( x > centerX )
 		{
-			sprite[ i ].setScale( -scale, scale );
-			sprite[ i ].setPosition( rightX[ i ], sprite[ i ].getY() );
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setScale( -scale, scale );
+				sprite[ i ].setPosition( rightX[ i ], sprite[ i ].getY() );
+			}
 		}
-	}
-	else if( x < centerX )
-	{
-		for( int i = 0; i < nr; i++ )
+		else if( x < centerX )
 		{
-			sprite[ i ].setScale( scale, scale );
-			sprite[ i ].setPosition( leftX[ i ], sprite[ i ].getY() );
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setScale( scale, scale );
+				sprite[ i ].setPosition( leftX[ i ], sprite[ i ].getY() );
+			}
 		}
-	}
-	
-	if( leftX[ 1 ] > x )
-	{
-		centerX -= vel;
-		for( int i = 0; i < nr; i++ )
+		
+		if( leftX[ 1 ] > x + w )
 		{
-			leftX[ i ] -= vel;
-			rightX[ i ] -= vel;
+			centerX -= vel;
+			for( int i = 0; i < nr; i++ )
+			{
+				leftX[ i ] -= vel;
+				rightX[ i ] -= vel;
+			}
+			right = false;
 		}
-		right = false;
-	}
-	else if( rightX[ 1 ] < x )
-	{
-		centerX += vel;
-		for( int i = 0; i < nr; i++ )
+		else if( rightX[ 1 ] < x )
 		{
-			leftX[ i ] += vel;
-			rightX[ i ] += vel;
+			centerX += vel;
+			for( int i = 0; i < nr; i++ )
+			{
+				leftX[ i ] += vel;
+				rightX[ i ] += vel;
+			}
+			right = true;
 		}
-		right = true;
+		
+		life_bar.center( centerX +7, sprite[ 1 ].getY() -20, 0, 0 );
 	}
-	
-	life_bar.center( centerX +7, sprite[ 1 ].getY() -20, 0, 0 );
 }
 
-bool Golem::checkCollision( int x, int y, int w, int h )
+bool Golem::checkHit( int x, int y, int w, int h, float damage )
 {
-	if( state != 1 && state != 3 )
+	if( state == 2 )
 	{
 		for( int i = 1; i < nr-1; i++ )	// without appear and dead animation
 		{
@@ -260,16 +279,28 @@ bool Golem::checkCollision( int x, int y, int w, int h )
 			if( sprite[ i ].checkCollision( x, y, w, h ) )
 			{
 				// printf( "%d %d %d %d\n", x, y, w, h );
-				life -= hit;
+				life -= damage;
 				hit_counter = 1;
-				
-				if( life < 0 && state < 3 )
-				{
-					state = 3;
-					offset = 0;
-					which = 3;
-				}
-					
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool Golem::allowAttack( int x, int y, int w, int h )
+{
+	if( state == 2 && attack_counter == 0 )
+	{
+		for( int i = 1; i < nr-1; i++ )
+		{
+			if( right )
+				x += sprite[ i ].getWidth();
+			
+			if( sprite[ i ].checkCollision( x, y, w, h ) )
+			{
+				attack_counter = 1;
 				return true;
 			}
 		}
