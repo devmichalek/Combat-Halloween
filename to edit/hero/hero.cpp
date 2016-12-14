@@ -168,7 +168,7 @@ bool Hero::attack()
 
 bool Hero::hit()
 {
-	if( offset == 7 )
+	if( offset == 6*delay )
 	{
 		return true;
 	}
@@ -335,7 +335,7 @@ bool Hero::throwing()
 
 bool Hero::throwed()
 {
-	if( offset == 8 )
+	if( offset == 3*delay )
 	{
 		return true;
 	}
