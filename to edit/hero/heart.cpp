@@ -45,7 +45,7 @@ void Heart::free()
 	
 void Heart::load()
 {
-	nr = 4;
+	nr = 3;
 	fill = new MySprite [ nr ];
 	frame = new MySprite [ nr ];
 	
