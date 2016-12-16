@@ -104,6 +104,16 @@ int Kunai::getH()
 	return sprite.getHeight();
 }
 
+int Kunai::getR( int which )
+{
+	return b[ which ]->getX();
+}
+
+int Kunai::getB( int which )
+{
+	return b[ which ]->getY() + getH();
+}
+
 void Kunai::destroy( int which )
 {
 	b[ which ]->destroy();

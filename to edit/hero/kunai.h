@@ -25,6 +25,8 @@ public:
 	int getY( int which );
 	int getW();
 	int getH();
+	int getR( int which );
+	int getB( int which );
 	void destroy( int which );
 	
 	void fadein( int v = 1, int max = 255 );
