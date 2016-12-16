@@ -34,6 +34,8 @@ public:
 	void positioning();
 	
 	bool checkCollision( int x, int y, int w, int h );
+	bool checkBlockByPixel( int l, int r, int t, int b );
+	
 	bool checkLadder( int x, int y, int w, int h );
 	
 	int getScreenWidth();

@@ -85,7 +85,7 @@ void Random_block::load( int screen_w, int screen_h, int number )
 	for( int i = 0; i < nr; i++ )
 	{
 		block[ i ].setName( "palette-block[" +to_string( i ) +"]" );
-		block[ i ].load( "data/sprites/play/" +to_string( number ) +"/" +to_string( i ) +".png" );
+		block[ i ].loadByImage( "data/sprites/play/" +to_string( number ) +"/" +to_string( i ) +".png" );
 	}
 	
 	ruleRightSide();
@@ -136,6 +136,68 @@ void Random_block::positioning()
 		envelope[ envelope.size()-1 ]->x = width *i;
 		envelope[ envelope.size()-1 ]->y = screen_h -width;
 	}
+
+	ladders.push_back( new Block() );
+	ladders[ ladders.size()-1 ]->nr = 31;
+	ladders[ ladders.size()-1 ]->x = width;
+	ladders[ ladders.size()-1 ]->y = screen_h -width -block[ 31 ].getHeight();
+	
+	ladders.push_back( new Block() );
+	ladders[ ladders.size()-1 ]->nr = 31;
+	ladders[ ladders.size()-1 ]->x = width -block[ 31 ].getWidth();
+	ladders[ ladders.size()-1 ]->y = screen_h -width*2 -block[ 31 ].getHeight();
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 2;
+	envelope[ envelope.size()-1 ]->x = 0;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*2;
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 5;
+	envelope[ envelope.size()-1 ]->x = width*6;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*2;
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 6;
+	envelope[ envelope.size()-1 ]->x = width*7;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*2;
+	
+	
+	ladders.push_back( new Block() );
+	ladders[ ladders.size()-1 ]->nr = 31;
+	ladders[ ladders.size()-1 ]->x = width*6 -block[ 31 ].getWidth();
+	ladders[ ladders.size()-1 ]->y = screen_h -block[ 31 ].getHeight() -width;
+	
+	ladders.push_back( new Block() );
+	ladders[ ladders.size()-1 ]->nr = 31;
+	ladders[ ladders.size()-1 ]->x = width*6;
+	ladders[ ladders.size()-1 ]->y = screen_h -width*2 -block[ 31 ].getHeight();
+	
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 5;
+	envelope[ envelope.size()-1 ]->x = width;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*3 -50;
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 6;
+	envelope[ envelope.size()-1 ]->x = width*2;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*3 -50;
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 6;
+	envelope[ envelope.size()-1 ]->x = width*3;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*3 -50;
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 6;
+	envelope[ envelope.size()-1 ]->x = width*4;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*3 -50;
+	
+	envelope.push_back( new Block() );
+	envelope[ envelope.size()-1 ]->nr = 7;
+	envelope[ envelope.size()-1 ]->x = width*5;
+	envelope[ envelope.size()-1 ]->y = screen_h -width*3 -50;
 }
 
 bool Random_block::checkCollision( int x, int y, int w, int h )
@@ -148,6 +210,31 @@ bool Random_block::checkCollision( int x, int y, int w, int h )
 			if( block[ envelope[ i ]->nr ].checkCollision( x, y, w, h ) )
 			{
 				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool Random_block::checkBlockByPixel( int l, int r, int t, int b )
+{
+	for( unsigned i = 0; i < envelope.size(); i++ )
+	{
+		if( envelope[ i ]->line )
+		{
+			block[ envelope[ i ]->nr ].setPosition( envelope[ i ]->x, envelope[ i ]->y );
+			
+			for( int j = l; j <= r; j++ )
+			{
+				if( block[ envelope[ i ]->nr ].checkPixelCollision( j, t ) )		return true;
+				else if( block[ envelope[ i ]->nr ].checkPixelCollision( j, b ) )	return true;
+			}
+			
+			for( int j = t; j <= b; j++ )
+			{
+				if( block[ envelope[ i ]->nr ].checkPixelCollision( l, j ) )		return true;
+				else if( block[ envelope[ i ]->nr ].checkPixelCollision( r, j ) )	return true;
 			}
 		}
 	}
