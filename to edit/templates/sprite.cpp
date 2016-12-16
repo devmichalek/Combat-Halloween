@@ -41,6 +41,7 @@ MySprite::MySprite( int x, int y, sf::Uint8 alpha )
 	
     sprite = NULL;
 	texture = NULL;
+	image = NULL;
 	
 	color.r = 0xFF;
 	color.g = 0xFF;
@@ -80,6 +81,12 @@ void MySprite::free()
     {
         delete texture;
         texture = NULL;
+    }
+	
+	if( image != NULL )
+    {
+        delete image;
+        image = NULL;
     }
 	
 	color.r = 0xFF;
@@ -687,3 +694,109 @@ void MySprite::loadTxt( string path )
 	}
 }
 */
+
+    
+void MySprite::loadByImage( string path, int nr )
+{
+	free();
+	
+	try
+	{
+		image = new sf::Image;
+		if( image == NULL )
+		{
+			throw name + " \x1B[91mnot created\x1B[0m image";
+		}
+		else if( !image->loadFromFile( path ) )
+		{
+			throw name + " \x1B[91mnot loaded\x1B[0m " + path;
+		}
+		
+		texture = new sf::Texture;
+		if( texture == NULL )
+		{
+			throw name + " \x1B[91mnot created\x1B[0m texture";
+		}
+		else if( !texture->loadFromFile( path ) )
+		{
+			throw name + " \x1B[91mnot loaded\x1B[0m " + path;
+		}
+		else
+		{
+			texture->setSmooth( true );
+			
+			if( nr < 1 )	throw name + " \x1B[91mnumber is less than 1\x1B[0m";
+			else			this->nr = nr;
+		}
+	}
+	catch( string msg )
+	{
+		cerr << msg << endl;
+	}
+	
+	if( nr == 1 )
+	{
+		try
+		{
+			sprite = new sf::Sprite;
+			if( sprite == NULL )
+			{
+				throw name + " \x1B[91mnot created\x1B[0m sprite";
+			}
+			else
+			{
+				sprite->setTexture( *texture );
+				sprite->setColor( color );
+				safe_width = width = texture->getSize().x;
+				safe_height = height = texture->getSize().y;
+			}
+		}
+		catch( string msg )
+		{
+			cerr << msg << endl;
+		}
+	}
+	else if( nr > 1 )
+	{
+		try
+		{
+			sprite = new sf::Sprite[ nr ];
+			if( sprite == NULL )
+			{
+				throw name + " \x1B[91mnot created\x1B[0m array of sprite";
+			}
+			else
+			{
+				safe_width = width = texture->getSize().x / nr;
+				safe_height = height = texture->getSize().y;
+			}
+			
+			sf::IntRect r;	// temporary rectangle
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setTexture( *texture );
+				sprite[ i ].setTextureRect( sf::IntRect( i * width, 0, width, height ) );
+				sprite[ i ].setColor( color );
+			}
+		}
+		catch( string msg )
+		{
+			cerr << msg << endl;
+		}
+	}
+}
+
+bool MySprite::checkPixelCollision( int x, int y )
+{
+	if( x -left >= 0 && y -top >= 0 && x < left + width && y < top + height )
+	{
+		sf::Color c = image->getPixel( x -left, y -top );
+		if( c.a > 0 )
+		{
+			// printf( "%d %d    x%d y%d xw%d yh%d\n", x, y, left, top, left + width, top + height );
+			return true;
+		}
+	}
+	
+	return false;
+}
