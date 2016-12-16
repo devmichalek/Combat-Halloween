@@ -20,6 +20,7 @@ class MySprite :public Rect, public Color
 	string name;		// Identity
     sf::Sprite* sprite;
     sf::Texture* texture;
+	sf::Image* image;
 	
 	
     int nr;		// How many offset's, 0 = blank texture, 1 = loaded image, 1 < image with offsets
@@ -75,4 +76,7 @@ public:
 	
 	const string& getName() const;
 	void setName( string name );
+	
+	void loadByImage( string path, int nr = 1 );
+	bool checkPixelCollision( int x, int y );
 };
