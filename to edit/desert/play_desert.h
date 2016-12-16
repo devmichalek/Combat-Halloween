@@ -6,7 +6,7 @@
 #include "wood/random_block.h"
 #include "hero/kunai.h"
 #include "hero/heart.h"
-#include "enemy/golem.h"
+#include "enemy/golem/golem.h"
 
 class Play_desert
 {
