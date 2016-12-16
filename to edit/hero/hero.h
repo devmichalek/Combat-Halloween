@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hero/activity.h"
-#include "wood/block.h"
+#include "templates/sprite.h"
 #include <vector>
 
 
@@ -37,7 +37,6 @@ class Hero
 	float scale;
 	
 	// Move.
-	bool flag;
 	bool right;
 	
 	// Glide.
@@ -46,31 +45,40 @@ class Hero
 	// Slide.
 	bool slide;
 	
+	// Climb.
+	sf::Uint8 climb;
+	
 	
 	Activity j;		// Jump.
 	Activity a;		// Attack.
 	Activity ja;	// Jump and attack.
 	Activity t;		// Throw.
 	Activity jt;	// Jump and throw.
-	Activity c;		// Climb.
+	
+	MySprite box;
 	
 public:
 
 	Hero();
 	~Hero();
 	void free();
-	
 	void load( int& screen_w, int& posY, string path );
 	void draw( sf::RenderWindow* &window );
 	
 	
-	
+	// IDLE
 	void idle();
-	bool move( sf::Uint8 test = 0 );
+	
+	// MOVE
+	bool move();
+	void mirrorLeft();
+	void mirrorRight();
+	
+	// JUMP
 	bool jump();
 	
 	bool attack();
-	bool hit();
+	bool hit( int x, int y, int w, int h );
 	
 	int getTrueW();
 	int getTrueX();
@@ -94,12 +102,18 @@ public:
 
 
 	void gravitation();
+	void pixelGravitation();
 	void weightlessness();
 	
 	const int getX();
 	const int getY();
 	const int getW();
 	const int getH();
+	
+	const int getL();
+	const int getT();
+	const int getR();
+	const int getB();
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
