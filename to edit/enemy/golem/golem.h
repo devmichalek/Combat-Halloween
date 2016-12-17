@@ -4,16 +4,6 @@
 
 class Golem
 {
-	enum
-	{
-		APPEAR = 15,
-		WALK = 6,
-		ATTACK = 6,
-		DEAD = 7
-	};
-	
-	int state;		// e. g. appear animation can be used once
-	
 	int nr;
 	MySprite* sprite;
 	
@@ -21,43 +11,41 @@ class Golem
 	int offset;		// Which offset is active.
 	int delay;		// Slow because of FPS.
 	
-	float* leftX;
-	float* rightX;
-	float centerX;
-	
-	float scale;
 	float vel;
+	float scale;
+	bool right;		// Champion is on the left or on the right.
 	
-	MySprite life_bar;
+	int* offset_nr;	// Golem has different number of offsets per particular animation.
+	sf::Uint8 state;		// e. g. appear animation can be used once
+	
 	float life;
+	MySprite life_bar;
 	
-	float strength;
 	
-	int hit_counter;
-	bool right;
+	float centerX;
+	float leftX;
+	sf::Uint8 hit_line;
+	sf::Uint8 hit_counter;
 	
-	int attack_counter;
-	int attack_line;
 	
 public:
+	
+	void setXY( int x, int y );
+	void matchX( int x, int w, int y, int h );	// move
+	void undoMove();
+	
+	bool checkHit( Rect* rect, float damage );
+	void makeColor();
 	
 	Golem();
 	~Golem();
 	void free();
 	
 	void load();
-	void setXY( int x, int y );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
 	
-	void matchX( int x, int w, int y, int h );
-	bool checkHit( int x, int y, int w, int h, float damage );
-	bool allowAttack( int x, int y, int w, int h );
-	
-	int getX();
-	int getY();
-	int getW();
-	int getH();
+	Rect* getRect();
 };
