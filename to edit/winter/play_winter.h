@@ -2,7 +2,7 @@
 
 #include "templates/state.h"
 #include "hero/hero.h"
-#include "wood/random_block.h"
+#include "world/brick.h"
 #include "hero/kunai.h"
 #include "hero/heart.h"
 #include "enemy/golem/golem.h"
@@ -12,7 +12,7 @@ class Play_winter
 	State* state;
 	Hero* hero;
 	MySprite* bg;
-	Random_block* random_block;
+	Brick* brick;
 	Kunai* kunai;
 	Heart* heart;
 	Golem* golem;
