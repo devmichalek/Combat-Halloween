@@ -31,13 +31,17 @@ class Hero
 	
 	vector <int*> keys; // Which keys are responsible for particular activity.
 	
-	float vel;		// Velocity.
-	float jVel;		// Jump velocity;
-	float grav;		// Gravity.
+	float vel;			// Velocity.
+	float jump_vel;		// Jump velocity;
+	float grav;			// Gravity.
 	float scale;
+	
+	// Damage.
+	float damage;
 	
 	// Move.
 	bool right;
+	bool move;
 	
 	// Glide.
 	bool glide;
@@ -56,51 +60,52 @@ class Hero
 	Activity jt;	// Jump and throw.
 	
 	MySprite box;
+	MySprite jumpBox;
+	
+	Rect attackBox;
+	Rect jumpAttackBox;
 	
 public:
 
-	Hero();
-	~Hero();
-	void free();
-	void load( int& screen_w, int& posY, string path );
-	void draw( sf::RenderWindow* &window );
-	
-	
 	// IDLE
 	void idle();
 	
 	// MOVE
-	bool move();
+	bool moving();
 	void mirrorLeft();
 	void mirrorRight();
+	void undoMove();
 	
 	// JUMP
 	bool jump();
+	void undoJump();
 	
+	// ATTACK
 	bool attack();
-	bool hit( int x, int y, int w, int h );
+	Rect* getAttackBox();
+	float getDamage();
 	
-	int getTrueW();
-	int getTrueX();
-	
+	// GLIDE
 	void gliding();
+	
+	// SLIDE
 	void sliding();
+	
+	// JUMP WITH ATTACK
 	bool jumpAttack();
+	
+	// JUMP WITH THROW
 	bool jumpThrow();
 	
+	// CLIMB
 	void climbing();
 	void banClimbing();
 	
+	// THROW
 	bool throwing();
 	bool throwed();
-	int getThrowVel();
-	const int getThrowX();
-	const int getThrowY();
 
-	void undoMove();
-	void undoJump();
-
-
+	// GRAVITY STUFF
 	void gravitation();
 	void pixelGravitation();
 	void weightlessness();
@@ -110,16 +115,20 @@ public:
 	const int getW();
 	const int getH();
 	
-	const int getL();
-	const int getT();
-	const int getR();
-	const int getB();
+	
+	int strToInt( string s );		// Transform string to int.
+	bool checkKeys( int a, int b );	// See if keys are pressed?
+	sf::Uint8 getDirection();		// Return 0 = hero is not moving etc.
+	bool getSide();					// Return true if hero is directed to the right.
+	Rect* getRect();			// Get rectangle of hero.
+	
+	Hero();
+	~Hero();
+	void free();
+	
+	void load( int& screen_w, int& posY, string path );
+	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
-	
-	int strToInt( string s );
-	bool checkKeys( int a, int b );
-	
-	int getDirection();
 };
