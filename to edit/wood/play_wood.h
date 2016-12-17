@@ -1,9 +1,9 @@
 #pragma once
 
 #include "templates/state.h"
-#include "wood/moving_bg.h"
+#include "world/moving_bg.h"
 #include "hero/hero.h"
-#include "wood/random_block.h"
+#include "world/brick.h"
 #include "hero/kunai.h"
 #include "hero/heart.h"
 #include "enemy/golem/golem.h"
@@ -13,7 +13,7 @@ class Play_wood
 	State* state;
 	Hero* hero;
 	Moving_bg* bg;
-	Random_block* random_block;
+	Brick* brick;
 	Kunai* kunai;
 	Heart* heart;
 	Golem* golem;
