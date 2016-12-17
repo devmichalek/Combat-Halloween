@@ -24,7 +24,7 @@ bool Bit::isActive()
 	return active;
 }
 
-void Bit::start( int vel, int startX, int startY )
+void Bit::start( int startX, int startY, int vel )
 {
 	if( !active )
 	{
