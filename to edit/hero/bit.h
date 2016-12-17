@@ -15,7 +15,7 @@ public:
 	void free();
 	
 	bool isActive();
-	void start( int vel, int startX, int startY );
+	void start( int startX, int startY, int vel );
 	void go();
 	
 	void destroy();
