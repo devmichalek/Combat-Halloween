@@ -5,7 +5,7 @@ Play_desert::Play_desert()
 	state = new State;
 	hero = new Hero;
 	bg = new Moving_bg;
-	random_block = new Random_block;
+	brick = new Brick;
 	kunai = new Kunai;
 	heart = new Heart;
 	golem = new Golem;
@@ -21,7 +21,7 @@ void Play_desert::free()
 	delete state;
 	delete hero;
 	delete bg;
-	delete random_block;
+	delete brick;
 	delete kunai;
 	delete heart;
 	delete golem;
@@ -31,7 +31,7 @@ void Play_desert::free()
 void Play_desert::load( int screen_w, int screen_h )
 {
 	bg->load( "data/sprites/play/3.png" );
-	random_block->load( screen_w, screen_h, 3 );
+	brick->load( screen_w, screen_h, 3 );
 	kunai->load();
 	heart->load();
 	golem->load();
@@ -61,18 +61,18 @@ void Play_desert::draw( sf::RenderWindow* &window )
 	mechanics();
 	
 	bg->fadein( 2 );
-	random_block->fadein( 2 );
+	brick->fadein( 2 );
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
 	golem->fadein( 2 );
 	
 	bg->draw( window );
-	random_block->drawBG( window );
+	brick->drawBG( window );
 	hero->draw( window );
 	kunai->draw( window );
 	golem->draw( window );
-	random_block->draw( window );
+	brick->draw( window );
 	heart->draw( window );
 }
 
