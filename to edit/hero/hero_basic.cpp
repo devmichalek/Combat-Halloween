@@ -12,12 +12,14 @@ Hero::Hero()
 	
 	
 	vel = 0;
-	jVel = 0;
+	jump_vel = 0;
 	grav = 0;
 	scale = 0;
 	
+	damage = 0;
 
 	right = false;
+	move = false;
 	
 	glide = false;
 	
@@ -60,11 +62,14 @@ void Hero::free()
 	keys.clear();
 	
 	vel = 0;
-	jVel = 0;
+	jump_vel = 0;
 	grav = 0;
 	scale = 0;
 	
 	right = false;
+	move = false;
+	
+	damage = 0;
 	
 	glide = false;
 	
@@ -79,6 +84,7 @@ void Hero::free()
 	jt.free();
 	
 	box.free();
+	jumpBox.free();
 }
 
 
@@ -99,7 +105,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", nr -1 );
 		sprite[ i ].setScale( scale, scale );
-		sprite[ i ].setPosition( 200, posY -sprite[ i ].getHeight() -200 );
+		sprite[ i ].setPosition( 600, posY -sprite[ i ].getHeight() -200 );
 	}
 	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() + ( sprite[ JUMP_ATTACK ].getHeight() - sprite[ IDLE ].getHeight() ) );
 	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +5, sprite[ THROW ].getY() );
@@ -139,12 +145,14 @@ void Hero::load( int& screen_w, int& posY, string path )
 	
 	// Set other values
 	vel = 1;
-	jVel = vel*2;
+	jump_vel = vel*2;
 	grav = 1;
+	
+	damage = 0.07;
+	
 	right = true;
+	move = false;
 	
-	
-
 	// Duration
 	j.setLine( (nr-1)*delay + 10*delay );
 	a.setLine( (nr-1)*delay + 2*delay );
@@ -157,6 +165,11 @@ void Hero::load( int& screen_w, int& posY, string path )
 	box.create( 30, sprite[ ATTACK ].getHeight() );
 	box.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
 	box.setAlpha( 100 );
+	
+	jumpBox.setName( "hero-box" );
+	jumpBox.create( 35, sprite[ JUMP_ATTACK ].getHeight() );
+	jumpBox.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
+	jumpBox.setAlpha( 100 );
 	
 
 	for( int i = 0; i < nr; i++ )
@@ -202,8 +215,14 @@ void Hero::draw( sf::RenderWindow* &window )
 		window->draw( box.get() );
 	}
 	
-	
-	// printf( "X %d   Y %d  W %d   H %d\n", getX(), getY(), getW(), getH() );
+	if( which == JUMP_ATTACK )
+	{
+		if( right )
+			jumpBox.setPosition( ( sprite[ JUMP_ATTACK ].getWidth() -box.getWidth() ) + sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() );
+		else
+			jumpBox.setPosition( sprite[ JUMP_ATTACK ].getX() -sprite[ JUMP_ATTACK ].getWidth(), sprite[ JUMP_ATTACK ].getY() );
+		window->draw( jumpBox.get() );
+	}
 }
 
 
@@ -293,35 +312,39 @@ const int Hero::getH()
 	return sprite[ IDLE ].getHeight();
 }
 
-
-
-
-const int Hero::getL()
+sf::Uint8 Hero::getDirection()
 {
-	int x = 0;
-	
-	x = sprite[ IDLE ].getX();
-	
-	if( !right )
+	if( move )
 	{
-		x -= getW();
+		if( right )
+		{
+			return 2;
+		}
+		else
+		{
+			return 1;
+		}
 	}
+
+	return 0;
+}
+
+bool Hero::getSide()
+{
+	return right;
+}
+
+Rect* Hero::getRect()
+{
+	int t_x = sprite[ IDLE ].getX();
+	if( !right )	t_x -= sprite[ IDLE ].getWidth();
 	
-	return x;
+	int t_y = sprite[ IDLE ].getY();
+	int t_w = sprite[ IDLE ].getWidth();
+	int t_h = sprite[ IDLE ].getHeight();
+	
+	
+	Rect* rect = new Rect;
+	rect->set( t_x, t_y, t_w, t_h );
+	return rect;
 }
-
-const int Hero::getT()
-{
-	return sprite[ IDLE ].getY();
-}
-
-const int Hero::getR()
-{
-	return getX() + getW();
-}
-
-const int Hero::getB()
-{
-	return getY() + getH();
-}
-
