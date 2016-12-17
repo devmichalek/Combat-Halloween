@@ -1,74 +1,16 @@
 #include "hero/kunai.h"
 
-Kunai::Kunai()
-{
-	scale = 0;
-}
 
-Kunai::~Kunai()
-{
-	free();
-}
 
-void Kunai::free()
+void Kunai::throwed( int x, int y, bool right )
 {
-	sprite.free();
-	
-	for( unsigned i = 0; i < b.size(); i++ )
+	for( unsigned i = 0; i < bits.size(); i++ )
 	{
-		b[ i ]->free();
-	}
-	
-	b.clear();
-	
-	scale = 0;
-}
-
-	
-void Kunai::load()
-{
-	scale = 1;
-	
-	sprite.setName( "kunai-sprite" );
-	sprite.load( "data/sprites/hero/0.png" );
-	// sprite.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
-	
-	for( int i = 0; i < 6; i++ )
-	{
-		b.push_back( new Bit() );
-	}
-}
-
-void Kunai::draw( sf::RenderWindow* &window )
-{
-	for( unsigned i = 0; i < b.size(); i++ )
-	{
-		if( b[ i ]->isActive() )
+		if( !bits[ i ]->isActive() )
 		{
-			b[ i ]->go();
-			sprite.setPosition( b[ i ]->getX(), b[ i ]->getY() );
-			
-			if( b[ i ]->getVel() < 0 )
-			{
-				sprite.setScale( scale, scale );
-			}
-			else if( b[ i ]->getVel() > 0 )
-			{
-				sprite.setScale( -scale, scale );
-			}
-			
-			window->draw( sprite.get() );
-		}
-	}
-}
+			if( right )		bits[ i ]->start( x +30, y +50, vel );
+			else			bits[ i ]->start( x -30, y +50, -vel );
 
-void Kunai::throwing( int x, int y, int vel )
-{
-	for( unsigned i = 0; i < b.size(); i++ )
-	{
-		if( !b[ i ]->isActive() )
-		{
-			b[ i ]->start( vel, x, y );
 			break;
 		}
 	}
@@ -76,14 +18,14 @@ void Kunai::throwing( int x, int y, int vel )
 
 unsigned int Kunai::getNr()
 {
-	return b.size();
+	return bits.size();
 }
 
 int Kunai::getX( int which )
 {
-	int x = b[ which ]->getX();
+	int x = bits[ which ]->getX();
 	
-	if( b[ which]->getVel() > 0 )
+	if( bits[ which]->getVel() > 0 )
 		x -= getW();
 	
 	return x;
@@ -91,7 +33,7 @@ int Kunai::getX( int which )
 
 int Kunai::getY( int which )
 {
-	return b[ which ]->getY();
+	return bits[ which ]->getY();
 }
 
 int Kunai::getW()
@@ -106,17 +48,110 @@ int Kunai::getH()
 
 int Kunai::getR( int which )
 {
-	return b[ which ]->getX();
+	return bits[ which ]->getX();
 }
 
 int Kunai::getB( int which )
 {
-	return b[ which ]->getY() + getH();
+	return bits[ which ]->getY() + getH();
 }
 
 void Kunai::destroy( int which )
 {
-	b[ which ]->destroy();
+	bits[ which ]->destroy();
+}
+
+Rect* Kunai::getRect( int which )
+{
+	Rect* rect = new Rect;
+	int t_x, t_y;	// temporary
+	int t_w, t_h;
+		
+	t_x = bits[ which ]->getX();
+	if( bits[ which ]->getVel() > 0 )
+		t_x -= sprite.getWidth();
+	
+	t_y = bits[ which ]->getY();
+	t_w = sprite.getWidth();
+	t_h = sprite.getHeight();
+	
+	rect->set( t_x, t_y, t_w, t_h );
+	return rect;
+}
+
+float Kunai::getDamage()
+{
+	return damage;
+}
+
+
+
+Kunai::Kunai()
+{
+	scale = 0;
+	vel = 0;
+	damage = 0;
+}
+
+Kunai::~Kunai()
+{
+	free();
+}
+
+void Kunai::free()
+{
+	sprite.free();
+	
+	for( unsigned i = 0; i < bits.size(); i++ )
+	{
+		bits[ i ]->free();
+	}
+	
+	bits.clear();
+	
+	scale = 0;
+	vel = 0;
+	damage = 0;
+}
+
+	
+void Kunai::load()
+{
+	scale = 1;
+	vel = 4;
+	damage = 0.03;
+	
+	sprite.setName( "kunai-sprite" );
+	sprite.load( "data/sprites/hero/0.png" );
+	
+	// Max amount of kunai's is 6
+	for( int i = 0; i < 6; i++ )
+	{
+		bits.push_back( new Bit() );
+	}
+}
+
+void Kunai::draw( sf::RenderWindow* &window )
+{
+	for( unsigned i = 0; i < bits.size(); i++ )
+	{
+		if( bits[ i ]->isActive() )
+		{
+			bits[ i ]->go();
+			sprite.setPosition( bits[ i ]->getX(), bits[ i ]->getY() );
+			
+			if( bits[ i ]->getVel() < 0 )
+			{
+				sprite.setScale( scale, scale );
+			}
+			else if( bits[ i ]->getVel() > 0 )
+			{
+				sprite.setScale( -scale, scale );
+			}
+			
+			window->draw( sprite.get() );
+		}
+	}
 }
 
 void Kunai::fadein( int v, int max )
