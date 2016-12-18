@@ -6,6 +6,7 @@
 // Create objects.
 Engine::Engine()
 {
+	srand( static_cast <int> ( time( NULL ) ) );
     core = new Core( 1000, 750, -2, 120 );	// new FPS
     core->load( "Ninja" );
 	
