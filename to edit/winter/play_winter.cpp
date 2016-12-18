@@ -32,7 +32,7 @@ void Play_winter::load( int screen_w, int screen_h )
 {
 	bg->setName( "play_winter-bg" );
 	bg->load( "data/sprites/play/2.png" );
-	brick->load( screen_w, screen_h, 2 );
+	brick->load( screen_w, screen_h, 18, 2 );
 	kunai->load();
 	heart->load();
 	golem->load();
