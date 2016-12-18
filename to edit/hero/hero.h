@@ -52,6 +52,10 @@ class Hero
 	// Climb.
 	sf::Uint8 climb;
 	
+	// Harm.
+	sf::Uint8 hit_line;
+	sf::Uint8 hit_counter;
+	
 	
 	Activity j;		// Jump.
 	Activity a;		// Attack.
@@ -84,6 +88,8 @@ public:
 	bool attack();
 	Rect* getAttackBox();
 	float getDamage();
+	void harm();
+	void makeColor();
 	
 	// GLIDE
 	void gliding();
