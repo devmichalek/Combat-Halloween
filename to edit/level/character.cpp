@@ -54,7 +54,7 @@ void Character::load( int screen_w, int screen_h )
 	
 	information.setName( "choice-information" );
 	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
-	information.setText( "Tip: Playing will start if you choose the character." );
+	information.setText( "Tip: Choose character to start game." );
 	information.setPosition( screen_w + 10, screen_h - information.getHeight() - 10 );
 	
 	range = screen_w;
