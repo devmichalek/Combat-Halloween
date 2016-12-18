@@ -26,4 +26,5 @@ public:
     const int getBot() const;
 	
 	bool checkCollision( int x, int y, int w = 0, int h = 0 );
+	bool checkRectCollision( Rect rect );
 };

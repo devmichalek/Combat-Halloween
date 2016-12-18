@@ -73,3 +73,20 @@ bool Rect::checkCollision( int x, int y, int w, int h )
 
     return true;
 }
+
+bool Rect::checkRectCollision( Rect rect )
+{
+	if( rect.getY() +rect.getHeight() <= top )
+        return false;
+
+    if( rect.getY() >= top + height )
+        return false;
+
+    if( rect.getX() + rect.getWidth() <= left )
+        return false;
+
+    if( rect.getX() >= left + width )
+        return false;
+
+    return true;
+}
