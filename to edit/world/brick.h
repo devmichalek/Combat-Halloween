@@ -2,17 +2,19 @@
 
 #include "templates/sprite.h"
 #include "world/block.h"
+#include "world/ladder.h"
 
 class Brick
 {
 	int nr;
 	MySprite* block;
+	MySprite ladder;
 	
 	int width;
 	int screen_w, screen_h;
 	
-	vector < Block* > envelope;
-	vector < Block* > ladders;
+	vector < Block* > blocks;
+	vector < Ladder* > ladders;
 	
 public:
 	
@@ -27,7 +29,7 @@ public:
 	~Brick();
 	void free();
 
-	void load( int screen_w, int screen_h, int number );
+	void load( int screen_w, int screen_h, int nr, int type );
 	void draw( sf::RenderWindow* &window );
 	void drawBG( sf::RenderWindow* &window );
 	
