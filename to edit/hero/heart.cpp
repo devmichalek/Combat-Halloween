@@ -70,30 +70,6 @@ void Heart::draw( sf::RenderWindow* &window )
 		window->draw( fill[ i ].get() );
 		window->draw( frame[ i ].get() );
 	}
-	
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
-	{
-		for( int i = nr-1; i >= 0; i-- )
-		{
-			if( fill[ i ].getAlpha() > 0 )
-			{
-				fill[ i ].setAlpha( fill[ i ].getAlpha() -1 );
-				break;
-			}
-		}
-	}
-	
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 3 ) ) )
-	{
-		for( int i = 0; i < nr; i++ )
-		{
-			if( fill[ i ].getAlpha() < 0xFF )
-			{
-				fill[ i ].setAlpha( fill[ i ].getAlpha() +1 );
-				break;
-			}
-		}
-	}
 }
 
 void Heart::fadein( int v, int max )
@@ -117,5 +93,20 @@ void Heart::fadeout( int v, int min )
 	{
 		fill[ i ].fadeout( v, min );
 		frame[ i ].fadeout( v, min );
+	}
+}
+
+void Heart::harm( float damage )
+{
+	for( int i = nr-1; i >= 0; i-- )
+	{
+		if( fill[ i ].getAlpha() > 0 )
+		{
+			if( fill[ i ].getAlpha() -damage*10 < 0 )
+				fill[ i ].setAlpha( 0 );
+			else
+				fill[ i ].setAlpha( fill[ i ].getAlpha() -damage*10 );
+			break;
+		}
 	}
 }
