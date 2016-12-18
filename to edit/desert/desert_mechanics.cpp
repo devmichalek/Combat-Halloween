@@ -130,14 +130,19 @@ void Play_desert::mechanics()
 			kunai->destroy( i );
 		}
 	}
-	
-	
+
 	// GOLEM SET X
-	golem->matchX( hero->getX(), hero->getW(), hero->getY(), hero->getH() );
-	
+	golem->matchX( hero->getRect() );
 	if( brick->checkCollision( golem->getRect() ) )
 	{
 		golem->undoMove();
+	}
+	
+	// GOLEM ATTACK
+	if( golem->checkAttackBox( hero->getRect() ) )
+	{
+		hero->harm();
+		heart->harm( golem->getDamage() );
 	}
 	
 	// BG MOVE
