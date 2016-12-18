@@ -133,7 +133,7 @@ void Play_halloween::mechanics()
 	
 	
 	// GOLEM SET X
-	golem->matchX( hero->getX(), hero->getW(), hero->getY(), hero->getH() );
+	golem->matchX( hero->getRect() );
 	
 	if( brick->checkCollision( golem->getRect() ) )
 	{
