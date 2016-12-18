@@ -57,7 +57,7 @@ void Choice::load( int screen_w, int screen_h )
 	
 	information.setName( "choice-information" );
 	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
-	information.setText( "Tip: Following worlds will be generate randomly." );
+	information.setText( "Tip: Following worlds will be generated randomly." );
 	information.setPosition( 10, screen_h - information.getHeight() - 10 );
 	
 	
@@ -180,7 +180,7 @@ void Choice::draw( sf::RenderWindow &window )
 	
 	if( counter > -1 && counter < 150 )
 	{
-		if( counter %4 == 0 )
+		if( counter %7 == 0 )
 			result = rand()%4;
 		counter ++;
 	}
