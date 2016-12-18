@@ -26,6 +26,9 @@ Hero::Hero()
 	slide = false;
 	
 	climb = 0;
+	
+	hit_line = 0;
+	hit_counter = 0;
 }
 
 Hero::~Hero()
@@ -85,6 +88,9 @@ void Hero::free()
 	
 	box.free();
 	jumpBox.free();
+	
+	hit_line = 0;
+	hit_counter = 0;
 }
 
 
@@ -183,10 +189,14 @@ void Hero::load( int& screen_w, int& posY, string path )
 	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
 	sprite[ JUMP_THROW ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
 	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +11, sprite[ IDLE ].getY() -1 );
+	
+	hit_line = 15;
 }
 
 void Hero::draw( sf::RenderWindow* &window )
 {
+	makeColor();
+	
 	window->draw( sprite[ which ].get() );
 	
 	sprite[ which ].setOffset( offset /delay );
