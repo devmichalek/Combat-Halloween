@@ -292,6 +292,36 @@ float Hero::getDamage()
 	return damage;
 }
 
+void Hero::harm()
+{
+	hit_counter = 1;
+}
+
+void Hero::makeColor()
+{
+	if( hit_counter > 0 )
+	{
+		hit_counter ++;
+		
+		if( hit_counter < hit_line )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( 0xFF, 0x66, 0x66 ) );
+			}
+		}
+		else
+		{
+			hit_counter = 0;
+			
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+			}
+		}
+	}
+}
+
 
 
 //--------------------------------------------------------------------------------------------------------
