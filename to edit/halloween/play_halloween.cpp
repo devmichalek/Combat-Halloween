@@ -32,7 +32,7 @@ void Play_halloween::load( int screen_w, int screen_h )
 {
 	bg->setName( "play_halloween-bg" );
 	bg->load( "data/sprites/play/0.png" );
-	brick->load( screen_w, screen_h, 0 );
+	brick->load( screen_w, screen_h, 16, 0 );
 	kunai->load();
 	heart->load();
 	golem->load();
