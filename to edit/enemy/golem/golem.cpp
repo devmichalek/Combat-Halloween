@@ -11,6 +11,7 @@ void Golem::setXY( int x, int y )
 	
 	centerX = x + sprite[ 1 ].getWidth()/2;
 	leftX = x;
+	life_bar.setPosition( x, sprite[ 1 ].getY() -20 );
 	
 	if( state == 0 )
 	{
@@ -18,10 +19,15 @@ void Golem::setXY( int x, int y )
 	}
 }
 
-void Golem::matchX( int x, int w, int y, int h )
+void Golem::matchX( Rect* rect )
 {
-	if( state == 2 )
+	if( state == 2 && rect != NULL )
 	{
+		int x = rect->getX();
+		int y = rect->getY();
+		int w = rect->getWidth();
+		int h = rect->getHeight();
+		
 		if( ( y >= sprite[ 1 ].getY() && y+h < sprite[ 1 ].getY() + sprite[ 1 ].getHeight() ) ||
 			( y +h >= sprite[ 1 ].getY() && y < sprite[ 1 ].getY() + sprite[ 1 ].getHeight() ) )
 		{
@@ -56,36 +62,39 @@ void Golem::matchX( int x, int w, int y, int h )
 						sprite[ i ].setPosition( leftX, sprite[ i ].getY() );
 					}
 					
+					sprite[ 2 ].setPosition( leftX -(sprite[ 2 ].getWidth() -sprite[ 1 ].getWidth() ), sprite[ 2 ].getY() );
+					
 					right = true;
 				}
 			}
 			
-			
-			if( leftX > x + w )
+			if( attack_counter == 0 || attack_counter > 120 )
 			{
-				centerX -= vel;
-				leftX -= vel;
-				
-				for( int i = 0; i < nr; i++ )
+				if( leftX +25 > x + w )
 				{
-					sprite[ i ].setPosition( leftX, sprite[ i ].getY() );
+					centerX -= vel;
+					leftX -= vel;
+					
+					for( int i = 0; i < nr; i++ )
+					{
+						sprite[ i ].setPosition( leftX, sprite[ i ].getY() );
+					}
 				}
-			}
-			else if( leftX + sprite[ 1 ].getWidth() < x )
-			{
-				centerX += vel;
-				leftX += vel;
-				
-				for( int i = 0; i < nr; i++ )
+				else if( leftX + sprite[ 1 ].getWidth() -25 < x )
 				{
-					sprite[ i ].setPosition( leftX + sprite[ i ].getWidth(), sprite[ i ].getY() );
+					centerX += vel;
+					leftX += vel;
+					
+					for( int i = 0; i < nr; i++ )
+					{
+						sprite[ i ].setPosition( leftX + sprite[ i ].getWidth(), sprite[ i ].getY() );
+					}
 				}
 			}
 			
 			
 			// life bar
-			if( right )		life_bar.setPosition( leftX, sprite[ 1 ].getY() -20 );
-			else 			life_bar.setPosition( leftX, sprite[ 1 ].getY() -20 );
+			life_bar.setPosition( leftX, sprite[ 1 ].getY() -20 );
 		}
 	}
 }
@@ -104,18 +113,42 @@ void Golem::undoMove()
 	}
 }
 
+
+
 bool Golem::checkHit( Rect* rect, float damage )
 {
 	if( state == 2 && rect != NULL )
 	{
-		int add = rect->getX();
-		if( !right )	add += sprite[ 1 ].getWidth();
-
-		if( sprite[ 1 ].checkCollision( add, rect->getY(), rect->getWidth(), rect->getHeight() ) )
+		if( right )
+			attackBox.setPosition( leftX, sprite[ 1 ].getY() +10 );
+		else
+			attackBox.setPosition( leftX +sprite[ 1 ].getWidth() -attackBox.getWidth(), sprite[ 1 ].getY() +10 );
+		
+		if( attackBox.checkRectCollision( *rect ) )
 		{
 			life -= damage;
 			hit_counter = 1;
 			return true;
+		}
+	}
+	
+	return false;
+}
+
+bool Golem::checkAttackBox( Rect* rect )
+{
+	if( state == 2 && rect != NULL )
+	{
+		if( attackBox.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+		{
+			if( attack_counter == 0 )
+			{
+				offset = 0;
+				attack_counter = 1;
+			}
+			
+			if( offset == 4*delay && attack_counter == 1 )
+				return true;
 		}
 	}
 	
@@ -172,6 +205,11 @@ Golem::Golem()
 	leftX = 0;
 	hit_line = 0;
 	hit_counter = 0;
+	
+	attack_line = 0;
+	attack_counter = 0;
+	
+	damage = 0;
 }
 
 Golem::~Golem()
@@ -216,6 +254,13 @@ void Golem::free()
 	leftX = 0;
 	hit_line = 0;
 	hit_counter = 0;
+	
+	attack_line = 0;
+	attack_counter = 0;
+	
+	attackBox.free();
+	
+	damage = 0;
 }
 
 
@@ -252,7 +297,17 @@ void Golem::load()
 	hit_line = 10;
 	hit_counter = 0;
 	
+	attack_line = 0xFF;
+	attack_counter = 0;
+	
 	right = true;
+	
+	attackBox.setName( "golem-attackBox" );
+	attackBox.create( 60, sprite[ 1 ].getHeight() -25 );
+	attackBox.setColor( sf::Color( 0x44, 0xFF, 0x00 ) );
+	attackBox.setAlpha( 100 );
+	
+	damage = 7;
 }
 
 void Golem::draw( sf::RenderWindow* &window )
@@ -283,6 +338,26 @@ void Golem::draw( sf::RenderWindow* &window )
 			which = 3;
 		}
 		
+		if(  attack_counter > 1 && attack_counter < attack_line )
+		{
+			attack_counter ++;
+		}
+		else if( attack_counter > 1 )
+		{
+			attack_counter = 0;
+		}
+		
+		if( attack_counter == 1 )
+		{
+			which = 2;
+			if( offset == offset_nr[ which ]*delay -1 )
+			{
+				offset = 0;
+				which = 1;
+				attack_counter = 2;
+			}
+		}
+		
 		makeColor();
 	}
 	
@@ -306,6 +381,13 @@ void Golem::draw( sf::RenderWindow* &window )
 		
 		sprite[ which ].setOffset( offset/delay );
 		window->draw( sprite[ which ].get() );
+		
+		if( right )
+			attackBox.setPosition( leftX, sprite[ 1 ].getY() +10 );
+		else	
+			attackBox.setPosition( leftX +sprite[ 1 ].getWidth() -attackBox.getWidth(), sprite[ 1 ].getY() +10 );
+			
+		window->draw( attackBox.get() );
 	}
 }
 
@@ -339,4 +421,9 @@ Rect* Golem::getRect()
 	Rect* rect = new Rect;
 	rect->set( t_x, t_y, t_w, t_h );
 	return rect;
+}
+
+float Golem::getDamage()
+{
+	return damage;
 }

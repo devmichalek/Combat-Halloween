@@ -27,14 +27,21 @@ class Golem
 	sf::Uint8 hit_line;
 	sf::Uint8 hit_counter;
 	
+	sf::Uint8 attack_line;
+	sf::Uint8 attack_counter;
+	
+	MySprite attackBox;
+	
+	float damage;
 	
 public:
 	
 	void setXY( int x, int y );
-	void matchX( int x, int w, int y, int h );	// move
+	void matchX( Rect* rect = NULL );	// move
 	void undoMove();
 	
-	bool checkHit( Rect* rect, float damage );
+	bool checkHit( Rect* rect = NULL, float damage = 0 );
+	bool checkAttackBox( Rect* rect = NULL );
 	void makeColor();
 	
 	Golem();
@@ -48,4 +55,5 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	Rect* getRect();
+	float getDamage();
 };
