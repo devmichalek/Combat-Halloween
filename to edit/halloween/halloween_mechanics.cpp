@@ -106,7 +106,7 @@ void Play_halloween::mechanics()
 	else if( hero->moving() )
 	{
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
-			hero->getX() + hero->getW()> brick->getScreenWidth() ||
+			hero->getX() + hero->getW() > brick->getScreenWidth() ||
 			hero->getX() < 0 )
 		{
 			hero->undoMove();
@@ -130,13 +130,18 @@ void Play_halloween::mechanics()
 			kunai->destroy( i );
 		}
 	}
-	
-	
+
 	// GOLEM SET X
 	golem->matchX( hero->getRect() );
-	
 	if( brick->checkCollision( golem->getRect() ) )
 	{
 		golem->undoMove();
+	}
+	
+	// GOLEM ATTACK
+	if( golem->checkAttackBox( hero->getRect() ) )
+	{
+		hero->harm();
+		heart->harm( golem->getDamage() );
 	}
 }
