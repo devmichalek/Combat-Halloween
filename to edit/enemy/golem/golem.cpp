@@ -62,8 +62,6 @@ void Golem::matchX( Rect* rect )
 						sprite[ i ].setPosition( leftX, sprite[ i ].getY() );
 					}
 					
-					sprite[ 2 ].setPosition( leftX -(sprite[ 2 ].getWidth() -sprite[ 1 ].getWidth() ), sprite[ 2 ].getY() );
-					
 					right = true;
 				}
 			}
@@ -79,6 +77,8 @@ void Golem::matchX( Rect* rect )
 					{
 						sprite[ i ].setPosition( leftX, sprite[ i ].getY() );
 					}
+					
+					sprite[ 2 ].setPosition( leftX -(sprite[ 2 ].getWidth() -sprite[ 1 ].getWidth()), sprite[ 2 ].getY() );
 				}
 				else if( leftX + sprite[ 1 ].getWidth() -25 < x )
 				{
