@@ -41,12 +41,25 @@ void Rules::free()
 	rules_top.clear();
 }
 
+vector <Law*> Rules::getRightRules( int which )
+{
+	return rules_right[ which +1 ];
+}
+
 
 
 
 void Rules::ruleRightSide()
 {
 	vector <Law*> temporary;
+	
+	// -1 - void
+	temporary.clear();
+	temporary.push_back( new Law( 0 ) );
+	temporary.push_back( new Law( 5 ) );
+	temporary.push_back( new Law( 8 ) );
+	temporary.push_back( new Law( 10 ) );
+	rules_right.push_back( temporary );
 	
 	// 0
 	temporary.clear();
