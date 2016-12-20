@@ -68,7 +68,7 @@ void Play_desert::draw( sf::RenderWindow* &window )
 	golem->fadein( 2 );
 	
 	bg->draw( window );
-	brick->drawBG( window );
+	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	golem->draw( window );
