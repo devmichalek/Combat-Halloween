@@ -124,13 +124,15 @@ void Play_wood::mechanics()
 	{
 		if( brick->checkBlockByPixel( kunai->getRect( i ) ) ||
 		kunai->getX( i ) + kunai->getW() > brick->getScreenWidth() +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() ||
-		golem->checkHit( kunai->getRect( i ), kunai->getDamage() ) )
+		kunai->getX( i ) < -kunai->getW() /*||
+		
+		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
 		{
 			kunai->destroy( i );
 		}
 	}
-
+	
+	/*
 	// GOLEM SET X
 	golem->matchX( hero->getRect() );
 	if( brick->checkCollision( golem->getRect() ) )
@@ -144,6 +146,7 @@ void Play_wood::mechanics()
 		hero->harm();
 		heart->harm( golem->getDamage() );
 	}
+	*/
 	
 	// BG MOVE
 	bg->move( hero->getDirection() );
