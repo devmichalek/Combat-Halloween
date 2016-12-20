@@ -31,7 +31,7 @@ public:
 
 	void load( int screen_w, int screen_h, int nr, int type );
 	void draw( sf::RenderWindow* &window );
-	void drawBG( sf::RenderWindow* &window );
+	void drawLadders( sf::RenderWindow* &window );
 	
 	int getScreenWidth();
 	void fadein( int v = 1, int max = 0xFF );

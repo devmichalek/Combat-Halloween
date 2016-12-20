@@ -1,82 +1,38 @@
 #include "world/brick.h"
-
+#include "world/rules.h"
+#include <cstdlib>	// rand
 
 void Brick::positioning()
 {
-	for( int i = 0; i < 8; i ++ )
+	Rules* rules = new Rules;
+//-------------------------------------------------------------------------------------
+	
+	rules->ruleRightSide();
+	rules->ruleLeftSide();
+	rules->ruleBotSide();
+	
+	int c = 10;	// how many blocks
+	
+	unsigned scope = 0;
+	int result = 0;
+	
+	while( c-- )
 	{
+		// get scope
+		scope = rules->getRightRules( blocks[ blocks.size()-1 ]->nr ).size();
+		
+		// get result
+		result = rules->getRightRules( blocks[ blocks.size()-1 ]->nr )[ rand()%scope ]->nr;
+		
+		// add block
 		blocks.push_back( new Block() );
-		blocks[ blocks.size()-1 ]->nr = 1;
-		blocks[ blocks.size()-1 ]->x = width *i;
+		blocks[ blocks.size()-1 ]->nr = result;
+		blocks[ blocks.size()-1 ]->x = blocks[ blocks.size()-2 ]->x +width;
 		blocks[ blocks.size()-1 ]->y = screen_h -width;
 	}
-
-	ladders.push_back( new Ladder() );
-	ladders[ ladders.size()-1 ]->x = width;
-	ladders[ ladders.size()-1 ]->y = screen_h -width -ladder.getHeight();
 	
-	ladders.push_back( new Ladder() );
-	ladders[ ladders.size()-1 ]->x = width -ladder.getWidth();
-	ladders[ ladders.size()-1 ]->y = screen_h -width*2 -ladder.getHeight();
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 2;
-	blocks[ blocks.size()-1 ]->x = 0;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*2;
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 5;
-	blocks[ blocks.size()-1 ]->x = width*5;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*2;
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 7;
-	blocks[ blocks.size()-1 ]->x = width*6;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*2;
-	
-	
-	ladders.push_back( new Ladder() );
-	ladders[ ladders.size()-1 ]->x = width*5 -ladder.getWidth();
-	ladders[ ladders.size()-1 ]->y = screen_h -ladder.getHeight() -width;
-	
-	ladders.push_back( new Ladder() );
-	ladders[ ladders.size()-1 ]->x = width*5;
-	ladders[ ladders.size()-1 ]->y = screen_h -width*2 -ladder.getHeight();
-	
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 5;
-	blocks[ blocks.size()-1 ]->x = width;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*4;
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 6;
-	blocks[ blocks.size()-1 ]->x = width*2;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*4;
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 6;
-	blocks[ blocks.size()-1 ]->x = width*3;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*4;
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 7;
-	blocks[ blocks.size()-1 ]->x = width*4;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*4;
-	
-	
-	
-	
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 5;
-	blocks[ blocks.size()-1 ]->x = width*6;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*4;
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 7;
-	blocks[ blocks.size()-1 ]->x = width*7;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*4;
+//-------------------------------------------------------------------------------------
+	delete rules;
 }
 
 
@@ -87,10 +43,13 @@ bool Brick::checkCollision( Rect* rect )
 	{
 		for( unsigned i = 0; i < blocks.size(); i++ )
 		{
-			block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-			if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+			if( blocks[ i ]->nr != -1 )
 			{
-				return true;
+				block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -109,18 +68,21 @@ bool Brick::checkBlockByPixel( Rect* rect )
 		
 		for( unsigned i = 0; i < blocks.size(); i++ )
 		{
-			block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-			
-			for( int j = l; j <= r; j++ )
+			if( blocks[ i ]->nr != -1 )
 			{
-				if( block[ blocks[ i ]->nr ].checkPixelCollision( j, t ) )		return true;
-				else if( block[ blocks[ i ]->nr ].checkPixelCollision( j, b ) )	return true;
-			}
+				block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
 			
-			for( int j = t; j <= b; j++ )
-			{
-				if( block[ blocks[ i ]->nr ].checkPixelCollision( l, j ) )		return true;
-				else if( block[ blocks[ i ]->nr ].checkPixelCollision( r, j ) )	return true;
+				for( int j = l; j <= r; j++ )
+				{
+					if( block[ blocks[ i ]->nr ].checkPixelCollision( j, t ) )		return true;
+					else if( block[ blocks[ i ]->nr ].checkPixelCollision( j, b ) )	return true;
+				}
+				
+				for( int j = t; j <= b; j++ )
+				{
+					if( block[ blocks[ i ]->nr ].checkPixelCollision( l, j ) )		return true;
+					else if( block[ blocks[ i ]->nr ].checkPixelCollision( r, j ) )	return true;
+				}
 			}
 		}
 	}
@@ -211,6 +173,11 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	ladder.setName( "brick-ladder" );
 	ladder.loadByImage( "data/sprites/play/0/ladder.png" );
 	
+	blocks.push_back( new Block() );
+	blocks[ blocks.size()-1 ]->nr = 1;
+	blocks[ blocks.size()-1 ]->x = 0;
+	blocks[ blocks.size()-1 ]->y = screen_h -width;
+	
 	// start
 	positioning();
 }
@@ -219,12 +186,15 @@ void Brick::draw( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-		window->draw( block[ blocks[ i ]->nr ].get() );
+		if( blocks[ i ]->nr != -1 )
+		{
+			block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
+			window->draw( block[ blocks[ i ]->nr ].get() );
+		}
 	}
 }
 
-void Brick::drawBG( sf::RenderWindow* &window )
+void Brick::drawLadders( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < ladders.size(); i++ )
 	{
