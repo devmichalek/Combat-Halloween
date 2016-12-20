@@ -65,13 +65,13 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
-	golem->fadein( 2 );
+	//golem->fadein( 2 );
 	
 	bg->draw( window );
-	brick->drawBG( window );
+	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
-	golem->draw( window );
+	//golem->draw( window );
 	brick->draw( window );
 	heart->draw( window );
 }
