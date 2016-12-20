@@ -1,8 +1,6 @@
 #include "world/law.h"
 
-Law::Law( int nr, bool line, bool bg )
+Law::Law( int nr )
 {
 	this->nr = nr;
-	this->line = line;
-	this->bg = bg;
 }

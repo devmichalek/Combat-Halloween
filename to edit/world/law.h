@@ -1,11 +1,11 @@
 #pragma once
 
+#include <cstdint>
+
 class Law
 {
 public:
-	int nr;
-	bool line;
-	bool bg;
+	int8_t nr;
 	
-	Law( int nr, bool line = true, bool bg = false );
+	Law( int nr );
 };
