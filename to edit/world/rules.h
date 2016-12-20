@@ -13,7 +13,6 @@ class Rules
 	vector < vector <Law*> > rules_top;
 	
 public:
-
 	Rules();
 	~Rules();
 	void free();
@@ -22,4 +21,6 @@ public:
 	void ruleLeftSide();
 	void ruleBotSide();
 	void ruleTopSide( int number );
+	
+	vector <Law*> getRightRules( int which );
 };
