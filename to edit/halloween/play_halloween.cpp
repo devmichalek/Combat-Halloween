@@ -69,7 +69,7 @@ void Play_halloween::draw( sf::RenderWindow* &window )
 	golem->fadein( 2 );
 	
 	window->draw( bg->get() );
-	brick->drawBG( window );
+	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	golem->draw( window );
