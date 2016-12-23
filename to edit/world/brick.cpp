@@ -31,6 +31,15 @@ void Brick::positioning()
 		blocks[ blocks.size()-1 ]->y = screen_h -width;
 	}
 	
+	ladders.push_back( new Ladder() );
+	ladders[ 0 ]->x = screen_w *3/4;
+	ladders[ 0 ]->y = screen_h -width -ladder.getHeight();
+	
+	blocks.push_back( new Block() );
+	blocks[ blocks.size()-1 ]->nr = 7;
+	blocks[ blocks.size()-1 ]->x = screen_w *3/4 -width;
+	blocks[ blocks.size()-1 ]->y = screen_h -width*3;
+	
 //-------------------------------------------------------------------------------------
 	delete rules;
 }
@@ -106,6 +115,79 @@ bool Brick::checkLadder( Rect* rect )
 	
 	return false;
 }
+
+
+
+sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
+{
+	if( direction == 1 )
+	{
+		if( getLX() > -10 )
+		{
+			return 1;
+		}
+		
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			blocks[ i ]->x += vel;
+		}
+		
+		for( unsigned i = 0; i < ladders.size(); i++ )
+		{
+			ladders[ i ]->x += vel;
+		}
+	}
+	else if( direction == 2 )
+	{
+		if( getRX() < screen_w -width +10 )
+		{
+			return 2;
+		}
+		
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			blocks[ i ]->x -= vel;
+		}
+		
+		for( unsigned i = 0; i < ladders.size(); i++ )
+		{
+			ladders[ i ]->x -= vel;
+		}
+	}
+	
+	return 0;
+}
+
+int Brick::getLX()
+{
+	int left = 0;
+	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->x < left )
+		{
+			left = blocks[ i ]->x;
+		}
+	}
+	
+	return left;
+}
+
+int Brick::getRX()
+{
+	int right = 0;
+	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->x > right )
+		{
+			right = blocks[ i ]->x;
+		}
+	}
+	
+	return right;
+}
+
 
 
 
