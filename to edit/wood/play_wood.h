@@ -6,7 +6,7 @@
 #include "world/brick.h"
 #include "hero/kunai.h"
 #include "hero/heart.h"
-#include "enemy/golem/golem.h"
+#include "hero/scope.h"
 
 class Play_wood
 {
@@ -16,7 +16,7 @@ class Play_wood
 	Brick* brick;
 	Kunai* kunai;
 	Heart* heart;
-	Golem* golem;
+	Scope* scope;
 		
 public:
 
