@@ -69,6 +69,8 @@ class Hero
 	Rect attackBox;
 	Rect jumpAttackBox;
 	
+	sf::Uint8 scope;
+	
 public:
 
 	// IDLE
@@ -93,6 +95,7 @@ public:
 	
 	// GLIDE
 	void gliding();
+	bool isGliding();
 	
 	// SLIDE
 	void sliding();
@@ -115,6 +118,11 @@ public:
 	void gravitation();
 	void pixelGravitation();
 	void weightlessness();
+	
+	// VEL STUFF AND SCOPE
+	float getVel();
+	float getJump_vel();
+	void setScope( sf::Uint8 scope );
 	
 	const int getX();
 	const int getY();
