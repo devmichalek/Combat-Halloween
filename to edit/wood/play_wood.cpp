@@ -47,9 +47,7 @@ void Play_wood::setHero( int screen_w, int screen_h, int type )
 		hero->load( screen_w, screen_h, "data/sprites/hero/1/" );
 	}
 	
-	scope->setHeroX( hero->getX() );
-	scope->setBorder( brick->getLX(), brick->getRX() );
-	scope->setWall( 128, screen_w );
+	scope->set( hero->getX(), brick->getWidth(), screen_w );
 }
 
 void Play_wood::handle( sf::Event &event )
