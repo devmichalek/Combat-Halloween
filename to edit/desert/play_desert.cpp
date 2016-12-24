@@ -8,7 +8,7 @@ Play_desert::Play_desert()
 	brick = new Brick;
 	kunai = new Kunai;
 	heart = new Heart;
-	golem = new Golem;
+	scope = new Scope;
 }
 
 Play_desert::~Play_desert()
@@ -24,7 +24,7 @@ void Play_desert::free()
 	delete brick;
 	delete kunai;
 	delete heart;
-	delete golem;
+	delete scope;
 }
 
 	
@@ -34,8 +34,6 @@ void Play_desert::load( int screen_w, int screen_h )
 	brick->load( screen_w, screen_h, 16, 3 );
 	kunai->load();
 	heart->load();
-	golem->load();
-	golem->setXY( 400, screen_h -128 );
 }
 
 void Play_desert::setHero( int screen_w, int screen_h, int type )
@@ -48,6 +46,8 @@ void Play_desert::setHero( int screen_w, int screen_h, int type )
 	{
 		hero->load( screen_w, screen_h, "data/sprites/hero/1/" );
 	}
+	
+	scope->set( hero->getX(), brick->getWidth(), screen_w );
 }
 
 
@@ -65,13 +65,11 @@ void Play_desert::draw( sf::RenderWindow* &window )
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
-	golem->fadein( 2 );
 	
 	bg->draw( window );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
-	golem->draw( window );
 	brick->draw( window );
 	heart->draw( window );
 }
