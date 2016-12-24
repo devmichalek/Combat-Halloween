@@ -29,6 +29,8 @@ Hero::Hero()
 	
 	hit_line = 0;
 	hit_counter = 0;
+	
+	scope = false;
 }
 
 Hero::~Hero()
@@ -91,6 +93,8 @@ void Hero::free()
 	
 	hit_line = 0;
 	hit_counter = 0;
+	
+	scope = false;
 }
 
 
@@ -111,7 +115,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ].load( path + to_string( i ) + ".png", nr -1 );
 		sprite[ i ].setScale( scale, scale );
-		sprite[ i ].setPosition( 600, posY -sprite[ i ].getHeight() -200 );
+		sprite[ i ].setPosition( 70, posY -sprite[ i ].getHeight() -200 );
 	}
 	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() + ( sprite[ JUMP_ATTACK ].getHeight() - sprite[ IDLE ].getHeight() ) );
 	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +5, sprite[ THROW ].getY() );
@@ -151,7 +155,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 	
 	// Set other values
 	vel = 1;
-	jump_vel = vel*2;
+	jump_vel = vel*2 +1;
 	grav = 1;
 	
 	damage = 0.07;
@@ -321,6 +325,23 @@ const int Hero::getH()
 {
 	return sprite[ IDLE ].getHeight();
 }
+
+
+float Hero::getVel()
+{
+	return vel;
+}
+
+float Hero::getJump_vel()
+{
+	return jump_vel;
+}
+
+void Hero::setScope( bool scope )
+{
+	this->scope = scope;
+}
+
 
 sf::Uint8 Hero::getDirection()
 {
