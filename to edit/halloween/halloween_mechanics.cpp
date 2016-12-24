@@ -25,7 +25,6 @@ void Play_halloween::mechanics()
 	}
 	
 	
-	
 	// HERO SLIDE
 	hero->sliding();
 	
@@ -50,6 +49,8 @@ void Play_halloween::mechanics()
 	// HERO JUMP WITH THROW
 	if( hero->jumpThrow() )
 	{
+		scope->setVel( hero->getJump_vel() );
+		
 		if( hero->throwed() )
 		{
 			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
@@ -66,7 +67,9 @@ void Play_halloween::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
-		golem->checkHit( hero->getAttackBox(), hero->getDamage() );
+		//golem->checkHit( hero->getAttackBox(), hero->getDamage() );
+		
+		scope->setVel( hero->getJump_vel() );
 		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
 			hero->getX() + hero->getW()> brick->getScreenWidth() ||
@@ -88,12 +91,14 @@ void Play_halloween::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		golem->checkHit( hero->getAttackBox(), hero->getDamage() );
+		//golem->checkHit( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	// HERO JUMP
 	else if( hero->jump() )
 	{
+		scope->setVel( hero->getJump_vel() );
+		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
 			hero->getX() + hero->getW()> brick->getScreenWidth() ||
 			hero->getX() < 0 )
@@ -105,8 +110,10 @@ void Play_halloween::mechanics()
 	// HERO MOVE
 	else if( hero->moving() )
 	{
+		scope->setVel( hero->getVel() );
+		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
-			hero->getX() + hero->getW() > brick->getScreenWidth() ||
+			hero->getX() + hero->getW()> brick->getScreenWidth() ||
 			hero->getX() < 0 )
 		{
 			hero->undoMove();
@@ -124,13 +131,14 @@ void Play_halloween::mechanics()
 	{
 		if( brick->checkBlockByPixel( kunai->getRect( i ) ) ||
 		kunai->getX( i ) + kunai->getW() > brick->getScreenWidth() +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() ||
-		golem->checkHit( kunai->getRect( i ), kunai->getDamage() ) )
+		kunai->getX( i ) < -kunai->getW() /*||
+		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
 		{
 			kunai->destroy( i );
 		}
 	}
-
+	
+	/*
 	// GOLEM SET X
 	golem->matchX( hero->getRect() );
 	if( brick->checkCollision( golem->getRect() ) )
@@ -144,4 +152,23 @@ void Play_halloween::mechanics()
 		hero->harm();
 		heart->harm( golem->getDamage() );
 	}
+	*/
+	
+	
+	// HERO SET SCOPE
+	hero->setScope( !scope->getScope() );
+	
+	// SCOPE ALLOW MOVE
+	if( scope->allowMoving() )
+	{
+		// BRICK MOVE
+		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
+		if( brick->checkBlockByPixel( hero->getRect() ) )
+		{
+			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
+		}
+	}
+	
+	// SCOPE MOVE
+	scope->move( hero->getDirection() );
 }
