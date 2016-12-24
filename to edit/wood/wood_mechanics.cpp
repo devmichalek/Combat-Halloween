@@ -25,7 +25,6 @@ void Play_wood::mechanics()
 	}
 	
 	
-	
 	// HERO SLIDE
 	hero->sliding();
 	
@@ -63,11 +62,6 @@ void Play_wood::mechanics()
 		{
 			hero->undoJump();
 		}
-		
-		if( scope->checkWall( hero->getX() ) )
-		{
-			hero->setScope( 1 );
-		}
 	}
 	
 	// HERO JUMP WITH ATTACK
@@ -82,11 +76,6 @@ void Play_wood::mechanics()
 			hero->getX() < 0 )
 		{
 			hero->undoJump();
-		}
-		
-		if( scope->checkWall( hero->getX() ) )
-		{
-			hero->setScope( 1 );
 		}
 	}
 	
@@ -116,11 +105,6 @@ void Play_wood::mechanics()
 		{
 			hero->undoJump();
 		}
-		
-		if( scope->checkWall( hero->getX() ) )
-		{
-			hero->setScope( 1 );
-		}
 	}
 	
 	// HERO MOVE
@@ -133,11 +117,6 @@ void Play_wood::mechanics()
 			hero->getX() < 0 )
 		{
 			hero->undoMove();
-		}
-		
-		if( scope->checkWall( hero->getX() ) )
-		{
-			hero->setScope( 1 );
 		}
 	}
 	
@@ -176,22 +155,22 @@ void Play_wood::mechanics()
 	*/
 	
 	
+	// HERO SET SCOPE
+	hero->setScope( !scope->getScope() );
 	
-	
-	
+	// SCOPE ALLOW MOVE
 	if( scope->allowMoving() )
 	{
 		// BG MOVE
 		bg->move( hero->getDirection() );
 		
 		// BRICK MOVE
-		brick->moveX( hero->getDirection(), scope->getVel() );
+		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
 		if( brick->checkBlockByPixel( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
 		}
 	}
-	
 	
 	// SCOPE MOVE
 	scope->move( hero->getDirection() );
