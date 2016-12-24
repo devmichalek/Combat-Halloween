@@ -85,6 +85,7 @@ void Moving_bg::draw( sf::RenderWindow* &window )
 	}
 	
 	// printf( "1: %d, 2: %d\n", one.getX(), two.getX() );
+	direction = 0;
 }
 
 void Moving_bg::move( sf::Uint8 direction )
