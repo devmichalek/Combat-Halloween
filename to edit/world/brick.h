@@ -25,8 +25,7 @@ public:
 	bool checkLadder( Rect* rect );
 	
 	sf::Uint8 moveX( sf::Uint8 direction, float vel );
-	int getLX();
-	int getRX();
+	sf::Uint8 getWidth();
 	
 	
 	Brick();
