@@ -35,7 +35,7 @@ bool Hero::moving()
 		
 		mirrorLeft();
 		
-		if( scope != 1 )
+		if( !scope )
 		{
 			for( int i = 0; i < nr; i++ )
 			{
@@ -65,7 +65,7 @@ bool Hero::moving()
 		
 		mirrorRight();
 		
-		if( scope != 1 )
+		if( !scope )
 		{
 			for( int i = 0; i < nr; i++ )
 			{
@@ -188,7 +188,7 @@ bool Hero::jump()
 		which = JUMP;
 		move = true;
 		
-		if( scope != 1 )
+		if( !scope )
 		{
 			if( right )
 			{
@@ -397,7 +397,7 @@ bool Hero::jumpAttack()
 		which = JUMP_ATTACK;
 		move = true;
 	
-		if( scope != 1 )
+		if( !scope )
 		{
 			if( right )
 			{
@@ -443,7 +443,7 @@ bool Hero::jumpThrow()
 		which = JUMP_THROW;
 		move = true;
 		
-		if( scope != 1 )
+		if( !scope )
 		{
 			if( right )
 			{

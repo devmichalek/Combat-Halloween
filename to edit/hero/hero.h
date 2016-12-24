@@ -69,7 +69,7 @@ class Hero
 	Rect attackBox;
 	Rect jumpAttackBox;
 	
-	sf::Uint8 scope;
+	bool scope;
 	
 public:
 
@@ -122,7 +122,7 @@ public:
 	// VEL STUFF AND SCOPE
 	float getVel();
 	float getJump_vel();
-	void setScope( sf::Uint8 scope );
+	void setScope( bool scope );
 	
 	const int getX();
 	const int getY();
