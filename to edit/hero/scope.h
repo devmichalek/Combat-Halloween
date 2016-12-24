@@ -4,13 +4,14 @@
 
 class Scope
 {
-	int heroX;
-	int left, right;
+	int x;
 	float vel;
-	
-	sf::Uint8 state;
+
 	int screen_w;
 	sf::Uint8 width;
+	
+	sf::Uint8 a;
+	sf::Uint8 b;
 	
 public:
 	
@@ -18,15 +19,14 @@ public:
 	~Scope();
 	void free();
 	
-	void setHeroX( int x );
-	void setBorder( int left, int right );
-	void setVel( float vel );
-	void setWall( int width, int screen_w );
+	void set( int x, int width, int screen_w );
 	
+	void setVel( float vel );
 	float getVel();
 	
+	void setFactor( int factor );
 	void move( sf::Uint8 direction );
-	bool checkWall( int x );
 	
+	bool getScope();
 	bool allowMoving();
 };
