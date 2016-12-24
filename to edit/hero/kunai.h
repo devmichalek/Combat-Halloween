@@ -13,7 +13,6 @@ class Kunai
 	float damage;
 	
 public:
-	
 	void throwed( int x, int y, bool right );
 	
 	unsigned int getNr();
