@@ -122,7 +122,17 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 {
 	if( direction == 1 )
 	{
-		if( getLX() > -10 )
+		// Searching for bop X
+		int left = 0;
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			if( blocks[ i ]->x < left )
+			{
+				left = blocks[ i ]->x;
+			}
+		}
+		
+		if( left > -10 )
 		{
 			return 1;
 		}
@@ -139,7 +149,17 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 	}
 	else if( direction == 2 )
 	{
-		if( getRX() < screen_w -width +10 )
+		// Searching for top X
+		int right = 0;
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			if( blocks[ i ]->x > right )
+			{
+				right = blocks[ i ]->x;
+			}
+		}
+		
+		if( right < screen_w -width +10 )
 		{
 			return 2;
 		}
@@ -158,35 +178,11 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 	return 0;
 }
 
-int Brick::getLX()
+sf::Uint8 Brick::getWidth()
 {
-	int left = 0;
-	
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( blocks[ i ]->x < left )
-		{
-			left = blocks[ i ]->x;
-		}
-	}
-	
-	return left;
+	return width;
 }
 
-int Brick::getRX()
-{
-	int right = 0;
-	
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( blocks[ i ]->x > right )
-		{
-			right = blocks[ i ]->x;
-		}
-	}
-	
-	return right;
-}
 
 
 
