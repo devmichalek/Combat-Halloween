@@ -3,13 +3,14 @@
 
 Scope::Scope()
 {
-	heroX = 0;
-	left = right = 0;
+	x = 0;
 	vel = 0;
 	
-	state = 0;
 	screen_w = 0;
 	width = 0;
+	
+	a = 0;
+	b = 0;
 }
 
 Scope::~Scope()
@@ -19,101 +20,124 @@ Scope::~Scope()
 
 void Scope::free()
 {
-	heroX = 0;
-	left = right = 0;
+	x = 0;
 	vel = 0;
 	
-	state = 0;
 	screen_w = 0;
 	width = 0;
+	
+	a = 0;
+	b = 0;
 }
 
 
 
-void Scope::setHeroX( int x )
+void Scope::set( int x, int width, int screen_w )
 {
-	heroX = x;
+	this->x = x;
+	this->width = width;
+	this->screen_w = screen_w;
 }
 
-void Scope::setBorder( int left, int right )
-{
-	this->left = left;
-	this->right = right;
-}
 
 void Scope::setVel( float vel )
 {
 	this->vel = vel;
 }
 
-void Scope::setWall( int width, int screen_w )
-{
-	this->width = width;
-	this->screen_w = screen_w/2;
-}
-
-
-
 float Scope::getVel()
 {
 	return vel;
 }
 
+void Scope::setFactor( int b )
+{
+	this->b = b;
+}
 
 void Scope::move( sf::Uint8 direction )
 {
-	if( state == 0 )
+	if( a == 0 )
 	{
 		if( direction == 1 )
 		{
-			heroX -= vel;
+			x -= vel;
 		}
 		else if( direction == 2 )
 		{
-			heroX += vel;
+			x += vel;
+		}
+		
+
+		if( x > screen_w/2 )
+		{
+			a = 1;
 		}
 	}
 	
-	if( state == 1 )
+	else if( a == 1 )
 	{
-		if( direction == 1 ) // left
+		if( b == 2 )
 		{
-			left += vel;
-			right += vel;
-			
+			a = 2;
 		}
-		else if( direction == 2 ) // right
+		
+		if( b == 1 )
 		{
-			left -= vel;
-			right -= vel;
-			
+			a = 0;
+		}
+	}
+	
+	
+	else if( a == 2 )
+	{
+		if( direction == 1 )
+		{
+			x -= vel;
+		}
+		else if( direction == 2 )
+		{
+			x += vel;
+		}
+		
+		if( x < screen_w/2 -width )
+		{
+			a = 3;
+		}
+	}
+	
+	else if( a == 3 )
+	{
+		if( b == 2 )
+		{
+			a = 2;
+		}
+		
+		if( b == 1 )
+		{
+			a = 0;
 		}
 	}
 	
 	vel = 0;
 	
-	//printf( "%d\n", state );
+	// printf( "%d\n", a );
 }
 
 
-bool Scope::checkWall( int x )
+bool Scope::getScope()
 {
-	if( state == 0 )
+	if( a == 0 || a == 2 )
 	{
-		if( x > screen_w/2 )
-		{
-			state = 1;
-			return true;
-		}
+		return true;
 	}
 	
 	return false;
 }
 
-
 bool Scope::allowMoving()
 {
-	if( state == 1 )
+	if( a == 1 || a == 3 )
 	{
 		return true;
 	}
