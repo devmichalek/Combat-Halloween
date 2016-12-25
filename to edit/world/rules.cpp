@@ -34,11 +34,14 @@ void Rules::free()
 	rules_bot.clear();
 	
 	
+	/*
 	for( unsigned i = 0; i < rules_top.size(); i++ )
 	{
 		rules_top[ i ].clear();
 	}
 	rules_top.clear();
+	
+	*/
 }
 
 vector <Law*> Rules::getRightRules( int which )
@@ -339,6 +342,7 @@ void Rules::ruleBotSide()
 	rules_bot.push_back( temporary );
 }
 
+/*
 void Rules::ruleTopSide( int number )
 {
 	vector <Law*> temporary;
@@ -352,3 +356,4 @@ void Rules::ruleTopSide( int number )
 		
 	}
 }
+*/
