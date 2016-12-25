@@ -2,7 +2,7 @@
 #include "world/rules.h"
 #include <cstdlib>	// rand
 
-void Brick::positioning()
+void Brick::positioning() // algorithm
 {
 	Rules* rules = new Rules;
 //-------------------------------------------------------------------------------------
@@ -11,11 +11,12 @@ void Brick::positioning()
 	rules->ruleLeftSide();
 	rules->ruleBotSide();
 	
-	int c = 10;	// how many blocks
+		
 	
 	unsigned scope = 0;
 	int result = 0;
 	
+	int c = 10; // how many blocks
 	while( c-- )
 	{
 		// get scope
@@ -54,10 +55,13 @@ bool Brick::checkCollision( Rect* rect )
 		{
 			if( blocks[ i ]->nr != -1 )
 			{
-				block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 				{
-					return true;
+					block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					{
+						return true;
+					}
 				}
 			}
 		}
@@ -79,18 +83,21 @@ bool Brick::checkBlockByPixel( Rect* rect )
 		{
 			if( blocks[ i ]->nr != -1 )
 			{
-				block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-			
-				for( int j = l; j <= r; j++ )
+				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 				{
-					if( block[ blocks[ i ]->nr ].checkPixelCollision( j, t ) )		return true;
-					else if( block[ blocks[ i ]->nr ].checkPixelCollision( j, b ) )	return true;
-				}
+					block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
 				
-				for( int j = t; j <= b; j++ )
-				{
-					if( block[ blocks[ i ]->nr ].checkPixelCollision( l, j ) )		return true;
-					else if( block[ blocks[ i ]->nr ].checkPixelCollision( r, j ) )	return true;
+					for( int j = l; j <= r; j++ )
+					{
+						if( block[ blocks[ i ]->nr ].checkPixelCollision( j, t ) )		return true;
+						else if( block[ blocks[ i ]->nr ].checkPixelCollision( j, b ) )	return true;
+					}
+					
+					for( int j = t; j <= b; j++ )
+					{
+						if( block[ blocks[ i ]->nr ].checkPixelCollision( l, j ) )		return true;
+						else if( block[ blocks[ i ]->nr ].checkPixelCollision( r, j ) )	return true;
+					}
 				}
 			}
 		}
@@ -105,10 +112,13 @@ bool Brick::checkLadder( Rect* rect )
 	{
 		for( unsigned i = 0; i < ladders.size(); i++ )
 		{
-			ladder.setPosition( ladders[ i ]->x, ladders[ i ]->y );
-			if( ladder.checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
+			if( ladders[ i ]->x > -width && ladders[ i ]->x < screen_w )
 			{
-				return true;
+				ladder.setPosition( ladders[ i ]->x, ladders[ i ]->y );
+				if( ladder.checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
+				{
+					return true;
+				}
 			}
 		}
 	}
@@ -266,8 +276,11 @@ void Brick::draw( sf::RenderWindow* &window )
 	{
 		if( blocks[ i ]->nr != -1 )
 		{
-			block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-			window->draw( block[ blocks[ i ]->nr ].get() );
+			if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+			{
+				block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				window->draw( block[ blocks[ i ]->nr ].get() );
+			}
 		}
 	}
 }
