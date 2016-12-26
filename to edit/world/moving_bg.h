@@ -4,13 +4,11 @@
 
 class Moving_bg
 {
-	MySprite one;
-	MySprite two;
+	MySprite sprite;
+	int screen_w, screen_h;
 	
 	float vel;
-	sf::Uint8 direction;
-	
-	float x1, x2;
+	float x, y;
 	
 public:
 	
@@ -18,9 +16,9 @@ public:
 	~Moving_bg();
 	void free();
 	
-	void load( string path );
+	void load( string path, int w, int h );
 	void draw( sf::RenderWindow* &window );
-	void move( sf::Uint8 direction );
+	void setXY( int posX, int posY );
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
