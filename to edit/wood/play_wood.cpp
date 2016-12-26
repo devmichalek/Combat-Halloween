@@ -30,7 +30,7 @@ void Play_wood::free()
 	
 void Play_wood::load( int screen_w, int screen_h )
 {
-	bg->load( "data/sprites/play/1.png" );
+	bg->load( "data/sprites/play/1.png", screen_w, screen_h );
 	brick->load( screen_w, screen_h, 18, 1 );
 	kunai->load();
 	heart->load();
