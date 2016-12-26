@@ -171,4 +171,6 @@ void Play_winter::mechanics()
 	
 	// SCOPE MOVE
 	scope->move( hero->getDirection() );
+	
+	bg->setXY( hero->getX(), hero->getY() );
 }
