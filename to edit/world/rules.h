@@ -20,7 +20,9 @@ public:
 	void ruleRightSide();
 	void ruleLeftSide();
 	void ruleBotSide();
-	// void ruleTopSide( int number );
+	// void ruleTopSide();
 	
 	vector <Law*> getRightRules( int which );
+	int getTopBlockFor( int nr );
+	int getBotBlockFor( int nr );
 };
