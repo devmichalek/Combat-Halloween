@@ -7,5 +7,5 @@ Ladder::Ladder()
 	
 	red = rand()%0xFF;
 	green = rand()%0xFF;
-	blue = rand()%0xFF;
+	blue = 0;
 }
