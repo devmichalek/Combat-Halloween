@@ -161,9 +161,6 @@ void Play_desert::mechanics()
 	// SCOPE ALLOW MOVE
 	if( scope->allowMoving() )
 	{
-		// BG MOVE
-		bg->move( hero->getDirection() );
-		
 		// BRICK MOVE
 		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
 		if( brick->checkBlockByPixel( hero->getRect() ) )
@@ -174,4 +171,6 @@ void Play_desert::mechanics()
 	
 	// SCOPE MOVE
 	scope->move( hero->getDirection() );
+	
+	bg->setXY( hero->getX(), hero->getY() );
 }
