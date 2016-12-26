@@ -30,7 +30,7 @@ void Play_desert::free()
 	
 void Play_desert::load( int screen_w, int screen_h )
 {
-	bg->load( "data/sprites/play/3.png" );
+	bg->load( "data/sprites/play/3.png", screen_w, screen_h );
 	brick->load( screen_w, screen_h, 16, 3 );
 	kunai->load();
 	heart->load();
