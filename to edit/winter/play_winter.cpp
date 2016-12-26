@@ -4,7 +4,7 @@ Play_winter::Play_winter()
 {
 	state = new State;
 	hero = new Hero;
-	bg = new MySprite;
+	bg = new Moving_bg;
 	brick = new Brick;
 	kunai = new Kunai;
 	heart = new Heart;
@@ -30,8 +30,7 @@ void Play_winter::free()
 	
 void Play_winter::load( int screen_w, int screen_h )
 {
-	bg->setName( "play_winter-bg" );
-	bg->load( "data/sprites/play/2.png" );
+	bg->load( "data/sprites/play/2.png", screen_w, screen_h );
 	brick->load( screen_w, screen_h, 18, 2 );
 	kunai->load();
 	heart->load();
@@ -67,7 +66,7 @@ void Play_winter::draw( sf::RenderWindow* &window )
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
 	
-	window->draw( bg->get() );
+	bg->draw( window );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );

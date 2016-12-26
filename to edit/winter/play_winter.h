@@ -1,6 +1,7 @@
 #pragma once
 
 #include "templates/state.h"
+#include "world/moving_bg.h"
 #include "hero/hero.h"
 #include "world/brick.h"
 #include "hero/kunai.h"
@@ -11,7 +12,7 @@ class Play_winter
 {
 	State* state;
 	Hero* hero;
-	MySprite* bg;
+	Moving_bg* bg;
 	Brick* brick;
 	Kunai* kunai;
 	Heart* heart;
