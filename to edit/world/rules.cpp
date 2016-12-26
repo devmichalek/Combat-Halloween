@@ -1,4 +1,5 @@
 #include "world/rules.h"
+#include <cstdlib>
 
 
 Rules::Rules()
@@ -40,13 +41,66 @@ void Rules::free()
 		rules_top[ i ].clear();
 	}
 	rules_top.clear();
-	
 	*/
 }
 
+
+
 vector <Law*> Rules::getRightRules( int which )
 {
-	return rules_right[ which +1 ];
+	return rules_right[ which +1 ];	// +1 because of void block below
+}
+
+int Rules::getTopBlockFor( int nr )
+{
+	if( nr == 14 )
+	{
+		if( rand()%2 == 1 )
+		{
+			return 0;
+		}
+		else
+		{
+			return 10;
+		}
+	}
+	else if( nr == -1 )
+	{
+		if( rand()%2 == 1 )
+		{
+			return 5;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+}
+
+int getBotBlockFor( int nr )
+{
+	if( nr == 14 )
+	{
+		if( rand()%2 == 1 )
+		{
+			return 0;
+		}
+		else
+		{
+			return 10;
+		}
+	}
+	else if( nr == -1 )
+	{
+		if( rand()%2 == 1 )
+		{
+			return 5;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 }
 
 
@@ -343,17 +397,29 @@ void Rules::ruleBotSide()
 }
 
 /*
-void Rules::ruleTopSide( int number )
+void Rules::ruleTopSide()
 {
 	vector <Law*> temporary;
 	
-	if( number == 1 )
-	{
-		// 0
-		temporary.clear();
-		temporary.push_back( new Law( -1 ) );
-		rules_top.push_back( temporary );
-		
-	}
+	// -1 - void
+	temporary.clear();
+	temporary.push_back( new Law( 5 ) );
+	temporary.push_back( new Law( 8 ) );
+	rules_top.push_back( temporary );
+	
+	// 0
+	temporary.clear();
+	temporary.push_back( new Law( -1 ) );
+	rules_top.push_back( temporary );
+	
+	// 1
+	temporary.clear();
+	temporary.push_back( new Law( -1 ) );
+	rules_top.push_back( temporary );
+	
+	// 2
+	temporary.clear();
+	temporary.push_back( new Law( -1 ) );
+	rules_top.push_back( temporary );
 }
 */
