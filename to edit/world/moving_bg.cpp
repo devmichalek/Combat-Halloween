@@ -4,9 +4,6 @@ Moving_bg::Moving_bg()
 {
 	screen_w = 0;
 	screen_h = 0;
-	
-	vel = 0;
-	x = y = 0;
 }
 
 Moving_bg::~Moving_bg()
@@ -20,9 +17,6 @@ void Moving_bg::free()
 	
 	screen_w = 0;
 	screen_h = 0;
-	
-	vel = 0;
-	x = y = 0;
 }
 	
 	
@@ -32,17 +26,10 @@ void Moving_bg::load( string path, int w, int h )
 	screen_w = w;
 	screen_h = h;
 	
-	printf( "%d %d\n", screen_w, screen_h );
+	// printf( "%d %d\n", screen_w, screen_h );
 	
 	sprite.setName( "moving_bg-sprite" );
 	sprite.load( path );
-	
-	x = -(sprite.getWidth() -screen_w)*(0 *100 /screen_w) /100;
-	y = -(sprite.getHeight() -screen_h)*((screen_h-238) *100 /screen_h) /100;
-	
-	sprite.setPosition( x, y );
-	
-	vel = 0.1;
 }
 
 void Moving_bg::draw( sf::RenderWindow* &window )
@@ -52,22 +39,13 @@ void Moving_bg::draw( sf::RenderWindow* &window )
 
 void Moving_bg::setXY( int posX, int posY )
 {
-	int new_x = -(sprite.getWidth() -screen_w)*(posX *100 /screen_w) /100;
-	int new_y = -(sprite.getHeight() -screen_h)*(posY *100 /screen_h) /100;
+	float new_x = -500 *posX /screen_w;
+	float new_y = -150 *(posY+300) /screen_h;
 	
-	if( x != new_x )
+	if( new_y > -(sprite.getHeight() -screen_h) && new_y < 0 )
 	{
-		if( x < new_x )	x += vel;
-		else			x -= vel;
+		sprite.setPosition( new_x, new_y );
 	}
-	
-	if( y != new_y )
-	{
-		if( y < new_y )	y += vel;
-		else			y -= vel;
-	}
-	
-	sprite.setPosition( x, y );
 }
 	
 	

@@ -7,9 +7,6 @@ class Moving_bg
 	MySprite sprite;
 	int screen_w, screen_h;
 	
-	float vel;
-	float x, y;
-	
 public:
 	
 	Moving_bg();
