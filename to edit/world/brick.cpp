@@ -2,47 +2,163 @@
 #include "world/rules.h"
 #include <cstdlib>	// rand
 
-void Brick::positioning() // algorithm
+void Brick::addBlock( int chosen, int x_width, sf::Uint8 floor )
 {
-	Rules* rules = new Rules;
-//-------------------------------------------------------------------------------------
+	// add block.
+	blocks.push_back( new Block() );
 	
+	// set chosen.
+	blocks[ blocks.size()-1 ]->nr = chosen;
+	
+	// set x.
+	blocks[ blocks.size()-1 ]->x = blocks[ blocks.size()-2 ]->x +x_width;
+	
+	// set y.
+	blocks[ blocks.size()-1 ]->y = screen_h -width*floor;
+}
+
+void Brick::addLadder( int x, int y )
+{
+	// add ladder.
+	ladders.push_back( new Ladder() );
+	
+	// set x.
+	ladders[ ladders.size()-1 ]->x = x;
+	
+	// set y.
+	ladders[ ladders.size()-1 ]->y = y;
+}
+
+
+
+bool Brick::topFloor()
+{
+	sf::Uint8 n = blocks[ blocks.size()-1 ]->nr;
+	
+	if( n == 2 || n == 3 || n == 7 || n == 9 || n == 12 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+
+bool Brick::botFloor()
+{
+	sf::Uint8 n = blocks[ blocks.size()-1 ]->nr;
+	
+	if( n == 2 || n == 7 || n == 12 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+
+
+void Brick::positioning()
+{
+	// Create rules.
+	Rules* rules = new Rules;
 	rules->ruleRightSide();
 	rules->ruleLeftSide();
 	rules->ruleBotSide();
 	
-		
+
+
+	// Flag for changing floor.
+	bool flag = false;
 	
-	unsigned scope = 0;
-	int result = 0;
+	// Flag for direction.
+	bool top = false;
 	
-	int c = 10; // how many blocks
+	
+	
+	// Random stuff
+	sf::Uint8 scope;
+	int8_t lastNr, chosen;
+	
+	
+	
+	// Another floor stuff.
+	sf::Uint8 new_floor = 1, max = 4, min = 1;
+	
+	// Set first floor.
+	sf::Uint8 floor = 1;
+	
+	
+	
+	int c = 100; // how many blocks in line
 	while( c-- )
 	{
-		// get scope
-		scope = rules->getRightRules( blocks[ blocks.size()-1 ]->nr ).size();
+		// Draw lots for true / false to change floor.
+		if( rand()%2 == 1 )	// 50%
+		{
+			// Getting new floor.
+			for(;;)
+			{
+				new_floor = rand()%max + min;
+				
+				if( new_floor != floor )
+				{
+					if( new_floor >= floor-1 && new_floor <= floor+1 )
+					{
+						// printf( "old %d, new %d\n", floor, new_floor );
+						break;
+					}
+				}
+			}
+			
+			if( floor < new_floor )	// means new floor is higher
+			{
+				if( topFloor() )	// if we can change floor
+				{
+					flag = true;
+					top = true;
+				}
+			}
+			else
+			{
+				if( botFloor() )	// if we can change floor
+				{
+					flag = true;
+					top = false;
+				}
+			}
+		}
 		
-		// get result
-		result = rules->getRightRules( blocks[ blocks.size()-1 ]->nr )[ rand()%scope ]->nr;
+		lastNr = blocks[ blocks.size()-1 ]->nr;
+		scope = rules->getRightRules( lastNr ).size();
+		chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
+		addBlock( chosen, width, floor );
 		
-		// add block
-		blocks.push_back( new Block() );
-		blocks[ blocks.size()-1 ]->nr = result;
-		blocks[ blocks.size()-1 ]->x = blocks[ blocks.size()-2 ]->x +width;
-		blocks[ blocks.size()-1 ]->y = screen_h -width;
+		if( flag )
+		{
+			if( top )
+			{
+				floor = new_floor;
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				addBlock( rules->getTopBlockFor( lastNr ), 0, floor );
+				
+				int ladder_x = blocks[ blocks.size()-1 ]->x -ladder.getWidth() +10;
+				int ladder_y = blocks[ blocks.size()-1 ]->y +width -ladder.getHeight();
+				addLadder( ladder_x, ladder_y );
+			}
+		}
+		
+		// fill bot
+		
+		
+		// Set flag as false.
+		flag = false;
 	}
 	
-	ladders.push_back( new Ladder() );
-	ladders[ 0 ]->x = screen_w *3/4;
-	ladders[ 0 ]->y = screen_h -width -ladder.getHeight();
-	
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 7;
-	blocks[ blocks.size()-1 ]->x = screen_w *3/4 -width;
-	blocks[ blocks.size()-1 ]->y = screen_h -width*3;
-	
-//-------------------------------------------------------------------------------------
+	// Delete rules
 	delete rules;
+	
+	// printf( "\n\n\n\n" );
 }
 
 
@@ -261,6 +377,7 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	ladder.setName( "brick-ladder" );
 	ladder.loadByImage( "data/sprites/play/0/ladder.png" );
 	
+	// Set first block.
 	blocks.push_back( new Block() );
 	blocks[ blocks.size()-1 ]->nr = 1;
 	blocks[ blocks.size()-1 ]->x = 0;
@@ -289,9 +406,12 @@ void Brick::drawLadders( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < ladders.size(); i++ )
 	{
-		ladder.setPosition( ladders[ i ]->x, ladders[ i ]->y );
-		ladder.setColor( sf::Color( ladders[ i ]->red, ladders[ i ]->green, ladders[ i ]->blue ) );
-		window->draw( ladder.get() );
+		if( ladders[ i ]->x > -width && ladders[ i ]->x < screen_w )
+		{
+			ladder.setPosition( ladders[ i ]->x, ladders[ i ]->y );
+			ladder.setColor( sf::Color( ladders[ i ]->red, ladders[ i ]->green, ladders[ i ]->blue ) );
+			window->draw( ladder.get() );
+		}
 	}
 }
 

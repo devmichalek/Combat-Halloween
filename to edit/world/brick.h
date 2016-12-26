@@ -18,6 +18,12 @@ class Brick
 	
 public:
 	
+	void addBlock( int chosen, int x_width, sf::Uint8 floor );
+	void addLadder( int x, int y );
+	bool topFloor();
+	bool botFloor();
+	
+	void draw_lots();
 	void positioning();
 	
 	bool checkCollision( Rect* rect );
