@@ -171,4 +171,6 @@ void Play_halloween::mechanics()
 	
 	// SCOPE MOVE
 	scope->move( hero->getDirection() );
+	
+	bg->setXY( hero->getX(), hero->getY() );
 }
