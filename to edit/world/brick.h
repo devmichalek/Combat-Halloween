@@ -20,10 +20,8 @@ public:
 	
 	void addBlock( int chosen, int x_width, sf::Uint8 floor );
 	void addLadder( int x, int y );
-	bool topFloor();
-	bool botFloor();
 	
-	void draw_lots();
+	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
 	void positioning();
 	
 	bool checkCollision( Rect* rect );

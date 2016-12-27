@@ -30,33 +30,44 @@ void Brick::addLadder( int x, int y )
 }
 
 
-
-bool Brick::topFloor()
+bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
 {
-	sf::Uint8 n = blocks[ blocks.size()-1 ]->nr;
+	bool flag = false;
+	sf::Uint8 max = 4;
+	sf::Uint8 min = 1;
 	
-	if( n == 2 || n == 3 || n == 7 || n == 9 || n == 12 )
+	// Draw lots for true / false to change floor.
+	if( rand()%2 == 1 )	// 50%
 	{
-		return true;
+		// Getting new floor.
+		for(;;)
+		{
+			new_floor = rand()%max + min;
+			
+			if( new_floor != floor )
+			{
+				if( new_floor >= floor-1 && new_floor <= floor+1 )
+				{
+					// printf( "old %d, new %d\n", floor, new_floor );
+					break;
+				}
+			}
+		}
+		
+		if( floor < new_floor )	// means new floor is higher
+		{
+			flag = true;
+			top = true;
+		}
+		else
+		{
+			flag = true;
+			top = false;
+		}
 	}
 	
-	return false;
+	return flag;
 }
-
-
-bool Brick::botFloor()
-{
-	sf::Uint8 n = blocks[ blocks.size()-1 ]->nr;
-	
-	if( n == 2 || n == 7 || n == 12 )
-	{
-		return true;
-	}
-	
-	return false;
-}
-
-
 
 void Brick::positioning()
 {
@@ -66,14 +77,6 @@ void Brick::positioning()
 	rules->ruleLeftSide();
 	rules->ruleBotSide();
 	
-
-
-	// Flag for changing floor.
-	bool flag = false;
-	
-	// Flag for direction.
-	bool top = false;
-	
 	
 	
 	// Random stuff
@@ -82,77 +85,98 @@ void Brick::positioning()
 	
 	
 	
-	// Another floor stuff.
-	sf::Uint8 new_floor = 1, max = 4, min = 1;
-	
-	// Set first floor.
+	// Floor stuff.
 	sf::Uint8 floor = 1;
+	sf::Uint8 new_floor = 1;
 	
+	// Floor flags
+	bool top = false;
+	bool flag = false;
 	
-	
-	int c = 100; // how many blocks in line
+	// how many blocks in line
+	int c = 100;
 	while( c-- )
 	{
-		// Draw lots for true / false to change floor.
-		if( rand()%2 == 1 )	// 50%
-		{
-			// Getting new floor.
-			for(;;)
-			{
-				new_floor = rand()%max + min;
-				
-				if( new_floor != floor )
-				{
-					if( new_floor >= floor-1 && new_floor <= floor+1 )
-					{
-						// printf( "old %d, new %d\n", floor, new_floor );
-						break;
-					}
-				}
-			}
-			
-			if( floor < new_floor )	// means new floor is higher
-			{
-				if( topFloor() )	// if we can change floor
-				{
-					flag = true;
-					top = true;
-				}
-			}
-			else
-			{
-				if( botFloor() )	// if we can change floor
-				{
-					flag = true;
-					top = false;
-				}
-			}
-		}
-		
+		// add block to the right
 		lastNr = blocks[ blocks.size()-1 ]->nr;
 		scope = rules->getRightRules( lastNr ).size();
 		chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
 		addBlock( chosen, width, floor );
 		
+		// RAND FLOOR
+		top = false;
+		flag = randFloor( top, floor, new_floor );
+		
+		// add top block
 		if( flag )
 		{
 			if( top )
 			{
+				int need;
+				if( rand()%2 == 1 )	need = -1;
+				else				need = 14;
+					
+				while( true )
+				{
+					lastNr = blocks[ blocks.size()-1 ]->nr;
+					if( lastNr == need )
+					{
+						break;
+					}
+					
+					lastNr = blocks[ blocks.size()-1 ]->nr;
+					addBlock( rules->fillForTop( lastNr ), width, floor );
+				}
+				
 				floor = new_floor;
 				lastNr = blocks[ blocks.size()-1 ]->nr;
 				addBlock( rules->getTopBlockFor( lastNr ), 0, floor );
 				
+				// add ladder
 				int ladder_x = blocks[ blocks.size()-1 ]->x -ladder.getWidth() +10;
 				int ladder_y = blocks[ blocks.size()-1 ]->y +width -ladder.getHeight();
 				addLadder( ladder_x, ladder_y );
 			}
+			else
+			{
+				int need;
+				if( rand()%2 == 1 )	need = 2;
+				else				need = 7;
+				
+				while( true )
+				{
+					lastNr = blocks[ blocks.size()-1 ]->nr;
+					if( lastNr == need )
+					{
+						break;
+					}
+					
+					lastNr = blocks[ blocks.size()-1 ]->nr;
+					addBlock( rules->fillForBot( lastNr ), width, floor );
+				}
+				
+				floor = new_floor;
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				addBlock( rules->getBotBlockFor( lastNr ), 0, floor );
+				
+				// add block to the right
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				scope = rules->getRightRules( lastNr ).size();
+				chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
+				addBlock( chosen, width, floor );
+				
+				// add ladder
+				int ladder_x = blocks[ blocks.size()-1 ]->x -10;
+				int ladder_y = blocks[ blocks.size()-1 ]->y -ladder.getHeight();
+				addLadder( ladder_x, ladder_y );
+			}
 		}
-		
-		// fill bot
-		
-		
-		// Set flag as false.
-		flag = false;
+	}
+	
+	// fill bottom
+	while( true )
+	{
+		break;
 	}
 	
 	// Delete rules
