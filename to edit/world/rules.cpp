@@ -1,5 +1,6 @@
 #include "world/rules.h"
 #include <cstdlib>
+#include <stdio.h>
 
 
 Rules::Rules()
@@ -55,14 +56,7 @@ int Rules::getTopBlockFor( int nr )
 {
 	if( nr == 14 )
 	{
-		if( rand()%2 == 1 )
-		{
-			return 0;
-		}
-		else
-		{
-			return 10;
-		}
+		return 0;
 	}
 	else if( nr == -1 )
 	{
@@ -75,33 +69,77 @@ int Rules::getTopBlockFor( int nr )
 			return 0;
 		}
 	}
+	
+	return 0;
 }
 
-int getBotBlockFor( int nr )
+int Rules::getBotBlockFor( int nr )
 {
-	if( nr == 14 )
+	if( nr == 2 )
 	{
-		if( rand()%2 == 1 )
-		{
-			return 0;
-		}
-		else
-		{
-			return 10;
-		}
+		return 13;
 	}
-	else if( nr == -1 )
-	{
-		if( rand()%2 == 1 )
-		{
-			return 5;
-		}
-		else
-		{
-			return 0;
-		}
-	}
+	
+	return -1;
 }
+
+int Rules::fillForTop( int nr )
+{
+	int result = -1;
+	
+	// printf(" nr %d\n", nr );
+	
+	switch( nr )
+	{
+		case 0: result = 3; 	break;
+		case 1: result = 3; 	break;
+		case 2: result = -1; 	break;
+		case 3: result = 14; 	break;
+		case 4: result = 3; 	break;
+		case 5: result = 7; 	break;
+		case 6: result = 7; 	break;
+		case 7: result = -1; 	break;
+		
+		case -1:
+			if( rand()%2 == 1 )
+				result = 0;
+			else
+				result = 5;
+			break;
+	}
+	
+	//printf(" result %d\n", result );
+	
+	return result;
+}
+
+int Rules::fillForBot( int nr )
+{
+	int result = -1;
+	
+	// printf(" nr %d\n", nr );
+	
+	switch( nr )
+	{
+		case 0: result = 2; 	break;
+		case 1: result = 2; 	break;
+		case 4: result = 2; 	break;
+		case 5: result = 7; 	break;
+		case 6: result = 7; 	break;
+		
+		case -1:
+			if( rand()%2 == 1 )
+				result = 0;
+			else
+				result = 5;
+			break;
+	}
+	
+	//printf(" result %d\n", result );
+	
+	return result;
+}
+
 
 
 
@@ -114,22 +152,18 @@ void Rules::ruleRightSide()
 	temporary.clear();
 	temporary.push_back( new Law( 0 ) );
 	temporary.push_back( new Law( 5 ) );
-	temporary.push_back( new Law( 8 ) );
-	temporary.push_back( new Law( 10 ) );
 	rules_right.push_back( temporary );
 	
 	// 0
 	temporary.clear();
 	temporary.push_back( new Law( 1 ) );
 	temporary.push_back( new Law( 2 ) );
-	temporary.push_back( new Law( 3 ) );
 	rules_right.push_back( temporary );
 	
 	// 1
 	temporary.clear();
-	temporary.push_back( new Law( 1 ) );
 	temporary.push_back( new Law( 2 ) );
-	temporary.push_back( new Law( 3 ) );
+	temporary.push_back( new Law( 1 ) );
 	rules_right.push_back( temporary );
 	
 	// 2
@@ -139,14 +173,13 @@ void Rules::ruleRightSide()
 	
 	// 3
 	temporary.clear();
-	temporary.push_back( new Law( 14 ) );
+	temporary.push_back( new Law( -1 ) );
 	rules_right.push_back( temporary );
 	
 	// 4
 	temporary.clear();
 	temporary.push_back( new Law( 1 ) );
 	temporary.push_back( new Law( 2 ) );
-	temporary.push_back( new Law( 3 ) );
 	rules_right.push_back( temporary );
 	
 	// 5
@@ -180,14 +213,12 @@ void Rules::ruleRightSide()
 	temporary.clear();
 	temporary.push_back( new Law( 11 ) );
 	temporary.push_back( new Law( 12 ) );
-	temporary.push_back( new Law( 13 ) );
 	rules_right.push_back( temporary );
 	
 	// 11
 	temporary.clear();
 	temporary.push_back( new Law( 11 ) );
 	temporary.push_back( new Law( 12 ) );
-	temporary.push_back( new Law( 13 ) );
 	rules_right.push_back( temporary );
 	
 	// 12
@@ -197,20 +228,7 @@ void Rules::ruleRightSide()
 	
 	// 13
 	temporary.clear();
-	temporary.push_back( new Law( 14 ) );
-	rules_right.push_back( temporary );
-	
-	// 14
-	temporary.clear();
-	temporary.push_back( new Law( 11 ) );
-	temporary.push_back( new Law( 12 ) );
-	temporary.push_back( new Law( 13 ) );
-	rules_right.push_back( temporary );
-	
-	// 15
-	temporary.clear();
-	temporary.push_back( new Law( 15 ) );
-	temporary.push_back( new Law( 9 ) );
+	temporary.push_back( new Law( 4 ) );
 	rules_right.push_back( temporary );
 }
 
