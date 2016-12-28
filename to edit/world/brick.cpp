@@ -97,6 +97,7 @@ void Brick::positioning()
 	int c = 100;
 	while( c-- )
 	{
+		
 		// add block to the right
 		lastNr = blocks[ blocks.size()-1 ]->nr;
 		scope = rules->getRightRules( lastNr ).size();
