@@ -13,12 +13,14 @@ class Brick
 	int width;
 	int screen_w, screen_h;
 	
+	int left, right;
+	
 	vector < Block* > blocks;
 	vector < Ladder* > ladders;
 	
 public:
 	
-	void addBlock( int chosen, int x_width, sf::Uint8 floor );
+	void addBlock( int chosen, int x_width, int floor );
 	void addLadder( int x, int y );
 	
 	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );

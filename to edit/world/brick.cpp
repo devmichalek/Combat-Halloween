@@ -2,7 +2,7 @@
 #include "world/rules.h"
 #include <cstdlib>	// rand
 
-void Brick::addBlock( int chosen, int x_width, sf::Uint8 floor )
+void Brick::addBlock( int chosen, int x_width, int floor )
 {
 	// add block.
 	blocks.push_back( new Block() );
@@ -11,10 +11,10 @@ void Brick::addBlock( int chosen, int x_width, sf::Uint8 floor )
 	blocks[ blocks.size()-1 ]->nr = chosen;
 	
 	// set x.
-	blocks[ blocks.size()-1 ]->x = blocks[ blocks.size()-2 ]->x +x_width;
+	blocks[ blocks.size()-1 ]->x = x_width;
 	
 	// set y.
-	blocks[ blocks.size()-1 ]->y = screen_h -width*floor;
+	blocks[ blocks.size()-1 ]->y = floor;
 }
 
 void Brick::addLadder( int x, int y )
@@ -97,12 +97,11 @@ void Brick::positioning()
 	int c = 100;
 	while( c-- )
 	{
-		
 		// add block to the right
 		lastNr = blocks[ blocks.size()-1 ]->nr;
 		scope = rules->getRightRules( lastNr ).size();
 		chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
-		addBlock( chosen, width, floor );
+		addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
 		
 		// RAND FLOOR
 		top = false;
@@ -126,12 +125,14 @@ void Brick::positioning()
 					}
 					
 					lastNr = blocks[ blocks.size()-1 ]->nr;
-					addBlock( rules->fillForTop( lastNr ), width, floor );
+					addBlock( rules->fillForTop( lastNr, need ), blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
 				}
+				
 				
 				floor = new_floor;
 				lastNr = blocks[ blocks.size()-1 ]->nr;
-				addBlock( rules->getTopBlockFor( lastNr ), 0, floor );
+				addBlock( rules->getTopBlockFor( lastNr ), blocks[ blocks.size()-1 ]->x, screen_h -width*floor );
+					
 				
 				// add ladder
 				int ladder_x = blocks[ blocks.size()-1 ]->x -ladder.getWidth() +10;
@@ -147,24 +148,24 @@ void Brick::positioning()
 				while( true )
 				{
 					lastNr = blocks[ blocks.size()-1 ]->nr;
+					addBlock( rules->fillForBot( lastNr ), blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
+					
+					lastNr = blocks[ blocks.size()-1 ]->nr;
 					if( lastNr == need )
 					{
 						break;
 					}
-					
-					lastNr = blocks[ blocks.size()-1 ]->nr;
-					addBlock( rules->fillForBot( lastNr ), width, floor );
 				}
 				
 				floor = new_floor;
 				lastNr = blocks[ blocks.size()-1 ]->nr;
-				addBlock( rules->getBotBlockFor( lastNr ), 0, floor );
+				addBlock( rules->getBotBlockFor( lastNr ), blocks[ blocks.size()-1 ]->x, screen_h -width*floor );
 				
 				// add block to the right
 				lastNr = blocks[ blocks.size()-1 ]->nr;
 				scope = rules->getRightRules( lastNr ).size();
 				chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
-				addBlock( chosen, width, floor );
+				addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
 				
 				// add ladder
 				int ladder_x = blocks[ blocks.size()-1 ]->x -10;
@@ -174,10 +175,35 @@ void Brick::positioning()
 		}
 	}
 	
+
+	
 	// fill bottom
-	while( true )
+	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		break;
+		if( blocks[ i ]->y < screen_h -width )
+		{
+			if( blocks[ i ]->nr == 0 )
+			{
+				addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
+			}
+			else if( blocks[ i ]->nr == 10 )
+			{
+				// we check if we have free place
+				bool free_place = true;
+				for( unsigned j = 0; j < blocks.size(); j++ )
+				{
+					if( blocks[ i ]->y == blocks[ j ]->y +width )
+					{
+						free_place = false;
+					}
+				}
+				
+				if( free_place )
+				{
+					addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
+				}
+			}
+		}
 	}
 	
 	// Delete rules
@@ -273,16 +299,6 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 {
 	if( direction == 1 )
 	{
-		// Searching for bop X
-		int left = 0;
-		for( unsigned i = 0; i < blocks.size(); i++ )
-		{
-			if( blocks[ i ]->x < left )
-			{
-				left = blocks[ i ]->x;
-			}
-		}
-		
 		if( left > -10 )
 		{
 			return 1;
@@ -297,19 +313,12 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 		{
 			ladders[ i ]->x += vel;
 		}
+		
+		left += vel;
+		right += vel;
 	}
 	else if( direction == 2 )
 	{
-		// Searching for top X
-		int right = 0;
-		for( unsigned i = 0; i < blocks.size(); i++ )
-		{
-			if( blocks[ i ]->x > right )
-			{
-				right = blocks[ i ]->x;
-			}
-		}
-		
 		if( right < screen_w -width +10 )
 		{
 			return 2;
@@ -324,6 +333,9 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 		{
 			ladders[ i ]->x -= vel;
 		}
+		
+		left -= vel;
+		right -= vel;
 	}
 	
 	return 0;
@@ -348,6 +360,9 @@ Brick::Brick()
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
+	
+	left = 0;
+	right = 0;
 }
 
 Brick::~Brick()
@@ -377,6 +392,9 @@ void Brick::free()
 	
 	blocks.clear();
 	ladders.clear();
+	
+	left = 0;
+	right = 0;
 }
 
 
@@ -410,6 +428,24 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	
 	// start
 	positioning();
+	
+	// Searching for left
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->x < left )
+		{
+			left = blocks[ i ]->x;
+		}
+	}
+	
+	// Searching right
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->x > right )
+		{
+			right = blocks[ i ]->x;
+		}
+	}
 }
 
 void Brick::draw( sf::RenderWindow* &window )
