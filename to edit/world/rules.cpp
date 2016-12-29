@@ -60,14 +60,7 @@ int Rules::getTopBlockFor( int nr )
 	}
 	else if( nr == -1 )
 	{
-		if( rand()%2 == 1 )
-		{
-			return 5;
-		}
-		else
-		{
-			return 0;
-		}
+		return 5;
 	}
 	
 	return 0;
@@ -83,30 +76,46 @@ int Rules::getBotBlockFor( int nr )
 	return -1;
 }
 
-int Rules::fillForTop( int nr )
+int Rules::fillForTop( int nr, int need )
 {
 	int result = -1;
 	
 	// printf(" nr %d\n", nr );
-	
-	switch( nr )
+	if( need == 14 )
 	{
-		case 0: result = 3; 	break;
-		case 1: result = 3; 	break;
-		case 2: result = -1; 	break;
-		case 3: result = 14; 	break;
-		case 4: result = 3; 	break;
-		case 5: result = 7; 	break;
-		case 6: result = 7; 	break;
-		case 7: result = -1; 	break;
-		
-		case -1:
-			if( rand()%2 == 1 )
-				result = 0;
-			else
-				result = 5;
-			break;
+		switch( nr )
+		{
+			case 0: result = 3; 	break;
+			case 1: result = 3; 	break;
+			case 2: result = -1; 	break;
+			case 3: result = 14; 	break;
+			case 4: result = 3; 	break;
+			case 5: result = 7; 	break;
+			case 6: result = 7; 	break;
+			case 7: result = -1; 	break;
+			
+			case -1:
+				if( rand()%2 == 1 )
+					result = 0;
+				else
+					result = 5;
+				break;
+		}
 	}
+	else
+	{
+		switch( nr )
+		{
+			case 0: result = 2; 	break;
+			case 1: result = 2; 	break;
+			case 2: result = -1; 	break;
+			case 4: result = 2; 	break;
+			case 5: result = 7; 	break;
+			case 6: result = 7; 	break;
+			case 7: result = -1; 	break;
+		}
+	}
+	
 	
 	//printf(" result %d\n", result );
 	
