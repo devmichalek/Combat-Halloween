@@ -69,7 +69,7 @@ bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
 	return flag;
 }
 
-void Brick::fill( int a, int n )	// fill till b
+void Brick::fill( int a, int n )	// fill till n
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
@@ -85,7 +85,7 @@ void Brick::fill( int a, int n )	// fill till b
 				}
 			}
 			
-			if( free_place )
+			if( free_place &&  blocks[ i ]->x + width <= right )
 			{
 				addBlock( n, blocks[ i ]->x + width, blocks[ i ]->y );
 			}
@@ -312,8 +312,6 @@ void Brick::positioning()
 		}
 	}
 	
-	fill( 8, 15 );
-	fill( 10, 11 );
 	
 	// Delete rules
 	delete rules;
@@ -555,6 +553,10 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 			right = blocks[ i ]->x;
 		}
 	}
+	
+	fill( 8, 15 );
+	fill( 10, 11 );
+	fill( 14, 11 );
 }
 
 void Brick::draw( sf::RenderWindow* &window )
