@@ -69,6 +69,30 @@ bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
 	return flag;
 }
 
+void Brick::fill( int a, int n )	// fill till b
+{
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->nr == a || blocks[ i ]->nr == n )
+		{
+			// we check if we have free place
+			bool free_place = true;
+			for( unsigned j = 0; j < blocks.size(); j++ )
+			{
+				if( blocks[ i ]->y == blocks[ j ]->y && blocks[ i ]->x +width == blocks[ j ]->x  )
+				{
+					free_place = false;
+				}
+			}
+			
+			if( free_place )
+			{
+				addBlock( n, blocks[ i ]->x + width, blocks[ i ]->y );
+			}
+		}
+	}
+}
+
 void Brick::positioning()
 {
 	// Create rules.
@@ -197,15 +221,28 @@ void Brick::positioning()
 				if( blocks[ i ]->nr == 0 )
 				{
 					// we are looking for block nr 13
+					
 					bool put = false;
+					int x = blocks[ i ]->x +width;
+					int y = blocks[ i ]->y +width;
+					
 					for( unsigned j = 0; j < blocks.size(); j++ )
 					{
-						if( blocks[ i ]->y +width == blocks[ j ]->y &&
-							blocks[ i ]->x +width == blocks[ j ]->x &&
-							blocks[ j ]->nr == 13 )
+						if( x == blocks[ j ]->x && y == blocks[ j ]->y )
 						{
-							put = true;
-							break;
+							// new x
+							x += width;
+
+							if( blocks[ j ]->nr == 13 )
+							{
+								put = true;
+								// printf( "ok\n" );
+								break;
+							}
+						}
+						else
+						{
+							put = false;
 						}
 					}
 					
@@ -275,6 +312,8 @@ void Brick::positioning()
 		}
 	}
 	
+	fill( 8, 15 );
+	fill( 10, 11 );
 	
 	// Delete rules
 	delete rules;
