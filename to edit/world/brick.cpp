@@ -180,7 +180,7 @@ void Brick::positioning()
 	// fill left bottom
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ]->y < screen_h -width )
+		if( blocks[ i ]->y < screen_h -width && ( blocks[ i ]->nr == 10 || blocks[ i ]->nr == 0 ) )
 		{
 			// we check if we have free place
 			bool free_place = true;
@@ -197,20 +197,19 @@ void Brick::positioning()
 				if( blocks[ i ]->nr == 0 )
 				{
 					// we are looking for block nr 13
-					bool nope = false;
+					bool put = false;
 					for( unsigned j = 0; j < blocks.size(); j++ )
 					{
 						if( blocks[ i ]->y +width == blocks[ j ]->y &&
 							blocks[ i ]->x +width == blocks[ j ]->x &&
 							blocks[ j ]->nr == 13 )
 						{
-							nope = true;
+							put = true;
 							break;
 						}
 					}
 					
-					
-					if( rand()%2 == 1 || nope )
+					if( rand()%2 == 1 || put )
 					{
 						addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
 					}
@@ -230,25 +229,52 @@ void Brick::positioning()
 	// fill right bottom
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ]->nr == 2 )
+		if( blocks[ i ]->y < screen_h -width && ( blocks[ i ]->nr == 12 || blocks[ i ]->nr == 2 ) )
 		{
-			break;
-		}
-	}
-	
-	/*
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( i + 2 < blocks.size() )
-		{
-			if( blocks[ i ]->nr == 14 )
+			// we check if we have free place
+			bool free_place = true;
+			for( unsigned j = 0; j < blocks.size(); j++ )
 			{
-				if( blocks[ i ]->x)
-				break;
+				if( blocks[ i ]->y +width == blocks[ j ]->y && blocks[ i ]->x == blocks[ j ]->x )
+				{
+					free_place = false;
+				}
+			}
+			
+			if( free_place )
+			{
+				// we have to check what kind of block is on the left 'further'
+				int type = -1;
+				int distance = -1;
+				
+				for( unsigned j = 0; j < blocks.size(); j++ )
+				{
+					if( blocks[ j ]->y == blocks[ i ]->y +width && blocks[ i ]->x -blocks[ j ]->x > 0 )
+					{
+						if( blocks[ j ]->nr == 8 || blocks[ j ]->nr == 10 ||
+							blocks[ j ]->nr == 0 || blocks[ j ]->nr == 14 )
+						{
+							if( distance >= blocks[ i ]->x - blocks[ j ]->x || distance == -1 )
+							{
+								distance = blocks[ i ]->x - blocks[ j ]->x;
+
+								// we found block
+								type = blocks[ j ]->nr;
+							}
+						}
+					}
+				}
+				
+				// printf( "type = %d\n", type );
+				
+				if( type == 8 )			type = 9;
+				else 					type = 12;
+				
+				addBlock( type, blocks[ i ]->x, blocks[ i ]->y +width );
 			}
 		}
 	}
-	*/
+	
 	
 	// Delete rules
 	delete rules;
