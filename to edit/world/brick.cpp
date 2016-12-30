@@ -177,34 +177,78 @@ void Brick::positioning()
 	
 
 	
-	// fill bottom
+	// fill left bottom
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->y < screen_h -width )
 		{
-			if( blocks[ i ]->nr == 0 )
+			// we check if we have free place
+			bool free_place = true;
+			for( unsigned j = 0; j < blocks.size(); j++ )
 			{
-				addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
-			}
-			else if( blocks[ i ]->nr == 10 )
-			{
-				// we check if we have free place
-				bool free_place = true;
-				for( unsigned j = 0; j < blocks.size(); j++ )
+				if( blocks[ i ]->y +width == blocks[ j ]->y && blocks[ i ]->x == blocks[ j ]->x )
 				{
-					if( blocks[ i ]->y == blocks[ j ]->y +width )
+					free_place = false;
+				}
+			}
+			
+			if( free_place )
+			{
+				if( blocks[ i ]->nr == 0 )
+				{
+					// we are looking for block nr 13
+					bool nope = false;
+					for( unsigned j = 0; j < blocks.size(); j++ )
 					{
-						free_place = false;
+						if( blocks[ i ]->y +width == blocks[ j ]->y &&
+							blocks[ i ]->x +width == blocks[ j ]->x &&
+							blocks[ j ]->nr == 13 )
+						{
+							nope = true;
+							break;
+						}
+					}
+					
+					
+					if( rand()%2 == 1 || nope )
+					{
+						addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
+					}
+					else
+					{
+						addBlock( 8, blocks[ i ]->x, blocks[ i ]->y +width );
 					}
 				}
-				
-				if( free_place )
+				else if( blocks[ i ]->nr == 10 )
 				{
 					addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
 				}
 			}
 		}
 	}
+	
+	// fill right bottom
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->nr == 2 )
+		{
+			break;
+		}
+	}
+	
+	/*
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( i + 2 < blocks.size() )
+		{
+			if( blocks[ i ]->nr == 14 )
+			{
+				if( blocks[ i ]->x)
+				break;
+			}
+		}
+	}
+	*/
 	
 	// Delete rules
 	delete rules;
