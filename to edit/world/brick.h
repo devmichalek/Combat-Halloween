@@ -8,12 +8,15 @@ class Brick
 {
 	int nr;
 	MySprite* block;
-	MySprite ladder;
+	
+	int ladder_nr;
+	MySprite* ladder;
 	
 	int width;
 	int screen_w, screen_h;
 	
 	int left, right;
+	bool water;
 	
 	vector < Block* > blocks;
 	vector < Ladder* > ladders;
@@ -24,7 +27,9 @@ public:
 	void addLadder( int x, int y );
 	
 	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
+	void fill( int a, int n );
 	void positioning();
+	void islands();
 	
 	bool checkCollision( Rect* rect );
 	bool checkBlockByPixel( Rect* rect );

@@ -118,7 +118,7 @@ void Brick::positioning()
 	bool flag = false;
 	
 	// how many blocks in line
-	int c = 100;
+	int c = 50;
 	while( c-- )
 	{
 		// add block to the right
@@ -224,11 +224,10 @@ void Brick::positioning()
 					
 					bool put = false;
 					int x = blocks[ i ]->x +width;
-					int y = blocks[ i ]->y +width;
 					
-					for( unsigned j = 0; j < blocks.size(); j++ )
+					for( unsigned j = i +1; j < blocks.size(); j++ )
 					{
-						if( x == blocks[ j ]->x && y == blocks[ j ]->y )
+						if( x == blocks[ j ]->x && blocks[ i ]->y +width == blocks[ j ]->y )
 						{
 							// new x
 							x += width;
@@ -236,13 +235,9 @@ void Brick::positioning()
 							if( blocks[ j ]->nr == 13 )
 							{
 								put = true;
-								// printf( "ok\n" );
+								// printf( "%d %d\n", x, blocks[ i ]->y +width );
 								break;
 							}
-						}
-						else
-						{
-							put = false;
 						}
 					}
 					
@@ -317,6 +312,77 @@ void Brick::positioning()
 	delete rules;
 	
 	// printf( "\n\n\n\n" );
+}
+
+void Brick::islands()
+{
+	vector <sf::Uint8> counters;
+	vector <int> posX;
+	vector <int> posY;
+
+	sf::Uint8 counter = 0;
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		// blocks with grass and with particular y
+		if( blocks[ i ]->nr >= -1 && blocks[ i ]->nr <= 7 && blocks[ i ]->y >= screen_h -width*2 )
+		{
+			posX.push_back( blocks[ i ]->x );
+			posY.push_back( blocks[ i ]->y );
+			for( unsigned j = i; j < blocks.size(); j++ )
+			{
+				if( blocks[ j ]->nr >= -1 && blocks[ j ]->nr <= 7 && blocks[ j ]->y >= screen_h -width*2 )
+				{
+					counter ++;
+				}
+				else
+				{
+					counters.push_back( counter );
+					counter = 0;
+					i = j;
+					break;
+				}
+			}
+		}
+	}
+	
+	for( unsigned i = 0; i < posX.size(); i++ )
+	{
+		printf( "X: %d  Y: %d  C: %d\n", posX[ i ], posY[ i ], counters[ i ] );
+		if( counters[ i ] >= 4 )
+		{
+			int myX = posX[ i ] +width;
+			int myY = posY[ i ] -(width*2);
+			
+			addLadder( myX, myY );
+			
+			while( counters[ i ] >= 4 )
+			{
+				int result = 0;
+				while( result < 2 )
+				{
+					result = rand()%(counters[ i ]/2) +1;
+				}
+				
+				// 5
+				addBlock( 5, myX, myY );
+				result -= 1;
+				myX += width;
+				
+				// 6
+				for( int j = 0; j < result-1; j++ )
+				{
+					addBlock( 6, myX, myY );
+					myX += width;
+				}
+				
+				// 7
+				addBlock( 7, myX, myY );
+				myX += width*2;
+				
+				counters[ i ] -= (result +2);
+			}
+		}
+	}
 }
 
 
@@ -464,12 +530,17 @@ Brick::Brick()
 	nr = 0;
 	block = NULL;
 	
+	ladder_nr = 0;
+	ladder = NULL;
+	
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
 	
 	left = 0;
 	right = 0;
+	
+	water = false;
 }
 
 Brick::~Brick()
@@ -491,7 +562,17 @@ void Brick::free()
 		nr = 0;
 	}
 	
-	ladder.free();
+	if( ladder != NULL )
+	{
+		for( int i = 0; i < ladder_nr; i++ )
+		{
+			ladder[ i ].free();
+		}
+		
+		delete [] ladder;
+		ladder = NULL;
+		ladder_nr = 0;
+	}
 	
 	width = 0;
 	screen_w = 0;
@@ -502,6 +583,8 @@ void Brick::free()
 	
 	left = 0;
 	right = 0;
+	
+	water = false;
 }
 
 
@@ -517,15 +600,21 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 
 	this->nr = nr;
 	block = new MySprite[ nr ];
-	
 	for( int i = 0; i < nr; i++ )
 	{
 		block[ i ].setName( "brick-block[" +to_string( i ) +"]" );
 		block[ i ].loadByImage( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
 	}
 	
-	ladder.setName( "brick-ladder" );
-	ladder.loadByImage( "data/sprites/play/0/ladder.png" );
+	this->ladder_nr = 2;
+	ladder = new MySprite[ ladder_nr ];
+	for( int i = 0; i < nr; i++ )
+	{
+		ladder.setName( "brick-ladder[" +to_string( i ) +"]" );
+		ladder.loadByImage( "data/sprites/play/0/" +to_string( i ) +".png" );
+	}
+	
+	
 	
 	// Set first block.
 	blocks.push_back( new Block() );
@@ -533,6 +622,10 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	blocks[ blocks.size()-1 ]->x = 0;
 	blocks[ blocks.size()-1 ]->y = screen_h -width;
 	
+	if( type == 1 || type == 2 )
+		water = true;
+	
+	printf("type: %d\n", type );
 	// start
 	positioning();
 	
@@ -557,6 +650,8 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	fill( 8, 15 );
 	fill( 10, 11 );
 	fill( 14, 11 );
+	
+	islands();
 }
 
 void Brick::draw( sf::RenderWindow* &window )
