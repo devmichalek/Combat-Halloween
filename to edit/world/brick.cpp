@@ -159,8 +159,8 @@ void Brick::positioning()
 					
 				
 				// add ladder
-				int ladder_x = blocks[ blocks.size()-1 ]->x -ladder.getWidth() +10;
-				int ladder_y = blocks[ blocks.size()-1 ]->y +width -ladder.getHeight();
+				int ladder_x = blocks[ blocks.size()-1 ]->x -ladder[ 0 ].getWidth() +10;
+				int ladder_y = blocks[ blocks.size()-1 ]->y +width -ladder[ 0 ].getHeight();
 				addLadder( ladder_x, ladder_y );
 			}
 			else
@@ -193,7 +193,7 @@ void Brick::positioning()
 				
 				// add ladder
 				int ladder_x = blocks[ blocks.size()-1 ]->x -10;
-				int ladder_y = blocks[ blocks.size()-1 ]->y -ladder.getHeight();
+				int ladder_y = blocks[ blocks.size()-1 ]->y -ladder[ 0 ].getHeight();
 				addLadder( ladder_x, ladder_y );
 			}
 		}
@@ -330,13 +330,13 @@ void Brick::islands()
 			posY.push_back( blocks[ i ]->y );
 			for( unsigned j = i; j < blocks.size(); j++ )
 			{
-				if( blocks[ j ]->nr >= -1 && blocks[ j ]->nr <= 7 && blocks[ j ]->y >= screen_h -width*2 )
+				if( blocks[ j ]->nr >= -1 && blocks[ j ]->nr <= 7 && blocks[ j ]->y >= posY[ posY.size() -1 ] )
 				{
 					counter ++;
 				}
 				else
 				{
-					counters.push_back( counter );
+					counters.push_back( counter-1 );
 					counter = 0;
 					i = j;
 					break;
@@ -350,10 +350,12 @@ void Brick::islands()
 		printf( "X: %d  Y: %d  C: %d\n", posX[ i ], posY[ i ], counters[ i ] );
 		if( counters[ i ] >= 4 )
 		{
+			printf( "counters[%d] = %d\n", i, counters[ i ] );
 			int myX = posX[ i ] +width;
 			int myY = posY[ i ] -(width*2);
 			
-			addLadder( myX, myY );
+			addLadder( myX -ladder[ 1 ].getWidth() +10, posY[ i ] -ladder[ 1 ].getHeight() );
+			ladders[ ladders.size()-1 ]->nr = 1;
 			
 			while( counters[ i ] >= 4 )
 			{
@@ -363,6 +365,7 @@ void Brick::islands()
 					result = rand()%(counters[ i ]/2) +1;
 				}
 				
+				//---------------------------
 				// 5
 				addBlock( 5, myX, myY );
 				result -= 1;
@@ -378,8 +381,9 @@ void Brick::islands()
 				// 7
 				addBlock( 7, myX, myY );
 				myX += width*2;
+				//---------------------------
 				
-				counters[ i ] -= (result +2);
+				counters[ i ] -= ( result +3 );
 			}
 		}
 	}
@@ -454,8 +458,8 @@ bool Brick::checkLadder( Rect* rect )
 		{
 			if( ladders[ i ]->x > -width && ladders[ i ]->x < screen_w )
 			{
-				ladder.setPosition( ladders[ i ]->x, ladders[ i ]->y );
-				if( ladder.checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
+				ladder[ ladders[ i ]->nr ].setPosition( ladders[ i ]->x, ladders[ i ]->y );
+				if( ladder[ ladders[ i ]->nr ].checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
 				{
 					return true;
 				}
@@ -608,12 +612,11 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	
 	this->ladder_nr = 2;
 	ladder = new MySprite[ ladder_nr ];
-	for( int i = 0; i < nr; i++ )
+	for( int i = 0; i < ladder_nr; i++ )
 	{
-		ladder.setName( "brick-ladder[" +to_string( i ) +"]" );
-		ladder.loadByImage( "data/sprites/play/0/" +to_string( i ) +".png" );
+		ladder[ i ].setName( "brick-ladder[" +to_string( i ) +"]" );
+		ladder[ i ].loadByImage( "data/sprites/play/ladder/" +to_string( i ) +".png" );
 	}
-	
 	
 	
 	// Set first block.
@@ -675,9 +678,9 @@ void Brick::drawLadders( sf::RenderWindow* &window )
 	{
 		if( ladders[ i ]->x > -width && ladders[ i ]->x < screen_w )
 		{
-			ladder.setPosition( ladders[ i ]->x, ladders[ i ]->y );
-			ladder.setColor( sf::Color( ladders[ i ]->red, ladders[ i ]->green, ladders[ i ]->blue ) );
-			window->draw( ladder.get() );
+			ladder[ ladders[ i ]->nr ].setPosition( ladders[ i ]->x, ladders[ i ]->y );
+			ladder[ ladders[ i ]->nr ].setColor( sf::Color( ladders[ i ]->red, ladders[ i ]->green, ladders[ i ]->blue ) );
+			window->draw( ladder[ ladders[ i ]->nr ].get() );
 		}
 	}
 }
@@ -698,7 +701,10 @@ void Brick::fadein( int v, int max )
 		block[ i ].fadein( v, max );
 	}
 	
-	ladder.fadein( v, max );
+	for( int i = 0; i < ladder_nr; i++ )
+	{
+		ladder[ i ].fadein( v, max );
+	}
 }
 
 void Brick::fadeout( int v, int min )
@@ -708,5 +714,8 @@ void Brick::fadeout( int v, int min )
 		block[ i ].fadeout( v, min );
 	}
 	
-	ladder.fadeout( v, min );
+	for( int i = 0; i < ladder_nr; i++ )
+	{
+		ladder[ i ].fadeout( v, min );
+	}
 }
