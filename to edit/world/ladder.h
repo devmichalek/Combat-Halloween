@@ -7,6 +7,7 @@ class Ladder
 public:
 	
 	int x, y;
+	sf::Uint8 nr;
 	
 	sf::Uint8 red;
 	sf::Uint8 green;
