@@ -316,41 +316,72 @@ void Brick::positioning()
 
 void Brick::islands()
 {
-	vector <sf::Uint8> counters;
 	vector <int> posX;
 	vector <int> posY;
-
-	sf::Uint8 counter = 0;
+	vector <int> counters;
+	
+	// Searcher
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		// blocks with grass and with particular y
-		if( blocks[ i ]->nr >= -1 && blocks[ i ]->nr <= 7 && blocks[ i ]->y >= screen_h -width*2 )
+		// blocks with grass, apriopriate y
+		if( blocks[ i ]->y >= screen_h -width*2 &&
+		  ( blocks[ i ]->nr == 0 ||
+			blocks[ i ]->nr == 4 ||
+			blocks[ i ]->nr == 5 ) )
 		{
 			posX.push_back( blocks[ i ]->x );
 			posY.push_back( blocks[ i ]->y );
-			for( unsigned j = i; j < blocks.size(); j++ )
+			counters.push_back( 1 );
+			// printf( "X: %d  Y: %d  nr: %d\n", blocks[ i ]->x, blocks[ i ]->y, blocks[ i ]->nr );
+			
+			for( unsigned j = i+1; j < blocks.size(); j++ )
 			{
-				if( blocks[ j ]->nr >= -1 && blocks[ j ]->nr <= 7 && blocks[ j ]->y >= posY[ posY.size() -1 ] )
+				if( blocks[ j ]->y == blocks[ i ]->y )
 				{
-					counter ++;
-				}
-				else
-				{
-					counters.push_back( counter-1 );
-					counter = 0;
-					i = j;
-					break;
+					if( blocks[ j ]->nr == 2 || blocks[ j ]->nr == 3 || blocks[ j ]->nr == 7 )
+					{
+						counters[ counters.size()-1 ] ++;
+						i = j +1;
+						break;
+					}
+					
+					if( blocks[ j ]->nr == 1 || blocks[ j ]->nr == 6 )
+					{
+						counters[ counters.size()-1 ] ++;
+					}
 				}
 			}
 		}
 	}
 	
+	// Merger
+	bool merger = true;
+	while( merger )
+	{
+		merger = false;
+		for( unsigned i = 0; i < posX.size() -1; i++ )
+		{
+			if( posY[ i ] == posY[ i +1 ] )
+			{
+				if( posX[ i ] +(width *(counters[ i ] +1) ) == posX[ i +1 ] )
+				{
+					merger = true;
+					counters[ i ] += counters[ i +1 ] +1;
+					posX.erase( posX.begin() +i +1 );
+					posY.erase( posY.begin() +i +1 );
+					counters.erase( counters.begin() +i +1 );
+				}
+			}
+		}
+	}
+	
+
+	// Creator
 	for( unsigned i = 0; i < posX.size(); i++ )
 	{
 		printf( "X: %d  Y: %d  C: %d\n", posX[ i ], posY[ i ], counters[ i ] );
 		if( counters[ i ] >= 4 )
 		{
-			printf( "counters[%d] = %d\n", i, counters[ i ] );
 			int myX = posX[ i ] +width;
 			int myY = posY[ i ] -(width*2);
 			
@@ -621,7 +652,7 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	
 	// Set first block.
 	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 1;
+	blocks[ blocks.size()-1 ]->nr = 4;
 	blocks[ blocks.size()-1 ]->x = 0;
 	blocks[ blocks.size()-1 ]->y = screen_h -width;
 	
