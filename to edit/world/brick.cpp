@@ -174,8 +174,6 @@ void Brick::positioning()
 	// Create rules.
 	Rules* rules = new Rules;
 	rules->ruleRightSide();
-	rules->ruleLeftSide();
-	rules->ruleBotSide();
 	
 	
 	
