@@ -21,7 +21,7 @@ void Rules::free()
 	}
 	rules_right.clear();
 	
-	
+	/*
 	for( unsigned i = 0; i < rules_left.size(); i++ )
 	{
 		rules_left[ i ].clear();
@@ -36,7 +36,7 @@ void Rules::free()
 	rules_bot.clear();
 	
 	
-	/*
+	
 	for( unsigned i = 0; i < rules_top.size(); i++ )
 	{
 		rules_top[ i ].clear();
@@ -240,7 +240,7 @@ void Rules::ruleRightSide()
 	temporary.push_back( new Law( 4 ) );
 	rules_right.push_back( temporary );
 }
-
+/*
 void Rules::ruleLeftSide()
 {
 	vector <Law*> temporary;
