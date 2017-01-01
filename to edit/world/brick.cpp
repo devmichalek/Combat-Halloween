@@ -27,6 +27,46 @@ void Brick::addLadder( int x, int y )
 	
 	// set y.
 	ladders[ ladders.size()-1 ]->y = y;
+	
+	bool luck = false;
+	
+	if( rand()%1000 > 995 )
+	{
+		luck = true;
+	}
+	
+	// setColor
+	if( world_type == 0 )
+	{
+		ladders[ ladders.size()-1 ]->red = 0;
+		ladders[ ladders.size()-1 ]->green = 0xFF;
+		ladders[ ladders.size()-1 ]->blue = rand()%0xAA;
+	}
+	else if( world_type == 1 )
+	{
+		ladders[ ladders.size()-1 ]->red = 0xFF;
+		ladders[ ladders.size()-1 ]->green = 0x9C;
+		ladders[ ladders.size()-1 ]->blue = rand()%0x50;
+	}
+	else if( world_type == 2 )
+	{
+		ladders[ ladders.size()-1 ]->red = 0;
+		ladders[ ladders.size()-1 ]->green = 0xFF;
+		ladders[ ladders.size()-1 ]->blue = rand()%(0xFF -0xAA) + 0xAA;
+	}
+	else if( world_type == 3 )
+	{
+		ladders[ ladders.size()-1 ]->red = 0xFF;
+		ladders[ ladders.size()-1 ]->green = 0xFF;
+		ladders[ ladders.size()-1 ]->blue = rand()%0xAA;
+	}
+	
+	if( luck )	// red ladder
+	{
+		ladders[ ladders.size()-1 ]->red = 0xFF;
+		ladders[ ladders.size()-1 ]->green = 0;
+		ladders[ ladders.size()-1 ]->blue = 0;
+	}
 }
 
 
@@ -379,7 +419,7 @@ void Brick::islands()
 	// Creator
 	for( unsigned i = 0; i < posX.size(); i++ )
 	{
-		printf( "X: %d  Y: %d  C: %d\n", posX[ i ], posY[ i ], counters[ i ] );
+		// printf( "X: %d  Y: %d  C: %d\n", posX[ i ], posY[ i ], counters[ i ] );
 		if( counters[ i ] >= 4 )
 		{
 			int myX = posX[ i ] +width;
@@ -575,7 +615,7 @@ Brick::Brick()
 	left = 0;
 	right = 0;
 	
-	water = false;
+	world_type = -1;
 }
 
 Brick::~Brick()
@@ -619,7 +659,7 @@ void Brick::free()
 	left = 0;
 	right = 0;
 	
-	water = false;
+	world_type = -1;
 }
 
 
@@ -628,6 +668,9 @@ void Brick::free()
 void Brick::load( int screen_w, int screen_h, int nr, int type )
 {
 	free();
+	
+	world_type = type;
+	printf("type: %d\n", world_type );
 	
 	width = 128;
 	this->screen_w = screen_w;
@@ -656,10 +699,6 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	blocks[ blocks.size()-1 ]->x = 0;
 	blocks[ blocks.size()-1 ]->y = screen_h -width;
 	
-	if( type == 1 || type == 2 )
-		water = true;
-	
-	printf("type: %d\n", type );
 	// start
 	positioning();
 	

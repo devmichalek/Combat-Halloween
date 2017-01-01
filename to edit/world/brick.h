@@ -16,7 +16,7 @@ class Brick
 	int screen_w, screen_h;
 	
 	int left, right;
-	bool water;
+	int world_type;
 	
 	vector < Block* > blocks;
 	vector < Ladder* > ladders;
