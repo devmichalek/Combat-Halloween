@@ -28,13 +28,6 @@ void Brick::addLadder( int x, int y )
 	// set y.
 	ladders[ ladders.size()-1 ]->y = y;
 	
-	bool luck = false;
-	
-	if( rand()%1000 > 995 )
-	{
-		luck = true;
-	}
-	
 	// setColor
 	if( world_type == 0 )
 	{
@@ -61,11 +54,28 @@ void Brick::addLadder( int x, int y )
 		ladders[ ladders.size()-1 ]->blue = rand()%0xAA;
 	}
 	
-	if( luck )	// red ladder
+	if( rand()%1000 +1 > 985 ) // 1.5% - red ladder
 	{
 		ladders[ ladders.size()-1 ]->red = 0xFF;
 		ladders[ ladders.size()-1 ]->green = 0;
 		ladders[ ladders.size()-1 ]->blue = 0;
+		printf( "r%d    %d %d\n", world_type, ladders[ ladders.size()-1 ]->x, ladders[ ladders.size()-1 ]->y );
+	}
+	
+	if( rand()%1000 +1 > 990 ) // 1% - white ladder
+	{
+		ladders[ ladders.size()-1 ]->red = 0xFF;
+		ladders[ ladders.size()-1 ]->green = 0;
+		ladders[ ladders.size()-1 ]->blue = 0;
+		printf( "w%d    %d %d\n", world_type, ladders[ ladders.size()-1 ]->x, ladders[ ladders.size()-1 ]->y );
+	}
+	
+	if( rand()%1000 +1 > 997 ) // 0.3% - black ladder
+	{
+		ladders[ ladders.size()-1 ]->red = 0xFF;
+		ladders[ ladders.size()-1 ]->green = 0;
+		ladders[ ladders.size()-1 ]->blue = 0;
+		printf( "b%d    %d %d\n", world_type, ladders[ ladders.size()-1 ]->x, ladders[ ladders.size()-1 ]->y );
 	}
 }
 
@@ -158,7 +168,7 @@ void Brick::positioning()
 	bool flag = false;
 	
 	// how many blocks in line
-	int c = 50;
+	int c = 1000;
 	while( c-- )
 	{
 		// add block to the right
@@ -670,7 +680,7 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	free();
 	
 	world_type = type;
-	printf("type: %d\n", world_type );
+	// printf("type: %d\n", world_type );
 	
 	width = 128;
 	this->screen_w = screen_w;
