@@ -2,6 +2,20 @@
 #include "world/rules.h"
 #include <cstdlib>	// rand
 
+Special_ladder::Special_ladder()
+{
+	x = y = nr = 0;
+	used = false;
+}
+
+Special_ladder::~Special_ladder()
+{
+	x = y = nr = 0;
+	used = false;
+}
+
+
+
 void Brick::addBlock( int chosen, int x_width, int floor )
 {
 	// add block.
@@ -54,28 +68,40 @@ void Brick::addLadder( int x, int y )
 		ladders[ ladders.size()-1 ]->blue = rand()%0xAA;
 	}
 	
-	if( rand()%1000 +1 > 985 ) // 1.5% - red ladder
+	if( rand()%1000 +1 > 985 && !red.used ) // 1.5% - red ladder
 	{
 		ladders[ ladders.size()-1 ]->red = 0xFF;
 		ladders[ ladders.size()-1 ]->green = 0;
 		ladders[ ladders.size()-1 ]->blue = 0;
-		printf( "r%d    %d %d\n", world_type, ladders[ ladders.size()-1 ]->x, ladders[ ladders.size()-1 ]->y );
+		
+		red.used = true;
+		red.x = ladders[ ladders.size()-1 ]->x;
+		red.y = ladders[ ladders.size()-1 ]->y;
+		printf( "R %d    %d %d\n", world_type, red.x, red.y );
 	}
 	
-	if( rand()%1000 +1 > 990 ) // 1% - white ladder
+	if( rand()%1000 +1 > 990 && !white.used ) // 1% - white ladder
 	{
 		ladders[ ladders.size()-1 ]->red = 0xFF;
-		ladders[ ladders.size()-1 ]->green = 0;
-		ladders[ ladders.size()-1 ]->blue = 0;
-		printf( "w%d    %d %d\n", world_type, ladders[ ladders.size()-1 ]->x, ladders[ ladders.size()-1 ]->y );
+		ladders[ ladders.size()-1 ]->green = 0xFF;
+		ladders[ ladders.size()-1 ]->blue = 0xFF;
+		
+		white.used = true;
+		white.x = ladders[ ladders.size()-1 ]->x;
+		white.y = ladders[ ladders.size()-1 ]->y;
+		printf( "W %d    %d %d\n", world_type, white.x, white.y );
 	}
 	
-	if( rand()%1000 +1 > 997 ) // 0.3% - black ladder
+	if( rand()%1000 +1 > 998 && !black.used ) // 0.2% - black ladder
 	{
-		ladders[ ladders.size()-1 ]->red = 0xFF;
+		ladders[ ladders.size()-1 ]->red = 0;
 		ladders[ ladders.size()-1 ]->green = 0;
 		ladders[ ladders.size()-1 ]->blue = 0;
-		printf( "b%d    %d %d\n", world_type, ladders[ ladders.size()-1 ]->x, ladders[ ladders.size()-1 ]->y );
+		
+		black.used = true;
+		black.x = ladders[ ladders.size()-1 ]->x;
+		black.y = ladders[ ladders.size()-1 ]->y;
+		printf( "B %d    %d %d\n", world_type, black.x, black.y );
 	}
 }
 

@@ -4,6 +4,17 @@
 #include "world/block.h"
 #include "world/ladder.h"
 
+class Special_ladder
+{
+public:
+	
+	int x, y;
+	bool used;
+	
+	Special_ladder();
+	~Special_ladder();
+};
+
 class Brick
 {
 	int nr;
@@ -20,6 +31,8 @@ class Brick
 	
 	vector < Block* > blocks;
 	vector < Ladder* > ladders;
+	
+	Special_ladder red, white, black;
 	
 public:
 	
