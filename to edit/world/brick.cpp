@@ -4,13 +4,13 @@
 
 Special_ladder::Special_ladder()
 {
-	x = y = nr = 0;
+	x = y = 0;
 	used = false;
 }
 
 Special_ladder::~Special_ladder()
 {
-	x = y = nr = 0;
+	x = y = 0;
 	used = false;
 }
 
@@ -77,7 +77,7 @@ void Brick::addLadder( int x, int y )
 		red.used = true;
 		red.x = ladders[ ladders.size()-1 ]->x;
 		red.y = ladders[ ladders.size()-1 ]->y;
-		printf( "R %d    %d %d\n", world_type, red.x, red.y );
+		// printf( "R %d    %d %d\n", world_type, red.x, red.y );
 	}
 	
 	if( rand()%1000 +1 > 990 && !white.used ) // 1% - white ladder
@@ -89,7 +89,7 @@ void Brick::addLadder( int x, int y )
 		white.used = true;
 		white.x = ladders[ ladders.size()-1 ]->x;
 		white.y = ladders[ ladders.size()-1 ]->y;
-		printf( "W %d    %d %d\n", world_type, white.x, white.y );
+		// printf( "W %d    %d %d\n", world_type, white.x, white.y );
 	}
 	
 	if( rand()%1000 +1 > 998 && !black.used ) // 0.2% - black ladder
@@ -101,7 +101,7 @@ void Brick::addLadder( int x, int y )
 		black.used = true;
 		black.x = ladders[ ladders.size()-1 ]->x;
 		black.y = ladders[ ladders.size()-1 ]->y;
-		printf( "B %d    %d %d\n", world_type, black.x, black.y );
+		// printf( "B %d    %d %d\n", world_type, black.x, black.y );
 	}
 }
 
@@ -194,7 +194,7 @@ void Brick::positioning()
 	bool flag = false;
 	
 	// how many blocks in line
-	int c = 1000;
+	int c = 100;
 	while( c-- )
 	{
 		// add block to the right
