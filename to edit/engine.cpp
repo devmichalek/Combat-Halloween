@@ -185,10 +185,26 @@ void Engine::states()
 		{
 			core->getState() = level_menu->getMap() +2;
 			
-			if( core->getState() == 2 ) play_halloween->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-			else if( core->getState() == 3 ) play_wood->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-			else if( core->getState() == 4 ) play_winter->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-			else if( core->getState() == 5 ) play_desert->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+			if( core->getState() == 2 )
+			{
+				play_halloween->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+				play_halloween->setWorldsize( level_menu->getWorldsize() );
+			}
+			else if( core->getState() == 3 )
+			{
+				play_wood->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+				play_wood->setWorldsize( level_menu->getWorldsize() );
+			}
+			else if( core->getState() == 4 )
+			{
+				play_winter->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+				play_winter->setWorldsize( level_menu->getWorldsize() );
+			}
+			else if( core->getState() == 5 )
+			{
+				play_desert->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
+				play_desert->setWorldsize( level_menu->getWorldsize() );
+			}
 			
 			level_menu->reloadMusic();
 			Mix_HaltMusic();
