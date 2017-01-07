@@ -39,9 +39,21 @@ void Level_menu::set( State* state )
 	// Set chunks
 	if( !state->cSwitch )
 	{
-		backtomenu->turn();
-		choice->turn();
-		worldsize->turn();
+		if( backtomenu->isPlayable() )
+		{
+			backtomenu->turn();
+			choice->turn();
+			worldsize->turn();
+		}
+	}
+	else
+	{
+		if( !backtomenu->isPlayable() )
+		{
+			backtomenu->turn();
+			choice->turn();
+			worldsize->turn();
+		}
 	}
 	
 	// Set music volume
