@@ -48,6 +48,13 @@ void Play_wood::setHero( int screen_w, int screen_h, int type )
 	}
 	
 	scope->set( hero->getX(), brick->getWidth(), screen_w );
+	
+	bg->setXY( hero->getX(), hero->getY() );
+}
+
+void Play_wood::setWorldsize( int size )
+{
+	brick->positioning( size );
 }
 
 void Play_wood::handle( sf::Event &event )
