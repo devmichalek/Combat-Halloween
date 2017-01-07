@@ -5,6 +5,7 @@
 #include "level/choice.h"
 #include "templates/state.h"
 #include "level/character.h"
+#include "level/worldsize.h"
 
 class Level_menu
 {
@@ -14,6 +15,7 @@ class Level_menu
 	Backtomenu* backtomenu;
 	Choice* choice;
 	Character* character;
+	Worldsize* worldsize;
 	
 public:
 
@@ -37,4 +39,5 @@ public:
 	
 	int getMap();
 	int getCharacter();
+	int getWorldsize();
 };
