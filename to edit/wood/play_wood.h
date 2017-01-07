@@ -29,6 +29,7 @@ public:
     void draw( sf::RenderWindow* &window );
 	
 	void setHero( int screen_w, int screen_h, int type );
+	void setWorldsize( int size );
 	State* getState();
 	void set( State* state );
 	
