@@ -4,12 +4,12 @@
 
 Choice::Choice()
 {
+	nr = 0;
+	world = NULL;
+	
 	counter = -1;
 	result = -1;
 	chosen = -1;
-	
-	nr = 0;
-	world = NULL;
 	
 	range = 0;
 }
@@ -18,9 +18,6 @@ Choice::~Choice()
 {
 	button.free();
 	text.free();
-	information.free();
-	
-	click.free();
 	
 	if( world != NULL )
 	{
@@ -32,11 +29,15 @@ Choice::~Choice()
 		nr = 0;
 	}
 	
+	frame.free();
+	
+	information.free();
+	
+	click.free();
+	
 	counter = -1;
 	result = -1;
 	chosen = -1;
-	
-	frame.free();
 	
 	range = 0;
 }
@@ -96,7 +97,7 @@ void Choice::handle( sf::Event &event )
 {
 	chosen = -1;
 	
-	if( button.getAlpha() == 255 && counter == -1 )
+	if( button.getAlpha() == 0xFF && counter == -1 )
 	{
 		int x, y;
 		button.setOffset( 0 );
@@ -141,6 +142,9 @@ void Choice::handle( sf::Event &event )
 			{
 				if( world[ i ].checkCollision( x, y ) )
 				{
+					if( play )
+						click.play();
+					
 					result = i;
 				}
 			}
