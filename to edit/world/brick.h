@@ -41,8 +41,9 @@ public:
 	
 	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
 	void fill( int a, int n );
-	void positioning();
 	void islands();
+	void positioning( int size );
+	
 	
 	bool checkCollision( Rect* rect );
 	bool checkBlockByPixel( Rect* rect );
