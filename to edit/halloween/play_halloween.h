@@ -26,6 +26,7 @@ public:
 	
     void load( int screen_w, int screen_h );
 	void setHero( int screen_w, int screen_h, int type );
+	void setWorldsize( int size );
 
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
