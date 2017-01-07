@@ -16,7 +16,11 @@ protected:
 	Chunk click;
 	
 public:
+
+	Click();
+	~Click();
 	
 	void turn();	// Turn on/off chunk
+	bool isPlayable();
 	void setVolume( sf::Uint8 volume );
 };
