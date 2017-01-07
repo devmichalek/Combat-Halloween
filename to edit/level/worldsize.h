@@ -1,11 +1,19 @@
 #pragma once
 
 #include "templates/text.h"
+#include "templates/sprite.h"
+#include "menu/click.h"
 
-class Worldsize
+class Worldsize :public Click
 {
-	
 	MyText text;
+	MyText blocks_text;
+	MySprite white_bar;
+	MySprite green_bar;
+	
+	// To move - animation
+	int range;
+	int blocks;
 	
 public:
 
