@@ -1,8 +1,17 @@
+/**
+    worldsize.h
+    Purpose: class Worldsize - to choose size of world.
+
+    @author Adrian Michalek
+    @version 2016.12.12
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "templates/text.h"
-#include "templates/sprite.h"
-#include "menu/click.h"
+#include "drawable/text.h"
+#include "drawable/sprite.h"
+#include "02_menu/click.h"
 
 class Worldsize :public Click
 {
@@ -14,6 +23,11 @@ class Worldsize :public Click
 	// To move - animation
 	int range;
 	int blocks;
+	bool keep;
+	
+	float delay;
+	sf::Uint8 blocks_value;
+	sf::Uint8 blocks_times;
 	
 public:
 
@@ -30,5 +44,5 @@ public:
 	int getResult();
 	void reset();
 	
-	bool move( int vel, int ran );	// move horizontal
+	bool move( int vel, int scope );	// move horizontal
 };
