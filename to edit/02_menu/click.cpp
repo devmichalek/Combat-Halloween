@@ -1,3 +1,12 @@
+/**
+    click.h
+    Purpose: class Click - to play click.wav with state called focus for buttons.
+
+    @author Adrian Michalek
+    @version 2016.10.14
+	@email adrmic98@gmail.com
+*/
+
 #include "click.h"
 
 Click::Click()
