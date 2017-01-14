@@ -1,3 +1,12 @@
+/**
+    choice.h
+    Purpose: class Choice - choose world or random.
+
+    @author Adrian Michalek
+    @version 2016.12.13
+	@email adrmic98@gmail.com
+*/
+
 #include "choice.h"
 #include <time.h>
 #include <cstdlib>
@@ -12,6 +21,7 @@ Choice::Choice()
 	chosen = -1;
 	
 	range = 0;
+	keep = false;
 }
 
 Choice::~Choice()
@@ -30,17 +40,18 @@ Choice::~Choice()
 	}
 	
 	frame.free();
-	
 	information.free();
-	
-	click.free();
-	
+
 	counter = -1;
 	result = -1;
 	chosen = -1;
 	
 	range = 0;
+	keep = false;
+	
+	click.free();
 }
+
 
 
 void Choice::load( int screen_w, int screen_h )
@@ -74,7 +85,6 @@ void Choice::load( int screen_w, int screen_h )
 	}
 	
 	int w = world[ 0 ].getWidth()*4 + 15*4;
-	
 	world[ 0 ].setPosition( screen_w/2 - w/2, button.getY() +90 );
 	world[ 1 ].setPosition( world[ 0 ].getRight() + 15, button.getY() +90 );
 	world[ 2 ].setPosition( world[ 1 ].getRight() + 15, button.getY() +90 );
@@ -108,16 +118,24 @@ void Choice::handle( sf::Event &event )
 			y = event.mouseMove.y;
 				
 			if( button.checkCollision( x, y ) )
+			{
 				button.setOffset( 1 );
+			}
 			else
+			{
 				focus = false;
-				
+			}
+			
 			for( sf::Uint8 i = 0; i < nr; i++ )
 			{
 				if( world[ i ].checkCollision( x, y ) )
+				{
 					chosen = i;
+				}
 				else
+				{
 					frame.setPosition( -1000, -1000 );
+				}
 			}
 		}
 
@@ -131,8 +149,11 @@ void Choice::handle( sf::Event &event )
 				button.setOffset( 2 );
 					
 				if( play )
+				{
 					click.play();
-						
+				}
+				
+				
 				focus = true;
 				counter = 0;
 				
@@ -143,7 +164,9 @@ void Choice::handle( sf::Event &event )
 				if( world[ i ].checkCollision( x, y ) )
 				{
 					if( play )
+					{
 						click.play();
+					}
 					
 					result = i;
 				}
@@ -151,10 +174,14 @@ void Choice::handle( sf::Event &event )
 		}
 			
 		if( event.type == sf::Event::MouseButtonReleased )
+		{
 			focus = false;
-			
+		}
+		
 		if( focus )
+		{
 			button.setOffset( 2 );
+		}
 	}
 }
 
@@ -173,10 +200,12 @@ void Choice::draw( sf::RenderWindow &window )
 	for( int i = 0; i < nr; i ++ )
 	{
 		if( i != result && i != chosen )
+		{
 			world[ i ].setAlpha( 100 );
+		}
 		else
 		{
-			world[ i ].setAlpha( 255 );
+			world[ i ].setAlpha( 0xFF );
 			frame.setPosition( world[ i ].getX(), world[ i ].getY() );
 		}
 			
@@ -185,7 +214,10 @@ void Choice::draw( sf::RenderWindow &window )
 	if( counter > -1 && counter < 150 )
 	{
 		if( counter %7 == 0 )
+		{
 			result = rand()%4;
+		}
+		
 		counter ++;
 	}
 		
@@ -200,7 +232,9 @@ void Choice::fadein( int j, int max )
 	information.fadein( j, max );
 	
 	for( int i = 0; i < nr; i ++ )
+	{
 		world[ i ].fadein( j, 100 );
+	}
 }
 
 void Choice::fadeout( int j, int min )
@@ -211,13 +245,18 @@ void Choice::fadeout( int j, int min )
 	frame.fadeout( j, min );
 
 	if( result != -1 )
+	{
 		world[ result ].fadeout( j, min );
-		
+	}
+	
+	
 
 	if( text.getAlpha() < 100 )
 	{
 		for( int i = 0; i < nr; i ++ )
+		{
 			world[ i ].fadeout( j, min );
+		}
 	}
 }
 
@@ -234,8 +273,10 @@ sf::Uint8 Choice::getAlpha()
 bool Choice::isChosen()
 {
 	if( ( counter == 150 || counter == -1 ) && result != -1 )
+	{
 		return true;
-		
+	}
+	
 	return false;
 }
 
@@ -248,23 +289,24 @@ void Choice::reset()
 	chosen = -1;
 }
 
-bool Choice::move( int vel, int ran )
+bool Choice::move( int vel, int scope )
 {
-	static bool continue_;
-	continue_ = false;
-	
 	if( vel < 0 )
 	{
-		if( range > ran )
-			continue_ = true;
+		if( range > scope )
+		{
+			keep = true;
+		}
 	}
 	else if( vel > 0 )
 	{
-		if( range < ran )
-			continue_ = true;
+		if( range < scope )
+		{
+			keep = true;
+		}
 	}
 	
-	if( continue_ )
+	if( keep )
 	{
 		range += vel;
 		button.setPosition( button.getX() +vel, button.getY() );
@@ -272,13 +314,20 @@ bool Choice::move( int vel, int ran )
 		information.setPosition( information.getX() +vel, information.getY() );
 		frame.setPosition( frame.getX() +vel, frame.getY() );
 		for( int i = 0; i < nr; i++ )
+		{
 			world[ i ].setPosition( world[ i ].getX() +vel, world[ i ].getY() );
+		}
 	}
 	else
-		range = ran;
-		
-	if( range == ran )
+	{
+		range = scope;
+	}
+	
+	
+	if( range == scope )
+	{
 		return true;
-		
+	}
+	
 	return false;
 }

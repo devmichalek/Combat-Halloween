@@ -1,8 +1,17 @@
+/**
+    choice.h
+    Purpose: class Choice - choose world or random.
+
+    @author Adrian Michalek
+    @version 2016.12.13
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "templates/sprite.h"
-#include "templates/text.h"
-#include "menu/click.h"
+#include "drawable/sprite.h"
+#include "drawable/text.h"
+#include "02_menu/click.h"
 
 class Choice :public Click
 {
@@ -13,16 +22,15 @@ class Choice :public Click
 	MySprite* world;
 	
 	MySprite frame;
-	
 	MyText information;
 	
-	
-	int counter; 	// random
-	int result;		// ended result
-	int chosen;		// if user moved on the one of images
+	int counter; 	// for random
+	int result;		// latest result
+	int chosen;		// if user choose one of images
 	
 	// To move - animation
 	int range;
+	bool keep;
 	
 public:
 	
@@ -42,5 +50,5 @@ public:
 	
 	void reset();
 	
-	bool move( int vel, int ran );	// move horizontal
+	bool move( int vel, int scope );	// move horizontal
 };
