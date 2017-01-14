@@ -1,6 +1,0 @@
-50
-40
-
-Template:
-
-First is music volume the second is chunk volume.
