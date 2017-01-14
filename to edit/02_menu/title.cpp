@@ -1,5 +1,13 @@
+/**
+    title.h
+    Purpose: class Title - to show sprite (title).
+
+    @author Adrian Michalek
+    @version 2016.10.13
+	@email adrmic98@gmail.com
+*/
+
 #include "title.h"
-#include <stdlib.h>
 
 Title::Title()
 {
@@ -31,7 +39,7 @@ void Title::draw( sf::RenderWindow &window )
 }
 
 
-const int& Title::getBot()
+const int Title::getBot()
 {
 	return belt.getBot();
 }
