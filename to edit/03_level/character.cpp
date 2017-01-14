@@ -1,13 +1,24 @@
-#include "level/character.h"
+/**
+    character.h
+    Purpose: class Character - shows 2 animations in level state.
+
+    @author Adrian Michalek
+    @version 2016.12.06
+	@email adrmic98@gmail.com
+*/
+
+#include "character.h"
 
 Character::Character()
 {
-	result = -1;
 	ready = 0;
-	range = 0;
+	result = -1;
 	
-	how_many = 0;
 	offset = 0;
+	how_many = 0;
+	
+	range = 0;
+	keep = false;
 }
 
 Character::~Character()
@@ -17,20 +28,23 @@ Character::~Character()
 
 void Character::free()
 {
-	result = -1;
-	ready = 0;
-	range = 0;
-	
 	one.free();
 	two.free();
 	text.free();
 	information.free();
 	
-	click.free();
+	ready = 0;
+	result = -1;
 	
-	how_many = 0;
 	offset = 0;
+	how_many = 0;
+	
+	range = 0;
+	keep = false;
+	
+	click.free();
 }
+
 
 
 void Character::load( int screen_w, int screen_h )
@@ -59,8 +73,8 @@ void Character::load( int screen_w, int screen_h )
 	
 	range = screen_w;
 	
-	how_many = 10;
 	offset = 0;
+	how_many = 10;
 }
 
 void Character::draw( sf::RenderWindow* &window )
@@ -70,8 +84,11 @@ void Character::draw( sf::RenderWindow* &window )
 	
 	offset ++;
 	if( offset == how_many *6 )
+	{
 		offset = 0;
-		
+	}
+	
+	
 	one.setOffset( offset /6 );
 	two.setOffset( offset /6 );
 	
@@ -91,15 +108,22 @@ void Character::handle( sf::Event &event )
 			y = event.mouseMove.y;
 			
 			if( one.checkCollision( x, y ) )
+			{
 				one.setAlpha( 0xFF );
+			}
 			else
+			{
 				one.setAlpha( 100 );
-				
+			}
+			
 			if( two.checkCollision( x, y ) )
+			{
 				two.setAlpha( 0xFF );
+			}
 			else
+			{
 				two.setAlpha( 100 );
-				
+			}
 		}
 		
 		else if( event.type == sf::Event::MouseButtonPressed )
@@ -109,29 +133,111 @@ void Character::handle( sf::Event &event )
 			
 			if( one.checkCollision( x, y ) )
 			{
-				result = 0;
 				ready = 2;
+				result = 0;
 				
 				if( play )
+				{
 					click.play();
+				}
 			}
 			else if( two.checkCollision( x, y ) )
 			{
-				result = 1;
 				ready = 2;
+				result = 1;
 				
 				if( play )
+				{
 					click.play();
+				}
 			}
 		}
 	}
 }
 
+
+
+void Character::fadein( int j, int max )
+{
+	int value = 100;
+	one.fadein( j, value );
+	two.fadein( j, value );
+	
+	if( ready == 0 )
+	{
+		if( one.getAlpha() == value )
+		{
+			ready = 1;
+		}
+	}
+	
+	text.fadein( j, max );
+	information.fadein( j, max );
+}
+
+void Character::fadeout( int j, int min )
+{
+	one.fadeout( j, min );
+	two.fadeout( j, min );
+	
+	text.fadeout( j, min );
+	information.fadeout( j, min );
+}
+
+
+
+int Character::getAlpha()
+{
+	return one.getAlpha();
+}
+
+bool Character::move( int vel, int scope )
+{
+	if( vel < 0 )
+	{
+		if( range > scope )
+		{
+			keep = true;
+		}
+	}
+	else if( vel > 0 )
+	{
+		if( range < scope )
+		{
+			keep = true;
+		}
+	}
+	
+	if( keep )
+	{
+		range += vel;
+		
+		text.setPosition( text.getX() +vel, text.getY() );
+		information.setPosition( information.getX() +vel, information.getY() );
+		one.setPosition( one.getX() +vel, one.getY() );
+		two.setPosition( two.getX() +vel, two.getY() );
+	}
+	else
+	{
+		range = scope;
+	}
+	
+	
+	if( range == scope )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 bool Character::nextState()
 {
 	if( ready == 2 )
+	{
 		return true;
-		
+	}
+	
 	return false;
 }
 	
@@ -147,64 +253,4 @@ int Character::getResult()
 	}
 	
 	return -1;
-}
-
-void Character::fadein( int j, int max )
-{
-	one.fadein( j, 100 );
-	two.fadein( j, 100 );
-	
-	if( ready == 0 && one.getAlpha() == 100 )
-		ready = 1;
-	
-	text.fadein( j, max );
-	information.fadein( j, max );
-}
-
-void Character::fadeout( int j, int min )
-{
-	one.fadeout( j, min );
-	two.fadeout( j, min );
-	
-	text.fadeout( j, min );
-	information.fadeout( j, min );
-}
-
-int Character::getAlpha()
-{
-	return one.getAlpha();
-}
-
-bool Character::move( int vel, int ran )
-{
-	static bool continue_;
-	continue_ = false;
-	
-	if( vel < 0 )
-	{
-		if( range > ran )
-			continue_ = true;
-	}
-	else if( vel > 0 )
-	{
-		if( range < ran )
-			continue_ = true;
-	}
-	
-	if( continue_ )
-	{
-		range += vel;
-		
-		text.setPosition( text.getX() +vel, text.getY() );
-		information.setPosition( information.getX() +vel, information.getY() );
-		one.setPosition( one.getX() +vel, one.getY() );
-		two.setPosition( two.getX() +vel, two.getY() );
-	}
-	else
-		range = ran;
-		
-	if( range == ran )
-		return true;
-		
-	return false;
 }
