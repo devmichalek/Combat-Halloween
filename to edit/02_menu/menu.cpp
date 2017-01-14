@@ -1,30 +1,52 @@
+/**
+    menu.h
+    Purpose: class Menu is a huge container with buttons in menu state.
+
+    @author Adrian Michalek
+    @version 2016.11.20
+	@email adrmic98@gmail.com
+*/
+
 #include "menu.h"
 
 Menu::Menu()
 {
+	state = 0;
+	
 	// Create menu objects
+	sound = new Sound;
+	
+	title = new Title;
+	
+	music_button = new Sound_button;
+	chunk_button = new Sound_button( false );
+	
+	music_volume = new Volume_button( 64 );	// 50% of 128, 128 is max value.
+	chunk_volume = new Volume_button( 52 );	// 40% of 128
+	
 	git_button = new Link_button( "https://github.com/Adriqun" );
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
-	twitter_button = new Link_button( "empty", true );
-	facebook_button = new Link_button( "empty", true );
-	background = new MySprite();	background->setName( "engine-background" );
+	twitter_button = new Link_button( "", true );
+	facebook_button = new Link_button( "", true );
+	
+	background = new MySprite();
+	background->setName( "menu-background" );
+	
 	play_button = new Play_button;
-	title = new Title;
-	music_button = new Music_button;
-	chunk_button = new Music_button( false );
+	
 	author_log = new Log;
 	game_log = new Log( true );
-	settings_log = new Log( false, false );
+	settings_log = new Log();
 	scores_log = new Log;
+	
 	exit = new Exit_log;
-	music = new Music; music->setID( "engine-music" );
-	music_volume = new Music_volume( 64 );
-	chunk_volume = new Music_volume( 51.2 );
-	keyboard = new Keyboard;
+	
+	music = new Music; music->setID( "menu-music" );
+	
 	version = new MyText;
-	setkeyboard = new Setkeyboard;
+	
 	information = new Information;
-	state = new State( 0, true, true, 0, 0 );
+	keyboard = new Keyboard;
 }
 
 Menu::~Menu()
@@ -34,150 +56,166 @@ Menu::~Menu()
 
 void Menu::free()
 {
+	delete sound;
+	delete title;
+	delete music_button;
+	delete chunk_button;
+	delete music_volume;
+	delete chunk_volume;
 	delete git_button;
 	delete google_button;
 	delete twitter_button;
 	delete facebook_button;
 	delete background;
 	delete play_button;
-	delete title;
-	delete music_button;
-	delete chunk_button;
 	delete author_log;
 	delete game_log;
 	delete settings_log;
 	delete scores_log;
 	delete exit;
 	delete music;
-	delete music_volume;
-	delete chunk_volume;
-	delete keyboard;
 	delete version;
-	delete setkeyboard;
 	delete information;
-	delete state;
+	delete keyboard;
 }
 
-	
-	
-void Menu::load( int screen_width, int screen_height )
+
+
+void Menu::load( int screen_w, int screen_h )
 {
-	git_button->load( "data/sprites/menu/git.png", screen_width );
-	google_button->load( "data/sprites/menu/google.png", screen_width, git_button->getBot() );
-	twitter_button->load( "data/sprites/menu/twitter.png", screen_width, google_button->getBot() );
-	facebook_button->load( "data/sprites/menu/facebook.png", screen_width, twitter_button->getBot() );
+	// title art
+	title->load( screen_w );
 	
-	background->load( "data/sprites/menu/background.png" );
-	
-	play_button->load( screen_width, 400 );
-	
-	title->load( screen_width );
-	
+	// sound buttons
 	music_button->load( "data/sprites/menu/music.png", 10 );
 	chunk_button->load( "data/sprites/menu/chunk.png", music_button->getBot() );
 	
-	author_log->load( "author", play_button->getX() +5, play_button->getBot() +10, screen_width );
-	game_log->load( "game", author_log->getRight(), play_button->getBot() +10, screen_width );
-	settings_log->load( "settings", game_log->getRight(), play_button->getBot() +10, screen_width );
-	scores_log->load( "scores", settings_log->getRight(), play_button->getBot() +10, screen_width );
-	
-	exit->load( screen_width, screen_height );
-	
-	music->load( "data/music/Rayman Legends OST - Moving Ground.mp3", 50 );
-	
-	music_volume->load( 100, screen_height/2 - 100, "Music" );
+	// volume buttons
+	music_volume->load( 100, screen_h/2 - 100, "Music" );
 	chunk_volume->load( 100, music_volume->getBot() + 25, "Sound" );
 	
-	keyboard->load( music_volume->getRight(), screen_height/2 - 100 );
+	// chunk volume
+	sound->setChunkPlay( true );
+	sound->setChunkVolume( chunk_volume->getVolume() );
 	
+	// music volume
+	sound->setMusicPlay( true );
+	sound->setMusicVolume( music_volume->getVolume() );
+	
+	// link buttons
+	git_button->load( "data/sprites/menu/git.png", screen_w );
+	google_button->load( "data/sprites/menu/google.png", screen_w, git_button->getBot() );
+	twitter_button->load( "data/sprites/menu/twitter.png", screen_w, google_button->getBot() );
+	facebook_button->load( "data/sprites/menu/facebook.png", screen_w, twitter_button->getBot() );
+	
+	// bg
+	background->load( "data/sprites/menu/background.png" );
+	
+	// button to start game
+	play_button->load( screen_w, 400 );
+	
+	// logs
+	author_log->load( "author", play_button->getX() +5, play_button->getBot() );
+	game_log->load( "game", author_log->getRight(), play_button->getBot() );
+	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
+	scores_log->load( "scores", settings_log->getRight(), play_button->getBot() );
+	
+	// exit log
+	exit->load( screen_w, screen_h );
+	
+	// music for menu
+	music->load( "data/music/Rayman Legends OST - Moving Ground.mp3", 50 );
+	
+	// simple text on the right
 	version->setName( "menu-version-text" );
 	version->setFont( "data/fonts/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 07.01.2017" );
-	version->setPosition( screen_width - version->getWidth() - 3, screen_height - version->getHeight() -7 );
+	version->setText( "latest edition 14.01.2017" );
+	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	
-	setkeyboard->load( 100, music_volume->getRight(), screen_height/2 + 100 );
-	setkeyboard->loadButton( screen_width, screen_height );
-	information->load( screen_height );
+	// information (keyboard) and keyboard
+	information->load( music_volume->getRight(), screen_h/2 - 100, screen_h );
+	keyboard->load( 100, music_volume->getRight(), screen_h/2 + 100, screen_w, screen_h );
+	
 	
 	//Set start volume
-	git_button->setVolume( chunk_volume->getVolume() );
-	google_button->setVolume( chunk_volume->getVolume() );
 	music_button->setVolume( chunk_volume->getVolume() );
 	chunk_button->setVolume( chunk_volume->getVolume() );
+	music_volume->setVolume( chunk_volume->getVolume() );
+	chunk_volume->setVolume( chunk_volume->getVolume() );
+	git_button->setVolume( chunk_volume->getVolume() );
+	google_button->setVolume( chunk_volume->getVolume() );
 	play_button->setVolume( chunk_volume->getVolume() );
 	author_log->setVolume( chunk_volume->getVolume() );
 	scores_log->setVolume( chunk_volume->getVolume() );
 	settings_log->setVolume( chunk_volume->getVolume() );
 	exit->setVolume( chunk_volume->getVolume() );
-	music_volume->setVolume( chunk_volume->getVolume() );
-	chunk_volume->setVolume( chunk_volume->getVolume() );
-	setkeyboard->setVolume( chunk_volume->getVolume() );
-	
-	state->cVolume = chunk_volume->getVolume();
-	state->mVolume = music_volume->getVolume();
+	keyboard->setVolume( chunk_volume->getVolume() );
 }
-
 
 void Menu::handle( sf::Event &event )
 {
 	if( play_button->getState() != 2 ) // if user didn't click play
+	{
+		exit->handle( event );
+		if( exit->getState() == 0 ) // if user didn't click quit
 		{
-			exit->handle( event );
-			if( exit->getState() == 0 ) // if user didn't click quit
+			if( !author_log->getState() && !scores_log->getState() && !settings_log->getState() ) // if user didn't click logs
 			{
-				if( author_log->getState() != 2 && scores_log->getState() != 2 && settings_log->getState() != 2 ) // if user didn't click logs
-				{
-					git_button->handle( event );
-					google_button->handle( event );
-					twitter_button->handle( event );
-					facebook_button->handle( event );
-					play_button->handle( event );
-					music_button->handle( event );
-					chunk_button->handle( event );
-				}
-					
-				if( author_log->getState() != 2 && settings_log->getState() != 2 )
-					scores_log->handle( event );
-				if( scores_log->getState() != 2 && settings_log->getState() != 2  )	
-					author_log->handle( event );
-				if( scores_log->getState() != 2 && author_log->getState() != 2  )	
-					settings_log->handle( event );
-					
-				if( settings_log->getState() == 2 )
-				{
-					music_volume->handle( event );
-					chunk_volume->handle( event );
-					setkeyboard->handle( event );
-				}
+				git_button->handle( event );
+				google_button->handle( event );
+				twitter_button->handle( event );
+				facebook_button->handle( event );
+				play_button->handle( event );
+				music_button->handle( event );
+				chunk_button->handle( event );
+			}
+				
+			if( !author_log->getState() && !settings_log->getState() )
+			{
+				scores_log->handle( event );
+			}
+			if( !scores_log->getState() && !settings_log->getState()  )
+			{
+				author_log->handle( event );
+			}
+			if( !scores_log->getState() && !author_log->getState()  )
+			{
+				settings_log->handle( event );
+			}
+				
+				
+			if( settings_log->getState() )
+			{
+				music_volume->handle( event );
+				chunk_volume->handle( event );
+				keyboard->handle( event );
 			}
 		}
+	}
 }
 
-	
-	
 void Menu::draw( sf::RenderWindow* &window )
 {
-	if( state->mSwitch )
+	// Play music if true
+	if( sound->getMusicPlay() )
 	{
 		music->play();
 	}
 		
-		
-		
-		
 	// Turn off/on music
-	if( music_button->change() )
+	if( music_button->isChanged() )
 	{
 		music->pause();
-		state->mSwitch = !state->mSwitch;
+		sound->setMusicPlay( !sound->getMusicPlay() );
 	}
+	
 	// Turn off/on chunks
-	if( chunk_button->change() )
+	if( chunk_button->isChanged() )
 	{
-		git_button->turn();
-		google_button->turn();
 		music_button->turn();
 		chunk_button->turn();
+		git_button->turn();
+		google_button->turn();
 		play_button->turn();
 		author_log->turn();
 		scores_log->turn();
@@ -185,24 +223,24 @@ void Menu::draw( sf::RenderWindow* &window )
 		exit->turn();
 		music_volume->turn();
 		chunk_volume->turn();
-		setkeyboard->turn(); 
-		state->cSwitch = !state->cSwitch;
+		keyboard->turn(); 
+		sound->setChunkPlay( !sound->getChunkPlay() );
 	}
 	
 	// Set music volume
-	if( music_volume->changeVolume() )
+	if( music_volume->isChanged() )
 	{
 		music->setVolume( music_volume->getVolume() );
-		state->mVolume = music_volume->getVolume();
+		sound->setMusicVolume( music_volume->getVolume() );
 	}
 	
 	// Set chunk volume
-	if( chunk_volume->changeVolume() )
+	if( chunk_volume->isChanged() )
 	{
-		git_button->setVolume( chunk_volume->getVolume() );
-		google_button->setVolume( chunk_volume->getVolume() );
 		music_button->setVolume( chunk_volume->getVolume() );
 		chunk_button->setVolume( chunk_volume->getVolume() );
+		git_button->setVolume( chunk_volume->getVolume() );
+		google_button->setVolume( chunk_volume->getVolume() );
 		play_button->setVolume( chunk_volume->getVolume() );
 		author_log->setVolume( chunk_volume->getVolume() );
 		scores_log->setVolume( chunk_volume->getVolume() );
@@ -210,8 +248,8 @@ void Menu::draw( sf::RenderWindow* &window )
 		exit->setVolume( chunk_volume->getVolume() );
 		music_volume->setVolume( chunk_volume->getVolume() );
 		chunk_volume->setVolume( chunk_volume->getVolume() );
-		state->cVolume = chunk_volume->getVolume();
-		setkeyboard->setVolume( chunk_volume->getVolume() );
+		keyboard->setVolume( chunk_volume->getVolume() );
+		sound->setChunkVolume( chunk_volume->getVolume() );
 	}
 	
 	
@@ -221,98 +259,99 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( play_button->getState() != 2 && exit->getState() == 0 )// if user didn't click play
 	{
 		music->fadein( 1, music_volume->getVolume() );
-		background->fadein( 2 );
-		git_button->fadein( 2 );
-		google_button->fadein( 2 );
-		twitter_button->fadein( 2 );
-		facebook_button->fadein( 2 );
-		play_button->fadein( 2 );
-		title->fadein( 2 );
-		music_button->fadein( 2 );
-		chunk_button->fadein( 2 );
-		author_log->fadein( 2 );
-		game_log->fadein( 2 );
-		settings_log->fadein( 2 );
-		music_volume->fadein( 2 );
-		chunk_volume->fadein( 2 );
-		scores_log->fadein( 2 );
-		keyboard->fadein( 2 );
-		version->fadein( 2 );
-		setkeyboard->fadein( 2 );
-		information->fadein( 2 );
+		sf::Uint8 value = 2;
+		background->fadein( value );
+		git_button->fadein( value );
+		google_button->fadein( value );
+		twitter_button->fadein( value );
+		facebook_button->fadein( value );
+		play_button->fadein( value );
+		title->fadein( value );
+		music_button->fadein( value );
+		chunk_button->fadein( value );
+		author_log->fadein( value );
+		game_log->fadein( value );
+		settings_log->fadein( value );
+		music_volume->fadein( value );
+		chunk_volume->fadein( value );
+		scores_log->fadein( value );
+		version->fadein( value );
+		keyboard->fadein( value );
+		information->fadein( value );
 	}
+	
 	// Fade out:
 	else if( play_button->getState() == 2 ) // if user clicked play
 	{
 		music->fadeout( 1 );
-		background->fadeout( 3 );
-		git_button->fadeout( 3 );
-		google_button->fadeout( 3 );
-		twitter_button->fadeout( 3 );
-		facebook_button->fadeout( 3 );
-		play_button->fadeout( 3 );
-		title->fadeout( 3 );
-		music_button->fadeout( 3 );
-		chunk_button->fadeout( 3 );
-		author_log->fadeout( 3 );
-		game_log->fadeout( 3 );
-		settings_log->fadeout( 3 );
-		music_volume->fadeout( 3 );
-		chunk_volume->fadeout( 3 );
-		scores_log->fadeout( 3 );
-		keyboard->fadeout( 3 );
-		version->fadeout( 3 );
-		setkeyboard->fadeout( 3 );
-		information->fadeout( 3 );
+		sf::Uint8 value = 3;
+		background->fadeout( value );
+		git_button->fadeout( value );
+		google_button->fadeout( value );
+		twitter_button->fadeout( value );
+		facebook_button->fadeout( value );
+		play_button->fadeout( value );
+		title->fadeout( value );
+		music_button->fadeout( value );
+		chunk_button->fadeout( value );
+		author_log->fadeout( value );
+		game_log->fadeout( value );
+		settings_log->fadeout( value );
+		music_volume->fadeout( value );
+		chunk_volume->fadeout( value );
+		scores_log->fadeout( value );
+		version->fadeout( value );
+		keyboard->fadeout( value );
+		information->fadeout( value );
 	}
 	else if( exit->getState() == 1 ) // if user clicked exit
 	{
 		music->fadeout( 3, 20 );
-		background->fadeout( 2, 170 );
-		git_button->fadeout( 2, 170 );
-		google_button->fadeout( 2, 170 );
-		twitter_button->fadeout( 2, 170 );
-		facebook_button->fadeout( 2, 170 );
-		play_button->fadeout( 2, 170 );
-		title->fadeout( 2, 170 );
-		music_button->fadeout( 2, 170 );
-		chunk_button->fadeout( 2, 170 );
-		author_log->fadeout( 2, 170 );
-		game_log->fadeout( 2, 170 );
-		settings_log->fadeout( 2, 170 );
-		music_volume->fadeout( 2, 170 );
-		chunk_volume->fadeout( 2, 170 );
-		scores_log->fadeout( 2, 170 );
-		keyboard->fadeout( 2, 170 );
-		version->fadeout( 2, 170 );
-		setkeyboard->fadeout( 2, 170 );
-		information->fadeout( 2, 170 );
+		int value = 2, alpha = 170;
+		background->fadeout( value, alpha );
+		git_button->fadeout( value, alpha );
+		google_button->fadeout( value, alpha );
+		twitter_button->fadeout( value, alpha );
+		facebook_button->fadeout( value, alpha );
+		play_button->fadeout( value, alpha );
+		title->fadeout( value, alpha );
+		music_button->fadeout( value, alpha );
+		chunk_button->fadeout( value, alpha );
+		author_log->fadeout( value, alpha );
+		game_log->fadeout( value, alpha );
+		settings_log->fadeout( value, alpha );
+		music_volume->fadeout( value, alpha );
+		chunk_volume->fadeout( value, alpha );
+		scores_log->fadeout( value, alpha );
+		version->fadeout( value, alpha );
+		keyboard->fadeout( value, alpha );
+		information->fadeout( value, alpha );
 	}
 	else
 	{
-		music->fadeout( 3 );
-		background->fadeout( 3 );
-		git_button->fadeout( 3 );
-		google_button->fadeout( 3 );
-		twitter_button->fadeout( 3 );
-		facebook_button->fadeout( 3 );
-		play_button->fadeout( 3 );
-		title->fadeout( 3 );
-		music_button->fadeout( 3 );
-		chunk_button->fadeout( 3 );
-		author_log->fadeout( 3 );
-		game_log->fadeout( 3 );
-		settings_log->fadeout( 3 );
-		music_volume->fadeout( 3 );
-		chunk_volume->fadeout( 3 );
-		scores_log->fadeout( 3 );
-		keyboard->fadeout( 3 );
-		version->fadeout( 3 );
-		setkeyboard->fadeout( 3 );
-		information->fadeout( 3 );
+		int value = 3;
+		music->fadeout( value );
+		background->fadeout( value );
+		git_button->fadeout( value );
+		google_button->fadeout( value );
+		twitter_button->fadeout( value );
+		facebook_button->fadeout( value );
+		play_button->fadeout( value );
+		title->fadeout( value );
+		music_button->fadeout( value );
+		chunk_button->fadeout( value );
+		author_log->fadeout( value );
+		game_log->fadeout( value );
+		settings_log->fadeout( value );
+		music_volume->fadeout( value );
+		chunk_volume->fadeout( value );
+		scores_log->fadeout( value );
+		version->fadeout( value );
+		keyboard->fadeout( value );
+		information->fadeout( value );
 		if( background->getAlpha() == 0 )
 		{
-			state->state = 1;
+			state = 1;
 		}
 	}
 	
@@ -321,11 +360,11 @@ void Menu::draw( sf::RenderWindow* &window )
 
 	
 	// Next state
-	if( play_button->nextGameState() )
+	if( play_button->nextState() )
 	{
 		music->halt();
 		play_button->setState( 0 );
-		state->state = 2;
+		state = 2;
 	}
 		
 	
@@ -337,7 +376,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	title->draw( *window );
 	window->draw( version->get() );
 	
-	if( author_log->getState() != 2 && scores_log->getState() != 2 && settings_log->getState() != 2 ) // if user didn't click logs
+	if( !author_log->getState() && !scores_log->getState() && !settings_log->getState() ) // if user didn't click logs
 	{
 		git_button->draw( *window );
 		google_button->draw( *window );
@@ -349,30 +388,40 @@ void Menu::draw( sf::RenderWindow* &window )
 		game_log->draw( window );
 	}
 	
-	if( author_log->getState() != 2 && settings_log->getState() != 2 )
+	if( !author_log->getState() && !settings_log->getState() )
+	{
 		scores_log->draw( window );
-	if( scores_log->getState() != 2 && settings_log->getState() != 2 )
+	}
+	if( !scores_log->getState() && !settings_log->getState() )
+	{
 		author_log->draw( window );
-	if( scores_log->getState() != 2 && author_log->getState() != 2 )
+	}
+	if( !scores_log->getState() && !author_log->getState() )
+	{
 		settings_log->draw( window );
+	}
+		
 			
-	if( settings_log->getState() == 2 )
+	if( settings_log->getState() )
 	{
 		music_volume->draw( window );
 		chunk_volume->draw( window );
 		keyboard->draw( *window );
-		setkeyboard->draw( *window );
 		information->draw( *window );
 	}
 			
 		
 	if( exit->getState() < 2 )
+	{
 		exit->draw( window );
+	}
 }
+
+
 
 bool Menu::isQuit()
 {
-	if( state->state == 1 )
+	if( state == 1 )
 	{
 		return true;
 	}
@@ -382,18 +431,23 @@ bool Menu::isQuit()
 
 bool Menu::nextState()
 {
-	if( state->state == 2 )
+	if( state == 2 )
 	{
-		state->state = 0;
+		state = 0;
 		return true;
 	}
 	
 	return false;
 }
 
-State* Menu::getState()
+int Menu::getState()
 {
 	return state;
+}
+
+Sound* Menu::getSound()
+{
+	return sound;
 }
 
 void Menu::reloadMusic()

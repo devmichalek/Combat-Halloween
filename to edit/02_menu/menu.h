@@ -1,43 +1,64 @@
+/**
+    menu.h
+    Purpose: class Menu is a huge container with buttons in menu state.
+
+    @author Adrian Michalek
+    @version 2016.11.20
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "menu/link_button.h"
-#include "menu/play_button.h"
-#include "menu/title.h"
-#include "menu/music_button.h"
-#include "menu/log.h"
-#include "menu/exit_log.h"
-#include "menu/music_volume.h"
-#include "menu/keyboard.h"
-#include "templates/music.h"
-#include "menu/setkeyboard.h"
-#include "menu/information.h"
-#include "templates/state.h"
+#include "sound/sound.h"
+#include "title.h"
+#include "sound_button.h"
+#include "volume_button.h"
+#include "link_button.h"
+#include "play_button.h"
+#include "log.h"
+#include "exit_log.h"
+#include "sound/music.h"
+#include "information.h"
+#include "keyboard.h"
+
 
 class Menu
 {
+	int state;
+	
 	// Menu objects
+	Sound* sound;
+	
+	Title* title;
+	
+	Sound_button* music_button;
+	Sound_button* chunk_button;
+	
+	Volume_button* music_volume;
+	Volume_button* chunk_volume;
+	
 	Link_button* git_button;
 	Link_button* google_button;
 	Link_button* twitter_button;
 	Link_button* facebook_button;
+	
 	MySprite* background;
+	
 	Play_button* play_button;
-	Title* title;
-	Music_button* music_button;
-	Music_button* chunk_button;
+	
 	Log* author_log;
 	Log* game_log;
 	Log* settings_log;
 	Log* scores_log;
+	
 	Exit_log* exit;
+	
 	Music* music;
-	Music_volume* music_volume;
-	Music_volume* chunk_volume;
-	Keyboard* keyboard;
+	
 	MyText* version;
-	Setkeyboard* setkeyboard;
+	
 	Information* information;
-	State* state;
+	Keyboard* keyboard;
 	
 public:
 	
@@ -45,16 +66,16 @@ public:
     ~Menu();
     void free();
 	
-    void load( int screen_width, int screen_height );
-
+    void load( int screen_w, int screen_h );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
 	bool isQuit();
 	bool nextState();
 	
-	State* getState();
-	void set( State* state );
+	int getState();
+	Sound* getSound();
+	void set( int state, Sound* sound );
 	
 	void reloadMusic();
 };
