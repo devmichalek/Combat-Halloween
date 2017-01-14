@@ -1,13 +1,22 @@
+/**
+    intro.h
+    Purpose: class Intro - to show slides.
+
+    @author Adrian Michalek
+    @version 2016.10.12
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "templates/sprite.h"
-#include "templates/text.h"
+#include "drawable/sprite.h"
+#include "drawable/text.h"
 
 class Intro
 {
 	MySprite bg;		// background
 	MySprite shuriken;	// shuriken image
-	MyText* text;	// some sentences
+	MyText* text;		// some sentences
 	
 	sf::Uint8 nr;		// how many text objects
 	bool quit;
