@@ -1,15 +1,18 @@
 #pragma once
 
-#include "templates/music.h"
-#include "level/backtomenu.h"
-#include "level/choice.h"
-#include "templates/state.h"
-#include "level/character.h"
-#include "level/worldsize.h"
+#include "sound/music.h"
+#include "backtomenu.h"
+#include "choice.h"
+#include "character.h"
+#include "worldsize.h"
+#include "sound/sound.h"
 
 class Level_menu
 {
-	State* state;
+	int state;
+	
+	// level menu objects
+	Sound* sound;
 	MySprite* background;
 	Music* music;
 	Backtomenu* backtomenu;
@@ -24,20 +27,21 @@ public:
     void free();
 	
     void load( int screen_w, int screen_h );
-
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	State* getState();
-	void set( State* state );
 	
+	int getState();
+	Sound* getSound();
+	void set( int state, Sound* sound );
 	bool isQuit();
 	bool nextState();
 	bool backToMenu();
-	
 	void reloadMusic();
+	
 	
 	int getMap();
 	int getCharacter();
 	int getWorldsize();
+	int getVegetationsize();
 };

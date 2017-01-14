@@ -1,8 +1,11 @@
-#include "level/levelmenu.h"
+#include "levelmenu.h"
 
 Level_menu::Level_menu()
 {
-	state = new State;
+	state = 0;
+	
+	// Create level menu objects
+	sound = new Sound;
 	background = new MySprite;
 	music = new Music;
 	backtomenu = new Backtomenu( "", false );
@@ -18,6 +21,7 @@ Level_menu::~Level_menu()
 
 void Level_menu::free()
 {
+	delete sound;
 	delete background;
 	delete music;
 	delete backtomenu;
@@ -26,43 +30,34 @@ void Level_menu::free()
 	delete worldsize;
 }
 
-State* Level_menu::getState()
+
+
+int Level_menu::getState()
 {
 	return state;
 }
 
-void Level_menu::set( State* state )
+void Level_menu::set( int state, Sound* sound )
 {
-	this->state = state;
-	state->state = 0;
+	state = 0;
+	this->sound = sound;
 	
 	// Set chunks
-	if( !state->cSwitch )
+	if( sound->getChunkPlay() != backtomenu->isPlayable() )
 	{
-		if( backtomenu->isPlayable() )
-		{
-			backtomenu->turn();
-			choice->turn();
-			worldsize->turn();
-		}
-	}
-	else
-	{
-		if( !backtomenu->isPlayable() )
-		{
-			backtomenu->turn();
-			choice->turn();
-			worldsize->turn();
-		}
+		backtomenu->turn();
+		choice->turn();
+		worldsize->turn();
 	}
 	
 	// Set music volume
-	music->setVolume( state->mVolume );
+	music->setVolume( sound->getMusicVolume() );
 	
 	// Set chunk volume
-	backtomenu->setVolume( state->cVolume );
-	choice->setVolume( state->cVolume );
-	worldsize->setVolume( state->cVolume );
+	backtomenu->setVolume( sound->getChunkVolume() );
+	choice->setVolume( sound->getChunkVolume() );
+	character->setVolume( sound->getChunkVolume() );
+	worldsize->setVolume( sound->getChunkVolume() );
 }
 	
 void Level_menu::load( int screen_w, int screen_h )
@@ -96,17 +91,25 @@ void Level_menu::handle( sf::Event &event )
 
 void Level_menu::draw( sf::RenderWindow* &window )
 {
-	if( state->mSwitch && state->state == 0 )
+	if( sound->getMusicPlay() && state == 0 )
+	{
 		music->play();
+	}
+		
 	
 	if( backtomenu->getState() == 0 )
-	if( choice->isChosen() )
 	{
-		character->move( -20, 0 );
-		worldsize->move( -20, -1000 );
-		if( choice->move( -20, -1000 ) )
-			backtomenu->setState( 1 );
+		if( choice->isChosen() )
+		{
+			character->move( -20, 0 );
+			worldsize->move( -20, -1000 );
+			if( choice->move( -20, -1000 ) )
+			{
+				backtomenu->setState( 1 );
+			}
+		}
 	}
+	
 	
 	window->draw( background->get() );
 	backtomenu->draw( *window );
@@ -116,28 +119,28 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	
 	if( backtomenu->getState() == 0 )
 	{
-		background->fadein( 3, 255 );
-		music->fadein( 1, state->mVolume );
-		backtomenu->fadein( 3, 255 );
-		choice->fadein( 3, 255 );
-		worldsize->fadein( 3, 255 );
-		character->fadein( 3, 255 );
+		music->fadein( 1, sound->getMusicVolume() );
+		
+		background->fadein( 3 );
+		backtomenu->fadein( 3 );
+		choice->fadein( 3 );
+		character->fadein( 3 );
+		worldsize->fadein( 3 );
 	}
-	
 	else if( backtomenu->getState() == -1 )
 	{
 		background->fadeout( 3 );
 		music->fadeout( 3 );
-		backtomenu->fadeout( 3, 0 );
-		choice->fadeout( 3, 0 );
-		worldsize->fadeout( 3, 0 );
-		character->fadeout( 3, 0 );
+		backtomenu->fadeout( 3 );
+		choice->fadeout( 3 );
+		character->fadeout( 3 );
+		worldsize->fadeout( 3 );
 		
 		if( choice->getAlpha() == 0 )
 		{
 			music->halt();
 			backtomenu->setState( 0 );
-			state->state = 2;
+			state = 2;
 		}
 	}
 	
@@ -145,18 +148,19 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	{
 		if( character->nextState() )
 		{
-			background->fadeout( 3 );
 			music->fadeout( 3 );
-			backtomenu->fadeout( 3, 0 );
-			choice->fadeout( 3, 0 );
-			worldsize->fadeout( 3, 0 );
-			character->fadeout( 3, 0 );
+			
+			background->fadeout( 3 );
+			backtomenu->fadeout( 3 );
+			choice->fadeout( 3 );
+			character->fadeout( 3 );
+			worldsize->fadeout( 3 );
 			
 			if( choice->getAlpha() == 0 )
 			{
 				music->halt();
 				backtomenu->setState( 0 );
-				state->state = 1;
+				state = 1;
 			}
 		}
 	}
@@ -176,7 +180,7 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	
 bool Level_menu::isQuit()
 {
-	if( state->state == 3 )
+	if( state == 3 )
 	{
 		return true;
 	}
@@ -186,7 +190,7 @@ bool Level_menu::isQuit()
 
 bool Level_menu::nextState()
 {
-	if( state->state == 1 )
+	if( state == 1 )
 	{
 		return true;
 	}
@@ -196,9 +200,9 @@ bool Level_menu::nextState()
 
 bool Level_menu::backToMenu()
 {
-	if( state->state == 2 )
+	if( state == 2 )
 	{
-		state->state = 0;
+		state = 0;
 		backtomenu->setState( 0 );
 		worldsize->reset();
 		return true;
@@ -226,4 +230,9 @@ int Level_menu::getCharacter()
 int Level_menu::getWorldsize()
 {
 	return worldsize->getResult();
+}
+
+int Level_menu::getVegetationsize()
+{
+	
 }
