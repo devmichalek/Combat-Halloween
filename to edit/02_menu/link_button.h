@@ -1,7 +1,16 @@
+/**
+    link_button.h
+    Purpose: class Link_button - for buttons, after click open website with special url.
+
+    @author Adrian Michalek
+    @version 2016.10.16
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "templates/sprite.h"
-#include "menu/click.h"
+#include "drawable/sprite.h"
+#include "click.h"
 
 class Link_button :public Click
 {
@@ -9,7 +18,7 @@ class Link_button :public Click
 	
 protected:
 	
-	bool locked;
+	bool locked;	// if true then we can not click on the button
     MySprite button;
 
 public:
@@ -21,8 +30,8 @@ public:
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
 	
-	int getBot();	// getter
-	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
+	
+	int getBot();	// getter
 };
