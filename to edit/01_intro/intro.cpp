@@ -1,3 +1,12 @@
+/**
+    intro.h
+    Purpose: class Intro - to show slides.
+
+    @author Adrian Michalek
+    @version 2016.10.12
+	@email adrmic98@gmail.com
+*/
+
 #include "intro.h"
 
 Intro::Intro()
