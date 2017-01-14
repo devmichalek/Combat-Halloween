@@ -1,5 +1,13 @@
+/**
+    play_button.h
+    Purpose: class Play_button - for button 'play' to start game, contain state.
+
+    @author Adrian Michalek
+    @version 2016.10.03
+	@email adrmic98@gmail.com
+*/
+
 #include "play_button.h"
-#include <stdlib.h>
 
 Play_button::Play_button()
 {
@@ -9,13 +17,16 @@ Play_button::Play_button()
 
 Play_button::~Play_button()
 {
+	state = 0;
+	
 	mySprite.free();
 	myText.free();
 	
-	state = 0;
 	play = true;
 	click.free();
 }
+
+
 
 void Play_button::load( int screen_w, int bot )
 {
@@ -40,39 +51,68 @@ void Play_button::draw( sf::RenderWindow* &window )
 
 void Play_button::handle( sf::Event &event )
 {
-	if( state != 2 && mySprite.getAlpha() == 255 )
+	if( state != 2 )
 	{
-		int x, y;
-		mySprite.setOffset( 0 );
-		
-		if( event.type == sf::Event::MouseMoved )
+		if( mySprite.getAlpha() == 0xFF )
 		{
-			x = event.mouseMove.x;
-			y = event.mouseMove.y;
-				
-			if( mySprite.checkCollision( x, y ) && state != 2 )
+			int x, y;
+			mySprite.setOffset( 0 );
+			
+			if( event.type == sf::Event::MouseMoved )
 			{
-				mySprite.setOffset( 1 );
-				state = 1;
+				x = event.mouseMove.x;
+				y = event.mouseMove.y;
+					
+				if( mySprite.checkCollision( x, y ) )
+				{
+					if( state != 2 )
+					{
+						state = 1;
+						mySprite.setOffset( 1 );
+					}
+				}
 			}
-		}
 
-		if( event.type == sf::Event::MouseButtonPressed )
-		{
-			x = event.mouseButton.x;
-			y = event.mouseButton.y;
-				
-			if( mySprite.checkCollision( x, y ) )
+			if( event.type == sf::Event::MouseButtonPressed )
 			{
-				mySprite.setOffset( 2 );
-				
-				if( play )
-					click.play();
-				
-				state = 2;
+				x = event.mouseButton.x;
+				y = event.mouseButton.y;
+					
+				if( mySprite.checkCollision( x, y ) )
+				{
+					state = 2;
+					mySprite.setOffset( 2 );
+					
+					if( play )
+					{
+						click.play();
+					}
+				}
 			}
 		}
 	}
+}
+
+
+
+void Play_button::fadein( int i, int max )
+{
+	mySprite.fadein( i, max );
+	myText.fadein( i, max );
+}
+
+void Play_button::fadeout( int i, int min )
+{
+	mySprite.fadeout( i, min );
+	myText.fadeout( i, min );
+}
+
+
+
+void Play_button::setState( int state )
+{
+	mySprite.setOffset( 0 );
+	this->state = state;
 }
 
 const int Play_button::getBot() const
@@ -90,28 +130,12 @@ const sf::Uint8& Play_button::getState() const
 	return state;
 }
 
-bool Play_button::nextGameState() const
+bool Play_button::nextState() const
 {
 	if( state == 2 && mySprite.getAlpha() == 0 )
+	{
 		return true;
+	}
 	
 	return false;
-}
-
-void Play_button::fadein( int i, int max )
-{
-	mySprite.fadein( i, max );
-	myText.fadein( i, max );
-}
-
-void Play_button::fadeout( int i, int min )
-{
-	mySprite.fadeout( i, min );
-	myText.fadeout( i, min );
-}
-
-void Play_button::setState( const  int s )
-{
-	mySprite.setOffset( 0 );
-	state = s;
 }
