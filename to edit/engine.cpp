@@ -165,7 +165,7 @@ void Engine::states()
 		else if( menu->nextState() )
 		{
 			core->getState() = 1;
-			level_menu->set( menu->getState() );
+			level_menu->set( menu->getState(), menu->getSound() );
 			
 			menu->reloadMusic();
 			Mix_HaltMusic();

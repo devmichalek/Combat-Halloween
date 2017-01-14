@@ -1,15 +1,14 @@
 #pragma once
 
 #include "core.h"
-#include "loading/loading.h"
-#include "intro/intro.h"
-#include "menu/menu.h"
-#include "level/levelmenu.h"
-
-#include "wood/play_wood.h"
-#include "halloween/play_halloween.h"
-#include "desert/play_desert.h"
-#include "winter/play_winter.h"
+#include "00_loading/loading.h"
+#include "01_intro/intro.h"
+#include "02_menu/menu.h"
+#include "03_level/levelmenu.h"
+#include "04_platform/wood/play_wood.h"
+#include "04_platform/halloween/play_halloween.h"
+#include "04_platform/desert/play_desert.h"
+#include "04_platform/winter/play_winter.h"
 
 class Engine
 {
