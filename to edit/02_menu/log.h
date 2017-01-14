@@ -1,36 +1,36 @@
+/**
+    log.h
+    Purpose: class Log - for simple buttons, after click you have clear window to show own stuff.
+
+    @author Adrian Michalek
+    @version 2016.10.07
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "templates/sprite.h"
-#include "templates/text.h"
-#include "menu/click.h"
+#include "click.h"
+#include "drawable/text.h"
+#include "drawable/sprite.h"
 
 class Log :public Click
 {
-	int state;
-	MySprite button;
-	MySprite log;
-	
-	sf::Uint8 nr;	// how many text textures
-	MyText* myText;
-	
-	// if that log is not ready
+	bool state;
 	bool locked;
-	
-	// if we don't want to render window texture
-	bool win;
+	MySprite button;
 	
 public:
 	
-	Log( bool locked = false, bool win = true );
+	Log( bool locked = false );
     ~Log();
 
-    void load( string path, int left, int y, int screen_w );
+    void load( string path, int left, int y );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
-	int getRight();
-	const int& getState() const;
-	
-	void fadein( int i = 1, int max = 255 );
+	void fadein( int i = 1, int max = 0xFF );
 	void fadeout( int i = 1, int min = 0 );
+	
+	int getRight();
+	const bool& getState();
 };
