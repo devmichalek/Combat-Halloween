@@ -1,8 +1,17 @@
+/**
+    play_button.h
+    Purpose: class Play_button - for button 'play' to start game, contain state.
+
+    @author Adrian Michalek
+    @version 2016.10.03
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "templates/sprite.h"
-#include "templates/text.h"
-#include "menu/click.h"
+#include "drawable/sprite.h"
+#include "drawable/text.h"
+#include "click.h"
 
 class Play_button :public Click
 {
@@ -22,13 +31,16 @@ public:
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
-	const int getBot() const;
-	const int getX() const;
-	const sf::Uint8& getState() const;
-	bool nextGameState() const;
-	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
 	
-	void setState( const int s );	// mutator
+	// mutator
+	void setState( int state );	
+	
+	// getters
+	const int getBot() const;
+	const int getX() const;
+	const sf::Uint8& getState() const;
+	
+	bool nextState() const;
 };
