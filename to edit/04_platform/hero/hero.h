@@ -130,9 +130,6 @@ public:
 	float getJump_vel();
 	void setScope( bool scope );
 	
-	void isLastStand( sf::Uint8 block_w, int screen_h );	// set last position where hero stand on the grass block
-	bool checkY( int screen_h );	// if y is higher than screen_h then equils -1 heart
-	
 	const int getX();
 	const int getY();
 	const int getW();
