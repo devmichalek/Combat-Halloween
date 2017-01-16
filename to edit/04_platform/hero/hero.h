@@ -71,11 +71,8 @@ class Hero
 	
 	bool scope;
 	
-	int deathY;
-	int deathX;
-	bool dead;
-	int deadCounter;
-	int deadLine;
+	int fallenCounter;
+	int fallenLine;
 	
 public:
 

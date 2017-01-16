@@ -41,8 +41,6 @@ bool Hero::moving()
 			{
 				sprite[ i ].setPosition( sprite[ i ].getX() -vel, sprite[ i ].getY() );
 			}
-			
-			deathX -= vel;
 		}
 		
 		
@@ -73,8 +71,6 @@ bool Hero::moving()
 			{
 				sprite[ i ].setPosition( sprite[ i ].getX() +vel, sprite[ i ].getY() );
 			}
-			
-			deathX += vel;
 		}
 		
 		move = true;

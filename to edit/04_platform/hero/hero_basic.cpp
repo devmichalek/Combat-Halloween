@@ -31,12 +31,9 @@ Hero::Hero()
 	hit_counter = 0;
 	
 	scope = false;
-	
-	deathY = 0;
-	deathX = 0;
-	dead = false;
-	deadCounter = 0;
-	deadLine = 0;
+
+	fallenCounter = 0;
+	fallenLine = 0;
 }
 
 Hero::~Hero()
@@ -102,11 +99,8 @@ void Hero::free()
 	
 	scope = false;
 	
-	deathY = 0;
-	deathX = 0;
-	dead = false;
-	deadCounter = 0;
-	deadLine = 0;
+	fallenCounter = 0;
+	fallenLine = 0;
 }
 
 
@@ -207,6 +201,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +11, sprite[ IDLE ].getY() -1 );
 	
 	hit_line = 15;
+	fallenLine = 540;
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -248,6 +243,38 @@ void Hero::draw( sf::RenderWindow* &window )
 		else
 			jumpBox.setPosition( sprite[ JUMP_ATTACK ].getX() -sprite[ JUMP_ATTACK ].getWidth(), sprite[ JUMP_ATTACK ].getY() );
 		window->draw( jumpBox.get() );
+	}
+	
+	if( fallenCounter > 0 )
+	{
+		fallenCounter ++;
+		
+		if( fallenCounter%60 == 0 )
+		{
+			if( sprite[ IDLE ].getAlpha() == 100 )
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setAlpha( 0xFF );
+				}
+			}
+			else
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setAlpha( 100 );
+				}
+			}
+		}
+	}
+	
+	if( fallenCounter == fallenLine )
+	{
+		fallenCounter = 0;
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setAlpha( 0xFF );
+		}
 	}
 }
 
@@ -358,6 +385,7 @@ bool Hero::isFallen( int screen_h )
 {
 	if( getY() > screen_h +100 )
 	{
+		
 		return true;
 	}
 	
@@ -376,9 +404,9 @@ void Hero::setNewY( int y )
 		{
 			sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -1 );
 		}
-		
-		// continue;
 	}
+	
+	fallenCounter = 1;
 }
 
 void Hero::setNewX( int distance )
