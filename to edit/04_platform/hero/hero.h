@@ -71,8 +71,11 @@ class Hero
 	
 	bool scope;
 	
+	bool fallen;
 	int fallenCounter;
 	int fallenLine;
+	int fallenX;
+	int fallenY;
 	
 public:
 
@@ -130,7 +133,8 @@ public:
 	// DEAD
 	bool isFallen( int screen_h );
 	void setNewY( int y );
-	void setNewX( int distance );
+	void setNewX( int x );
+	void backToGrass();
 	
 	const int getX();
 	const int getY();
