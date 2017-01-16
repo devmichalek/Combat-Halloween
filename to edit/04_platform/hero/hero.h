@@ -134,7 +134,8 @@ public:
 	bool isFallen( int screen_h );
 	void setNewY( int y );
 	void setNewX( int x );
-	void backToGrass();
+	bool backToGrass();
+	void setFallen();
 	
 	const int getX();
 	const int getY();

@@ -411,7 +411,7 @@ void Hero::setNewX( int x )
 	fallenX = x +sprite[ IDLE ].getWidth();
 }
 
-void Hero::backToGrass()
+bool Hero::backToGrass()
 {
 	if( fallen )
 	{
@@ -465,6 +465,18 @@ void Hero::backToGrass()
 			fallenCounter = 1;
 		}
 	}
+	
+	if( fallenX == -1 && fallenY == -1 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+void Hero::setFallen()
+{
+	fallen = true;
 }
 
 
