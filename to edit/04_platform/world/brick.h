@@ -35,6 +35,8 @@ class Brick
 	
 	Special_ladder red, white, black;
 	
+	int lastGrass;
+	
 public:
 	
 	void addBlock( int chosen, int x_width, int floor );
@@ -52,7 +54,9 @@ public:
 	
 	sf::Uint8 moveX( sf::Uint8 direction, float vel );
 	sf::Uint8 getWidth();
-	bool isBlock( int x, int y );
+	vector < Block* > getBlocks();
+	
+	void findLastGrass( Rect* rect );
 	
 	
 	Brick();
