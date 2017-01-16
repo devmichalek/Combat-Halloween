@@ -672,7 +672,7 @@ void Brick::findLastGrass( Rect* rect )
 					if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
 					{
 						lastGrass = i;
-						// printf( "last grass %d\n", lastGrass );
+						//printf("%d\n", lastGrass );
 						break;
 					}
 				}
@@ -691,30 +691,67 @@ int Brick::getLastGrassX()
 	return blocks[ lastGrass ]->x;
 }
 
-void Brick::setNewX( int distance )
+void Brick::setNewX( int heroX )
 {
-	int component;
-	if( distance < 0 )
-		component = 1;
-	else
-		component = -1;
+	//printf("lll %d\n", lastGrass );
+	fallenX = blocks[ lastGrass ]->x;
+	int t = heroX -blocks[ lastGrass ]->x;
+	if( t < 0 )	t = -t;
 	
-	while( true )
+	if( heroX < fallenX )
+		fallenX -= t;
+	else
+		fallenX += t;
+}
+
+bool Brick::backToGrass()
+{
+	if( fallenX != 0 )
 	{
-		if( distance == 0 )
-			break;
+		int add = 1;
+		if( fallenX > blocks[ lastGrass ]->x )
+		{
+			for( unsigned i = 0; i < blocks.size(); i++ )
+			{
+				blocks[ i ]->x += add;
+			}
 			
-		distance += component;
-		for( unsigned i = 0; i < blocks.size(); i++ )
-		{
-			blocks[ i ]->x += component;
+			for( unsigned i = 0; i < ladders.size(); i++ )
+			{
+				ladders[ i ]->x += add;
+			}
+			
+			if( fallenX < blocks[ lastGrass ]->x )
+				fallenX = 0;
 		}
-		
-		for( unsigned i = 0; i < ladders.size(); i++ )
+		else if( fallenX < blocks[ lastGrass ]->x )
 		{
-			ladders[ i ]->x += component;
+			
+			for( unsigned i = 0; i < blocks.size(); i++ )
+			{
+				blocks[ i ]->x -= add;
+			}
+			
+			for( unsigned i = 0; i < ladders.size(); i++ )
+			{
+				ladders[ i ]->x -= add;
+			}
+			
+			if( fallenX > blocks[ lastGrass ]->x )
+				fallenX = 0;
+		}
+		else
+		{
+			fallenX = 0;
 		}
 	}
+	
+	if( fallenX != 0 )
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 
@@ -737,6 +774,7 @@ Brick::Brick()
 	
 	world_type = -1;
 	lastGrass = -1;
+	fallenX = 0;
 }
 
 Brick::~Brick()
@@ -782,6 +820,7 @@ void Brick::free()
 	
 	world_type = -1;
 	lastGrass = -1;
+	fallenX = 0;
 }
 
 

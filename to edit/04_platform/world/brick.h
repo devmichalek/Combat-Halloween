@@ -36,6 +36,7 @@ class Brick
 	Special_ladder red, white, black;
 	
 	int lastGrass;
+	int fallenX;
 	
 public:
 	
@@ -59,7 +60,8 @@ public:
 	void findLastGrass( Rect* rect );
 	int getLastGrassY();
 	int getLastGrassX();
-	void setNewX( int distance );
+	void setNewX( int heroX );
+	bool backToGrass();
 	
 	
 	Brick();
