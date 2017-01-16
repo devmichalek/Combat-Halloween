@@ -174,4 +174,28 @@ void Play_desert::mechanics()
 	
 	// BACKGROUND SET XY
 	bg->setXY( hero->getX(), hero->getY() );
+	
+	if( hero->isFallen( brick->getScreenHeight() ) )
+	{
+		hero->setNewY( brick->getLastGrassY() );
+		
+		if( scope->getState() == 1 || scope->getState() == 3 )
+		{
+			brick->setNewX( hero->getX() );
+		}
+		else
+		{
+			scope->setNewX( hero->getX() -brick->getLastGrassX() );
+			hero->setNewX( brick->getLastGrassX() );
+		}
+	}
+	
+	if( hero->backToGrass() )
+	{
+		brick->findLastGrass( hero->getRect() );
+	}
+	if( brick->backToGrass() )
+	{
+		hero->setFallen();
+	}
 }
