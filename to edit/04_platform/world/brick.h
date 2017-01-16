@@ -57,6 +57,9 @@ public:
 	vector < Block* > getBlocks();
 	
 	void findLastGrass( Rect* rect );
+	int getLastGrassY();
+	int getLastGrassX();
+	void setNewX( int distance );
 	
 	
 	Brick();
