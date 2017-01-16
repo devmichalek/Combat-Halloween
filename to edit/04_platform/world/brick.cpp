@@ -681,7 +681,41 @@ void Brick::findLastGrass( Rect* rect )
 	}
 }
 
+int Brick::getLastGrassY()
+{
+	return blocks[ lastGrass ]->y;
+}
 
+int Brick::getLastGrassX()
+{
+	return blocks[ lastGrass ]->x;
+}
+
+void Brick::setNewX( int distance )
+{
+	int component;
+	if( distance < 0 )
+		component = 1;
+	else
+		component = -1;
+	
+	while( true )
+	{
+		if( distance == 0 )
+			break;
+			
+		distance += component;
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			blocks[ i ]->x += component;
+		}
+		
+		for( unsigned i = 0; i < ladders.size(); i++ )
+		{
+			ladders[ i ]->x += component;
+		}
+	}
+}
 
 
 
