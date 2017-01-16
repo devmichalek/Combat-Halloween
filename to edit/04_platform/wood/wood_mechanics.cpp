@@ -174,4 +174,20 @@ void Play_wood::mechanics()
 	
 	// BACKGROUND SET XY
 	bg->setXY( hero->getX(), hero->getY() );
+	
+	brick->findLastGrass( hero->getRect() );
+	if( hero->isFallen( brick->getScreenHeight() ) )
+	{
+		hero->setNewY( brick->getLastGrassY() );
+		
+		if( scope->getState() == 1 || scope->getState() == 3 )
+		{
+			brick->setNewX( brick->getLastGrassX() -hero->getX() );
+		}
+		else
+		{
+			scope->setNewX( hero->getX() -brick->getLastGrassX() );
+			hero->setNewX( hero->getX() -brick->getLastGrassX() );
+		}
+	}
 }
