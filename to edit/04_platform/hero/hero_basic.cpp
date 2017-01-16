@@ -354,50 +354,54 @@ void Hero::setScope( bool scope )
 	this->scope = scope;
 }
 
-void Hero::isLastStand( sf::Uint8 block_w, int screen_h )
+bool Hero::isFallen( int screen_h )
 {
-	for( sf::Uint8 i = 1; i < 6; i++ )
+	if( getY() > screen_h +100 )
 	{
-		if( getY() + getH() == screen_h -block_w*i -1 )
+		return true;
+	}
+	
+	return false;
+}
+
+void Hero::setNewY( int y )
+{
+	while( true )
+	{
+		if( sprite[ IDLE ].getY() == y -sprite[ IDLE ].getWidth() -100 )
 		{
-			// printf( "%d %d\n", screen_h -block_w*i, getY() + getH() );
-			deathX = getX();
-			deathY = getY();
 			break;
+		}
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -1 );
+		}
+		
+		// continue;
+	}
+}
+
+void Hero::setNewX( int distance )
+{
+	int component;
+	if( distance < 0 )
+		component = 1;
+	else
+		component = -1;
+		
+	while( true )
+	{
+		if( distance == 0 )
+			break;
+		distance += component;
+		
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setPosition( sprite[ i ].getX() + component, sprite[ i ].getY() );
 		}
 	}
 }
 
-bool Hero::checkY( int screen_h )
-{
-	if( getY() > screen_h +20 )
-	{
-		for( int i = 0; i < nr; i++ )
-		{
-			sprite[ i ].setScale( scale, scale );
-			sprite[ i ].setPosition( deathX -50, deathY -50 );
-		}
-		
-		for( int i = 0; i < nr; i++ )
-		{
-			sprite[ i ].setPosition( sprite[ i ].getX() - ( sprite[ i ].getWidth() ), sprite[ i ].getY() );
-			sprite[ i ].setPosition( sprite[ IDLE ].getX() - ( sprite[ i ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ i ].getY() );
-		}
-		
-		sprite[ ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
-		sprite[ SLIDE ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() +sprite[ SLIDE ].getHeight() );
-		sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
-		sprite[ JUMP_THROW ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
-		sprite[ THROW ].setPosition( sprite[ THROW ].getX() +11, sprite[ IDLE ].getY() -1 );
-	
-		which = IDLE;
-		
-		return true;
-	}
-		
-	
-	return false;
-}
 
 
 sf::Uint8 Hero::getDirection()

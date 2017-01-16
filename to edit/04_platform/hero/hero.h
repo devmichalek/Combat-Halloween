@@ -130,6 +130,11 @@ public:
 	float getJump_vel();
 	void setScope( bool scope );
 	
+	// DEAD
+	bool isFallen( int screen_h );
+	void setNewY( int y );
+	void setNewX( int distance );
+	
 	const int getX();
 	const int getY();
 	const int getW();
@@ -140,7 +145,7 @@ public:
 	bool checkKeys( int a, int b );	// See if keys are pressed?
 	sf::Uint8 getDirection();		// Return 0 = hero is not moving etc.
 	bool getSide();					// Return true if hero is directed to the right.
-	Rect* getRect();			// Get rectangle of hero.
+	Rect* getRect();				// Get rectangle of hero.
 	
 	Hero();
 	~Hero();
