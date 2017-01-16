@@ -2,13 +2,6 @@
 
 void Play_wood::mechanics()
 {
-	// HERO DEAD
-	if( brick->isBlock( hero->getX(), hero->getY() ) )
-	{
-		hero->isLastStand( brick->getWidth(), brick->getScreenHeight() );
-	}
-	hero->checkY( brick->getScreenHeight() );
-	
 	// HERO GRAVITY
 	hero->gravitation();
 	
