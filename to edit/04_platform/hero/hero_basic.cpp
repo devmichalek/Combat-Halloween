@@ -31,9 +31,12 @@ Hero::Hero()
 	hit_counter = 0;
 	
 	scope = false;
-
+	
+	fallen = false;
 	fallenCounter = 0;
 	fallenLine = 0;
+	fallenX = -1;
+	fallenY = -1;
 }
 
 Hero::~Hero()
@@ -99,8 +102,11 @@ void Hero::free()
 	
 	scope = false;
 	
+	fallen = false;
 	fallenCounter = 0;
 	fallenLine = 0;
+	fallenX = -1;
+	fallenY = -1;
 }
 
 
@@ -208,7 +214,10 @@ void Hero::draw( sf::RenderWindow* &window )
 {
 	makeColor();
 	
-	window->draw( sprite[ which ].get() );
+	if( !fallen )
+	{
+		window->draw( sprite[ which ].get() );
+	}
 	
 	sprite[ which ].setOffset( offset /delay );
 	
@@ -245,11 +254,11 @@ void Hero::draw( sf::RenderWindow* &window )
 		window->draw( jumpBox.get() );
 	}
 	
-	if( fallenCounter > 0 )
+	if( fallenCounter > 0 && !fallen )
 	{
 		fallenCounter ++;
 		
-		if( fallenCounter%60 == 0 )
+		if( fallenCounter%60 == 0 )	// 1 sec
 		{
 			if( sprite[ IDLE ].getAlpha() == 100 )
 			{
@@ -385,7 +394,7 @@ bool Hero::isFallen( int screen_h )
 {
 	if( getY() > screen_h +100 )
 	{
-		
+		fallen = true;
 		return true;
 	}
 	
@@ -394,38 +403,66 @@ bool Hero::isFallen( int screen_h )
 
 void Hero::setNewY( int y )
 {
-	while( true )
-	{
-		if( sprite[ IDLE ].getY() == y -sprite[ IDLE ].getWidth() -100 )
-		{
-			break;
-		}
-		for( int i = 0; i < nr; i++ )
-		{
-			sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -1 );
-		}
-	}
-	
-	fallenCounter = 1;
+	fallenY = y -sprite[ IDLE ].getHeight() -40;
 }
 
-void Hero::setNewX( int distance )
+void Hero::setNewX( int x )
 {
-	int component;
-	if( distance < 0 )
-		component = 1;
-	else
-		component = -1;
-		
-	while( true )
+	fallenX = x +sprite[ IDLE ].getWidth();
+}
+
+void Hero::backToGrass()
+{
+	if( fallen )
 	{
-		if( distance == 0 )
-			break;
-		distance += component;
-		
-		for( int i = 0; i < nr; i++ )
+		if( fallenY != -1 )
 		{
-			sprite[ i ].setPosition( sprite[ i ].getX() + component, sprite[ i ].getY() );
+			if( fallenY < sprite[ IDLE ].getY() )
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -7 );
+				}
+			}
+			else
+			{
+				fallenY = -1;
+			}
+		}
+		
+		if( fallenX != -1 )
+		{
+			if( fallenX > sprite[ IDLE ].getX() )
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setPosition( sprite[ i ].getX() +7, sprite[ i ].getY() );
+				}
+				
+				if( fallenX < sprite[ IDLE ].getX() )
+					fallenX = -1;
+			}
+			else if( fallenX < sprite[ IDLE ].getX() )
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setPosition( sprite[ i ].getX() -7, sprite[ i ].getY() );
+				}
+				
+				if( fallenX > sprite[ IDLE ].getX() )
+					fallenX = -1;
+			}
+			else
+			{
+				fallenX = -1;
+			}
+		}
+		
+		
+		if( fallenX == -1 && fallenY == -1 )
+		{
+			fallen = false;
+			fallenCounter = 1;
 		}
 	}
 }

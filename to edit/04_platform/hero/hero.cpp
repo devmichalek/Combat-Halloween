@@ -19,7 +19,7 @@ void Hero::idle()
 bool Hero::moving()
 {
 	// move left
-	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) )
+	if( checkKeys( keys[ 0 ][ 0 ], keys[ 0 ][ 1 ] ) && !fallen )
 	{
 		if( !glide && !slide && climb == 0 )
 		{
@@ -49,7 +49,7 @@ bool Hero::moving()
 	}
 	
 	// move right
-	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) ) 
+	else if( checkKeys( keys[ 1 ][ 0 ], keys[ 1 ][ 1 ] ) && !fallen ) 
 	{
 		if( !glide && !slide && climb == 0 )
 		{
@@ -175,7 +175,7 @@ void Hero::undoMove()
 // JUMP
 bool Hero::jump()
 {
-	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide && climb == 0 )
+	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide && climb == 0 && !fallen )
 	{
 		offset = 0;
 		j.start();
@@ -241,7 +241,7 @@ void Hero::undoJump()
 // ATTACK
 bool Hero::attack()
 {
-	if( checkKeys( keys[ 5 ][ 0 ], keys[ 5 ][ 1 ] ) && a.Do() && !glide && !j.isActive() && climb == 0 )
+	if( checkKeys( keys[ 5 ][ 0 ], keys[ 5 ][ 1 ] ) && a.Do() && !glide && !j.isActive() && climb == 0 && !fallen )
 	{
 		offset = 0;
 		a.start();
@@ -361,7 +361,7 @@ bool Hero::isGliding()
 // SLIDE
 void Hero::sliding()
 {
-	if( checkKeys( keys[ 3 ][ 0 ], keys[ 3 ][ 1 ] ) )
+	if( checkKeys( keys[ 3 ][ 0 ], keys[ 3 ][ 1 ] ) && !fallen )
 	{
 		if( !glide && climb == 0 )
 		{
@@ -384,7 +384,7 @@ void Hero::sliding()
 // JUMP WITH ATTACK
 bool Hero::jumpAttack()
 {
-	if( checkKeys( keys[ 6 ][ 0 ], keys[ 6 ][ 1 ] ) && ja.Do() && !glide && j.isActive() && !a.isActive() && !t.isActive() && climb == 0 )
+	if( checkKeys( keys[ 6 ][ 0 ], keys[ 6 ][ 1 ] ) && ja.Do() && !glide && j.isActive() && !a.isActive() && !t.isActive() && climb == 0 && !fallen )
 	{
 		offset = 0;
 		ja.start();
@@ -430,7 +430,7 @@ bool Hero::jumpAttack()
 // JUMP WITH THROW
 bool Hero::jumpThrow()
 {
-	if( checkKeys( keys[ 8 ][ 0 ], keys[ 8 ][ 1 ] ) && jt.Do() && !glide && !a.isActive() && !t.isActive() && ( j.isActive() || ja.isActive() ) && climb == 0 )
+	if( checkKeys( keys[ 8 ][ 0 ], keys[ 8 ][ 1 ] ) && jt.Do() && !glide && !a.isActive() && !t.isActive() && ( j.isActive() || ja.isActive() ) && climb == 0 && !fallen )
 	{
 		offset = 0;
 		jt.start();
@@ -477,7 +477,7 @@ bool Hero::jumpThrow()
 // CLIMB
 void Hero::climbing()
 {
-	if( checkKeys( keys[ 4 ][ 0 ], keys[ 4 ][ 1 ] ) && !j.isActive() && !ja.isActive() && !jt.isActive() && !glide && !t.isActive() && !a.isActive() )
+	if( checkKeys( keys[ 4 ][ 0 ], keys[ 4 ][ 1 ] ) && !j.isActive() && !ja.isActive() && !jt.isActive() && !glide && !t.isActive() && !a.isActive() && !fallen )
 	{
 		which = CLIMB;
 		slide = false;
@@ -516,7 +516,7 @@ void Hero::banClimbing()
 // THROW
 bool Hero::throwing()
 {
-	if( checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) && !t.isActive() && !glide && !j.isActive() && !a.isActive() && climb == 0 )
+	if( checkKeys( keys[ 7 ][ 0 ], keys[ 7 ][ 1 ] ) && !t.isActive() && !glide && !j.isActive() && !a.isActive() && climb == 0 && !fallen )
 	{
 		offset = 0;
 		t.start();
@@ -554,7 +554,7 @@ bool Hero::throwed()
 // GRAVITY STUFF
 void Hero::gravitation()
 {
-	if( !j.isActive() && !ja.isActive() && !jt.isActive() && climb == 0 )
+	if( !j.isActive() && !ja.isActive() && !jt.isActive() && climb == 0 && !fallen )
 	{
 		for( int i = 0; i < nr; i++ )
 		{
@@ -571,7 +571,7 @@ void Hero::gravitation()
 
 void Hero::pixelGravitation()
 {
-	if( climb != 0 )
+	if( climb != 0 && !fallen )
 	{
 		for( int i = 0; i < nr; i++ )
 		{
@@ -582,7 +582,7 @@ void Hero::pixelGravitation()
 
 void Hero::weightlessness()
 {
-	if( climb == 0 )
+	if( climb == 0 && !fallen )
 	{
 		glide = false;
 		for( int i = 0; i < nr; i++ )
