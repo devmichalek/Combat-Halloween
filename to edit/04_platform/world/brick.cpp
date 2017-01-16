@@ -105,7 +105,6 @@ void Brick::addLadder( int x, int y )
 	}
 }
 
-
 bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
 {
 	bool flag = false;
@@ -654,38 +653,33 @@ sf::Uint8 Brick::getWidth()
 	return width;
 }
 
-bool Brick::isBlock( int x, int y ) // for hero
+vector < Block* > Brick::getBlocks()
 {
-	for( sf::Uint8 i = 1; i < 9; i ++ )
-	{
-		if( x -width*i < 0 )
-		{
-			x = width*(i-1);
-			break;
-		}
-	}
-
-	for( sf::Uint8 i = 6; i >= 1; i -- )
-	{
-		if( screen_h-width*i > y )
-		{
-			y = screen_h-width*i;
-			break;
-		}
-	}
-			
-	// searching for block
-	for( unsigned j = 0; j < blocks.size(); j++ )
-	{
-		if( blocks[ j ]->x == x && blocks[ j ]->y == y && blocks[ j ]->nr != -1 )
-		{
-			return true;
-		}
-	}
-	
-	return false;
+	return blocks;
 }
 
+void Brick::findLastGrass( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			if( blocks[ i ]->nr >= 0 && blocks[ i ]->nr <= 7 )
+			{
+				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+				{
+					block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
+					{
+						lastGrass = i;
+						// printf( "last grass %d\n", lastGrass );
+						break;
+					}
+				}
+			}
+		}
+	}
+}
 
 
 
@@ -708,6 +702,7 @@ Brick::Brick()
 	right = 0;
 	
 	world_type = -1;
+	lastGrass = -1;
 }
 
 Brick::~Brick()
@@ -752,6 +747,7 @@ void Brick::free()
 	right = 0;
 	
 	world_type = -1;
+	lastGrass = -1;
 }
 
 
