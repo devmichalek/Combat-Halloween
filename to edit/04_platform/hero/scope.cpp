@@ -89,6 +89,29 @@ void Scope::move( sf::Uint8 direction )
 	vel = 0;
 }
 
+int Scope::getState()
+{
+	// printf( "%d\n", a );
+	return a;
+}
+
+void Scope::setNewX( int distance )
+{
+	int component;
+	if( distance < 0 )
+		component = 1;
+	else
+		component = -1;
+		
+	while( true )
+	{
+		if( distance == 0 )
+			break;
+			
+		distance += component;
+		x += component;
+	}
+}
 
 bool Scope::getScope()
 {

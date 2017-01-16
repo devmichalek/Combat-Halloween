@@ -26,6 +26,9 @@ public:
 	
 	void setFactor( int factor );
 	void move( sf::Uint8 direction );
+	int getState();
+	
+	void setNewX( int distance );
 	
 	bool getScope();
 	bool allowMoving();
