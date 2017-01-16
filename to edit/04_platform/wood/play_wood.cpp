@@ -12,6 +12,7 @@ Play_wood::Play_wood()
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
+	vegetation = new Vegetation;
 }
 
 Play_wood::~Play_wood()
@@ -28,6 +29,7 @@ void Play_wood::free()
 	delete kunai;
 	delete heart;
 	delete scope;
+	delete vegetation;
 }
 
 	
@@ -58,6 +60,7 @@ void Play_wood::setHero( int screen_w, int screen_h, int type )
 void Play_wood::setWorldsize( int size )
 {
 	brick->positioning( size );
+	vegetation->load( 1, brick->getBlocks() );
 }
 
 void Play_wood::handle( sf::Event &event )
@@ -83,6 +86,7 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	kunai->draw( window );
 	brick->draw( window );
 	heart->draw( window );
+	vegetation->draw( window );
 }
 
 	
