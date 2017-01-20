@@ -41,17 +41,7 @@ void Play_winter::load( int screen_w, int screen_h )
 
 void Play_winter::setHero( int screen_w, int screen_h, int type )
 {
-	if( type == 0 )
-	{
-		hero->load( screen_w, screen_h, "data/sprites/hero/0/" );
-	}
-	else
-	{
-		hero->load( screen_w, screen_h, "data/sprites/hero/1/" );
-	}
-	
-	scope->set( hero->getX(), brick->getWidth(), screen_w );
-
+	hero->load( screen_w, screen_h, "data/sprites/hero/" + to_string( type ) + "/" );
 	bg->setXY( hero->getX(), hero->getY() );
 }
 
