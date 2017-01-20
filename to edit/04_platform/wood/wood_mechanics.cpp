@@ -170,12 +170,12 @@ void Play_wood::mechanics()
 	}
 	
 	// SCOPE MOVE
-	scope->move( hero->getDirection() );
+	scope->move( hero->getX(), brick->getScreenWidth() );
 	
 	// BACKGROUND SET XY
 	bg->setXY( hero->getX(), hero->getY() );
 	
-
+	// HERO FALLEN
 	if( hero->isFallen( brick->getScreenHeight() ) )
 	{
 		hero->setNewY( brick->getLastGrassY() );
@@ -186,11 +186,18 @@ void Play_wood::mechanics()
 		}
 		else
 		{
-			scope->setNewX( hero->getX() -brick->getLastGrassX() );
-			hero->setNewX( brick->getLastGrassX() );
+			if( hero->setNewX( brick->getLastGrassX(), brick->getScreenWidth() ) )
+			{
+				scope->transform();
+			}
 		}
 	}
 	
+	// GET BACK HERO
+	if( hero->isSurplus() )
+	{
+		brick->setNewX( hero->getX() );
+	}
 	if( hero->backToGrass() )
 	{
 		brick->findLastGrass( hero->getRect() );
