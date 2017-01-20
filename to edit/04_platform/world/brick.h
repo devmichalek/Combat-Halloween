@@ -44,7 +44,7 @@ public:
 	void addLadder( int x, int y );
 	
 	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
-	void fill( int a, int n );
+	void fill( int a, int n );	//  Fill from left to right 
 	void islands();
 	void positioning( int size );
 	

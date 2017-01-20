@@ -144,7 +144,7 @@ bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
 	return flag;
 }
 
-void Brick::fill( int a, int n )	// fill till n
+void Brick::fill( int a, int n )	// fill pending n
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
@@ -508,9 +508,10 @@ void Brick::positioning( int size )
 		}
 	}
 	
-	fill( 8, 15 );
+	
 	fill( 10, 11 );
 	fill( 14, 11 );
+	fill( 8, 15 );
 	
 	islands();
 	
@@ -721,6 +722,9 @@ bool Brick::backToGrass()
 				ladders[ i ]->x += add;
 			}
 			
+			left += add;
+			right += add;
+			
 			if( fallenX < blocks[ lastGrass ]->x )
 				fallenX = 0;
 		}
@@ -736,6 +740,9 @@ bool Brick::backToGrass()
 			{
 				ladders[ i ]->x -= add;
 			}
+			
+			left -= add;
+			right -= add;
 			
 			if( fallenX > blocks[ lastGrass ]->x )
 				fallenX = 0;
