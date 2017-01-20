@@ -39,11 +39,12 @@ public:
     int getState();
 	Sound* getSound();
 	void set( int state, Sound* sound );
+	
 	bool isQuit();
 	bool nextState();
 	bool backToLevel();
-	void reloadMusic();
 	
+	void reloadMusic();
 	
 	void mechanics();
 };
