@@ -37,6 +37,7 @@ Hero::Hero()
 	fallenLine = 0;
 	fallenX = -1;
 	fallenY = -1;
+	surplus = false;
 }
 
 Hero::~Hero()
@@ -107,6 +108,7 @@ void Hero::free()
 	fallenLine = 0;
 	fallenX = -1;
 	fallenY = -1;
+	surplus = false;
 }
 
 
@@ -406,9 +408,17 @@ void Hero::setNewY( int y )
 	fallenY = y -sprite[ IDLE ].getHeight() -40;
 }
 
-void Hero::setNewX( int x )
+bool Hero::setNewX( int x, int screen_w )
 {
 	fallenX = x +sprite[ IDLE ].getWidth();
+	
+	if( fallenX > screen_w/2 )
+	{
+		surplus = true;
+		fallenX = screen_w/2;
+	}
+	
+	return surplus;
 }
 
 bool Hero::backToGrass()
@@ -477,6 +487,18 @@ bool Hero::backToGrass()
 void Hero::setFallen()
 {
 	fallen = true;
+}
+
+bool Hero::isSurplus()
+{
+	if( fallenX == -1 )
+	{
+		bool sur = surplus;
+		surplus = false;
+		return sur;
+	}
+	
+	return false;
 }
 
 
