@@ -1,4 +1,7 @@
 #include "vegetation.h"
+#include <time.h>
+#include <cstdlib>
+#include <fstream>
 
 Plant::Plant()
 {
@@ -23,17 +26,6 @@ void Plant::add( sf::Uint8 block )
 	blocks.push_back( block );
 }
 
-void Plant::setX( int startX, int endX )
-{
-	this->startX = startX;
-	this->endX = endX;
-}
-
-void Plant::setY( int startY, int endY )
-{
-	this->startY = startY;
-	this->endY = endY;
-}
 
 	
 bool Plant::available( sf::Uint8 block )
@@ -49,22 +41,21 @@ bool Plant::available( sf::Uint8 block )
 	return false;
 }
 
-int Plant::getX()
+unsigned Plant::getSize()
 {
-	return rand()%startX +endX;
+	return blocks.size();
 }
 
-int Plant::getY()
+sf::Uint8 Plant::getBlocksNr( sf::Uint8 n )
 {
-	return rand()%startY +endY;
+	return blocks[ n ];
 }
 
 
 
 Vegetation::Vegetation()
 {
-	world_type = -1;
-	min = max = 0;
+	min = 0;
 }
 
 Vegetation::~Vegetation()
@@ -74,9 +65,10 @@ Vegetation::~Vegetation()
 
 void Vegetation::free()
 {
-	world_type = -1;
-	min = max = 0;
+	min = 0;
 	plants.clear();
+	blocks.clear();
+	sprites.clear();
 }
 
 	
@@ -84,22 +76,12 @@ void Vegetation::load( int type, vector < Block* > blocks )
 {
 	free();
 	
-	Plant* plant = new Plant;
-	
-	world_type = type;
+	int how_many = 0;
 	
 	if( type == 1 )
 	{
-		min = 18;
-		max = 30;
+		min = 16;
 		
-		for( int i = 0; i <= 7; i++ )
-		{
-			plant->add( i );
-		}
-		
-		// crank
-		// blocks.push_back( )
 	}
 }
 
