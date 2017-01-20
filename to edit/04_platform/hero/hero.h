@@ -76,6 +76,7 @@ class Hero
 	int fallenLine;
 	int fallenX;
 	int fallenY;
+	bool surplus;
 	
 public:
 
@@ -133,9 +134,10 @@ public:
 	// DEAD
 	bool isFallen( int screen_h );
 	void setNewY( int y );
-	void setNewX( int x );
+	bool setNewX( int x, int screen_w );
 	bool backToGrass();
 	void setFallen();
+	bool isSurplus();
 	
 	const int getX();
 	const int getY();
