@@ -74,11 +74,12 @@ void Play_wood::draw( sf::RenderWindow* &window )
 
 	
 	bg->draw( window );
-	vegetation->draw( window, brick->getScreenWidth() );
+	vegetation->drawBG( window, brick->getScreenWidth() );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	brick->draw( window );
+	vegetation->draw( window, brick->getScreenWidth() );
 	heart->draw( window );
 }
 

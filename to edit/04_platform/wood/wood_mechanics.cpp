@@ -163,7 +163,7 @@ void Play_wood::mechanics()
 	{
 		// BRICK MOVE
 		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
-		vegetation->moveX( hero->getDirection(), scope->getVel() );
+		if( scope->getFactor() == 0 )	vegetation->moveX( hero->getDirection(), scope->getVel() );
 		if( brick->checkBlockByPixel( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
