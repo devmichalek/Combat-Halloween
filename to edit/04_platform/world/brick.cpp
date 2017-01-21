@@ -404,17 +404,48 @@ void Brick::positioning( int size )
 					
 					for( unsigned j = i +1; j < blocks.size(); j++ )
 					{
+						bool success = false;
+						
+						while( !success )
+						{
+							for( unsigned k = 0; k < blocks.size(); k++ )
+							{
+								if( x == blocks[ k ]->x && blocks[ i ]->y +width == blocks[ k ]->y )
+								{
+									success = true;
+								}
+							}
+							
+							if( !success )
+							{
+								// new x
+								x += width;
+							}
+							
+							int further = 0;
+							for( unsigned k = 0; k < blocks.size(); k++ )
+							{
+								if( blocks[ k ]->x > further )
+								{
+									further = blocks[ k ]->x;
+								}
+							}
+							
+							if( x > further )
+							{
+								break;
+							}
+						}
+						
 						if( x == blocks[ j ]->x && blocks[ i ]->y +width == blocks[ j ]->y )
 						{
-							// new x
-							x += width;
-
 							if( blocks[ j ]->nr == 13 )
 							{
 								put = true;
 								// printf( "%d %d\n", x, blocks[ i ]->y +width );
-								break;
 							}
+							
+							break;
 						}
 					}
 					
