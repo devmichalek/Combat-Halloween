@@ -20,29 +20,6 @@ void Rules::free()
 		rules_right[ i ].clear();
 	}
 	rules_right.clear();
-	
-	/*
-	for( unsigned i = 0; i < rules_left.size(); i++ )
-	{
-		rules_left[ i ].clear();
-	}
-	rules_left.clear();
-	
-	
-	for( unsigned i = 0; i < rules_bot.size(); i++ )
-	{
-		rules_bot[ i ].clear();
-	}
-	rules_bot.clear();
-	
-	
-	
-	for( unsigned i = 0; i < rules_top.size(); i++ )
-	{
-		rules_top[ i ].clear();
-	}
-	rules_top.clear();
-	*/
 }
 
 
