@@ -163,9 +163,11 @@ void Play_wood::mechanics()
 	{
 		// BRICK MOVE
 		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
+		vegetation->moveX( hero->getDirection(), scope->getVel() );
 		if( brick->checkBlockByPixel( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
+			vegetation->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -202,7 +204,7 @@ void Play_wood::mechanics()
 	{
 		brick->findLastGrass( hero->getRect() );
 	}
-	if( brick->backToGrass() )
+	if( vegetation->backToGrass( brick->backToGrass() ) != 0 )
 	{
 		hero->setFallen();
 	}
