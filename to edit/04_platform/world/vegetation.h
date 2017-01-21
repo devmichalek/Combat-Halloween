@@ -12,6 +12,7 @@ public:
 	sf::Uint8 nr;
 	int startX, endX;
 	int startY, endY;
+	sf::Uint8 chance;
 
 	Plant();
 	~Plant();
@@ -31,17 +32,21 @@ class Vegetation
 	vector <MySprite*> sprites;
 	
 public:
-
+	
 	Vegetation();
 	~Vegetation();
 	void free();
 	
-	void load( int type, vector < Block* > b );
-	void draw( sf::RenderWindow* &window );
+	void load( int type );
+	void draw( sf::RenderWindow* &window, int screen_w );
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	
 	int strToInt( string s );
-	int getSpecialNr( string line, int nr, char c );
+	unsigned getDistance( int v1, int v2 );
+	void positioning( vector < Block* > blocks );
+	
+	void moveX( sf::Uint8 direction, float vel );
+	int backToGrass( int add );
 };
