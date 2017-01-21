@@ -7,6 +7,7 @@
 #include "04_platform/hero/kunai.h"
 #include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
+#include "04_platform/world/vegetation.h"
 
 class Play_halloween
 {
@@ -20,6 +21,7 @@ class Play_halloween
 	Kunai* kunai;
 	Heart* heart;
 	Scope* scope;
+	Vegetation* vegetation;
 	
 public:
 
