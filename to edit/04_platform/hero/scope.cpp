@@ -34,9 +34,11 @@ float Scope::getVel()
 	return vel;
 }
 
-void Scope::setFactor( int b )
+
+
+void Scope::setFactor( int factor )
 {
-	this->b = b;
+	b = factor;
 }
 
 void Scope::move( int x, int screen_w )
@@ -75,6 +77,19 @@ int Scope::getState()
 	return a;
 }
 
+void Scope::transform()
+{
+	if( a == 0 )
+	{
+		a = 1;
+	}
+	else if( a == 3 )
+	{
+		a = 2;
+	}
+}
+
+
 
 bool Scope::getScope()
 {
@@ -86,16 +101,9 @@ bool Scope::getScope()
 	return false;
 }
 
-void Scope::transform()
+sf::Uint8 Scope::getFactor()
 {
-	if( a == 0 )
-	{
-		a = 1;
-	}
-	else if( a == 3 )
-	{
-		a = 2;
-	}
+	return b;
 }
 
 bool Scope::allowMoving()
