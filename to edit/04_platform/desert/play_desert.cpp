@@ -12,6 +12,7 @@ Play_desert::Play_desert()
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
+	vegetation = new Vegetation;
 }
 
 Play_desert::~Play_desert()
@@ -28,6 +29,7 @@ void Play_desert::free()
 	delete kunai;
 	delete heart;
 	delete scope;
+	delete vegetation;
 }
 
 	
@@ -48,6 +50,8 @@ void Play_desert::setHero( int screen_w, int screen_h, int type )
 void Play_desert::setWorldsize( int size )
 {
 	brick->positioning( size );
+	vegetation->load( 3 );
+	vegetation->positioning( brick->getBlocks() );
 }
 
 
@@ -65,12 +69,16 @@ void Play_desert::draw( sf::RenderWindow* &window )
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
+	vegetation->fadein( 2 );
+
 	
 	bg->draw( window );
+	vegetation->drawBG( window, brick->getScreenWidth() );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	brick->draw( window );
+	vegetation->draw( window, brick->getScreenWidth() );
 	heart->draw( window );
 }
 
