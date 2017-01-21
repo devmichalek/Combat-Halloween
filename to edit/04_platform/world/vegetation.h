@@ -13,6 +13,7 @@ public:
 	int startX, endX;
 	int startY, endY;
 	sf::Uint8 chance;
+	bool bg;
 
 	Plant();
 	~Plant();
@@ -24,12 +25,21 @@ public:
 	sf::Uint8 getBlocksNr( sf::Uint8 n );
 };
 
+class Veg_block :public Block
+{
+public:
+	bool bg;
+	using::Block::Block;
+};
+
 class Vegetation
 {
 	sf::Uint8 min;
 	vector <Plant*> plants;
-	vector <Block*> blocks;
+	vector <Veg_block*> blocks;
 	vector <MySprite*> sprites;
+	
+	
 	
 public:
 	
@@ -38,6 +48,7 @@ public:
 	void free();
 	
 	void load( int type );
+	void drawBG( sf::RenderWindow* &window, int screen_w );
 	void draw( sf::RenderWindow* &window, int screen_w );
 	
 	void fadein( int v = 1, int max = 0xFF );
