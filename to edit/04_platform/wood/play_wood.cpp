@@ -51,7 +51,8 @@ void Play_wood::setHero( int screen_w, int screen_h, int type )
 void Play_wood::setWorldsize( int size )
 {
 	brick->positioning( size );
-	vegetation->load( 1, brick->getBlocks() );
+	vegetation->load( 1 );
+	vegetation->positioning( brick->getBlocks() );
 }
 
 void Play_wood::handle( sf::Event &event )
@@ -69,15 +70,16 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
+	vegetation->fadein( 2 );
 
 	
 	bg->draw( window );
+	vegetation->draw( window, brick->getScreenWidth() );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	brick->draw( window );
 	heart->draw( window );
-	vegetation->draw( window );
 }
 
 	
