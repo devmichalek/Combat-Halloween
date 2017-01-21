@@ -12,6 +12,7 @@ Play_halloween::Play_halloween()
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
+	vegetation = new Vegetation;
 }
 
 Play_halloween::~Play_halloween()
@@ -28,6 +29,7 @@ void Play_halloween::free()
 	delete kunai;
 	delete heart;
 	delete scope;
+	delete vegetation;
 }
 
 	
@@ -48,6 +50,8 @@ void Play_halloween::setHero( int screen_w, int screen_h, int type )
 void Play_halloween::setWorldsize( int size )
 {
 	brick->positioning( size );
+	vegetation->load( 0 );
+	vegetation->positioning( brick->getBlocks() );
 }
 
 
@@ -65,12 +69,15 @@ void Play_halloween::draw( sf::RenderWindow* &window )
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
+	vegetation->fadein( 2 );
 	
 	bg->draw( window );
+	vegetation->drawBG( window, brick->getScreenWidth() );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	brick->draw( window );
+	vegetation->draw( window, brick->getScreenWidth() );
 	heart->draw( window );
 }
 
