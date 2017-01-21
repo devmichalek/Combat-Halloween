@@ -6,6 +6,7 @@ class Scope
 {
 	float vel;
 	
+	// states a- hero, b- brick
 	sf::Uint8 a;
 	sf::Uint8 b;
 	
@@ -24,5 +25,6 @@ public:
 	void transform();
 		
 	bool getScope();
+	sf::Uint8 getFactor();
 	bool allowMoving();
 };

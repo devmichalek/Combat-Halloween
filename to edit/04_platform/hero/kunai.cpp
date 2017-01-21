@@ -1,4 +1,85 @@
+/**
+    kunai.h
+    Purpose: class Kunai and Bit - to contain kunai texture, throw kunai, contains max 6 kunai.
+
+    @author Adrian Michalek
+    @version 2016.12.15
+	@email adrmic98@gmail.com
+*/
+
 #include "kunai.h"
+
+Bit::Bit()
+{
+	x = y = 0;
+	active = false;
+	vel = 0;
+}
+
+Bit::~Bit()
+{
+	free();
+}
+
+void Bit::free()
+{
+	x = y = 0;
+	active = false;
+	vel = 0;
+}
+
+
+
+bool Bit::isActive()
+{
+	return active;
+}
+
+void Bit::start( int startX, int startY, int vel )
+{
+	if( !active )
+	{
+		active = true;
+		this->vel = vel;
+		this->x = startX;
+		this->y = startY;
+	}
+}
+
+void Bit::go()
+{
+	if( active )
+	{
+		x += vel;
+	}
+}
+
+
+
+void Bit::destroy()
+{
+	active = false;
+	x = y = 0;
+	vel = 0;
+}
+
+	
+int Bit::getX()
+{
+	return x;
+}
+
+int Bit::getY()
+{
+	return y;
+}
+
+int Bit::getVel()
+{
+	return vel;
+}
+
+
 
 
 
@@ -8,8 +89,14 @@ void Kunai::throwed( int x, int y, bool right )
 	{
 		if( !bits[ i ]->isActive() )
 		{
-			if( right )		bits[ i ]->start( x +30, y +50, vel );
-			else			bits[ i ]->start( x -30, y +50, -vel );
+			if( right )
+			{
+				bits[ i ]->start( x +30, y +50, vel );
+			}
+			else
+			{
+				bits[ i ]->start( x -30, y +50, -vel );
+			}
 
 			break;
 		}
@@ -21,19 +108,18 @@ unsigned int Kunai::getNr()
 	return bits.size();
 }
 
+
+
 int Kunai::getX( int which )
 {
 	int x = bits[ which ]->getX();
 	
 	if( bits[ which]->getVel() > 0 )
+	{
 		x -= getW();
+	}
 	
 	return x;
-}
-
-int Kunai::getY( int which )
-{
-	return bits[ which ]->getY();
 }
 
 int Kunai::getW()
@@ -41,43 +127,10 @@ int Kunai::getW()
 	return sprite.getWidth();
 }
 
-int Kunai::getH()
-{
-	return sprite.getHeight();
-}
-
-int Kunai::getR( int which )
-{
-	return bits[ which ]->getX();
-}
-
-int Kunai::getB( int which )
-{
-	return bits[ which ]->getY() + getH();
-}
-
 void Kunai::destroy( int which )
 {
 	bits[ which ]->destroy();
 }
-
-/*
-bool Kunai::allow()
-{
-	bool flag = false;
-	
-	for( unsigned i = 0; i < bits.size(); i++ )
-	{
-		if( !bits[ i ]->isActive() )
-		{
-			flag = true;
-			break;
-		}
-	}
-	
-	return flag;
-}
-*/
 
 Rect* Kunai::getRect( int which )
 {
@@ -87,7 +140,9 @@ Rect* Kunai::getRect( int which )
 		
 	t_x = bits[ which ]->getX();
 	if( bits[ which ]->getVel() > 0 )
+	{
 		t_x -= sprite.getWidth();
+	}
 	
 	t_y = bits[ which ]->getY();
 	t_w = sprite.getWidth();

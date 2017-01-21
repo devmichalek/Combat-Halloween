@@ -1,7 +1,39 @@
+/**
+    kunai.h
+    Purpose: class Kunai and Bit - to contain kunai texture, throw kunai, contains max 6 kunai.
+
+    @author Adrian Michalek
+    @version 2016.12.15
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "bit.h"
 #include <vector>
+#include "drawable/sprite.h"
+
+class Bit
+{
+	int x, y;
+	bool active;
+	int vel;
+	
+public:
+	
+	Bit();
+	~Bit();
+	void free();
+	
+	bool isActive();
+	void start( int startX, int startY, int vel );
+	void go();
+	
+	void destroy();
+	
+	int getX();
+	int getY();
+	int getVel();
+};
 
 class Kunai
 {
@@ -17,14 +49,9 @@ public:
 	
 	unsigned int getNr();
 	int getX( int which );
-	int getY( int which );
 	int getW();
-	int getH();
-	int getR( int which );
-	int getB( int which );
 	
 	void destroy( int which );
-	// bool allow();
 	
 	Rect* getRect( int which );
 	float getDamage();
