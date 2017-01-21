@@ -61,7 +61,7 @@ public:
 	int getLastGrassY();
 	int getLastGrassX();
 	void setNewX( int heroX );
-	bool backToGrass();
+	int backToGrass();
 	
 	
 	Brick();

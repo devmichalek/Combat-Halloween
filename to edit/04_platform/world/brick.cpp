@@ -705,13 +705,16 @@ void Brick::setNewX( int heroX )
 		fallenX += t;
 }
 
-bool Brick::backToGrass()
+int Brick::backToGrass()
 {
+	int add = 0;
+	
 	if( fallenX != 0 )
 	{
-		int add = 1;
 		if( fallenX > blocks[ lastGrass ]->x )
 		{
+			add = 1;
+			
 			for( unsigned i = 0; i < blocks.size(); i++ )
 			{
 				blocks[ i ]->x += add;
@@ -730,19 +733,20 @@ bool Brick::backToGrass()
 		}
 		else if( fallenX < blocks[ lastGrass ]->x )
 		{
+			add = -1;
 			
 			for( unsigned i = 0; i < blocks.size(); i++ )
 			{
-				blocks[ i ]->x -= add;
+				blocks[ i ]->x += add;
 			}
 			
 			for( unsigned i = 0; i < ladders.size(); i++ )
 			{
-				ladders[ i ]->x -= add;
+				ladders[ i ]->x += add;
 			}
 			
-			left -= add;
-			right -= add;
+			left += add;
+			right += add;
 			
 			if( fallenX > blocks[ lastGrass ]->x )
 				fallenX = 0;
@@ -753,12 +757,7 @@ bool Brick::backToGrass()
 		}
 	}
 	
-	if( fallenX != 0 )
-	{
-		return true;
-	}
-	
-	return false;
+	return add;
 }
 
 
