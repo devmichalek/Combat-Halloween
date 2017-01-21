@@ -8,6 +8,7 @@ Plant::Plant()
 	startX = endX = 0;
 	startY = endY = 0;
 	chance = 0;
+	bg = true;
 }
 
 Plant::~Plant()
@@ -16,6 +17,7 @@ Plant::~Plant()
 	startX = endX = 0;
 	startY = endY = 0;
 	chance = 0;
+	bg = true;
 }
 
 void Plant::clear()
@@ -79,10 +81,25 @@ void Vegetation::load( int type )
 	free();
 	
 	sf::Uint8 max;
-	if( type == 1 )
+	if( type == 0 )
+	{
+		min = 16;
+		max = 29 +1;
+	}
+	else if( type == 1 )
 	{
 		min = 18;
 		max = 30 +1;
+	}
+	else if( type == 2 )
+	{
+		min = 18;
+		max = 27 +1;
+	}
+	else if( type == 3 )
+	{
+		min = 16;
+		max = 29 +1;
 	}
 	
 	for( sf::Uint8 i = 0; i < max-min; i++ )
@@ -134,9 +151,10 @@ void Vegetation::load( int type )
 			plants[ plants.size() -1 ]->endX = block_types[ 2 ];
 			plants[ plants.size() -1 ]->startY = block_types[ 3 ];
 			plants[ plants.size() -1 ]->endY = block_types[ 4 ];
-			plants[ plants.size() -1 ]->chance = block_types[ 5 ];
+			plants[ plants.size() -1 ]->bg = block_types[ 5 ];
+			plants[ plants.size() -1 ]->chance = block_types[ 6 ];
 			
-			for( unsigned i = 6; i < block_types.size(); i++ )
+			for( unsigned i = 7; i < block_types.size(); i++ )
 			{
 				plants[ plants.size() -1 ]->add( block_types[ i ] );
 			}
@@ -160,14 +178,32 @@ void Vegetation::load( int type )
 	*/
 }
 
+void Vegetation::drawBG( sf::RenderWindow* &window, int screen_w )
+{
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->bg )
+		{
+			if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
+			{
+				sprites[ blocks[ i ]->nr -min ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				window->draw( sprites[ blocks[ i ]->nr -min ]->get() );
+			}
+		}
+	}
+}
+
 void Vegetation::draw( sf::RenderWindow* &window, int screen_w )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
+		if( !blocks[ i ]->bg )
 		{
-			sprites[ blocks[ i ]->nr -min ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-			window->draw( sprites[ blocks[ i ]->nr -min ]->get() );
+			if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
+			{
+				sprites[ blocks[ i ]->nr -min ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				window->draw( sprites[ blocks[ i ]->nr -min ]->get() );
+			}
 		}
 	}
 }
@@ -244,7 +280,7 @@ void Vegetation::positioning( vector < Block* > blocks )
 				{
 					if( rand()%100 < plants[ random ]->chance )
 					{
-						this->blocks.push_back( new Block() );
+						this->blocks.push_back( new Veg_block() );
 					
 						this->blocks[ this->blocks.size() -1 ]->nr = plants[ random ]->nr;
 						
@@ -254,6 +290,8 @@ void Vegetation::positioning( vector < Block* > blocks )
 						distance = rand()%getDistance( plants[ random ]->startY, plants[ random ]->endY );
 						this->blocks[ this->blocks.size() -1 ]->y = plants[ random ]->startY +distance +blocks[ i ]->y;
 						this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
+						
+						this->blocks[ this->blocks.size() -1 ]->bg = plants[ random ]->bg;
 						
 						break;
 					}
