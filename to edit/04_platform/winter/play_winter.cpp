@@ -12,7 +12,7 @@ Play_winter::Play_winter()
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
-	vegetation = new Vegetation;
+	greenery = new Greenery;
 }
 
 Play_winter::~Play_winter()
@@ -29,7 +29,7 @@ void Play_winter::free()
 	delete kunai;
 	delete heart;
 	delete scope;
-	delete vegetation;
+	delete greenery;
 }
 
 	
@@ -50,8 +50,8 @@ void Play_winter::setHero( int screen_w, int screen_h, int type )
 void Play_winter::setWorldsize( int size )
 {
 	brick->positioning( size );
-	vegetation->load( 1 );
-	vegetation->positioning( brick->getBlocks() );
+	greenery->load( 2 );
+	greenery->positioning( brick->getBlocks() );
 }
 
 
@@ -69,16 +69,16 @@ void Play_winter::draw( sf::RenderWindow* &window )
 	hero->fadein( 2 );
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
-	vegetation->fadein( 2 );
+	greenery->fadein( 2 );
 
 	
 	bg->draw( window );
-	vegetation->drawBG( window, brick->getScreenWidth() );
+	greenery->drawBG( window, brick->getScreenWidth() );
 	brick->drawLadders( window );
 	hero->draw( window );
 	kunai->draw( window );
 	brick->draw( window );
-	vegetation->draw( window, brick->getScreenWidth() );
+	greenery->draw( window, brick->getScreenWidth() );
 	heart->draw( window );
 }
 
