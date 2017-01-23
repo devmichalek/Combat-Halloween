@@ -301,7 +301,7 @@ void Brick::positioning( int size )
 		// add block to the right
 		lastNr = blocks[ blocks.size()-1 ]->nr;
 		scope = rules->getRightRules( lastNr ).size();
-		chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
+		chosen = rules->getRightRules( lastNr )[ rand()%scope ];
 		addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
 		
 		// RAND FLOOR
@@ -365,7 +365,7 @@ void Brick::positioning( int size )
 				// add block to the right
 				lastNr = blocks[ blocks.size()-1 ]->nr;
 				scope = rules->getRightRules( lastNr ).size();
-				chosen = rules->getRightRules( lastNr )[ rand()%scope ]->nr;
+				chosen = rules->getRightRules( lastNr )[ rand()%scope ];
 				addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
 				
 				// add ladder
