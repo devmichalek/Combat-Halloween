@@ -1,13 +1,13 @@
 #pragma once
 
-#include "law.h"
 #include <vector>
+#include <cstdint>
 
 using namespace std;
 
 class Rules
 {
-	vector < vector <Law*> > rules_right;
+	vector < vector <int8_t> > rules_right;
 	
 public:
 	Rules();
@@ -16,7 +16,7 @@ public:
 	
 	void ruleRightSide();
 	
-	vector <Law*> getRightRules( int which );
+	vector <int8_t> getRightRules( int which );
 	
 	int getTopBlockFor( int nr );
 	int getBotBlockFor( int nr );

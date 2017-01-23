@@ -19,14 +19,15 @@ void Rules::free()
 	{
 		rules_right[ i ].clear();
 	}
+	
 	rules_right.clear();
 }
 
 
 
-vector <Law*> Rules::getRightRules( int which )
+vector <int8_t> Rules::getRightRules( int which )
 {
-	return rules_right[ which +1 ];	// +1 because of void block below
+	return rules_right[ which +1 ];	// +1 because of void block ( -1 )
 }
 
 int Rules::getTopBlockFor( int nr )
@@ -72,10 +73,16 @@ int Rules::fillForTop( int nr, int need )
 			case 7: result = -1; 	break;
 			
 			case -1:
+			
 				if( rand()%2 == 1 )
+				{
 					result = 0;
+				}
 				else
+				{
 					result = 5;
+				}
+					
 				break;
 		}
 	}
@@ -114,10 +121,16 @@ int Rules::fillForBot( int nr )
 		case 6: result = 7; 	break;
 		
 		case -1:
+		
 			if( rand()%2 == 1 )
+			{
 				result = 0;
+			}
 			else
+			{
 				result = 5;
+			}
+				
 			break;
 	}
 	
@@ -132,88 +145,88 @@ int Rules::fillForBot( int nr )
 
 void Rules::ruleRightSide()
 {
-	vector <Law*> temporary;
+	vector <int8_t> temporary;
 	
 	// -1 - void
 	temporary.clear();
-	temporary.push_back( new Law( 0 ) );
-	temporary.push_back( new Law( 5 ) );
+	temporary.push_back( 0 );
+	temporary.push_back( 5 );
 	rules_right.push_back( temporary );
 	
 	// 0
 	temporary.clear();
-	temporary.push_back( new Law( 1 ) );
-	temporary.push_back( new Law( 2 ) );
+	temporary.push_back( 1 );
+	temporary.push_back( 2 );
 	rules_right.push_back( temporary );
 	
 	// 1
 	temporary.clear();
-	temporary.push_back( new Law( 2 ) );
-	temporary.push_back( new Law( 1 ) );
+	temporary.push_back( 2 );
+	temporary.push_back( 1 );
 	rules_right.push_back( temporary );
 	
 	// 2
 	temporary.clear();
-	temporary.push_back( new Law( -1 ) );	// means that the block can not be put on the right
+	temporary.push_back( -1 );	// means that the block can not be put on the right
 	rules_right.push_back( temporary );
 	
 	// 3
 	temporary.clear();
-	temporary.push_back( new Law( -1 ) );
+	temporary.push_back( -1 );
 	rules_right.push_back( temporary );
 	
 	// 4
 	temporary.clear();
-	temporary.push_back( new Law( 1 ) );
-	temporary.push_back( new Law( 2 ) );
+	temporary.push_back( 1 );
+	temporary.push_back( 2 );
 	rules_right.push_back( temporary );
 	
 	// 5
 	temporary.clear();
-	temporary.push_back( new Law( 6 ) );
+	temporary.push_back( 6 );
 	rules_right.push_back( temporary );
 	
 	// 6
 	temporary.clear();
-	temporary.push_back( new Law( 6 ) );
-	temporary.push_back( new Law( 7 ) );
+	temporary.push_back( 6 );
+	temporary.push_back( 7 );
 	rules_right.push_back( temporary );
 	
 	// 7
 	temporary.clear();
-	temporary.push_back( new Law( -1 ) );
+	temporary.push_back( -1 );
 	rules_right.push_back( temporary );
 	
 	// 8
 	temporary.clear();
-	temporary.push_back( new Law( 9 ) );
-	temporary.push_back( new Law( 15 ) );
+	temporary.push_back( 9 );
+	temporary.push_back( 15 );
 	rules_right.push_back( temporary );
 	
 	// 9
 	temporary.clear();
-	temporary.push_back( new Law( -1 ) );
+	temporary.push_back( -1 );
 	rules_right.push_back( temporary );
 	
 	// 10
 	temporary.clear();
-	temporary.push_back( new Law( 11 ) );
-	temporary.push_back( new Law( 12 ) );
+	temporary.push_back( 11 );
+	temporary.push_back( 12 );
 	rules_right.push_back( temporary );
 	
 	// 11
 	temporary.clear();
-	temporary.push_back( new Law( 11 ) );
-	temporary.push_back( new Law( 12 ) );
+	temporary.push_back( 11 );
+	temporary.push_back( 12 );
 	rules_right.push_back( temporary );
 	
 	// 12
 	temporary.clear();
-	temporary.push_back( new Law( -1 ) );
+	temporary.push_back( -1 );
 	rules_right.push_back( temporary );
 	
 	// 13
 	temporary.clear();
-	temporary.push_back( new Law( 4 ) );
+	temporary.push_back( 4 );
 	rules_right.push_back( temporary );
 }
