@@ -29,7 +29,7 @@ void Play_halloween::mechanics()
 	hero->sliding();
 	
 	// HERO CLIMB
-	if( brick->checkLadder( hero->getRect() ) )
+	if( ladder->checkLadder( hero->getRect(), screen_w ) )
 	{
 		if( !brick->checkBlockByPixel( hero->getRect() ) )
 		{
@@ -57,7 +57,7 @@ void Play_halloween::mechanics()
 		}
 		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
-			hero->getX() + hero->getW()> brick->getScreenWidth() ||
+			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
 			hero->undoJump();
@@ -72,7 +72,7 @@ void Play_halloween::mechanics()
 		scope->setVel( hero->getJump_vel() );
 		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
-			hero->getX() + hero->getW()> brick->getScreenWidth() ||
+			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
 			hero->undoJump();
@@ -100,7 +100,7 @@ void Play_halloween::mechanics()
 		scope->setVel( hero->getJump_vel() );
 		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
-			hero->getX() + hero->getW()> brick->getScreenWidth() ||
+			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
 			hero->undoJump();
@@ -113,7 +113,7 @@ void Play_halloween::mechanics()
 		scope->setVel( hero->getVel() );
 		
 		if( brick->checkBlockByPixel( hero->getRect() ) ||
-			hero->getX() + hero->getW()> brick->getScreenWidth() ||
+			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
 			hero->undoMove();
@@ -130,7 +130,7 @@ void Play_halloween::mechanics()
 	for( unsigned i = 0; i < kunai->getNr(); i++ )
 	{
 		if( brick->checkBlockByPixel( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW() > brick->getScreenWidth() +kunai->getW() ||
+		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
 		kunai->getX( i ) < -kunai->getW() /*||
 		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
 		{
@@ -163,22 +163,28 @@ void Play_halloween::mechanics()
 	{
 		// BRICK MOVE
 		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
-		if( scope->getFactor() == 0 )	greenery->moveX( hero->getDirection(), scope->getVel() );
+		if( scope->getFactor() == 0 )
+		{
+			greenery->moveX( hero->getDirection(), scope->getVel() );
+			ladder->moveX( hero->getDirection(), scope->getVel() );
+		}
+			
 		if( brick->checkBlockByPixel( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
+			ladder->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
 	// SCOPE MOVE
-	scope->move( hero->getX(), brick->getScreenWidth() );
+	scope->move( hero->getX(), screen_w );
 	
 	// BACKGROUND SET XY
 	bg->setXY( hero->getX(), hero->getY() );
 	
 	// HERO FALLEN
-	if( hero->isFallen( brick->getScreenHeight() ) )
+	if( hero->isFallen( screen_h ) )
 	{
 		hero->setNewY( brick->getLastGrassY() );
 		
@@ -188,7 +194,7 @@ void Play_halloween::mechanics()
 		}
 		else
 		{
-			if( hero->setNewX( brick->getLastGrassX(), brick->getScreenWidth() ) )
+			if( hero->setNewX( brick->getLastGrassX(), screen_w ) )
 			{
 				scope->transform();
 			}
@@ -204,7 +210,7 @@ void Play_halloween::mechanics()
 	{
 		brick->findLastGrass( hero->getRect() );
 	}
-	if( greenery->backToGrass( brick->backToGrass() ) != 0 )
+	if( ladder->backToGrass( greenery->backToGrass( brick->backToGrass() ) ) != 0 )
 	{
 		hero->setFallen();
 	}
