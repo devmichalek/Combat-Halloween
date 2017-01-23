@@ -12,6 +12,8 @@
 class Play_desert
 {
 	int state;
+	int screen_w;
+	int screen_h;
 	
 	// Play desert objects
 	Sound* sound;
@@ -22,6 +24,7 @@ class Play_desert
 	Heart* heart;
 	Scope* scope;
 	Greenery* greenery;
+	Ladder* ladder;
 	
 public:
 
