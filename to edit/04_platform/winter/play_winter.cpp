@@ -13,6 +13,7 @@ Play_winter::Play_winter()
 	heart = new Heart;
 	scope = new Scope;
 	greenery = new Greenery;
+	ladder = new Ladder;
 }
 
 Play_winter::~Play_winter()
@@ -30,15 +31,21 @@ void Play_winter::free()
 	delete heart;
 	delete scope;
 	delete greenery;
+	delete ladder;
 }
 
 	
 void Play_winter::load( int screen_w, int screen_h )
 {
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
+	
 	bg->load( "data/sprites/play/2.png", screen_w, screen_h );
 	brick->load( screen_w, screen_h, 18, 2 );
 	kunai->load();
 	heart->load();
+	greenery->load( 2 );
+	ladder->load( 2 );
 }
 
 void Play_winter::setHero( int screen_w, int screen_h, int type )
@@ -49,8 +56,9 @@ void Play_winter::setHero( int screen_w, int screen_h, int type )
 
 void Play_winter::setWorldsize( int size )
 {
-	brick->positioning( size );
-	greenery->load( 2 );
+	ladder->positioning( brick->positioning( size, ladder->getW( 0 ), ladder->getH( 0 ),
+	ladder->getW( 1 ), ladder->getH( 1 ) ) );
+	
 	greenery->positioning( brick->getBlocks() );
 }
 
@@ -70,15 +78,16 @@ void Play_winter::draw( sf::RenderWindow* &window )
 	kunai->fadein( 2 );
 	heart->fadein( 2 );
 	greenery->fadein( 2 );
+	ladder->fadein( 2 );
 
 	
 	bg->draw( window );
-	greenery->drawBG( window, brick->getScreenWidth() );
-	brick->drawLadders( window );
+	greenery->drawBG( window, screen_w );
+	ladder->draw( window, screen_w );
 	hero->draw( window );
 	kunai->draw( window );
 	brick->draw( window );
-	greenery->draw( window, brick->getScreenWidth() );
+	greenery->draw( window, screen_w );
 	heart->draw( window );
 }
 
