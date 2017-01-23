@@ -12,6 +12,8 @@
 class Play_halloween
 {
 	int state;
+	int screen_w;
+	int screen_h;
 	
 	// Play halloween objects
 	Sound* sound;
@@ -22,6 +24,7 @@ class Play_halloween
 	Heart* heart;
 	Scope* scope;
 	Greenery* greenery;
+	Ladder* ladder;
 	
 public:
 
