@@ -105,17 +105,17 @@ void Greenery::load( int type )
 	for( sf::Uint8 i = 0; i < max-min; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ sprites.size() -1 ]->setName( "vegetation-sprites[ " +to_string( i+min ) +"]" );
+		sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +to_string( i+min ) +"]" );
 		sprites[ sprites.size() -1 ]->load( "data/sprites/play/" +to_string( type )
 		+ "/" +to_string( i+min ) + ".png" );
 	}
 	
 	
 	fstream file;
-	file.open( "data/txt/vegetation/" +to_string( type ) +".txt" );
+	file.open( "data/txt/greenery/" +to_string( type ) +".txt" );
 	if( file.bad() )
 	{
-		printf( "Can not open file: %s\n", ("data/txt/vegetation/" +to_string( type ) +".txt").c_str() );
+		printf( "Can not open file: %s\n", ("data/txt/greenery/" +to_string( type ) +".txt").c_str() );
 	}
 	else
 	{
