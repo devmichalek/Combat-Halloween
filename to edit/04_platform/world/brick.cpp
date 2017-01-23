@@ -2,17 +2,104 @@
 #include "rules.h"
 #include <cstdlib>	// rand
 
-Special_ladder::Special_ladder()
+Brick::Brick()
 {
-	x = y = 0;
-	used = false;
+	width = 0;
+	screen_w = 0;
+	screen_h = 0;
+	
+	left = 0;
+	right = 0;
+	
+	lastGrass = -1;
+	fallenX = 0;
 }
 
-Special_ladder::~Special_ladder()
+Brick::~Brick()
 {
-	x = y = 0;
-	used = false;
+	free();
 }
+
+void Brick::free()
+{
+	for( unsigned i = 0; i < block.size(); i++ )
+	{
+		block[ i ]->free();
+	}
+	
+	block.clear();
+	blocks.clear();
+	bg_blocks.clear();
+
+	width = 0;
+	screen_w = 0;
+	screen_h = 0;
+	
+	left = 0;
+	right = 0;
+
+	lastGrass = -1;
+	fallenX = 0;
+}
+
+
+
+void Brick::load( int screen_w, int screen_h, int nr, int type )
+{
+	free();
+	
+	width = 128;
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
+
+	for( int i = 0; i < 16; i++ )
+	{
+		block.push_back( new MySprite() );
+		block[ i ]->setName( "brick-block[" +to_string( i ) +"]" );
+		block[ i ]->loadByImage( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
+	}
+	
+	
+	// Set first block.
+	blocks.push_back( new Block() );
+	blocks[ blocks.size()-1 ]->nr = 4;
+	blocks[ blocks.size()-1 ]->x = 0;
+	blocks[ blocks.size()-1 ]->y = screen_h -width;
+}
+
+void Brick::draw( sf::RenderWindow* &window )
+{
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->nr != -1 )
+		{
+			if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+			{
+				block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				window->draw( block[ blocks[ i ]->nr ]->get() );
+			}
+		}
+	}
+}
+
+
+
+void Brick::fadein( int v, int max )
+{
+	for( unsigned i = 0; i < block.size(); i++ )
+	{
+		block[ i ]->fadein( v, max );
+	}
+}
+
+void Brick::fadeout( int v, int min )
+{
+	for( unsigned i = 0; i < block.size(); i++ )
+	{
+		block[ i ]->fadeout( v, min );
+	}
+}
+
 
 
 
@@ -29,80 +116,6 @@ void Brick::addBlock( int chosen, int x_width, int floor )
 	
 	// set y.
 	blocks[ blocks.size()-1 ]->y = floor;
-}
-
-void Brick::addLadder( int x, int y )
-{
-	// add ladder.
-	ladders.push_back( new Ladder() );
-	
-	// set x.
-	ladders[ ladders.size()-1 ]->x = x;
-	
-	// set y.
-	ladders[ ladders.size()-1 ]->y = y;
-	
-	// setColor
-	if( world_type == 0 )
-	{
-		ladders[ ladders.size()-1 ]->red = 0;
-		ladders[ ladders.size()-1 ]->green = 0xFF;
-		ladders[ ladders.size()-1 ]->blue = rand()%0xAA;
-	}
-	else if( world_type == 1 )
-	{
-		ladders[ ladders.size()-1 ]->red = 0xFF;
-		ladders[ ladders.size()-1 ]->green = 0x9C;
-		ladders[ ladders.size()-1 ]->blue = rand()%0x50;
-	}
-	else if( world_type == 2 )
-	{
-		ladders[ ladders.size()-1 ]->red = 0;
-		ladders[ ladders.size()-1 ]->green = 0xFF;
-		ladders[ ladders.size()-1 ]->blue = rand()%(0xFF -0xAA) + 0xAA;
-	}
-	else if( world_type == 3 )
-	{
-		ladders[ ladders.size()-1 ]->red = 0xFF;
-		ladders[ ladders.size()-1 ]->green = 0xFF;
-		ladders[ ladders.size()-1 ]->blue = rand()%0xAA;
-	}
-	
-	if( rand()%1000 +1 > 985 && !red.used ) // 1.5% - red ladder
-	{
-		ladders[ ladders.size()-1 ]->red = 0xFF;
-		ladders[ ladders.size()-1 ]->green = 0;
-		ladders[ ladders.size()-1 ]->blue = 0;
-		
-		red.used = true;
-		red.x = ladders[ ladders.size()-1 ]->x;
-		red.y = ladders[ ladders.size()-1 ]->y;
-		// printf( "R %d    %d %d\n", world_type, red.x, red.y );
-	}
-	
-	if( rand()%1000 +1 > 990 && !white.used ) // 1% - white ladder
-	{
-		ladders[ ladders.size()-1 ]->red = 0xFF;
-		ladders[ ladders.size()-1 ]->green = 0xFF;
-		ladders[ ladders.size()-1 ]->blue = 0xFF;
-		
-		white.used = true;
-		white.x = ladders[ ladders.size()-1 ]->x;
-		white.y = ladders[ ladders.size()-1 ]->y;
-		// printf( "W %d    %d %d\n", world_type, white.x, white.y );
-	}
-	
-	if( rand()%1000 +1 > 998 && !black.used ) // 0.2% - black ladder
-	{
-		ladders[ ladders.size()-1 ]->red = 0;
-		ladders[ ladders.size()-1 ]->green = 0;
-		ladders[ ladders.size()-1 ]->blue = 0;
-		
-		black.used = true;
-		black.x = ladders[ ladders.size()-1 ]->x;
-		black.y = ladders[ ladders.size()-1 ]->y;
-		// printf( "B %d    %d %d\n", world_type, black.x, black.y );
-	}
 }
 
 bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
@@ -123,7 +136,6 @@ bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
 			{
 				if( new_floor >= floor-1 && new_floor <= floor+1 )
 				{
-					// printf( "old %d, new %d\n", floor, new_floor );
 					break;
 				}
 			}
@@ -168,11 +180,14 @@ void Brick::fill( int a, int n )	// fill pending n
 	}
 }
 
-void Brick::islands()
+vector <Plank*> Brick::top_islands( int w2, int h2 )
 {
 	vector <int> posX;
 	vector <int> posY;
 	vector <int> counters;
+	
+	// Create planks
+	vector < Plank* > planks;
 	
 	// Searcher
 	for( unsigned i = 0; i < blocks.size(); i++ )
@@ -186,7 +201,6 @@ void Brick::islands()
 			posX.push_back( blocks[ i ]->x );
 			posY.push_back( blocks[ i ]->y );
 			counters.push_back( 1 );
-			// printf( "X: %d  Y: %d  nr: %d\n", blocks[ i ]->x, blocks[ i ]->y, blocks[ i ]->nr );
 			
 			for( unsigned j = i+1; j < blocks.size(); j++ )
 			{
@@ -229,18 +243,19 @@ void Brick::islands()
 		}
 	}
 	
-
 	// Creator
 	for( unsigned i = 0; i < posX.size(); i++ )
 	{
-		// printf( "X: %d  Y: %d  C: %d\n", posX[ i ], posY[ i ], counters[ i ] );
 		if( counters[ i ] >= 4 )
 		{
 			int myX = posX[ i ] +width;
 			int myY = posY[ i ] -(width*2);
 			
-			addLadder( myX -ladder[ 1 ].getWidth() +10, posY[ i ] -ladder[ 1 ].getHeight() );
-			ladders[ ladders.size()-1 ]->nr = 1;
+			// add ladder
+			planks.push_back( new Plank() );
+			planks[ planks.size() -1 ]->x = myX -w2 +10;
+			planks[ planks.size() -1 ]->y = posY[ i ] -h2;
+			planks[ planks.size() -1 ]->nr = 1;
 			
 			while( counters[ i ] >= 4 )
 			{
@@ -272,15 +287,18 @@ void Brick::islands()
 			}
 		}
 	}
+	
+	return planks;
 }
 
-void Brick::positioning( int size )
+vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 {
 	// Create rules.
 	Rules* rules = new Rules;
 	rules->ruleRightSide();
 	
-	
+	// Create planks
+	vector < Plank* > planks;
 	
 	// Random stuff
 	sf::Uint8 scope;
@@ -336,9 +354,9 @@ void Brick::positioning( int size )
 					
 				
 				// add ladder
-				int ladder_x = blocks[ blocks.size()-1 ]->x -ladder[ 0 ].getWidth() +10;
-				int ladder_y = blocks[ blocks.size()-1 ]->y +width -ladder[ 0 ].getHeight();
-				addLadder( ladder_x, ladder_y );
+				planks.push_back( new Plank() );
+				planks[ planks.size() -1 ]->x = blocks[ blocks.size()-1 ]->x -w1 +10;
+				planks[ planks.size() -1 ]->y = blocks[ blocks.size()-1 ]->y +width -h1;
 			}
 			else
 			{
@@ -369,9 +387,9 @@ void Brick::positioning( int size )
 				addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
 				
 				// add ladder
-				int ladder_x = blocks[ blocks.size()-1 ]->x -10;
-				int ladder_y = blocks[ blocks.size()-1 ]->y -ladder[ 0 ].getHeight();
-				addLadder( ladder_x, ladder_y );
+				planks.push_back( new Plank() );
+				planks[ planks.size() -1 ]->x = blocks[ blocks.size()-1 ]->x -10;
+				planks[ planks.size() -1 ]->y = blocks[ blocks.size()-1 ]->y -h1;
 			}
 		}
 	}
@@ -544,15 +562,20 @@ void Brick::positioning( int size )
 	fill( 14, 11 );
 	fill( 8, 15 );
 	
-	islands();
+	vector <Plank*> additional = top_islands( w2, h2 );
+	for( unsigned i = 0; i < additional.size(); i++ )
+	{
+		planks.push_back( new Plank() );
+		planks[ planks.size() -1 ]->x = additional[ i ]->x;
+		planks[ planks.size() -1 ]->y = additional[ i ]->y;
+		planks[ planks.size() -1 ]->nr = additional[ i ]->nr;
+	}
 	
-	// printf( "type %d, %d\n", world_type, (right -left)/128 );
+	return planks;
 }
 
 
-
-
-
+/*
 bool Brick::checkCollision( Rect* rect )
 {
 	if( rect != NULL )
@@ -563,8 +586,8 @@ bool Brick::checkCollision( Rect* rect )
 			{
 				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 				{
-					block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-					if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					if( block[ blocks[ i ]->nr ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 					{
 						return true;
 					}
@@ -575,6 +598,7 @@ bool Brick::checkCollision( Rect* rect )
 	
 	return false;
 }
+*/
 
 bool Brick::checkBlockByPixel( Rect* rect )
 {
@@ -591,18 +615,18 @@ bool Brick::checkBlockByPixel( Rect* rect )
 			{
 				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 				{
-					block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
 				
 					for( int j = l; j <= r; j++ )
 					{
-						if( block[ blocks[ i ]->nr ].checkPixelCollision( j, t ) )		return true;
-						else if( block[ blocks[ i ]->nr ].checkPixelCollision( j, b ) )	return true;
+						if( block[ blocks[ i ]->nr ]->checkPixelCollision( j, t ) )		return true;
+						else if( block[ blocks[ i ]->nr ]->checkPixelCollision( j, b ) )	return true;
 					}
 					
 					for( int j = t; j <= b; j++ )
 					{
-						if( block[ blocks[ i ]->nr ].checkPixelCollision( l, j ) )		return true;
-						else if( block[ blocks[ i ]->nr ].checkPixelCollision( r, j ) )	return true;
+						if( block[ blocks[ i ]->nr ]->checkPixelCollision( l, j ) )		return true;
+						else if( block[ blocks[ i ]->nr ]->checkPixelCollision( r, j ) )	return true;
 					}
 				}
 			}
@@ -612,25 +636,6 @@ bool Brick::checkBlockByPixel( Rect* rect )
 	return false;
 }
 
-bool Brick::checkLadder( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		for( unsigned i = 0; i < ladders.size(); i++ )
-		{
-			if( ladders[ i ]->x > -width && ladders[ i ]->x < screen_w )
-			{
-				ladder[ ladders[ i ]->nr ].setPosition( ladders[ i ]->x, ladders[ i ]->y );
-				if( ladder[ ladders[ i ]->nr ].checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
-				{
-					return true;
-				}
-			}
-		}
-	}
-	
-	return false;
-}
 
 
 
@@ -648,11 +653,6 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 			blocks[ i ]->x += vel;
 		}
 		
-		for( unsigned i = 0; i < ladders.size(); i++ )
-		{
-			ladders[ i ]->x += vel;
-		}
-		
 		left += vel;
 		right += vel;
 	}
@@ -666,11 +666,6 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 		for( unsigned i = 0; i < blocks.size(); i++ )
 		{
 			blocks[ i ]->x -= vel;
-		}
-		
-		for( unsigned i = 0; i < ladders.size(); i++ )
-		{
-			ladders[ i ]->x -= vel;
 		}
 		
 		left -= vel;
@@ -690,6 +685,10 @@ vector < Block* > Brick::getBlocks()
 	return blocks;
 }
 
+
+
+
+
 void Brick::findLastGrass( Rect* rect )
 {
 	if( rect != NULL )
@@ -700,8 +699,8 @@ void Brick::findLastGrass( Rect* rect )
 			{
 				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 				{
-					block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-					if( block[ blocks[ i ]->nr ].checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
+					block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					if( block[ blocks[ i ]->nr ]->checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
 					{
 						lastGrass = i;
 						//printf("%d\n", lastGrass );
@@ -727,13 +726,22 @@ void Brick::setNewX( int heroX )
 {
 	//printf("lll %d\n", lastGrass );
 	fallenX = blocks[ lastGrass ]->x;
-	int t = heroX -blocks[ lastGrass ]->x;
-	if( t < 0 )	t = -t;
 	
+	int value = heroX -blocks[ lastGrass ]->x;
+	
+	if( value < 0 )
+	{
+		value = -value;
+	}
+		
 	if( heroX < fallenX )
-		fallenX -= t;
+	{
+		fallenX -= value;
+	}
 	else
-		fallenX += t;
+	{
+		fallenX += value;
+	}
 }
 
 int Brick::backToGrass()
@@ -751,16 +759,13 @@ int Brick::backToGrass()
 				blocks[ i ]->x += add;
 			}
 			
-			for( unsigned i = 0; i < ladders.size(); i++ )
-			{
-				ladders[ i ]->x += add;
-			}
-			
 			left += add;
 			right += add;
 			
 			if( fallenX < blocks[ lastGrass ]->x )
+			{
 				fallenX = 0;
+			}
 		}
 		else if( fallenX < blocks[ lastGrass ]->x )
 		{
@@ -771,16 +776,13 @@ int Brick::backToGrass()
 				blocks[ i ]->x += add;
 			}
 			
-			for( unsigned i = 0; i < ladders.size(); i++ )
-			{
-				ladders[ i ]->x += add;
-			}
-			
 			left += add;
 			right += add;
 			
 			if( fallenX > blocks[ lastGrass ]->x )
+			{
 				fallenX = 0;
+			}
 		}
 		else
 		{
@@ -789,179 +791,4 @@ int Brick::backToGrass()
 	}
 	
 	return add;
-}
-
-
-
-
-Brick::Brick()
-{
-	nr = 0;
-	block = NULL;
-	
-	ladder_nr = 0;
-	ladder = NULL;
-	
-	width = 0;
-	screen_w = 0;
-	screen_h = 0;
-	
-	left = 0;
-	right = 0;
-	
-	world_type = -1;
-	lastGrass = -1;
-	fallenX = 0;
-}
-
-Brick::~Brick()
-{
-	free();
-}
-
-void Brick::free()
-{
-	if( block != NULL )
-	{
-		for( int i = 0; i < nr; i++ )
-		{
-			block[ i ].free();
-		}
-		
-		delete [] block;
-		block = NULL;
-		nr = 0;
-	}
-	
-	if( ladder != NULL )
-	{
-		for( int i = 0; i < ladder_nr; i++ )
-		{
-			ladder[ i ].free();
-		}
-		
-		delete [] ladder;
-		ladder = NULL;
-		ladder_nr = 0;
-	}
-	
-	width = 0;
-	screen_w = 0;
-	screen_h = 0;
-	
-	blocks.clear();
-	ladders.clear();
-	
-	left = 0;
-	right = 0;
-	
-	world_type = -1;
-	lastGrass = -1;
-	fallenX = 0;
-}
-
-
-
-
-void Brick::load( int screen_w, int screen_h, int nr, int type )
-{
-	free();
-	
-	world_type = type;
-	// printf("type: %d\n", world_type );
-	
-	width = 128;
-	this->screen_w = screen_w;
-	this->screen_h = screen_h;
-
-	this->nr = nr;
-	block = new MySprite[ nr ];
-	for( int i = 0; i < nr; i++ )
-	{
-		block[ i ].setName( "brick-block[" +to_string( i ) +"]" );
-		block[ i ].loadByImage( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
-	}
-	
-	this->ladder_nr = 2;
-	ladder = new MySprite[ ladder_nr ];
-	for( int i = 0; i < ladder_nr; i++ )
-	{
-		ladder[ i ].setName( "brick-ladder[" +to_string( i ) +"]" );
-		ladder[ i ].loadByImage( "data/sprites/play/ladder/" +to_string( i ) +".png" );
-	}
-	
-	
-	// Set first block.
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 4;
-	blocks[ blocks.size()-1 ]->x = 0;
-	blocks[ blocks.size()-1 ]->y = screen_h -width;
-}
-
-void Brick::draw( sf::RenderWindow* &window )
-{
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( blocks[ i ]->nr != -1 )
-		{
-			if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
-			{
-				block[ blocks[ i ]->nr ].setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				window->draw( block[ blocks[ i ]->nr ].get() );
-			}
-		}
-	}
-}
-
-void Brick::drawLadders( sf::RenderWindow* &window )
-{
-	for( unsigned i = 0; i < ladders.size(); i++ )
-	{
-		if( ladders[ i ]->x > -width && ladders[ i ]->x < screen_w )
-		{
-			ladder[ ladders[ i ]->nr ].setPosition( ladders[ i ]->x, ladders[ i ]->y );
-			ladder[ ladders[ i ]->nr ].setColor( sf::Color( ladders[ i ]->red, ladders[ i ]->green, ladders[ i ]->blue ) );
-			window->draw( ladder[ ladders[ i ]->nr ].get() );
-		}
-	}
-}
-
-
-
-
-
-int Brick::getScreenWidth()
-{
-	return screen_w;
-}
-
-int Brick::getScreenHeight()
-{
-	return screen_h;
-}
-
-void Brick::fadein( int v, int max )
-{
-	for( int i = 0; i < nr; i++ )
-	{
-		block[ i ].fadein( v, max );
-	}
-	
-	for( int i = 0; i < ladder_nr; i++ )
-	{
-		ladder[ i ].fadein( v, max );
-	}
-}
-
-void Brick::fadeout( int v, int min )
-{
-	for( int i = 0; i < nr; i++ )
-	{
-		block[ i ].fadeout( v, min );
-	}
-	
-	for( int i = 0; i < ladder_nr; i++ )
-	{
-		ladder[ i ].fadeout( v, min );
-	}
 }
