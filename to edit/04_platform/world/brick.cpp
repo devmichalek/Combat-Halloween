@@ -227,39 +227,16 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			
 		}
 	}
-	
-	for( unsigned i = 0; i < posX.size(); i++ )
-	{
-		printf( "%d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
-	}
 
 	
-	// Rubbish
-	bool rubbish = true;
-	while( rubbish )
-	{
-		rubbish = false;
-		for( unsigned i = 0; i < posX.size(); i++ )
-		{
-			if( counters[ i ] < 4 )
-			{
-				rubbish = true;
-				posX.erase( posX.begin() +i );
-				posY.erase( posY.begin() +i );
-				counters.erase( counters.begin() +i );
-			}
-		}
-	}
-	
-	
-	// Creator// Creator
+	// Creator
 	for( unsigned i = 0; i < posX.size(); i++ )
 	{
 		// x and y for ladder
 		int myX, myY;
 		
 		// searching for free space
-		bool success = false;
+		sf::Uint8 success = 0;
 		
 		// check left
 		for( unsigned j = 0; j < size; j++ )
@@ -268,16 +245,15 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			{
 				if( blocks[ j ]->x == posX[ i ] -width )
 				{
-					success = true;
+					success = 1;
 					myX = blocks[ j ]->x +width -w2 +10;
-					printf( "1 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
 					break;
 				}
 			}
 		}
 		
 		// check right
-		if( !success )
+		if( success == 0 )
 		{
 			for( unsigned j = 0; j < size; j++ )
 			{
@@ -285,9 +261,8 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 				{
 					if( blocks[ j ]->x == posX[ i ] + ( width *counters[ i ] ) )
 					{
-						success = true;
+						success = 2;
 						myX = blocks[ j ]->x -10;
-						printf( "2 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
 						break;
 					}
 				}
@@ -295,7 +270,8 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 		}
 		
 		// other option
-		if( !success )
+		int n = 0;
+		if( success == 0 )
 		{
 			for( unsigned k = 1; k < counters[ i ]; k++ )
 			{
@@ -305,9 +281,8 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 					{
 						if( blocks[ j ]->x == posX[ i ] + ( width *k ) )
 						{
-							success = true;
+							success = 3;
 							myX = blocks[ j ]->x -10;
-							printf( "3 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
 							k = counters[ i ] -1;
 							break;
 						}
@@ -316,7 +291,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			}
 		}
 		
-		if( success )
+		if( success != 0 )
 		{
 			planks.push_back( new Plank() );
 			planks[ planks.size() -1 ]->x = myX;
@@ -326,6 +301,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			if( posY[ i ] == screen_h -width*4 ) // 0, 1, 2.
 			{
 				myY = screen_h -width;
+				int saveX = myX;
 				
 				addBlock( 10, myX, myY );
 				myX += width;
@@ -339,6 +315,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 				addBlock( 12, myX, myY );
 				
 				myY = screen_h -width*2;
+				myX = saveX;
 			}
 			else
 			{
