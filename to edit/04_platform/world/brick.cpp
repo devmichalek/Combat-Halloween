@@ -80,6 +80,8 @@ void Brick::draw( sf::RenderWindow* &window )
 			}
 		}
 	}
+	
+	// printf( "%d\n", left );
 }
 
 
@@ -178,6 +180,215 @@ void Brick::fill( int a, int n )	// fill pending n
 			}
 		}
 	}
+}
+
+vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
+{
+	vector <int> posX;
+	vector <int> posY;
+	vector <int> counters;
+	
+	// Create planks
+	vector < Plank* > planks;
+	
+	// Searcher
+	for( unsigned i = 0; i < size; i++ )
+	{
+		// blocks with grass, apriopriate y
+		if( blocks[ i ]->y < screen_h -width*2 )
+		{
+			if( blocks[ i ]->nr >= 5 && blocks[ i ]->nr <= 7 )
+			{
+				posX.push_back( blocks[ i ]->x );
+				posY.push_back( blocks[ i ]->y );
+				counters.push_back( 1 );
+				
+				for( unsigned j = i+1; j < size; j++ )
+				{
+					if( blocks[ j ]->y == blocks[ i ]->y ) // check y
+					{
+						if( (blocks[ j ]->nr >= 5 && blocks[ j ]->nr <= 7) || blocks[ j ]->nr == -1 )
+						{
+							counters[ counters.size()-1 ] ++;
+						}
+						else
+						{
+							i = j +1;
+							break;
+						}
+					}
+					else
+					{
+						i = j +1;
+						break;
+					}
+				}
+			}
+			
+		}
+	}
+	
+	// Merger
+	bool merger = true;
+	while( merger )
+	{
+		merger = false;
+		for( unsigned i = 0; i < posX.size() -1; i++ )
+		{
+			if( posX[ i ] +(width *(counters[ i ] +1) ) == posX[ i +1 ] )
+			{
+				merger = true;
+				counters[ i ] += counters[ i +1 ];
+				posY[ i ] = screen_h -width*3;
+				posX.erase( posX.begin() +i +1 );
+				posY.erase( posY.begin() +i +1 );
+				counters.erase( counters.begin() +i +1 );
+			}
+		}
+	}
+
+	
+	// Rubbish
+	bool rubbish = true;
+	while( rubbish )
+	{
+		rubbish = false;
+		for( unsigned i = 0; i < posX.size(); i++ )
+		{
+			if( counters[ i ] < 4 )
+			{
+				rubbish = true;
+				posX.erase( posX.begin() +i );
+				posY.erase( posY.begin() +i );
+				counters.erase( counters.begin() +i );
+			}
+		}
+	}
+	
+	
+	// Creator// Creator
+	for( unsigned i = 0; i < posX.size(); i++ )
+	{
+		// x and y for ladder
+		int myX, myY;
+		
+		// searching for free space
+		bool success = false;
+		
+		// check left
+		for( unsigned j = 0; j < size; j++ )
+		{
+			if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
+			{
+				if( blocks[ j ]->x == posX[ i ] -width )
+				{
+					success = true;
+					myX = blocks[ j ]->x +width -w2 +10;
+					printf( "1 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
+					break;
+				}
+			}
+		}
+		
+		// check right
+		if( !success && false )
+		{
+			for( unsigned j = 0; j < size; j++ )
+			{
+				if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
+				{
+					if( blocks[ j ]->x == posX[ i ] + ( width *counters[ i ] ) )
+					{
+						success = true;
+						myX = blocks[ j ]->x -w2 -10;
+						printf( "2 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
+						break;
+					}
+				}
+			}
+		}
+		
+		
+		// check other options
+		if( !success && false )
+		{
+			for( int k = 0; k < counters[ i ]; k++ )
+			{
+				for( unsigned j = 0; j < size; j++ )
+				{
+					if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
+					{
+						if( blocks[ j ]->x == posX[ i ] -width*k )
+						{
+							success = true;
+							if( rand()%2 == 1 )
+							{
+								myX = blocks[ j ]->x -w2 -10;
+							}
+							else
+							{
+								myX = blocks[ j ]->x +width -w2 +10;
+							}
+							
+							printf( "3 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
+							break;
+						}
+					}
+				}
+			}
+		}
+		
+		if( success )
+		{
+			planks.push_back( new Plank() );
+			planks[ planks.size() -1 ]->x = myX;
+			planks[ planks.size() -1 ]->y = posY[ i ] -h2 +width*2;
+			planks[ planks.size() -1 ]->nr = 1;
+		}
+		/*
+		
+		
+		// add ladder
+		while( counters[ i ] >= 4 )
+		{
+			int result = 0;
+			while( result < 2 )
+			{
+				result = rand()%(counters[ i ]/2) +1;
+			}
+			
+			//---------------------------
+			// 5
+			addBlock( 5, myX, myY );
+			result -= 1;
+			myX += width;
+			
+			// 6
+			for( int j = 0; j < result-1; j++ )
+			{
+				addBlock( 6, myX, myY );
+				myX += width;
+			}
+			
+			// 7
+			addBlock( 7, myX, myY );
+			myX += width*2;
+			//---------------------------
+			
+			counters[ i ] -= ( result +3 );
+		}
+		*/
+	}
+	
+	/*
+	for( unsigned i = 0; i < posX.size(); i++ )
+	{
+		printf( "%d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
+	}
+	 * */
+	
+	
+	return planks;
 }
 
 vector <Plank*> Brick::top_islands( int w2, int h2 )
@@ -533,8 +744,6 @@ vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 		}
 	}
 	
-	
-	// Delete rules
 	delete rules;
 	
 	// printf( "\n\n\n\n" );
@@ -562,7 +771,18 @@ vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 	fill( 14, 11 );
 	fill( 8, 15 );
 	
+	unsigned s = blocks.size();
+	
 	vector <Plank*> additional = top_islands( w2, h2 );
+	for( unsigned i = 0; i < additional.size(); i++ )
+	{
+		planks.push_back( new Plank() );
+		planks[ planks.size() -1 ]->x = additional[ i ]->x;
+		planks[ planks.size() -1 ]->y = additional[ i ]->y;
+		planks[ planks.size() -1 ]->nr = additional[ i ]->nr;
+	}
+	
+	additional = bot_islands( w2, h2, s );
 	for( unsigned i = 0; i < additional.size(); i++ )
 	{
 		planks.push_back( new Plank() );
