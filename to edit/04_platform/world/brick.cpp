@@ -246,6 +246,11 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			}
 		}
 	}
+	
+	for( unsigned i = 0; i < posX.size(); i++ )
+	{
+		printf( "%d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
+	}
 
 	
 	// Rubbish
@@ -291,7 +296,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 		}
 		
 		// check right
-		if( !success && false )
+		if( !success )
 		{
 			for( unsigned j = 0; j < size; j++ )
 			{
@@ -300,7 +305,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 					if( blocks[ j ]->x == posX[ i ] + ( width *counters[ i ] ) )
 					{
 						success = true;
-						myX = blocks[ j ]->x -w2 -10;
+						myX = blocks[ j ]->x -10;
 						printf( "2 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
 						break;
 					}
@@ -308,29 +313,21 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			}
 		}
 		
-		
-		// check other options
-		if( !success && false )
+		// other option
+		if( !success )
 		{
-			for( int k = 0; k < counters[ i ]; k++ )
+			for( unsigned k = 1; k < counters[ i ]; k++ )
 			{
 				for( unsigned j = 0; j < size; j++ )
 				{
 					if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
 					{
-						if( blocks[ j ]->x == posX[ i ] -width*k )
+						if( blocks[ j ]->x == posX[ i ] + ( width *k ) )
 						{
 							success = true;
-							if( rand()%2 == 1 )
-							{
-								myX = blocks[ j ]->x -w2 -10;
-							}
-							else
-							{
-								myX = blocks[ j ]->x +width -w2 +10;
-							}
-							
+							myX = blocks[ j ]->x -10;
 							printf( "3 %d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
+							k = counters[ i ] -1;
 							break;
 						}
 					}
@@ -344,49 +341,43 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			planks[ planks.size() -1 ]->x = myX;
 			planks[ planks.size() -1 ]->y = posY[ i ] -h2 +width*2;
 			planks[ planks.size() -1 ]->nr = 1;
-		}
-		/*
-		
-		
-		// add ladder
-		while( counters[ i ] >= 4 )
-		{
-			int result = 0;
-			while( result < 2 )
+			
+			if( posY[ i ] == screen_h -width*4 ) // 0, 1, 2.
 			{
-				result = rand()%(counters[ i ]/2) +1;
+				myY = screen_h -width;
+				
+				addBlock( 10, myX, myY );
+				myX += width;
+				
+				for( int j = 0; j < counters[ i ]-2; j++ )
+				{
+					addBlock( 11, myX, myY );
+					myX += width;
+				}
+				
+				addBlock( 12, myX, myY );
+				
+				myY = screen_h -width*2;
+			}
+			else
+			{
+				myY = screen_h -width;
 			}
 			
-			//---------------------------
-			// 5
-			addBlock( 5, myX, myY );
-			result -= 1;
+			addBlock( 0, myX, myY );
 			myX += width;
 			
-			// 6
-			for( int j = 0; j < result-1; j++ )
+			for( int j = 0; j < counters[ i ]-2; j++ )
 			{
-				addBlock( 6, myX, myY );
+				addBlock( 1, myX, myY );
 				myX += width;
 			}
 			
-			// 7
-			addBlock( 7, myX, myY );
-			myX += width*2;
-			//---------------------------
+			addBlock( 2, myX, myY );
 			
-			counters[ i ] -= ( result +3 );
+			printf( "added %d %d\n", myX, myY );
 		}
-		*/
 	}
-	
-	/*
-	for( unsigned i = 0; i < posX.size(); i++ )
-	{
-		printf( "%d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
-	}
-	 * */
-	
 	
 	return planks;
 }
