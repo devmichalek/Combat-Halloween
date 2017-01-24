@@ -32,10 +32,11 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 
 	
-	
 	void addBlock( int chosen, int x_width, int floor );
 	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
 	void fill( int a, int n );	//  Fill from left to right
+	
+	vector <Plank*> bot_islands( int w2, int h2, unsigned size );	// we have send size because we want to have it before islands
 	vector <Plank*> top_islands( int w2, int h2 );
 	vector <Plank*> positioning( int size, int w1, int h1, int w2, int h2 );
 	
