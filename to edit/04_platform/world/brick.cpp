@@ -228,25 +228,6 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 		}
 	}
 	
-	// Merger
-	bool merger = true;
-	while( merger )
-	{
-		merger = false;
-		for( unsigned i = 0; i < posX.size() -1; i++ )
-		{
-			if( posX[ i ] +(width *(counters[ i ] +1) ) == posX[ i +1 ] )
-			{
-				merger = true;
-				counters[ i ] += counters[ i +1 ];
-				posY[ i ] = screen_h -width*3;
-				posX.erase( posX.begin() +i +1 );
-				posY.erase( posY.begin() +i +1 );
-				counters.erase( counters.begin() +i +1 );
-			}
-		}
-	}
-	
 	for( unsigned i = 0; i < posX.size(); i++ )
 	{
 		printf( "%d %d %d\n", posX[ i ], posY[ i ], counters[ i ] );
