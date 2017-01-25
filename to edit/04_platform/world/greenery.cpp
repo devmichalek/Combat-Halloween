@@ -94,7 +94,7 @@ void Greenery::load( int type )
 	else if( type == 2 )
 	{
 		min = 18;
-		max = 27 +1;
+		max = 28 +1;
 	}
 	else if( type == 3 )
 	{
