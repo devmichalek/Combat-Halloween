@@ -13,6 +13,8 @@ Brick::Brick()
 	
 	lastGrass = -1;
 	fallenX = 0;
+	
+	water_size = 0;
 }
 
 Brick::~Brick()
@@ -40,6 +42,8 @@ void Brick::free()
 
 	lastGrass = -1;
 	fallenX = 0;
+	
+	water_size = 0;
 }
 
 
@@ -52,7 +56,7 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	for( int i = 0; i < 16; i++ )
+	for( int i = 0; i < nr; i++ )
 	{
 		block.push_back( new MySprite() );
 		block[ i ]->setName( "brick-block[" +to_string( i ) +"]" );
@@ -69,6 +73,15 @@ void Brick::load( int screen_w, int screen_h, int nr, int type )
 
 void Brick::draw( sf::RenderWindow* &window )
 {
+	for( unsigned i = 0; i < bg_blocks.size(); i++ )
+	{
+		if( bg_blocks[ i ]->x > -width && bg_blocks[ i ]->x < screen_w )
+		{
+			block[ bg_blocks[ i ]->nr ]->setPosition( bg_blocks[ i ]->x, bg_blocks[ i ]->y );
+			window->draw( block[ bg_blocks[ i ]->nr ]->get() );
+		}
+	}
+	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->nr != -1 )
@@ -182,6 +195,193 @@ void Brick::fill( int a, int n )	// fill pending n
 	}
 }
 
+
+
+
+void Brick::cave()
+{
+	
+}
+
+void Brick::water()
+{
+	vector <Block*> water_block;
+	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->nr == 2 ) // right border
+		{
+			bool success = false;
+			
+			// what kind of block is at the bottom
+			for( unsigned j = 0; j < blocks.size(); j++ )
+			{
+				if( blocks[ j ]->x == blocks[ i ]->x )
+				{
+					if( blocks[ j ]->y == screen_h -width )
+					{
+						if( blocks[ j ]->nr == 12 )
+						{
+							// printf( "%d\n", blocks[ i ]->x );
+							success = true;
+						}
+					}
+				}
+			}
+			
+			if( success )
+			{
+				int myX = blocks[ i ]->x +width;
+				int good_nr = -1;
+				
+				// what kind of block is on the right
+				for( unsigned j = i+1; j < blocks.size(); j++ )
+				{
+					if( blocks[ j ]->nr < 8 ) // grass blocks
+					{
+						if( blocks[ j ]->x == myX )
+						{
+							if( blocks[ j ]->y == blocks[ i ]->y )
+							{
+								myX += width;
+								
+								if( blocks[ j ]->nr == 0 )
+								{
+									good_nr = j;
+									// printf( "%d\n", blocks[ j ]->x );
+								}
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+				}
+				
+				if( good_nr != -1 )
+				{
+					bool ready = false;
+					
+					// what kind of block is at the bottom again
+					for( unsigned j = 0; j < blocks.size(); j++ )
+					{
+						if( blocks[ j ]->x == blocks[ good_nr ]->x )
+						{
+							if( blocks[ j ]->y == screen_h -width )
+							{
+								if( blocks[ j ]->nr == 10 )
+								{
+									ready = true;
+								}
+							}
+						}
+					}
+					
+					if( ready )
+					{
+						// check that there is no bottom islands
+						for( unsigned j = 0; j < blocks.size(); j++ )
+						{
+							if( blocks[ j ]->y > blocks[ i ]->y )
+							{
+								if( blocks[ j ]->x > blocks[ i ]->x && blocks[ j ]->x < blocks[ good_nr ]->x )
+								{
+									if( blocks[ j ]->nr >= 0 && blocks[ j ]->nr <= 7 )
+									{
+										ready = false;
+										break;
+									}
+								}
+							}
+						}
+							
+					}
+					
+					if( ready )
+					{
+						// printf( "im ready  %d %d\n",  blocks[ i ]->x, blocks[ good_nr ]->x );
+						
+						// 16
+						for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
+						{
+							// add block.
+							water_block.push_back( new Block() );
+							water_block[ water_block.size()-1 ]->nr = 16;
+							water_block[ water_block.size()-1 ]->x = j;
+							water_block[ water_block.size()-1 ]->y = blocks[ i ]->y;
+						}
+						
+						// 17
+						for( int k = blocks[ i ]->y +width; k <= screen_h -width; k += width )
+						{
+							for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
+							{
+								// add block.
+								water_block.push_back( new Block() );
+								water_block[ water_block.size()-1 ]->nr = 17;
+								water_block[ water_block.size()-1 ]->x = j;
+								water_block[ water_block.size()-1 ]->y = k;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		if( blocks[ i ]->y == screen_h -width )
+		{
+			if( blocks[ i ]->nr == 2 || blocks[ i ]->nr == 12 )
+			{
+				int good_nr = -1;
+				
+				if( blocks[ i ]->x %width == 0 )
+				{
+					for( int k = blocks[ i ]->x +width; k < right; k += width )
+					{
+						// check block on the right
+						for( unsigned j = 0; j < blocks.size(); j++ )
+						{
+							if( blocks[ j ]->x == k && blocks[ j ]->y == blocks[ i ]->y )
+							{
+								if( blocks[ j ]->nr == 10 || blocks[ j ]->nr == 0 )
+								{
+									good_nr = j;
+									k = right;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				
+			
+			
+				if( good_nr != -1 )
+				{
+					// 16
+					for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
+					{
+						// add block.
+						water_block.push_back( new Block() );
+						water_block[ water_block.size()-1 ]->nr = 16;
+						water_block[ water_block.size()-1 ]->x = j;
+						water_block[ water_block.size()-1 ]->y = blocks[ i ]->y;
+					}
+				}
+			}
+		}
+	}
+	
+	water_size = water_block.size();	// for pixel collision
+	auto it = blocks.begin();
+	for( unsigned i = 0; i < water_size; i++ )
+	{
+		it = blocks.insert( it, water_block[ i ] );
+	}
+}
+
 vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 {
 	vector <int> posX;
@@ -279,7 +479,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			
 			if( success == 2 )
 			{
-				myX -= width*(counters[ i ] -1) +w2;
+				myX -= width*(counters[ i ] -1) -w2;
 				counters[ i ] -= 1;
 			}
 			
@@ -318,7 +518,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			
 			addBlock( 2, myX, myY );
 			
-			printf( "%d    %d %d\n", success, myX, myY );
+			// printf( "%d    %d %d\n", success, myX, myY );
 		}
 	}
 	
@@ -763,7 +963,7 @@ bool Brick::checkBlockByPixel( Rect* rect )
 		int t = rect->getY();		// top
 		int b = rect->getBot(); 		// bot
 		
-		for( unsigned i = 0; i < blocks.size(); i++ )
+		for( unsigned i = water_size; i < blocks.size(); i++ )
 		{
 			if( blocks[ i ]->nr != -1 )
 			{
