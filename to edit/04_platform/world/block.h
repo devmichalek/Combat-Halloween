@@ -13,6 +13,7 @@ public:
 	
 };
 
+/*
 class BG_Block :public Block
 {
 	
@@ -22,3 +23,4 @@ public:
 
 	BG_Block();
 };
+*/
