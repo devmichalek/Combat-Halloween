@@ -8,6 +8,7 @@
 #include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
 #include "04_platform/world/greenery.h"
+#include "04_platform/world/ladder.h"
 
 class Play_wood
 {
