@@ -41,7 +41,7 @@ void Play_winter::load( int screen_w, int screen_h )
 	this->screen_h = screen_h;
 	
 	bg->load( "data/sprites/play/2.png", screen_w, screen_h );
-	brick->load( screen_w, screen_h, 18, 2 );
+	brick->load( screen_w, screen_h, 2 );
 	kunai->load();
 	heart->load();
 	greenery->load( 2 );
@@ -56,11 +56,20 @@ void Play_winter::setHero( int screen_w, int screen_h, int type )
 
 void Play_winter::setWorldsize( int size )
 {
-	ladder->positioning( brick->positioning( size, ladder->getW( 0 ), ladder->getH( 0 ),
-	ladder->getW( 1 ), ladder->getH( 1 ) ) );
+	brick->createTopBorders( size, ladder->getW( 0 ), ladder->getH( 0 ) );
+	brick->createLeftBorders();
+	brick->createRightBorders();
+	brick->setLeft();
+	brick->setRight();
+	brick->createStuffing( 10, 11 );
+	brick->createStuffing( 14, 11 );
+	brick->createStuffing( 8, 15 );
+	brick->createTopIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
+	brick->createBotIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
+	brick->createWater();
 	
+	ladder->positioning( brick->getPlanks() );
 	greenery->positioning( brick->getBlocks() );
-	brick->water();
 }
 
 
