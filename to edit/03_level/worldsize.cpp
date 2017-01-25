@@ -47,7 +47,7 @@ void Worldsize::load( int screen_w, int screen_h )
 	text.setText( "Set length" );
 	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
 	
-	delay = 3.05;
+	delay = 4.05;
 	blocks_times = 5;
 	blocks_value = 120;
 	blocks = blocks_value;
@@ -109,23 +109,22 @@ void Worldsize::handle( sf::Event &event )
 					{
 						blocks_text.setText( t + ", est. time > " + to_string( r ) + " sec" );
 					}
-					else if( r > 1800 && r < 2400 )
+					else if( r > 1800 && r < 2700 )
 					{
 						blocks_text.setText( t + ", est. time > 30 min" );
 					}
-					else if( r > 2400 && r < 3600 )
+					else if( r > 2700 && r < 3600 )
 					{
 						blocks_text.setText( t + ", est. time > 45 min" );
 					}
-					else if( r > 3600 && r < 4200 )
+					else if( r > 3600 && r < 4500 )
 					{
 						blocks_text.setText( t + ", est. time > 1 hour" );
 					}
 					else
 					{
-						blocks_text.setText( t + "   y o u   a r e   c r a z y" );
+						blocks_text.setText( t + ", est. time > 1 hour 15 min" );
 					}
-					
 					
 					blocks_text.reloadPosition();
 				}
