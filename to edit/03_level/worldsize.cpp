@@ -15,9 +15,9 @@ Worldsize::Worldsize()
 	blocks = 0;
 	keep = false;
 	
-	delay = 0;
+	min = 0;
+	multiplier = 0;
 	blocks_value = 0;
-	blocks_times = 0;
 }
 
 Worldsize::~Worldsize()
@@ -31,9 +31,9 @@ Worldsize::~Worldsize()
 	blocks = 0;
 	keep = false;
 	
-	delay = 0;
+	min = 0;
+	multiplier = 0;
 	blocks_value = 0;
-	blocks_times = 0;
 	
 	click.free();
 }
@@ -47,14 +47,14 @@ void Worldsize::load( int screen_w, int screen_h )
 	text.setText( "Set length" );
 	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
 	
-	delay = 4.05;
-	blocks_times = 5;
-	blocks_value = 120;
-	blocks = blocks_value;
+	min = 20;
+	multiplier = 5;
+	blocks_value = multiplier *100;
+	blocks = blocks_value +min;
 	
 	blocks_text.setName( "worldsize-blocks_text" );
-	blocks_text.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0x33, 0x66, 0x99 );
-	blocks_text.setText( "blocks " + to_string( blocks ) + "-" + to_string( blocks*blocks_times ) + ", est. time > " + to_string( static_cast <int> (blocks *delay) ) +"sec" );
+	blocks_text.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x33, 0x66, 0x99 );
+	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
 	
 	
 	sf::Uint8 bar_width = 30;
@@ -69,9 +69,9 @@ void Worldsize::load( int screen_w, int screen_h )
 	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
 	green_bar.setColor( sf::Color( 0x66, 0x99, 0x66 ) );
 	
-	green_bar.setScale( blocks_value/2 -10, 1 );
+	green_bar.setScale( blocks_value/multiplier, 1 );
 	
-	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() +3 );
+	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() );
 	
 	click.setID( "choice-click" );
 	click.load( "data/sounds/click.wav", 50 );
@@ -99,33 +99,8 @@ void Worldsize::handle( sf::Event &event )
 						click.play();
 					}
 					
-					blocks = (green_bar.getWidth()+10) *2;
-
-					int r = static_cast <int> (blocks*delay);
-						
-					string t = "blocks " + to_string( blocks ) + "-" + to_string( blocks*blocks_times );
-					
-					if( r < 1800 )
-					{
-						blocks_text.setText( t + ", est. time > " + to_string( r ) + " sec" );
-					}
-					else if( r > 1800 && r < 2700 )
-					{
-						blocks_text.setText( t + ", est. time > 30 min" );
-					}
-					else if( r > 2700 && r < 3600 )
-					{
-						blocks_text.setText( t + ", est. time > 45 min" );
-					}
-					else if( r > 3600 && r < 4500 )
-					{
-						blocks_text.setText( t + ", est. time > 1 hour" );
-					}
-					else
-					{
-						blocks_text.setText( t + ", est. time > 1 hour 15 min" );
-					}
-					
+					blocks = green_bar.getWidth() *multiplier +min;
+					blocks_text.setText( to_string( blocks ) +" blocks in line" );
 					blocks_text.reloadPosition();
 				}
 			}
@@ -165,15 +140,16 @@ void Worldsize::fadeout( int j, int min )
 
 int Worldsize::getResult()
 {
+	printf( "%d\n", blocks );
 	return blocks;
 }
 
 void Worldsize::reset()
 {
 	range = 0;
-	blocks = blocks_value;
-	green_bar.setScale( blocks_value/2 -10, 1 );
-	blocks_text.setText( "blocks " + to_string( blocks ) + "-" + to_string( blocks*blocks_times ) + ", est. time > " + to_string( static_cast <int> (blocks *delay) ) +"sec" );
+	blocks = blocks_value/multiplier +min;
+	green_bar.setScale( blocks_value/multiplier, 1 );
+	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
 	blocks_text.reloadPosition();
 }
 

@@ -25,9 +25,9 @@ class Worldsize :public Click
 	int blocks;
 	bool keep;
 	
-	float delay;
-	sf::Uint8 blocks_value;
-	sf::Uint8 blocks_times;
+	int min;
+	int multiplier;
+	int blocks_value;
 	
 public:
 
