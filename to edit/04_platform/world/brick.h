@@ -8,7 +8,7 @@ class Brick
 {
 	vector <MySprite*> block;
 	vector <Block*> blocks;
-	vector <Block*> bg_blocks;
+	// vector <BG_Block*> bg_blocks;
 	
 	int width;
 	int screen_w;
@@ -19,7 +19,7 @@ class Brick
 	int lastGrass;
 	int fallenX;
 	
-	int water_size;
+	unsigned water_size;
 	
 public:
 	
@@ -29,11 +29,12 @@ public:
 	
 	void load( int screen_w, int screen_h, int nr, int type );
 	void draw( sf::RenderWindow* &window );
+	// void drawBG( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 
-	
+	// void addBG_Block( int n, int x, int y, int8_t x_scale = 1, int8_t y_scale = 1 );
 	void addBlock( int chosen, int x_width, int floor );
 	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
 	void fill( int a, int n );	//  Fill from left to right
