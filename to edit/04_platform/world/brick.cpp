@@ -255,11 +255,12 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 		// check right
 		if( success == 0 )
 		{
-			for( unsigned j = 0; j < size; j++ )
+			for( unsigned j = 0; j < size -1; j++ )
 			{
 				if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
 				{
-					if( blocks[ j ]->x == posX[ i ] + ( width *(counters[ i ]-1) ) )
+					if( blocks[ j ]->x == posX[ i ] + ( width *(counters[ i ]-1) )
+						&& blocks[ j ]->x != blocks[ j +1 ]->x )
 					{
 						success = 2;
 						myX = blocks[ j ]->x -10;
@@ -278,7 +279,7 @@ vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
 			
 			if( success == 2 )
 			{
-				myX -= width*(counters[ i ] -1);
+				myX -= width*(counters[ i ] -1) +w2;
 				counters[ i ] -= 1;
 			}
 			
