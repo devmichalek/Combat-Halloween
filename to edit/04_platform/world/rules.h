@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cstdint>
+#include <string>
 
 using namespace std;
 
@@ -14,7 +15,7 @@ public:
 	~Rules();
 	void free();
 	
-	void ruleRightSide();
+	void rule();
 	
 	vector <int8_t> getRightRules( int which );
 	
@@ -23,4 +24,8 @@ public:
 	
 	int fillForTop( int nr, int need );
 	int fillForBot( int nr );
+	
+	int to_int( string s );
+	unsigned getSize( int which );
+	int8_t getBlock( int which );
 };

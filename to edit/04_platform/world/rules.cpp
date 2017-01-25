@@ -1,6 +1,7 @@
 #include "rules.h"
 #include <cstdlib>
 #include <stdio.h>
+#include <fstream>
 
 
 Rules::Rules()
@@ -15,19 +16,25 @@ Rules::~Rules()
 
 void Rules::free()
 {
-	for( unsigned i = 0; i < rules_right.size(); i++ )
+	if( !rules_right.empty() )
 	{
-		rules_right[ i ].clear();
+		for( unsigned i = 0; i < rules_right.size(); i++ )
+		{
+			if( !rules_right[ i ].empty() )
+			{
+				rules_right[ i ].clear();
+			}
+		}
+		
+		rules_right.clear();
 	}
-	
-	rules_right.clear();
 }
 
 
 
 vector <int8_t> Rules::getRightRules( int which )
 {
-	return rules_right[ which +1 ];	// +1 because of void block ( -1 )
+	return rules_right[ which +1 ];
 }
 
 int Rules::getTopBlockFor( int nr )
@@ -143,90 +150,82 @@ int Rules::fillForBot( int nr )
 
 
 
-void Rules::ruleRightSide()
+void Rules::rule()
 {
 	vector <int8_t> temporary;
+	fstream file;
 	
-	// -1 - void
-	temporary.clear();
-	temporary.push_back( 0 );
-	temporary.push_back( 5 );
-	rules_right.push_back( temporary );
+	file.open( "data/txt/rules/right_rules.txt" );
+	if( file.bad() )
+	{
+		printf( "Cannot open %s\n", "data/txt/rules/right_rules.txt" );
+	}
+	else
+	{
+		string line;
+		while( getline( file, line ) )
+		{
+			temporary.clear();
+			string l = "";
+			for( unsigned i = 0; i < line.size(); i++ )
+			{
+				if( line[ i ] == ' ' )
+				{
+					temporary.push_back( to_int( l ) );
+					l = "";
+				}
+				else
+				{
+					l += line[ i ];
+				}
+			}
+			
+			rules_right.push_back( temporary );
+		}
+	}
 	
-	// 0
-	temporary.clear();
-	temporary.push_back( 1 );
-	temporary.push_back( 2 );
-	rules_right.push_back( temporary );
+	/*
+	for( unsigned i = 0; i < rules_right.size(); i++ )
+	{
+		for( unsigned j = 0; j < rules_right[ i ].size(); j++ )
+		{
+			printf( "%d ", rules_right[ i ][ j ] );
+		}
+		printf( "\n" );
+	}
+	*/
 	
-	// 1
-	temporary.clear();
-	temporary.push_back( 2 );
-	temporary.push_back( 1 );
-	rules_right.push_back( temporary );
+	// printf( "\n\n\n\n" );
 	
-	// 2
-	temporary.clear();
-	temporary.push_back( -1 );	// means that the block can not be put on the right
-	rules_right.push_back( temporary );
+	file.close();
+}
+
+int Rules::to_int( string s )
+{
+    bool m = false;
+    int tmp = 0;
+    unsigned i = 0;
+    if( s[ 0 ] == '-' )
+    {
+          i++;
+          m = true;
+    }
 	
-	// 3
-	temporary.clear();
-	temporary.push_back( -1 );
-	rules_right.push_back( temporary );
+    while( i < s.size() )
+    {
+      tmp = 10*tmp +s[ i ] -48;
+      i++;
+    }
 	
-	// 4
-	temporary.clear();
-	temporary.push_back( 1 );
-	temporary.push_back( 2 );
-	rules_right.push_back( temporary );
-	
-	// 5
-	temporary.clear();
-	temporary.push_back( 6 );
-	rules_right.push_back( temporary );
-	
-	// 6
-	temporary.clear();
-	temporary.push_back( 6 );
-	temporary.push_back( 7 );
-	rules_right.push_back( temporary );
-	
-	// 7
-	temporary.clear();
-	temporary.push_back( -1 );
-	rules_right.push_back( temporary );
-	
-	// 8
-	temporary.clear();
-	temporary.push_back( 9 );
-	temporary.push_back( 15 );
-	rules_right.push_back( temporary );
-	
-	// 9
-	temporary.clear();
-	temporary.push_back( -1 );
-	rules_right.push_back( temporary );
-	
-	// 10
-	temporary.clear();
-	temporary.push_back( 11 );
-	temporary.push_back( 12 );
-	rules_right.push_back( temporary );
-	
-	// 11
-	temporary.clear();
-	temporary.push_back( 11 );
-	temporary.push_back( 12 );
-	rules_right.push_back( temporary );
-	
-	// 12
-	temporary.clear();
-	temporary.push_back( -1 );
-	rules_right.push_back( temporary );
-	
-	// 13
-	temporary.clear();
-	temporary.push_back( 4 );
-	rules_right.push_back( temporary );
+    return m ? -tmp : tmp;   
+}
+
+unsigned Rules::getSize( int which )
+{
+	return rules_right[ which +1 ].size();
+}
+
+int8_t Rules::getBlock( int which )
+{
+	return getRightRules( which )[ rand()%(getSize( which )) ];
 }
