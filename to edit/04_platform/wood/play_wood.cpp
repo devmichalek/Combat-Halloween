@@ -61,6 +61,7 @@ void Play_wood::setWorldsize( int size )
 	ladder->getH( 0 ), ladder->getW( 1 ), ladder->getH( 1 ) ) );
 	
 	greenery->positioning( brick->getBlocks() );
+	brick->water();
 }
 
 void Play_wood::handle( sf::Event &event )
