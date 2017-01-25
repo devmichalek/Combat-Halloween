@@ -31,7 +31,7 @@ void Brick::free()
 	
 	block.clear();
 	blocks.clear();
-	bg_blocks.clear();
+	// bg_blocks.clear();
 
 	width = 0;
 	screen_w = 0;
@@ -88,18 +88,21 @@ void Brick::draw( sf::RenderWindow* &window )
 	// printf( "%d\n", left );
 }
 
+/*
 void Brick::drawBG( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < bg_blocks.size(); i++ )
 	{
 		if( bg_blocks[ i ]->x > -width && bg_blocks[ i ]->x < screen_w )
 		{
+			block[ bg_blocks[ i ]->nr ]->setScale( bg_blocks[ i ]->x_scale, bg_blocks[ i ]->y_scale );
 			block[ bg_blocks[ i ]->nr ]->setPosition( bg_blocks[ i ]->x, bg_blocks[ i ]->y );
 			window->draw( block[ bg_blocks[ i ]->nr ]->get() );
+			block[ bg_blocks[ i ]->nr ]->setScale( 1, 1 );
 		}
 	}
 }
-
+*/
 
 
 void Brick::fadein( int v, int max )
@@ -120,6 +123,28 @@ void Brick::fadeout( int v, int min )
 
 
 
+/*
+void Brick::addBG_Block( int n, int x, int y, int8_t x_scale, int8_t y_scale )
+{
+	// add block.
+	bg_blocks.push_back( new BG_Block() );
+	
+	// set chosen.
+	bg_blocks[ bg_blocks.size()-1 ]->nr = n;
+	
+	// set x.
+	bg_blocks[ bg_blocks.size()-1 ]->x = x;
+	
+	// set y.
+	bg_blocks[ bg_blocks.size()-1 ]->y = y;
+	
+	// set x scale.
+	bg_blocks[ bg_blocks.size()-1 ]->x_scale = x_scale;
+	
+	// set y scale.
+	bg_blocks[ bg_blocks.size()-1 ]->y_scale = y_scale;
+}
+*/
 
 void Brick::addBlock( int chosen, int x_width, int floor )
 {
@@ -201,72 +226,10 @@ void Brick::fill( int a, int n )	// fill pending n
 
 
 
-void Brick::cave()
-{
-	int MAX = 30;
-	int MIN = 10;
-	int x1, x2;
-	
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		x1 = -1;
-		x2 = -1;
-		
-		if( blocks[ i ]->nr == 0 || blocks[ i ]->nr == 5 )
-		{
-			if( rand()%100 < 10 ) // 7% of chance
-			{
-				x1 = blocks[ i ]->x;
-				for( int j = blocks[ i ]->x +width*MIN; j < blocks[ i ]->x +width*MAX; j += width )
-				{
-					for( unsigned k = 0; k < blocks.size(); k++ )
-					{
-						if( blocks[ k ]->nr == 2 || blocks[ k ]->nr == 7 )
-						{
-							if( blocks[ k ]->x == j )
-							{
-								x2 = j;
-								j = blocks[ i ]->x +width*MAX;
-								i = k;
-								break;
-							}
-						}
-					}
-				}
-				
-				if( x2 != -1 )
-				{
-					for( int k = screen_h -width; k >= screen_h -width*6; k -= width )
-					{
-						// 10 block
-						bg_blocks.push_back( new Block() );
-						bg_blocks[ bg_blocks.size()-1 ]->nr = 10;
-						bg_blocks[ bg_blocks.size()-1 ]->x = x1;
-						bg_blocks[ bg_blocks.size()-1 ]->y = k;
-						
-						// 11 block
-						for( int j = x1 +width; j < x2; j += width )
-						{
-							bg_blocks.push_back( new Block() );
-							bg_blocks[ bg_blocks.size()-1 ]->nr = 11;
-							bg_blocks[ bg_blocks.size()-1 ]->x = j;
-							bg_blocks[ bg_blocks.size()-1 ]->y = k;
-						}
-						
-						// 12 block
-						bg_blocks.push_back( new Block() );
-						bg_blocks[ bg_blocks.size()-1 ]->nr = 12;
-						bg_blocks[ bg_blocks.size()-1 ]->x = x2;
-						bg_blocks[ bg_blocks.size()-1 ]->y = k;
-					}
-				}
-			}
-		}
-	}
-}
-
 void Brick::water()
 {
+	vector <Block*> water_blocks;
+	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->nr == 2 ) // right border
@@ -366,10 +329,10 @@ void Brick::water()
 						for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
 						{
 							// add block.
-							bg_blocks.push_back( new Block() );
-							bg_blocks[ bg_blocks.size()-1 ]->nr = 16;
-							bg_blocks[ bg_blocks.size()-1 ]->x = j;
-							bg_blocks[ bg_blocks.size()-1 ]->y = blocks[ i ]->y;
+							water_blocks.push_back( new Block() );
+							water_blocks[ water_blocks.size()-1 ]->nr = 16;
+							water_blocks[ water_blocks.size()-1 ]->x = j;
+							water_blocks[ water_blocks.size()-1 ]->y = blocks[ i ]->y;
 						}
 						
 						// 17
@@ -378,10 +341,10 @@ void Brick::water()
 							for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
 							{
 								// add block.
-								bg_blocks.push_back( new Block() );
-								bg_blocks[ bg_blocks.size()-1 ]->nr = 17;
-								bg_blocks[ bg_blocks.size()-1 ]->x = j;
-								bg_blocks[ bg_blocks.size()-1 ]->y = k;
+								water_blocks.push_back( new Block() );
+								water_blocks[ water_blocks.size()-1 ]->nr = 17;
+								water_blocks[ water_blocks.size()-1 ]->x = j;
+								water_blocks[ water_blocks.size()-1 ]->y = k;
 							}
 						}
 					}
@@ -424,25 +387,23 @@ void Brick::water()
 					for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
 					{
 						// add block.
-						bg_blocks.push_back( new Block() );
-						bg_blocks[ bg_blocks.size()-1 ]->nr = 16;
-						bg_blocks[ bg_blocks.size()-1 ]->x = j;
-						bg_blocks[ bg_blocks.size()-1 ]->y = blocks[ i ]->y;
+						water_blocks.push_back( new Block() );
+						water_blocks[ water_blocks.size()-1 ]->nr = 16;
+						water_blocks[ water_blocks.size()-1 ]->x = j;
+						water_blocks[ water_blocks.size()-1 ]->y = blocks[ i ]->y;
 					}
 				}
 			}
 		}
 	}
 	
-	water_size = bg_blocks.size();	// for pixel collision
+	water_size = water_blocks.size();	// for pixel collision
 	
 	auto it = blocks.begin();
 	for( unsigned i = 0; i < water_size; i++ )
 	{
-		it = blocks.insert( it, bg_blocks[ i ] );
+		it = blocks.insert( it, water_blocks[ i ] );
 	}
-	
-	bg_blocks.clear();
 }
 
 vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
@@ -988,7 +949,7 @@ vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 		planks[ planks.size() -1 ]->nr = additional[ i ]->nr;
 	}
 	
-	cave();
+	//cave();
 	
 	return planks;
 }
@@ -1072,10 +1033,12 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 			blocks[ i ]->x += vel;
 		}
 		
+		/*
 		for( unsigned i = 0; i < bg_blocks.size(); i++ )
 		{
 			bg_blocks[ i ]->x += vel;
 		}
+		*/
 		
 		left += vel;
 		right += vel;
@@ -1092,10 +1055,12 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 			blocks[ i ]->x -= vel;
 		}
 		
+		/*
 		for( unsigned i = 0; i < bg_blocks.size(); i++ )
 		{
 			bg_blocks[ i ]->x -= vel;
 		}
+		*/
 		
 		left -= vel;
 		right -= vel;
@@ -1188,10 +1153,12 @@ int Brick::backToGrass()
 				blocks[ i ]->x += add;
 			}
 			
+			/*
 			for( unsigned i = 0; i < bg_blocks.size(); i++ )
 			{
 				bg_blocks[ i ]->x += add;
 			}
+			*/
 			
 			left += add;
 			right += add;
@@ -1210,10 +1177,12 @@ int Brick::backToGrass()
 				blocks[ i ]->x += add;
 			}
 			
+			/*
 			for( unsigned i = 0; i < bg_blocks.size(); i++ )
 			{
 				bg_blocks[ i ]->x += add;
 			}
+			*/
 			
 			left += add;
 			right += add;
