@@ -200,13 +200,57 @@ void Brick::fill( int a, int n )	// fill pending n
 
 void Brick::cave()
 {
+	int MAX = 20;
+	int x1, x2;
 	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		x1 = -1;
+		x2 = -1;
+		
+		if( blocks[ i ]->nr == 0 || blocks[ i ]->nr == 5 )
+		{
+			if( rand()%100 < 7 ) // 7% of chance
+			{
+				x1 = blocks[ i ]->x;
+				for( int j = blocks[ i ]->x; j < blocks[ i ]->x +width*MAX; j += width )
+				{
+					for( unsigned k = 0; k < blocks.size(); k++ )
+					{
+						if( blocks[ k ]->nr == 2 || blocks[ k ]->nr == 7 )
+						{
+							if( blocks[ k ]->x == j )
+							{
+								x2 = k;
+								j = blocks[ i ]->x +width*MAX;
+								break;
+							}
+						}
+					}
+				}
+				
+				if( x2 != -1 )
+				{
+					// 10 block
+					for( int k = 0; k <= screen_h -width; k += width )
+					{
+						for( int j = x1 +width; j < x2; j += width )
+						{
+							bg_blocks.push_back( new Block() );
+							blocks[ bg_blocks.size()-1 ]->nr = 10;
+							blocks[ bg_blocks.size()-1 ]->x = j;
+							blocks[ bg_blocks.size()-1 ]->y = k;
+						}
+					}
+					
+				}
+			}
+		}
+	}
 }
 
 void Brick::water()
 {
-	vector <Block*> water_block;
-	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->nr == 2 ) // right border
@@ -306,10 +350,10 @@ void Brick::water()
 						for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
 						{
 							// add block.
-							water_block.push_back( new Block() );
-							water_block[ water_block.size()-1 ]->nr = 16;
-							water_block[ water_block.size()-1 ]->x = j;
-							water_block[ water_block.size()-1 ]->y = blocks[ i ]->y;
+							bg_blocks.push_back( new Block() );
+							bg_blocks[ bg_blocks.size()-1 ]->nr = 16;
+							bg_blocks[ bg_blocks.size()-1 ]->x = j;
+							bg_blocks[ bg_blocks.size()-1 ]->y = blocks[ i ]->y;
 						}
 						
 						// 17
@@ -318,10 +362,10 @@ void Brick::water()
 							for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
 							{
 								// add block.
-								water_block.push_back( new Block() );
-								water_block[ water_block.size()-1 ]->nr = 17;
-								water_block[ water_block.size()-1 ]->x = j;
-								water_block[ water_block.size()-1 ]->y = k;
+								bg_blocks.push_back( new Block() );
+								bg_blocks[ bg_blocks.size()-1 ]->nr = 17;
+								bg_blocks[ bg_blocks.size()-1 ]->x = j;
+								bg_blocks[ bg_blocks.size()-1 ]->y = k;
 							}
 						}
 					}
@@ -364,22 +408,24 @@ void Brick::water()
 					for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
 					{
 						// add block.
-						water_block.push_back( new Block() );
-						water_block[ water_block.size()-1 ]->nr = 16;
-						water_block[ water_block.size()-1 ]->x = j;
-						water_block[ water_block.size()-1 ]->y = blocks[ i ]->y;
+						bg_blocks.push_back( new Block() );
+						bg_blocks[ bg_blocks.size()-1 ]->nr = 16;
+						bg_blocks[ bg_blocks.size()-1 ]->x = j;
+						bg_blocks[ bg_blocks.size()-1 ]->y = blocks[ i ]->y;
 					}
 				}
 			}
 		}
 	}
 	
-	water_size = water_block.size();	// for pixel collision
+	water_size = bg_blocks.size();	// for pixel collision
+	/*
 	auto it = blocks.begin();
 	for( unsigned i = 0; i < water_size; i++ )
 	{
 		it = blocks.insert( it, water_block[ i ] );
 	}
+	*/
 }
 
 vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
@@ -925,6 +971,8 @@ vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 		planks[ planks.size() -1 ]->nr = additional[ i ]->nr;
 	}
 	
+	cave();
+	
 	return planks;
 }
 
@@ -963,7 +1011,7 @@ bool Brick::checkBlockByPixel( Rect* rect )
 		int t = rect->getY();		// top
 		int b = rect->getBot(); 		// bot
 		
-		for( unsigned i = water_size; i < blocks.size(); i++ )
+		for( unsigned i = 0; i < blocks.size(); i++ )
 		{
 			if( blocks[ i ]->nr != -1 )
 			{

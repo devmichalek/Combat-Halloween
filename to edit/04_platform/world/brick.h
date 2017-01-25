@@ -19,7 +19,7 @@ class Brick
 	int lastGrass;
 	int fallenX;
 	
-	unsigned water_size;
+	int water_size;
 	
 public:
 	
