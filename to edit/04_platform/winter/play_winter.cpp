@@ -60,6 +60,7 @@ void Play_winter::setWorldsize( int size )
 	ladder->getW( 1 ), ladder->getH( 1 ) ) );
 	
 	greenery->positioning( brick->getBlocks() );
+	brick->water();
 }
 
 
