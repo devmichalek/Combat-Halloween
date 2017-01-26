@@ -1,28 +1,13 @@
 #pragma once
 
 #include "drawable/sprite.h"
+#include "plank.h"
 #include <vector>
-
-
-class Plank
-{
-	
-public:
-	
-	int x, y;
-	sf::Uint8 nr;
-	
-	sf::Uint8 red;
-	sf::Uint8 green;
-	sf::Uint8 blue;
-	
-	Plank();
-};
 
 class Ladder
 {
 	vector <MySprite*> ladder;
-	vector < Plank* > ladders;
+	vector <Plank*> ladders;
 	
 	// Color
 	sf::Uint8 red, green, blue, add;
@@ -32,10 +17,8 @@ public:
 	Ladder();
 	~Ladder();
 	void free();
-	
 	void load( int type );
 	void draw( sf::RenderWindow* &window, int screen_w );
-	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	

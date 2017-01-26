@@ -1,11 +1,7 @@
 #include "ladder.h"
 #include <cstdlib>
 
-Plank::Plank()
-{
-	x = y = nr = 0;
-	red = green = blue = 0;
-}
+
 
 
 
@@ -40,7 +36,7 @@ void Ladder::load( int type )
 	for( int i = 0; i < 2; i++ )
 	{
 		ladder.push_back( new MySprite() );
-		ladder[ i ]->setName( "brick-ladder[" +to_string( i ) +"]" );
+		ladder[ i ]->setName( "ladder[" +to_string( i ) +"]" );
 		ladder[ i ]->loadByImage( "data/sprites/play/ladder/" +to_string( i ) +".png" );
 	}
 	
