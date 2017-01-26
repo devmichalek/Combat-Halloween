@@ -1,6 +1,7 @@
 #include "brick.h"
 #include "rules.h"
-#include <cstdlib>	// rand
+#include <cstdlib>
+#include <fstream>
 
 Brick::Brick()
 {
@@ -11,10 +12,10 @@ Brick::Brick()
 	left = 0;
 	right = 0;
 	
-	lastGrass = -1;
 	fallenX = 0;
-	
-	water_size = 0;
+	lastGrass = -1;
+	water_line = 0;
+	islands_line = 0;
 }
 
 Brick::~Brick()
@@ -24,51 +25,76 @@ Brick::~Brick()
 
 void Brick::free()
 {
-	for( unsigned i = 0; i < block.size(); i++ )
-	{
-		block[ i ]->free();
-	}
-	
-	block.clear();
-	blocks.clear();
-	// bg_blocks.clear();
-
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
 	
 	left = 0;
 	right = 0;
-
-	lastGrass = -1;
-	fallenX = 0;
 	
-	water_size = 0;
+	if( !planks.empty() )
+	{
+		for( unsigned i = 0; i < planks.size(); i++ )
+		{
+			planks[ i ]->free();
+		}
+		
+		planks.clear();
+	}
+	
+	if( !sprites.empty() )
+	{
+		for( unsigned i = 0; i < sprites.size(); i++ )
+		{
+			sprites[ i ]->free();
+		}
+		
+		sprites.clear();
+	}
+	
+	if( !blocks.empty() )
+	{
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			blocks[ i ]->free();
+		}
+		
+		blocks.clear();
+	}
+	
+	fallenX = 0;
+	lastGrass = -1;
+	water_line = 0;
+	islands_line = 0;
 }
 
-
-
-void Brick::load( int screen_w, int screen_h, int nr, int type )
+void Brick::load( int screen_w, int screen_h, int type )
 {
 	free();
 	
 	width = 128;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-
-	for( int i = 0; i < nr; i++ )
+	
+	// Load data with amount of blocks.
+	fstream file;
+	file.open( "data/txt/brick/" +to_string( type ) +".map" );
+	if( file.bad() )
 	{
-		block.push_back( new MySprite() );
-		block[ i ]->setName( "brick-block[" +to_string( i ) +"]" );
-		block[ i ]->loadByImage( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
+		printf( "Cannot open %s\n", ("data/txt/brick/" +to_string( type ) +".map").c_str() );
 	}
-	
-	
-	// Set first block.
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 4;
-	blocks[ blocks.size()-1 ]->x = 0;
-	blocks[ blocks.size()-1 ]->y = screen_h -width;
+	else
+	{
+		int nr;
+		file >> nr;
+		
+		for( int i = 0; i < nr; i++ )
+		{
+			sprites.push_back( new MySprite() );
+			sprites[ i ]->setName( "brick-block[" +to_string( i ) +"]" );
+			sprites[ i ]->loadByImage( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
+		}
+	}
 }
 
 void Brick::draw( sf::RenderWindow* &window )
@@ -79,127 +105,323 @@ void Brick::draw( sf::RenderWindow* &window )
 		{
 			if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 			{
-				block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				window->draw( block[ blocks[ i ]->nr ]->get() );
+				sprites[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				window->draw( sprites[ blocks[ i ]->nr ]->get() );
 			}
 		}
 	}
-	
-	// printf( "%d\n", left );
 }
-
-/*
-void Brick::drawBG( sf::RenderWindow* &window )
-{
-	for( unsigned i = 0; i < bg_blocks.size(); i++ )
-	{
-		if( bg_blocks[ i ]->x > -width && bg_blocks[ i ]->x < screen_w )
-		{
-			block[ bg_blocks[ i ]->nr ]->setScale( bg_blocks[ i ]->x_scale, bg_blocks[ i ]->y_scale );
-			block[ bg_blocks[ i ]->nr ]->setPosition( bg_blocks[ i ]->x, bg_blocks[ i ]->y );
-			window->draw( block[ bg_blocks[ i ]->nr ]->get() );
-			block[ bg_blocks[ i ]->nr ]->setScale( 1, 1 );
-		}
-	}
-}
-*/
-
 
 void Brick::fadein( int v, int max )
 {
-	for( unsigned i = 0; i < block.size(); i++ )
+	for( unsigned i = 0; i < sprites.size(); i++ )
 	{
-		block[ i ]->fadein( v, max );
+		sprites[ i ]->fadein( v, max );
 	}
 }
 
 void Brick::fadeout( int v, int min )
 {
-	for( unsigned i = 0; i < block.size(); i++ )
+	for( unsigned i = 0; i < sprites.size(); i++ )
 	{
-		block[ i ]->fadeout( v, min );
+		sprites[ i ]->fadeout( v, min );
 	}
 }
 
 
 
-/*
-void Brick::addBG_Block( int n, int x, int y, int8_t x_scale, int8_t y_scale )
-{
-	// add block.
-	bg_blocks.push_back( new BG_Block() );
-	
-	// set chosen.
-	bg_blocks[ bg_blocks.size()-1 ]->nr = n;
-	
-	// set x.
-	bg_blocks[ bg_blocks.size()-1 ]->x = x;
-	
-	// set y.
-	bg_blocks[ bg_blocks.size()-1 ]->y = y;
-	
-	// set x scale.
-	bg_blocks[ bg_blocks.size()-1 ]->x_scale = x_scale;
-	
-	// set y scale.
-	bg_blocks[ bg_blocks.size()-1 ]->y_scale = y_scale;
-}
-*/
 
-void Brick::addBlock( int chosen, int x_width, int floor )
+int Brick::to_int( string s )
 {
-	// add block.
-	blocks.push_back( new Block() );
+    bool m = false;
+    int tmp = 0;
+    unsigned i = 0;
+    if( s[ 0 ] == '-' )
+    {
+          i++;
+          m = true;
+    }
 	
-	// set chosen.
-	blocks[ blocks.size()-1 ]->nr = chosen;
+    while( i < s.size() )
+    {
+      tmp = 10*tmp +s[ i ] -48;
+      i++;
+    }
 	
-	// set x.
-	blocks[ blocks.size()-1 ]->x = x_width;
-	
-	// set y.
-	blocks[ blocks.size()-1 ]->y = floor;
+    return m ? -tmp : tmp;   
 }
 
-bool Brick::randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor )
+void Brick::addPlank( int n, int x, int y )
 {
-	bool flag = false;
-	sf::Uint8 max = 4;
+	planks.push_back( new Plank() ); 	// add block.
+	planks[ planks.size()-1 ]->nr = n; 	// set chosen.
+	planks[ planks.size()-1 ]->x = x; 	// set x.
+	planks[ planks.size()-1 ]->y = y; 	// set y.
+}
+
+void Brick::addBlock( int n, int x, int y )
+{
+	blocks.push_back( new Block() ); 	// add block.
+	blocks[ blocks.size()-1 ]->nr = n; 	// set chosen.
+	blocks[ blocks.size()-1 ]->x = x; 	// set x.
+	blocks[ blocks.size()-1 ]->y = y; 	// set y.
+}
+
+sf::Uint8 Brick::getNewFloor( sf::Uint8 floor )
+{
 	sf::Uint8 min = 1;
+	sf::Uint8 max = 4;
 	
 	// Draw lots for true / false to change floor.
 	if( rand()%2 == 1 )	// 50%
 	{
-		// Getting new floor.
-		for(;;)
+		if( floor == min )
 		{
-			new_floor = rand()%max + min;
-			
-			if( new_floor != floor )
+			return min +1;
+		}
+		else if( floor == max )
+		{
+			return max -1;
+		}
+		else
+		{
+			return rand()%(max-2) + (min+1);
+		}
+	}
+	
+	return floor;
+}
+
+
+
+
+void Brick::createTopBorders( int size, int w, int h )
+{
+	// Set first block.
+	blocks.push_back( new Block() );
+	blocks[ blocks.size()-1 ]->nr = 4;
+	blocks[ blocks.size()-1 ]->x = 0;
+	blocks[ blocks.size()-1 ]->y = screen_h -width;
+	
+	// Create rules.
+	Rules* rules = new Rules;
+	rules->rule();
+	
+	sf::Uint8 floor = 1;
+	size --;
+	while( size-- )
+	{
+		// add block to the right
+		int8_t lastNr = blocks[ blocks.size()-1 ]->nr;
+		addBlock( rules->getBlock( lastNr ) , blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
+		
+		sf::Uint8 new_floor = getNewFloor( floor );
+		if( new_floor > floor )
+		{
+			int need;
+			if( rand()%2 == 1 )	need = -1;
+			else				need = 14;
+				
+			while( true )
 			{
-				if( new_floor >= floor-1 && new_floor <= floor+1 )
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				if( lastNr == need )
+				{
+					break;
+				}
+				
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				addBlock( rules->fillForTop( lastNr, need ), blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
+				if( size > 0 )	size --;
+			}
+			
+			
+			floor = new_floor;
+			lastNr = blocks[ blocks.size()-1 ]->nr;
+			addBlock( rules->getTopBlockFor( lastNr ), blocks[ blocks.size()-1 ]->x, screen_h -width*floor );
+				
+			
+			// add ladder
+			addPlank( 0, blocks[ blocks.size()-1 ]->x -w +10, blocks[ blocks.size()-1 ]->y +width -h );
+		}
+		else if( new_floor < floor )
+		{
+			int need;
+			if( rand()%2 == 1 )	need = 2;
+			else				need = 7;
+			
+			while( true )
+			{
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				addBlock( rules->fillForBot( lastNr ), blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
+				if( size > 0 )	size --;
+				
+				lastNr = blocks[ blocks.size()-1 ]->nr;
+				if( lastNr == need )
 				{
 					break;
 				}
 			}
-		}
-		
-		if( floor < new_floor )	// means new floor is higher
-		{
-			flag = true;
-			top = true;
-		}
-		else
-		{
-			flag = true;
-			top = false;
+			
+			floor = new_floor;
+			lastNr = blocks[ blocks.size()-1 ]->nr;
+			addBlock( rules->getBotBlockFor( lastNr ), blocks[ blocks.size()-1 ]->x, screen_h -width*floor );
+			
+			// add block to the right
+			int8_t lastNr = blocks[ blocks.size()-1 ]->nr;
+			addBlock( rules->getBlock( lastNr ) , blocks[ blocks.size()-1 ]->x +width, screen_h -width*floor );
+			if( size > 0 )	size --;
+			
+			// add ladder
+			addPlank( 0, blocks[ blocks.size()-1 ]->x -10, blocks[ blocks.size()-1 ]->y -h );
 		}
 	}
 	
-	return flag;
+	delete rules;
 }
 
-void Brick::fill( int a, int n )	// fill pending n
+void Brick::createLeftBorders()
+{
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->y < screen_h -width && ( blocks[ i ]->nr == 10 || blocks[ i ]->nr == 0 ) )
+		{
+			// we check if we have free place
+			bool free_place = true;
+			for( unsigned j = 0; j < blocks.size(); j++ )
+			{
+				if( blocks[ i ]->y +width == blocks[ j ]->y && blocks[ i ]->x == blocks[ j ]->x )
+				{
+					free_place = false;
+				}
+			}
+			
+			if( free_place )
+			{
+				if( blocks[ i ]->nr == 0 )
+				{
+					// we are looking for block nr 13
+					
+					bool put = false;
+					int x = blocks[ i ]->x +width;
+					
+					for( unsigned j = i +1; j < blocks.size(); j++ )
+					{
+						bool success = false;
+						
+						while( !success )
+						{
+							for( unsigned k = 0; k < blocks.size(); k++ )
+							{
+								if( x == blocks[ k ]->x && blocks[ i ]->y +width == blocks[ k ]->y )
+								{
+									success = true;
+								}
+							}
+							
+							if( !success )
+							{
+								// new x
+								x += width;
+							}
+							
+							int further = 0;
+							for( unsigned k = 0; k < blocks.size(); k++ )
+							{
+								if( blocks[ k ]->x > further )
+								{
+									further = blocks[ k ]->x;
+								}
+							}
+							
+							if( x > further )
+							{
+								break;
+							}
+						}
+						
+						if( x == blocks[ j ]->x && blocks[ i ]->y +width == blocks[ j ]->y )
+						{
+							if( blocks[ j ]->nr == 13 )
+							{
+								put = true;
+								// printf( "%d %d\n", x, blocks[ i ]->y +width );
+							}
+							
+							break;
+						}
+					}
+					
+					if( rand()%2 == 1 || put )
+					{
+						addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
+					}
+					else
+					{
+						addBlock( 8, blocks[ i ]->x, blocks[ i ]->y +width );
+					}
+				}
+				else if( blocks[ i ]->nr == 10 )
+				{
+					addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
+				}
+			}
+		}
+	}
+}
+
+void Brick::createRightBorders()
+{
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->y < screen_h -width && ( blocks[ i ]->nr == 12 || blocks[ i ]->nr == 2 ) )
+		{
+			// we check if we have free place
+			bool free_place = true;
+			for( unsigned j = 0; j < blocks.size(); j++ )
+			{
+				if( blocks[ i ]->y +width == blocks[ j ]->y && blocks[ i ]->x == blocks[ j ]->x )
+				{
+					free_place = false;
+				}
+			}
+			
+			if( free_place )
+			{
+				// we have to check what kind of block is on the left 'further'
+				int type = -1;
+				int distance = -1;
+				
+				for( unsigned j = 0; j < blocks.size(); j++ )
+				{
+					if( blocks[ j ]->y == blocks[ i ]->y +width && blocks[ i ]->x -blocks[ j ]->x > 0 )
+					{
+						if( blocks[ j ]->nr == 8 || blocks[ j ]->nr == 10 ||
+							blocks[ j ]->nr == 0 || blocks[ j ]->nr == 14 )
+						{
+							if( distance >= blocks[ i ]->x - blocks[ j ]->x || distance == -1 )
+							{
+								distance = blocks[ i ]->x - blocks[ j ]->x;
+
+								// we found block
+								type = blocks[ j ]->nr;
+							}
+						}
+					}
+				}
+				
+				// printf( "type = %d\n", type );
+				
+				if( type == 8 )			type = 9;
+				else 					type = 12;
+				
+				addBlock( type, blocks[ i ]->x, blocks[ i ]->y +width );
+			}
+		}
+	}
+}
+
+void Brick::createStuffing( int a, int n )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
@@ -223,10 +445,247 @@ void Brick::fill( int a, int n )	// fill pending n
 	}
 }
 
+void Brick::createBotIslands( int w, int h )
+{
+	vector <int> posX;
+	vector <int> posY;
+	vector <int> counters;
+	
+	// Searcher
+	for( unsigned i = 0; i < islands_line; i++ )
+	{
+		// blocks with grass, apriopriate y
+		if( blocks[ i ]->y < screen_h -width*2 )
+		{
+			if( blocks[ i ]->nr >= 5 && blocks[ i ]->nr <= 7 )
+			{
+				posX.push_back( blocks[ i ]->x );
+				posY.push_back( blocks[ i ]->y );
+				counters.push_back( 1 );
+				
+				for( unsigned j = i+1; j < islands_line; j++ )
+				{
+					if( blocks[ j ]->y == blocks[ i ]->y ) // check y
+					{
+						if( (blocks[ j ]->nr >= 5 && blocks[ j ]->nr <= 7) || blocks[ j ]->nr == -1 )
+						{
+							counters[ counters.size()-1 ] ++;
+						}
+						else
+						{
+							i = j +1;
+							break;
+						}
+					}
+					else
+					{
+						i = j +1;
+						break;
+					}
+				}
+			}
+			
+		}
+	}
 
+	
+	// Creator
+	for( unsigned i = 0; i < posX.size(); i++ )
+	{
+		// x and y for ladder
+		int myX, myY;
+		
+		// searching for free space
+		sf::Uint8 success = 0;
+		
+		// check left
+		for( unsigned j = 0; j < islands_line; j++ )
+		{
+			if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
+			{
+				if( blocks[ j ]->x == posX[ i ] -width )
+				{
+					success = 1;
+					myX = blocks[ j ]->x +width -w +10;
+					break;
+				}
+			}
+		}
+		
+		// check right
+		if( success == 0 )
+		{
+			for( unsigned j = 0; j < islands_line -1; j++ )
+			{
+				if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
+				{
+					if( blocks[ j ]->x == posX[ i ] + ( width *(counters[ i ]-1) )
+						&& blocks[ j ]->x != blocks[ j +1 ]->x )
+					{
+						success = 2;
+						myX = blocks[ j ]->x -10;
+						break;
+					}
+				}
+			}
+		}
+		
+		if( success != 0 )
+		{
+			// add ladder
+			addPlank( 1, myX, posY[ i ] -h +width*2 );
+			
+			if( success == 2 )
+			{
+				myX -= width*(counters[ i ] -1) -w;
+				counters[ i ] -= 1;
+			}
+			
+			if( posY[ i ] == screen_h -width*4 ) // 0, 1, 2.
+			{
+				myY = screen_h -width;
+				int saveX = myX;
+				
+				addBlock( 10, myX, myY );
+				myX += width;
+				
+				for( int j = 0; j < counters[ i ]-2; j++ )
+				{
+					addBlock( 11, myX, myY );
+					myX += width;
+				}
+				
+				addBlock( 12, myX, myY );
+				
+				myY = screen_h -width*2;
+				myX = saveX;
+			}
+			else
+			{
+				myY = screen_h -width;
+			}
+			
+			addBlock( 0, myX, myY );
+			myX += width;
+			
+			for( int j = 0; j < counters[ i ]-2; j++ )
+			{
+				addBlock( 1, myX, myY );
+				myX += width;
+			}
+			
+			addBlock( 2, myX, myY );
+		}
+	}
+}
 
+void Brick::createTopIslands( int w, int h )
+{
+	islands_line = blocks.size();
+	
+	vector <int> posX;
+	vector <int> posY;
+	vector <int> counters;
+	
+	// Searcher
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		// blocks with grass, apriopriate y
+		if( blocks[ i ]->y >= screen_h -width*2 &&
+		  ( blocks[ i ]->nr == 0 ||
+			blocks[ i ]->nr == 4 ||
+			blocks[ i ]->nr == 5 ) )
+		{
+			posX.push_back( blocks[ i ]->x );
+			posY.push_back( blocks[ i ]->y );
+			counters.push_back( 1 );
+			
+			for( unsigned j = i+1; j < blocks.size(); j++ )
+			{
+				if( blocks[ j ]->y == blocks[ i ]->y )
+				{
+					if( blocks[ j ]->nr == 2 || blocks[ j ]->nr == 3 || blocks[ j ]->nr == 7 )
+					{
+						counters[ counters.size()-1 ] ++;
+						i = j +1;
+						break;
+					}
+					
+					if( blocks[ j ]->nr == 1 || blocks[ j ]->nr == 6 )
+					{
+						counters[ counters.size()-1 ] ++;
+					}
+				}
+			}
+		}
+	}
+	
+	// Merger
+	bool merger = true;
+	while( merger )
+	{
+		merger = false;
+		for( unsigned i = 0; i < posX.size() -1; i++ )
+		{
+			if( posY[ i ] == posY[ i +1 ] )
+			{
+				if( posX[ i ] +(width *(counters[ i ] +1) ) == posX[ i +1 ] )
+				{
+					merger = true;
+					counters[ i ] += counters[ i +1 ] +1;
+					posX.erase( posX.begin() +i +1 );
+					posY.erase( posY.begin() +i +1 );
+					counters.erase( counters.begin() +i +1 );
+				}
+			}
+		}
+	}
+	
+	// Creator
+	for( unsigned i = 0; i < posX.size(); i++ )
+	{
+		if( counters[ i ] >= 4 )
+		{
+			int myX = posX[ i ] +width;
+			int myY = posY[ i ] -(width*2);
+			
+			// add ladder
+			addPlank( 1, myX -w +10, posY[ i ] -h );
+			
+			while( counters[ i ] >= 4 )
+			{
+				int result = 0;
+				while( result < 2 )
+				{
+					result = rand()%(counters[ i ]/2) +1;
+				}
+				
+				//---------------------------
+				// 5
+				addBlock( 5, myX, myY );
+				result -= 1;
+				myX += width;
+				
+				// 6
+				for( int j = 0; j < result-1; j++ )
+				{
+					addBlock( 6, myX, myY );
+					myX += width;
+				}
+				
+				// 7
+				addBlock( 7, myX, myY );
+				myX += width*2;
+				//---------------------------
+				
+				counters[ i ] -= ( result +3 );
+			}
+		}
+	}
+	
+}
 
-void Brick::water()
+void Brick::createWater()
 {
 	vector <Block*> water_blocks;
 	
@@ -378,9 +837,7 @@ void Brick::water()
 					}
 				}
 				
-				
-			
-			
+
 				if( good_nr != -1 )
 				{
 					// 16
@@ -397,515 +854,17 @@ void Brick::water()
 		}
 	}
 	
-	water_size = water_blocks.size();	// for pixel collision
+	water_line = water_blocks.size();	// for pixel collision
 	
 	auto it = blocks.begin();
-	for( unsigned i = 0; i < water_size; i++ )
+	for( unsigned i = 0; i < water_line; i++ )
 	{
 		it = blocks.insert( it, water_blocks[ i ] );
 	}
 }
 
-vector <Plank*> Brick::bot_islands( int w2, int h2, unsigned size )
+void Brick::setLeft()
 {
-	vector <int> posX;
-	vector <int> posY;
-	vector <int> counters;
-	
-	// Create planks
-	vector < Plank* > planks;
-	
-	// Searcher
-	for( unsigned i = 0; i < size; i++ )
-	{
-		// blocks with grass, apriopriate y
-		if( blocks[ i ]->y < screen_h -width*2 )
-		{
-			if( blocks[ i ]->nr >= 5 && blocks[ i ]->nr <= 7 )
-			{
-				posX.push_back( blocks[ i ]->x );
-				posY.push_back( blocks[ i ]->y );
-				counters.push_back( 1 );
-				
-				for( unsigned j = i+1; j < size; j++ )
-				{
-					if( blocks[ j ]->y == blocks[ i ]->y ) // check y
-					{
-						if( (blocks[ j ]->nr >= 5 && blocks[ j ]->nr <= 7) || blocks[ j ]->nr == -1 )
-						{
-							counters[ counters.size()-1 ] ++;
-						}
-						else
-						{
-							i = j +1;
-							break;
-						}
-					}
-					else
-					{
-						i = j +1;
-						break;
-					}
-				}
-			}
-			
-		}
-	}
-
-	
-	// Creator
-	for( unsigned i = 0; i < posX.size(); i++ )
-	{
-		// x and y for ladder
-		int myX, myY;
-		
-		// searching for free space
-		sf::Uint8 success = 0;
-		
-		// check left
-		for( unsigned j = 0; j < size; j++ )
-		{
-			if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
-			{
-				if( blocks[ j ]->x == posX[ i ] -width )
-				{
-					success = 1;
-					myX = blocks[ j ]->x +width -w2 +10;
-					break;
-				}
-			}
-		}
-		
-		// check right
-		if( success == 0 )
-		{
-			for( unsigned j = 0; j < size -1; j++ )
-			{
-				if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 )
-				{
-					if( blocks[ j ]->x == posX[ i ] + ( width *(counters[ i ]-1) )
-						&& blocks[ j ]->x != blocks[ j +1 ]->x )
-					{
-						success = 2;
-						myX = blocks[ j ]->x -10;
-						break;
-					}
-				}
-			}
-		}
-		
-		if( success != 0 )
-		{
-			planks.push_back( new Plank() );
-			planks[ planks.size() -1 ]->x = myX;
-			planks[ planks.size() -1 ]->y = posY[ i ] -h2 +width*2;
-			planks[ planks.size() -1 ]->nr = 1;
-			
-			if( success == 2 )
-			{
-				myX -= width*(counters[ i ] -1) -w2;
-				counters[ i ] -= 1;
-			}
-			
-			if( posY[ i ] == screen_h -width*4 ) // 0, 1, 2.
-			{
-				myY = screen_h -width;
-				int saveX = myX;
-				
-				addBlock( 10, myX, myY );
-				myX += width;
-				
-				for( int j = 0; j < counters[ i ]-2; j++ )
-				{
-					addBlock( 11, myX, myY );
-					myX += width;
-				}
-				
-				addBlock( 12, myX, myY );
-				
-				myY = screen_h -width*2;
-				myX = saveX;
-			}
-			else
-			{
-				myY = screen_h -width;
-			}
-			
-			addBlock( 0, myX, myY );
-			myX += width;
-			
-			for( int j = 0; j < counters[ i ]-2; j++ )
-			{
-				addBlock( 1, myX, myY );
-				myX += width;
-			}
-			
-			addBlock( 2, myX, myY );
-			
-			// printf( "%d    %d %d\n", success, myX, myY );
-		}
-	}
-	
-	return planks;
-}
-
-vector <Plank*> Brick::top_islands( int w2, int h2 )
-{
-	vector <int> posX;
-	vector <int> posY;
-	vector <int> counters;
-	
-	// Create planks
-	vector < Plank* > planks;
-	
-	// Searcher
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		// blocks with grass, apriopriate y
-		if( blocks[ i ]->y >= screen_h -width*2 &&
-		  ( blocks[ i ]->nr == 0 ||
-			blocks[ i ]->nr == 4 ||
-			blocks[ i ]->nr == 5 ) )
-		{
-			posX.push_back( blocks[ i ]->x );
-			posY.push_back( blocks[ i ]->y );
-			counters.push_back( 1 );
-			
-			for( unsigned j = i+1; j < blocks.size(); j++ )
-			{
-				if( blocks[ j ]->y == blocks[ i ]->y )
-				{
-					if( blocks[ j ]->nr == 2 || blocks[ j ]->nr == 3 || blocks[ j ]->nr == 7 )
-					{
-						counters[ counters.size()-1 ] ++;
-						i = j +1;
-						break;
-					}
-					
-					if( blocks[ j ]->nr == 1 || blocks[ j ]->nr == 6 )
-					{
-						counters[ counters.size()-1 ] ++;
-					}
-				}
-			}
-		}
-	}
-	
-	// Merger
-	bool merger = true;
-	while( merger )
-	{
-		merger = false;
-		for( unsigned i = 0; i < posX.size() -1; i++ )
-		{
-			if( posY[ i ] == posY[ i +1 ] )
-			{
-				if( posX[ i ] +(width *(counters[ i ] +1) ) == posX[ i +1 ] )
-				{
-					merger = true;
-					counters[ i ] += counters[ i +1 ] +1;
-					posX.erase( posX.begin() +i +1 );
-					posY.erase( posY.begin() +i +1 );
-					counters.erase( counters.begin() +i +1 );
-				}
-			}
-		}
-	}
-	
-	// Creator
-	for( unsigned i = 0; i < posX.size(); i++ )
-	{
-		if( counters[ i ] >= 4 )
-		{
-			int myX = posX[ i ] +width;
-			int myY = posY[ i ] -(width*2);
-			
-			// add ladder
-			planks.push_back( new Plank() );
-			planks[ planks.size() -1 ]->x = myX -w2 +10;
-			planks[ planks.size() -1 ]->y = posY[ i ] -h2;
-			planks[ planks.size() -1 ]->nr = 1;
-			
-			while( counters[ i ] >= 4 )
-			{
-				int result = 0;
-				while( result < 2 )
-				{
-					result = rand()%(counters[ i ]/2) +1;
-				}
-				
-				//---------------------------
-				// 5
-				addBlock( 5, myX, myY );
-				result -= 1;
-				myX += width;
-				
-				// 6
-				for( int j = 0; j < result-1; j++ )
-				{
-					addBlock( 6, myX, myY );
-					myX += width;
-				}
-				
-				// 7
-				addBlock( 7, myX, myY );
-				myX += width*2;
-				//---------------------------
-				
-				counters[ i ] -= ( result +3 );
-			}
-		}
-	}
-	
-	return planks;
-}
-
-vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
-{
-	// Create rules.
-	Rules* rules = new Rules;
-	rules->ruleRightSide();
-	
-	// Create planks
-	vector < Plank* > planks;
-	
-	// Random stuff
-	sf::Uint8 scope;
-	int8_t lastNr, chosen;
-	
-	
-	
-	// Floor stuff.
-	sf::Uint8 floor = 1;
-	sf::Uint8 new_floor = 1;
-	
-	// Floor flags
-	bool top = false;
-	bool flag = false;
-	
-	while( size-- )
-	{
-		// add block to the right
-		lastNr = blocks[ blocks.size()-1 ]->nr;
-		scope = rules->getRightRules( lastNr ).size();
-		chosen = rules->getRightRules( lastNr )[ rand()%scope ];
-		addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
-		
-		// RAND FLOOR
-		top = false;
-		flag = randFloor( top, floor, new_floor );
-		
-		// add top block
-		if( flag )
-		{
-			if( top )
-			{
-				int need;
-				if( rand()%2 == 1 )	need = -1;
-				else				need = 14;
-					
-				while( true )
-				{
-					lastNr = blocks[ blocks.size()-1 ]->nr;
-					if( lastNr == need )
-					{
-						break;
-					}
-					
-					lastNr = blocks[ blocks.size()-1 ]->nr;
-					addBlock( rules->fillForTop( lastNr, need ), blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
-				}
-				
-				
-				floor = new_floor;
-				lastNr = blocks[ blocks.size()-1 ]->nr;
-				addBlock( rules->getTopBlockFor( lastNr ), blocks[ blocks.size()-1 ]->x, screen_h -width*floor );
-					
-				
-				// add ladder
-				planks.push_back( new Plank() );
-				planks[ planks.size() -1 ]->x = blocks[ blocks.size()-1 ]->x -w1 +10;
-				planks[ planks.size() -1 ]->y = blocks[ blocks.size()-1 ]->y +width -h1;
-			}
-			else
-			{
-				int need;
-				if( rand()%2 == 1 )	need = 2;
-				else				need = 7;
-				
-				while( true )
-				{
-					lastNr = blocks[ blocks.size()-1 ]->nr;
-					addBlock( rules->fillForBot( lastNr ), blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
-					
-					lastNr = blocks[ blocks.size()-1 ]->nr;
-					if( lastNr == need )
-					{
-						break;
-					}
-				}
-				
-				floor = new_floor;
-				lastNr = blocks[ blocks.size()-1 ]->nr;
-				addBlock( rules->getBotBlockFor( lastNr ), blocks[ blocks.size()-1 ]->x, screen_h -width*floor );
-				
-				// add block to the right
-				lastNr = blocks[ blocks.size()-1 ]->nr;
-				scope = rules->getRightRules( lastNr ).size();
-				chosen = rules->getRightRules( lastNr )[ rand()%scope ];
-				addBlock( chosen, blocks[ blocks.size()-1 ]->x + width, screen_h -width*floor );
-				
-				// add ladder
-				planks.push_back( new Plank() );
-				planks[ planks.size() -1 ]->x = blocks[ blocks.size()-1 ]->x -10;
-				planks[ planks.size() -1 ]->y = blocks[ blocks.size()-1 ]->y -h1;
-			}
-		}
-	}
-	
-
-	
-	// fill left bottom
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( blocks[ i ]->y < screen_h -width && ( blocks[ i ]->nr == 10 || blocks[ i ]->nr == 0 ) )
-		{
-			// we check if we have free place
-			bool free_place = true;
-			for( unsigned j = 0; j < blocks.size(); j++ )
-			{
-				if( blocks[ i ]->y +width == blocks[ j ]->y && blocks[ i ]->x == blocks[ j ]->x )
-				{
-					free_place = false;
-				}
-			}
-			
-			if( free_place )
-			{
-				if( blocks[ i ]->nr == 0 )
-				{
-					// we are looking for block nr 13
-					
-					bool put = false;
-					int x = blocks[ i ]->x +width;
-					
-					for( unsigned j = i +1; j < blocks.size(); j++ )
-					{
-						bool success = false;
-						
-						while( !success )
-						{
-							for( unsigned k = 0; k < blocks.size(); k++ )
-							{
-								if( x == blocks[ k ]->x && blocks[ i ]->y +width == blocks[ k ]->y )
-								{
-									success = true;
-								}
-							}
-							
-							if( !success )
-							{
-								// new x
-								x += width;
-							}
-							
-							int further = 0;
-							for( unsigned k = 0; k < blocks.size(); k++ )
-							{
-								if( blocks[ k ]->x > further )
-								{
-									further = blocks[ k ]->x;
-								}
-							}
-							
-							if( x > further )
-							{
-								break;
-							}
-						}
-						
-						if( x == blocks[ j ]->x && blocks[ i ]->y +width == blocks[ j ]->y )
-						{
-							if( blocks[ j ]->nr == 13 )
-							{
-								put = true;
-								// printf( "%d %d\n", x, blocks[ i ]->y +width );
-							}
-							
-							break;
-						}
-					}
-					
-					if( rand()%2 == 1 || put )
-					{
-						addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
-					}
-					else
-					{
-						addBlock( 8, blocks[ i ]->x, blocks[ i ]->y +width );
-					}
-				}
-				else if( blocks[ i ]->nr == 10 )
-				{
-					addBlock( 10, blocks[ i ]->x, blocks[ i ]->y +width );
-				}
-			}
-		}
-	}
-	
-	// fill right bottom
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( blocks[ i ]->y < screen_h -width && ( blocks[ i ]->nr == 12 || blocks[ i ]->nr == 2 ) )
-		{
-			// we check if we have free place
-			bool free_place = true;
-			for( unsigned j = 0; j < blocks.size(); j++ )
-			{
-				if( blocks[ i ]->y +width == blocks[ j ]->y && blocks[ i ]->x == blocks[ j ]->x )
-				{
-					free_place = false;
-				}
-			}
-			
-			if( free_place )
-			{
-				// we have to check what kind of block is on the left 'further'
-				int type = -1;
-				int distance = -1;
-				
-				for( unsigned j = 0; j < blocks.size(); j++ )
-				{
-					if( blocks[ j ]->y == blocks[ i ]->y +width && blocks[ i ]->x -blocks[ j ]->x > 0 )
-					{
-						if( blocks[ j ]->nr == 8 || blocks[ j ]->nr == 10 ||
-							blocks[ j ]->nr == 0 || blocks[ j ]->nr == 14 )
-						{
-							if( distance >= blocks[ i ]->x - blocks[ j ]->x || distance == -1 )
-							{
-								distance = blocks[ i ]->x - blocks[ j ]->x;
-
-								// we found block
-								type = blocks[ j ]->nr;
-							}
-						}
-					}
-				}
-				
-				// printf( "type = %d\n", type );
-				
-				if( type == 8 )			type = 9;
-				else 					type = 12;
-				
-				addBlock( type, blocks[ i ]->x, blocks[ i ]->y +width );
-			}
-		}
-	}
-	
-	delete rules;
-	
-	// printf( "\n\n\n\n" );
-	
 	// Searching for left
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
@@ -914,7 +873,10 @@ vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 			left = blocks[ i ]->x;
 		}
 	}
-	
+}
+
+void Brick::setRight()
+{
 	// Searching right
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
@@ -923,97 +885,6 @@ vector <Plank*> Brick::positioning( int size, int w1, int h1, int w2, int h2 )
 			right = blocks[ i ]->x;
 		}
 	}
-	
-	
-	fill( 10, 11 );
-	fill( 14, 11 );
-	fill( 8, 15 );
-	
-	unsigned s = blocks.size();
-	
-	vector <Plank*> additional = top_islands( w2, h2 );
-	for( unsigned i = 0; i < additional.size(); i++ )
-	{
-		planks.push_back( new Plank() );
-		planks[ planks.size() -1 ]->x = additional[ i ]->x;
-		planks[ planks.size() -1 ]->y = additional[ i ]->y;
-		planks[ planks.size() -1 ]->nr = additional[ i ]->nr;
-	}
-	
-	additional = bot_islands( w2, h2, s );
-	for( unsigned i = 0; i < additional.size(); i++ )
-	{
-		planks.push_back( new Plank() );
-		planks[ planks.size() -1 ]->x = additional[ i ]->x;
-		planks[ planks.size() -1 ]->y = additional[ i ]->y;
-		planks[ planks.size() -1 ]->nr = additional[ i ]->nr;
-	}
-	
-	//cave();
-	
-	return planks;
-}
-
-
-/*
-bool Brick::checkCollision( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		for( unsigned i = 0; i < blocks.size(); i++ )
-		{
-			if( blocks[ i ]->nr != -1 )
-			{
-				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
-				{
-					block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-					if( block[ blocks[ i ]->nr ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
-					{
-						return true;
-					}
-				}
-			}
-		}
-	}
-	
-	return false;
-}
-*/
-
-bool Brick::checkBlockByPixel( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		int l = rect->getX();		// left
-		int r = rect->getRight();	// right
-		int t = rect->getY();		// top
-		int b = rect->getBot(); 		// bot
-		
-		for( unsigned i = water_size; i < blocks.size(); i++ )
-		{
-			if( blocks[ i ]->nr != -1 )
-			{
-				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
-				{
-					block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				
-					for( int j = l; j <= r; j++ )
-					{
-						if( block[ blocks[ i ]->nr ]->checkPixelCollision( j, t ) )		return true;
-						else if( block[ blocks[ i ]->nr ]->checkPixelCollision( j, b ) )	return true;
-					}
-					
-					for( int j = t; j <= b; j++ )
-					{
-						if( block[ blocks[ i ]->nr ]->checkPixelCollision( l, j ) )		return true;
-						else if( block[ blocks[ i ]->nr ]->checkPixelCollision( r, j ) )	return true;
-					}
-				}
-			}
-		}
-	}
-	
-	return false;
 }
 
 
@@ -1033,13 +904,6 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 			blocks[ i ]->x += vel;
 		}
 		
-		/*
-		for( unsigned i = 0; i < bg_blocks.size(); i++ )
-		{
-			bg_blocks[ i ]->x += vel;
-		}
-		*/
-		
 		left += vel;
 		right += vel;
 	}
@@ -1055,33 +919,12 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 			blocks[ i ]->x -= vel;
 		}
 		
-		/*
-		for( unsigned i = 0; i < bg_blocks.size(); i++ )
-		{
-			bg_blocks[ i ]->x -= vel;
-		}
-		*/
-		
 		left -= vel;
 		right -= vel;
 	}
 	
 	return 0;
 }
-
-sf::Uint8 Brick::getWidth()
-{
-	return width;
-}
-
-vector < Block* > Brick::getBlocks()
-{
-	return blocks;
-}
-
-
-
-
 
 void Brick::findLastGrass( Rect* rect )
 {
@@ -1093,8 +936,8 @@ void Brick::findLastGrass( Rect* rect )
 			{
 				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
 				{
-					block[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-					if( block[ blocks[ i ]->nr ]->checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
+					sprites[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					if( sprites[ blocks[ i ]->nr ]->checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
 					{
 						lastGrass = i;
 						//printf("%d\n", lastGrass );
@@ -1104,16 +947,6 @@ void Brick::findLastGrass( Rect* rect )
 			}
 		}
 	}
-}
-
-int Brick::getLastGrassY()
-{
-	return blocks[ lastGrass ]->y;
-}
-
-int Brick::getLastGrassX()
-{
-	return blocks[ lastGrass ]->x;
 }
 
 void Brick::setNewX( int heroX )
@@ -1153,13 +986,6 @@ int Brick::backToGrass()
 				blocks[ i ]->x += add;
 			}
 			
-			/*
-			for( unsigned i = 0; i < bg_blocks.size(); i++ )
-			{
-				bg_blocks[ i ]->x += add;
-			}
-			*/
-			
 			left += add;
 			right += add;
 			
@@ -1177,13 +1003,6 @@ int Brick::backToGrass()
 				blocks[ i ]->x += add;
 			}
 			
-			/*
-			for( unsigned i = 0; i < bg_blocks.size(); i++ )
-			{
-				bg_blocks[ i ]->x += add;
-			}
-			*/
-			
 			left += add;
 			right += add;
 			
@@ -1199,4 +1018,94 @@ int Brick::backToGrass()
 	}
 	
 	return add;
+}
+
+
+
+
+int Brick::getLastGrassY()
+{
+	return blocks[ lastGrass ]->y;
+}
+
+int Brick::getLastGrassX()
+{
+	return blocks[ lastGrass ]->x;
+}
+
+sf::Uint8 Brick::getWidth()
+{
+	return width;
+}
+
+vector <Block*> Brick::getBlocks()
+{
+	return blocks;
+}
+
+vector <Plank*> Brick::getPlanks()
+{
+	return planks;
+}
+
+
+
+
+bool Brick::checkCollision( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			if( blocks[ i ]->nr != -1 )
+			{
+				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+				{
+					sprites[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+					if( sprites[ blocks[ i ]->nr ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					{
+						return true;
+					}
+				}
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool Brick::checkBlockByPixel( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		int l = rect->getX();		// left
+		int r = rect->getRight();	// right
+		int t = rect->getY();		// top
+		int b = rect->getBot(); 		// bot
+		
+		for( unsigned i = water_line; i < blocks.size(); i++ )
+		{
+			if( blocks[ i ]->nr != -1 )
+			{
+				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+				{
+					sprites[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				
+					for( int j = l; j <= r; j++ )
+					{
+						if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( j, t ) )		return true;
+						else if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( j, b ) )	return true;
+					}
+					
+					for( int j = t; j <= b; j++ )
+					{
+						if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( l, j ) )		return true;
+						else if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( r, j ) )	return true;
+					}
+				}
+			}
+		}
+	}
+	
+	return false;
 }

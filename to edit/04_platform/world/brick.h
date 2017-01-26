@@ -1,61 +1,73 @@
 #pragma once
 
 #include "drawable/sprite.h"
-#include "block.h"
-#include "ladder.h"
+#include "plank.h"
 
 class Brick
 {
-	vector <MySprite*> block;
+	int16_t width;
+	int16_t screen_w;
+	int16_t screen_h;
+	
+	int left;
+	int right;
+	
+	vector <Plank*> planks;
 	vector <Block*> blocks;
-	// vector <BG_Block*> bg_blocks;
+	vector <MySprite*> sprites;
 	
-	int width;
-	int screen_w;
-	int screen_h;
-	
-	int left, right;
-	
-	int lastGrass;
 	int fallenX;
-	
-	unsigned water_size;
+	unsigned lastGrass;
+	unsigned water_line;
+	unsigned islands_line;
 	
 public:
 	
+	// Basics.
 	Brick();
 	~Brick();
 	void free();
-	
-	void load( int screen_w, int screen_h, int nr, int type );
+	void load( int screen_w, int screen_h, int type );
 	void draw( sf::RenderWindow* &window );
-	// void drawBG( sf::RenderWindow* &window );
-	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
-
-	// void addBG_Block( int n, int x, int y, int8_t x_scale = 1, int8_t y_scale = 1 );
-	void addBlock( int chosen, int x_width, int floor );
-	bool randFloor( bool &top, sf::Uint8 floor, sf::Uint8 &new_floor );
-	void fill( int a, int n );	//  Fill from left to right
 	
-	void cave();
-	void water();
-	vector <Plank*> bot_islands( int w2, int h2, unsigned size );	// we have send size because we want to have it before top islands
-	vector <Plank*> top_islands( int w2, int h2 );
-	vector <Plank*> positioning( int size, int w1, int h1, int w2, int h2 );
+	// Support.
+	int to_int( string s );
+	void addPlank( int n, int x, int y );
+	void addBlock( int n, int x, int y );
+	sf::Uint8 getNewFloor( sf::Uint8 floor );
 	
-	// bool checkCollision( Rect* rect );
-	bool checkBlockByPixel( Rect* rect );
+	// Creators.
+	void createTopBorders( int size, int w, int h );
+	void createLeftBorders();
+	void createRightBorders();
+	void createStuffing( int a, int n );	//  Fill from left to right.
+	void createTopIslands( int w, int h );
+	void createBotIslands( int w, int h );
+	void createWater();
+	
+	// Setters
+	void setLeft();		// set the smallest x.
+	void setRight(); 	// set the biggest x.
+	
 	
 	sf::Uint8 moveX( sf::Uint8 direction, float vel );
-	sf::Uint8 getWidth();
-	vector < Block* > getBlocks();
-	
 	void findLastGrass( Rect* rect );
-	int getLastGrassY();
-	int getLastGrassX();
 	void setNewX( int heroX );
 	int backToGrass();
+	
+	
+	// Getters.
+	int getLastGrassX();
+	int getLastGrassY();
+	sf::Uint8 getWidth();
+	vector <Block*> getBlocks();
+	vector <Plank*> getPlanks();
+	
+	
+	// Check collision.
+	bool checkCollision( Rect* rect );
+	bool checkBlockByPixel( Rect* rect );
 };
 
