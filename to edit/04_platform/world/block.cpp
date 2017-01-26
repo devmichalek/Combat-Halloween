@@ -2,14 +2,17 @@
 
 Block::Block()
 {
-	nr = x = y = 0;
+	x = y = 0;
+	nr = 0;
 }
 
-/*
-BG_Block::BG_Block()
+Block::~Block()
 {
-	nr = x = y = 0;
-	x_scale = 1;
-	y_scale = 1;
+	free();
 }
-*/
+
+void Block::free()
+{
+	x = y = 0;
+	nr = 0;
+}
