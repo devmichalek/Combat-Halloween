@@ -56,6 +56,7 @@ void Play_halloween::setHero( int screen_w, int screen_h, int type )
 
 void Play_halloween::setWorldsize( int size )
 {
+	brick->reserve( size );
 	brick->createTopBorders( size, ladder->getW( 0 ), ladder->getH( 0 ) );
 	brick->createLeftBorders();
 	brick->createRightBorders();
@@ -66,6 +67,7 @@ void Play_halloween::setWorldsize( int size )
 	brick->createStuffing( 8, 15 );
 	brick->createTopIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
 	brick->createBotIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
+	brick->shrink();
 	
 	ladder->positioning( brick->getPlanks() );
 	greenery->positioning( brick->getBlocks() );
