@@ -3,6 +3,24 @@
 #include <cstdlib>
 #include <fstream>
 
+void Brick::reserve( unsigned size )
+{
+	// Reserve.
+	blocks.reserve( size*(3.85) );
+	this->size = blocks.capacity();
+	// cout << "size (start): " << this->size << endl;
+}
+
+void Brick::shrink()
+{
+	// Shrink.
+	blocks.shrink_to_fit();
+	this->size = blocks.capacity();
+	// cout << "size (end): " << this->size << endl;
+}
+
+
+
 Brick::Brick()
 {
 	width = 0;
@@ -13,6 +31,7 @@ Brick::Brick()
 	right = 0;
 	
 	fallenX = 0;
+	grass_value = 0;
 	lastGrass = -1;
 	water_line = 0;
 	islands_line = 0;
@@ -63,6 +82,7 @@ void Brick::free()
 	}
 	
 	fallenX = 0;
+	grass_value = 0;
 	lastGrass = -1;
 	water_line = 0;
 	islands_line = 0;
@@ -971,23 +991,22 @@ void Brick::setNewX( int heroX )
 	}
 }
 
-int Brick::backToGrass()
+bool Brick::backToGrass()
 {
-	int add = 0;
-	
+	grass_value = 0;
 	if( fallenX != 0 )
 	{
 		if( fallenX > blocks[ lastGrass ]->x )
 		{
-			add = 1;
+			grass_value = 1;
 			
 			for( unsigned i = 0; i < blocks.size(); i++ )
 			{
-				blocks[ i ]->x += add;
+				blocks[ i ]->x += grass_value;
 			}
 			
-			left += add;
-			right += add;
+			left += grass_value;
+			right += grass_value;
 			
 			if( fallenX < blocks[ lastGrass ]->x )
 			{
@@ -996,15 +1015,15 @@ int Brick::backToGrass()
 		}
 		else if( fallenX < blocks[ lastGrass ]->x )
 		{
-			add = -1;
+			grass_value = -1;
 			
 			for( unsigned i = 0; i < blocks.size(); i++ )
 			{
-				blocks[ i ]->x += add;
+				blocks[ i ]->x += grass_value;
 			}
 			
-			left += add;
-			right += add;
+			left += grass_value;
+			right += grass_value;
 			
 			if( fallenX > blocks[ lastGrass ]->x )
 			{
@@ -1017,20 +1036,33 @@ int Brick::backToGrass()
 		}
 	}
 	
-	return add;
+	if( grass_value == 0 )
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 
 
+
+
+int Brick::getLastGrassX()
+{
+	return blocks[ lastGrass ]->x;
+}
 
 int Brick::getLastGrassY()
 {
 	return blocks[ lastGrass ]->y;
 }
 
-int Brick::getLastGrassX()
+int Brick::getGrassValue()
 {
-	return blocks[ lastGrass ]->x;
+	return grass_value;
 }
 
 sf::Uint8 Brick::getWidth()
@@ -1074,7 +1106,7 @@ bool Brick::checkCollision( Rect* rect )
 	return false;
 }
 
-bool Brick::checkBlockByPixel( Rect* rect )
+bool Brick::checkPixelCollision( Rect* rect )
 {
 	if( rect != NULL )
 	{
