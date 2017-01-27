@@ -3,59 +3,6 @@
 #include <cstdlib>
 #include <fstream>
 
-Plant::Plant()
-{
-	startX = endX = 0;
-	startY = endY = 0;
-	chance = 0;
-	bg = true;
-}
-
-Plant::~Plant()
-{
-	blocks.clear();
-	startX = endX = 0;
-	startY = endY = 0;
-	chance = 0;
-	bg = true;
-}
-
-void Plant::clear()
-{
-	blocks.clear();
-}
-
-void Plant::add( sf::Uint8 block )
-{
-	blocks.push_back( block );
-}
-
-bool Plant::available( sf::Uint8 block )
-{
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( block == blocks[ i ] )
-		{
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-unsigned Plant::getSize()
-{
-	return blocks.size();
-}
-
-sf::Uint8 Plant::getBlocksNr( sf::Uint8 n )
-{
-	return blocks[ n ];
-}
-
-
-
-
 
 Greenery::Greenery()
 {
@@ -70,46 +17,42 @@ Greenery::~Greenery()
 void Greenery::free()
 {
 	min = 0;
-	plants.clear();
-	blocks.clear();
-	sprites.clear();
+	
+	if( !plants.empty() )
+	{
+		for( unsigned i = 0; i < plants.size(); i++ )
+		{
+			plants[ i ]->free();
+		}
+		
+		plants.clear();
+	}
+	
+	if( !sprites.empty() )
+	{
+		for( unsigned i = 0; i < sprites.size(); i++ )
+		{
+			sprites[ i ]->free();
+		}
+		
+		sprites.clear();
+	}
+	
+	if( !blocks.empty() )
+	{
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			blocks[ i ]->free();
+		}
+		
+		blocks.clear();
+	}
 }
 
 	
 void Greenery::load( int type )
 {
 	free();
-	
-	sf::Uint8 max;
-	if( type == 0 )
-	{
-		min = 16;
-		max = 29 +1;
-	}
-	else if( type == 1 )
-	{
-		min = 18;
-		max = 30 +1;
-	}
-	else if( type == 2 )
-	{
-		min = 18;
-		max = 28 +1;
-	}
-	else if( type == 3 )
-	{
-		min = 16;
-		max = 29 +1;
-	}
-	
-	for( sf::Uint8 i = 0; i < max-min; i++ )
-	{
-		sprites.push_back( new MySprite() );
-		sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +to_string( i+min ) +"]" );
-		sprites[ sprites.size() -1 ]->load( "data/sprites/play/" +to_string( type )
-		+ "/" +to_string( i+min ) + ".png" );
-	}
-	
 	
 	fstream file;
 	file.open( "data/txt/greenery/" +to_string( type ) +".txt" );
@@ -119,15 +62,31 @@ void Greenery::load( int type )
 	}
 	else
 	{
-		// sf::Uint8 nr;
-		// int startX, endX;
-		// int startY, endY;
-		vector <int> block_types;
-		
+		vector <int> types;
 		string line;
+		sf::Uint8 max;
+		
+		// set min
+		getline( file, line );
+		min = to_int( line );
+		
+		// set max
+		getline( file, line );
+		max = to_int( line );
+		
+		// load sprites
+		for( sf::Uint8 i = 0; i < max-min; i++ )
+		{
+			sprites.push_back( new MySprite() );
+			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +to_string( i+min ) +"]" );
+			sprites[ sprites.size() -1 ]->load( "data/sprites/play/" +to_string( type )
+			+ "/" +to_string( i+min ) + ".png" );
+		}
+		
+		// load rules
 		while( getline( file, line ) )
 		{
-			block_types.clear();
+			types.clear();
 			
 			// nr
 			string l = "";
@@ -135,7 +94,7 @@ void Greenery::load( int type )
 			{
 				if( line[ i ] == ' ' )
 				{
-					block_types.push_back( strToInt( l ) );
+					types.push_back( to_int( l ) );
 					l = "";
 				}
 				else
@@ -146,22 +105,24 @@ void Greenery::load( int type )
 			
 			plants.push_back( new Plant() );
 			
-			plants[ plants.size() -1 ]->nr = block_types[ 0 ];
-			plants[ plants.size() -1 ]->startX = block_types[ 1 ];
-			plants[ plants.size() -1 ]->endX = block_types[ 2 ];
-			plants[ plants.size() -1 ]->startY = block_types[ 3 ];
-			plants[ plants.size() -1 ]->endY = block_types[ 4 ];
-			plants[ plants.size() -1 ]->bg = block_types[ 5 ];
-			plants[ plants.size() -1 ]->chance = block_types[ 6 ];
+			plants[ plants.size() -1 ]->nr = 		types[ 0 ];
+			plants[ plants.size() -1 ]->startX = 	types[ 1 ];
+			plants[ plants.size() -1 ]->endX = 		types[ 2 ];
+			plants[ plants.size() -1 ]->startY = 	types[ 3 ];
+			plants[ plants.size() -1 ]->endY = 		types[ 4 ];
+			plants[ plants.size() -1 ]->bg = 		types[ 5 ];
+			plants[ plants.size() -1 ]->chance = 	types[ 6 ];
 			
-			for( unsigned i = 7; i < block_types.size(); i++ )
+			for( unsigned i = 7; i < types.size(); i++ )
 			{
-				plants[ plants.size() -1 ]->add( block_types[ i ] );
+				plants[ plants.size() -1 ]->add( types[ i ] );
 			}
 		}
 	}
 	
-	// test
+	file.close();
+	
+	// Test.
 	/*
 	for( unsigned i = 0; i < plants.size(); i++ )
 	{
@@ -178,11 +139,11 @@ void Greenery::load( int type )
 	*/
 }
 
-void Greenery::drawBG( sf::RenderWindow* &window, int screen_w )
+void Greenery::draw( sf::RenderWindow* &window, int screen_w )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ]->bg )
+		if( !blocks[ i ]->bg )
 		{
 			if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
 			{
@@ -193,11 +154,11 @@ void Greenery::drawBG( sf::RenderWindow* &window, int screen_w )
 	}
 }
 
-void Greenery::draw( sf::RenderWindow* &window, int screen_w )
+void Greenery::drawBG( sf::RenderWindow* &window, int screen_w )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( !blocks[ i ]->bg )
+		if( blocks[ i ]->bg )
 		{
 			if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
 			{
@@ -225,21 +186,25 @@ void Greenery::fadeout( int v, int min )
 	}
 }
 
-int Greenery::strToInt(string s)
+
+
+
+int Greenery::to_int( string s )
 {
-    bool m=false;
-    int tmp=0;
-    unsigned i=0;
-    if(s[0]=='-')
+    bool m = false;
+    int tmp = 0;
+    unsigned i = 0;
+	
+    if( s[ 0 ] == '-')
     {
-          i++;
-          m = true;
+		i++;
+		m = true;
     }
 	
-    while(i<s.size())
+    while( i < s.size() )
     {
-      tmp = 10*tmp+s[i]-48;
-      i++;
+		tmp = 10*tmp +s[ i ] -48;
+		i++;
     }
 	
     return m ? -tmp : tmp;   
@@ -259,44 +224,48 @@ unsigned Greenery::getDistance( int v1, int v2 )
 
 void Greenery::positioning( vector < Block* > blocks )
 {
+	vector <sf::Uint8> available;
+	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		bool success = false;
 		for( unsigned j = 0; j < plants.size(); j++ )
 		{
 			if( plants[ j ]->available( blocks[ i ]->nr ) )
 			{
-				success = true;
-				break;
+				available.push_back( j );
 			}
 		}
 		
-		if( success )
+		if( available.size() > 0 )
 		{
 			int t = 4;
 			while( t-- )
 			{
-				int random = rand()%plants.size();
+				int random = rand()%available.size();
+				int chosen = available[ random ];
+				// printf( "chosen %d\n", chosen );
 				
-				if( plants[ random ]->available( blocks[ i ]->nr ) )
+				if( rand()%100 < plants[ chosen ]->chance )
 				{
-					if( rand()%100 < plants[ random ]->chance )
-					{
-						this->blocks.push_back( new Gre_block() );
+					this->blocks.push_back( new GreenBlock() );
+				
+					this->blocks[ this->blocks.size() -1 ]->nr = plants[ chosen ]->nr;
 					
-						this->blocks[ this->blocks.size() -1 ]->nr = plants[ random ]->nr;
-						
-						int distance = rand()%getDistance( plants[ random ]->startX, plants[ random ]->endX );
-						this->blocks[ this->blocks.size() -1 ]->x = plants[ random ]->startX +distance +blocks[ i ]->x;
-						
-						distance = rand()%getDistance( plants[ random ]->startY, plants[ random ]->endY );
-						this->blocks[ this->blocks.size() -1 ]->y = plants[ random ]->startY +distance +blocks[ i ]->y;
-						this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
-						
-						this->blocks[ this->blocks.size() -1 ]->bg = plants[ random ]->bg;
-					}
+					int distance = rand()%getDistance( plants[ chosen ]->startX, plants[ chosen ]->endX );
+					this->blocks[ this->blocks.size() -1 ]->x = plants[ chosen ]->startX +distance +blocks[ i ]->x;
+					
+					distance = rand()%getDistance( plants[ chosen ]->startY, plants[ chosen ]->endY );
+					this->blocks[ this->blocks.size() -1 ]->y = plants[ chosen ]->startY +distance +blocks[ i ]->y;
+					this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
+					
+					this->blocks[ this->blocks.size() -1 ]->bg = plants[ chosen ]->bg;
 				}
 			}
+		}
+		
+		if( !available.empty() )
+		{
+			available.clear();
 		}
 	}
 }
@@ -319,12 +288,10 @@ void Greenery::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-int Greenery::backToGrass( int add )
+void Greenery::backToGrass( int add )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		blocks[ i ]->x += add;
 	}
-	
-	return add;
 }
