@@ -6,7 +6,7 @@ void Play_desert::mechanics()
 	hero->gravitation();
 	
 	// HERO WEIGHTLESSNESS
-	if( brick->checkBlockByPixel( hero->getRect() ) )
+	if( brick->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
 	}
@@ -19,7 +19,7 @@ void Play_desert::mechanics()
 	
 	
 	// HERO PIXEL GRAVITY
-	if( brick->checkBlockByPixel( hero->getRect() ) )
+	if( brick->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->pixelGravitation();
 	}
@@ -29,9 +29,9 @@ void Play_desert::mechanics()
 	hero->sliding();
 	
 	// HERO CLIMB
-	if( ladder->checkLadder( hero->getRect(), screen_w ) )
+	if( ladder->checkCollision( hero->getRect(), screen_w ) )
 	{
-		if( !brick->checkBlockByPixel( hero->getRect() ) )
+		if( !brick->checkPixelCollision( hero->getRect() ) )
 		{
 			hero->climbing();
 		}
@@ -56,7 +56,7 @@ void Play_desert::mechanics()
 			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
 		}
 		
-		if( brick->checkBlockByPixel( hero->getRect() ) ||
+		if( brick->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -71,7 +71,7 @@ void Play_desert::mechanics()
 		
 		scope->setVel( hero->getJump_vel() );
 		
-		if( brick->checkBlockByPixel( hero->getRect() ) ||
+		if( brick->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -99,7 +99,7 @@ void Play_desert::mechanics()
 	{
 		scope->setVel( hero->getJump_vel() );
 		
-		if( brick->checkBlockByPixel( hero->getRect() ) ||
+		if( brick->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -112,7 +112,7 @@ void Play_desert::mechanics()
 	{
 		scope->setVel( hero->getVel() );
 		
-		if( brick->checkBlockByPixel( hero->getRect() ) ||
+		if( brick->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -129,7 +129,7 @@ void Play_desert::mechanics()
 	// KUNAI DESTROY
 	for( unsigned i = 0; i < kunai->getNr(); i++ )
 	{
-		if( brick->checkBlockByPixel( kunai->getRect( i ) ) ||
+		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
 		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
 		kunai->getX( i ) < -kunai->getW() /*||
 		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
@@ -169,7 +169,7 @@ void Play_desert::mechanics()
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 		}
 			
-		if( brick->checkBlockByPixel( hero->getRect() ) )
+		if( brick->checkPixelCollision( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
@@ -210,8 +210,10 @@ void Play_desert::mechanics()
 	{
 		brick->findLastGrass( hero->getRect() );
 	}
-	if( ladder->backToGrass( greenery->backToGrass( brick->backToGrass() ) ) != 0 )
+	if( brick->backToGrass() )
 	{
 		hero->setFallen();
+		ladder->backToGrass( brick->getGrassValue() );
+		greenery->backToGrass( brick->getGrassValue() ); 
 	}
 }
