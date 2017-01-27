@@ -1,9 +1,6 @@
 #include "ladder.h"
 #include <cstdlib>
-
-
-
-
+#include <fstream>
 
 Ladder::Ladder()
 {
@@ -17,175 +14,175 @@ Ladder::~Ladder()
 
 void Ladder::free()
 {
-	for( unsigned i = 0; i < ladder.size(); i++ )
+	if( !sprites.empty() )
 	{
-		ladder[ i ]->free();
+		for( unsigned i = 0; i < sprites.size(); i++ )
+		{
+			sprites[ i ]->free();
+		}
+		
+		sprites.clear();
 	}
 	
-	ladder.clear();
-	ladders.clear();
+	if( !planks.empty() )
+	{
+		for( unsigned i = 0; i < planks.size(); i++ )
+		{
+			planks[ i ]->free();
+		}
+		
+		planks.clear();
+	}
 	
 	red = green = blue = add = 0;
 }
-
 
 void Ladder::load( int type )
 {
 	free();
 	
-	for( int i = 0; i < 2; i++ )
+	fstream file;
+	file.open( "data/txt/ladder/" +to_string( type ) +".map" );
+	if( file.bad() )
 	{
-		ladder.push_back( new MySprite() );
-		ladder[ i ]->setName( "ladder[" +to_string( i ) +"]" );
-		ladder[ i ]->loadByImage( "data/sprites/play/ladder/" +to_string( i ) +".png" );
+		printf( "Cannot load %s\n", ( "data/txt/ladder/" +to_string( type ) +".map" ).c_str() );
 	}
-	
-	// setColor
-	if( type == 0 )
+	else
 	{
-		red = 0;
-		green = 0xFF;
-		blue = 0xAA;
-	}
-	else if( type == 1 )
-	{
-		red = 0xFF;
-		green = 0x9C;
-		blue = 0x50;
-	}
-	else if( type == 2 )
-	{
-		red = 0;
-		green = 0xFF;
-		blue = 0xFF -0xAA;
-		add = 0xAA;
-	}
-	else if( type == 3 )
-	{
-		red = 0xFF;
-		green = 0xFF;
-		blue = 0xAA;
+		// Set color.
+		int container;
+		vector <int> temporary;
+		while( file >> container )
+		{
+			temporary.push_back( container );
+		}
+		
+		if( !temporary.empty() )
+		{
+			red = 	temporary[ 0 ];
+			green = temporary[ 1 ];
+			blue = 	temporary[ 2 ];
+			
+			if( temporary.size() == 4 )
+			{
+				add = temporary[ 3 ];
+			}
+			
+			temporary.clear();
+		}
+		
+		for( int i = 0; i < 2; i++ )
+		{
+			sprites.push_back( new MySprite() );
+			sprites[ i ]->setName( "ladder[" +to_string( i ) +"]" );
+			sprites[ i ]->loadByImage( "data/sprites/play/ladder/" +to_string( i ) +".png" );
+		}
 	}
 }
 
 void Ladder::draw( sf::RenderWindow* &window, int screen_w )
 {
-	for( unsigned i = 0; i < ladders.size(); i++ )
+	for( unsigned i = 0; i < planks.size(); i++ )
 	{
-		if( ladders[ i ]->x > -screen_w/2 && ladders[ i ]->x < screen_w )
+		if( planks[ i ]->x > -screen_w/2 && planks[ i ]->x < screen_w )
 		{
-			ladder[ ladders[ i ]->nr ]->setPosition( ladders[ i ]->x, ladders[ i ]->y );
-			ladder[ ladders[ i ]->nr ]->setColor( sf::Color( ladders[ i ]->red, ladders[ i ]->green, ladders[ i ]->blue ) );
-			window->draw( ladder[ ladders[ i ]->nr ]->get() );
+			sprites[ planks[ i ]->nr ]->setPosition( planks[ i ]->x, planks[ i ]->y );
+			sprites[ planks[ i ]->nr ]->setColor( sf::Color( planks[ i ]->red, planks[ i ]->green, planks[ i ]->blue ) );
+			window->draw( sprites[ planks[ i ]->nr ]->get() );
 		}
 	}
 }
 
-
 void Ladder::fadein( int v, int max )
 {
-	for( unsigned i = 0; i < ladder.size(); i++ )
+	for( unsigned i = 0; i < sprites.size(); i++ )
 	{
-		ladder[ i ]->fadein( v, max );
+		sprites[ i ]->fadein( v, max );
 	}
 }
 
 void Ladder::fadeout( int v, int min )
 {
-	for( unsigned i = 0; i < ladder.size(); i++ )
+	for( unsigned i = 0; i < sprites.size(); i++ )
 	{
-		ladder[ i ]->fadeout( v, min );
+		sprites[ i ]->fadeout( v, min );
 	}
 }
 
 
-int Ladder::strToInt( string s )
+
+int Ladder::to_int( string s )
 {
-	bool m=false;
-    int tmp=0;
-    unsigned i=0;
-    if(s[0]=='-')
+	bool m = false;
+    int tmp = 0;
+    unsigned i = 0;
+	
+    if( s[ 0 ] == '-' )
     {
-          i++;
-          m = true;
+		i++;
+		m = true;
     }
 	
-    while(i<s.size())
+    while( i < s.size() )
     {
-      tmp = 10*tmp+s[i]-48;
-      i++;
+		tmp = 10*tmp +s[ i ] -48;
+		i++;
     }
 	
     return m ? -tmp : tmp; 
 }
 
-void Ladder::positioning(  vector <Plank*> planks )
+void Ladder::positioning( vector <Plank*> planks )
 {
-	ladders = planks;
+	this->planks = planks;
 	
-	for( unsigned i = 0; i < ladders.size(); i++ )
+	for( unsigned i = 0; i < this->planks.size(); i++ )
 	{
-		ladders[ i ]->red = red;
-		ladders[ i ]->green = green;
-		ladders[ i ]->blue = rand()%blue +add;
+		this->planks[ i ]->red = red;
+		this->planks[ i ]->green = green;
+		this->planks[ i ]->blue = rand()%blue +add;
 	}
 }
+
+
 
 
 void Ladder::moveX( sf::Uint8 direction, float vel )
 {
 	if( direction == 1 )
 	{
-		for( unsigned i = 0; i < ladders.size(); i++ )
+		for( unsigned i = 0; i < planks.size(); i++ )
 		{
-			ladders[ i ]->x += vel;
+			planks[ i ]->x += vel;
 		}
 	}
 	else if( direction == 2 )
 	{
-		for( unsigned i = 0; i < ladders.size(); i++ )
+		for( unsigned i = 0; i < planks.size(); i++ )
 		{
-			ladders[ i ]->x -= vel;
+			planks[ i ]->x -= vel;
 		}
 	}
 }
 
-int Ladder::backToGrass( int add )
+void Ladder::backToGrass( int add )
 {
-	for( unsigned i = 0; i < ladders.size(); i++ )
+	for( unsigned i = 0; i < planks.size(); i++ )
 	{
-		ladders[ i ]->x += add;
+		planks[ i ]->x += add;
 	}
-	
-	return add;
 }
 
-void Ladder::addLadder( int x, int y )
-{
-	// add ladder.
-	ladders.push_back( new Plank() );
-	
-	// set x.
-	ladders[ ladders.size()-1 ]->x = x;
-	
-	// set y.
-	ladders[ ladders.size()-1 ]->y = y;
-	
-	ladders[ ladders.size()-1 ]->red;
-	ladders[ ladders.size()-1 ]->green;
-	ladders[ ladders.size()-1 ]->blue = rand()%blue +add;
-}
-
-bool Ladder::checkLadder( Rect* rect, int screen_w )
+bool Ladder::checkCollision( Rect* rect, int screen_w )
 {
 	if( rect != NULL )
 	{
-		for( unsigned i = 0; i < ladders.size(); i++ )
+		for( unsigned i = 0; i < planks.size(); i++ )
 		{
-			if( ladders[ i ]->x > -screen_w/2 && ladders[ i ]->x < screen_w )
+			if( planks[ i ]->x > -screen_w/2 && planks[ i ]->x < screen_w )
 			{
-				ladder[ ladders[ i ]->nr ]->setPosition( ladders[ i ]->x, ladders[ i ]->y );
-				if( ladder[ ladders[ i ]->nr ]->checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
+				sprites[ planks[ i ]->nr ]->setPosition( planks[ i ]->x, planks[ i ]->y );
+				if( sprites[ planks[ i ]->nr ]->checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
 				{
 					return true;
 				}
@@ -196,12 +193,14 @@ bool Ladder::checkLadder( Rect* rect, int screen_w )
 	return false;
 }
 
+
+
 int Ladder::getW( sf::Uint8 nr )
 {
-	return ladder[ nr ]->getWidth();
+	return sprites[ nr ]->getWidth();
 }
 
 int Ladder::getH( sf::Uint8 nr )
 {
-	return ladder[ nr ]->getHeight();
+	return sprites[ nr ]->getHeight();
 }
