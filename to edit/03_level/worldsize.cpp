@@ -48,7 +48,7 @@ void Worldsize::load( int screen_w, int screen_h )
 	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
 	
 	min = 20;
-	multiplier = 5;
+	multiplier = 3;
 	blocks_value = multiplier *100;
 	blocks = blocks_value +min;
 	
@@ -140,7 +140,7 @@ void Worldsize::fadeout( int j, int min )
 
 int Worldsize::getResult()
 {
-	printf( "%d\n", blocks );
+	// printf( "%d\n", blocks );
 	return blocks;
 }
 
