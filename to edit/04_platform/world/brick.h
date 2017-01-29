@@ -73,7 +73,7 @@ public:
 	vector <Plank*> getPlanks();
 	
 	
-	// Check collision.
+	// Collision detection.
 	bool checkCollision( Rect* rect );
 	bool checkPixelCollision( Rect* rect );
 };
