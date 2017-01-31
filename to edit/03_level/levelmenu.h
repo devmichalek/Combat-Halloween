@@ -10,6 +10,7 @@
 class Level_menu
 {
 	int state;
+	int screen_w, screen_h;
 	
 	// level menu objects
 	Sound* sound;
@@ -37,11 +38,10 @@ public:
 	bool isQuit();
 	bool nextState();
 	bool backToMenu();
-	void reloadMusic();
+	void reset();
 	
 	
 	int getMap();
 	int getCharacter();
 	int getWorldsize();
-	int getVegetationsize();
 };

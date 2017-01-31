@@ -62,6 +62,9 @@ void Level_menu::set( int state, Sound* sound )
 	
 void Level_menu::load( int screen_w, int screen_h )
 {
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
+	
 	background->load( "data/sprites/menu/background.png" );
 	music->load( "data/music/Rayman Legends OST - Mysterious Swamps .mp3" );
 	backtomenu->load( screen_w );
@@ -121,20 +124,24 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	{
 		music->fadein( 1, sound->getMusicVolume() );
 		
-		background->fadein( 3 );
-		backtomenu->fadein( 3 );
-		choice->fadein( 3 );
-		character->fadein( 3 );
-		worldsize->fadein( 3 );
+		sf::Uint8 v = 2;
+		
+		background->fadein( v );
+		backtomenu->fadein( v );
+		choice->fadein( v );
+		character->fadein( v );
+		worldsize->fadein( v );
 	}
 	else if( backtomenu->getState() == -1 )
 	{
-		background->fadeout( 3 );
-		music->fadeout( 3 );
-		backtomenu->fadeout( 3 );
-		choice->fadeout( 3 );
-		character->fadeout( 3 );
-		worldsize->fadeout( 3 );
+		sf::Uint8 v = 3;
+		
+		background->fadeout( v );
+		music->fadeout( v );
+		backtomenu->fadeout( v );
+		choice->fadeout( v );
+		character->fadeout( v );
+		worldsize->fadeout( v );
 		
 		if( choice->getAlpha() == 0 )
 		{
@@ -148,13 +155,15 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	{
 		if( character->nextState() )
 		{
-			music->fadeout( 3 );
+			sf::Uint8 v = 3;
 			
-			background->fadeout( 3 );
-			backtomenu->fadeout( 3 );
-			choice->fadeout( 3 );
-			character->fadeout( 3 );
-			worldsize->fadeout( 3 );
+			music->fadeout( v );
+			
+			background->fadeout( v );
+			backtomenu->fadeout( v );
+			choice->fadeout( v );
+			character->fadeout( v );
+			worldsize->fadeout( v );
 			
 			if( choice->getAlpha() == 0 )
 			{
@@ -167,11 +176,12 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	
 	else if( backtomenu->getState() == 2 )
 	{
-		character->move( 20, 1000 );
-		worldsize->move( 20, 0 );
-		if( choice->move( 20, 0 ) )
+		sf::Uint8 v = 20;
+		character->move( v, screen_w );
+		worldsize->move( v, 0 );
+		if( choice->move( v, 0 ) )
 		{
-			choice->reset();
+			choice->reset( screen_w, screen_h );
 			backtomenu->setState( 0 );
 		}
 	}
@@ -202,9 +212,6 @@ bool Level_menu::backToMenu()
 {
 	if( state == 2 )
 	{
-		state = 0;
-		backtomenu->setState( 0 );
-		worldsize->reset();
 		return true;
 	}
 		
@@ -212,10 +219,18 @@ bool Level_menu::backToMenu()
 }
 
 
-void Level_menu::reloadMusic()
+void Level_menu::reset()
 {
+	state = 0;
+	backtomenu->setState( 0 );
+	choice->reset( screen_w, screen_h );
+	worldsize->reset( screen_w, screen_h );
+	character->reset( screen_w, screen_h );
 	music->reload();
 }
+
+
+
 
 int Level_menu::getMap()
 {
@@ -230,9 +245,4 @@ int Level_menu::getCharacter()
 int Level_menu::getWorldsize()
 {
 	return worldsize->getResult();
-}
-
-int Level_menu::getVegetationsize()
-{
-	
 }
