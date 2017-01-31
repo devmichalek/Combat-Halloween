@@ -36,7 +36,9 @@ public:
 	
 	Character();
     ~Character();
+	
 	void free();
+	void reset( int screen_w, int screen_h );
 
     void load( int screen_w, int screen_h );
     void draw( sf::RenderWindow* &window );

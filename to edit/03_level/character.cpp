@@ -45,6 +45,14 @@ void Character::free()
 	click.free();
 }
 
+void Character::reset( int screen_w, int screen_h )
+{
+	one.center( screen_w, 100, screen_w/2, screen_h );
+	two.center( screen_w + screen_w/2, 100, screen_w/2, screen_h ); // RUDA <3
+	text.center( screen_w, screen_h/2 -40, screen_w );
+	information.setPosition( screen_w + 10, screen_h - information.getHeight() - 10 );
+}
+
 
 
 void Character::load( int screen_w, int screen_h )
