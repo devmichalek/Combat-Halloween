@@ -27,4 +27,6 @@ public:
 	bool getScope();
 	sf::Uint8 getFactor();
 	bool allowMoving();
+	
+	void reset();
 };

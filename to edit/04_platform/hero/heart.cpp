@@ -75,6 +75,11 @@ void Heart::draw( sf::RenderWindow* &window )
 		window->draw( fill[ i ].get() );
 		window->draw( frame[ i ].get() );
 	}
+	
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
+	{
+		harm( -4 );
+	}
 }
 
 void Heart::fadein( int v, int max )
@@ -87,7 +92,7 @@ void Heart::fadein( int v, int max )
 			frame[ i ].fadein( v, max );
 		}
 		
-		if( fill[ 0 ].getAlpha() == 0xFF )
+		if( frame[ 0 ].getAlpha() == 0xFF )
 		{
 			flag = true;
 		}
@@ -150,4 +155,11 @@ bool Heart::isDead()
 	}
 	
 	return false;
+}
+
+void Heart::reset()
+{
+	life = nr *0xFF;
+	harm( 0 );
+	flag = false;
 }
