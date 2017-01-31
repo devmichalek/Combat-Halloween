@@ -49,7 +49,26 @@ void Greenery::free()
 	}
 }
 
-	
+void Greenery::reset( int distance )
+{
+	while( true )
+	{
+		if( distance > 0 )
+		{
+			for( unsigned i = 0; i < blocks.size(); i++ )
+			{
+				blocks[ i ]->x += 1;
+			}
+			
+			distance -= 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
 void Greenery::load( int type )
 {
 	free();
