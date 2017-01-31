@@ -9,6 +9,7 @@ class Heart
 	MySprite* frame;
 	
 	bool flag;
+	int life;
 	
 public:
 	
@@ -22,5 +23,6 @@ public:
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0x00 );
 	
-	void harm( float damage );
+	void harm( int damage );
+	bool isDead();
 };
