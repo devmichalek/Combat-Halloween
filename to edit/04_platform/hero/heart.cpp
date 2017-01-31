@@ -7,6 +7,7 @@ Heart::Heart()
 	frame = NULL;
 	
 	flag = false;
+	life = 0;
 }
 
 Heart::~Heart()
@@ -40,6 +41,7 @@ void Heart::free()
 	
 	nr = 0;
 	flag = false;
+	life = 0;
 }
 
 	
@@ -49,18 +51,21 @@ void Heart::load()
 	fill = new MySprite [ nr ];
 	frame = new MySprite [ nr ];
 	
+	float scale = 0.75;
 	for( int i = 0; i < nr; i++ )
 	{
 		fill[ i ].setName( "heart-fill[" + to_string( i ) + "]" );
 		fill[ i ].load( "data/sprites/hero/heart/fill.png");
-		fill[ i ].setScale( 0.75, 0.75 );
+		fill[ i ].setScale( scale, scale );
 		fill[ i ].setPosition( 10 + fill[ i ].getWidth()*i, 10 );
 		
 		frame[ i ].setName( "heart-frame[" + to_string( i ) + "]" );
 		frame[ i ].load( "data/sprites/hero/heart/frame.png");
-		frame[ i ].setScale( 0.75, 0.75 );
+		frame[ i ].setScale( scale, scale );
 		frame[ i ].setPosition( 10 + frame[ i ].getWidth()*i, 10 );
 	}
+	
+	life = nr *0xFF;
 }
 
 void Heart::draw( sf::RenderWindow* &window )
@@ -83,7 +88,9 @@ void Heart::fadein( int v, int max )
 		}
 		
 		if( fill[ 0 ].getAlpha() == 0xFF )
+		{
 			flag = true;
+		}
 	}
 }
 
@@ -96,17 +103,51 @@ void Heart::fadeout( int v, int min )
 	}
 }
 
-void Heart::harm( float damage )
+void Heart::harm( int damage )
 {
-	for( int i = nr-1; i >= 0; i-- )
+	life += damage;
+	
+	int temporary_life = 0;
+	for( int i = 0; i < nr; i++ )
 	{
-		if( fill[ i ].getAlpha() > 0 )
+		temporary_life += fill[ i ].getAlpha();
+	}
+	
+	if( temporary_life != life )
+	{
+		temporary_life = life;
+		
+		for( int i = 0; i < nr; i++ )
 		{
-			if( fill[ i ].getAlpha() -damage*10 < 0 )
-				fill[ i ].setAlpha( 0 );
-			else
-				fill[ i ].setAlpha( fill[ i ].getAlpha() -damage*10 );
-			break;
+			fill[ i ].setAlpha( 0 );
+		}
+		
+		if( temporary_life > 0 )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				if( temporary_life < 0xFF )
+				{
+					fill[ i ].setAlpha( temporary_life );
+					break;
+				}
+				else
+				{
+					fill[ i ].setAlpha( 0xFF );
+				}
+				
+				temporary_life -= 0xFF;
+			}
 		}
 	}
+}
+
+bool Heart::isDead()
+{
+	if( life <= 0 )
+	{
+		return true;
+	}
+	
+	return false;
 }
