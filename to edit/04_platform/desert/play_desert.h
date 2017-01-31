@@ -31,10 +31,12 @@ public:
 
 	Play_desert();
     ~Play_desert();
+	
     void free();
+	void reset();
 	
     void load( int screen_w, int screen_h );
-	void handle( sf::Event &event );
+    void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
 	
@@ -46,11 +48,10 @@ public:
 	Sound* getSound();
 	void set( int state, Sound* sound );
 	
-	bool isQuit();
+	
 	bool nextState();
 	bool backToLevel();
 	
-	void reloadMusic();
 	
 	void mechanics();
 };
