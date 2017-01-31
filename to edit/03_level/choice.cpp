@@ -282,11 +282,27 @@ bool Choice::isChosen()
 
 
 
-void Choice::reset()
+void Choice::reset( int screen_w, int screen_h )
 {
 	counter = -1;
 	result = -1;
 	chosen = -1;
+	
+	text.setPosition( screen_w/2 -text.getWidth()/2 -button.getWidth(), screen_h/4 - text.getHeight()/2 -80 );
+	button.setPosition( text.getRight() +10, text.getY() -5 );
+
+	information.setPosition( 10, screen_h - information.getHeight() - 10 );
+
+	int w = world[ 0 ].getWidth()*4 + 15*4;
+	world[ 0 ].setPosition( screen_w/2 - w/2, button.getY() +90 );
+	world[ 1 ].setPosition( world[ 0 ].getRight() + 15, button.getY() +90 );
+	world[ 2 ].setPosition( world[ 1 ].getRight() + 15, button.getY() +90 );
+	world[ 3 ].setPosition( world[ 2 ].getRight() + 15, button.getY() +90 );
+	
+	frame.setPosition( -1000, -1000 );
+	
+	range = 0;
+	keep = false;
 }
 
 bool Choice::move( int vel, int scope )

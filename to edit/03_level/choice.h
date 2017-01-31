@@ -48,7 +48,7 @@ public:
 	sf::Uint8 getAlpha();
 	bool isChosen();
 	
-	void reset();
+	void reset( int screen_w, int screen_h );
 	
 	bool move( int vel, int scope );	// move horizontal
 };
