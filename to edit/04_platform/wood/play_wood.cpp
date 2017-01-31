@@ -21,6 +21,8 @@ Play_wood::~Play_wood()
 	free();
 }
 
+
+
 void Play_wood::free()
 {
 	delete sound;
@@ -34,7 +36,19 @@ void Play_wood::free()
 	delete ladder;
 }
 
-	
+void Play_wood::reset()
+{
+	hero->reset( screen_h );
+	bg->setXY( hero->getX(), hero->getY() );
+	int distance = brick->reset();
+	greenery->reset( distance );
+	ladder->reset( distance );
+	heart->reset();
+	scope->reset();
+}
+
+
+
 void Play_wood::load( int screen_w, int screen_h )
 {
 	this->screen_w = screen_w;
@@ -47,6 +61,52 @@ void Play_wood::load( int screen_w, int screen_h )
 	greenery->load( 1 );
 	ladder->load( 1 );
 }
+
+void Play_wood::handle( sf::Event &event )
+{
+	//...
+}
+
+void Play_wood::draw( sf::RenderWindow* &window )
+{
+	mechanics();
+	
+	if( hero->isDead() )
+	{
+		sf::Uint8 v = 1;
+		bg->fadeout( v );
+		brick->fadeout( v );
+		hero->fadeout( v );
+		kunai->fadeout( v );
+		heart->fadeout( v );
+		greenery->fadeout( v );
+		ladder->fadeout( v );
+	}
+	else
+	{
+		sf::Uint8 v = 2;
+		bg->fadein( v );
+		brick->fadein( v );
+		hero->fadein( v );
+		kunai->fadein( v );
+		heart->fadein( v );
+		greenery->fadein( v );
+		ladder->fadein( v );
+	}
+	
+
+	
+	bg->draw( window );
+	greenery->drawBG( window, screen_w );
+	ladder->draw( window, screen_w );
+	hero->draw( window );
+	kunai->draw( window );
+	brick->draw( window );
+	greenery->draw( window, screen_w );
+	heart->draw( window );
+}
+
+
 
 void Play_wood::setHero( int screen_w, int screen_h, int type )
 {
@@ -75,36 +135,13 @@ void Play_wood::setWorldsize( int size )
 	greenery->positioning( brick->getBlocks() );
 }
 
-void Play_wood::handle( sf::Event &event )
+
+
+Sound* Play_wood::getSound()
 {
-	//...
+	return sound;
 }
 
-
-void Play_wood::draw( sf::RenderWindow* &window )
-{
-	mechanics();
-	
-	bg->fadein( 2 );
-	brick->fadein( 2 );
-	hero->fadein( 2 );
-	kunai->fadein( 2 );
-	heart->fadein( 2 );
-	greenery->fadein( 2 );
-	ladder->fadein( 2 );
-
-	
-	bg->draw( window );
-	greenery->drawBG( window, screen_w );
-	ladder->draw( window, screen_w );
-	hero->draw( window );
-	kunai->draw( window );
-	brick->draw( window );
-	greenery->draw( window, screen_w );
-	heart->draw( window );
-}
-
-	
 int Play_wood::getState()
 {
 	return state;
@@ -131,20 +168,11 @@ void Play_wood::set( int state, Sound* sound )
 	*/
 }
 
-	
-bool Play_wood::isQuit()
-{
-	if( state == 3 )
-	{
-		return true;
-	}
-	
-	return false;
-}
+
 
 bool Play_wood::nextState()
 {
-	if( state == 1 )
+	if( hero->isDead() && bg->getAlpha() == 0 )
 	{
 		return true;
 	}
@@ -154,18 +182,5 @@ bool Play_wood::nextState()
 
 bool Play_wood::backToLevel()
 {
-	if( state == 2 )
-	{
-		state = 0;
-		return true;
-	}
-		
 	return false;
 }
-
-	
-void Play_wood::reloadMusic()
-{
-	// music->reload();
-}
-

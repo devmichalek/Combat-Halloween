@@ -186,18 +186,16 @@ void Play_wood::mechanics()
 	// HERO FALLEN
 	if( hero->isFallen( screen_h ) )
 	{
+		heart->harm( -0xCC );
 		hero->setNewY( brick->getLastGrassY() );
 		
 		if( scope->getState() == 1 || scope->getState() == 3 )
 		{
 			brick->setNewX( hero->getX() );
 		}
-		else
+		else if( hero->setNewX( brick->getLastGrassX(), screen_w ) )
 		{
-			if( hero->setNewX( brick->getLastGrassX(), screen_w ) )
-			{
-				scope->transform();
-			}
+			scope->transform();
 		}
 	}
 	
@@ -206,6 +204,7 @@ void Play_wood::mechanics()
 	{
 		brick->setNewX( hero->getX() );
 	}
+	
 	if( hero->backToGrass() )
 	{
 		brick->findLastGrass( hero->getRect() );
@@ -215,5 +214,11 @@ void Play_wood::mechanics()
 		hero->setFallen();
 		ladder->backToGrass( brick->getGrassValue() );
 		greenery->backToGrass( brick->getGrassValue() ); 
+	}
+	
+	// DEAD
+	if( heart->isDead() )
+	{
+		hero->die();
 	}
 }
