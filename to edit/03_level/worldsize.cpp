@@ -38,6 +38,19 @@ Worldsize::~Worldsize()
 	click.free();
 }
 
+void Worldsize::reset( int screen_w, int screen_h )
+{
+	range = 0;
+	blocks = blocks_value/multiplier +min;
+	green_bar.setScale( blocks_value/multiplier, 1 );
+	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
+	
+	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
+	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
+	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
+	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() );
+}
+
 
 
 void Worldsize::load( int screen_w, int screen_h )
@@ -62,7 +75,7 @@ void Worldsize::load( int screen_w, int screen_h )
 	white_bar.setName( "worldsize-white_bar" );
 	white_bar.create( screen_w/4 *3, bar_width );
 	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
-	white_bar.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	white_bar.setColor( sf::Color( 0xFF, 0xFF, 0xFE ) );
 	
 	green_bar.setName( "worldsize-green_bar" );
 	green_bar.create( 1, bar_width );
@@ -73,7 +86,7 @@ void Worldsize::load( int screen_w, int screen_h )
 	
 	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() );
 	
-	click.setID( "choice-click" );
+	click.setID( "worldsize-click" );
 	click.load( "data/sounds/click.wav", 50 );
 }
 
@@ -142,15 +155,6 @@ int Worldsize::getResult()
 {
 	// printf( "%d\n", blocks );
 	return blocks;
-}
-
-void Worldsize::reset()
-{
-	range = 0;
-	blocks = blocks_value/multiplier +min;
-	green_bar.setScale( blocks_value/multiplier, 1 );
-	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
-	blocks_text.reloadPosition();
 }
 
 	

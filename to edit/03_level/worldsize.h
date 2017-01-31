@@ -33,6 +33,7 @@ public:
 
 	Worldsize();
 	~Worldsize();
+	void reset( int screen_w, int screen_h );
 
 	void load( int screen_w, int screen_h );
 	void handle( sf::Event &event );
@@ -42,7 +43,6 @@ public:
 	void fadeout( int j = 1, int min = 0 );
 	
 	int getResult();
-	void reset();
 	
 	bool move( int vel, int scope );	// move horizontal
 };
