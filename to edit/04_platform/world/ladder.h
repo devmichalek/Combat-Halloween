@@ -17,6 +17,7 @@ public:
 	Ladder();
 	~Ladder();
 	void free();
+	void reset( int distance );
 	void load( int type );
 	void draw( sf::RenderWindow* &window, int screen_w );
 	void fadein( int v = 1, int max = 0xFF );

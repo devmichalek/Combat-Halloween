@@ -16,6 +16,7 @@ public:
 	void load( string path, int w, int h );
 	void draw( sf::RenderWindow* &window );
 	void setXY( int posX, int posY );
+	sf::Uint8 getAlpha();
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );

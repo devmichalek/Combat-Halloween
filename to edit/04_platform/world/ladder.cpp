@@ -37,6 +37,26 @@ void Ladder::free()
 	red = green = blue = add = 0;
 }
 
+void Ladder::reset( int distance )
+{
+	while( true )
+	{
+		if( distance > 0 )
+		{
+			for( unsigned i = 0; i < planks.size(); i++ )
+			{
+				planks[ i ]->x += 1;
+			}
+			
+			distance -= 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+}
+
 void Ladder::load( int type )
 {
 	free();

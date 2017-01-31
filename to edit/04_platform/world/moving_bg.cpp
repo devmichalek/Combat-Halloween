@@ -23,6 +23,8 @@ void Moving_bg::free()
 	
 void Moving_bg::load( string path, int w, int h )
 {
+	free();
+	
 	screen_w = w;
 	screen_h = h;
 	
@@ -46,6 +48,11 @@ void Moving_bg::setXY( int posX, int posY )
 	{
 		sprite.setPosition( new_x, new_y );
 	}
+}
+
+sf::Uint8 Moving_bg::getAlpha()
+{
+	return sprite.getAlpha();
 }
 	
 	

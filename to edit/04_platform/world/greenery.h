@@ -16,6 +16,7 @@ public:
 	Greenery();
 	~Greenery();
 	void free();
+	void reset( int distance );
 	void load( int type );
 	void draw( sf::RenderWindow* &window, int screen_w );
 	void drawBG( sf::RenderWindow* &window, int screen_w );

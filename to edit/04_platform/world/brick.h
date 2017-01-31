@@ -33,6 +33,7 @@ public:
 	Brick();
 	~Brick();
 	void free();
+	int reset();
 	void load( int screen_w, int screen_h, int type );
 	void draw( sf::RenderWindow* &window );
 	void fadein( int v = 1, int max = 0xFF );

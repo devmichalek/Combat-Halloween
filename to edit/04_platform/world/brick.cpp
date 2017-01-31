@@ -88,6 +88,32 @@ void Brick::free()
 	islands_line = 0;
 }
 
+int Brick::reset()
+{
+	int distance = 0;
+	
+	while( true )
+	{
+		if( left < -10 )
+		{
+			for( unsigned i = 0; i < blocks.size(); i++ )
+			{
+				blocks[ i ]->x += 1;
+			}
+			
+			left += 1;
+			right += 1;
+			distance += 1;
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	return distance;
+}
+
 void Brick::load( int screen_w, int screen_h, int type )
 {
 	free();
@@ -147,6 +173,7 @@ void Brick::fadeout( int v, int min )
 		sprites[ i ]->fadeout( v, min );
 	}
 }
+
 
 
 
