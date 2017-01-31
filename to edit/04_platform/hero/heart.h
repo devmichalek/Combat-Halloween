@@ -25,4 +25,5 @@ public:
 	
 	void harm( int damage );
 	bool isDead();
+	void reset();
 };

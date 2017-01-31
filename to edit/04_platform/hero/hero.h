@@ -52,6 +52,9 @@ class Hero
 	// Climb.
 	sf::Uint8 climb;
 	
+	// Dead.
+	sf::Uint8 dead;
+	
 	// Harm.
 	sf::Uint8 hit_line;
 	sf::Uint8 hit_counter;
@@ -71,6 +74,7 @@ class Hero
 	
 	bool scope;
 	
+	// Fall stuff.
 	bool fallen;
 	int fallenCounter;
 	int fallenLine;
@@ -138,6 +142,9 @@ public:
 	bool backToGrass();
 	void setFallen();
 	bool isSurplus();
+	void makeFall();
+	void die();
+	bool isDead();
 	
 	const int getX();
 	const int getY();
@@ -160,4 +167,5 @@ public:
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
+	void reset( int posY );
 };

@@ -115,3 +115,9 @@ bool Scope::allowMoving()
 		
 	return false;
 }
+
+void Scope::reset()
+{
+	a = 0;
+	b = 0;
+}

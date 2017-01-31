@@ -27,6 +27,8 @@ Hero::Hero()
 	
 	climb = 0;
 	
+	dead = 0;
+	
 	hit_line = 0;
 	hit_counter = 0;
 	
@@ -62,16 +64,19 @@ void Hero::free()
 	offset = 0;
 	delay = 0;
 	
-	for( unsigned i = 0; i < keys.size(); i++ )
+	if( !keys.empty() )
 	{
-		if( keys[ i ] != NULL )
+		for( unsigned i = 0; i < keys.size(); i++ )
 		{
-			delete [] keys[ i ];
-			keys[ i ] = NULL;
+			if( keys[ i ] != NULL )
+			{
+				delete [] keys[ i ];
+				keys[ i ] = NULL;
+			}
 		}
+		
+		keys.clear();
 	}
-	
-	keys.clear();
 	
 	vel = 0;
 	jump_vel = 0;
@@ -88,6 +93,8 @@ void Hero::free()
 	slide = false;
 	
 	climb = 0;
+	
+	dead = 0;
 	
 	j.free();
 	a.free();
@@ -207,6 +214,7 @@ void Hero::load( int& screen_w, int& posY, string path )
 	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
 	sprite[ JUMP_THROW ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
 	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +11, sprite[ IDLE ].getY() -1 );
+	sprite[ DEAD ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() -5 );
 	
 	hit_line = 15;
 	fallenLine = 540;
@@ -214,30 +222,50 @@ void Hero::load( int& screen_w, int& posY, string path )
 
 void Hero::draw( sf::RenderWindow* &window )
 {
-	makeColor();
+	if( dead == 0 )
+	{
+		makeColor();
+		makeFall();
+	}
+	
+	if( dead != 2 )
+	{
+		sprite[ which ].setOffset( offset /delay );
+	}
+	
 	
 	if( !fallen )
 	{
 		window->draw( sprite[ which ].get() );
 	}
 	
-	sprite[ which ].setOffset( offset /delay );
-	
-	if( climb == 1 || ( climb == 0 && which != CLIMB ) )
+	if( dead != 2 )
 	{
-		offset ++;
+		if( climb == 1 || ( climb == 0 && which != CLIMB ) )
+		{
+			offset ++;
+		}
+		
+		if( offset == (nr-1) *delay )
+		{
+			offset = 0;
+			j.setActive( false );
+			a.setActive( false );
+			ja.setActive( false );
+			t.setActive( false );
+			jt.setActive( false );
+			
+			if( dead == 1 )
+			{
+				dead = 2;
+			}
+		}
 	}
 	
-	if( offset == (nr-1) *delay )
-	{
-		offset = 0;
-		j.setActive( false );
-		a.setActive( false );
-		ja.setActive( false );
-		t.setActive( false );
-		jt.setActive( false );
-	}
 	
+	
+	
+	/*
 	if( which == ATTACK )
 	{
 		if( right )
@@ -255,38 +283,7 @@ void Hero::draw( sf::RenderWindow* &window )
 			jumpBox.setPosition( sprite[ JUMP_ATTACK ].getX() -sprite[ JUMP_ATTACK ].getWidth(), sprite[ JUMP_ATTACK ].getY() );
 		window->draw( jumpBox.get() );
 	}
-	
-	if( fallenCounter > 0 && !fallen )
-	{
-		fallenCounter ++;
-		
-		if( fallenCounter%60 == 0 )	// 1 sec
-		{
-			if( sprite[ IDLE ].getAlpha() == 100 )
-			{
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setAlpha( 0xFF );
-				}
-			}
-			else
-			{
-				for( int i = 0; i < nr; i++ )
-				{
-					sprite[ i ].setAlpha( 100 );
-				}
-			}
-		}
-	}
-	
-	if( fallenCounter == fallenLine )
-	{
-		fallenCounter = 0;
-		for( int i = 0; i < nr; i++ )
-		{
-			sprite[ i ].setAlpha( 0xFF );
-		}
-	}
+	*/
 }
 
 
@@ -501,6 +498,61 @@ bool Hero::isSurplus()
 	return false;
 }
 
+void Hero::makeFall()
+{
+	if( fallenCounter > 0 && !fallen )
+	{
+		fallenCounter ++;
+		
+		if( fallenCounter%60 == 0 )	// 1 sec
+		{
+			if( sprite[ IDLE ].getAlpha() == 100 )
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setAlpha( 0xFF );
+				}
+			}
+			else
+			{
+				for( int i = 0; i < nr; i++ )
+				{
+					sprite[ i ].setAlpha( 100 );
+				}
+			}
+		}
+	}
+	
+	if( fallenCounter == fallenLine )
+	{
+		fallenCounter = 0;
+		for( int i = 0; i < nr; i++ )
+		{
+			sprite[ i ].setAlpha( 0xFF );
+		}
+	}
+}
+
+void Hero::die()
+{
+	if( dead == 0 )
+	{
+		dead = 1;
+		offset = 0;
+		which = DEAD;
+	}
+}
+
+bool Hero::isDead()
+{
+	if( dead == 2 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 
 
 sf::Uint8 Hero::getDirection()
@@ -538,4 +590,43 @@ Rect* Hero::getRect()
 	Rect* rect = new Rect;
 	rect->set( t_x, t_y, t_w, t_h );
 	return rect;
+}
+
+void Hero::reset( int posY )
+{
+	int startX = 100;
+	int startY = posY -sprite[ IDLE ].getHeight() -400;
+	
+	while( true )
+	{
+		if( sprite[ IDLE ].getX() > startX )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX() -1, sprite[ i ].getY() );
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	while( true )
+	{
+		if( sprite[ IDLE ].getY() > startY )
+		{
+			for( int i = 0; i < nr; i++ )
+			{
+				sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -1 );
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+	
+	which = IDLE;
+	dead = 0;
 }
