@@ -13,13 +13,13 @@ void Exit_log::load( int screen_w, int screen_h )
 {
 	mySprite.setName( "exit_log-mySprite" );
     mySprite.load( "data/sprites/menu/exit.png" );
-	mySprite.setAlpha( 255 );
+	mySprite.setAlpha( 0xFF );
 	mySprite.center( 0, 0, screen_w, screen_h );
 
 	myText.setName( "exit_log-myText" );
 	myText.setFont( "data/fonts/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
 	myText.setText( "q-quit  b-back" );
-	myText.setAlpha( 255 );
+	myText.setAlpha( 0xFF );
 	myText.center( screen_w, screen_h, 0, -6 );
 
 	click.setID( "exit_log-click" );

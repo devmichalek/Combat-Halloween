@@ -9,6 +9,7 @@
 
 #include "log.h"
 
+
 Log::Log( bool locked )
 {
     state = false;

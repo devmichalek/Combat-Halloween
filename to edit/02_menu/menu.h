@@ -27,7 +27,7 @@ class Menu
 	int state;
 	
 	// Menu objects
-	Sound* sound;
+	Sound sound;
 	
 	Title* title;
 	
@@ -74,7 +74,7 @@ public:
 	bool nextState();
 	
 	int getState();
-	Sound* getSound();
+	Sound getSound();
 	void set( int state, Sound* sound );
 	
 	void reloadMusic();

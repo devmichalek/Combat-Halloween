@@ -28,6 +28,7 @@ public:
 
 	Click();
 	~Click();
+	void free();
 	
 	void turn();	// Turn on/off chunk
 	bool isPlayable();
