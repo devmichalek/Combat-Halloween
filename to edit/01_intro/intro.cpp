@@ -43,7 +43,7 @@ void Intro::free()
 }
 
 	
-void Intro::load( const int &screen_w, const int &screen_h )
+void Intro::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
