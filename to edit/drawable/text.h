@@ -17,7 +17,7 @@ using namespace std;
 
 class MyText :public Rect, public Color
 {
-	string ID;	// Universal
+	string name;	// Universal
 	
 	sf::Font* font;
 	sf::Text* text;
@@ -26,32 +26,33 @@ class MyText :public Rect, public Color
 	
 public:
 	
-	MyText( int x = 0, int y = 0, sf::Uint8 alpha = 0x00 );
+	MyText();
 	~MyText();
 	void free();
-	void setName( string name );		// To find bugs
 	
+	void setFont( string path, int size = 1, sf::Uint8 r = 0, sf::Uint8 g = 0, sf::Uint8 b = 0 );
+	void setText( string line );
 	#ifdef _WIN32
 	void setColor( int i );
 	#endif
 	
-	void setFont( string path, int size = 1, sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
-	void setText( string line );
-	
-	void setPosition( float x, float y );
-	void center( int w, int h, int wm = 0, int hm = 0 );
-    void setScale( float w, float h );
-
-    sf::Text& get();
-	
-	void fadein( int v = 1, int max = 255 );
+	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	
-	void setColor( sf::Uint8 r = 0x00, sf::Uint8 g = 0x00, sf::Uint8 b = 0x00 );
-	void setSize( int size = 1 );
 	
+	void setName( string name );	// To find errors.
+	const string& getName() const;
+	
+	
+	void setPosition( float x, float y );
+	void reloadPosition();	// Set the same position as it was.
+	void center( int w, int h, int wm = 0, int hm = 0 );
+	
+	
+	const sf::Text& get() const;
 	void setAlpha( sf::Uint8 alpha = 0 );
+	void setColor( sf::Uint8 r = 0, sf::Uint8 g = 0, sf::Uint8 b = 0 );
 	
-	std::ostream& operator <<( std::ostream& s );	// Print ID, rect and alpha
-	void reloadPosition();
+	void setSize( int size = 1 );
+	std::ostream& operator <<( std::ostream& s );
 };
