@@ -15,13 +15,12 @@
 #include <windows.h>
 #endif
 
-MyText::MyText( int x, int y, sf::Uint8 alpha )
+MyText::MyText()
 {
-	ID = "";
+	name = "";
 	
 	width = height = 0;
-    left = x;
-	top = y;
+    left = top = 0;
 
     font = NULL;
 	text = NULL;
@@ -31,7 +30,7 @@ MyText::MyText( int x, int y, sf::Uint8 alpha )
 	color.r = 0xFF;
 	color.g = 0xFF;
 	color.b = 0xFF;
-	color.a = alpha;
+	color.a = 0;
 }
 
 MyText::~MyText()
@@ -64,10 +63,6 @@ void MyText::free()
 	color.a = 0x00;
 }
 
-void MyText::setName( string name )
-{
-	ID = name;
-}
 
 
 #ifdef __linux__
@@ -84,7 +79,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 		font = new sf::Font;
 
 		if( !font->loadFromFile( path ) )
-			throw "ID: " + ID + " \x1B[91mnot loaded\x1B[0m " + path;
+			throw "ID: " + name + " \x1B[91mnot loaded\x1B[0m " + path;
 	}
 	catch( string msg )
 	{
@@ -95,15 +90,45 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 	{
 		this->size = size;
 		if( size < 1 )
-			throw "ID: " + ID + " \x1B[91msize is less than 1!\x1B[0m";
+			throw "ID: " + name + " \x1B[91msize is less than 1!\x1B[0m";
 	}
 	catch( string msg )
 	{
 		cerr << msg << endl;
 	}
 	
-	this->color = sf::Color( r, g, b, 0x00 );
+	this->color = sf::Color( r, g, b, 0 );
 }
+
+void MyText::setText( string line )
+{
+	if( text != NULL )
+    {
+        delete text;
+        text = NULL;
+    }
+	
+	try
+	{
+		text = new sf::Text;
+		
+		if( text == NULL )
+			throw "ID: " + name + " not created text object";
+		
+		text->setString( line );
+		text->setCharacterSize( size );
+		text->setColor( color );
+		text->setFont( *font );
+		
+		width = text->getLocalBounds().width;
+		height = text->getLocalBounds().height;
+	}
+	catch( string msg )
+	{
+		cerr << msg << endl;
+	}
+}
+
 #elif _WIN32
 void MyText::setColor( int i )
 {
@@ -125,7 +150,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 
 		if( !font->loadFromFile( path ) )
 		{
-			throw "ID: " + ID + " ";
+			throw "ID: " + name + " ";
 			setColor( 12 );
 			throw "not loaded";
 			setColor( 7 );
@@ -142,7 +167,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 		this->size = size;
 		if( size < 1 )
 		{
-			throw "ID: " + ID + " ";
+			throw "ID: " + name + " ";
 			setColor( 12 );
 			throw "size is less than 1!";
 			setColor( 7 );
@@ -153,69 +178,10 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 		cerr << msg << endl;
 	}
 	
-	this->color = sf::Color( r, g, b, 0x00 );
+	this->color = sf::Color( r, g, b, 0 );
 }
 #endif
 
-
-void MyText::setText( string line )
-{
-	if( text != NULL )
-    {
-        delete text;
-        text = NULL;
-    }
-	
-	try
-	{
-		text = new sf::Text;
-		
-		if( text == NULL )
-			throw "ID: " + ID + " not created text object";
-		
-		text->setString( line );
-		text->setCharacterSize( size );
-		text->setColor( color );
-		text->setFont( *font );
-		
-		width = text->getLocalBounds().width;
-		height = text->getLocalBounds().height;
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-}
-	
-void MyText::setPosition( float x, float y )
-{
-	this->left = x;
-	this->top = y;
-	
-	text->setPosition( left, top );
-}
-
-void MyText::center( int w, int h, int wm, int hm )
-{
-	this->left = w/2 - this->width/2 + wm;
-    this->top = h/2 - this->height/2 + hm;
-
-	text->setPosition( left, top );
-}
-
-void MyText::setScale( float w, float h )
-{
-	this->width = w;
-	this->height = h;
-	
-	text->setScale( w, h );
-}
-
-
-sf::Text& MyText::get()
-{
-	return *text;
-}
 
 
 void MyText::fadein( int v, int max )
@@ -223,8 +189,12 @@ void MyText::fadein( int v, int max )
 	if( color.a < max )
 	{
 		int alpha = color.a +v;
+		
 		if( alpha > max )
+		{
 			alpha = max;
+		}
+			
 		color.a = alpha;
 
 		text->setColor( color );
@@ -236,14 +206,66 @@ void MyText::fadeout( int v, int min )
 	if( color.a > min )
 	{
 		int alpha = color.a -v;
+		
 		if( alpha < min )
+		{
 			alpha = min;
+		}
+			
 		color.a = alpha;
 
 		text->setColor( color );
 	}
 }
 
+
+
+void MyText::setName( string name )
+{
+	this->name = name;
+}
+
+const string& MyText::getName() const
+{
+	return name;
+}
+
+
+void MyText::setPosition( float x, float y )
+{
+	this->left = x;
+	this->top = y;
+	
+	text->setPosition( left, top );
+}
+
+void MyText::reloadPosition()
+{
+	text->setPosition( left, top );
+}
+
+void MyText::center( int w, int h, int wm, int hm )
+{
+	this->left = w/2 - this->width/2 + wm;
+    this->top = h/2 - this->height/2 + hm;
+
+	text->setPosition( left, top );
+}
+
+
+const sf::Text& MyText::get() const
+{
+	return *text;
+}
+
+void MyText::setAlpha( sf::Uint8 alpha )
+{
+	if( this->color.a != alpha )
+	{
+		this->color.a = alpha;
+		text->setColor( color );
+	}
+}
 
 void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
@@ -270,6 +292,7 @@ void MyText::setColor( sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 		text->setColor( this->color );
 }
 
+
 void MyText::setSize( int size )
 {
 	if( this->size != size )
@@ -279,24 +302,8 @@ void MyText::setSize( int size )
 	}
 }
 
-
-
-void MyText::setAlpha( sf::Uint8 alpha )
-{
-	if( this->color.a != alpha )
-	{
-		this->color.a = alpha;
-		text->setColor( color );
-	}
-}
-
-
 std::ostream& MyText::operator <<( std::ostream& s )
 {
-	return s << "ID: " << ID << " x: " << left << " y: " << top << " w: " << width << " h: " << height << " alpha: " << color.a;
+	return s << "ID: " << name << " x: " << left << " y: " << top << " w: " << width << " h: " << height << " alpha: " << color.a;
 }
 
-void MyText::reloadPosition()
-{
-	text->setPosition( left, top );
-}
