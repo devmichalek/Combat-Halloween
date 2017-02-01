@@ -5,7 +5,6 @@ Level_menu::Level_menu()
 	state = 0;
 	
 	// Create level menu objects
-	sound = new Sound;
 	background = new MySprite;
 	music = new Music;
 	backtomenu = new Backtomenu( "", false );
@@ -21,7 +20,7 @@ Level_menu::~Level_menu()
 
 void Level_menu::free()
 {
-	delete sound;
+	sound.free();
 	delete background;
 	delete music;
 	delete backtomenu;
@@ -37,13 +36,13 @@ int Level_menu::getState()
 	return state;
 }
 
-void Level_menu::set( int state, Sound* sound )
+void Level_menu::set( int state, Sound sound )
 {
 	state = 0;
 	this->sound = sound;
 	
 	// Set chunks
-	if( sound->getChunkPlay() != backtomenu->isPlayable() )
+	if( sound.getChunkPlay() != backtomenu->isPlayable() )
 	{
 		backtomenu->turn();
 		choice->turn();
@@ -51,16 +50,16 @@ void Level_menu::set( int state, Sound* sound )
 	}
 	
 	// Set music volume
-	music->setVolume( sound->getMusicVolume() );
+	music->setVolume( sound.getMusicVolume() );
 	
 	// Set chunk volume
-	backtomenu->setVolume( sound->getChunkVolume() );
-	choice->setVolume( sound->getChunkVolume() );
-	character->setVolume( sound->getChunkVolume() );
-	worldsize->setVolume( sound->getChunkVolume() );
+	backtomenu->setVolume( sound.getChunkVolume() );
+	choice->setVolume( sound.getChunkVolume() );
+	character->setVolume( sound.getChunkVolume() );
+	worldsize->setVolume( sound.getChunkVolume() );
 }
 	
-void Level_menu::load( int screen_w, int screen_h )
+void Level_menu::load( unsigned screen_w, unsigned screen_h )
 {
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
@@ -94,7 +93,7 @@ void Level_menu::handle( sf::Event &event )
 
 void Level_menu::draw( sf::RenderWindow* &window )
 {
-	if( sound->getMusicPlay() && state == 0 )
+	if( sound.getMusicPlay() && state == 0 )
 	{
 		music->play();
 	}
@@ -122,7 +121,7 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	
 	if( backtomenu->getState() == 0 )
 	{
-		music->fadein( 1, sound->getMusicVolume() );
+		music->fadein( 1, sound.getMusicVolume() );
 		
 		sf::Uint8 v = 2;
 		

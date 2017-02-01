@@ -38,7 +38,7 @@ Worldsize::~Worldsize()
 	click.free();
 }
 
-void Worldsize::reset( int screen_w, int screen_h )
+void Worldsize::reset( unsigned screen_w, unsigned screen_h )
 {
 	range = 0;
 	blocks = blocks_value/multiplier +min;
@@ -53,7 +53,7 @@ void Worldsize::reset( int screen_w, int screen_h )
 
 
 
-void Worldsize::load( int screen_w, int screen_h )
+void Worldsize::load( unsigned screen_w, unsigned screen_h )
 {
 	text.setName( "worldsize-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
@@ -153,7 +153,6 @@ void Worldsize::fadeout( int j, int min )
 
 int Worldsize::getResult()
 {
-	// printf( "%d\n", blocks );
 	return blocks;
 }
 

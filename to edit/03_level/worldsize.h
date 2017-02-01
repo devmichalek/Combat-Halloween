@@ -33,9 +33,9 @@ public:
 
 	Worldsize();
 	~Worldsize();
-	void reset( int screen_w, int screen_h );
+	void reset( unsigned screen_w, unsigned screen_h );
 
-	void load( int screen_w, int screen_h );
+	void load( unsigned screen_w, unsigned screen_h );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	

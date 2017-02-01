@@ -13,7 +13,7 @@ class Level_menu
 	int screen_w, screen_h;
 	
 	// level menu objects
-	Sound* sound;
+	Sound sound;
 	MySprite* background;
 	Music* music;
 	Backtomenu* backtomenu;
@@ -27,14 +27,14 @@ public:
     ~Level_menu();
     void free();
 	
-    void load( int screen_w, int screen_h );
+    void load( unsigned screen_w, unsigned screen_h );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
 	
 	int getState();
 	Sound* getSound();
-	void set( int state, Sound* sound );
+	void set( int state, Sound sound );
 	bool isQuit();
 	bool nextState();
 	bool backToMenu();
