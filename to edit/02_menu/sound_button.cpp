@@ -10,6 +10,7 @@
 #include "sound_button.h"
 #include <stdlib.h>
 
+
 Sound_button::Sound_button( bool play )
 {
     state = 0;

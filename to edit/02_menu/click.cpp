@@ -17,6 +17,11 @@ Click::Click()
 
 Click::~Click()
 {
+	free();
+}
+
+void Click::free()
+{
 	focus = false;
 	play = true;
 	click.free();

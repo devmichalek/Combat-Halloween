@@ -10,6 +10,7 @@
 #include "link_button.h"
 #include <stdlib.h>
 
+
 Link_button::Link_button( string url, bool locked )
 {
 	this->url = url;

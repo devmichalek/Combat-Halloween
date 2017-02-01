@@ -12,6 +12,7 @@
 #include <fstream>
 
 
+
 Keyboard::Keyboard()
 {
     nr = 0;
@@ -335,7 +336,7 @@ void Keyboard::handle( sf::Event &event )
 
 			for( unsigned m = 0; m < actual_keys.size(); m++ )
 			{
-				if( lastChosen == m )
+				if( static_cast <unsigned> (lastChosen) == m )
 				{
 					continue;
 				}

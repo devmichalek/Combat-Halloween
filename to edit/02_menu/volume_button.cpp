@@ -9,7 +9,6 @@
 
 #include "volume_button.h"
 
-
 Volume_button::Volume_button( float volume )
 {
 	play = true;

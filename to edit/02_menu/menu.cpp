@@ -14,8 +14,6 @@ Menu::Menu()
 	state = 0;
 	
 	// Create menu objects
-	sound = new Sound;
-	
 	title = new Title;
 	
 	music_button = new Sound_button;
@@ -29,6 +27,7 @@ Menu::Menu()
 	twitter_button = new Link_button( "", true );
 	facebook_button = new Link_button( "", true );
 	
+
 	background = new MySprite();
 	background->setName( "menu-background" );
 	
@@ -56,7 +55,7 @@ Menu::~Menu()
 
 void Menu::free()
 {
-	delete sound;
+	sound.free();
 	delete title;
 	delete music_button;
 	delete chunk_button;
@@ -95,12 +94,12 @@ void Menu::load( int screen_w, int screen_h )
 	chunk_volume->load( 100, music_volume->getBot() + 25, "Sound" );
 	
 	// chunk volume
-	sound->setChunkPlay( true );
-	sound->setChunkVolume( chunk_volume->getVolume() );
+	sound.setChunkPlay( true );
+	sound.setChunkVolume( chunk_volume->getVolume() );
 	
 	// music volume
-	sound->setMusicPlay( true );
-	sound->setMusicVolume( music_volume->getVolume() );
+	sound.setMusicPlay( true );
+	sound.setMusicVolume( music_volume->getVolume() );
 	
 	// link buttons
 	git_button->load( "data/sprites/menu/git.png", screen_w );
@@ -197,7 +196,7 @@ void Menu::handle( sf::Event &event )
 void Menu::draw( sf::RenderWindow* &window )
 {
 	// Play music if true
-	if( sound->getMusicPlay() )
+	if( sound.getMusicPlay() )
 	{
 		music->play();
 	}
@@ -206,7 +205,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( music_button->isChanged() )
 	{
 		music->pause();
-		sound->setMusicPlay( !sound->getMusicPlay() );
+		sound.setMusicPlay( !sound.getMusicPlay() );
 	}
 	
 	// Turn off/on chunks
@@ -224,14 +223,14 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->turn();
 		chunk_volume->turn();
 		keyboard->turn(); 
-		sound->setChunkPlay( !sound->getChunkPlay() );
+		sound.setChunkPlay( !sound.getChunkPlay() );
 	}
 	
 	// Set music volume
 	if( music_volume->isChanged() )
 	{
 		music->setVolume( music_volume->getVolume() );
-		sound->setMusicVolume( music_volume->getVolume() );
+		sound.setMusicVolume( music_volume->getVolume() );
 	}
 	
 	// Set chunk volume
@@ -249,7 +248,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->setVolume( chunk_volume->getVolume() );
 		chunk_volume->setVolume( chunk_volume->getVolume() );
 		keyboard->setVolume( chunk_volume->getVolume() );
-		sound->setChunkVolume( chunk_volume->getVolume() );
+		sound.setChunkVolume( chunk_volume->getVolume() );
 	}
 	
 	
@@ -445,7 +444,7 @@ int Menu::getState()
 	return state;
 }
 
-Sound* Menu::getSound()
+Sound Menu::getSound()
 {
 	return sound;
 }
