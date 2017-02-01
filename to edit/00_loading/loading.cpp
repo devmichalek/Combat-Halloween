@@ -32,7 +32,7 @@ void Loading::free()
 	state = 0;
 }
 	
-void Loading::load( const int &screen_w, const int &screen_h )
+void Loading::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	max = 8;
@@ -51,7 +51,7 @@ void Loading::load( const int &screen_w, const int &screen_h )
 	
 	
 	bg.setName( "loading-background" );
-	bg.create( screen_w, screen_h );
+	bg.create( screen_w, screen_h ); 
 	bg.setColor( sf::Color( 21, 21, 29 ) );
 	bg.setAlpha( 0xFF );
 }
