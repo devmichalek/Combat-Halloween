@@ -27,7 +27,7 @@ public:
 	~Intro();
 	void free();
 	
-	void load( const int &screen_w, const int &screen_h );	// load
-	void draw( sf::RenderWindow* &window );	// render
-	const bool& isQuit() const;	// tell us when we can stop rendering intro / accessor
+	void load( unsigned screen_w, unsigned screen_h );	// load
+	void draw( sf::RenderWindow* &window );				// render
+	const bool& isQuit() const;							// tell us when we can stop rendering intro / accessor
 };
