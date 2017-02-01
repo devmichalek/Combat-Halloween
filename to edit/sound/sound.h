@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/Color.hpp>
+#include <stdbool.h>
 
 class Sound
 {
@@ -13,6 +14,7 @@ public:
 	
 	Sound();
 	~Sound();
+	void free();
 	
 	void setChunkVolume( sf::Uint8 volume );
 	void setChunkPlay( bool play );

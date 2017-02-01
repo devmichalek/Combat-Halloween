@@ -10,6 +10,11 @@ Sound::Sound()
 
 Sound::~Sound()
 {
+	free();
+}
+
+void Sound::free()
+{
 	chunk_play = false;
 	music_play = false;
 	chunk_volume = 0;
