@@ -1,3 +1,12 @@
+/**
+    rect.h
+    Purpose: class Rect represents rectangle.
+
+    @author Adrian Michalek
+    @version 2016.09.10
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 class Rect
