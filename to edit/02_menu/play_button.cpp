@@ -18,6 +18,11 @@ Play_button::Play_button()
 
 Play_button::~Play_button()
 {
+	free();
+}
+
+void Play_button::free()
+{
 	state = 0;
 	
 	mySprite.free();
