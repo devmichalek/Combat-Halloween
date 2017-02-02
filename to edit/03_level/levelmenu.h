@@ -1,3 +1,12 @@
+/**
+    levelmenu.h
+    Purpose: class Level_menu - huge object which contains stuff drawable in level state.
+
+    @author Adrian Michalek
+    @version 2016.12.20
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "sound/music.h"
@@ -31,17 +40,15 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	
-	int getState();
-	Sound* getSound();
-	void set( int state, Sound sound );
+	void setSound();
 	bool isQuit();
 	bool nextState();
 	bool backToMenu();
 	void reset();
+	void reloadMusic();
 	
 	
-	int getMap();
+	int getWorld();
 	int getCharacter();
 	int getWorldsize();
 };

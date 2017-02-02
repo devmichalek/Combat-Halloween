@@ -1,3 +1,12 @@
+/**
+    levelmenu.h
+    Purpose: class Level_menu - huge object which contains stuff drawable in level state.
+
+    @author Adrian Michalek
+    @version 2016.12.20
+	@email adrmic98@gmail.com
+*/
+
 #include "levelmenu.h"
 
 Level_menu::Level_menu()
@@ -31,34 +40,6 @@ void Level_menu::free()
 
 
 
-int Level_menu::getState()
-{
-	return state;
-}
-
-void Level_menu::set( int state, Sound sound )
-{
-	state = 0;
-	this->sound = sound;
-	
-	// Set chunks
-	if( sound.getChunkPlay() != backtomenu->isPlayable() )
-	{
-		backtomenu->turn();
-		choice->turn();
-		worldsize->turn();
-	}
-	
-	// Set music volume
-	music->setVolume( sound.getMusicVolume() );
-	
-	// Set chunk volume
-	backtomenu->setVolume( sound.getChunkVolume() );
-	choice->setVolume( sound.getChunkVolume() );
-	character->setVolume( sound.getChunkVolume() );
-	worldsize->setVolume( sound.getChunkVolume() );
-}
-	
 void Level_menu::load( unsigned screen_w, unsigned screen_h )
 {
 	this->screen_w = screen_w;
@@ -71,7 +52,6 @@ void Level_menu::load( unsigned screen_w, unsigned screen_h )
 	character->load( screen_w, screen_h );
 	worldsize->load( screen_w, screen_h );
 }
-
 
 void Level_menu::handle( sf::Event &event )
 {
@@ -186,6 +166,27 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	}
 }
 
+
+
+void Level_menu::setSound()
+{
+	// Set chunks
+	if( !sound.getChunkPlay() )
+	{
+		backtomenu->turnOff();
+		choice->turnOff();
+		worldsize->turnOff();
+	}
+	
+	// Set music volume
+	music->setVolume( sound.getMusicVolume() );
+	
+	// Set chunk volume
+	backtomenu->setVolume( sound.getChunkVolume() );
+	choice->setVolume( sound.getChunkVolume() );
+	character->setVolume( sound.getChunkVolume() );
+	worldsize->setVolume( sound.getChunkVolume() );
+}
 	
 bool Level_menu::isQuit()
 {
@@ -217,7 +218,6 @@ bool Level_menu::backToMenu()
 	return false;
 }
 
-
 void Level_menu::reset()
 {
 	state = 0;
@@ -225,13 +225,17 @@ void Level_menu::reset()
 	choice->reset( screen_w, screen_h );
 	worldsize->reset( screen_w, screen_h );
 	character->reset( screen_w, screen_h );
+}
+
+void Level_menu::reloadMusic()
+{
 	music->reload();
+	Mix_HaltMusic();
 }
 
 
 
-
-int Level_menu::getMap()
+int Level_menu::getWorld()
 {
 	return choice->getResult();
 }
