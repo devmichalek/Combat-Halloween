@@ -28,10 +28,23 @@ void Click::free()
 }
 
 
+
 void Click::turn()
 {
 	play = !play;
 }
+
+void Click::turnOn()
+{
+	play = true;
+}
+
+void Click::turnOff()
+{
+	play = false;
+}
+
+
 
 bool Click::isPlayable()
 {
