@@ -35,7 +35,7 @@ void Loading::free()
 void Loading::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
-	max = 8;
+	max = 20;
 	
 	text.setName( "loading-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 255, 255, 255 );
@@ -66,11 +66,11 @@ void Loading::draw( sf::RenderWindow* &window )
 	
 	state ++;
 	
-	progress_bar.setOffset( counter /5 );
+	progress_bar.setOffset( counter/6 );
 	window->draw( progress_bar.get() );
 	
 	counter++;
-	if( counter == max *5 )
+	if( counter == max *6 )
 	{
 		counter = 0;
 	}
