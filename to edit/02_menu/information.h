@@ -11,19 +11,18 @@
 
 #include "drawable/text.h"
 #include "drawable/sprite.h"
+#include <vector>
 
 class Information
 {
-	int nr;
-	MyText* text;
-	
-	int info_nr;
-	MyText* info_text;
+	vector <MyText*> text;
+	vector <MyText*> info_text;
 	
 public:
 
 	Information();
     ~Information();
+	void free();
 
     void load( int right, int top, int screen_h );
     void draw( sf::RenderWindow &window );
