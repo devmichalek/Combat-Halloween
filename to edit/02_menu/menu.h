@@ -72,10 +72,5 @@ public:
 	
 	bool isQuit();
 	bool nextState();
-	
-	int getState();
-	Sound getSound();
-	void set( int state, Sound* sound );
-	
 	void reloadMusic();
 };
