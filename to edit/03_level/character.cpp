@@ -1,6 +1,6 @@
 /**
     character.h
-    Purpose: class Character - shows 2 animations in level state.
+    Purpose: class Character - shows 2 animations in level state and allow to choose what of them, then game starts.
 
     @author Adrian Michalek
     @version 2016.12.06
@@ -19,6 +19,9 @@ Character::Character()
 	
 	range = 0;
 	keep = false;
+	
+	delay = 0;
+	alpha_line = 0;
 }
 
 Character::~Character()
@@ -41,6 +44,9 @@ void Character::free()
 	
 	range = 0;
 	keep = false;
+	
+	delay = 0;
+	alpha_line = 0;
 	
 	click.free();
 }
@@ -83,6 +89,9 @@ void Character::load( int screen_w, int screen_h )
 	
 	offset = 0;
 	how_many = 10;
+	
+	delay = 6;
+	alpha_line = 100;
 }
 
 void Character::draw( sf::RenderWindow* &window )
@@ -91,14 +100,14 @@ void Character::draw( sf::RenderWindow* &window )
 	window->draw( two.get() );
 	
 	offset ++;
-	if( offset == how_many *6 )
+	if( offset == how_many *delay )
 	{
 		offset = 0;
 	}
 	
 	
-	one.setOffset( offset /6 );
-	two.setOffset( offset /6 );
+	one.setOffset( offset /delay );
+	two.setOffset( offset /delay );
 	
 	window->draw( text.get() );
 	window->draw( information.get() );
@@ -121,7 +130,7 @@ void Character::handle( sf::Event &event )
 			}
 			else
 			{
-				one.setAlpha( 100 );
+				one.setAlpha( alpha_line );
 			}
 			
 			if( two.checkCollision( x, y ) )
@@ -130,7 +139,7 @@ void Character::handle( sf::Event &event )
 			}
 			else
 			{
-				two.setAlpha( 100 );
+				two.setAlpha( alpha_line );
 			}
 		}
 		
@@ -167,13 +176,12 @@ void Character::handle( sf::Event &event )
 
 void Character::fadein( int j, int max )
 {
-	int value = 100;
-	one.fadein( j, value );
-	two.fadein( j, value );
+	one.fadein( j, alpha_line );
+	two.fadein( j, alpha_line );
 	
 	if( ready == 0 )
 	{
-		if( one.getAlpha() == value )
+		if( one.getAlpha() == alpha_line )
 		{
 			ready = 1;
 		}
