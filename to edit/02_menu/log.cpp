@@ -20,6 +20,11 @@ Log::Log( bool locked )
 
 Log::~Log()
 {
+	free();
+}
+
+void Log::free()
+{
 	state = false;
 	locked = false;
 	button.free();
