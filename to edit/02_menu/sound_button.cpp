@@ -20,6 +20,11 @@ Sound_button::Sound_button( bool play )
 
 Sound_button::~Sound_button()
 {
+	free();
+}
+
+void Sound_button::free()
+{
 	button.free();
 	scratch.free();
 	
@@ -29,6 +34,7 @@ Sound_button::~Sound_button()
 	focus = false;
 	play = true;
 }
+
 
 
 void Sound_button::load( string path, int bot )

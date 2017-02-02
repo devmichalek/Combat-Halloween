@@ -25,6 +25,7 @@ public:
 
 	Sound_button( bool play = true );
     ~Sound_button();
+	void free();
 
 	void load( string path, int bot );
     void draw( sf::RenderWindow* &window );
