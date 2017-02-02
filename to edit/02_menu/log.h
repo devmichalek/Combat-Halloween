@@ -23,6 +23,7 @@ public:
 	
 	Log( bool locked = false );
     ~Log();
+	void free();
 
     void load( string path, int left, int y );
     void draw( sf::RenderWindow* &window );
