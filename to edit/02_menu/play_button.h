@@ -26,6 +26,7 @@ public:
 	
 	Play_button();
     ~Play_button();
+	void free();
 
     void load( int screen_w, int bot );
     void draw( sf::RenderWindow* &window );
