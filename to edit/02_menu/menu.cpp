@@ -55,7 +55,6 @@ Menu::~Menu()
 
 void Menu::free()
 {
-	sound.free();
 	delete title;
 	delete music_button;
 	delete chunk_button;
@@ -439,17 +438,8 @@ bool Menu::nextState()
 	return false;
 }
 
-int Menu::getState()
-{
-	return state;
-}
-
-Sound Menu::getSound()
-{
-	return sound;
-}
-
 void Menu::reloadMusic()
 {
 	music->reload();
+	Mix_HaltMusic();
 }
