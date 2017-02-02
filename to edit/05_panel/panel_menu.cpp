@@ -1,9 +1,9 @@
 #include "panel_menu.h"
 
+
 Panel_menu::Panel_menu()
 {
 	state = 0;
-	sound = new Sound;
 	
 	bg = new MySprite;
 	replay_button = new Replay_button;
@@ -17,13 +17,20 @@ Panel_menu::~Panel_menu()
 
 void Panel_menu::free()
 {
-	delete sound;
+	sound.free();
 	delete bg;
 	delete replay_button;
 	delete backtomenu_panel;
 }
 
-	
+void Panel_menu::reset()
+{
+	replay_button->setState( 0 );
+	backtomenu_panel->setState( 0 );
+}
+
+
+
 void Panel_menu::load( int screen_w, int screen_h )
 {
 	bg->setName( "panel_menu-background" );
@@ -69,33 +76,17 @@ void Panel_menu::draw( sf::RenderWindow* &window )
 }
 
 
-void Panel_menu::set( int state, Sound* sound )
-{
-	this->state = state;
-	this->sound = sound;
-	
-	// Set chunks
-	if( sound->getChunkPlay() != replay_button->isPlayable() )
-	{
-		replay_button->turn();
-		backtomenu_panel->turn();
-	}
-	
-	// Set chunk volume
-	replay_button->setVolume( sound->getChunkVolume() );
-	backtomenu_panel->setVolume( sound->getChunkVolume() );
-}
-
-void Panel_menu::reset()
-{
-	replay_button->setState( 0 );
-	backtomenu_panel->setState( 0 );
-}
 
 int Panel_menu::getState()
 {
 	return state;
 }
+
+void Panel_menu::setState( int state )
+{
+	this->state = state;
+}
+
 
 
 bool Panel_menu::backToMenu()
