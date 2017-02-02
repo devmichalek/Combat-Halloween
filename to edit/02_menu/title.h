@@ -22,11 +22,12 @@ public:
 	
 	Title();
     ~Title();
+	void free();
 
     void load( const int& screen_w );
     void draw( sf::RenderWindow &window );
 	
-	const int getBot();	// accessor
+	const int getBot()const;	// accessor
 	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
