@@ -23,6 +23,11 @@ Volume_button::Volume_button( float volume )
 
 Volume_button::~Volume_button()
 {
+	free();
+}
+
+void Volume_button::free()
+{
 	name.free();
 	percent.free();
 	
