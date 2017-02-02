@@ -1,6 +1,6 @@
 /**
     worldsize.h
-    Purpose: class Worldsize - to choose size of world.
+    Purpose: class Worldsize - to set size of world.
 
     @author Adrian Michalek
     @version 2016.12.12
@@ -33,16 +33,18 @@ public:
 
 	Worldsize();
 	~Worldsize();
+	void free();
 	void reset( unsigned screen_w, unsigned screen_h );
+
 
 	void load( unsigned screen_w, unsigned screen_h );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	
+	
 	void fadein( int j = 1, int max = 255 );
 	void fadeout( int j = 1, int min = 0 );
 	
 	int getResult();
-	
 	bool move( int vel, int scope );	// move horizontal
 };
