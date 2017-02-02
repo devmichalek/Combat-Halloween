@@ -18,13 +18,14 @@ class Link_button :public Click
 	
 protected:
 	
-	bool locked;	// if true then we can not click on the button
+	bool locked;	// if true then we cannot click on the button
     MySprite button;
 
 public:
 	
     Link_button( string url, bool locked = false );
     ~Link_button();
+	void free();
 
     void load( string path, int screen_w, int bot = 10 );
     void draw( sf::RenderWindow &window );

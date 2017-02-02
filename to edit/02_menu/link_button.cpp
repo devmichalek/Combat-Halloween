@@ -22,6 +22,11 @@ Link_button::Link_button( string url, bool locked )
 
 Link_button::~Link_button()
 {
+	free();
+}
+
+void Link_button::free()
+{
 	url = "";
     locked = true;
 	
