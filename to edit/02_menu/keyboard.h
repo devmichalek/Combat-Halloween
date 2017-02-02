@@ -1,6 +1,6 @@
 /**
     keyboard.h
-    Purpose: class Keyboard and DoubleKey - to change hero keys.
+    Purpose: class Keyboard and Key - to manage keyboard.
 
     @author Adrian Michalek
     @version 2016.11.11
@@ -14,10 +14,15 @@
 #include "click.h"
 #include <vector>
 
-struct DoubleKey
+class Key
 {
-	int a;
-	int b;
+public:
+	
+	int one, two;
+
+	Key( int one = -1, int two = -1 );
+	~Key();
+	void free();
 	
 	bool isEmpty();
 	bool oneIsFree();
@@ -27,25 +32,25 @@ class Keyboard :public Click
 {
 	MySprite save_button;
 	
-	int nr;
-	MyText* text;
-	
-	vector <DoubleKey> keys; 		// basic keys
-	vector <DoubleKey> actual_keys;	// useable keys
+	vector <MyText*> text;
+	vector <Key*> keys; 		// Basics.
+	vector <Key*> actual_keys;	// Useable keys.
 	vector <sf::Uint8> banned_keys;
 	
 	int which;	// -1 = nothing was clicked;
 	
-	sf::Uint8 add;		// number of add key
-	sf::Uint8 substract;	// number of substract key
-	sf::Uint8 addMode; // state
-	
+	bool addMode;
+	bool release;
 	int lastChosen;
 	
 public:
 
 	Keyboard();
     ~Keyboard();
+	void free();
+	
+	template <typename object>
+	void freeObject( vector <object> o );
 	
     void load( int left, int right, int bot, int screen_w, int screen_h );
     void draw( sf::RenderWindow &window );
@@ -56,8 +61,13 @@ public:
 	
 	
 	int strToInt( string s );
-	DoubleKey addKey( int a, int b );
-	string getName( int n ); // e. g. n == 71, return == "left"
+	string getName( int n ); 	// e. g. n == 71, return == "left"
+	
+	
+	void add( sf::Event &event );			// add
+	bool substract( sf::Event &event );		// remove
+	bool isPossibleKey( sf::Event &event ); // check whether key is possible to add
+	void handleButton( sf::Event &event );	// specially for button
 };
 
 /*
