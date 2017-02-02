@@ -1,11 +1,23 @@
+/**
+    sound.h
+    Purpose: class Sound contains static members, uses as global switch with states.
+
+    @author Adrian Michalek
+    @version 2016.09.10
+	@email adrmic98@gmail.com
+*/
+
 #include "sound.h"
+#include <stdio.h>
+
+bool Sound::chunk_play = false;
+bool Sound::music_play = false;
+sf::Uint8 Sound::chunk_volume = 0;
+sf::Uint8 Sound::music_volume = 0;
 
 Sound::Sound()
 {
-	chunk_play = false;
-	music_play = false;
-	chunk_volume = 0;
-	music_volume = 0;
+	// empty.
 }
 
 Sound::~Sound()
@@ -15,10 +27,7 @@ Sound::~Sound()
 
 void Sound::free()
 {
-	chunk_play = false;
-	music_play = false;
-	chunk_volume = 0;
-	music_volume = 0;
+	// empty.
 }
 	
 

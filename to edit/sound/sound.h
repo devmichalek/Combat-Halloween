@@ -1,3 +1,12 @@
+/**
+    sound.h
+    Purpose: class Sound contains static members, uses as global switch with states.
+
+    @author Adrian Michalek
+    @version 2016.09.10
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include <SFML/Graphics/Color.hpp>
@@ -5,10 +14,10 @@
 
 class Sound
 {
-	bool chunk_play;
-	bool music_play;
-	sf::Uint8 chunk_volume;
-	sf::Uint8 music_volume;
+	static bool chunk_play;
+	static bool music_play;
+	static sf::Uint8 chunk_volume;
+	static sf::Uint8 music_volume;
 	
 public:
 	
