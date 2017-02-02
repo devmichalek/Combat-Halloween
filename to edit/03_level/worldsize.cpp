@@ -22,6 +22,11 @@ Worldsize::Worldsize()
 
 Worldsize::~Worldsize()
 {
+	free();
+}
+
+void Worldsize::free()
+{
 	text.free();
 	blocks_text.free();
 	white_bar.free();
@@ -156,7 +161,6 @@ int Worldsize::getResult()
 	return blocks;
 }
 
-	
 bool Worldsize::move( int vel, int scope )
 {
 	if( vel < 0 )
