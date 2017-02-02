@@ -37,6 +37,7 @@ public:
 	
 	Volume_button( float volume = 1 );
 	~Volume_button();
+	void free();
 	
 	void load( int left, int y, string new_name );
 	void draw( sf::RenderWindow* &window );
