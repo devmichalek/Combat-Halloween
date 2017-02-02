@@ -17,9 +17,16 @@ Title::Title()
 
 Title::~Title()
 {
+	free();
+}
+
+void Title::free()
+{
 	belt.free();
 	title.free();
 }
+
+
 
 void Title::load( const int& screen_w )
 {
@@ -40,7 +47,7 @@ void Title::draw( sf::RenderWindow &window )
 }
 
 
-const int Title::getBot()
+const int Title::getBot() const
 {
 	return belt.getBot();
 }
