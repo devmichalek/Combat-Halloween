@@ -30,7 +30,10 @@ public:
 	~Click();
 	void free();
 	
-	void turn();	// Turn on/off chunk
+	void turn();
+	void turnOn();
+	void turnOff();
+	
 	bool isPlayable();
 	void setVolume( sf::Uint8 volume );
 };
