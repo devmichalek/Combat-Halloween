@@ -6,6 +6,7 @@ void Replay_button::load( int screen_w, int bot )
 	mySprite.load( "data/sprites/menu/blankbutton.png", 4 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
 	
+	//com
 	myText.setName( "replay_button-myText" );
 	myText.setFont( "data/fonts/BADABB__.TTF", 108, 0x82, 0xae, 0x20 );
 	myText.setText( "replay" );
