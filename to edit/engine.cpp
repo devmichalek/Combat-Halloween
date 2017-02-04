@@ -6,7 +6,10 @@
 // Create objects.
 Engine::Engine()
 {
+	// Set seed.
 	srand( static_cast <int> ( time( NULL ) ) );
+	
+	// Create and load core.
     core = new Core( 1000, 750, -2, 120 );	// new FPS
     core->load( "Ninja" );
 	
@@ -19,26 +22,31 @@ Engine::Engine()
 	
 	level_menu = new Level_menu;
 	
+	loading_world = new Loading_world;
+	
 	play_wood = new Play_wood;
 	play_halloween = new Play_halloween;
 	play_desert = new Play_desert;
 	play_winter = new Play_winter;
+	
+	panel_menu = new Panel_menu;
 }
 
 
 // Free objects.
 void Engine::free()
 {
-	if( loading != NULL )	delete loading;
-	if( intro != NULL )		delete intro;
-	if( menu != NULL )		delete menu;
+	if( core != NULL )			delete core;
+	if( loading != NULL )		delete loading;
+	if( intro != NULL )			delete intro;
+	if( menu != NULL )			delete menu;
 	if( level_menu != NULL )	delete level_menu;
-	if( play_wood != NULL )	delete play_wood;
-	if( play_halloween != NULL )	delete play_halloween;
+	if( loading_world != NULL ) delete loading_world;
+	if( play_wood != NULL )		delete play_wood;
+	if( play_halloween != NULL )delete play_halloween;
 	if( play_desert != NULL )	delete play_desert;
 	if( play_winter != NULL )	delete play_winter;
-	
-	delete core;
+	if( panel_menu != NULL )	delete panel_menu;
 }
 
 
@@ -49,37 +57,47 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
-		case 1:
+		case 10:
 		intro->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 2:
+		case 20:
 		menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 3:
+		case 30:
 		level_menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 4:
+		case 35:
+		loading_world->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 40:
 		play_wood->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 5:
+		case 50:
 		play_halloween->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 6:
+		case 60:
 		play_desert->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 7:
+		case 70:
 		play_winter->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 8:
+		case 80:
+		panel_menu->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 90:
 		srand( time( NULL ) );
 		break;
+		
+		
 
 		case 100:
 		delete loading;
@@ -110,24 +128,29 @@ void Engine::events()
 			level_menu->handle( core->getEvent() );
 		}
 		
-		if( core->getState() == 2 ) // halloween state
+		if( core->getState() == 3 ) // halloween state
 		{
 			play_halloween->handle( core->getEvent() );
 		}
 		
-		if( core->getState() == 3 ) // wood state
+		if( core->getState() == 4 ) // wood state
 		{
 			play_wood->handle( core->getEvent() );
 		}
 		
-		if( core->getState() == 4 ) // winter state
+		if( core->getState() == 5 ) // winter state
 		{
 			play_winter->handle( core->getEvent() );
 		}
 		
-		if( core->getState() == 5 ) // desert state
+		if( core->getState() == 6 ) // desert state
 		{
 			play_desert->handle( core->getEvent() );
+		}
+		
+		if( core->getState() == 7 ) // panel state
+		{
+			panel_menu->handle( core->getEvent() );
 		}
     }
 }
@@ -154,6 +177,7 @@ void Engine::states()
 		}
 	}
 	
+	
 	// menu state
     if( core->getState() == 0 )
     {
@@ -165,13 +189,13 @@ void Engine::states()
 		else if( menu->nextState() )
 		{
 			core->getState() = 1;
-			level_menu->set( menu->getState(), menu->getSound() );
 			
 			menu->reloadMusic();
-			Mix_HaltMusic();
+			level_menu->setSound();
 			level_menu->reloadMusic();
 		}
     }
+	
 	
 	// select level state
 	if( core->getState() == 1 )
@@ -183,60 +207,125 @@ void Engine::states()
 		}
 		else if( level_menu->nextState() )
 		{
-			core->getState() = level_menu->getMap() +2;
-			
-			if( core->getState() == 2 )
-			{
-				play_halloween->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-				play_halloween->setWorldsize( level_menu->getWorldsize() );
-			}
-			else if( core->getState() == 3 )
-			{
-				play_wood->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-				play_wood->setWorldsize( level_menu->getWorldsize() );
-			}
-			else if( core->getState() == 4 )
-			{
-				play_winter->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-				play_winter->setWorldsize( level_menu->getWorldsize() );
-			}
-			else if( core->getState() == 5 )
-			{
-				play_desert->setHero( core->getWidth(), core->getHeight(), level_menu->getCharacter() );
-				play_desert->setWorldsize( level_menu->getWorldsize() );
-			}
-			
-			level_menu->reloadMusic();
-			Mix_HaltMusic();
+			loading_world->setState( level_menu->getWorld() +3 );
+			core->getState()++;
 		}
 		else if( level_menu->backToMenu() )
 		{
 			core->getState() = 0;
+			level_menu->reset();
 		}
 	}
 	
-	// halloween state
+	
+	// loading world state
 	if( core->getState() == 2 )
 	{
-		play_halloween->draw( core->getWindow() );
+		loading_world->draw( core->getWindow() );
+		
+		if( loading_world->readyToLoad() )
+		{
+			if( loading_world->getState() == 3 )		load_world( play_halloween );
+			else if( loading_world->getState() == 4 )	load_world( play_wood );
+			else if( loading_world->getState() == 5 )	load_world( play_winter );
+			else if( loading_world->getState() == 6 )	load_world( play_desert );
+		}
+		
+		if( loading_world->nextState() )
+		{
+			core->getState() = loading_world->getState();
+		}
 	}
 	
-	// wood state
+	
+	// halloween state
 	if( core->getState() == 3 )
 	{
-		play_wood->draw( core->getWindow() );
+		play_halloween->draw( core->getWindow() );
+		if( play_halloween->nextState() )
+		{
+			panel_menu->setState( core->getState() );
+			core->getState() = 7;
+			play_halloween->reset();
+		}
 	}
 	
-	// winter state
+	
+	// wood state
 	if( core->getState() == 4 )
 	{
-		play_winter->draw( core->getWindow() );
+		play_wood->draw( core->getWindow() );
+		if( play_wood->nextState() )
+		{
+			panel_menu->setState( core->getState() );
+			core->getState() = 7;
+			play_wood->reset();
+		}
 	}
 	
-	// desert state
+	
+	// winter state
 	if( core->getState() == 5 )
 	{
+		play_winter->draw( core->getWindow() );
+		if( play_winter->nextState() )
+		{
+			panel_menu->setState( core->getState() );
+			core->getState() = 7;
+			play_winter->reset();
+		}
+	}
+	
+	
+	// desert state
+	if( core->getState() == 6 )
+	{
 		play_desert->draw( core->getWindow() );
+		if( play_desert->nextState() )
+		{
+			panel_menu->setState( core->getState() );
+			core->getState() = 7;
+			play_desert->reset();
+		}
+	}
+	
+	
+	// panel state
+	if( core->getState() == 7 )
+	{
+		panel_menu->draw( core->getWindow() );
+		
+		if( panel_menu->backToMenu() )
+		{
+			core->getState() = 0;
+			
+			if( panel_menu->getState() == 3 )
+			{
+				play_halloween->load( core->getWidth(), core->getHeight() );
+			}
+			else if( panel_menu->getState() == 4 )
+			{
+				play_wood->load( core->getWidth(), core->getHeight() );
+			}
+			else if( panel_menu->getState() == 5 )
+			{
+				play_winter->load( core->getWidth(), core->getHeight() );
+			}
+			else if( panel_menu->getState() == 6 )
+			{
+				play_desert->load( core->getWidth(), core->getHeight() );
+			}
+		
+			panel_menu->reset();
+			level_menu->reset();
+			loading_world->reset();
+			Mix_HaltMusic();
+		}
+		else if( panel_menu->backToPlatform() )
+		{
+			core->getState() = panel_menu->getState();
+			panel_menu->reset();
+		}
 	}
 }
 
@@ -247,7 +336,7 @@ void Engine::states()
 
 
 // We don't care about things below.
-// They will look the same all time
+// They will be the same all the time.
 void Engine::loop()
 {
     while( core->isOpen() )
@@ -265,4 +354,14 @@ void Engine::loop()
 Engine::~Engine()
 {
     free();
+}
+
+template <typename world>
+void Engine::load_world( world w )
+{
+	loading_world->setText( w->getInfo() );
+	if( w->positioning( level_menu->getWorldsize(), level_menu->getCharacter() ) )
+	{
+		loading_world->setReady();
+	}
 }
