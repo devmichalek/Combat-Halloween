@@ -13,11 +13,13 @@
 class Play_wood
 {
 	int state;
+	string info;
+	
 	int screen_w;
 	int screen_h;
 	
 	// Play wood objects
-	Sound* sound;
+	Sound sound;
 	Hero* hero;
 	Moving_bg* bg;
 	Brick* brick;
@@ -26,12 +28,11 @@ class Play_wood
 	Scope* scope;
 	Greenery* greenery;
 	Ladder* ladder;
-		
+	
 public:
 
 	Play_wood();
     ~Play_wood();
-	
     void free();
 	void reset();
 	
@@ -39,19 +40,10 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	
-	void setHero( int screen_w, int screen_h, int type );
-	void setWorldsize( int size );
-	
-	
-	int getState();
-	Sound* getSound();
-	void set( int state, Sound* sound );
-	
+	bool positioning( int size, int type );
+	string getInfo();
 	
 	bool nextState();
 	bool backToLevel();
-	
-	
 	void mechanics();
 };
