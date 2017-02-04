@@ -1,9 +1,18 @@
+/**
+    core.h
+    Purpose: class Core responsible for sending renderer, accessing start valuables etc.
+
+    @author Adrian Michalek
+    @version 2016.08.19
+	@email adrmic98@gmail.com
+*/
+
 #include "core.h"
 #include <stdio.h>
 #include <SDL2/SDL_mixer.h>
 
 #ifdef __linux__
-Core::Core( int w, int h, int state, int FPS )
+Core::Core( unsigned w, unsigned h, int state, int FPS )
 {
     this->state = state;
     open = true;
@@ -47,6 +56,7 @@ void Core::free()
 		Mix_Quit();
     }
 }
+
 
 bool Core::load( string title )
 {
@@ -135,12 +145,12 @@ bool& Core::isOpen()
 
 
 
-const int& Core::getWidth() const
+const unsigned Core::getWidth() const
 {
     return width;
 }
 
-const int& Core::getHeight() const
+const unsigned Core::getHeight() const
 {
     return height;
 }
