@@ -1,3 +1,12 @@
+/**
+    core.h
+    Purpose: class Core responsible for sending renderer, accessing start valuables etc.
+
+    @author Adrian Michalek
+    @version 2016.08.19
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include <string>
@@ -12,8 +21,8 @@ class Core
     bool open;
     unsigned FPS;
 
-    int width;
-    int height;
+    unsigned width;
+    unsigned height;
 
     sf::Event event;
     sf::Color color;
@@ -21,7 +30,7 @@ class Core
 
 public:
 
-    Core( int w, int h, int state, int FPS = 60 );
+    Core( unsigned w, unsigned h, int state, int FPS = 60 );
     ~Core();
 
     void free();
@@ -42,6 +51,6 @@ public:
     bool& isOpen();     // get or set open window
 
 
-    const int& getWidth() const;
-    const int& getHeight() const;
+    const unsigned getWidth() const;
+    const unsigned getHeight() const;
 };
