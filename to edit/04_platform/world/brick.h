@@ -2,9 +2,11 @@
 
 #include "drawable/sprite.h"
 #include "plank.h"
+#include "rules.h"
 
 class Brick
 {
+	string info;
 	int16_t width;
 	int16_t screen_w;
 	int16_t screen_h;
@@ -22,6 +24,7 @@ class Brick
 	unsigned lastGrass;		// Contain number of last grass standingby hero block.
 	unsigned water_line;	// Line between water and other blocks (islands + basic).
 	unsigned islands_line;	// Line between islands and other blocks (basic).
+	
 	
 public:
 
