@@ -16,9 +16,9 @@ void Ladder::free()
 {
 	if( !sprites.empty() )
 	{
-		for( unsigned i = 0; i < sprites.size(); i++ )
+		for( auto &it :sprites )
 		{
-			sprites[ i ]->free();
+			it->free();
 		}
 		
 		sprites.clear();
@@ -26,9 +26,9 @@ void Ladder::free()
 	
 	if( !planks.empty() )
 	{
-		for( unsigned i = 0; i < planks.size(); i++ )
+		for( auto &it :planks )
 		{
-			planks[ i ]->free();
+			it->free();
 		}
 		
 		planks.clear();
@@ -43,12 +43,12 @@ void Ladder::reset( int distance )
 	{
 		if( distance > 0 )
 		{
-			for( unsigned i = 0; i < planks.size(); i++ )
+			for( auto &it :planks )
 			{
-				planks[ i ]->x += 1;
+				it->x ++;
 			}
 			
-			distance -= 1;
+			distance --;
 		}
 		else
 		{
@@ -56,6 +56,8 @@ void Ladder::reset( int distance )
 		}
 	}
 }
+
+
 
 void Ladder::load( int type )
 {
@@ -95,37 +97,39 @@ void Ladder::load( int type )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ i ]->setName( "ladder[" +to_string( i ) +"]" );
-			sprites[ i ]->loadByImage( "data/sprites/play/ladder/" +to_string( i ) +".png" );
+			sprites[ i ]->load( "data/sprites/play/ladder/" +to_string( i ) +".png" );
 		}
 	}
 }
 
 void Ladder::draw( sf::RenderWindow* &window, int screen_w )
 {
-	for( unsigned i = 0; i < planks.size(); i++ )
+	for( auto &it :planks )
 	{
-		if( planks[ i ]->x > -screen_w/2 && planks[ i ]->x < screen_w )
+		if( it->x > -screen_w/2 && it->x < screen_w )
 		{
-			sprites[ planks[ i ]->nr ]->setPosition( planks[ i ]->x, planks[ i ]->y );
-			sprites[ planks[ i ]->nr ]->setColor( sf::Color( planks[ i ]->red, planks[ i ]->green, planks[ i ]->blue ) );
-			window->draw( sprites[ planks[ i ]->nr ]->get() );
+			sprites[ it->nr ]->setPosition( it->x, it->y );
+			sprites[ it->nr ]->setColor( sf::Color( it->red, it->green, it->blue ) );
+			window->draw( sprites[ it->nr ]->get() );
 		}
 	}
 }
 
+
+
 void Ladder::fadein( int v, int max )
 {
-	for( unsigned i = 0; i < sprites.size(); i++ )
+	for( auto &it :sprites )
 	{
-		sprites[ i ]->fadein( v, max );
+		it->fadein( v, max );
 	}
 }
 
 void Ladder::fadeout( int v, int min )
 {
-	for( unsigned i = 0; i < sprites.size(); i++ )
+	for( auto &it :sprites )
 	{
-		sprites[ i ]->fadeout( v, min );
+		it->fadeout( v, min );
 	}
 }
 
@@ -156,11 +160,11 @@ void Ladder::positioning( vector <Plank*> planks )
 {
 	this->planks = planks;
 	
-	for( unsigned i = 0; i < this->planks.size(); i++ )
+	for( auto &it :this->planks )
 	{
-		this->planks[ i ]->red = red;
-		this->planks[ i ]->green = green;
-		this->planks[ i ]->blue = rand()%blue +add;
+		it->red = red;
+		it->green = green;
+		it->blue = rand()%blue +add;
 	}
 }
 
@@ -171,25 +175,25 @@ void Ladder::moveX( sf::Uint8 direction, float vel )
 {
 	if( direction == 1 )
 	{
-		for( unsigned i = 0; i < planks.size(); i++ )
+		for( auto &it :this->planks )
 		{
-			planks[ i ]->x += vel;
+			it->x += vel;
 		}
 	}
 	else if( direction == 2 )
 	{
-		for( unsigned i = 0; i < planks.size(); i++ )
+		for( auto &it :this->planks )
 		{
-			planks[ i ]->x -= vel;
+			it->x -= vel;
 		}
 	}
 }
 
 void Ladder::backToGrass( int add )
 {
-	for( unsigned i = 0; i < planks.size(); i++ )
+	for( auto &it :this->planks )
 	{
-		planks[ i ]->x += add;
+		it->x += add;
 	}
 }
 
@@ -197,12 +201,12 @@ bool Ladder::checkCollision( Rect* rect, int screen_w )
 {
 	if( rect != NULL )
 	{
-		for( unsigned i = 0; i < planks.size(); i++ )
+		for( auto &it :planks )
 		{
-			if( planks[ i ]->x > -screen_w/2 && planks[ i ]->x < screen_w )
+			if( it->x > -screen_w/2 && it->x < screen_w )
 			{
-				sprites[ planks[ i ]->nr ]->setPosition( planks[ i ]->x, planks[ i ]->y );
-				if( sprites[ planks[ i ]->nr ]->checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
+				sprites[ it->nr ]->setPosition( it->x, it->y );
+				if( sprites[ it->nr ]->checkCollision( rect->getX() +rect->getWidth() /4, rect->getY() -50, rect->getWidth() /2, rect->getHeight() ) )
 				{
 					return true;
 				}

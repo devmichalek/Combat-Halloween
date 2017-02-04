@@ -18,10 +18,13 @@ public:
 	~Ladder();
 	void free();
 	void reset( int distance );
+	
 	void load( int type );
 	void draw( sf::RenderWindow* &window, int screen_w );
+	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
+	
 	
 	int to_int( string s );
 	void positioning( vector <Plank*> planks );
