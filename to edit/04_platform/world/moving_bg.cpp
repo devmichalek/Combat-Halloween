@@ -39,9 +39,22 @@ void Moving_bg::draw( sf::RenderWindow* &window )
 	window->draw( sprite.get() );
 }
 
+
+
+void Moving_bg::fadein( int v, int max )
+{
+	sprite.fadein( v, max );
+}
+
+void Moving_bg::fadeout( int v, int min )
+{
+	sprite.fadeout( v, min );
+}
+
+
 void Moving_bg::setXY( int posX, int posY )
 {
-	float new_x = -500 *posX /screen_w;
+	float new_x = -(screen_w/2) *posX /screen_w;
 	float new_y = -150 *(posY+300) /screen_h;
 	
 	if( new_y > -(sprite.getHeight() -screen_h) && new_y < 0 )
@@ -53,16 +66,4 @@ void Moving_bg::setXY( int posX, int posY )
 sf::Uint8 Moving_bg::getAlpha()
 {
 	return sprite.getAlpha();
-}
-	
-	
-	
-void Moving_bg::fadein( int v, int max )
-{
-	sprite.fadein( v, max );
-}
-
-void Moving_bg::fadeout( int v, int min )
-{
-	sprite.fadeout( v, min );
 }
