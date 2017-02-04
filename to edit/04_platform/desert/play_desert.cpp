@@ -1,11 +1,11 @@
-#include "04_platform/desert/play_desert.h"
+#include "play_desert.h"
 
 Play_desert::Play_desert()
 {
 	state = 0;
+	info = "";
 	
-	// Create play_wood objects
-	sound = new Sound;
+	// Create Play_desert objects
 	hero = new Hero;
 	bg = new Moving_bg;
 	brick = new Brick;
@@ -21,11 +21,12 @@ Play_desert::~Play_desert()
 	free();
 }
 
-
-
 void Play_desert::free()
 {
-	delete sound;
+	state = 0;
+	info = "";
+	
+	sound.free();
 	delete hero;
 	delete bg;
 	delete brick;
@@ -39,6 +40,7 @@ void Play_desert::free()
 void Play_desert::reset()
 {
 	hero->reset( screen_h );
+	hero->setKeys();
 	bg->setXY( hero->getX(), hero->getY() );
 	int distance = brick->reset();
 	greenery->reset( distance );
@@ -60,6 +62,7 @@ void Play_desert::load( int screen_w, int screen_h )
 	heart->load();
 	greenery->load( 3 );
 	ladder->load( 3 );
+	info = "loading hero";
 }
 
 void Play_desert::handle( sf::Event &event )
@@ -108,63 +111,108 @@ void Play_desert::draw( sf::RenderWindow* &window )
 
 
 
-void Play_desert::setHero( int screen_w, int screen_h, int type )
+bool Play_desert::positioning( int size, int type )
 {
-	hero->load( screen_w, screen_h, "data/sprites/hero/" + to_string( type ) + "/" );
-	
-	bg->setXY( hero->getX(), hero->getY() );
-}
-
-void Play_desert::setWorldsize( int size )
-{
-	brick->reserve( size );
-	brick->createTopBorders( size, ladder->getW( 0 ), ladder->getH( 0 ) );
-	brick->createLeftBorders();
-	brick->createRightBorders();
-	brick->setLeft();
-	brick->setRight();
-	brick->createStuffing( 10, 11 );
-	brick->createStuffing( 14, 11 );
-	brick->createStuffing( 8, 15 );
-	brick->createTopIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
-	brick->createBotIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
-	brick->shrink();
-	
-	ladder->positioning( brick->getPlanks() );
-	greenery->positioning( brick->getBlocks() );
-}
-
-
-
-Sound* Play_desert::getSound()
-{
-	return sound;
-}
-
-int Play_desert::getState()
-{
-	return state;
-}
-
-void Play_desert::set( int state, Sound* sound )
-{
-	state = 0;
-	
-	/*
-	// Set chunks
-	if( !state->cSwitch )
+	switch( state )
 	{
-		backtomenu->turn();
-		choice->turn();
+		case 0: 
+		info = "setting keys";
+		hero->load( screen_w, screen_h, "data/sprites/hero/" + to_string( type ) + "/" );
+		break;
+		
+		case 1:
+		info = "setting position x, y of background";
+		hero->setKeys();
+		break;
+		
+		case 2:
+		info = "reserving memory (it can take a while)";
+		bg->setXY( hero->getX(), hero->getY() );
+		break;
+		
+		case 3:
+		info = "creating top border of hills";
+		brick->reserve( size );
+		break;
+		
+		case 4:
+		info = "creating left border of hills";
+		brick->createTopBorders( size, ladder->getW( 0 ), ladder->getH( 0 ) );
+		break;
+		
+		case 5:
+		info = "creating right border of hills";
+		brick->createLeftBorders();
+		break;
+		
+		case 6:
+		info = "setting left x of world";
+		brick->createRightBorders();
+		break;
+		
+		case 7:
+		info = "setting right x of world";
+		brick->setLeft();
+		break;
+		
+		case 8:
+		info = "filling hills step 1";
+		brick->setRight();
+		break;
+		
+		case 9:
+		info = "filling hills step 2";
+		brick->createStuffing( 10, 11 );
+		break;
+		
+		case 10:
+		info = "filling hills step 3";
+		brick->createStuffing( 14, 11 );
+		break;
+		
+		case 11:
+		info = "creating top islands";
+		brick->createStuffing( 8, 15 );
+		break;
+	
+		case 12:
+		info = "creating bottom islands";
+		brick->createTopIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
+		break;
+		
+		case 13:
+		info = "shrink to fit vector";
+		brick->createBotIslands( ladder->getW( 1 ), ladder->getH( 1 ) );
+		break;
+		
+		case 14:
+		info = "setting ladders";
+		brick->shrink();
+		break;
+	
+		case 15:
+		info = "setting greenery";
+		ladder->positioning( brick->getPlanks() );
+		break;
+		
+		case 16:
+		info = "done";
+		greenery->positioning( brick->getBlocks() );
+		break;
+		
+		default:
+		return true;
+		break;
 	}
 	
-	// Set music volume
-	music->setVolume( state->mVolume );
+	state ++;
 	
-	// Set chunk volume
-	backtomenu->setVolume( state->cVolume );
-	choice->setVolume( state->cVolume );
-	*/
+	return false;
+}
+
+string Play_desert::getInfo()
+{
+	return info;
 }
 
 
