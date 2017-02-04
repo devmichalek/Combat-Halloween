@@ -20,9 +20,9 @@ void Greenery::free()
 	
 	if( !plants.empty() )
 	{
-		for( unsigned i = 0; i < plants.size(); i++ )
+		for( auto &i :plants )
 		{
-			plants[ i ]->free();
+			i->free();
 		}
 		
 		plants.clear();
@@ -30,9 +30,9 @@ void Greenery::free()
 	
 	if( !sprites.empty() )
 	{
-		for( unsigned i = 0; i < sprites.size(); i++ )
+		for( auto &i :sprites )
 		{
-			sprites[ i ]->free();
+			i->free();
 		}
 		
 		sprites.clear();
@@ -40,9 +40,9 @@ void Greenery::free()
 	
 	if( !blocks.empty() )
 	{
-		for( unsigned i = 0; i < blocks.size(); i++ )
+		for( auto &i :blocks )
 		{
-			blocks[ i ]->free();
+			i->free();
 		}
 		
 		blocks.clear();
@@ -55,12 +55,12 @@ void Greenery::reset( int distance )
 	{
 		if( distance > 0 )
 		{
-			for( unsigned i = 0; i < blocks.size(); i++ )
+			for( auto &it :blocks )
 			{
-				blocks[ i ]->x += 1;
+				it->x ++;
 			}
 			
-			distance -= 1;
+			distance --;
 		}
 		else
 		{
@@ -68,6 +68,8 @@ void Greenery::reset( int distance )
 		}
 	}
 }
+
+
 
 void Greenery::load( int type )
 {
@@ -160,14 +162,14 @@ void Greenery::load( int type )
 
 void Greenery::draw( sf::RenderWindow* &window, int screen_w )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( auto &it :blocks )
 	{
-		if( !blocks[ i ]->bg )
+		if( !it->bg )
 		{
-			if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
+			if( it->x > -screen_w/2 && it->x < screen_w )
 			{
-				sprites[ blocks[ i ]->nr -min ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				window->draw( sprites[ blocks[ i ]->nr -min ]->get() );
+				sprites[ it->nr -min ]->setPosition( it->x, it->y );
+				window->draw( sprites[ it->nr -min ]->get() );
 			}
 		}
 	}
@@ -175,14 +177,14 @@ void Greenery::draw( sf::RenderWindow* &window, int screen_w )
 
 void Greenery::drawBG( sf::RenderWindow* &window, int screen_w )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( auto &it :blocks )
 	{
-		if( blocks[ i ]->bg )
+		if( it->bg )
 		{
-			if( blocks[ i ]->x > -screen_w/2 && blocks[ i ]->x < screen_w )
+			if( it->x > -screen_w/2 && it->x < screen_w )
 			{
-				sprites[ blocks[ i ]->nr -min ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				window->draw( sprites[ blocks[ i ]->nr -min ]->get() );
+				sprites[ it->nr -min ]->setPosition( it->x, it->y );
+				window->draw( sprites[ it->nr -min ]->get() );
 			}
 		}
 	}
@@ -191,17 +193,17 @@ void Greenery::drawBG( sf::RenderWindow* &window, int screen_w )
 	
 void Greenery::fadein( int v, int max )
 {
-	for( sf::Uint8 i = 0; i < sprites.size(); i++ )
+	for( auto &it :sprites )
 	{
-		sprites[ i ]->fadein( v, max );
+		it->fadein( v, max );
 	}
 }
 
 void Greenery::fadeout( int v, int min )
 {
-	for( sf::Uint8 i = 0; i < sprites.size(); i++ )
+	for( auto &it :sprites )
 	{
-		sprites[ i ]->fadeout( v, min );
+		it->fadeout( v, min );
 	}
 }
 
@@ -241,17 +243,17 @@ unsigned Greenery::getDistance( int v1, int v2 )
 	return v;
 }
 
-void Greenery::positioning( vector < Block* > blocks )
+void Greenery::positioning( vector <Block*> blocks )
 {
 	vector <sf::Uint8> available;
 	
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( auto &it :blocks )
 	{
-		for( unsigned j = 0; j < plants.size(); j++ )
+		for( unsigned i = 0; i < plants.size(); i++ )
 		{
-			if( plants[ j ]->available( blocks[ i ]->nr ) )
+			if( plants[ i ]->available( it->nr ) )
 			{
-				available.push_back( j );
+				available.push_back( i );
 			}
 		}
 		
@@ -271,10 +273,10 @@ void Greenery::positioning( vector < Block* > blocks )
 					this->blocks[ this->blocks.size() -1 ]->nr = plants[ chosen ]->nr;
 					
 					int distance = rand()%getDistance( plants[ chosen ]->startX, plants[ chosen ]->endX );
-					this->blocks[ this->blocks.size() -1 ]->x = plants[ chosen ]->startX +distance +blocks[ i ]->x;
+					this->blocks[ this->blocks.size() -1 ]->x = plants[ chosen ]->startX +distance +it->x;
 					
 					distance = rand()%getDistance( plants[ chosen ]->startY, plants[ chosen ]->endY );
-					this->blocks[ this->blocks.size() -1 ]->y = plants[ chosen ]->startY +distance +blocks[ i ]->y;
+					this->blocks[ this->blocks.size() -1 ]->y = plants[ chosen ]->startY +distance +it->y;
 					this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
 					
 					this->blocks[ this->blocks.size() -1 ]->bg = plants[ chosen ]->bg;
@@ -289,28 +291,30 @@ void Greenery::positioning( vector < Block* > blocks )
 	}
 }
 
+
+
 void Greenery::moveX( sf::Uint8 direction, float vel )
 {
 	if( direction == 1 )
 	{
-		for( unsigned i = 0; i < blocks.size(); i++ )
+		for( auto &it :blocks )
 		{
-			blocks[ i ]->x += vel;
+			it->x += vel;
 		}
 	}
 	else if( direction == 2 )
 	{
-		for( unsigned i = 0; i < blocks.size(); i++ )
+		for( auto &it :blocks )
 		{
-			blocks[ i ]->x -= vel;
+			it->x -= vel;
 		}
 	}
 }
 
 void Greenery::backToGrass( int add )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( auto &it :blocks )
 	{
-		blocks[ i ]->x += add;
+		it->x += add;
 	}
 }
