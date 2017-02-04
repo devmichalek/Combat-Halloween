@@ -23,6 +23,7 @@ void Brick::shrink()
 
 Brick::Brick()
 {
+	
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
@@ -53,9 +54,9 @@ void Brick::free()
 	
 	if( !planks.empty() )
 	{
-		for( unsigned i = 0; i < planks.size(); i++ )
+		for( auto &it :planks )
 		{
-			planks[ i ]->free();
+			it->free();
 		}
 		
 		planks.clear();
@@ -63,9 +64,9 @@ void Brick::free()
 	
 	if( !sprites.empty() )
 	{
-		for( unsigned i = 0; i < sprites.size(); i++ )
+		for( auto &it :sprites )
 		{
-			sprites[ i ]->free();
+			it->free();
 		}
 		
 		sprites.clear();
@@ -73,9 +74,9 @@ void Brick::free()
 	
 	if( !blocks.empty() )
 	{
-		for( unsigned i = 0; i < blocks.size(); i++ )
+		for( auto &it :blocks )
 		{
-			blocks[ i ]->free();
+			it->free();
 		}
 		
 		blocks.clear();
@@ -96,14 +97,14 @@ int Brick::reset()
 	{
 		if( left < -10 )
 		{
-			for( unsigned i = 0; i < blocks.size(); i++ )
+			for( auto &it :blocks )
 			{
-				blocks[ i ]->x += 1;
+				it->x ++;
 			}
 			
-			left += 1;
-			right += 1;
-			distance += 1;
+			left ++;
+			right ++;
+			distance ++;
 		}
 		else
 		{
@@ -113,6 +114,8 @@ int Brick::reset()
 	
 	return distance;
 }
+
+
 
 void Brick::load( int screen_w, int screen_h, int type )
 {
@@ -138,43 +141,43 @@ void Brick::load( int screen_w, int screen_h, int type )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ i ]->setName( "brick-block[" +to_string( i ) +"]" );
-			sprites[ i ]->loadByImage( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
+			sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
 		}
 	}
 }
 
 void Brick::draw( sf::RenderWindow* &window )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( auto &it :blocks )
 	{
-		if( blocks[ i ]->nr != -1 )
+		if( it->nr != -1 )
 		{
-			if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+			if( it->x > -width && it->x < screen_w )
 			{
-				sprites[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
-				window->draw( sprites[ blocks[ i ]->nr ]->get() );
+				sprites[ it->nr ]->setPosition( it->x, it->y );
+				window->draw( sprites[ it->nr ]->get() );
 			}
 		}
 	}
 }
 
+
+
 void Brick::fadein( int v, int max )
 {
-	for( unsigned i = 0; i < sprites.size(); i++ )
+	for( auto &it :sprites )
 	{
-		sprites[ i ]->fadein( v, max );
+		it->fadein( v, max );
 	}
 }
 
 void Brick::fadeout( int v, int min )
 {
-	for( unsigned i = 0; i < sprites.size(); i++ )
+	for( auto &it :sprites )
 	{
-		sprites[ i ]->fadeout( v, min );
+		it->fadeout( v, min );
 	}
 }
-
-
 
 
 
@@ -481,6 +484,7 @@ void Brick::createStuffing( int a, int n )
 				if( blocks[ i ]->y == blocks[ j ]->y && blocks[ i ]->x +width == blocks[ j ]->x  )
 				{
 					free_place = false;
+					break;
 				}
 			}
 			
