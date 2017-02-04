@@ -40,9 +40,9 @@ void Plant::add( sf::Uint8 block )
 
 bool Plant::available( sf::Uint8 block )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( auto &it :blocks )
 	{
-		if( block == blocks[ i ] )
+		if( block == it )
 		{
 			return true;
 		}
