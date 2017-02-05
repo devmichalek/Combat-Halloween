@@ -4,12 +4,9 @@
 
 Hero::Hero()
 {
-	sprite = NULL;
-	
 	which = 0;
 	offset = 0;
 	delay = 0;
-	
 	
 	vel = 0;
 	jump_vel = 0;
@@ -29,9 +26,6 @@ Hero::Hero()
 	
 	dead = 0;
 	
-	hit_line = 0;
-	hit_counter = 0;
-	
 	scope = false;
 	
 	fallen = false;
@@ -49,34 +43,33 @@ Hero::~Hero()
 
 void Hero::free()
 {
-	if( sprite != NULL )
-	{
-		for( int i = 0; i < nr; i ++ )
-		{
-			sprite[ i ].free();
-		}
-		
-		delete [] sprite;
-		sprite = NULL;
-	}
-	
-	which = 0;
-	offset = 0;
-	delay = 0;
-	
 	if( !keys.empty() )
 	{
-		for( unsigned i = 0; i < keys.size(); i++ )
+		for( auto &i :keys )
 		{
-			if( keys[ i ] != NULL )
+			if( i != NULL )
 			{
-				delete [] keys[ i ];
-				keys[ i ] = NULL;
+				delete [] i;
+				i = NULL;
 			}
 		}
 		
 		keys.clear();
 	}
+	
+	if( !sprite.empty() )
+	{
+		for( auto &i :sprite )
+		{
+			i->free();
+		}
+		
+		sprite.clear();
+	}
+	
+	which = 0;
+	offset = 0;
+	delay = 0;
 	
 	vel = 0;
 	jump_vel = 0;
@@ -102,11 +95,8 @@ void Hero::free()
 	t.free();
 	jt.free();
 	
-	box.free();
-	jumpBox.free();
-	
-	hit_line = 0;
-	hit_counter = 0;
+	// box.free();
+	// jumpBox.free();
 	
 	scope = false;
 	
@@ -128,49 +118,23 @@ void Hero::load( int& screen_w, int& posY, string path )
 	// 	Set scale.
 	scale = 0.75;
 	
-	// Create array.
-	sprite = new MySprite [ nr ];
-	
+	int nr = DEAD +1;
 	for( int i = 0; i < nr; i++ )
 	{
-		sprite[ i ].setName( "hero-sprite[" + to_string( i ) + "]" );
-		sprite[ i ].load( path + to_string( i ) + ".png", nr -1 );
-		sprite[ i ].setScale( scale, scale );
-		sprite[ i ].setPosition( 70, posY -sprite[ i ].getHeight() -200 );
+		sprite.push_back( new MySprite() );
+		sprite[ i ]->setName( "hero-sprite[" + to_string( i ) + "]" );
+		sprite[ i ]->load( path + to_string( i ) + ".png", nr -1 );
+		sprite[ i ]->setScale( scale, scale );
+		sprite[ i ]->setPosition( 70, posY -sprite[ i ]->getHeight() -200 );
 	}
-	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() + ( sprite[ JUMP_ATTACK ].getHeight() - sprite[ IDLE ].getHeight() ) );
-	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +5, sprite[ THROW ].getY() );
-	sprite[ RUN ].setPosition( sprite[ RUN ].getX(), sprite[ RUN ].getY() +5 );
+	sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP_ATTACK ]->getX(), sprite[ JUMP_ATTACK ]->getY() + ( sprite[ JUMP_ATTACK ]->getHeight() - sprite[ IDLE ]->getHeight() ) );
+	sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +5, sprite[ THROW ]->getY() );
+	sprite[ RUN ]->setPosition( sprite[ RUN ]->getX(), sprite[ RUN ]->getY() +5 );
 	
 	// Start values.
 	which = IDLE;
 	offset = 0;
 	delay = 6;
-	
-	
-	// Set keys.
-	fstream file;
-	file.open( "data/txt/menu/keyboard_temporary.txt" );
-	if( file.bad() )
-	{
-		printf( "Cannot open file! (hero)\n" );
-	}
-	else
-	{
-		string line;
-		for( int i = 0; i < nr; i ++ )
-		{
-			int* arrow;
-			keys.push_back( arrow );
-			keys[ i ] = new int[ 2 ];
-			
-			file >> line;	keys[ i ][ 0 ] = strToInt( line );
-			file >> line;	keys[ i ][ 1 ] = strToInt( line );
-		}
-	}
-	file.close();
-	
-	
 	
 	
 	
@@ -191,52 +155,85 @@ void Hero::load( int& screen_w, int& posY, string path )
 	t.setLine( (nr-1)*delay + 2*delay );
 	jt.setLine( (nr-1)*delay + 2*delay );
 	
-	
+	/*
 	box.setName( "hero-box" );
-	box.create( 30, sprite[ ATTACK ].getHeight() );
+	box.create( 30, sprite[ ATTACK ]->getHeight() );
 	box.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
 	box.setAlpha( 100 );
 	
 	jumpBox.setName( "hero-box" );
-	jumpBox.create( 35, sprite[ JUMP_ATTACK ].getHeight() );
+	jumpBox.create( 35, sprite[ JUMP_ATTACK ]->getHeight() );
 	jumpBox.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
 	jumpBox.setAlpha( 100 );
-	
+	*/
 
-	for( int i = 0; i < nr; i++ )
+	for( auto &i :sprite )
 	{
-		sprite[ i ].setPosition( sprite[ i ].getX() - ( sprite[ i ].getWidth() ), sprite[ i ].getY() );
-		sprite[ i ].setPosition( sprite[ IDLE ].getX() - ( sprite[ i ].getWidth() -sprite[ IDLE ].getWidth() ), sprite[ i ].getY() );
+		i->setPosition( i->getX() - ( i->getWidth() ), i->getY() );
+		i->setPosition( sprite[ IDLE ]->getX() - ( i->getWidth() -sprite[ IDLE ]->getWidth() ), i->getY() );
 	}
 	
-	sprite[ ATTACK ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() );
-	sprite[ SLIDE ].setPosition( sprite[ IDLE ].getX(), sprite[ SLIDE ].getY() );
-	sprite[ JUMP_ATTACK ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
-	sprite[ JUMP_THROW ].setPosition( sprite[ JUMP ].getX(), sprite[ JUMP ].getY() );
-	sprite[ THROW ].setPosition( sprite[ THROW ].getX() +11, sprite[ IDLE ].getY() -1 );
-	sprite[ DEAD ].setPosition( sprite[ IDLE ].getX(), sprite[ IDLE ].getY() -5 );
-	
-	hit_line = 15;
+	sprite[ ATTACK ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() );
+	sprite[ SLIDE ]->setPosition( sprite[ IDLE ]->getX(), sprite[ SLIDE ]->getY() );
+	sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
+	sprite[ JUMP_THROW ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
+	sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +11, sprite[ IDLE ]->getY() -1 );
+	sprite[ DEAD ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() -5 );
+
 	fallenLine = 540;
+}
+
+void Hero::setKeys()
+{
+	if( !keys.empty() )
+	{
+		for( auto &it :keys )
+		{
+			delete [] it;
+		}
+		
+		keys.clear();
+	}
+	
+	// Set keys.
+	fstream file;
+	file.open( "data/txt/menu/keyboard_temporary.txt" );
+	if( file.bad() )
+	{
+		printf( "Cannot open file! (hero)\n" );
+	}
+	else
+	{
+		string line;
+		for( unsigned i = 0; i < sprite.size(); i ++ )
+		{
+			int* arrow;
+			keys.push_back( arrow );
+			keys[ i ] = new int[ 2 ];
+			
+			file >> line;	keys[ i ][ 0 ] = strToInt( line );
+			file >> line;	keys[ i ][ 1 ] = strToInt( line );
+		}
+	}
+	file.close();
 }
 
 void Hero::draw( sf::RenderWindow* &window )
 {
 	if( dead == 0 )
 	{
-		makeColor();
 		makeFall();
 	}
 	
 	if( dead != 2 )
 	{
-		sprite[ which ].setOffset( offset /delay );
+		sprite[ which ]->setOffset( offset /delay );
 	}
 	
 	
 	if( !fallen )
 	{
-		window->draw( sprite[ which ].get() );
+		window->draw( sprite[ which ]->get() );
 	}
 	
 	if( dead != 2 )
@@ -245,8 +242,8 @@ void Hero::draw( sf::RenderWindow* &window )
 		{
 			offset ++;
 		}
-		
-		if( offset == (nr-1) *delay )
+		//printf( "%d\n", offset );
+		if( offset == (sprite.size()-1) *delay || ( dead == 1 && offset == (sprite.size()-1) *delay-1 ) )
 		{
 			offset = 0;
 			j.setActive( false );
@@ -290,17 +287,17 @@ void Hero::draw( sf::RenderWindow* &window )
 
 void Hero::fadein( int v, int max )
 {
-	for( int i = 0; i < nr; i++ )
+	for( auto &i :sprite )
 	{
-		sprite[ i ].fadein( v, max );
+		i->fadein( v, max );
 	}
 }
 
 void Hero::fadeout( int v, int min )
 {
-	for( int i = 0; i < nr; i++ )
+	for( auto &i :sprite )
 	{
-		sprite[ i ].fadeout( v, min );
+		i->fadeout( v, min );
 	}
 }
 
@@ -348,7 +345,7 @@ const int Hero::getX()
 {
 	int x = 0;
 	
-	x = sprite[ IDLE ].getX();
+	x = sprite[ IDLE ]->getX();
 	
 	if( !right )
 	{
@@ -360,17 +357,17 @@ const int Hero::getX()
 
 const int Hero::getY()
 {
-	return sprite[ IDLE ].getY();
+	return sprite[ IDLE ]->getY();
 }
 
 const int Hero::getW()
 {
-	return sprite[ IDLE ].getWidth();
+	return sprite[ IDLE ]->getWidth();
 }
 
 const int Hero::getH()
 {
-	return sprite[ IDLE ].getHeight();
+	return sprite[ IDLE ]->getHeight();
 }
 
 
@@ -402,12 +399,12 @@ bool Hero::isFallen( int screen_h )
 
 void Hero::setNewY( int y )
 {
-	fallenY = y -sprite[ IDLE ].getHeight() -40;
+	fallenY = y -sprite[ IDLE ]->getHeight() -40;
 }
 
 bool Hero::setNewX( int x, int screen_w )
 {
-	fallenX = x +sprite[ IDLE ].getWidth();
+	fallenX = x +sprite[ IDLE ]->getWidth();
 	
 	if( fallenX > screen_w/2 )
 	{
@@ -424,11 +421,11 @@ bool Hero::backToGrass()
 	{
 		if( fallenY != -1 )
 		{
-			if( fallenY < sprite[ IDLE ].getY() )
+			if( fallenY < sprite[ IDLE ]->getY() )
 			{
-				for( int i = 0; i < nr; i++ )
+				for( auto &i :sprite )
 				{
-					sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -7 );
+					i->setPosition( i->getX(), i->getY() -7 );
 				}
 			}
 			else
@@ -439,24 +436,24 @@ bool Hero::backToGrass()
 		
 		if( fallenX != -1 )
 		{
-			if( fallenX > sprite[ IDLE ].getX() )
+			if( fallenX > sprite[ IDLE ]->getX() )
 			{
-				for( int i = 0; i < nr; i++ )
+				for( auto &i :sprite )
 				{
-					sprite[ i ].setPosition( sprite[ i ].getX() +7, sprite[ i ].getY() );
+					i->setPosition( i->getX() +7, i->getY() );
 				}
 				
-				if( fallenX < sprite[ IDLE ].getX() )
+				if( fallenX < sprite[ IDLE ]->getX() )
 					fallenX = -1;
 			}
-			else if( fallenX < sprite[ IDLE ].getX() )
+			else if( fallenX < sprite[ IDLE ]->getX() )
 			{
-				for( int i = 0; i < nr; i++ )
+				for( auto &i :sprite )
 				{
-					sprite[ i ].setPosition( sprite[ i ].getX() -7, sprite[ i ].getY() );
+					i->setPosition( i->getX() -7, i->getY() );
 				}
 				
-				if( fallenX > sprite[ IDLE ].getX() )
+				if( fallenX > sprite[ IDLE ]->getX() )
 					fallenX = -1;
 			}
 			else
@@ -506,18 +503,18 @@ void Hero::makeFall()
 		
 		if( fallenCounter%60 == 0 )	// 1 sec
 		{
-			if( sprite[ IDLE ].getAlpha() == 100 )
+			if( sprite[ IDLE ]->getAlpha() == 100 )
 			{
-				for( int i = 0; i < nr; i++ )
+				for( auto &i :sprite )
 				{
-					sprite[ i ].setAlpha( 0xFF );
+					i->setAlpha( 0xFF );
 				}
 			}
 			else
 			{
-				for( int i = 0; i < nr; i++ )
+				for( auto &i :sprite )
 				{
-					sprite[ i ].setAlpha( 100 );
+					i->setAlpha( 100 );
 				}
 			}
 		}
@@ -526,9 +523,9 @@ void Hero::makeFall()
 	if( fallenCounter == fallenLine )
 	{
 		fallenCounter = 0;
-		for( int i = 0; i < nr; i++ )
+		for( auto &i :sprite )
 		{
-			sprite[ i ].setAlpha( 0xFF );
+			i->setAlpha( 0xFF );
 		}
 	}
 }
@@ -538,8 +535,21 @@ void Hero::die()
 	if( dead == 0 )
 	{
 		dead = 1;
-		offset = 0;
-		which = DEAD;
+		
+		if( which <= SLIDE )
+		{
+			offset = 0;
+			j.setActive( false );
+			a.setActive( false );
+			ja.setActive( false );
+			t.setActive( false );
+			jt.setActive( false );
+			which = DEAD;
+		}
+		else
+		{
+			offset = (sprite.size()-1)*delay -1;
+		}
 	}
 }
 
@@ -579,12 +589,12 @@ bool Hero::getSide()
 
 Rect* Hero::getRect()
 {
-	int t_x = sprite[ IDLE ].getX();
-	if( !right )	t_x -= sprite[ IDLE ].getWidth();
+	int t_x = sprite[ IDLE ]->getX();
+	if( !right )	t_x -= sprite[ IDLE ]->getWidth();
 	
-	int t_y = sprite[ IDLE ].getY();
-	int t_w = sprite[ IDLE ].getWidth();
-	int t_h = sprite[ IDLE ].getHeight();
+	int t_y = sprite[ IDLE ]->getY();
+	int t_w = sprite[ IDLE ]->getWidth();
+	int t_h = sprite[ IDLE ]->getHeight();
 	
 	
 	Rect* rect = new Rect;
@@ -595,15 +605,15 @@ Rect* Hero::getRect()
 void Hero::reset( int posY )
 {
 	int startX = 100;
-	int startY = posY -sprite[ IDLE ].getHeight() -400;
+	int startY = posY -sprite[ IDLE ]->getHeight() -400;
 	
 	while( true )
 	{
-		if( sprite[ IDLE ].getX() > startX )
+		if( sprite[ IDLE ]->getX() > startX )
 		{
-			for( int i = 0; i < nr; i++ )
+			for( auto &i :sprite )
 			{
-				sprite[ i ].setPosition( sprite[ i ].getX() -1, sprite[ i ].getY() );
+				i->setPosition( i->getX() -1, i->getY() );
 			}
 		}
 		else
@@ -614,11 +624,11 @@ void Hero::reset( int posY )
 	
 	while( true )
 	{
-		if( sprite[ IDLE ].getY() > startY )
+		if( sprite[ IDLE ]->getY() > startY )
 		{
-			for( int i = 0; i < nr; i++ )
+			for( auto &i :sprite )
 			{
-				sprite[ i ].setPosition( sprite[ i ].getX(), sprite[ i ].getY() -1 );
+				i->setPosition( i->getX(), i->getY() -1 );
 			}
 		}
 		else

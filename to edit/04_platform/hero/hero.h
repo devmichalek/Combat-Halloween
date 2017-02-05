@@ -19,17 +19,15 @@ class Hero
 		JUMP,
 		JUMP_ATTACK,
 		JUMP_THROW,
-		DEAD,
-		nr = DEAD +1 // Tells us how many sprites we have.
+		DEAD
 	};
 	
-	MySprite* sprite;
-
-	int which;		// Which sprite is active.
-	int offset;		// Which offset is active.
-	int delay;		// Slow because of FPS.
-	
 	vector <int*> keys; // Which keys are responsible for particular activity.
+	vector <MySprite*> sprite;
+
+	int which;			// Which sprite is active.
+	unsigned offset;	// Which offset is active.
+	unsigned delay;		// Slow because of FPS.
 	
 	float vel;			// Velocity.
 	float jump_vel;		// Jump velocity;
@@ -55,10 +53,6 @@ class Hero
 	// Dead.
 	sf::Uint8 dead;
 	
-	// Harm.
-	sf::Uint8 hit_line;
-	sf::Uint8 hit_counter;
-	
 	
 	Activity j;		// Jump.
 	Activity a;		// Attack.
@@ -66,11 +60,8 @@ class Hero
 	Activity t;		// Throw.
 	Activity jt;	// Jump and throw.
 	
-	MySprite box;
-	MySprite jumpBox;
-	
-	Rect attackBox;
-	Rect jumpAttackBox;
+	// MySprite box;
+	// MySprite jumpBox;
 	
 	bool scope;
 	
@@ -101,8 +92,6 @@ public:
 	bool attack();
 	Rect* getAttackBox();
 	float getDamage();
-	void harm();
-	void makeColor();
 	
 	// GLIDE
 	void gliding();
@@ -163,6 +152,7 @@ public:
 	void free();
 	
 	void load( int& screen_w, int& posY, string path );
+	void setKeys();
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 255 );
