@@ -1,14 +1,16 @@
 #pragma once
 
 #include "sound/sound.h"
-#include "04_platform/world/moving_bg.h"
+#include "04_platform/background/moving_bg.h"
 #include "04_platform/hero/hero.h"
 #include "04_platform/world/brick.h"
 #include "04_platform/hero/kunai.h"
 #include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
-#include "04_platform/world/greenery.h"
-#include "04_platform/world/ladder.h"
+#include "04_platform/greenery/greenery.h"
+#include "04_platform/ladder/ladder.h"
+#include "04_platform/wall/wall.h"
+#include "04_platform/background/bg.h"
 
 class Play_winter
 {
@@ -21,13 +23,15 @@ class Play_winter
 	// Play wood objects
 	Sound sound;
 	Hero* hero;
-	Moving_bg* bg;
+	Moving_bg* moving_bg;
 	Brick* brick;
 	Kunai* kunai;
 	Heart* heart;
 	Scope* scope;
 	Greenery* greenery;
 	Ladder* ladder;
+	Wall* wall;
+	Bg* bg;
 	
 public:
 
@@ -40,7 +44,7 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int size, int type );
+	bool positioning( int size, int flatness, int type );
 	string getInfo();
 	
 	bool nextState();
