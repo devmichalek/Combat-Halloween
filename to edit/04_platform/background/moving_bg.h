@@ -1,0 +1,24 @@
+#pragma once
+
+#include "drawable/sprite.h"
+
+class Moving_bg
+{
+	MySprite sprite;
+	int screen_w, screen_h;
+	
+public:
+	
+	Moving_bg();
+	~Moving_bg();
+	void free();
+	
+	void load( string path, int w, int h );
+	void draw( sf::RenderWindow* &window );
+	
+	void fadein( int v = 1, int max = 255 );
+	void fadeout( int v = 1, int min = 0 );
+	
+	void setXY( int posX, int posY );
+	sf::Uint8 getAlpha();
+};
