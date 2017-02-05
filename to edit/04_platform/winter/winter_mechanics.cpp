@@ -2,32 +2,6 @@
 
 void Play_winter::mechanics()
 {
-	// HERO GRAVITY
-	hero->gravitation();
-	
-	// HERO WEIGHTLESSNESS
-	if( brick->checkPixelCollision( hero->getRect() ) )
-	{
-		hero->weightlessness();
-	}
-	
-	// HERO GLIDE
-	else
-	{
-		hero->gliding();
-	}
-	
-	
-	// HERO PIXEL GRAVITY
-	if( brick->checkPixelCollision( hero->getRect() ) )
-	{
-		hero->pixelGravitation();
-	}
-	
-	
-	// HERO SLIDE
-	hero->sliding();
-	
 	// HERO CLIMB
 	if( ladder->checkCollision( hero->getRect(), screen_w ) )
 	{
@@ -44,6 +18,31 @@ void Play_winter::mechanics()
 	{
 		hero->banClimbing();
 	}
+	
+	// HERO GRAVITY
+	hero->gravitation();
+	
+	// HERO WEIGHTLESSNESS
+	if( brick->checkPixelCollision( hero->getRect() ) )
+	{
+		hero->weightlessness();
+	}
+	
+	// HERO GLIDE
+	else
+	{
+		hero->gliding();
+	}
+	
+	// HERO PIXEL GRAVITY
+	if( brick->checkPixelCollision( hero->getRect() ) )
+	{
+		hero->pixelGravitation();
+	}
+	
+	
+	// HERO SLIDE
+	hero->sliding();
 
 		
 	// HERO JUMP WITH THROW
@@ -131,7 +130,8 @@ void Play_winter::mechanics()
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
 		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() /*||
+		kunai->getX( i ) < -kunai->getW() ||
+		wall->checkCollision( kunai->getRect( i ), screen_w ) /*||
 		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
 		{
 			kunai->destroy( i );
@@ -167,6 +167,7 @@ void Play_winter::mechanics()
 		{
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
+			wall->moveX( hero->getDirection(), scope->getVel() );
 		}
 			
 		if( brick->checkPixelCollision( hero->getRect() ) )
@@ -174,6 +175,15 @@ void Play_winter::mechanics()
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
+			wall->moveX( hero->getDirection(), -scope->getVel() );
+		}
+		
+		if( wall->checkCollision( hero->getRect(), screen_w ) )
+		{
+			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
+			greenery->moveX( hero->getDirection(), -scope->getVel() );
+			ladder->moveX( hero->getDirection(), -scope->getVel() );
+			wall->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -181,7 +191,7 @@ void Play_winter::mechanics()
 	scope->move( hero->getX(), screen_w );
 	
 	// BACKGROUND SET XY
-	bg->setXY( hero->getX(), hero->getY() );
+	moving_bg->setXY( hero->getX(), hero->getY() );
 	
 	// HERO FALLEN
 	if( hero->isFallen( screen_h ) )
@@ -199,6 +209,11 @@ void Play_winter::mechanics()
 		}
 	}
 	
+	if( hero->getY() > screen_h -hero->getH()/2 )
+	{
+		bg->runWater();
+	}
+	
 	// GET BACK HERO
 	if( hero->isSurplus() )
 	{
@@ -213,7 +228,15 @@ void Play_winter::mechanics()
 	{
 		hero->setFallen();
 		ladder->backToGrass( brick->getGrassValue() );
-		greenery->backToGrass( brick->getGrassValue() ); 
+		greenery->backToGrass( brick->getGrassValue() );
+		wall->backToGrass( brick->getGrassValue() );
+	}
+	
+	// HARM BY WALL
+	if( wall->harm( hero->getRect(), screen_w ) )
+	{
+		heart->harm( -0xAA );
+		bg->runBlood();
 	}
 	
 	// DEAD
