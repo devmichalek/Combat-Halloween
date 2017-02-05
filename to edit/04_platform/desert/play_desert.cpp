@@ -7,13 +7,15 @@ Play_desert::Play_desert()
 	
 	// Create Play_desert objects
 	hero = new Hero;
-	bg = new Moving_bg;
+	moving_bg = new Moving_bg;
 	brick = new Brick;
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
 	greenery = new Greenery;
 	ladder = new Ladder;
+	wall = new Wall;
+	bg = new Bg;
 }
 
 Play_desert::~Play_desert()
@@ -28,25 +30,30 @@ void Play_desert::free()
 	
 	sound.free();
 	delete hero;
-	delete bg;
+	delete moving_bg;
 	delete brick;
 	delete kunai;
 	delete heart;
 	delete scope;
 	delete greenery;
 	delete ladder;
+	delete wall;
+	delete bg;
 }
 
 void Play_desert::reset()
 {
+	state = 0;
 	hero->reset( screen_h );
 	hero->setKeys();
-	bg->setXY( hero->getX(), hero->getY() );
+	moving_bg->setXY( hero->getX(), hero->getY() );
 	int distance = brick->reset();
 	greenery->reset( distance );
 	ladder->reset( distance );
+	wall->reset( distance );
 	heart->reset();
 	scope->reset();
+	bg->reset();
 }
 
 
@@ -56,12 +63,14 @@ void Play_desert::load( int screen_w, int screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	bg->load( "data/sprites/play/3.png", screen_w, screen_h );
+	moving_bg->load( "data/sprites/play/3.png", screen_w, screen_h );
 	brick->load( screen_w, screen_h, 3 );
 	kunai->load();
 	heart->load();
 	greenery->load( 3 );
 	ladder->load( 3 );
+	wall->load( 3 );
+	bg->load( screen_w, screen_h );
 	info = "loading hero";
 }
 
@@ -77,41 +86,46 @@ void Play_desert::draw( sf::RenderWindow* &window )
 	if( hero->isDead() )
 	{
 		sf::Uint8 v = 1;
-		bg->fadeout( v );
+		moving_bg->fadeout( v );
 		brick->fadeout( v );
 		hero->fadeout( v );
 		kunai->fadeout( v );
 		heart->fadeout( v );
 		greenery->fadeout( v );
 		ladder->fadeout( v );
+		wall->fadeout( v );
+		bg->fadeout( v );
 	}
 	else
 	{
 		sf::Uint8 v = 2;
-		bg->fadein( v );
+		moving_bg->fadein( v );
 		brick->fadein( v );
 		hero->fadein( v );
 		kunai->fadein( v );
 		heart->fadein( v );
 		greenery->fadein( v );
 		ladder->fadein( v );
+		wall->fadein( v );
 	}
 	
 
 	
-	bg->draw( window );
+	moving_bg->draw( window );
 	greenery->drawBG( window, screen_w );
 	ladder->draw( window, screen_w );
 	hero->draw( window );
+	wall->draw( window, screen_w );
 	kunai->draw( window );
 	brick->draw( window );
 	greenery->draw( window, screen_w );
 	heart->draw( window );
+	bg->draw( window );
 }
 
 
 
-bool Play_desert::positioning( int size, int type )
+bool Play_desert::positioning( int size, int flatness, int type )
 {
 	switch( state )
 	{
@@ -127,7 +141,7 @@ bool Play_desert::positioning( int size, int type )
 		
 		case 2:
 		info = "reserving memory (it can take a while)";
-		bg->setXY( hero->getX(), hero->getY() );
+		moving_bg->setXY( hero->getX(), hero->getY() );
 		break;
 		
 		case 3:
@@ -137,7 +151,7 @@ bool Play_desert::positioning( int size, int type )
 		
 		case 4:
 		info = "creating left border of hills";
-		brick->createTopBorders( size, ladder->getW( 0 ), ladder->getH( 0 ) );
+		brick->createTopBorders( size, flatness, ladder->getW( 0 ), ladder->getH( 0 ) );
 		break;
 		
 		case 5:
@@ -196,6 +210,10 @@ bool Play_desert::positioning( int size, int type )
 		break;
 		
 		case 16:
+		info = "setting wall";
+		wall->positioning( brick->getBlocks(), screen_w, brick->getRight() -screen_w );
+		
+		case 17:
 		info = "done";
 		greenery->positioning( brick->getBlocks() );
 		break;
@@ -210,6 +228,7 @@ bool Play_desert::positioning( int size, int type )
 	return false;
 }
 
+
 string Play_desert::getInfo()
 {
 	return info;
@@ -219,7 +238,7 @@ string Play_desert::getInfo()
 
 bool Play_desert::nextState()
 {
-	if( hero->isDead() && bg->getAlpha() == 0 )
+	if( hero->isDead() && moving_bg->getAlpha() == 0 )
 	{
 		return true;
 	}
