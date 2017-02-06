@@ -1,8 +1,9 @@
 #pragma once
 
 #include "drawable/sprite.h"
-#include "plank.h"
+#include "04_platform/ladder/plank.h"
 #include "rules.h"
+#include "moving_block.h"
 
 class Brick
 {
@@ -18,10 +19,11 @@ class Brick
 	vector <Plank*> planks;
 	vector <Block*> blocks;
 	vector <MySprite*> sprites;
+	vector <Moving_block*> moving_blocks;
 	
 	int fallenX;			// Distance to make after hero fall.
 	int grass_value;		// Velocity (1,-1,0) for other objects.
-	unsigned lastGrass;		// Contain number of last grass standingby hero block.
+	vector <Block*>::iterator lastGrass;	// Contain number of last grass standingby hero block.
 	unsigned water_line;	// Line between water and other blocks (islands + basic).
 	unsigned islands_line;	// Line between islands and other blocks (basic).
 	
@@ -46,10 +48,11 @@ public:
 	int to_int( string s );						// Transform string into int.
 	void addPlank( int n, int x, int y );
 	void addBlock( int n, int x, int y );
-	sf::Uint8 getNewFloor( sf::Uint8 floor );	// For createTopBorders() function to decide about new floor.
+	sf::Uint8 getNewFloor( sf::Uint8 floor, int chance );	// For createTopBorders() function to decide about new floor.
 	
 	// Creators in appriopriate order.
-	void createTopBorders( int size, int w, int h );	// Add main path - important.
+	void createTopBorders( int size, int chance, int w, int h );	// Add main path - important.
+	void createMovingIslands();							// Add moving islands.
 	void createLeftBorders();							// Add left borders to hills.
 	void createRightBorders();							// Add right borders to hills.
 	void createStuffing( int a, int n );				// Fill hills.
@@ -75,10 +78,13 @@ public:
 	sf::Uint8 getWidth();	// Get width of divide.
 	vector <Block*> getBlocks();
 	vector <Plank*> getPlanks();
+	int getLeft();
+	int getRight();
 	
 	
 	// Collision detection.
 	bool checkCollision( Rect* rect );
 	bool checkPixelCollision( Rect* rect );
+	bool isInTheWater( Rect* rect );
 };
 
