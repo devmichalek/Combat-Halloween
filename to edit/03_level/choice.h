@@ -54,6 +54,7 @@ public:
 	
 	
 	int getResult();
+	int getBot();
 	sf::Uint8 getAlpha();
 	bool isChosen();
 	
