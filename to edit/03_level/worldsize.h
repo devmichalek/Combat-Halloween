@@ -34,10 +34,10 @@ public:
 	Worldsize();
 	~Worldsize();
 	void free();
-	void reset( unsigned screen_w, unsigned screen_h );
+	void reset( unsigned screen_w, unsigned screen_h, int bot );
 
 
-	void load( unsigned screen_w, unsigned screen_h );
+	void load( unsigned screen_w, unsigned screen_h, int bot );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	
@@ -46,5 +46,6 @@ public:
 	void fadeout( int j = 1, int min = 0 );
 	
 	int getResult();
+	int getBot();
 	bool move( int vel, int scope );	// move horizontal
 };

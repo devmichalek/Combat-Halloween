@@ -43,14 +43,14 @@ void Worldsize::free()
 	click.free();
 }
 
-void Worldsize::reset( unsigned screen_w, unsigned screen_h )
+void Worldsize::reset( unsigned screen_w, unsigned screen_h, int bot )
 {
 	range = 0;
 	blocks = blocks_value/multiplier +min;
 	green_bar.setScale( blocks_value/multiplier, 1 );
 	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
 	
-	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
+	text.setPosition( screen_w/2 -text.getWidth()/2, bot +15 );
 	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
 	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
 	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() );
@@ -58,12 +58,12 @@ void Worldsize::reset( unsigned screen_w, unsigned screen_h )
 
 
 
-void Worldsize::load( unsigned screen_w, unsigned screen_h )
+void Worldsize::load( unsigned screen_w, unsigned screen_h, int bot )
 {
 	text.setName( "worldsize-text" );
-	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
 	text.setText( "Set length" );
-	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 - text.getHeight()/2 );
+	text.setPosition( screen_w/2 -text.getWidth()/2, bot +15 );
 	
 	min = 20;
 	multiplier = 3;
@@ -71,11 +71,11 @@ void Worldsize::load( unsigned screen_w, unsigned screen_h )
 	blocks = blocks_value +min;
 	
 	blocks_text.setName( "worldsize-blocks_text" );
-	blocks_text.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x33, 0x66, 0x99 );
+	blocks_text.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0x33, 0x66, 0x99 );
 	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
 	
 	
-	sf::Uint8 bar_width = 30;
+	sf::Uint8 bar_width = 25;
 	
 	white_bar.setName( "worldsize-white_bar" );
 	white_bar.create( screen_w/4 *3, bar_width );
@@ -159,6 +159,11 @@ void Worldsize::fadeout( int j, int min )
 int Worldsize::getResult()
 {
 	return blocks;
+}
+
+int Worldsize::getBot()
+{
+	return white_bar.getBot();
 }
 
 bool Worldsize::move( int vel, int scope )

@@ -279,6 +279,11 @@ int Choice::getResult()
 	return result;
 }
 
+int Choice::getBot()
+{
+	return world[ world.size() -1 ]->getBot();
+}
+
 sf::Uint8 Choice::getAlpha()
 {
 	return text.getAlpha();
