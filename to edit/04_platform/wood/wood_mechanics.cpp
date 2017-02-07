@@ -2,8 +2,10 @@
 
 void Play_wood::mechanics()
 {
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
-	if( ladder->checkCollision( hero->getRect(), screen_w ) )
+	if( ladder->checkCollision( hero->getRect() ) )
 	{
 		if( !brick->checkPixelCollision( hero->getRect() ) )
 		{
@@ -19,11 +21,18 @@ void Play_wood::mechanics()
 		hero->banClimbing();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO GRAVITY
 	hero->gravitation();
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO WEIGHTLESSNESS
-	if( brick->checkPixelCollision( hero->getRect() ) )
+	if( brick->checkPixelCollision( hero->getRect() ) ||
+		islands->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
 	}
@@ -34,6 +43,9 @@ void Play_wood::mechanics()
 		hero->gliding();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO PIXEL GRAVITY
 	if( brick->checkPixelCollision( hero->getRect() ) )
 	{
@@ -41,10 +53,14 @@ void Play_wood::mechanics()
 	}
 	
 	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO SLIDE
 	hero->sliding();
-
-		
+	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO JUMP WITH THROW
 	if( hero->jumpThrow() )
 	{
@@ -63,6 +79,9 @@ void Play_wood::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
@@ -78,6 +97,9 @@ void Play_wood::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO THROW
 	else if( hero->throwing() )
 	{
@@ -87,12 +109,18 @@ void Play_wood::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
 		//golem->checkHit( hero->getAttackBox(), hero->getDamage() );
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO JUMP
 	else if( hero->jump() )
 	{
@@ -106,6 +134,9 @@ void Play_wood::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO MOVE
 	else if( hero->moving() )
 	{
@@ -119,19 +150,25 @@ void Play_wood::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO IDLE
 	else
 	{
 		hero->idle();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// KUNAI DESTROY
 	for( unsigned i = 0; i < kunai->getNr(); i++ )
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
 		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
 		kunai->getX( i ) < -kunai->getW() ||
-		wall->checkCollision( kunai->getRect( i ), screen_w ) /*||
+		wall->checkCollision( kunai->getRect( i )) /*||
 		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
 		{
 			kunai->destroy( i );
@@ -155,6 +192,8 @@ void Play_wood::mechanics()
 	*/
 	
 	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO SET SCOPE
 	hero->setScope( !scope->getScope() );
 	
@@ -165,34 +204,38 @@ void Play_wood::mechanics()
 		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
 		if( scope->getFactor() == 0 )
 		{
-			greenery->moveX( hero->getDirection(), scope->getVel() );
-			ladder->moveX( hero->getDirection(), scope->getVel() );
+			islands->moveX( hero->getDirection(), scope->getVel() );
+			water->moveX( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
+			ladder->moveX( hero->getDirection(), scope->getVel() );
+			greenery->moveX( hero->getDirection(), scope->getVel() );
 		}
-			
-		if( brick->checkPixelCollision( hero->getRect() ) )
+
+		if( brick->checkPixelCollision( hero->getRect() ) ||
+			wall->checkCollision( hero->getRect() )	||
+			islands->checkPixelCollision( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
-			greenery->moveX( hero->getDirection(), -scope->getVel() );
-			ladder->moveX( hero->getDirection(), -scope->getVel() );
+			islands->moveX( hero->getDirection(), -scope->getVel() );
+			water->moveX( hero->getDirection(), -scope->getVel() );
 			wall->moveX( hero->getDirection(), -scope->getVel() );
-		}
-		
-		if( wall->checkCollision( hero->getRect(), screen_w ) )
-		{
-			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
-			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
-			wall->moveX( hero->getDirection(), -scope->getVel() );
+			greenery->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
 	// SCOPE MOVE
 	scope->move( hero->getX(), screen_w );
 	
-	// BACKGROUND SET XY
-	moving_bg->setXY( hero->getX(), hero->getY() );
 	
+	
+// ------------------------------------------------------------------------------------------------
+	// BACKGROUND SET XY
+	background->setPosition( hero->getX(), hero->getY() );
+	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO FALLEN
 	if( hero->isFallen( screen_h ) )
 	{
@@ -209,9 +252,11 @@ void Play_wood::mechanics()
 		}
 	}
 	
-	if( hero->getY() > screen_h -hero->getH()/2 )
+	// CHECK Y AND SHOW EFFECT
+	if( hero->getY() > screen_h -hero->getH()/2 || 
+		water->checkCollision( hero->getRect() ) )
 	{
-		bg->runWater();
+		effect->runWater();
 	}
 	
 	// GET BACK HERO
@@ -220,6 +265,7 @@ void Play_wood::mechanics()
 		brick->setNewX( hero->getX() );
 	}
 	
+	// BACK TO LAST GRASS BLOCK
 	if( hero->backToGrass() )
 	{
 		brick->findLastGrass( hero->getRect() );
@@ -227,18 +273,26 @@ void Play_wood::mechanics()
 	if( brick->backToGrass() )
 	{
 		hero->setFallen();
+		islands->backToGrass( brick->getGrassValue() );
+		water->backToGrass( brick->getGrassValue() );
+		wall->backToGrass( brick->getGrassValue() );
 		ladder->backToGrass( brick->getGrassValue() );
 		greenery->backToGrass( brick->getGrassValue() );
-		wall->backToGrass( brick->getGrassValue() );
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HARM BY WALL
-	if( wall->harm( hero->getRect(), screen_w ) )
+	if( wall->harm( hero->getRect() ) )
 	{
 		heart->harm( -0xAA );
-		bg->runBlood();
+		effect->runBlood();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// DEAD
 	if( heart->isDead() )
 	{

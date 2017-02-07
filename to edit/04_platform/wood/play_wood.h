@@ -1,16 +1,25 @@
 #pragma once
 
+// Sound
 #include "sound/sound.h"
-#include "04_platform/background/moving_bg.h"
+
+// Hero stuff
 #include "04_platform/hero/hero.h"
-#include "04_platform/world/brick.h"
 #include "04_platform/hero/kunai.h"
 #include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
-#include "04_platform/greenery/greenery.h"
-#include "04_platform/ladder/ladder.h"
-#include "04_platform/wall/wall.h"
-#include "04_platform/background/bg.h"
+
+// World stuff
+#include "04_platform/world/brick/brick.h"
+#include "04_platform/world/background/effect.h"
+#include "04_platform/world/background/background.h"
+#include "04_platform/world/islands/islands.h"
+#include "04_platform/world/water/water.h"
+#include "04_platform/world/wall/wall.h"
+#include "04_platform/world/ladder/ladder.h"
+#include "04_platform/world/greenery/greenery.h"
+
+
 
 class Play_wood
 {
@@ -20,18 +29,24 @@ class Play_wood
 	int screen_w;
 	int screen_h;
 	
-	// Play wood objects
+	// sound
 	Sound sound;
+	
+	// hero
 	Hero* hero;
-	Moving_bg* moving_bg;
-	Brick* brick;
 	Kunai* kunai;
 	Heart* heart;
 	Scope* scope;
-	Greenery* greenery;
-	Ladder* ladder;
+	
+	// world
+	Brick* brick;
+	Effect* effect;
+	Background* background;
+	Islands* islands;
+	Water* water;
 	Wall* wall;
-	Bg* bg;
+	Ladder* ladder;
+	Greenery* greenery;
 	
 public:
 
@@ -44,7 +59,7 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int size, int flatness, int type );
+	bool positioning( int type, int size, int flatness, int hover, int pug  );
 	string getInfo();
 	
 	bool nextState();
