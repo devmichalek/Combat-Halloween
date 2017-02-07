@@ -360,7 +360,11 @@ template <typename world>
 void Engine::load_world( world w )
 {
 	loading_world->setText( w->getInfo() );
-	if( w->positioning( level_menu->getWorldsize(), level_menu->getCharacter() ) )
+	if( w->positioning( level_menu->getCharacter(),
+						level_menu->getWorldsize(), 
+						level_menu->getFlatness(),
+						level_menu->getHoverness(),
+						level_menu->getPugness() ) )
 	{
 		loading_world->setReady();
 	}
