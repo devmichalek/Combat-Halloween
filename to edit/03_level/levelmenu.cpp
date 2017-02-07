@@ -20,6 +20,9 @@ Level_menu::Level_menu()
 	choice = new Choice;
 	character = new Character;
 	worldsize = new Worldsize;
+	flatness = new Flatness( "Set flatness", "% of flatness", 50 );
+	hover = new Flatness( "Set chance of boxers", "% of chance", 35 );
+	pug = new Flatness( "Set chance of flying islands", "% of chance", 30 ); 
 }
 
 Level_menu::~Level_menu()
@@ -36,6 +39,9 @@ void Level_menu::free()
 	delete choice;
 	delete character;
 	delete worldsize;
+	delete flatness;
+	delete hover;
+	delete pug;
 }
 
 
@@ -50,7 +56,10 @@ void Level_menu::load( unsigned screen_w, unsigned screen_h )
 	backtomenu->load( screen_w );
 	choice->load( screen_w, screen_h );
 	character->load( screen_w, screen_h );
-	worldsize->load( screen_w, screen_h );
+	worldsize->load( screen_w, screen_h, choice->getBot() );
+	flatness->load( screen_w, screen_h, worldsize->getBot() );
+	hover->load( screen_w, screen_h, flatness->getBot() );
+	pug->load( screen_w, screen_h, hover->getBot() );
 }
 
 void Level_menu::handle( sf::Event &event )
@@ -59,6 +68,9 @@ void Level_menu::handle( sf::Event &event )
 	{
 		choice->handle( event );
 		worldsize->handle( event );
+		flatness->handle( event );
+		hover->handle( event );
+		pug->handle( event );
 		backtomenu->handle( event );
 	}
 	else if( !character->nextState() )
@@ -84,8 +96,11 @@ void Level_menu::draw( sf::RenderWindow* &window )
 		if( choice->isChosen() )
 		{
 			character->move( -20, 0 );
-			worldsize->move( -20, -1000 );
-			if( choice->move( -20, -1000 ) )
+			worldsize->move( -20, -screen_w );
+			flatness->move( -20, -screen_w );
+			hover->move( -20, -screen_w );
+			pug->move( -20, -screen_w );
+			if( choice->move( -20, -screen_w ) )
 			{
 				backtomenu->setState( 1 );
 			}
@@ -97,6 +112,9 @@ void Level_menu::draw( sf::RenderWindow* &window )
 	backtomenu->draw( *window );
 	choice->draw( *window );
 	worldsize->draw( *window );
+	flatness->draw( *window );
+	hover->draw( *window );
+	pug->draw( *window );
 	character->draw( window );
 	
 	if( backtomenu->getState() == 0 )
@@ -110,6 +128,9 @@ void Level_menu::draw( sf::RenderWindow* &window )
 		choice->fadein( v );
 		character->fadein( v );
 		worldsize->fadein( v );
+		flatness->fadein( v );
+		hover->fadein( v );
+		pug->fadein( v );
 	}
 	else if( backtomenu->getState() == -1 )
 	{
@@ -121,6 +142,9 @@ void Level_menu::draw( sf::RenderWindow* &window )
 		choice->fadeout( v );
 		character->fadeout( v );
 		worldsize->fadeout( v );
+		flatness->fadeout( v );
+		hover->fadeout( v );
+		pug->fadeout( v );
 		
 		if( choice->getAlpha() == 0 )
 		{
@@ -143,6 +167,9 @@ void Level_menu::draw( sf::RenderWindow* &window )
 			choice->fadeout( v );
 			character->fadeout( v );
 			worldsize->fadeout( v );
+			flatness->fadeout( v );
+			hover->fadeout( v );
+			pug->fadeout( v );
 			
 			if( choice->getAlpha() == 0 )
 			{
@@ -158,6 +185,9 @@ void Level_menu::draw( sf::RenderWindow* &window )
 		sf::Uint8 v = 20;
 		character->move( v, screen_w );
 		worldsize->move( v, 0 );
+		flatness->move( v, 0 );
+		hover->move( v, 0 );
+		pug->move( v, 0 );
 		if( choice->move( v, 0 ) )
 		{
 			choice->reset( screen_w, screen_h );
@@ -176,6 +206,9 @@ void Level_menu::setSound()
 		backtomenu->turnOff();
 		choice->turnOff();
 		worldsize->turnOff();
+		flatness->turnOff();
+		hover->turnOff();
+		pug->turnOff();
 	}
 	
 	// Set music volume
@@ -186,6 +219,9 @@ void Level_menu::setSound()
 	choice->setVolume( sound.getChunkVolume() );
 	character->setVolume( sound.getChunkVolume() );
 	worldsize->setVolume( sound.getChunkVolume() );
+	flatness->setVolume( sound.getChunkVolume() );
+	hover->setVolume( sound.getChunkVolume() );
+	pug->setVolume( sound.getChunkVolume() );
 }
 	
 bool Level_menu::isQuit()
@@ -223,7 +259,10 @@ void Level_menu::reset()
 	state = 0;
 	backtomenu->setState( 0 );
 	choice->reset( screen_w, screen_h );
-	worldsize->reset( screen_w, screen_h );
+	worldsize->reset( screen_w, screen_h, choice->getBot() );
+	flatness->reset( screen_w, screen_h, worldsize->getBot() );
+	hover->reset( screen_w, screen_h, flatness->getBot() );
+	pug->reset( screen_w, screen_h, hover->getBot() );
 	character->reset( screen_w, screen_h );
 }
 
@@ -248,4 +287,19 @@ int Level_menu::getCharacter()
 int Level_menu::getWorldsize()
 {
 	return worldsize->getResult();
+}
+
+int Level_menu::getFlatness()
+{
+	return flatness->getResult();
+}
+
+int Level_menu::getPugness()
+{
+	return hover->getResult();
+}
+
+int Level_menu::getHoverness()
+{
+	return pug->getResult();
 }

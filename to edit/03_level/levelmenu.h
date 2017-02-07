@@ -9,12 +9,13 @@
 
 #pragma once
 
+#include "sound/sound.h"
 #include "sound/music.h"
 #include "backtomenu.h"
 #include "choice.h"
 #include "character.h"
 #include "worldsize.h"
-#include "sound/sound.h"
+#include "flatness.h"
 
 class Level_menu
 {
@@ -29,6 +30,9 @@ class Level_menu
 	Choice* choice;
 	Character* character;
 	Worldsize* worldsize;
+	Flatness* flatness;
+	Flatness* hover;
+	Flatness* pug;
 	
 public:
 
@@ -51,4 +55,7 @@ public:
 	int getWorld();
 	int getCharacter();
 	int getWorldsize();
+	int getFlatness();
+	int getPugness();
+	int getHoverness();
 };
