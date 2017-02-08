@@ -34,10 +34,10 @@ public:
 	Worldsize();
 	~Worldsize();
 	void free();
-	void reset( unsigned screen_w, unsigned screen_h, int bot );
+	void reset( int addX, unsigned screen_w, unsigned screen_h, int bot );
 
 
-	void load( unsigned screen_w, unsigned screen_h, int bot );
+	void load( int addX, unsigned screen_w, unsigned screen_h, int bot );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	
