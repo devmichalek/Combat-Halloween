@@ -209,13 +209,19 @@ sf::Uint8 Brick::getNewFloor( sf::Uint8 floor, int chance )
 		{
 			return min +1;
 		}
+		if( floor == min +1 )
+		{
+			if( rand()%2 == 1 )	return min;
+			else				return min +2;
+		}
+		if( floor == max -1 )
+		{
+			if( rand()%2 == 1 )	return max;
+			else				return max -2;
+		}
 		else if( floor == max )
 		{
 			return max -1;
-		}
-		else
-		{
-			return rand()%(max-2) + (min+1);
 		}
 	}
 	
