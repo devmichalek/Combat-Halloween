@@ -71,16 +71,16 @@ void Wall::load( int type, int width, int screen_w )
 	this->width = width;
 	this->screen_w = screen_w;
 	
-	for( int i = 0; i < 4; i++ )
+	for( int i = 0; i < 5; i++ )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "wall-sprites[" +to_string( i ) +"]" );
+		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
 	}
 	
-	sprites[ 0 ]->load( "data/sprites/play/" +to_string( type ) +"/8.png" );
-	sprites[ 1 ]->load( "data/sprites/play/" +to_string( type ) +"/9.png" );
-	sprites[ 2 ]->load( "data/sprites/play/" +to_string( type ) +"/10.png" );
-	sprites[ 3 ]->load( "data/sprites/play/" +to_string( type ) +"/12.png" );
+	sprites.push_back( new MySprite() );
+	sprites[ sprites.size()-1 ]->setName( "wall-sprites[5]" );
+	sprites[ sprites.size()-1 ]->load( "data/sprites/play/" +to_string( type ) +"/15.png" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )
@@ -93,16 +93,8 @@ void Wall::draw( sf::RenderWindow* &window )
 		{
 			if( it->getX(j) > -width*2 && it->getX(j) < screen_w +width*2 )
 			{
-				if( it->getNr(j) == 12 )
-				{
-					sprites[ sprites.size()-1 ]->setPosition( it->getX(j), it->getY(j) );
-					window->draw( sprites[ sprites.size()-1 ]->get() );
-				}
-				else
-				{
-					sprites[ it->getNr(j) -8 ]->setPosition( it->getX(j), it->getY(j) );
-					window->draw( sprites[ it->getNr(j) -8 ]->get() );
-				}
+				sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
+				window->draw( sprites[ it->getNr(j) ]->get() );
 			}
 		}
 	}
@@ -134,20 +126,32 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 	{
 		if( blocks[ i ]->y <= 3*width )
 		{
-			if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 || blocks[ i ]->nr == 5 )
+			if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 || blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0 )
 			{
 				if( rand()%100 < chance )
 				{
-					this->blocks.push_back( new Pug() );
-					this->blocks[ this->blocks.size()-1 ]->positioning( width );
+					int nr = 1;
+					if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 )	nr = 0;
 					
-					if( rand()%2 == 1 )
+					this->blocks.push_back( new Pug() );
+					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
+					
+					int vel = 1;
+					
+					if( nr == 1 )
 					{
-						this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, 2, width );
+						if( rand()%2 == 1 )	vel = 4;
+						else				vel = 3;
+					}
+					else if( rand()%2 == 1 ) vel = 2;
+					
+					if( vel > 1 )
+					{
+						this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, vel, width );
 					}
 					else
 					{
-						this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, 1 );
+						this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, vel );
 					}
 					
 					i += 3;
@@ -202,8 +206,8 @@ bool Wall::harm( Rect* rect )
 						if( it->getNr(j) < 10 )
 						{
 							
-							sprites[ it->getNr(j) -min ]->setPosition( it->getX(j), it->getY(j) );
-							if( sprites[ it->getNr(j) -min ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+							sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
+							if( sprites[ it->getNr(j) ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 							{
 								return true;
 							}
@@ -227,21 +231,10 @@ bool Wall::checkCollision( Rect* rect )
 			{
 				if( it->getX(j) > -width*2 && it->getX(j) < screen_w +width*2 )
 				{
-					if( it->getNr(j) < 12 )
+					sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
+					if( sprites[ it->getNr(j) ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 					{
-						sprites[ it->getNr(j) -8 ]->setPosition( it->getX(j), it->getY(j) );
-						if( sprites[ it->getNr(j) -8 ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
-						{
-							return true;
-						}
-					}
-					else
-					{
-						sprites[ sprites.size()-1 ]->setPosition( it->getX(j), it->getY(j) );
-						if( sprites[ sprites.size()-1 ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
-						{
-							return true;
-						}
+						return true;
 					}
 				}
 			}

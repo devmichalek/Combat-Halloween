@@ -43,30 +43,44 @@ void Pug::addBlock( int n, int x, int y )
 	blocks[ blocks.size()-1 ]->y = y; 	// set y.
 }
 
-void Pug::positioning( int width )
+void Pug::positioning( int width, int type )
 {
 	int length = 2;
 	
-	// First line of blocks.
-	addBlock( 10, 0, -( width *(length +1) ) );
-
-	for( int i = 1; i < length; i++ )
+	if( type == 1 )
 	{
-		addBlock( 10, 0, blocks[ blocks.size()-1 ]->y +width );
+		addBlock( 3, 0, -( width *(length +1) ) );
+		
+		for( int i = 1; i < length; i++ )
+		{
+			addBlock( 3, 0, blocks[ blocks.size()-1 ]->y +width );
+		}
+		
+		addBlock( 5, 0, -width );
 	}
-	
-	addBlock( 8, 0, -width );
-	
-	
-	// Second line of blocks.
-	addBlock( 12, width, -( width *( length +1 ) ) );
-
-	for( int i = 1; i < length; i++ )
+	else
 	{
-		addBlock( 12, width, blocks[ blocks.size()-1 ]->y +width );
+		// First line of blocks.
+		addBlock( 2, 0, -( width *(length +1) ) );
+
+		for( int i = 1; i < length; i++ )
+		{
+			addBlock( 2, 0, blocks[ blocks.size()-1 ]->y +width );
+		}
+		
+		addBlock( 0, 0, -width );
+		
+		
+		// Second line of blocks.
+		addBlock( 4, width, -( width *( length +1 ) ) );
+
+		for( int i = 1; i < length; i++ )
+		{
+			addBlock( 4, width, blocks[ blocks.size()-1 ]->y +width );
+		}
+		
+		addBlock( 1, width, -width );
 	}
-	
-	addBlock( 9, width, -width );
 }
 
 void Pug::setPosition( int x, int y, int vel, int surplus )

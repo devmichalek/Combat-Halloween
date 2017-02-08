@@ -34,7 +34,7 @@ public:
 	void backToGrass( int add );
 	
 	// Creating.
-	void createWater( vector <Block*> blocks_1, vector <Block*> blocks_2, int right );	// Add water.
+	void createWater( vector <Block*> b1, vector <Block*> b2, int right );	// Add water.
 	
 	// Collision detection.
 	bool checkCollision( Rect* rect );

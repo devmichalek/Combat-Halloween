@@ -24,7 +24,7 @@ public:
 	// Support.
 	void addBlock( int n, int x, int y );
 	
-	void positioning( int width );
+	void positioning( int width, int type );
 	void setPosition( int x, int y, int vel, int surplus = 0 );
 	void moveX( float vel );
 	void moving( int width );

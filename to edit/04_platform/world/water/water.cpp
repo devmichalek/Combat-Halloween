@@ -148,15 +148,57 @@ void Water::backToGrass( int add )
 
 
 
-void Water::createWater( vector <Block*> blocks_1, vector <Block*> blocks_2, int right )
+void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 {
-	vector <Block*> blocks = blocks_1;
-	for( unsigned i = 0; i < blocks_2.size(); i++ )
+	vector <Block*> blocks = b1;
+	for( unsigned i = 0; i < b2.size(); i++ )
 	{
 		blocks.push_back( new Block() );
-		blocks[ blocks.size()-1 ]->x = blocks_2[ i ]->x;
-		blocks[ blocks.size()-1 ]->y = blocks_2[ i ]->y;
-		blocks[ blocks.size()-1 ]->nr = blocks_2[ i ]->nr;
+		blocks[ blocks.size()-1 ]->x = b2[ i ]->x;
+		blocks[ blocks.size()-1 ]->y = b2[ i ]->y;
+		blocks[ blocks.size()-1 ]->nr = b2[ i ]->nr;
+	}
+	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->y == screen_h -width )
+		{
+			if( blocks[ i ]->nr == 2 || blocks[ i ]->nr == 12 )
+			{
+				int good_nr = -1;
+				
+				if( blocks[ i ]->x %width == 0 )
+				{
+					for( int k = blocks[ i ]->x +width; k < right; k += width )
+					{
+						// check block on the right
+						for( unsigned j = 0; j < blocks.size(); j++ )
+						{
+							if( blocks[ j ]->x == k && blocks[ j ]->y == blocks[ i ]->y )
+							{
+								if( blocks[ j ]->nr == 10 || blocks[ j ]->nr == 0 )
+								{
+									good_nr = j;
+									k = right;
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+
+				if( good_nr != -1 )
+				{
+					// 16
+					for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
+					{
+						addBlock( 0, j, blocks[ i ]->y );
+					}
+				}
+			}
+		}
+		
 	}
 	
 	for( unsigned i = 0; i < blocks.size(); i++ )
@@ -273,44 +315,8 @@ void Water::createWater( vector <Block*> blocks_1, vector <Block*> blocks_2, int
 			}
 		}
 		
-		if( blocks[ i ]->y == screen_h -width )
-		{
-			if( blocks[ i ]->nr == 2 || blocks[ i ]->nr == 12 )
-			{
-				int good_nr = -1;
-				
-				if( blocks[ i ]->x %width == 0 )
-				{
-					for( int k = blocks[ i ]->x +width; k < right; k += width )
-					{
-						// check block on the right
-						for( unsigned j = 0; j < blocks.size(); j++ )
-						{
-							if( blocks[ j ]->x == k && blocks[ j ]->y == blocks[ i ]->y )
-							{
-								if( blocks[ j ]->nr == 10 || blocks[ j ]->nr == 0 )
-								{
-									good_nr = j;
-									k = right;
-									break;
-								}
-							}
-						}
-					}
-				}
-				
-
-				if( good_nr != -1 )
-				{
-					// 16
-					for( int j = blocks[ i ]->x; j <= blocks[ good_nr ]->x; j += width )
-					{
-						addBlock( 0, j, blocks[ i ]->y );
-					}
-				}
-			}
-		}
 	}
+	
 }
 
 
