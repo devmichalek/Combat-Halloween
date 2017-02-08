@@ -43,27 +43,27 @@ void Worldsize::free()
 	click.free();
 }
 
-void Worldsize::reset( unsigned screen_w, unsigned screen_h, int bot )
+void Worldsize::reset( int addX, unsigned screen_w, unsigned screen_h, int bot )
 {
 	range = 0;
 	blocks = blocks_value/multiplier +min;
 	green_bar.setScale( blocks_value/multiplier, 1 );
 	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
 	
-	text.setPosition( screen_w/2 -text.getWidth()/2, bot +15 );
-	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
-	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
-	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() );
+	text.setPosition( screen_w/2 -text.getWidth()/2 +addX, bot +15 );
+	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2 +addX, text.getBot() +15 );
+	green_bar.setPosition( white_bar.getLeft(), text.getBot() +15 );
+	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2 +addX, white_bar.getTop() );
 }
 
 
 
-void Worldsize::load( unsigned screen_w, unsigned screen_h, int bot )
+void Worldsize::load( int addX, unsigned screen_w, unsigned screen_h, int bot )
 {
 	text.setName( "worldsize-text" );
-	text.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
-	text.setText( "Set length" );
-	text.setPosition( screen_w/2 -text.getWidth()/2, bot +15 );
+	text.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+	text.setText( "Set size" );
+	text.setPosition( screen_w/2 -text.getWidth()/2 +addX, bot +15 );
 	
 	min = 20;
 	multiplier = 3;
@@ -71,25 +71,25 @@ void Worldsize::load( unsigned screen_w, unsigned screen_h, int bot )
 	blocks = blocks_value +min;
 	
 	blocks_text.setName( "worldsize-blocks_text" );
-	blocks_text.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0x33, 0x66, 0x99 );
+	blocks_text.setFont( "data/fonts/Jaapokki-Regular.otf", 17, 0x33, 0x66, 0x99 );
 	blocks_text.setText( to_string( blocks_value +min ) +" blocks in line" );
 	
 	
-	sf::Uint8 bar_width = 25;
+	sf::Uint8 bar_width = 20;
 	
 	white_bar.setName( "worldsize-white_bar" );
-	white_bar.create( screen_w/4 *3, bar_width );
-	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
+	white_bar.create( screen_w/8 *3, bar_width );
+	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2 +addX, text.getBot() +15 );
 	white_bar.setColor( sf::Color( 0xFF, 0xFF, 0xFE ) );
 	
 	green_bar.setName( "worldsize-green_bar" );
 	green_bar.create( 1, bar_width );
-	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
+	green_bar.setPosition( white_bar.getLeft(), text.getBot() +15 );
 	green_bar.setColor( sf::Color( 0x66, 0x99, 0x66 ) );
 	
 	green_bar.setScale( blocks_value/multiplier, 1 );
 	
-	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2, white_bar.getTop() );
+	blocks_text.setPosition( screen_w/2 -blocks_text.getWidth()/2 +addX, white_bar.getTop() );
 	
 	click.setID( "worldsize-click" );
 	click.load( "data/sounds/click.wav", 50 );

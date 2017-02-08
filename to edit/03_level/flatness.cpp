@@ -8,6 +8,7 @@ Flatness::Flatness( string text_one, string text_two, int percent )
 	range = 0;
 	blocks = 0;
 	keep = false;
+	percent_state = percent;
 	this->percent = percent;
 }
 
@@ -21,6 +22,7 @@ void Flatness::free()
 	range = 0;
 	blocks = 0;
 	keep = false;
+	percent_state = 0;
 	percent = 0;
 	
 	text.free();
@@ -29,47 +31,48 @@ void Flatness::free()
 	green_bar.free();
 }
 
-void Flatness::reset( unsigned screen_w, unsigned screen_h, int bot )
+void Flatness::reset( int addX, unsigned screen_w, unsigned screen_h, int bot )
 {
 	range = 0;
+	percent = percent_state;
 	green_bar.setScale( white_bar.getWidth() /100 *percent, 1 );
 	percent_text.setText( to_string( percent ) + text_two );
 	
-	text.setPosition( screen_w/2 -text.getWidth()/2, bot +15 );
-	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
-	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
-	percent_text.setPosition( screen_w/2 -percent_text.getWidth()/2, white_bar.getTop() );
+	text.setPosition( screen_w/2 -text.getWidth()/2 +addX, bot +15 );
+	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2 +addX, text.getBot() +15 );
+	green_bar.setPosition( white_bar.getLeft(), text.getBot() +15 );
+	percent_text.setPosition( screen_w/2 -percent_text.getWidth()/2 +addX, white_bar.getTop() );
 }
 
 
 
-void Flatness::load( unsigned screen_w, unsigned screen_h, int bot )
+void Flatness::load( int addX, unsigned screen_w, unsigned screen_h, int bot )
 {
 	text.setName( "flatness-text" );
-	text.setFont( "data/fonts/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	text.setText( text_one );
-	text.setPosition( screen_w/2 -text.getWidth()/2, bot +15  );
+	text.setPosition( screen_w/2 -text.getWidth()/2 +addX, bot +15  );
 	
 	percent_text.setName( "flatness-percent_text" );
-	percent_text.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0x33, 0x66, 0x99 );
+	percent_text.setFont( "data/fonts/Jaapokki-Regular.otf", 17, 0x33, 0x66, 0x99 );
 	percent_text.setText( to_string( percent ) +text_two );
 	
 	
-	sf::Uint8 bar_width = 25;
+	sf::Uint8 bar_width = 20;
 	
 	white_bar.setName( "flatness-white_bar" );
-	white_bar.create( screen_w/4 *3, bar_width );
-	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2, text.getBot() +20 );
+	white_bar.create( screen_w/8 *3, bar_width );
+	white_bar.setPosition( screen_w/2 -white_bar.getWidth()/2 +addX, text.getBot() +15 );
 	white_bar.setColor( sf::Color( 0xFF, 0xFF, 0xFE ) );
 	
 	green_bar.setName( "flatness-green_bar" );
 	green_bar.create( 1, bar_width );
-	green_bar.setPosition( white_bar.getLeft(), text.getBot() +20 );
+	green_bar.setPosition( white_bar.getLeft(), text.getBot() +15 );
 	green_bar.setColor( sf::Color( 0x66, 0x99, 0x66 ) );
 	
 	green_bar.setScale( white_bar.getWidth() /100 *percent, 1 );
 	
-	percent_text.setPosition( screen_w/2 -percent_text.getWidth()/2, white_bar.getTop() );
+	percent_text.setPosition( screen_w/2 -percent_text.getWidth()/2 +addX, white_bar.getTop() );
 	
 	click.setID( "flatness-click" );
 	click.load( "data/sounds/click.wav", 50 );

@@ -20,15 +20,16 @@ class Flatness :public Click
 	bool keep;
 	
 	int percent;
+	int percent_state;
 	
 public:
 	Flatness( string text_one, string text_two, int percent );
 	~Flatness();
 	void free();
-	void reset( unsigned screen_w, unsigned screen_h, int bot );
+	void reset( int addX, unsigned screen_w, unsigned screen_h, int bot );
 
 
-	void load( unsigned screen_w, unsigned screen_h, int bot );
+	void load( int addX, unsigned screen_w, unsigned screen_h, int bot );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	
