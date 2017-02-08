@@ -1,4 +1,4 @@
 ##Introduction
 Work in progress... </br>
-Click to the image below (reset functions) [last edition - 05.02.2017] <br/>
-[![youtube](https://cloud.githubusercontent.com/assets/19840443/22628167/8c037c78-ebcf-11e6-96bb-937c0fce7fa3.png)](https://youtu.be/AtBtePekbdU)
+Click no the image below (shows current look) [last edition - 08.02.2017] <br/>
+[![youtube](https://cloud.githubusercontent.com/assets/19840443/22755002/af8c0cae-ee41-11e6-83e5-081dcef025b9.png)](https://youtu.be/WuZMoES_b6E)
