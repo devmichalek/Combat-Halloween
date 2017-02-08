@@ -151,7 +151,7 @@ public:
 	~Hero();
 	void free();
 	
-	void load( int& screen_w, int& posY, string path );
+	void load( int type, int screen_w, int screen_h );
 	void setKeys();
 	void draw( sf::RenderWindow* &window );
 	

@@ -187,6 +187,8 @@ void Kunai::free()
 	damage = 0;
 }
 
+
+
 	
 void Kunai::load()
 {
