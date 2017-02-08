@@ -7,6 +7,7 @@ Islands::Islands()
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
+	moved = false;
 }
 
 Islands::~Islands()
@@ -19,6 +20,7 @@ void Islands::free()
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
+	moved = false;
 	
 	if( !hovers.empty() )
 	{
@@ -107,8 +109,6 @@ void Islands::draw( sf::RenderWindow* &window )
 {
 	for( auto &it :hovers )
 	{
-		it->moving( width );
-		
 		for( unsigned i = 0; i < it->getSize(); i++ )
 		{
 			if( it->getX(i) > -width*2 && it->getX(i) < screen_w +width )
@@ -152,8 +152,11 @@ void Islands::fadeout( int v, int min )
 
 void Islands::addHover( int startX, int endX, int y, int vel )
 {
+	int nr = 0;
+	if( rand()%2 == 1 )	nr = 1;
+	
 	hovers.push_back( new Hover() ); 	// add block.
-	hovers[ hovers.size()-1 ]->positioning( width );
+	hovers[ hovers.size()-1 ]->positioning( width, nr );
 	hovers[ hovers.size()-1 ]->setPosition( startX, endX, y, vel );
 }
 
@@ -220,6 +223,17 @@ void Islands::createFlyingIslands( vector <Block*> blocks, vector <Plank*> plank
 					for( unsigned j = i +1; j < blocks.size(); j++ )
 					{
 						blocks[ j ]->x += distance*width;
+					}
+					
+					// put -1
+					int new_x = blocks[ i ]->x;
+					
+					for( int j = 0; j < distance; j++ )
+					{
+						blocks.push_back( new Block() );
+						blocks[ blocks.size() -1 ]->x = new_x + width*j;
+						blocks[ blocks.size() -1 ]->y = blocks[ i ]->y;
+						blocks[ blocks.size() -1 ]->nr = -1;
 					}
 				}
 			}
@@ -364,109 +378,245 @@ void Islands::createBotIslands( vector <Block*> blocks, int w, int h )
 	}
 }
 
-void Islands::createTopIslands( vector <Block*> blocks, int w, int h )
+void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 {
 	vector <int> posX;
 	vector <int> posY;
-	vector <int> counters;
 	
 	// Searcher
+	unsigned last = 0;
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		// blocks with grass, apriopriate y
-		if( blocks[ i ]->y >= screen_h -width*2 &&
-		  ( blocks[ i ]->nr == 0 ||
-			blocks[ i ]->nr == 4 ||
-			blocks[ i ]->nr == 5 ) )
+		if( blocks[ i ]->y >= screen_h -width*2 && 
+			blocks[ i ]->nr >= -1 && blocks[ i ]->nr <= 7 )
 		{
 			posX.push_back( blocks[ i ]->x );
-			posY.push_back( blocks[ i ]->y );
-			counters.push_back( 1 );
+			posY.push_back( blocks[ i ]->y -width*2 );
 			
-			for( unsigned j = i+1; j < blocks.size(); j++ )
+			if( blocks[ i ]->y != blocks[ i +1 ]->y )
 			{
-				if( blocks[ j ]->y == blocks[ i ]->y )
+				posX.erase( posX.begin() +posX.size() -1 );
+				posY.erase( posY.begin() +posY.size() -1 );
+			}
+			
+			if( last == i-1 && posX[ posX.size() -2 ] != posX[ posX.size() -1 ] -width )
+			{
+				int x = posX[ posX.size() -2 ];
+				int nr = (posX[ posX.size() -1 ] -width -x) /width;
+				for( int j = 0; j < nr; j++ )
 				{
-					if( blocks[ j ]->nr == 2 || blocks[ j ]->nr == 3 || blocks[ j ]->nr == 7 )
-					{
-						counters[ counters.size()-1 ] ++;
-						i = j +1;
-						break;
-					}
-					
-					if( blocks[ j ]->nr == 1 || blocks[ j ]->nr == 6 )
-					{
-						counters[ counters.size()-1 ] ++;
-					}
+					posX.push_back( x +(width*(j+1)) );
+					posY.push_back( blocks[ i ]->y -width*2 );
 				}
 			}
+				
+			last = i;
 		}
 	}
 	
 	// Merger
-	bool merger = true;
-	while( merger )
+	for( unsigned i = 0; i < posY.size() -1; i++ )
 	{
-		merger = false;
-		for( unsigned i = 0; i < posX.size() -1; i++ )
+		if( posY[ i ] != posY[ i +1 ] && posX[ i ] == posX[ i +1 ] -width )
 		{
-			if( posY[ i ] == posY[ i +1 ] )
+			posY[ i ] = posY[ i +1 ];
+		}
+	}
+	
+	// Rubbish
+	bool rubbish = true;
+	while( rubbish )
+	{
+		rubbish = false;
+		for( unsigned i = 1; i < posX.size() -1; i++ )
+		{
+			for( unsigned j = 0; j < blocks.size(); j++ )
 			{
-				if( posX[ i ] +(width *(counters[ i ] +1) ) == posX[ i +1 ] )
+				if( (posX[ i ] == blocks[ j ]->x -width && posY[ i ] == blocks[ j ]->y -width) ||
+					(posX[ i ] == blocks[ j ]->x +width && posY[ i ] == blocks[ j ]->y -width))
 				{
-					merger = true;
-					counters[ i ] += counters[ i +1 ] +1;
-					posX.erase( posX.begin() +i +1 );
-					posY.erase( posY.begin() +i +1 );
-					counters.erase( counters.begin() +i +1 );
+					posX.erase( posX.begin() +i );
+					posY.erase( posY.begin() +i );
+					rubbish = true;
 				}
 			}
 		}
 	}
 	
-	// Creator
-	for( unsigned i = 0; i < posX.size(); i++ )
+	
+	if( posY[ 0 ] != posY[ 1 ] )
 	{
-		if( counters[ i ] >= 4 )
-		{
-			int myX = posX[ i ] +width;
-			int myY = posY[ i ] -(width*2);
-			
-			// add ladder
-			addPlank( 1, myX -w +10, posY[ i ] -h );
-			
-			while( counters[ i ] >= 4 )
-			{
-				int result = 0;
-				while( result < 2 )
-				{
-					result = rand()%(counters[ i ]/2) +1;
-				}
-				
-				//---------------------------
-				addBlock( 5, myX, myY );
-				result -= 1;
-				myX += width;
-				
-				// 6
-				for( int j = 0; j < result-1; j++ )
-				{
-					addBlock( 6, myX, myY );
-					myX += width;
-				}
-				
-				// 7
-				addBlock( 7, myX, myY );
-				myX += width*2;
-				//---------------------------
-				
-				counters[ i ] -= ( result +3 );
-			}
-		}
+		posX.erase( posX.begin() );
+		posY.erase( posY.begin() );
 	}
 	
-}
+	
 
+	// Creator
+	vector <int> c;
+	vector <int> x;
+	vector <int> y;
+	
+	c.push_back( 1 );
+	x.push_back( posX[ 0 ] );
+	y.push_back( posY[ 0 ] );
+	
+	for( unsigned i = 0; i < posX.size() -1; i++ )
+	{
+		if( posX[ i ] == posX[ i +1 ] -width && posY[ i ] == posY[ i +1 ] )
+		{
+			c[ c.size() -1 ] ++;
+		}
+		else
+		{
+			c.push_back( 1 );
+			x.push_back( posX[ i +1 ] );
+			y.push_back( posY[ i +1 ] );
+		}
+	}
+	
+	for( unsigned i = 0; i < c.size() -1; i++ )
+	{
+		// printf( "%d %d %d\n", c[ i ], x[ i ], y[ i ] );
+	}
+	
+	
+	bool flag = true;
+	while( flag )
+	{
+		flag = false;
+		for( unsigned i = 0; i < c.size(); i++ )
+		{
+			if( c[ i ] < 2 )
+			{
+				c.erase( c.begin() +i );
+				x.erase( x.begin() +i );
+				y.erase( y.begin() +i );
+				flag = true;
+			}
+		}
+	}
+	
+	for( unsigned i = 0; i < x.size(); i++ )
+	{
+		int lastNr = 5;
+		unsigned actual_size = this->blocks.size();
+		
+		if( this->blocks.size() > 0 )
+		{
+			if( this->blocks[ this->blocks.size() -1 ]->x == x[ i ] )
+			{
+				if( c[ i ] >= 3 )
+				{
+					lastNr = 5;
+					addBlock( lastNr, x[ i ] +width, y[ i ] );
+					
+					c[ i ] --;
+				}
+				else
+				{
+					c[ i ] = 0;
+				}
+			}
+			else
+			{
+				lastNr = 5;
+				addBlock( lastNr, x[ i ], y[ i ] );
+				c[ i ] --;
+			}
+		}
+		else
+		{
+			lastNr = 5;
+			addBlock( lastNr, x[ i ], y[ i ] );
+			c[ i ] --;
+		}
+		
+		
+		while( c[ i ] > 0 )
+		{
+			c[ i ] --;
+			if( lastNr == 5 || lastNr == 6 )
+			{
+				if( c[ i ] == 0 )
+				{
+					lastNr = 7;
+					addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
+				}
+				else if( c[ i ] > 1 )
+				{
+					if( rand()%6 < 2 )
+					{
+						lastNr = 7;
+						addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
+					}
+					else
+					{
+						lastNr = 6;
+						addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
+					}
+				}
+			}
+			
+			else if( lastNr == 7 )
+			{
+				lastNr = -1;
+				addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
+			}
+			else if( lastNr == -1 && c[ i ] > 0 )
+			{
+				lastNr = 5;
+				addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
+			}
+		}
+		
+		
+		if( i < x.size() -1 )
+		{
+			if( this->blocks[ this->blocks.size() -1 ]->x +width == x[ i+1 ] &&
+				this->blocks[ this->blocks.size() -1 ]->y != y[ i+1 ] &&
+				this->blocks[ this->blocks.size() -1 ]->nr != -1 )
+			{
+				addPlank( 0, x[ i+1 ] -w +10, y[ i ] -h2 );
+			}
+			else
+			{
+				for( unsigned j = 0; j < blocks.size(); j++ )
+				{
+					for( unsigned k = actual_size; k < this->blocks.size(); k++ )
+					{
+						if( this->blocks[ k ]->nr == 7 )
+						{
+							if( this->blocks[ k ]->x == blocks[ j ]->x -width && this->blocks[ k ]->y == blocks[ j ]->y -width*2 )
+							{
+								if( blocks[ j ]->nr != -1 )
+								{
+									addPlank( 1, blocks[ j ]->x -10, blocks[ j ]->y -h );
+									j = blocks.size();
+									break;
+								}
+							}
+						}
+						else if( this->blocks[ k ]->nr == 5 )
+						{
+							if( this->blocks[ k ]->x == blocks[ j ]->x +width && this->blocks[ k ]->y == blocks[ j ]->y -width*2 )
+							{
+								if( blocks[ j ]->nr != -1 )
+								{
+									addPlank( 1, blocks[ j ]->x +width +10 -w, blocks[ j ]->y -h );
+									j = blocks.size();
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	
+	}
+}
 
 
 void Islands::moveX( sf::Uint8 direction, float vel )
@@ -507,6 +657,52 @@ void Islands::backToGrass( int add )
 	for( auto &it :blocks )
 	{
 		it->x += add;
+	}
+}
+
+void Islands::moving()
+{
+	for( auto &it :hovers )
+	{
+		it->moving( width );
+	}
+}
+
+void Islands::turnOff( sf::Uint8 direction )
+{
+	if( !moved )
+	{
+		if( direction == 1 )
+		{
+			for( auto &it :hovers )
+			{
+				it->moveX( -2 );
+			}
+		}
+		else if( direction == 2 )
+		{
+			for( auto &it :hovers )
+			{
+				it->moveX( 2 );
+			}
+		}
+		
+		moved = true;
+	}
+	
+	for( auto &it :hovers )
+	{
+		it->turnOff();
+	}
+}
+
+void Islands::turnOn()
+{
+	moved = false;
+	
+	for( auto &it :hovers )
+	{
+		it->turnOn();
 	}
 }
 
@@ -592,6 +788,78 @@ bool Islands::checkPixelCollision( Rect* rect )
 				}
 			}
 		}
+		
+		for( unsigned i = 0; i < blocks.size(); i++ )
+		{
+			if( blocks[ i ]->nr != -1 )
+			{
+				if( blocks[ i ]->x > -width && blocks[ i ]->x < screen_w )
+				{
+					sprites[ blocks[ i ]->nr ]->setPosition( blocks[ i ]->x, blocks[ i ]->y );
+				
+					for( int j = l; j <= r; j++ )
+					{
+						if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( j, t ) )		return true;
+						else if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( j, b ) )	return true;
+					}
+					
+					for( int j = t; j <= b; j++ )
+					{
+						if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( l, j ) )		return true;
+						else if( sprites[ blocks[ i ]->nr ]->checkPixelCollision( r, j ) )	return true;
+					}
+				}
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool Islands::checkFlyingIslands( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		int l = rect->getX();		// left
+		int r = rect->getRight();	// right
+		int t = rect->getY();		// top
+		int b = rect->getBot(); 	// bot
+		
+		for( auto &it :hovers )
+		{
+			for( unsigned i = 0; i < it->getSize(); i++ )
+			{
+				if( it->getX(i) > -width*2 && it->getX(i) < screen_w +width )
+				{
+					sprites[ it->getNr(i) ]->setPosition( it->getX(i), it->getY(i) );
+					
+					for( int j = l; j <= r; j++ )
+					{
+						if( sprites[ it->getNr(i) ]->checkPixelCollision( j, t ) )		return true;
+						else if( sprites[ it->getNr(i) ]->checkPixelCollision( j, b ) )	return true;
+					}
+					
+					for( int j = t; j <= b; j++ )
+					{
+						if( sprites[ it->getNr(i) ]->checkPixelCollision( l, j ) )		return true;
+						else if( sprites[ it->getNr(i) ]->checkPixelCollision( r, j ) )	return true;
+					}
+				}
+			}
+		}
+	}
+	
+	return false;
+}
+
+bool Islands::checkOtherIslands( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		int l = rect->getX();		// left
+		int r = rect->getRight();	// right
+		int t = rect->getY();		// top
+		int b = rect->getBot(); 	// bot
 		
 		for( unsigned i = 0; i < blocks.size(); i++ )
 		{

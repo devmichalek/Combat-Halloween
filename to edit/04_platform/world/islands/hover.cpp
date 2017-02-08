@@ -4,6 +4,7 @@ Hover::Hover()
 {
 	startX = endX = 0;
 	vel = 0;
+	vel_state = 0;
 	state = 0;
 }
 
@@ -26,20 +27,28 @@ void Hover::free()
 	
 	startX = endX = 0;
 	vel = 0;
+	vel_state = 0;
 	state = 0;
 }
 
 
 
-void Hover::positioning( int width )
+void Hover::positioning( int width, int type )
 {
 	blocks.push_back( new Block() );
 	blocks[ blocks.size() -1 ]->nr = 5;
 	blocks[ blocks.size() -1 ]->x = 0;
 	
+	if( type == 0 )
+	{
+		blocks.push_back( new Block() );
+		blocks[ blocks.size() -1 ]->nr = 6;
+		blocks[ blocks.size() -1 ]->x = width;
+	}
+	
 	blocks.push_back( new Block() );
 	blocks[ blocks.size() -1 ]->nr = 7;
-	blocks[ blocks.size() -1 ]->x = width;
+	blocks[ blocks.size() -1 ]->x = blocks[ blocks.size() -2 ]->x +width;
 }
 
 void Hover::setPosition( int startX, int endX, int y, int vel )
@@ -47,6 +56,7 @@ void Hover::setPosition( int startX, int endX, int y, int vel )
 	this->startX = startX;
 	this->endX = endX;
 	this->vel = vel;
+	vel_state = vel;
 	
 	for( auto &i :blocks )
 	{
@@ -100,6 +110,15 @@ void Hover::moving( int width )
 	}
 }
 
+void Hover::turnOff()
+{
+	vel = 0;
+}
+
+void Hover::turnOn()
+{
+	vel = vel_state;
+}
 
 
 unsigned Hover::getSize()

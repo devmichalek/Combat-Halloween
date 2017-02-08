@@ -11,6 +11,7 @@ class Hover	// flying island
 	
 	int startX, endX;
 	int vel;
+	int vel_state;
 	int state;
 	
 public:
@@ -18,10 +19,13 @@ public:
 	~Hover();
 	void free();
 	
-	void positioning( int width );
+	void positioning( int width, int type );
 	void setPosition( int startX, int endX, int y, int vel );
 	void moveX( float vel );
 	void moving( int width );
+	
+	void turnOff();
+	void turnOn();
 	
 	unsigned getSize();
 	int getX( unsigned which );
