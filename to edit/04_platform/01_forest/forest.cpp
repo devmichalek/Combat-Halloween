@@ -1,6 +1,6 @@
-#include "play_wood.h"
+#include "forest.h"
 
-Play_wood::Play_wood()
+Forest::Forest()
 {
 	state = 0;
 	info = "";
@@ -21,14 +21,16 @@ Play_wood::Play_wood()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	
+	mine_factory = new Mine_factory;
 }
 
-Play_wood::~Play_wood()
+Forest::~Forest()
 {
 	free();
 }
 
-void Play_wood::free()
+void Forest::free()
 {
 	state = 0;
 	info = "";
@@ -52,9 +54,11 @@ void Play_wood::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	
+	delete mine_factory;
 }
 
-void Play_wood::reset()
+void Forest::reset()
 {
 	state = 0;
 	
@@ -71,11 +75,13 @@ void Play_wood::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	
+	mine_factory->reset( distance );
 }
 
 
 
-void Play_wood::load( int screen_w, int screen_h )
+void Forest::load( int screen_w, int screen_h )
 {
 	state = 0;
 	info = "setting keys";
@@ -96,14 +102,16 @@ void Play_wood::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	
+	mine_factory->load( width, screen_w, screen_h );
 }
 
-void Play_wood::handle( sf::Event &event )
+void Forest::handle( sf::Event &event )
 {
 	//...
 }
 
-void Play_wood::draw( sf::RenderWindow* &window )
+void Forest::draw( sf::RenderWindow* &window )
 {
 	mechanics();
 	
@@ -122,6 +130,8 @@ void Play_wood::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
+		
+		mine_factory->fadeout( value );
 	}
 	else
 	{
@@ -138,6 +148,8 @@ void Play_wood::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
+		
+		mine_factory->fadein( value );
 	}
 	
 
@@ -148,8 +160,12 @@ void Play_wood::draw( sf::RenderWindow* &window )
 	// blocks
 	ladder->draw( window );
 	
+	// hero
 	hero->draw( window );
 	kunai->draw( window );
+	
+	// enemy
+	mine_factory->draw( window );
 	
 	// rest
 	water->draw( window );
@@ -163,7 +179,7 @@ void Play_wood::draw( sf::RenderWindow* &window )
 
 
 
-bool Play_wood::positioning( int type, int size, int flatness, int flying_is, int pug  )
+bool Forest::positioning( int type, int size, int flatness, int flying_is, int pug, int mine  )
 {
 	switch( state )
 	{
@@ -211,7 +227,7 @@ bool Play_wood::positioning( int type, int size, int flatness, int flying_is, in
 		
 		
 		
-		case 12:	islands->createTopIslands( brick->getBlocks(), ladder->getW( 1 ), ladder->getH( 1 ) );
+		case 12:	islands->createTopIslands( brick->getBlocks(), ladder->getW( 1 ), ladder->getH( 1 ), ladder->getH( 0 ) );
 		info = "creating bot islands";	break;
 		
 		case 13:	islands->createBotIslands( brick->getBlocks(), ladder->getW( 1 ), ladder->getH( 1 ) );
@@ -229,17 +245,22 @@ bool Play_wood::positioning( int type, int size, int flatness, int flying_is, in
 		
 		
 		
-		case 16:	ladder->positioning( brick->getPlanks() );	ladder->positioning( islands->getPlanks() );
+		case 16:	ladder->positioning( brick->getPlanks() );
+					ladder->positioning( islands->getPlanks() );
 		info = "setting greenery";	break;
 		
-		case 17:	greenery->positioning( brick->getBlocks() );	greenery->positioning( islands->getBlocks() );
+		case 17:	greenery->positioning( brick->getBlocks() );
+					greenery->positioning( islands->getBlocks() );
 		info = "setting wall";	break;
 		
-		
-		
 		case 18:	wall->positioning( brick->getBlocks(), pug );
-		info = "done";	break;
+					wall->positioning( islands->getBlocks(), pug );
+		info = "creating mine factory";	break;
 		
+		
+		case 19: mine_factory->positioning( brick->getBlocks(), mine );
+				 mine_factory->positioning( islands->getBlocks(), mine );
+		info = "done";	break;
 		
 		default:
 		return true;
@@ -251,14 +272,14 @@ bool Play_wood::positioning( int type, int size, int flatness, int flying_is, in
 	return false;
 }
 
-string Play_wood::getInfo()
+string Forest::getInfo()
 {
 	return info;
 }
 
 
 
-bool Play_wood::nextState()
+bool Forest::nextState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
 	{
@@ -268,7 +289,7 @@ bool Play_wood::nextState()
 	return false;
 }
 
-bool Play_wood::backToLevel()
+bool Forest::backToLevel()
 {
 	return false;
 }
