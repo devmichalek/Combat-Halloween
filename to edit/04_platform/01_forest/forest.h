@@ -19,9 +19,10 @@
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
 
+// Enemy
+#include "04_platform/enemy/mine/mine_factory.h"
 
-
-class Play_wood
+class Forest
 {
 	int state;
 	string info;
@@ -48,10 +49,13 @@ class Play_wood
 	Ladder* ladder;
 	Greenery* greenery;
 	
+	// enemy
+	Mine_factory* mine_factory;
+	
 public:
 
-	Play_wood();
-    ~Play_wood();
+	Forest();
+    ~Forest();
     void free();
 	void reset();
 	
@@ -59,7 +63,7 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int type, int size, int flatness, int hover, int pug  );
+	bool positioning( int type, int size, int flatness, int hover, int pug, int mine );
 	string getInfo();
 	
 	bool nextState();
