@@ -9,6 +9,7 @@ class Islands
 	int width;
 	int screen_w;
 	int screen_h;
+	bool moved;
 	
 	vector <Hover*> hovers;	// Flying islands.
 	vector <Block*> blocks;	// Bottom and top islands.
@@ -34,12 +35,15 @@ public:
 	
 	// Creating.
 	void createFlyingIslands( vector <Block*> blocks, vector <Plank*> planks, int chance );
-	void createTopIslands( vector <Block*> blocks, int w, int h );
+	void createTopIslands( vector <Block*> blocks, int w, int h, int h2 );
 	void createBotIslands( vector <Block*> blocks, int w, int h );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
 	void backToGrass( int add );
+	void moving();
+	void turnOff( sf::Uint8 direction );
+	void turnOn();
 	
 	// Getters.
 	vector <Block*> getBlocks();
@@ -48,4 +52,6 @@ public:
 	// Collision detection.
 	bool checkCollision( Rect* rect );
 	bool checkPixelCollision( Rect* rect );
+	bool checkFlyingIslands( Rect* rect );
+	bool checkOtherIslands( Rect* rect );
 };
