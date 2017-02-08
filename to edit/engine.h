@@ -4,29 +4,46 @@
 #include "00_loading/loading.h"
 #include "01_intro/intro.h"
 #include "02_menu/menu.h"
-#include "03_level/levelmenu.h"
-#include "04_platform/wood/play_wood.h"
-#include "04_platform/halloween/play_halloween.h"
-#include "04_platform/desert/play_desert.h"
-#include "04_platform/winter/play_winter.h"
+#include "03_level/level.h"
+
+
+#include "04_platform/00_halloween/halloween.h"
+#include "04_platform/01_forest/forest.h"
+#include "04_platform/02_winter/winter.h"
+#include "04_platform/03_desert/desert.h"
+
+
 #include "05_loading_world/loading_world.h"
 #include "06_panel/panel_menu.h"
 
 class Engine
 {
+	enum
+	{
+		INTRO = -1,
+		MENU,
+		LEVEL,
+		GEARS,
+		HALLOWEEN,
+		FOREST,
+		WINTER,
+		DESERT,
+		PANEL
+	};
+	
     Core* core;
 	Loading* loading;
 	Intro* intro;
 	Menu* menu;
-	Level_menu* level_menu;
-	Loading_world* loading_world;
+	Level* level;
+	Loading_world* gears;
 	
-	Play_wood* play_wood;
-	Play_halloween* play_halloween;
-	Play_desert* play_desert;
-	Play_winter* play_winter;
+	Halloween* halloween;
+	Forest* forest;
+	Winter* winter;
+	Desert* desert;
 	
-	Panel_menu* panel_menu;
+	Panel_menu* panel;
 
 public:
 
