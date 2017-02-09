@@ -247,6 +247,7 @@ bool Forest::positioning( int type, int size, int flatness, int flying_is, int p
 		
 		case 16:	ladder->positioning( brick->getPlanks() );
 					ladder->positioning( islands->getPlanks() );
+					ladder->shrink();
 		info = "setting greenery";	break;
 		
 		case 17:	greenery->positioning( brick->getBlocks() );
