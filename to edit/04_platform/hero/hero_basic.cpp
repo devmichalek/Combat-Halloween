@@ -357,6 +357,9 @@ const int Hero::getX()
 
 const int Hero::getY()
 {
+	if( which == SLIDE )
+		return sprite[ SLIDE ]->getY();
+	
 	return sprite[ IDLE ]->getY();
 }
 
@@ -367,6 +370,9 @@ const int Hero::getW()
 
 const int Hero::getH()
 {
+	if( which == SLIDE )
+		return sprite[ SLIDE ]->getHeight();
+	
 	return sprite[ IDLE ]->getHeight();
 }
 
