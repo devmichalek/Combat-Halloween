@@ -270,8 +270,8 @@ void Forest::mechanics()
 	}
 	
 	// CHECK Y AND SHOW EFFECT
-	if( hero->getY() > screen_h -hero->getH()/2 || 
-		water->checkCollision( hero->getRect() ) )
+	if( hero->getY() > screen_h ||
+			 water->checkCollision( hero->getRect() ))
 	{
 		effect->runWater();
 	}
