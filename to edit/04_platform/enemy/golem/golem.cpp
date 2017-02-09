@@ -22,11 +22,12 @@ void Golem::setXY( int x, int y )
 void Golem::matchX( Rect* rect )
 {
 	if( state == 2 && rect != NULL )
-	{
+	{/*
 		int x = rect->getX();
 		int y = rect->getY();
 		int w = rect->getWidth();
 		int h = rect->getHeight();
+		
 		
 		if( ( y >= sprite[ 1 ].getY() && y+h < sprite[ 1 ].getY() + sprite[ 1 ].getHeight() ) ||
 			( y +h >= sprite[ 1 ].getY() && y < sprite[ 1 ].getY() + sprite[ 1 ].getHeight() ) )
@@ -96,6 +97,7 @@ void Golem::matchX( Rect* rect )
 			// life bar
 			life_bar.setPosition( leftX, sprite[ 1 ].getY() -20 );
 		}
+		*/
 	}
 }
 
