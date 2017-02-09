@@ -124,7 +124,7 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 {
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ]->y <= 3*width )
+		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
 		{
 			if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 || blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0 )
 			{
