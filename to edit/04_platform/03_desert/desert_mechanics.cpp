@@ -1,11 +1,13 @@
-#include "play_desert.h"
+#include "desert.h"
 
-void Play_desert::mechanics()
+void Desert::mechanics()
 {
+	// ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
-	if( ladder->checkCollision( hero->getRect(), screen_w ) )
+	if( ladder->checkCollision( hero->getRect() ) )
 	{
-		if( !brick->checkPixelCollision( hero->getRect() ) )
+		if( !brick->checkPixelCollision( hero->getRect() ) &&
+			!islands->checkPixelCollision( hero->getRect() ) )
 		{
 			hero->climbing();
 		}
@@ -19,14 +21,27 @@ void Play_desert::mechanics()
 		hero->banClimbing();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO GRAVITY
 	hero->gravitation();
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO WEIGHTLESSNESS
 	if( brick->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
+		islands->turnOn();
 	}
+	else if( islands->checkPixelCollision( hero->getRect() ) )
+	{
+		hero->weightlessness();
+	}
+	
+	
 	
 	// HERO GLIDE
 	else
@@ -34,17 +49,25 @@ void Play_desert::mechanics()
 		hero->gliding();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO PIXEL GRAVITY
-	if( brick->checkPixelCollision( hero->getRect() ) )
+	if( brick->checkPixelCollision( hero->getRect() ) ||
+		islands->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->pixelGravitation();
 	}
 	
 	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO SLIDE
 	hero->sliding();
-
-		
+	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO JUMP WITH THROW
 	if( hero->jumpThrow() )
 	{
@@ -56,6 +79,7 @@ void Play_desert::mechanics()
 		}
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
+			islands->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -63,6 +87,9 @@ void Play_desert::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
@@ -71,6 +98,7 @@ void Play_desert::mechanics()
 		scope->setVel( hero->getJump_vel() );
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
+			islands->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -78,6 +106,9 @@ void Play_desert::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO THROW
 	else if( hero->throwing() )
 	{
@@ -87,18 +118,25 @@ void Play_desert::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		//golem->checkHit( hero->getAttackBox(), hero->getDamage() );
+		
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO JUMP
 	else if( hero->jump() )
 	{
 		scope->setVel( hero->getJump_vel() );
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
+			islands->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -106,12 +144,16 @@ void Play_desert::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO MOVE
 	else if( hero->moving() )
 	{
 		scope->setVel( hero->getVel() );
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
+			islands->checkPixelCollision( hero->getRect() ) ||
 			hero->getX() + hero->getW() > screen_w ||
 			hero->getX() < 0 )
 		{
@@ -119,42 +161,35 @@ void Play_desert::mechanics()
 		}
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO IDLE
 	else
 	{
 		hero->idle();
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// KUNAI DESTROY
 	for( unsigned i = 0; i < kunai->getNr(); i++ )
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
 		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
 		kunai->getX( i ) < -kunai->getW() ||
-		wall->checkCollision( kunai->getRect( i ), screen_w ) /*||
-		golem->checkHit( kunai->getRect( i ), kunai->getDamage() )*/ )
+		wall->checkCollision( kunai->getRect( i ) )	||
+		islands->checkPixelCollision( kunai->getRect( i ) ) )
 		{
 			kunai->destroy( i );
 		}
 	}
 	
-	/*
-	// GOLEM SET X
-	golem->matchX( hero->getRect() );
-	if( brick->checkCollision( golem->getRect() ) )
-	{
-		golem->undoMove();
-	}
-	
-	// GOLEM ATTACK
-	if( golem->checkAttackBox( hero->getRect() ) )
-	{
-		hero->harm();
-		heart->harm( golem->getDamage() );
-	}
-	*/
 	
 	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO SET SCOPE
 	hero->setScope( !scope->getScope() );
 	
@@ -165,34 +200,56 @@ void Play_desert::mechanics()
 		scope->setFactor( brick->moveX( hero->getDirection(), scope->getVel() ) );
 		if( scope->getFactor() == 0 )
 		{
-			greenery->moveX( hero->getDirection(), scope->getVel() );
-			ladder->moveX( hero->getDirection(), scope->getVel() );
+			islands->moveX( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
+			ladder->moveX( hero->getDirection(), scope->getVel() );
+			greenery->moveX( hero->getDirection(), scope->getVel() );
+			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 		}
-			
-		if( brick->checkPixelCollision( hero->getRect() ) )
+
+		if( brick->checkPixelCollision( hero->getRect() ) ||
+			wall->checkCollision( hero->getRect() ) ||
+			islands->checkPixelCollision( hero->getRect() ) )
 		{
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
-			greenery->moveX( hero->getDirection(), -scope->getVel() );
-			ladder->moveX( hero->getDirection(), -scope->getVel() );
+			islands->moveX( hero->getDirection(), -scope->getVel() );
 			wall->moveX( hero->getDirection(), -scope->getVel() );
-		}
-		
-		if( wall->checkCollision( hero->getRect(), screen_w ) )
-		{
-			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
-			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
-			wall->moveX( hero->getDirection(), -scope->getVel() );
+			greenery->moveX( hero->getDirection(), -scope->getVel() );
+			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
+	
+	if( !islands->checkFlyingIslands( hero->getRect() ) )
+	{
+		islands->moving();
+	}
+	else
+	{
+		islands->turnOff( hero->getDirection() );
+	}
+	
+	if( islands->checkOtherIslands( hero->getRect() ) )
+	{
+		islands->turnOn();
+	}
+	
+	
+	
+	
 	
 	// SCOPE MOVE
 	scope->move( hero->getX(), screen_w );
 	
-	// BACKGROUND SET XY
-	moving_bg->setXY( hero->getX(), hero->getY() );
 	
+	
+// ------------------------------------------------------------------------------------------------
+	// BACKGROUND SET XY
+	background->setPosition( hero->getX(), hero->getY() );
+	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HERO FALLEN
 	if( hero->isFallen( screen_h ) )
 	{
@@ -209,9 +266,10 @@ void Play_desert::mechanics()
 		}
 	}
 	
+	// CHECK Y AND SHOW EFFECT
 	if( hero->getY() > screen_h -hero->getH()/2 )
 	{
-		bg->runFall();
+		effect->runFall();
 	}
 	
 	// GET BACK HERO
@@ -220,6 +278,7 @@ void Play_desert::mechanics()
 		brick->setNewX( hero->getX() );
 	}
 	
+	// BACK TO LAST GRASS BLOCK
 	if( hero->backToGrass() )
 	{
 		brick->findLastGrass( hero->getRect() );
@@ -227,18 +286,32 @@ void Play_desert::mechanics()
 	if( brick->backToGrass() )
 	{
 		hero->setFallen();
+		islands->backToGrass( brick->getGrassValue() );
+		wall->backToGrass( brick->getGrassValue() );
 		ladder->backToGrass( brick->getGrassValue() );
 		greenery->backToGrass( brick->getGrassValue() );
-		wall->backToGrass( brick->getGrassValue() );
+		mine_factory->backToGrass( brick->getGrassValue() );
 	}
 	
+	
+	
+// ------------------------------------------------------------------------------------------------
 	// HARM BY WALL
-	if( wall->harm( hero->getRect(), screen_w ) )
+	if( wall->harm( hero->getRect() ) )
 	{
 		heart->harm( -0xAA );
-		bg->runBlood();
+		effect->runBlood();
 	}
 	
+	// HARM BY MINE
+	mine_factory->checkCollision( hero->getRect() );
+	if( mine_factory->harm( hero->getRect() ) )
+	{
+		heart->harm( -0xBB );
+		effect->runBlood();
+	}
+	
+// ------------------------------------------------------------------------------------------------
 	// DEAD
 	if( heart->isDead() )
 	{
