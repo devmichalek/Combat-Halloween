@@ -32,6 +32,7 @@ public:
 	
 	// Setter.
 	void positioning( vector <Plank*> planks );
+	void shrink();
 	
 	// In action.
 	void moveX( sf::Uint8 direction, float vel );

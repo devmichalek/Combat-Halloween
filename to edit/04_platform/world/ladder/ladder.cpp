@@ -178,6 +178,42 @@ void Ladder::positioning( vector <Plank*> planks )
 	}
 }
 
+void Ladder::shrink()
+{
+	bool end = false;
+	while( !end )
+	{
+		end = true;
+		for( unsigned i = 0; i < planks.size(); i++ )
+		{
+			for( unsigned j = 0; j < planks.size(); j++ )
+			{
+				if( j != i )
+				{
+					int value = planks[ j ]->x -planks[ i ]->x;
+					if( value < 0 )	value = -value;
+					
+					if( value < width )
+					{
+						// printf( "happend %d\n", planks[ i ]->x );
+						
+						if( planks[ j ]->nr < planks[ i ]->nr )
+						{
+							planks.erase( planks.begin() +j );
+						}
+						else
+						{
+							planks.erase( planks.begin() +i );
+						}
+						
+						end = false;
+					}
+				}
+			}
+		}
+	}
+}
+
 
 
 void Ladder::moveX( sf::Uint8 direction, float vel )
