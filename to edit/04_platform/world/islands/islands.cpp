@@ -385,7 +385,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 	
 	// Searcher
 	unsigned last = 0;
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( unsigned i = 0; i < blocks.size() -1; i++ )
 	{
 		// blocks with grass, apriopriate y
 		if( blocks[ i ]->y >= screen_h -width*2 && 
@@ -452,6 +452,25 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 	}
 	
 	
+	for( unsigned i = 0; i < posX.size() -1; i++ )
+	{
+		if( posX[ i ] > posX[ i +1 ] )
+		{
+			swap( posX[ i ], posX[ i +1 ] );
+			swap( posY[ i ], posY[ i +1 ] );
+		}
+	}
+	
+	/*
+	for( unsigned i = 0; i < posX.size() -1; i++ )
+	{
+		if( posX[ i ] > posX[ i +1 ] )
+		{
+			printf( "--%d %d\n", posX[ i ], posY[ i ] );
+		}
+	}
+	*/
+	
 
 	// Creator
 	vector <int> c;
@@ -476,10 +495,8 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 		}
 	}
 	
-	for( unsigned i = 0; i < c.size() -1; i++ )
-	{
-		// printf( "%d %d %d\n", c[ i ], x[ i ], y[ i ] );
-	}
+	
+	
 	
 	
 	bool flag = true;
@@ -505,13 +522,27 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 		
 		if( this->blocks.size() > 0 )
 		{
-			if( this->blocks[ this->blocks.size() -1 ]->x == x[ i ] )
+			if( this->blocks[ this->blocks.size() -1 ]->x == x[ i ] &&
+				this->blocks[ this->blocks.size() -1 ]->y == y[ i ] )
+			{
+				if( c[ i ] >= 4 )
+				{
+					lastNr = 5;
+					addBlock( lastNr, x[ i ] +width*2, y[ i ] );
+					c[ i ] -= 2;
+				}
+				else
+				{
+					c[ i ] = 0;
+				}
+			}
+			else if( this->blocks[ this->blocks.size() -1 ]->x +width == x[ i ] &&
+					 this->blocks[ this->blocks.size() -1 ]->y == y[ i ] )
 			{
 				if( c[ i ] >= 3 )
 				{
 					lastNr = 5;
 					addBlock( lastNr, x[ i ] +width, y[ i ] );
-					
 					c[ i ] --;
 				}
 				else
@@ -614,9 +645,55 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 				}
 			}
 		}
-	
+		
+		
 	}
+	
+	
+	/*
+	for( unsigned i = 0; i < this->blocks.size() -1; i++ )
+	{
+		if( this->blocks[ i ]->x == this->blocks[ i +1 ]->x -width &&
+			this->blocks[ i ]->y == this->blocks[ i +1 ]->y &&
+			this->blocks[ i ]->nr == 7 &&
+			this->blocks[ i +1 ]->nr == 5 )
+			{
+				printf( "%d %d\n", this->blocks[ i ]->x, this->blocks[ i ]->y );
+			}
+	}
+	*/
 }
+
+/*
+void Islands::quick_sort( vector <int> tab, vector <int> tab2, int left, int right )
+{
+    int i = left;
+    int j = right;
+    int x = tab[( left + right ) / 2 ];
+    do
+    {
+        while( tab[ i ] < x )
+             i++;
+        
+        while( tab[ j ] > x )
+             j--;
+        
+        if( i <= j )
+        {
+            swap( tab[ i ], tab[ j ] );
+			swap( tab2[ i ], tab2[ j ] );
+            
+            i++;
+            j--;
+        }
+    } while( i <= j );
+    
+    if( left < j ) quick_sort( tab, tab2, left, j );
+    
+    if( right > i ) quick_sort( tab, tab2, i, right );
+    
+}
+*/
 
 
 void Islands::moveX( sf::Uint8 direction, float vel )

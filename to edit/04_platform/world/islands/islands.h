@@ -37,6 +37,7 @@ public:
 	void createFlyingIslands( vector <Block*> blocks, vector <Plank*> planks, int chance );
 	void createTopIslands( vector <Block*> blocks, int w, int h, int h2 );
 	void createBotIslands( vector <Block*> blocks, int w, int h );
+	// void quick_sort( vector <int> tab, vector <int> tab2, int left, int right );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
