@@ -609,7 +609,7 @@ bool Brick::backToGrass()
 	{
 		if( fallenX > (*lastGrass)->x )
 		{
-			grass_value = 1;
+			grass_value = 2;
 			
 			for( auto &i :blocks )
 			{
@@ -626,7 +626,7 @@ bool Brick::backToGrass()
 		}
 		else if( fallenX < (*lastGrass)->x )
 		{
-			grass_value = -1;
+			grass_value = -2;
 			
 			for( auto &i :blocks )
 			{
