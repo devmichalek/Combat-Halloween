@@ -203,7 +203,7 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ]->nr == 2 ) // right border
+		if( (blocks[ i ]->nr == 2 || blocks[ i ]->nr == 12) && blocks[ i ]->x%width == 0 ) // right border
 		{
 			bool success = false;
 			
@@ -214,60 +214,57 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 				{
 					if( blocks[ j ]->y == screen_h -width )
 					{
-						if( blocks[ j ]->nr == 12 )
-						{
-							// printf( "%d\n", blocks[ i ]->x );
-							success = true;
-						}
+						// printf( "1. %d\n", blocks[ i ]->x );
+						success = true;
+						break;
 					}
 				}
 			}
 			
 			if( success )
 			{
-				int myX = blocks[ i ]->x +width;
 				int good_nr = -1;
 				
 				// what kind of block is on the right
-				for( unsigned j = i+1; j < blocks.size(); j++ )
+				int right = blocks.size()*width;
+				
+				for( int k = blocks[ i ]->x +width; k <= right; k += width )
 				{
-					if( blocks[ j ]->nr < 8 ) // grass blocks
+					for( unsigned j = i+1; j < blocks.size(); j++ )
 					{
-						if( blocks[ j ]->x == myX )
+						if( blocks[ j ]->nr < 8 ) // grass blocks
 						{
-							if( blocks[ j ]->y == blocks[ i ]->y )
+							if( blocks[ j ]->x == k )
 							{
-								myX += width;
-								
-								if( blocks[ j ]->nr == 0 )
+								if( blocks[ j ]->y == blocks[ i ]->y )
 								{
-									good_nr = j;
-									// printf( "%d\n", blocks[ j ]->x );
+									if( blocks[ j ]->nr == 0 || blocks[ j ]->nr == 10 )
+									{
+										good_nr = j;
+										// printf( "2. %d\n", blocks[ j ]->x );
+										k = right +width;
+										break;
+									}
 								}
-							}
-							else
-							{
-								break;
 							}
 						}
 					}
 				}
 				
+				// printf( "%d\n", good_nr );
 				if( good_nr != -1 )
 				{
 					bool ready = false;
-					
 					// what kind of block is at the bottom again
 					for( unsigned j = 0; j < blocks.size(); j++ )
 					{
 						if( blocks[ j ]->x == blocks[ good_nr ]->x )
 						{
+							// printf( "--0. pass\n" );
 							if( blocks[ j ]->y == screen_h -width )
 							{
-								if( blocks[ j ]->nr == 10 )
-								{
-									ready = true;
-								}
+								// printf( "--1. pass\n" );
+								ready = true;
 							}
 						}
 					}
@@ -283,6 +280,7 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 								{
 									if( blocks[ j ]->nr >= 0 && blocks[ j ]->nr <= 7 )
 									{
+										// printf( "WARNING %d\n", blocks[ j ]->x );
 										ready = false;
 										break;
 									}
@@ -316,7 +314,42 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 		}
 		
 	}
+
 	
+	// delete if we have surplus
+	
+	bool end = false;
+	while( !end )
+	{
+		end = true;
+		
+		for( unsigned i = 0; i < waterblocks.size(); i++ )
+		{
+			for( unsigned j = 0; j < waterblocks.size(); j++ )
+			{
+				if( waterblocks[ i ]->x == waterblocks[ j ]->x &&
+					waterblocks[ i ]->y == waterblocks[ j ]->y && j != i  )
+				{
+					if( waterblocks[ i ]->nr == 0 )
+					{
+						waterblocks.erase( waterblocks.begin() +i );
+					}
+					else if( waterblocks[ j ]->nr == 0 )
+					{
+						waterblocks.erase( waterblocks.begin() +j );
+					}
+					else
+					{
+						waterblocks.erase( waterblocks.begin() +i );
+					}
+					
+					//printf( "happen\n" );
+					
+					end = false;
+				}
+			}
+		}
+	}
 }
 
 
