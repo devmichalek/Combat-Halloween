@@ -76,11 +76,13 @@ void Wall::load( int type, int width, int screen_w )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "wall-sprites[" +to_string( i ) +"]" );
 		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
+		sprites[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 	}
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size()-1 ]->setName( "wall-sprites[5]" );
 	sprites[ sprites.size()-1 ]->load( "data/sprites/play/" +to_string( type ) +"/15.png" );
+	sprites[ sprites.size() -1 ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 }
 
 void Wall::draw( sf::RenderWindow* &window )
@@ -122,16 +124,20 @@ void Wall::fadeout( int v, int min )
 
 void Wall::positioning( vector <Block*> blocks, int chance )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	for( unsigned i = 0; i < blocks.size() -2; i++ )
 	{
 		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
 		{
-			if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 || blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0 )
+			if( (blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 || blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0) &&
+				blocks[ i ]->y == blocks[ i +2 ]->y )
 			{
 				if( rand()%100 < chance )
 				{
-					int nr = 1;
-					if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 )	nr = 0;
+					int nr = 0;
+					if( rand()%2 == 0 )
+					{
+						nr = 1;
+					}
 					
 					this->blocks.push_back( new Pug() );
 					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
@@ -181,7 +187,7 @@ void Wall::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-void Wall::backToGrass( int add )
+void Wall::undoFall( sf::Uint8 add )
 {
 	for( auto &it :blocks )
 	{
