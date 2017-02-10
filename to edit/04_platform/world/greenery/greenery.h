@@ -37,5 +37,5 @@ public:
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
-	void backToGrass( int add );
+	void undoFall( sf::Uint8 add );
 };

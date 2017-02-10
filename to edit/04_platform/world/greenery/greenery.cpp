@@ -105,6 +105,7 @@ void Greenery::load( int type, int width, int screen_w )
 			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +to_string( i+min ) +"]" );
 			sprites[ sprites.size() -1 ]->load( "data/sprites/play/" +to_string( type )
 			+ "/" +to_string( i+min ) + ".png" );
+			sprites[ sprites.size() -1 ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 		}
 		
 		// load rules
@@ -317,10 +318,10 @@ void Greenery::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-void Greenery::backToGrass( int add )
+void Greenery::undoFall( sf::Uint8 add )
 {
-	for( auto &it :blocks )
+	for( auto &i :blocks )
 	{
-		it->x += add;
+		i->x += add;
 	}
 }
