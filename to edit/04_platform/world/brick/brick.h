@@ -18,9 +18,8 @@ class Brick
 	vector <Block*> blocks;
 	vector <MySprite*> sprites;
 	
-	int fallenX;			// Distance to make after hero fall.
-	int grass_value;		// Velocity (1,-1,0) for other objects.
-	vector <Block*>::iterator lastGrass;	// Contain number of last grass standed by hero block.	
+	int grass_distance;
+	sf::Uint8 grass_value;
 	
 public:
 
@@ -54,17 +53,14 @@ public:
 	void setLeft();		// set the smallest x.
 	void setRight(); 	// set the biggest x.
 	
-	
+	// In action.
 	sf::Uint8 moveX( sf::Uint8 direction, float vel );	// Move whether hero moves.
-	void findLastGrass( Rect* rect );	// Find last standing grass block.
-	void setNewX( int heroX );			// Set new x every fall (fallenX).
-	bool backToGrass();					// After new fallenX move blocks and send message about it.
-	
+	int getNearGrassY( int hero_x );
+	int getGrassDistance();
+	sf::Uint8 getGrassValue();
+	void undoFall();
 	
 	// Getters.
-	int getLastGrassX();	// Get x from last grass block.
-	int getLastGrassY();	// Get y from last grass block.
-	int getGrassValue();	// Get velocity (for other objects to tell when they have to move).
 	sf::Uint8 getWidth();	// Get width of divide.
 	vector <Block*> getBlocks();
 	vector <Plank*> getPlanks();
