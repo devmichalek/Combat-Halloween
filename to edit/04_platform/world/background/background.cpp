@@ -35,6 +35,7 @@ void Background::load( int type, int screen_w, int screen_h )
 	
 	sprite.setName( "background-sprite" );
 	sprite.load( "data/sprites/play/" +to_string( type ) +".png" );
+	sprite.setColor( sf::Color( 0xFF, 0xF3, 0x6A ) );
 }
 
 void Background::draw( sf::RenderWindow* &window )
@@ -42,7 +43,8 @@ void Background::draw( sf::RenderWindow* &window )
 	window->draw( sprite.get() );
 }
 
-
+// 61 49 49
+// FF 9C 00
 
 void Background::fadein( int v, int max )
 {
