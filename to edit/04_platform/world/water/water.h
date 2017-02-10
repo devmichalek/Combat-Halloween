@@ -31,7 +31,7 @@ public:
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
-	void backToGrass( int add );
+	void undoFall( sf::Uint8 add );
 	
 	// Creating.
 	void createWater( vector <Block*> b1, vector <Block*> b2, int right );	// Add water.
