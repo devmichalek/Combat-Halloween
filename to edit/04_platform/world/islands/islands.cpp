@@ -98,6 +98,7 @@ void Islands::load( int type, int width, int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "islands-sprites[" +to_string( i ) +"]" );
 		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
+		sprites[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 	}
 	
 	this->width = width;
@@ -664,36 +665,6 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 	*/
 }
 
-/*
-void Islands::quick_sort( vector <int> tab, vector <int> tab2, int left, int right )
-{
-    int i = left;
-    int j = right;
-    int x = tab[( left + right ) / 2 ];
-    do
-    {
-        while( tab[ i ] < x )
-             i++;
-        
-        while( tab[ j ] > x )
-             j--;
-        
-        if( i <= j )
-        {
-            swap( tab[ i ], tab[ j ] );
-			swap( tab2[ i ], tab2[ j ] );
-            
-            i++;
-            j--;
-        }
-    } while( i <= j );
-    
-    if( left < j ) quick_sort( tab, tab2, left, j );
-    
-    if( right > i ) quick_sort( tab, tab2, i, right );
-    
-}
-*/
 
 
 void Islands::moveX( sf::Uint8 direction, float vel )
@@ -724,7 +695,7 @@ void Islands::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-void Islands::backToGrass( int add )
+void Islands::undoFall( sf::Uint8 add )
 {
 	for( auto &it :hovers )
 	{
@@ -736,6 +707,8 @@ void Islands::backToGrass( int add )
 		it->x += add;
 	}
 }
+
+
 
 void Islands::moving()
 {
