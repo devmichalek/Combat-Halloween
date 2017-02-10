@@ -77,6 +77,7 @@ void Water::load( int type, int width, int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "water-sprites[" +to_string( i ) +"]" );
 		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
+		sprites[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 	}
 }
 
@@ -138,7 +139,7 @@ void Water::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-void Water::backToGrass( int add )
+void Water::undoFall( sf::Uint8 add )
 {
 	for( auto &it :waterblocks )
 	{
@@ -340,7 +341,7 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 					}
 					else
 					{
-						waterblocks.erase( waterblocks.begin() +i );
+						waterblocks.erase( waterblocks.begin() +j );
 					}
 					
 					//printf( "happen\n" );
