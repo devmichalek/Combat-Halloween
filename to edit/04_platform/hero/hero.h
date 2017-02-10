@@ -69,9 +69,7 @@ class Hero
 	bool fallen;
 	int fallenCounter;
 	int fallenLine;
-	int fallenX;
 	int fallenY;
-	bool surplus;
 	
 public:
 
@@ -125,12 +123,13 @@ public:
 	void setScope( bool scope );
 	
 	// DEAD
-	bool isFallen( int screen_h );
-	void setNewY( int y );
-	bool setNewX( int x, int screen_w );
-	bool backToGrass();
-	void setFallen();
-	bool isSurplus();
+	bool checkFall( int screen_h );
+	void setFallenY( int y );
+	bool isFallen();
+	void undoFallX( sf::Uint8 add );
+	void undoFallY();
+	void runFallenCounter();
+	
 	void makeFall();
 	void die();
 	bool isDead();
@@ -142,7 +141,7 @@ public:
 	
 	
 	int strToInt( string s );		// Transform string to int.
-	bool checkKeys( int a, int b );	// See if keys are pressed?
+	bool checkKeys( int a, int b );	// Which keys are pressed
 	sf::Uint8 getDirection();		// Return 0 = hero is not moving etc.
 	bool getSide();					// Return true if hero is directed to the right.
 	Rect* getRect();				// Get rectangle of hero.
