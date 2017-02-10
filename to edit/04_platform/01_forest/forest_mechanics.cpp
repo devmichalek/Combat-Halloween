@@ -254,51 +254,35 @@ void Forest::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO FALLEN
-	if( hero->isFallen( screen_h ) )
+	if( hero->checkFall( screen_h ) )
 	{
 		heart->harm( -0xCC );
-		hero->setNewY( brick->getLastGrassY() );
-		
-		if( scope->getState() == 1 || scope->getState() == 3 )
+		hero->setFallenY( brick->getNearGrassY( hero->getX() ) );
+	}
+	
+	if( brick->getGrassDistance() > 0 )
+	{
+		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
 		{
-			brick->setNewX( hero->getX() );
+			hero->undoFallX( brick->getGrassValue() );
 		}
-		else if( hero->setNewX( brick->getLastGrassX(), screen_w ) )
+		else
 		{
-			scope->transform();
+			brick->undoFall();
+			islands->undoFall( brick->getGrassValue() );
+			water->undoFall( brick->getGrassValue() );
+			wall->undoFall( brick->getGrassValue() );
+			ladder->undoFall( brick->getGrassValue() );
+			greenery->undoFall( brick->getGrassValue() );
+			mine_factory->undoFall( brick->getGrassValue() );
 		}
 	}
-	
-	// CHECK Y AND SHOW EFFECT
-	if( hero->getY() > screen_h ||
-			 water->checkCollision( hero->getRect() ))
+	else
 	{
-		effect->runWater();
+		hero->runFallenCounter();
 	}
 	
-	// GET BACK HERO
-	if( hero->isSurplus() )
-	{
-		brick->setNewX( hero->getX() );
-	}
-	
-	// BACK TO LAST GRASS BLOCK
-	if( hero->backToGrass() )
-	{
-		brick->findLastGrass( hero->getRect() );
-	}
-	if( brick->backToGrass() )
-	{
-		hero->setFallen();
-		islands->backToGrass( brick->getGrassValue() );
-		water->backToGrass( brick->getGrassValue() );
-		wall->backToGrass( brick->getGrassValue() );
-		ladder->backToGrass( brick->getGrassValue() );
-		greenery->backToGrass( brick->getGrassValue() );
-		mine_factory->backToGrass( brick->getGrassValue() );
-	}
-	
-	
+	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
 	// HARM BY WALL
@@ -321,5 +305,14 @@ void Forest::mechanics()
 	if( heart->isDead() )
 	{
 		hero->die();
+	}
+	
+	
+// ------------------------------------------------------------------------------------------------
+	// CHECK Y AND SHOW EFFECT
+	if( hero->getY() > screen_h ||
+		water->checkCollision( hero->getRect() ))
+	{
+		effect->runWater();
 	}
 }
