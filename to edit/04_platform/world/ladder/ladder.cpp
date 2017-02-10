@@ -102,6 +102,7 @@ void Ladder::load( int type, int width, int screen_w )
 			sprites.push_back( new MySprite() );
 			sprites[ i ]->setName( "ladder-sprites[" +to_string( i ) +"]" );
 			sprites[ i ]->load( "data/sprites/play/ladder/" +to_string( i ) +".png" );
+			sprites[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 		}
 		
 		this->width = width;
@@ -234,7 +235,7 @@ void Ladder::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-void Ladder::backToGrass( int add )
+void Ladder::undoFall( sf::Uint8 add )
 {
 	for( auto &it :planks )
 	{
