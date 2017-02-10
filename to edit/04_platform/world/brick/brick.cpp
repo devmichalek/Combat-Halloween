@@ -29,7 +29,7 @@ Brick::Brick()
 	left = 0;
 	right = 0;
 	
-	fallenX = 0;
+	grass_distance = 0;
 	grass_value = 0;
 }
 
@@ -77,12 +77,13 @@ void Brick::free()
 		blocks.clear();
 	}
 	
-	fallenX = 0;
+	grass_distance = 0;
 	grass_value = 0;
 }
 
 int Brick::reset()
 {
+	grass_distance = 0;
 	int distance = 0;
 	
 	while( true )
@@ -119,11 +120,13 @@ void Brick::load( int type, int width, int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "brick-sprites[" +to_string( i ) +"]" );
 		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i ) +".png" );
+		sprites[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 	}
 	
 	this->width = width;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
+	grass_value = 2;
 }
 
 void Brick::draw( sf::RenderWindow* &window )
@@ -557,129 +560,54 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 	return 0;
 }
 
-void Brick::findLastGrass( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		for( vector <Block*>::iterator i = blocks.begin(); i != blocks.end(); i++ )
-		{
-			if( (*i)->nr >= 0 && (*i)->nr <= 7 )
-			{
-				if( (*i)->x > -width && (*i)->x < screen_w )
-				{
-					sprites[ (*i)->nr ]->setPosition( (*i)->x, (*i)->y );
-					if( sprites[ (*i)->nr ]->checkCollision( rect->getX(), rect->getY() +5, rect->getWidth(), rect->getHeight() ) )
-					{
-						lastGrass = i;
-						//printf("%d\n", lastGrass );
-						break;
-					}
-				}
-			}
-		}
-	}
-}
 
-void Brick::setNewX( int heroX )
+int Brick::getNearGrassY( int hero_x )
 {
-	//printf("lll %d\n", lastGrass );
-	fallenX = (*lastGrass)->x;
-	
-	int value = heroX -(*lastGrass)->x;
-	
-	if( value < 0 )
+	for( unsigned i = blocks.size()-1; i >= 0; i-- )
 	{
-		value = -value;
-	}
-		
-	if( heroX < fallenX )
-	{
-		fallenX -= value;
-	}
-	else
-	{
-		fallenX += value;
-	}
-}
-
-bool Brick::backToGrass()
-{
-	grass_value = 0;
-	if( fallenX != 0 )
-	{
-		if( fallenX > (*lastGrass)->x )
+		if( blocks[ i ]->nr >= 0 && blocks[ i ]->nr <= 7 )
 		{
-			grass_value = 2;
-			
-			for( auto &i :blocks )
+			if( blocks[ i ]->x < hero_x )
 			{
-				i->x += grass_value;
+				grass_distance = hero_x -blocks[ i ]->x;
+				// printf( "%d\n", grass_distance );
+				return blocks[ i ]->y;
 			}
-			
-			left += grass_value;
-			right += grass_value;
-			
-			if( fallenX < (*lastGrass)->x )
-			{
-				fallenX = 0;
-			}
-		}
-		else if( fallenX < (*lastGrass)->x )
-		{
-			grass_value = -2;
-			
-			for( auto &i :blocks )
-			{
-				i->x += grass_value;
-			}
-			
-			left += grass_value;
-			right += grass_value;
-			
-			if( fallenX > (*lastGrass)->x )
-			{
-				fallenX = 0;
-			}
-		}
-		else
-		{
-			fallenX = 0;
 		}
 	}
 	
-	if( grass_value == 0 )
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return 0;
 }
 
-
-
-
-
-int Brick::getLastGrassX()
+int Brick::getGrassDistance()
 {
-	return (*lastGrass)->x;
+	if( grass_distance > 0 )
+	{
+		grass_distance -= grass_value;
+		if( grass_distance < 0 )
+			grass_distance = 0;
+	}
+	
+	return grass_distance;
 }
 
-int Brick::getLastGrassY()
-{
-	return (*lastGrass)->y;
-}
-
-int Brick::getGrassValue()
+sf::Uint8 Brick::getGrassValue()
 {
 	return grass_value;
 }
 
-sf::Uint8 Brick::getWidth()
+void Brick::undoFall()
 {
-	return width;
+	for( auto &i :blocks )
+	{
+		i->x += grass_value;
+	}
+	
+	left += grass_value;
+	right += grass_value;
 }
+
+
 
 vector <Block*> Brick::getBlocks()
 {
