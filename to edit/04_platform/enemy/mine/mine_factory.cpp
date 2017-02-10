@@ -205,7 +205,7 @@ void Mine_factory::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
-void Mine_factory::backToGrass( int add )
+void Mine_factory::undoFall( sf::Uint8 add )
 {
 	for( auto &it :mines )
 	{
