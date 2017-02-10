@@ -1,5 +1,5 @@
 #include "scope.h"
-// #include <stdio.h>
+ #include <stdio.h>
 
 Scope::Scope()
 {
@@ -68,7 +68,7 @@ void Scope::move( int x, int screen_w )
 		else if( b == 1 )	a = 0;
 	}
 	
-	// printf( "%d\n", x );
+	// printf( "%d\n", a );
 }
 
 int Scope::getState()

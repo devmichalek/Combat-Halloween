@@ -31,9 +31,7 @@ Hero::Hero()
 	fallen = false;
 	fallenCounter = 0;
 	fallenLine = 0;
-	fallenX = -1;
 	fallenY = -1;
-	surplus = false;
 }
 
 Hero::~Hero()
@@ -103,9 +101,7 @@ void Hero::free()
 	fallen = false;
 	fallenCounter = 0;
 	fallenLine = 0;
-	fallenX = -1;
 	fallenY = -1;
-	surplus = false;
 }
 
 
@@ -126,6 +122,7 @@ void Hero::load( int type, int screen_w, int screen_h )
 		sprite[ i ]->load( "data/sprites/hero/" + to_string( type ) + "/" + to_string( i ) + ".png", nr -1 );
 		sprite[ i ]->setScale( scale, scale );
 		sprite[ i ]->setPosition( 70, screen_h -sprite[ i ]->getHeight() -200 );
+		sprite[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 	}
 	sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP_ATTACK ]->getX(), sprite[ JUMP_ATTACK ]->getY() + ( sprite[ JUMP_ATTACK ]->getHeight() - sprite[ IDLE ]->getHeight() ) );
 	sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +5, sprite[ THROW ]->getY() );
@@ -392,9 +389,9 @@ void Hero::setScope( bool scope )
 	this->scope = scope;
 }
 
-bool Hero::isFallen( int screen_h )
+bool Hero::checkFall( int screen_h )
 {
-	if( getY() > screen_h +100 )
+	if( getY() > screen_h +getH()/2 && !fallen )
 	{
 		fallen = true;
 		return true;
@@ -403,103 +400,49 @@ bool Hero::isFallen( int screen_h )
 	return false;
 }
 
-void Hero::setNewY( int y )
+void Hero::setFallenY( int y )
 {
 	fallenY = y -sprite[ IDLE ]->getHeight() -40;
 }
 
-bool Hero::setNewX( int x, int screen_w )
+bool Hero::isFallen()
 {
-	fallenX = x +sprite[ IDLE ]->getWidth();
-	
-	if( fallenX > screen_w/2 )
-	{
-		surplus = true;
-		fallenX = screen_w/2;
-	}
-	
-	return surplus;
+	return fallen;
 }
 
-bool Hero::backToGrass()
+void Hero::undoFallX( sf::Uint8 add )
+{
+	for( auto &i :sprite )
+	{
+		i->setPosition( i->getX() -add, i->getY() );
+	}
+}
+
+void Hero::undoFallY()
+{
+	if( fallenY < sprite[ IDLE ]->getY() && fallenY != -1 )
+	{
+		for( auto &i :sprite )
+		{
+			i->setPosition( i->getX(), i->getY() -10 );
+		}
+	}
+	else
+	{
+		fallenY = -1;
+	}
+}
+
+void Hero::runFallenCounter()
 {
 	if( fallen )
 	{
-		if( fallenY != -1 )
-		{
-			if( fallenY < sprite[ IDLE ]->getY() )
-			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX(), i->getY() -7 );
-				}
-			}
-			else
-			{
-				fallenY = -1;
-			}
-		}
-		
-		if( fallenX != -1 )
-		{
-			if( fallenX > sprite[ IDLE ]->getX() )
-			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() +7, i->getY() );
-				}
-				
-				if( fallenX < sprite[ IDLE ]->getX() )
-					fallenX = -1;
-			}
-			else if( fallenX < sprite[ IDLE ]->getX() )
-			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() -7, i->getY() );
-				}
-				
-				if( fallenX > sprite[ IDLE ]->getX() )
-					fallenX = -1;
-			}
-			else
-			{
-				fallenX = -1;
-			}
-		}
-		
-		
-		if( fallenX == -1 && fallenY == -1 )
-		{
-			fallen = false;
-			fallenCounter = 1;
-		}
+		fallen = !fallen;
+		fallenCounter = 1;
 	}
-	
-	if( fallenX == -1 && fallenY == -1 )
-	{
-		return true;
-	}
-	
-	return false;
 }
 
-void Hero::setFallen()
-{
-	fallen = true;
-}
 
-bool Hero::isSurplus()
-{
-	if( fallenX == -1 )
-	{
-		bool sur = surplus;
-		surplus = false;
-		return sur;
-	}
-	
-	return false;
-}
 
 void Hero::makeFall()
 {
