@@ -1,4 +1,4 @@
 ##Introduction
 Work in progress... </br>
-Click no the image below (shows current look) [last edition - 08.02.2017] <br/>
-[![youtube](https://cloud.githubusercontent.com/assets/19840443/22755002/af8c0cae-ee41-11e6-83e5-081dcef025b9.png)](https://youtu.be/WuZMoES_b6E)
+Controling lightning [last edition - 11.02.2017] <br/>
+[![yt](https://cloud.githubusercontent.com/assets/19840443/22848806/60ce5d3a-eff7-11e6-962b-1eb8b3226484.png)](https://youtu.be/Pfs_4prqSy4)
