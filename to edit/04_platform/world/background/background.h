@@ -24,4 +24,5 @@ public:
 	
 	void setPosition( int x, int y );
 	sf::Uint8 getAlpha();
+	void setColor( sf::Color color );
 };
