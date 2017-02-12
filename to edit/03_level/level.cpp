@@ -22,7 +22,7 @@ Level::Level()
 	worldsize = new Worldsize;
 	flatness = new Flatness( "Set flatness", "% of flatness", 50 );
 	hover = new Flatness( "Set chance of boxers", "% of chance", 35 );
-	pug = new Flatness( "Set chance of hover islands", "% of chance", 30 );
+	pug = new Flatness( "Set chance of hovering islands", "% of chance", 30 );
 	mine = new Flatness( "Set chance of mines", "% of chance", 15 );
 }
 
