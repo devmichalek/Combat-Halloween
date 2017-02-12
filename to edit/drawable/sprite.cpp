@@ -536,3 +536,99 @@ std::ostream& MySprite::operator <<( std::ostream& str )
 	
 	return str << result;
 }
+
+
+
+void MySprite::setLight( sf::Color color )
+{
+	sf::Color myColor;
+	sf::Image temp = *image;
+	for( int i = 0; i < width; i++ )
+	{
+		for( int j = 0; j < height; j++ )
+		{
+			myColor = this->image->getPixel( i, j );
+			
+			if( myColor.a > 0 && myColor.r > 0 && myColor.g > 0 && myColor.b > 0 )
+			{
+				//myColor.a = 0xFF;
+			}
+			
+			int r, g, b;
+			
+			r = ( 0xFF -myColor.r) * 0.1;
+			if( r > 0xFF ) r = 0xFF;
+			
+			g = ( 0xFF -myColor.g) * 0.1;
+			if( g > 0xFF ) g = 0xFF;
+			
+			b = ( 0xFF -myColor.b) * 0.05;
+			if( b > 0xFF ) b = 0xFF;
+			
+			myColor.r += r;
+			myColor.g += g;
+			myColor.b += b;
+			// color.a = 0xFF;
+			
+			temp.setPixel( i, j, myColor );
+		}
+	}
+	
+	texture->update( temp.getPixelsPtr() );
+	sprite->setTexture( *texture );
+}
+
+sf::Image* MySprite::getImage()
+{
+	return image;
+}
+
+void MySprite::setPixels_light( Rect* rect, sf::Image* image )
+{
+	if( texture != NULL )
+	{
+		int sX, eX, sY, eY;
+		
+		if( rect->getX() < left )
+		{
+			sX = left;
+			eX = left +(rect->getWidth() -(left -rect->getX()));
+		}
+		else
+		{
+			sX = rect->getX();
+			eX = left +width;
+		}
+		
+		if( rect->getY() < top )
+		{
+			sY = top;
+			eY = top +(rect->getHeight() -(top -rect->getY()));
+		}
+		else
+		{
+			sY = rect->getY();
+			eY = top +height;
+		}
+		
+		sf::Color color;
+		for( unsigned i = 0; i < width; i++ )
+		{
+			for( unsigned j = 0; j < height; j++ )
+			{
+				color = this->image->getPixel( i, j );
+				
+				if( color.a > 0 && color.r > 0 && color.g > 0 && color.b > 0 )
+				{
+					//color.a = 0xFF;
+				}
+				
+				this->image->setPixel( i, j, color );
+			}
+		}
+		
+
+		texture->update( this->image->getPixelsPtr() );
+		sprite->setTexture( *texture );
+	}
+}

@@ -71,4 +71,9 @@ public:
 	bool operator <( MySprite& mySprite );
 	bool operator <=( MySprite& mySprite );
 	std::ostream& operator <<( std::ostream& str );
+	
+	// lighting
+	void setLight( sf::Color color );
+	sf::Image* getImage();
+	void setPixels_light( Rect* rect, sf::Image* image );
 };
