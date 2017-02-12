@@ -157,4 +157,5 @@ public:
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
 	void reset( int posY );
+	void setColor( sf::Color color );
 };
