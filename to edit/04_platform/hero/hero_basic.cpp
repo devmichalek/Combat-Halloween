@@ -122,7 +122,6 @@ void Hero::load( int type, int screen_w, int screen_h )
 		sprite[ i ]->load( "data/sprites/hero/" + to_string( type ) + "/" + to_string( i ) + ".png", nr -1 );
 		sprite[ i ]->setScale( scale, scale );
 		sprite[ i ]->setPosition( 70, screen_h -sprite[ i ]->getHeight() -200 );
-		sprite[ i ]->setColor( sf::Color( 0xFF, 0x9C, 0 ) );
 	}
 	sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP_ATTACK ]->getX(), sprite[ JUMP_ATTACK ]->getY() + ( sprite[ JUMP_ATTACK ]->getHeight() - sprite[ IDLE ]->getHeight() ) );
 	sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +5, sprite[ THROW ]->getY() );
@@ -588,4 +587,12 @@ void Hero::reset( int posY )
 	
 	which = IDLE;
 	dead = 0;
+}
+
+void Hero::setColor( sf::Color color )
+{
+	for( auto &i :sprite )
+	{
+		i->setColor( color );
+	}
 }
