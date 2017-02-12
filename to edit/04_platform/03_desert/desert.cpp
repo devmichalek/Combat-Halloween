@@ -20,8 +20,10 @@ Desert::Desert()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	day = new Day;
 	
 	mine_factory = new Mine_factory;
+	skeleton_factory = new Skeleton_factory;
 }
 
 Desert::~Desert()
@@ -52,8 +54,10 @@ void Desert::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	delete day;
 	
 	delete mine_factory;
+	delete skeleton_factory;
 }
 
 void Desert::reset()
@@ -72,8 +76,26 @@ void Desert::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	day->reset();
 	
 	mine_factory->reset( distance );
+	skeleton_factory->reset( distance );
+	
+	
+	
+	
+	// Set color
+	hero->setColor( day->getColor() );
+		
+	brick->setColor( day->getColor() );
+	background->setColor( day->getColor() );
+	islands->setColor( day->getColor() );
+	wall->setColor( day->getColor() );
+	ladder->setColor( day->getColor() );
+	greenery->setColor( day->getColor() );
+	
+	mine_factory->setColor( day->getColor() );
+	skeleton_factory->setColor( day->getColor() );
 }
 
 
@@ -98,8 +120,10 @@ void Desert::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	day->set();
 	
 	mine_factory->load( width, screen_w, screen_h );
+	skeleton_factory->load( width, screen_h, screen_h );
 }
 
 void Desert::handle( sf::Event &event )
@@ -127,6 +151,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
+		skeleton_factory->fadeout( value );
 	}
 	else
 	{
@@ -144,6 +169,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
+		skeleton_factory->fadein( value );
 	}
 	
 
@@ -160,6 +186,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
+	skeleton_factory->draw( window );
 	
 	// rest
 	brick->draw( window );
@@ -254,6 +281,10 @@ bool Desert::positioning( int type, int size, int flatness, int flying_is, int p
 		
 		case 19: mine_factory->positioning( brick->getBlocks(), mine );
 				 mine_factory->positioning( islands->getBlocks(), mine );
+		info = "creating skeleton factory";	break;
+		
+		case 20: skeleton_factory->positioning( brick->getBlocks(), 100 );
+				 skeleton_factory->positioning( islands->getBlocks(), 100 );
 		info = "done";	break;
 		
 		default:

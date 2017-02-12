@@ -205,6 +205,7 @@ void Desert::mechanics()
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
+			skeleton_factory->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -217,6 +218,7 @@ void Desert::mechanics()
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
+			skeleton_factory->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -271,6 +273,7 @@ void Desert::mechanics()
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
+			skeleton_factory->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -302,4 +305,32 @@ void Desert::mechanics()
 	{
 		hero->die();
 	}
+	
+// ------------------------------------------------------------------------------------------------
+	// SET COLOR ~ DAY
+	day->mechanics();
+	
+	if( day->isChange() )
+	{
+		hero->setColor( day->getColor() );
+		
+		brick->setColor( day->getColor() );
+		background->setColor( day->getColor() );
+		islands->setColor( day->getColor() );
+		wall->setColor( day->getColor() );
+		ladder->setColor( day->getColor() );
+		greenery->setColor( day->getColor() );
+		
+		mine_factory->setColor( day->getColor() );
+	}
+	
+	// TORCH
+	// torch->setPosition( hero->getRect() );
+	// brick->checkTorch( torch->getRect(), torch->getImage() );
+	
+// ------------------------------------------------------------------------------------------------
+	// SKELETON PART
+	
+	skeleton_factory->appear( hero->getX(), hero->getY() );
+	skeleton_factory->walk( hero->getX(), hero->getY() );
 }
