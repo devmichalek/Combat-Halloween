@@ -12,6 +12,7 @@ Forest::Forest()
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
+	torch = new Torch;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -21,6 +22,7 @@ Forest::Forest()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	day = new Day;
 	
 	mine_factory = new Mine_factory;
 }
@@ -44,6 +46,7 @@ void Forest::free()
 	delete kunai;
 	delete heart;
 	delete scope;
+	delete torch;
 	
 	
 	delete brick;
@@ -54,6 +57,7 @@ void Forest::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	delete day;
 	
 	delete mine_factory;
 }
@@ -66,6 +70,7 @@ void Forest::reset()
 	hero->setKeys();
 	heart->reset();
 	scope->reset();
+	torch->setPosition( hero->getRect() );
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -75,8 +80,25 @@ void Forest::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	day->reset();
 	
 	mine_factory->reset( distance );
+	
+	
+	
+	
+	// Set color
+	hero->setColor( day->getColor() );
+		
+	brick->setColor( day->getColor() );
+	background->setColor( day->getColor() );
+	islands->setColor( day->getColor() );
+	water->setColor( day->getColor() );
+	wall->setColor( day->getColor() );
+	ladder->setColor( day->getColor() );
+	greenery->setColor( day->getColor() );
+	
+	mine_factory->setColor( day->getColor() );
 }
 
 
@@ -93,6 +115,7 @@ void Forest::load( int screen_w, int screen_h )
 	
 	kunai->load();
 	heart->load();
+	torch->load();
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -102,6 +125,7 @@ void Forest::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	day->set();
 	
 	mine_factory->load( width, screen_w, screen_h );
 }
@@ -175,6 +199,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	greenery->draw( window );
 	heart->draw( window );
 	effect->draw( window );
+	// torch->drawTest( window );
 }
 
 

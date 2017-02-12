@@ -8,6 +8,7 @@
 #include "04_platform/hero/kunai.h"
 #include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
+#include "04_platform/hero/torch.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -18,6 +19,7 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
+#include "04_platform/world/background/day.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -38,6 +40,7 @@ class Forest
 	Kunai* kunai;
 	Heart* heart;
 	Scope* scope;
+	Torch* torch;
 	
 	// world
 	Brick* brick;
@@ -48,6 +51,7 @@ class Forest
 	Wall* wall;
 	Ladder* ladder;
 	Greenery* greenery;
+	Day* day;
 	
 	// enemy
 	Mine_factory* mine_factory;
