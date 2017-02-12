@@ -306,4 +306,27 @@ void Winter::mechanics()
 	{
 		hero->die();
 	}
+	
+// ------------------------------------------------------------------------------------------------
+	// SET COLOR ~ DAY
+	day->mechanics();
+	
+	if( day->isChange() )
+	{
+		hero->setColor( day->getColor() );
+		
+		brick->setColor( day->getColor() );
+		background->setColor( day->getColor() );
+		islands->setColor( day->getColor() );
+		water->setColor( day->getColor() );
+		wall->setColor( day->getColor() );
+		ladder->setColor( day->getColor() );
+		greenery->setColor( day->getColor() );
+		
+		mine_factory->setColor( day->getColor() );
+	}
+	
+	// TORCH
+	// torch->setPosition( hero->getRect() );
+	// brick->checkTorch( torch->getRect(), torch->getImage() );
 }

@@ -21,6 +21,7 @@ Winter::Winter()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	day = new Day;
 	
 	mine_factory = new Mine_factory;
 }
@@ -54,6 +55,7 @@ void Winter::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	delete day;
 	
 	delete mine_factory;
 }
@@ -75,8 +77,25 @@ void Winter::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	day->reset();
 	
 	mine_factory->reset( distance );
+	
+	
+	
+	
+	// Set color
+	hero->setColor( day->getColor() );
+		
+	brick->setColor( day->getColor() );
+	background->setColor( day->getColor() );
+	islands->setColor( day->getColor() );
+	water->setColor( day->getColor() );
+	wall->setColor( day->getColor() );
+	ladder->setColor( day->getColor() );
+	greenery->setColor( day->getColor() );
+	
+	mine_factory->setColor( day->getColor() );
 }
 
 
@@ -102,6 +121,7 @@ void Winter::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	day->set();
 	
 	mine_factory->load( width, screen_w, screen_h );
 }

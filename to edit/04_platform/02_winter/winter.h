@@ -18,6 +18,7 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
+#include "04_platform/world/background/day.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -48,6 +49,7 @@ class Winter
 	Wall* wall;
 	Ladder* ladder;
 	Greenery* greenery;
+	Day* day;
 	
 	// enemy
 	Mine_factory* mine_factory;
