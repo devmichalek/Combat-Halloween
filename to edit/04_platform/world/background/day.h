@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
+#include "drawable/sprite.h"
 #include <vector>
 
 using namespace std;
@@ -9,10 +9,9 @@ class Day
 {
 	enum
 	{
-		I = 17,
-		F = 20,
-		S = 35,
-		N = 40
+		I = 20,
+		S = 20,
+		N = 25
 	};
 	
 	bool change;
@@ -23,20 +22,20 @@ class Day
 	sf::Uint8 sec;
 	sf::Uint8 line;
 	
-	sf::Uint8 r, g, b;
+	sf::Uint8 r, g, b, a;
 	vector <sf::Color> colors;
+	
+	MySprite overlay;
 	
 public:
 
 	Day();
 	~Day();
 	void free();
-	void reset();
+	void reset( Rect* rect );
 	
-	void set();
+	void load( int screen_w, int screen_h );
+	void draw( sf::RenderWindow* &window );
 	void setInTime();
 	void mechanics();
-	
-	bool isChange();
-	sf::Color getColor();
 };
