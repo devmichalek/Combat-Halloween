@@ -2,10 +2,7 @@
 
 Heart::Heart()
 {
-	nr = 0;
-	fill = NULL;
-	frame = NULL;
-	
+	max = 0;
 	flag = false;
 	life = 0;
 }
@@ -17,29 +14,37 @@ Heart::~Heart()
 
 void Heart::free()
 {
-	if( fill != NULL )
+	if( !fill.empty() )
 	{
-		for( int i = 0; i < nr; i++ )
+		for( unsigned i = 0; i < fill.size(); i++ )
 		{
-			fill[ i ].free();
+			fill[ i ]->free();
 		}
 		
-		delete [] fill;
-		fill = NULL;
+		fill.clear();
 	}
 	
-	if( frame != NULL )
+	if( !frame.empty() )
 	{
-		for( int i = 0; i < nr; i++ )
+		for( unsigned i = 0; i < frame.size(); i++ )
 		{
-			frame[ i ].free();
+			frame[ i ]->free();
 		}
 		
-		delete [] frame;
-		frame = NULL;
+		frame.clear();
 	}
 	
-	nr = 0;
+	if( !grey_panel.empty() )
+	{
+		for( unsigned i = 0; i < grey_panel.size(); i++ )
+		{
+			grey_panel[ i ]->free();
+		}
+		
+		grey_panel.clear();
+	}
+	
+	max = 0;
 	flag = false;
 	life = 0;
 }
@@ -47,33 +52,48 @@ void Heart::free()
 	
 void Heart::load()
 {
-	nr = 3;
-	fill = new MySprite [ nr ];
-	frame = new MySprite [ nr ];
+	free();
 	
+	max = 5;
+	int nr = 2;
 	float scale = 0.75;
+	
 	for( int i = 0; i < nr; i++ )
 	{
-		fill[ i ].setName( "heart-fill[" + to_string( i ) + "]" );
-		fill[ i ].load( "data/sprites/hero/heart/fill.png");
-		fill[ i ].setScale( scale, scale );
-		fill[ i ].setPosition( 10 + fill[ i ].getWidth()*i, 10 );
+		fill.push_back( new MySprite() );
+		fill[ i ]->setName( "heart-fill[" + to_string( i ) + "]" );
+		fill[ i ]->load( "data/sprites/hero/heart/fill.png");
+		fill[ i ]->setScale( scale, scale );
+		fill[ i ]->setPosition( 10 + (fill[ i ]->getWidth() +10)*i, 10 );
 		
-		frame[ i ].setName( "heart-frame[" + to_string( i ) + "]" );
-		frame[ i ].load( "data/sprites/hero/heart/frame.png");
-		frame[ i ].setScale( scale, scale );
-		frame[ i ].setPosition( 10 + frame[ i ].getWidth()*i, 10 );
+		frame.push_back( new MySprite() );
+		frame[ i ]->setName( "heart-frame[" + to_string( i ) + "]" );
+		frame[ i ]->load( "data/sprites/hero/heart/frame.png");
+		frame[ i ]->setScale( scale, scale );
+		frame[ i ]->setPosition( 10 + (frame[ i ]->getWidth() +10)*i, 10 );
 	}
 	
-	life = nr *0xFF;
+	for( int i = 0; i < max; i++ )
+	{
+		grey_panel.push_back( new MySprite() );
+		grey_panel[ grey_panel.size() -1 ]->setName( "heart-gray_panel[" + to_string( i ) + "]" );
+		grey_panel[ grey_panel.size() -1 ]->load( "data/sprites/hero/heart/grey_panel.png");
+		grey_panel[ grey_panel.size() -1 ]->setScale( 0.5, 0.5 );
+		grey_panel[ grey_panel.size() -1 ]->setPosition( 5 + (frame[ 0 ]->getWidth() +10)*i, 5 );
+	}
 }
 
 void Heart::draw( sf::RenderWindow* &window )
 {
-	for( int i = 0; i < nr; i++ )
+	for( unsigned i = 0; i < grey_panel.size(); i++ )
 	{
-		window->draw( fill[ i ].get() );
-		window->draw( frame[ i ].get() );
+		window->draw( grey_panel[ i ]->get() );
+	}
+	
+	for( unsigned i = 0; i < fill.size(); i++ )
+	{
+		window->draw( fill[ i ]->get() );
+		window->draw( frame[ i ]->get() );
 	}
 	
 	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
@@ -82,17 +102,30 @@ void Heart::draw( sf::RenderWindow* &window )
 	}
 }
 
+void Heart::setLife( int chance )
+{
+	float newChance = 100 -( static_cast <float> (chance) /1.5);
+	newChance /= 100;
+	
+	life = fill.size() *0xFF *newChance;
+	harm( 0 );
+}
+
 void Heart::fadein( int v, int max )
 {
+	for( unsigned i = 0; i < grey_panel.size(); i++ )
+	{
+		grey_panel[ i ]->fadein( v, max );
+	}
+	
 	if( !flag )
 	{
-		for( int i = 0; i < nr; i++ )
+		for( unsigned i = 0; i < fill.size(); i++ )
 		{
-			fill[ i ].fadein( v, max );
-			frame[ i ].fadein( v, max );
+			frame[ i ]->fadein( v, max );
 		}
 		
-		if( frame[ 0 ].getAlpha() == 0xFF )
+		if( frame[ 0 ]->getAlpha() == 0xFF )
 		{
 			flag = true;
 		}
@@ -101,10 +134,15 @@ void Heart::fadein( int v, int max )
 
 void Heart::fadeout( int v, int min )
 {
-	for( int i = 0; i < nr; i++ )
+	for( unsigned i = 0; i < grey_panel.size(); i++ )
 	{
-		fill[ i ].fadeout( v, min );
-		frame[ i ].fadeout( v, min );
+		grey_panel[ i ]->fadeout( v, min );
+	}
+	
+	for( unsigned i = 0; i < fill.size(); i++ )
+	{
+		fill[ i ]->fadeout( v, min );
+		frame[ i ]->fadeout( v, min );
 	}
 }
 
@@ -113,32 +151,32 @@ void Heart::harm( int damage )
 	life += damage;
 	
 	int temporary_life = 0;
-	for( int i = 0; i < nr; i++ )
+	for( unsigned i = 0; i < fill.size(); i++ )
 	{
-		temporary_life += fill[ i ].getAlpha();
+		temporary_life += fill[ i ]->getAlpha();
 	}
 	
 	if( temporary_life != life )
 	{
 		temporary_life = life;
 		
-		for( int i = 0; i < nr; i++ )
+		for( unsigned i = 0; i < fill.size(); i++ )
 		{
-			fill[ i ].setAlpha( 0 );
+			fill[ i ]->setAlpha( 0 );
 		}
 		
 		if( temporary_life > 0 )
 		{
-			for( int i = 0; i < nr; i++ )
+			for( unsigned i = 0; i < fill.size(); i++ )
 			{
 				if( temporary_life < 0xFF )
 				{
-					fill[ i ].setAlpha( temporary_life );
+					fill[ i ]->setAlpha( temporary_life );
 					break;
 				}
 				else
 				{
-					fill[ i ].setAlpha( 0xFF );
+					fill[ i ]->setAlpha( 0xFF );
 				}
 				
 				temporary_life -= 0xFF;
@@ -159,7 +197,7 @@ bool Heart::isDead()
 
 void Heart::reset()
 {
-	life = nr *0xFF;
+	life = fill.size() *0xFF;
 	harm( 0 );
 	flag = false;
 }
