@@ -18,10 +18,10 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
-#include "04_platform/world/background/day.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
+#include "04_platform/enemy/skeleton/skeleton_factory.h"
 
 class Winter
 {
@@ -49,10 +49,10 @@ class Winter
 	Wall* wall;
 	Ladder* ladder;
 	Greenery* greenery;
-	Day* day;
 	
 	// enemy
 	Mine_factory* mine_factory;
+	Skeleton_factory* skeleton_factory;
 	
 public:
 
@@ -61,11 +61,11 @@ public:
     void free();
 	void reset();
 	
-    void load( int screen_w, int screen_h );
+    void load( int screen_w, int screen_h, unsigned FPS );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int type, int size, int flatness, int hover, int pug, int mine );
+	bool positioning( int type, int size, int flatness, int difficulty );
 	string getInfo();
 	
 	bool nextState();

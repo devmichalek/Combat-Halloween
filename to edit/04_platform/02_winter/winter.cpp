@@ -21,9 +21,9 @@ Winter::Winter()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
-	day = new Day;
 	
 	mine_factory = new Mine_factory;
+	skeleton_factory = new Skeleton_factory;
 }
 
 Winter::~Winter()
@@ -55,9 +55,9 @@ void Winter::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
-	delete day;
 	
 	delete mine_factory;
+	delete skeleton_factory;
 }
 
 void Winter::reset()
@@ -77,30 +77,13 @@ void Winter::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
-	day->reset();
 	
 	mine_factory->reset( distance );
-	
-	
-	
-	
-	// Set color
-	hero->setColor( day->getColor() );
-		
-	brick->setColor( day->getColor() );
-	background->setColor( day->getColor() );
-	islands->setColor( day->getColor() );
-	water->setColor( day->getColor() );
-	wall->setColor( day->getColor() );
-	ladder->setColor( day->getColor() );
-	greenery->setColor( day->getColor() );
-	
-	mine_factory->setColor( day->getColor() );
 }
 
 
 
-void Winter::load( int screen_w, int screen_h )
+void Winter::load( int screen_w, int screen_h, unsigned FPS )
 {
 	state = 0;
 	info = "setting keys";
@@ -121,9 +104,9 @@ void Winter::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
-	day->set();
 	
 	mine_factory->load( width, screen_w, screen_h );
+	skeleton_factory->load( width, screen_h, screen_h );
 }
 
 void Winter::handle( sf::Event &event )
@@ -152,6 +135,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
+		skeleton_factory->fadeout( value );
 	}
 	else
 	{
@@ -170,6 +154,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
+		skeleton_factory->fadein( value );
 	}
 	
 
@@ -186,6 +171,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
+	skeleton_factory->draw( window );
 	
 	// rest
 	water->draw( window );
@@ -199,11 +185,13 @@ void Winter::draw( sf::RenderWindow* &window )
 
 
 
-bool Winter::positioning( int type, int size, int flatness, int flying_is, int pug, int mine  )
+bool Winter::positioning( int type, int size, int flatness, int difficulty )
 {
 	switch( state )
 	{
 		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();
+				heart->setLife( difficulty );			hero->setDamage( difficulty );
+				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->setPosition( hero->getX(), hero->getY() );
@@ -215,7 +203,7 @@ bool Winter::positioning( int type, int size, int flatness, int flying_is, int p
 		case 3:	brick->createTopBorders( size, flatness, ladder->getW( 0 ), ladder->getH( 0 ) );
 		info = "creating flying islands";	break;
 		
-		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), flying_is );
+		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), difficulty );
 		info = "creating left borders of hill";	break;
 		
 		
@@ -274,13 +262,17 @@ bool Winter::positioning( int type, int size, int flatness, int flying_is, int p
 					greenery->positioning( islands->getBlocks() );
 		info = "setting wall";	break;
 		
-		case 18:	wall->positioning( brick->getBlocks(), pug );
-					wall->positioning( islands->getBlocks(), pug );
+		case 18:	wall->positioning( brick->getBlocks(), difficulty );
+					wall->positioning( islands->getBlocks(), difficulty );
 		info = "creating mine factory";	break;
 		
 		
-		case 19: mine_factory->positioning( brick->getBlocks(), mine );
-				 mine_factory->positioning( islands->getBlocks(), mine );
+		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
+				 mine_factory->positioning( islands->getBlocks(), difficulty );
+		info = "creating skeleton factory";	break;
+		
+		case 20: skeleton_factory->positioning( brick->getBlocks(), difficulty );
+				 skeleton_factory->positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
 		default:
