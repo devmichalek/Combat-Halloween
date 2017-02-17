@@ -12,7 +12,6 @@ Forest::Forest()
 	kunai = new Kunai;
 	heart = new Heart;
 	scope = new Scope;
-	torch = new Torch;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -25,6 +24,7 @@ Forest::Forest()
 	day = new Day;
 	
 	mine_factory = new Mine_factory;
+	skeleton_factory = new Skeleton_factory;
 }
 
 Forest::~Forest()
@@ -46,7 +46,6 @@ void Forest::free()
 	delete kunai;
 	delete heart;
 	delete scope;
-	delete torch;
 	
 	
 	delete brick;
@@ -60,6 +59,7 @@ void Forest::free()
 	delete day;
 	
 	delete mine_factory;
+	delete skeleton_factory;
 }
 
 void Forest::reset()
@@ -70,7 +70,6 @@ void Forest::reset()
 	hero->setKeys();
 	heart->reset();
 	scope->reset();
-	torch->setPosition( hero->getRect() );
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -84,9 +83,6 @@ void Forest::reset()
 	
 	mine_factory->reset( distance );
 	
-	
-	
-	
 	// Set color
 	hero->setColor( day->getColor() );
 		
@@ -99,11 +95,12 @@ void Forest::reset()
 	greenery->setColor( day->getColor() );
 	
 	mine_factory->setColor( day->getColor() );
+	skeleton_factory->setColor( day->getColor() );
 }
 
 
 
-void Forest::load( int screen_w, int screen_h )
+void Forest::load( int screen_w, int screen_h, unsigned FPS )
 {
 	state = 0;
 	info = "setting keys";
@@ -115,7 +112,6 @@ void Forest::load( int screen_w, int screen_h )
 	
 	kunai->load();
 	heart->load();
-	torch->load();
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -125,9 +121,10 @@ void Forest::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
-	day->set();
+	day->set( FPS );
 	
 	mine_factory->load( width, screen_w, screen_h );
+	skeleton_factory->load( width, screen_h, screen_h );
 }
 
 void Forest::handle( sf::Event &event )
@@ -156,6 +153,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
+		skeleton_factory->fadeout( value );
 	}
 	else
 	{
@@ -174,6 +172,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
+		skeleton_factory->fadein( value );
 	}
 	
 
@@ -190,6 +189,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
+	skeleton_factory->draw( window );
 	
 	// rest
 	water->draw( window );
@@ -199,16 +199,17 @@ void Forest::draw( sf::RenderWindow* &window )
 	greenery->draw( window );
 	heart->draw( window );
 	effect->draw( window );
-	// torch->drawTest( window );
 }
 
 
 
-bool Forest::positioning( int type, int size, int flatness, int flying_is, int pug, int mine  )
+bool Forest::positioning( int type, int size, int flatness, int difficulty )
 {
 	switch( state )
 	{
 		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();
+				heart->setLife( difficulty );			hero->setDamage( difficulty );
+				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->setPosition( hero->getX(), hero->getY() );
@@ -220,7 +221,7 @@ bool Forest::positioning( int type, int size, int flatness, int flying_is, int p
 		case 3:	brick->createTopBorders( size, flatness, ladder->getW( 0 ), ladder->getH( 0 ) );
 		info = "creating flying islands";	break;
 		
-		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), flying_is );
+		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), difficulty );
 		info = "creating left borders of hill";	break;
 		
 		
@@ -279,13 +280,17 @@ bool Forest::positioning( int type, int size, int flatness, int flying_is, int p
 					greenery->positioning( islands->getBlocks() );
 		info = "setting wall";	break;
 		
-		case 18:	wall->positioning( brick->getBlocks(), pug );
-					wall->positioning( islands->getBlocks(), pug );
+		case 18:	wall->positioning( brick->getBlocks(), difficulty );
+					wall->positioning( islands->getBlocks(), difficulty );
 		info = "creating mine factory";	break;
 		
 		
-		case 19: mine_factory->positioning( brick->getBlocks(), mine );
-				 mine_factory->positioning( islands->getBlocks(), mine );
+		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
+				 mine_factory->positioning( islands->getBlocks(), difficulty );
+		info = "creating skeleton factory";	break;
+		
+		case 20: skeleton_factory->positioning( brick->getBlocks(), difficulty );
+				 skeleton_factory->positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
 		default:
