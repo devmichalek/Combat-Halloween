@@ -1,6 +1,5 @@
 #include "engine.h"
 #include <stdio.h>
-#include <time.h>
 #include <cstdlib>
 
 // Create objects.
@@ -10,7 +9,7 @@ Engine::Engine()
 	srand( static_cast <int> ( time( NULL ) ) );
 	
 	// Create and load core.
-    core = new Core( 1000, 750, -2, 120 );	// new FPS
+    core = new Core( 1000, 750, -2, 160 );	// new FPS
     core->load( "Ninja" );
 	
 	loading = new Loading;
@@ -69,10 +68,10 @@ void Engine::load()
 		
 		case 35:	gears->load( core->getWidth(), core->getHeight() );	break;
 
-		case 40:	halloween->load( core->getWidth(), core->getHeight() );	break;
-		case 50:	forest->load( core->getWidth(), core->getHeight() );	break;
-		case 60:	winter->load( core->getWidth(), core->getHeight() );	break;
-		case 70:	desert->load( core->getWidth(), core->getHeight() );	break;
+		case 40:	halloween->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
+		case 50:	forest->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
+		case 60:	winter->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
+		case 70:	desert->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
 		
 		case 80:	panel->load( core->getWidth(), core->getHeight() );	break;
 		
@@ -256,19 +255,19 @@ void Engine::states()
 			
 			if( panel->getState() == HALLOWEEN )
 			{
-				halloween->load( core->getWidth(), core->getHeight() );
+				halloween->load( core->getWidth(), core->getHeight(), core->getFPS() );
 			}
 			else if( panel->getState() == FOREST )
 			{
-				forest->load( core->getWidth(), core->getHeight() );
+				forest->load( core->getWidth(), core->getHeight(), core->getFPS() );
 			}
 			else if( panel->getState() == WINTER )
 			{
-				winter->load( core->getWidth(), core->getHeight() );
+				winter->load( core->getWidth(), core->getHeight(), core->getFPS() );
 			}
 			else if( panel->getState() == DESERT )
 			{
-				desert->load( core->getWidth(), core->getHeight() );
+				desert->load( core->getWidth(), core->getHeight(), core->getFPS() );
 			}
 		
 			panel->reset();
@@ -318,9 +317,7 @@ void Engine::load_world( world w )
 	if( w->positioning( level->getCharacter(),
 						level->getWorldsize(), 
 						level->getFlatness(),
-						level->getHoverness(),
-						level->getPugness(),
-						level->getMine() ) )
+						level->getDifficulty() ) )
 	{
 		gears->setReady();
 	}
