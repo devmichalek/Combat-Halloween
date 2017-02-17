@@ -2,7 +2,7 @@
 
 void Desert::mechanics()
 {
-	// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
 	if( ladder->checkCollision( hero->getRect() ) )
 	{
@@ -93,7 +93,7 @@ void Desert::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
-		//golem->checkHit( hero->getAttackBox(), hero->getDamage() );
+		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -124,7 +124,7 @@ void Desert::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		
+		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -180,7 +180,8 @@ void Desert::mechanics()
 		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
 		kunai->getX( i ) < -kunai->getW() ||
 		wall->checkCollision( kunai->getRect( i ) )	||
-		islands->checkPixelCollision( kunai->getRect( i ) ) )
+		islands->checkPixelCollision( kunai->getRect( i ) ) ||
+		skeleton_factory->harm( kunai->getRect( i ), kunai->getDamage() ) )
 		{
 			kunai->destroy( i );
 		}
@@ -222,23 +223,6 @@ void Desert::mechanics()
 		}
 	}
 	
-	if( !islands->checkFlyingIslands( hero->getRect() ) )
-	{
-		islands->moving();
-	}
-	else
-	{
-		islands->turnOff( hero->getDirection() );
-	}
-	
-	if( islands->checkOtherIslands( hero->getRect() ) )
-	{
-		islands->turnOn();
-	}
-	
-	
-	
-	
 	
 	// SCOPE MOVE
 	scope->move( hero->getX(), screen_w );
@@ -255,7 +239,7 @@ void Desert::mechanics()
 	// HERO FALLEN
 	if( hero->checkFall( screen_h ) )
 	{
-		heart->harm( -0xCC );
+		heart->harm( -wall->getFallDamage() );
 		hero->setFallenY( brick->getNearGrassY( hero->getX() ) );
 	}
 	
@@ -287,15 +271,36 @@ void Desert::mechanics()
 	// HARM BY WALL
 	if( wall->harm( hero->getRect() ) )
 	{
-		heart->harm( -0xAA );
+		heart->harm( -wall->getDamage() );
 		effect->runBlood();
+	}
+	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
+	{
+		if( wall->harm( skeleton_factory->getRect( i ) ) )
+		{
+			skeleton_factory->harmDefinite( i, -wall->getDamage() );
+		}
 	}
 	
 	// HARM BY MINE
 	mine_factory->checkCollision( hero->getRect() );
 	if( mine_factory->harm( hero->getRect() ) )
 	{
-		heart->harm( -0xBB );
+		heart->harm( -mine_factory->getDamage() );
+		effect->runBlood();
+	}
+	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
+	{
+		if( mine_factory->harm( skeleton_factory->getRect( i ) ) )
+		{
+			skeleton_factory->harmDefinite( i, -mine_factory->getDamage() );
+		}
+	}
+	
+	// HARM BY SKELETON
+	if( skeleton_factory->isSword( hero->getRect() ) )
+	{
+		heart->harm( -skeleton_factory->getDamage() );
 		effect->runBlood();
 	}
 	
@@ -305,10 +310,38 @@ void Desert::mechanics()
 	{
 		hero->die();
 	}
+	else
+	{
+		wall->mechanics();
+		mine_factory->mechanics();
+		skeleton_factory->mechanics();
+		
+		if( !islands->checkFlyingIslands( hero->getRect() ) )
+		{
+			islands->moving();
+		}
+		else
+		{
+			islands->turnOff( hero->getDirection() );
+		}
+		
+		if( islands->checkOtherIslands( hero->getRect() ) )
+		{
+			islands->turnOn();
+		}
+	}
+	
+// ------------------------------------------------------------------------------------------------
+	// CHECK Y AND SHOW EFFECT
+	if( hero->getY() > screen_h )
+	{
+		effect->runFall();
+	}
 	
 // ------------------------------------------------------------------------------------------------
 	// SET COLOR ~ DAY
 	day->mechanics();
+
 	
 	if( day->isChange() )
 	{
@@ -322,15 +355,13 @@ void Desert::mechanics()
 		greenery->setColor( day->getColor() );
 		
 		mine_factory->setColor( day->getColor() );
+		skeleton_factory->setColor( day->getColor() );
 	}
-	
-	// TORCH
-	// torch->setPosition( hero->getRect() );
-	// brick->checkTorch( torch->getRect(), torch->getImage() );
 	
 // ------------------------------------------------------------------------------------------------
 	// SKELETON PART
 	
-	skeleton_factory->appear( hero->getX(), hero->getY() );
-	skeleton_factory->walk( hero->getX(), hero->getY() );
+	skeleton_factory->appear( hero->getRect() );
+	skeleton_factory->walk( hero->getRect() );
+	skeleton_factory->ableAttack( hero->getRect() );
 }

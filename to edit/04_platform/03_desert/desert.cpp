@@ -81,9 +81,6 @@ void Desert::reset()
 	mine_factory->reset( distance );
 	skeleton_factory->reset( distance );
 	
-	
-	
-	
 	// Set color
 	hero->setColor( day->getColor() );
 		
@@ -100,7 +97,7 @@ void Desert::reset()
 
 
 
-void Desert::load( int screen_w, int screen_h )
+void Desert::load( int screen_w, int screen_h, unsigned FPS )
 {
 	state = 0;
 	info = "setting keys";
@@ -120,7 +117,7 @@ void Desert::load( int screen_w, int screen_h )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
-	day->set();
+	day->set( FPS );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	skeleton_factory->load( width, screen_h, screen_h );
@@ -199,11 +196,13 @@ void Desert::draw( sf::RenderWindow* &window )
 
 
 
-bool Desert::positioning( int type, int size, int flatness, int flying_is, int pug, int mine  )
+bool Desert::positioning( int type, int size, int flatness, int difficulty )
 {
 	switch( state )
 	{
 		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();
+				heart->setLife( difficulty );			hero->setDamage( difficulty );
+				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->setPosition( hero->getX(), hero->getY() );
@@ -215,7 +214,7 @@ bool Desert::positioning( int type, int size, int flatness, int flying_is, int p
 		case 3:	brick->createTopBorders( size, flatness, ladder->getW( 0 ), ladder->getH( 0 ) );
 		info = "creating flying islands";	break;
 		
-		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), flying_is );
+		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), difficulty );
 		info = "creating left borders of hill";	break;
 		
 		
@@ -274,17 +273,17 @@ bool Desert::positioning( int type, int size, int flatness, int flying_is, int p
 					greenery->positioning( islands->getBlocks() );
 		info = "setting wall";	break;
 		
-		case 18:	wall->positioning( brick->getBlocks(), pug );
-					wall->positioning( islands->getBlocks(), pug );
+		case 18:	wall->positioning( brick->getBlocks(), difficulty );
+					wall->positioning( islands->getBlocks(), difficulty );
 		info = "creating mine factory";	break;
 		
 		
-		case 19: mine_factory->positioning( brick->getBlocks(), mine );
-				 mine_factory->positioning( islands->getBlocks(), mine );
+		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
+				 mine_factory->positioning( islands->getBlocks(), difficulty );
 		info = "creating skeleton factory";	break;
 		
-		case 20: skeleton_factory->positioning( brick->getBlocks(), 100 );
-				 skeleton_factory->positioning( islands->getBlocks(), 100 );
+		case 20: skeleton_factory->positioning( brick->getBlocks(), difficulty );
+				 skeleton_factory->positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
 		default:

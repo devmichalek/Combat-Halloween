@@ -62,11 +62,11 @@ public:
     void free();
 	void reset();
 	
-    void load( int screen_w, int screen_h );
+    void load( int screen_w, int screen_h, unsigned FPS );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int type, int size, int flatness, int hover, int pug, int mine );
+	bool positioning( int type, int size, int flatness, int difficulty );
 	string getInfo();
 	
 	bool nextState();
