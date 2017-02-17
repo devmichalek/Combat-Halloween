@@ -143,6 +143,11 @@ bool& Core::isOpen()
     return open;
 }
 
+unsigned Core::getFPS()
+{
+	return FPS;
+}
+
 
 
 const unsigned Core::getWidth() const
