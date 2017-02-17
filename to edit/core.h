@@ -49,6 +49,7 @@ public:
 
     int& getState();    // get or set state, e.g. from intro to menu
     bool& isOpen();     // get or set open window
+	unsigned getFPS();
 
 
     const unsigned getWidth() const;
