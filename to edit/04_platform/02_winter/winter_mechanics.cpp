@@ -2,7 +2,6 @@
 
 void Winter::mechanics()
 {
-	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
 	if( ladder->checkCollision( hero->getRect() ) )
@@ -94,7 +93,7 @@ void Winter::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
-		//golem->checkHit( hero->getAttackBox(), hero->getDamage() );
+		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -125,7 +124,7 @@ void Winter::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		
+		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -181,7 +180,8 @@ void Winter::mechanics()
 		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
 		kunai->getX( i ) < -kunai->getW() ||
 		wall->checkCollision( kunai->getRect( i ) )	||
-		islands->checkPixelCollision( kunai->getRect( i ) ) )
+		islands->checkPixelCollision( kunai->getRect( i ) ) ||
+		skeleton_factory->harm( kunai->getRect( i ), kunai->getDamage() ) )
 		{
 			kunai->destroy( i );
 		}
@@ -207,6 +207,7 @@ void Winter::mechanics()
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
+			skeleton_factory->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -220,31 +221,13 @@ void Winter::mechanics()
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
+			skeleton_factory->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
-	
-	if( !islands->checkFlyingIslands( hero->getRect() ) )
-	{
-		islands->moving();
-	}
-	else
-	{
-		islands->turnOff( hero->getDirection() );
-	}
-	
-	if( islands->checkOtherIslands( hero->getRect() ) )
-	{
-		islands->turnOn();
-	}
-	
-	
-	
 	
 	
 	// SCOPE MOVE
 	scope->move( hero->getX(), screen_w );
-	
-	
 	
 // ------------------------------------------------------------------------------------------------
 	// BACKGROUND SET XY
@@ -256,7 +239,7 @@ void Winter::mechanics()
 	// HERO FALLEN
 	if( hero->checkFall( screen_h ) )
 	{
-		heart->harm( -0xCC );
+		heart->harm( -wall->getFallDamage() );
 		hero->setFallenY( brick->getNearGrassY( hero->getX() ) );
 	}
 	
@@ -275,6 +258,7 @@ void Winter::mechanics()
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
+			skeleton_factory->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -288,15 +272,36 @@ void Winter::mechanics()
 	// HARM BY WALL
 	if( wall->harm( hero->getRect() ) )
 	{
-		heart->harm( -0xAA );
+		heart->harm( -wall->getDamage() );
 		effect->runBlood();
+	}
+	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
+	{
+		if( wall->harm( skeleton_factory->getRect( i ) ) )
+		{
+			skeleton_factory->harmDefinite( i, -wall->getDamage() );
+		}
 	}
 	
 	// HARM BY MINE
 	mine_factory->checkCollision( hero->getRect() );
 	if( mine_factory->harm( hero->getRect() ) )
 	{
-		heart->harm( -0xBB );
+		heart->harm( -mine_factory->getDamage() );
+		effect->runBlood();
+	}
+	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
+	{
+		if( mine_factory->harm( skeleton_factory->getRect( i ) ) )
+		{
+			skeleton_factory->harmDefinite( i, -mine_factory->getDamage() );
+		}
+	}
+	
+	// HARM BY SKELETON
+	if( skeleton_factory->isSword( hero->getRect() ) )
+	{
+		heart->harm( -skeleton_factory->getDamage() );
 		effect->runBlood();
 	}
 	
@@ -306,27 +311,39 @@ void Winter::mechanics()
 	{
 		hero->die();
 	}
-	
-// ------------------------------------------------------------------------------------------------
-	// SET COLOR ~ DAY
-	day->mechanics();
-	
-	if( day->isChange() )
+	else
 	{
-		hero->setColor( day->getColor() );
+		wall->mechanics();
+		mine_factory->mechanics();
+		skeleton_factory->mechanics();
 		
-		brick->setColor( day->getColor() );
-		background->setColor( day->getColor() );
-		islands->setColor( day->getColor() );
-		water->setColor( day->getColor() );
-		wall->setColor( day->getColor() );
-		ladder->setColor( day->getColor() );
-		greenery->setColor( day->getColor() );
+		if( !islands->checkFlyingIslands( hero->getRect() ) )
+		{
+			islands->moving();
+		}
+		else
+		{
+			islands->turnOff( hero->getDirection() );
+		}
 		
-		mine_factory->setColor( day->getColor() );
+		if( islands->checkOtherIslands( hero->getRect() ) )
+		{
+			islands->turnOn();
+		}
 	}
 	
-	// TORCH
-	// torch->setPosition( hero->getRect() );
-	// brick->checkTorch( torch->getRect(), torch->getImage() );
+// ------------------------------------------------------------------------------------------------
+	// CHECK Y AND SHOW EFFECT
+	if( hero->getY() > screen_h ||
+		water->checkCollision( hero->getRect() ))
+	{
+		effect->runWater();
+	}
+	
+// ------------------------------------------------------------------------------------------------
+	// SKELETON PART
+	
+	skeleton_factory->appear( hero->getRect() );
+	skeleton_factory->walk( hero->getRect() );
+	skeleton_factory->ableAttack( hero->getRect() );
 }
