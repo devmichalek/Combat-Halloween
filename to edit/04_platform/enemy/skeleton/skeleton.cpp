@@ -3,22 +3,27 @@
 
 Skeleton::Skeleton()
 {
-	state = 0;
+	state = APPEAR -1;
 	offset = 0;
 	delay = 0;
 	counter = 0;
 	
-	startX = 0;
-	endX = 0;
+	left = 0;
+	right = 0;
 	
 	hp = 0;
 	hp_state = 0;
+	
 	damage = 0;
 	vel = 0;
 	direction = 0;
 	
+	xScale = yScale = 0;
+	
 	attack = 0;
 	attack_line = 0;
+	attack_count = 0;
+	flag = false;
 }
 
 Skeleton::~Skeleton()
@@ -28,10 +33,30 @@ Skeleton::~Skeleton()
 
 void Skeleton::free()
 {
-	state = 0;
+	state = APPEAR -1;
 	offset = 0;
 	delay = 0;
 	counter = 0;
+	if( !line.empty() )
+	{
+		line.clear();
+	}
+	
+	left = 0;
+	right = 0;
+	
+	hp = 0;
+	hp_state = 0;
+	
+	damage = 0;
+	vel = 0;
+	direction = 0;
+	
+	xScale = yScale = 0;
+	
+	attack = 0;
+	attack_line = 0;
+	attack_count = 0;
 	
 	if( !x.empty() )
 	{
@@ -43,27 +68,17 @@ void Skeleton::free()
 		y.clear();
 	}
 	
-	if( !line.empty() )
-	{
-		line.clear();
-	}
-	
 	if( !width.empty() )
 	{
 		width.clear();
 	}
 	
-	startX = 0;
-	endX = 0;
+	if( !height.empty() )
+	{
+		height.clear();
+	}
 	
-	hp = 0;
-	hp_state = 0;
-	damage = 0;
-	vel = 0;
-	direction = 0;
-	
-	attack = 0;
-	attack_line = 0;
+	flag = false;
 }
 
 void Skeleton::reset( int distance )
@@ -77,13 +92,8 @@ void Skeleton::reset( int distance )
 				it ++;
 			}
 			
-			for( auto &it :y )
-			{
-				it ++;
-			}
-			
-			startX ++;
-			endX ++;
+			left ++;
+			right ++;
 			
 			distance --;
 		}
@@ -93,69 +103,213 @@ void Skeleton::reset( int distance )
 		}
 	}
 	
-	state = 0;
+	state = APPEAR -1;
 	offset = 0;
 	counter = 0;
 	direction = 0;
 	hp = hp_state;
-	
 	attack = 0;
-	attack_line = 0;
+	attack_count = 0;
+	
+	flag = false;
 }
 
 
 
 
-void Skeleton::setPosition( vector <float> x, vector <float> y )
+void Skeleton::setX( vector <float> x )
 {
 	this->x = x;
+}
+
+void Skeleton::setY( vector <float> y )
+{
 	this->y = y;
 }
 
-void Skeleton::setLine( vector <int> line, vector <int> width )
+void Skeleton::setLine( vector <sf::Uint8> line )
 {
 	this->line = line;
+}
+
+void Skeleton::setWidth( vector <int> width )
+{
 	this->width = width;
 }
 
-void Skeleton::setDamage( int damage )
+void Skeleton::setHeight( vector <int> height )
+{
+	this->height = height;
+}
+
+void Skeleton::setVelocity( float vel )
+{
+	this->vel = vel;
+}
+
+void Skeleton::setDelay( sf::Uint8 delay )
+{
+	this->delay = delay;
+}
+
+void Skeleton::setDamage( sf::Uint8 damage )
 {
 	this->damage = damage;
 }
 
-void Skeleton::setHP( int hp )
+void Skeleton::setHeartPoints( int hp )
 {
 	this->hp = hp;
+	hp_state = hp;
 }
 
-void Skeleton::setGlobalX( int startX, int endX )
+void Skeleton::setBorders( int left, int right )
 {
-	delay = 10;
-	vel = 0.8;
-	attack_line = 4;
-	
-	this->startX = startX;
-	this->endX = endX;
+	this->left = left;
+	this->right = right;
+}
+
+void Skeleton::setAttackLine( sf::Uint8 attack_line )
+{
+	attack = 0;
+	this->attack_line = attack_line;
+}
+
+void Skeleton::setScale( float xScale, float yScale )
+{
+	this->xScale = xScale;
+	this->yScale = yScale;
+}
+
+void Skeleton::setDead()
+{
+	offset = 0;
+	state = DEAD;
 }
 
 
 
 
-void Skeleton::appear( int heroX )
+float Skeleton::getX()
 {
-	if( state == 0 )
+	if( (direction == 2 || direction == 0) && flag )
 	{
-		if( heroX > startX -width[ 0 ] )
+		if( state < ATTACK )
 		{
-			// printf( "appeared\n" );
-			state = 1;
+			return x[ state ] +width[ APPEAR ]/2;
 		}
+		else
+		{
+			return x[ state ] +width[ APPEAR ] +(30*yScale);
+		}
+		
 	}
+	else if( state == ATTACK )
+	{
+		return x[ state ] -(60*yScale);
+	}
+	
+	
+	return x[ state ];
 }
 
-bool Skeleton::alive()
+float Skeleton::getY()
 {
-	if( state > 0 )
+	return y[ state ];
+}
+
+
+
+float Skeleton::getRealX()
+{
+	return x[ 0 ];
+}
+
+float Skeleton::getRealY()
+{
+	return y[ 0 ];
+}
+
+float Skeleton::getRealWidth()
+{
+	return width[ 0 ];
+}
+
+float Skeleton::getRealHeight()
+{
+	return height[ 0 ];
+}
+
+
+
+float Skeleton::getAttackX()
+{
+	if( direction == 2 || direction == 0 )
+	{
+		return x[ ATTACK ] +194*yScale;
+	}
+	
+	return x[ ATTACK ] -55*yScale;
+}
+
+float Skeleton::getAttackY()
+{
+	return y[ ATTACK ] +height[ ATTACK ]/3;
+}
+
+int Skeleton::getAttackWidth()
+{
+	return width[ APPEAR ]/3;
+}
+
+int Skeleton::getAttackHeight()
+{
+	return height[ APPEAR ]/2;
+}
+
+
+
+int8_t Skeleton::getState()
+{
+	return state;
+}
+
+sf::Uint8 Skeleton::getOffset()
+{
+	if( offset >= line[ state ]*delay )
+	{
+		offset = 0;
+	}
+	
+	return offset /delay;
+}
+
+sf::Uint8 Skeleton::getDamage()
+{
+	return damage;
+}
+
+float Skeleton::getHorizontalScale()
+{
+	return xScale;
+}
+
+float Skeleton::getVerticalScale()
+{
+	return yScale;
+}
+
+int Skeleton::getHeartPoints()
+{
+	if( hp < 0 )
+		return 0;
+		
+	return hp;
+}
+
+bool Skeleton::isAlive()
+{
+	if( state > APPEAR -1 && state < DEAD +1 )
 	{
 		return true;
 	}
@@ -163,87 +317,110 @@ bool Skeleton::alive()
 	return false;
 }
 
-void Skeleton::walk( int heroX, int heroY, int w )
+bool Skeleton::isSword()
 {
-	sf::Uint8 gap = 10;
-	
-	if( direction == 2 || direction == 0 )
+	if( state == ATTACK )
 	{
-		gap *= 2;
+		if( offset /delay == 4 && attack_count < 1 )
+		{
+			attack_count++;
+			return true;
+		}
+		else if( offset /delay == 7 && attack_count < 2 )
+		{
+			attack_count++;
+			return true;
+		}
 	}
 	
-	if( heroX +w >= startX &&
-		heroX -w <= endX &&
-		heroY >= y[ 0 ] && 
-		heroY <= y[ 0 ] +w &&
-		state < 4 )
+	return false;
+}
+
+
+
+
+
+void Skeleton::appear( Rect* rect )
+{
+	if( state == APPEAR -1 && rect != NULL )
 	{
-		if( heroX < x[ 0 ] -gap && x[ 0 ] > startX )
+		if( rect->getX() > left && rect->getX() + rect->getWidth() < right )
 		{
-			direction = 1;
-		}
-		else if( heroX > x[ 0 ] +gap && x[ 0 ] +width[ 0 ] < endX )
-		{
-			direction = 2;
-		}
-		else
-		{
-			if( direction == 1 )
-			{
-				direction = 3;
-			}
-			else if( direction == 2 )
-			{
-				direction = 0;
-			}
-		}
-	}
-	else
-	{
-		if( direction == 1 )
-		{
-			direction = 3;
-		}
-		else if( direction == 2 )
-		{
-			direction = 0;
+			// printf( "appeared\n" );
+			state = APPEAR;
 		}
 	}
 }
 
-void Skeleton::mechanics( int w )
+void Skeleton::walk( Rect* rect )
 {
-	if( state > 0 )
+	if( rect != NULL )
+	{
+		if( rect->getX() +rect->getWidth() > left &&
+		rect->getX() < right &&
+		rect->getY() +rect->getHeight() > y[ state ] && 
+		rect->getY() < y[ state ] +height[ state ] &&
+		state < ATTACK )
+		{
+			if( rect->getX() +rect->getWidth()/2 -5 < x[ ATTACK ] && x[ WALK ] > left )
+			{
+				if( xScale < 0 )	xScale = -xScale;
+				direction = 1;
+			}
+			else if( rect->getX() +rect->getWidth() > x[ WALK ] +width[ WALK ]/6 && x[ WALK ] < right )
+			{
+				if( xScale > 0 )	xScale = -xScale;
+				direction = 2;
+				flag = true;
+			}
+			else
+			{
+				if( direction == 1 )		direction = 3;
+				else if( direction == 2 )	direction = 0;
+			}
+		}
+		else
+		{
+			if( direction == 1 )		direction = 3;
+			else if( direction == 2 )	direction = 0;
+		}
+	}
+}
+
+void Skeleton::mechanics()
+{
+	if( state > APPEAR -1 && state < DEAD +1 )
 	{
 		offset ++;
-		if( offset == line[ state -1 ]*delay )
+		if( offset == line[ state ]*delay )
 		{
 			attack ++;
-			state = 2;	// reset
+			attack_count = 0;
+			state = IDLE;	// reset
 			offset = 0;
 		}
 			
-		if( state == 1 )
+		if( state == APPEAR )
 		{
 			if( offset == 0 )
 			{
-				state = 2;
+				state = IDLE;
 			}
 		}
-		else if( state == 2 || state == 3 )
+		else if( state == IDLE || state == WALK )
 		{
 			if( direction == 0 || direction == 3 )
 			{
-				if( offset >= line[ state -1 ]*delay )
+				if( offset >= line[ state ]*delay )
 				{
 					offset = 0;
 				}
 				
-				state = 2;
+				state = IDLE;
 			}
 			else if( direction == 1 )
 			{
-				state = 3;
+				state = WALK;
 				
 				for( auto &it :x )
 				{
@@ -252,7 +429,7 @@ void Skeleton::mechanics( int w )
 			}
 			else if( direction == 2 )
 			{
-				state = 3;
+				state = WALK;
 				
 				for( auto &it :x )
 				{
@@ -260,80 +437,25 @@ void Skeleton::mechanics( int w )
 				}
 			}
 		}
-		
-		// printf( "%d %d\n", startX, endX );
+		else if( state == DEAD )
+		{
+			if( offset == line[ state ]*delay -1 )
+			{
+				state = DEAD +1;
+			}
+		}
 	}
 }
 
 void Skeleton::ableAttack()
 {
-	if( state < 4 && attack > attack_line )
+	if( state < ATTACK && attack >= attack_line )
 	{
 		attack = 0;
 		offset = 0;
-		state = 4;
+		state = ATTACK;
 	}
 }
-
-
-
-
-float Skeleton::getX()
-{
-	if( direction == 2 || direction == 0 )
-	{
-		return x[ state -1 ] +width[ 0 ]/2;
-	}
-	
-	if( state == 4 )
-	{
-		return x[ state -1 ] -30;
-	}
-	
-	return x[ state -1 ];
-}
-
-float Skeleton::getY()
-{
-	return y[ state -1 ];
-}
-
-sf::Uint8 Skeleton::getDamage()
-{
-	return damage;
-}
-
-int Skeleton::getOffset()
-{
-	if( offset >= line[ state -1 ]*delay )
-	{
-		offset = 0;
-	}
-	
-	return offset /delay;
-}
-
-int Skeleton::getNr()
-{
-	return state -1;
-}
-
-int Skeleton::get_x_scale()
-{
-	if( direction == 2 || direction == 0 )
-	{
-		return -1;
-	}
-
-	return 1;
-}
-
-bool Skeleton::harmAvailable()
-{
-	return false;
-}
-
-
 
 void Skeleton::moveX( int vel )
 {
@@ -342,6 +464,11 @@ void Skeleton::moveX( int vel )
 		it += vel;
 	}
 	
-	startX += vel;
-	endX += vel;
+	left += vel;
+	right += vel;
+}
+
+void Skeleton::harm( int damage )
+{
+	hp += damage;
 }
