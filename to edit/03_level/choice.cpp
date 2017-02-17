@@ -279,6 +279,11 @@ int Choice::getResult()
 	return result;
 }
 
+int Choice::getLeft()
+{
+	return world[ 0 ]->getX();
+}
+
 int Choice::getBot()
 {
 	return world[ world.size() -1 ]->getBot();
