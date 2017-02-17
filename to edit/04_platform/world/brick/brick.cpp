@@ -697,24 +697,3 @@ bool Brick::checkPixelCollision( Rect* rect )
 	
 	return false;
 }
-
-void Brick::checkTorch( Rect* rect, sf::Image* image )
-{
-	if( rect != NULL && image != NULL )
-	{
-		for( auto &i :blocks )
-		{
-			if( i->nr != -1 )
-			{
-				if( i->x > -width && i->x < screen_w )
-				{
-					sprites[ i->nr ]->setPosition( i->x, i->y );
-					if( sprites[ i->nr ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
-					{
-						sprites[ i->nr ]->setPixels_light( rect, image );
-					}
-				}
-			}
-		}
-	}
-}
