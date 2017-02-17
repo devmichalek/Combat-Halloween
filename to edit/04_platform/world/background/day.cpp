@@ -12,7 +12,6 @@ Day::Day()
 	line = 0;
 	
 	r = g = b = 0xFF;
-	a = 0;
 }
 
 Day::~Day()
@@ -36,12 +35,9 @@ void Day::free()
 	}
 	
 	r = g = b = 0xFF;
-	a = 0;
-	
-	overlay.free();
 }
 
-void Day::reset( Rect* rect )
+void Day::reset()
 {
 	change = false;
 	count = false;
@@ -51,45 +47,33 @@ void Day::reset( Rect* rect )
 	sec = 0;
 	
 	r = g = b = 0xFF;
-	a = 0;
-	
-	overlay.setColor( colors[ 0 ] );
-	overlay.setAlpha( colors[ 0 ].a );
 }
 
 
 
-void Day::load( int screen_w, int screen_h )
+void Day::set( unsigned FPS )
 {
 	colors.push_back( sf::Color() );
-	colors[ colors.size() -1 ].r = 0x00;
-	colors[ colors.size() -1 ].g = 0x00;
-	colors[ colors.size() -1 ].b = 0x00;
-	colors[ colors.size() -1 ].a = 0x00;
+	colors[ colors.size() -1 ].r = 0xFF;
+	colors[ colors.size() -1 ].g = 0xFF;
+	colors[ colors.size() -1 ].b = 0xFF;
 	
 	colors.push_back( sf::Color() );
-	colors[ colors.size() -1 ].r = 0xA9;
-	colors[ colors.size() -1 ].g = 0x38;
+	colors[ colors.size() -1 ].r = 0xFF;
+	colors[ colors.size() -1 ].g = 0xF6;
+	colors[ colors.size() -1 ].b = 0x6C;
+	
+	colors.push_back( sf::Color() );
+	colors[ colors.size() -1 ].r = 0xFF;
+	colors[ colors.size() -1 ].g = 0x9C;
 	colors[ colors.size() -1 ].b = 0x00;
-	colors[ colors.size() -1 ].a = 170;
 	
 	colors.push_back( sf::Color() );
 	colors[ colors.size() -1 ].r = 0x19;
 	colors[ colors.size() -1 ].g = 0x18;
 	colors[ colors.size() -1 ].b = 0x18;
-	colors[ colors.size() -1 ].a = 235;
 	
-	overlay.setName( "day-overlay" );
-	overlay.create( screen_w, screen_h );
-	overlay.setColor( colors[ 0 ] );
-	overlay.setAlpha( colors[ 0 ].a );
-
-	line = 120;
-}
-
-void Day::draw( sf::RenderWindow* &window )
-{
-	window->draw( overlay.get() );
+	line = FPS;
 }
 
 void Day::setInTime()
@@ -135,21 +119,6 @@ void Day::setInTime()
 		b--;
 		change = true;
 	}
-	
-	
-	if( !change || state != 1 )
-	{
-		if( a < colors[ which ].a )
-		{
-			a++;
-			change = true;
-		}
-		else if( a > colors[ which ].a )
-		{
-			a--;
-			change = true;
-		}
-	}
 }
 
 void Day::mechanics()
@@ -170,8 +139,7 @@ void Day::mechanics()
 		
 		if( r == colors[ which ].r &&
 			g == colors[ which ].g &&
-			b == colors[ which ].b &&
-			a == colors[ which ].a )
+			b == colors[ which ].b )
 		{
 			if( !count )
 			{
@@ -193,14 +161,21 @@ void Day::mechanics()
 		state = 1;
 		setInTime();
 	}
-	else if( state == 1 && sec == S && count )
+	else if( state == 1 && sec == F && count )
 	{
 		counter = 0;
 		sec = 0;
 		state = 2;
 		setInTime();
 	}
-	else if( state == 2 && sec == N && count )
+	else if( state == 2 && sec == S && count )
+	{
+		counter = 0;
+		sec = 0;
+		state = 3;
+		setInTime();
+	}
+	else if( state == 3 && sec == N && count )
 	{
 		counter = 0;
 		sec = 0;
@@ -208,12 +183,23 @@ void Day::mechanics()
 		setInTime();
 	}
 	
+	// printf( "%d %d %d | counter %d  sec %d  state %d\n", r, g, b, counter, sec, state );
+	// printf( "%d %d %d\n", colors[ state ].r, colors[ state ].g, colors[ state ].b );
+}
+
+
+bool Day::isChange()
+{
 	if( change )
 	{
 		change = false;
-		overlay.setColor( sf::Color( r, g, b ) );
-		overlay.setAlpha( a );
+		return true;
 	}
 	
-	// printf( "%d %d %d | counter %d  sec %d  state %d\n", r, g, b, counter, sec, state );
+	return false;
+}
+
+sf::Color Day::getColor()
+{
+	return sf::Color( r, g, b );
 }
