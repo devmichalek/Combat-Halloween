@@ -72,6 +72,5 @@ public:
 	// Collision detection.
 	bool checkCollision( Rect* rect );
 	bool checkPixelCollision( Rect* rect );
-	void checkTorch( Rect* rect, sf::Image* image );
 };
 
