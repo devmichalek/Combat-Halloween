@@ -6,6 +6,7 @@ Mine_factory::Mine_factory()
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
+	damage = 0;
 }
 
 Mine_factory::~Mine_factory()
@@ -18,6 +19,7 @@ void Mine_factory::free()
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
+	damage = 0;
 	
 	if( !mines.empty() )
 	{
@@ -90,8 +92,6 @@ void Mine_factory::draw( sf::RenderWindow* &window )
 {
 	for( auto &i :mines )
 	{
-		i->mechanics();
-		
 		if( i->getX() > -width && i->getX() < screen_w + width && i->ableToDraw() )
 		{
 			sprites[ i->getNr() ]->setOffset( i->getOffset() );
@@ -129,11 +129,12 @@ void Mine_factory::addMine( int x1, int x2, int y )
 
 void Mine_factory::positioning( vector <Block*> blocks, int chance )
 {
+	damage = chance /2;
 	for( auto &i :blocks )
 	{
-		if( i->nr >= 0 && i->nr <= 7 && i->x > screen_w )
+		if( i->nr >= 0 && i->nr <= 7 )
 		{
-			if( rand()%100 < chance )
+			if( rand()%100 < chance/2 )
 			{
 				int x1 = i->x +width/2 -sprites[ 0 ]->getWidth()/2;
 				int x2 = i->x +width/2 -sprites[ 1 ]->getWidth()/2;
@@ -211,4 +212,25 @@ void Mine_factory::undoFall( sf::Uint8 add )
 	{
 		it->moveX( add );
 	}
+}
+
+void Mine_factory::mechanics()
+{
+	for( auto &i :mines )
+	{
+		i->mechanics();
+	}
+}
+
+void Mine_factory::setColor( sf::Color color )
+{
+	for( auto &i :sprites )
+	{
+		i->setColor( color );
+	}
+}
+
+int Mine_factory::getDamage()
+{
+	return damage;
 }
