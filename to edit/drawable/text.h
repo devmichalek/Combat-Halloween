@@ -55,4 +55,6 @@ public:
 	
 	void setSize( int size = 1 );
 	std::ostream& operator <<( std::ostream& s );
+	
+	void setRotation( float angle );
 };
