@@ -152,6 +152,11 @@ Rect* Kunai::getRect( int which )
 	return rect;
 }
 
+void Kunai::setDamage( int chance )
+{
+	damage = (120 -chance);
+}
+
 float Kunai::getDamage()
 {
 	return damage;
@@ -194,7 +199,6 @@ void Kunai::load()
 {
 	scale = 1;
 	vel = 4;
-	damage = 0.03;
 	
 	sprite.setName( "kunai-sprite" );
 	sprite.load( "data/sprites/hero/0.png" );

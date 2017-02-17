@@ -54,6 +54,7 @@ public:
 	void destroy( int which );
 	
 	Rect* getRect( int which );
+	void setDamage( int chance );
 	float getDamage();
 	
 	Kunai();
