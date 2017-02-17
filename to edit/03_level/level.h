@@ -14,8 +14,8 @@
 #include "backtomenu.h"
 #include "choice.h"
 #include "character.h"
-#include "worldsize.h"
-#include "flatness.h"
+#include "cube.h"
+#include "difficulty.h"
 
 class Level
 {
@@ -29,11 +29,8 @@ class Level
 	Backtomenu* backtomenu;
 	Choice* choice;
 	Character* character;
-	Worldsize* worldsize;
-	Flatness* flatness;
-	Flatness* hover;
-	Flatness* pug;
-	Flatness* mine;
+	Cube* cube;
+	Difficulty* difficulty;
 	
 public:
 
@@ -57,7 +54,5 @@ public:
 	int getCharacter();
 	int getWorldsize();
 	int getFlatness();
-	int getPugness();
-	int getHoverness();
-	int getMine();
+	int getDifficulty();
 };

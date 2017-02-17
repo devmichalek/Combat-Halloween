@@ -19,11 +19,8 @@ Level::Level()
 	backtomenu = new Backtomenu( "", false );
 	choice = new Choice;
 	character = new Character;
-	worldsize = new Worldsize;
-	flatness = new Flatness( "Set flatness", "% of flatness", 50 );
-	hover = new Flatness( "Set chance of boxers", "% of chance", 35 );
-	pug = new Flatness( "Set chance of hovering islands", "% of chance", 30 );
-	mine = new Flatness( "Set chance of mines", "% of chance", 15 );
+	cube = new Cube;
+	difficulty = new Difficulty;
 }
 
 Level::~Level()
@@ -39,11 +36,8 @@ void Level::free()
 	delete backtomenu;
 	delete choice;
 	delete character;
-	delete worldsize;
-	delete flatness;
-	delete hover;
-	delete pug;
-	delete mine;
+	delete cube;
+	delete difficulty;
 }
 
 
@@ -58,11 +52,8 @@ void Level::load( unsigned screen_w, unsigned screen_h )
 	backtomenu->load( screen_w );
 	choice->load( screen_w, screen_h );
 	character->load( screen_w, screen_h );
-	worldsize->load( -(screen_w/4), screen_w, screen_h, choice->getBot() );
-	flatness->load( -(screen_w/4), screen_w, screen_h, worldsize->getBot() );
-	hover->load( -(screen_w/4), screen_w, screen_h, flatness->getBot() );
-	pug->load( -(screen_w/4), screen_w, screen_h, hover->getBot() );
-	mine->load( (screen_w/4), screen_w, screen_h, choice->getBot() );
+	cube->load( choice->getLeft(), choice->getBot() );
+	difficulty->load( cube->getRight(), cube->getTop() );
 }
 
 void Level::handle( sf::Event &event )
@@ -70,11 +61,8 @@ void Level::handle( sf::Event &event )
 	if( !choice->isChosen() && backtomenu->getState() == 0 )
 	{
 		choice->handle( event );
-		worldsize->handle( event );
-		flatness->handle( event );
-		hover->handle( event );
-		pug->handle( event );
-		mine->handle( event );
+		cube->handle( event );
+		difficulty->handle( event );
 		backtomenu->handle( event );
 	}
 	else if( !character->nextState() )
@@ -100,11 +88,8 @@ void Level::draw( sf::RenderWindow* &window )
 		if( choice->isChosen() )
 		{
 			character->move( -20, 0 );
-			worldsize->move( -20, -screen_w );
-			flatness->move( -20, -screen_w );
-			hover->move( -20, -screen_w );
-			pug->move( -20, -screen_w );
-			mine->move( -20, -screen_w );
+			cube->move( -20, -screen_w );
+			difficulty->move( -20, -screen_w );
 			if( choice->move( -20, -screen_w ) )
 			{
 				backtomenu->setState( 1 );
@@ -116,11 +101,8 @@ void Level::draw( sf::RenderWindow* &window )
 	window->draw( background->get() );
 	backtomenu->draw( *window );
 	choice->draw( *window );
-	worldsize->draw( *window );
-	flatness->draw( *window );
-	hover->draw( *window );
-	pug->draw( *window );
-	mine->draw( *window );
+	cube->draw( *window );
+	difficulty->draw( *window );
 	character->draw( window );
 	
 	if( backtomenu->getState() == 0 )
@@ -133,11 +115,8 @@ void Level::draw( sf::RenderWindow* &window )
 		backtomenu->fadein( v );
 		choice->fadein( v );
 		character->fadein( v );
-		worldsize->fadein( v );
-		flatness->fadein( v );
-		hover->fadein( v );
-		pug->fadein( v );
-		mine->fadein( v );
+		cube->fadein( v );
+		difficulty->fadein( v );
 	}
 	else if( backtomenu->getState() == -1 )
 	{
@@ -148,11 +127,8 @@ void Level::draw( sf::RenderWindow* &window )
 		backtomenu->fadeout( v );
 		choice->fadeout( v );
 		character->fadeout( v );
-		worldsize->fadeout( v );
-		flatness->fadeout( v );
-		hover->fadeout( v );
-		pug->fadeout( v );
-		mine->fadeout( v );
+		cube->fadeout( v );
+		difficulty->fadeout( v );
 		
 		if( choice->getAlpha() == 0 )
 		{
@@ -174,11 +150,8 @@ void Level::draw( sf::RenderWindow* &window )
 			backtomenu->fadeout( v );
 			choice->fadeout( v );
 			character->fadeout( v );
-			worldsize->fadeout( v );
-			flatness->fadeout( v );
-			hover->fadeout( v );
-			pug->fadeout( v );
-			mine->fadeout( v );
+			cube->fadeout( v );
+			difficulty->fadeout( v );
 			
 			if( choice->getAlpha() == 0 )
 			{
@@ -193,11 +166,8 @@ void Level::draw( sf::RenderWindow* &window )
 	{
 		sf::Uint8 v = 20;
 		character->move( v, screen_w );
-		worldsize->move( v, 0 );
-		flatness->move( v, 0 );
-		hover->move( v, 0 );
-		pug->move( v, 0 );
-		mine->move( v, 0 );
+		cube->move( v, 0 );
+		difficulty->move( v, 0 );
 		if( choice->move( v, 0 ) )
 		{
 			choice->reset( screen_w, screen_h );
@@ -215,11 +185,7 @@ void Level::setSound()
 	{
 		backtomenu->turnOff();
 		choice->turnOff();
-		worldsize->turnOff();
-		flatness->turnOff();
-		hover->turnOff();
-		pug->turnOff();
-		mine->turnOff();
+		cube->turnOff();
 	}
 	
 	// Set music volume
@@ -229,11 +195,8 @@ void Level::setSound()
 	backtomenu->setVolume( sound.getChunkVolume() );
 	choice->setVolume( sound.getChunkVolume() );
 	character->setVolume( sound.getChunkVolume() );
-	worldsize->setVolume( sound.getChunkVolume() );
-	flatness->setVolume( sound.getChunkVolume() );
-	hover->setVolume( sound.getChunkVolume() );
-	pug->setVolume( sound.getChunkVolume() );
-	mine->setVolume( sound.getChunkVolume() );
+	cube->setVolume( sound.getChunkVolume() );
+	difficulty->setVolume( sound.getChunkVolume() );
 }
 	
 bool Level::isQuit()
@@ -271,12 +234,9 @@ void Level::reset()
 	state = 0;
 	backtomenu->setState( 0 );
 	choice->reset( screen_w, screen_h );
-	worldsize->reset( -(screen_w/4), screen_w, screen_h, choice->getBot() );
-	flatness->reset( -(screen_w/4), screen_w, screen_h, worldsize->getBot() );
-	hover->reset( -(screen_w/4), screen_w, screen_h, flatness->getBot() );
-	pug->reset( -(screen_w/4), screen_w, screen_h, hover->getBot() );
-	mine->reset( (screen_w/4), screen_w, screen_h, choice->getBot() );
 	character->reset( screen_w, screen_h );
+	cube->reset( choice->getLeft(), choice->getBot() );
+	difficulty->load( cube->getRight(), cube->getTop() );
 }
 
 void Level::reloadMusic()
@@ -299,25 +259,16 @@ int Level::getCharacter()
 
 int Level::getWorldsize()
 {
-	return worldsize->getResult();
+	return cube->getWorldSize();
 }
 
 int Level::getFlatness()
 {
-	return flatness->getResult();
+	// printf( "%d\n", cube->getFlatness() );
+	return cube->getFlatness();
 }
 
-int Level::getPugness()
+int Level::getDifficulty()
 {
-	return hover->getResult();
-}
-
-int Level::getHoverness()
-{
-	return pug->getResult();
-}
-
-int Level::getMine()
-{
-	return mine->getResult();
+	return difficulty->getDifficulty();
 }
