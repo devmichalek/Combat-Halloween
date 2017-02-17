@@ -307,3 +307,7 @@ std::ostream& MyText::operator <<( std::ostream& s )
 	return s << "ID: " << name << " x: " << left << " y: " << top << " w: " << width << " h: " << height << " alpha: " << color.a;
 }
 
+void MyText::setRotation( float angle )
+{
+	text->setRotation( angle );
+}
