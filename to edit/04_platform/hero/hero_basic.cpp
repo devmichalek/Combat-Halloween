@@ -139,8 +139,6 @@ void Hero::load( int type, int screen_w, int screen_h )
 	jump_vel = vel*2 +1;
 	grav = 1;
 	
-	damage = 0.07;
-	
 	right = true;
 	move = false;
 	
@@ -212,6 +210,11 @@ void Hero::setKeys()
 		}
 	}
 	file.close();
+}
+
+void Hero::setDamage( int chance )
+{
+	damage = 120 -chance;
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -553,7 +556,7 @@ Rect* Hero::getRect()
 void Hero::reset( int posY )
 {
 	int startX = 100;
-	int startY = posY -sprite[ IDLE ]->getHeight() -400;
+	int startY = posY -sprite[ IDLE ]->getHeight() -500;
 	
 	while( true )
 	{

@@ -287,7 +287,7 @@ Rect* Hero::getAttackBox()
 	{
 		rect = new Rect;
 		t_y = sprite[ JUMP_ATTACK ]->getY();
-		t_w = 35;
+		t_w = 40;
 		t_h = sprite[ JUMP_ATTACK ]->getHeight();
 							
 		if( right )		t_x = ( sprite[ JUMP_ATTACK ]->getWidth() -t_w ) + sprite[ JUMP_ATTACK ]->getX();
