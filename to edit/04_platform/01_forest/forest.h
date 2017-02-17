@@ -8,7 +8,6 @@
 #include "04_platform/hero/kunai.h"
 #include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
-#include "04_platform/hero/torch.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -23,6 +22,7 @@
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
+#include "04_platform/enemy/skeleton/skeleton_factory.h"
 
 class Forest
 {
@@ -40,7 +40,6 @@ class Forest
 	Kunai* kunai;
 	Heart* heart;
 	Scope* scope;
-	Torch* torch;
 	
 	// world
 	Brick* brick;
@@ -55,6 +54,7 @@ class Forest
 	
 	// enemy
 	Mine_factory* mine_factory;
+	Skeleton_factory* skeleton_factory;
 	
 public:
 
@@ -63,11 +63,11 @@ public:
     void free();
 	void reset();
 	
-    void load( int screen_w, int screen_h );
+    void load( int screen_w, int screen_h, unsigned FPS );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int type, int size, int flatness, int hover, int pug, int mine );
+	bool positioning( int type, int size, int flatness, int difficuly );
 	string getInfo();
 	
 	bool nextState();
