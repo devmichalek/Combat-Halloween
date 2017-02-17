@@ -8,6 +8,7 @@ class Wall
 	sf::Uint8 min;
 	int width;
 	int screen_w;
+	int damage;
 	
 	vector <Pug*> blocks;
 	vector <MySprite*> sprites;
@@ -31,9 +32,14 @@ public:
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
+	void mechanics();
 	void setColor( sf::Color color );
 	
 	// Check collision.
 	bool harm( Rect* rect );
 	bool checkCollision( Rect* rect );
+	
+	// Damage
+	int getDamage();
+	int getFallDamage();
 };
