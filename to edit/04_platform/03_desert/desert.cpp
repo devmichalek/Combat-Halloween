@@ -23,7 +23,7 @@ Desert::Desert()
 	day = new Day;
 	
 	mine_factory = new Mine_factory;
-	skeleton_factory = new Skeleton_factory;
+	// skeleton_factory = new Factory;
 }
 
 Desert::~Desert()
@@ -57,7 +57,7 @@ void Desert::free()
 	delete day;
 	
 	delete mine_factory;
-	delete skeleton_factory;
+	skeleton_factory.free();
 }
 
 void Desert::reset()
@@ -79,7 +79,7 @@ void Desert::reset()
 	day->reset();
 	
 	mine_factory->reset( distance );
-	skeleton_factory->reset( distance );
+	skeleton_factory.reset( distance );
 	
 	// Set color
 	hero->setColor( day->getColor() );
@@ -92,7 +92,7 @@ void Desert::reset()
 	greenery->setColor( day->getColor() );
 	
 	mine_factory->setColor( day->getColor() );
-	skeleton_factory->setColor( day->getColor() );
+	skeleton_factory.setColor( day->getColor() );
 }
 
 
@@ -120,7 +120,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	day->set( FPS );
 	
 	mine_factory->load( width, screen_w, screen_h );
-	skeleton_factory->load( width, screen_h, screen_h );
+	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
 }
 
 void Desert::handle( sf::Event &event )
@@ -148,7 +148,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
-		skeleton_factory->fadeout( value );
+		skeleton_factory.fadeout( value );
 	}
 	else
 	{
@@ -166,7 +166,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
-		skeleton_factory->fadein( value );
+		skeleton_factory.fadein( value );
 	}
 	
 
@@ -183,7 +183,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
-	skeleton_factory->draw( window );
+	skeleton_factory.draw( window );
 	
 	// rest
 	brick->draw( window );
@@ -282,8 +282,8 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 				 mine_factory->positioning( islands->getBlocks(), difficulty );
 		info = "creating skeleton factory";	break;
 		
-		case 20: skeleton_factory->positioning( brick->getBlocks(), difficulty );
-				 skeleton_factory->positioning( islands->getBlocks(), difficulty );
+		case 20: skeleton_factory.positioning( brick->getBlocks(), difficulty );
+				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
 		default:
