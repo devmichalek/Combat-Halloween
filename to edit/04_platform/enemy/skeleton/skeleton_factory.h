@@ -39,7 +39,7 @@ public:
 	void walk( Rect* rect );
 	bool harm( Rect* rect, int damage );
 	void ableAttack( Rect* rect );
-	bool isSword( Rect* rect );
+	bool harmSomebody( Rect* rect );
 	int getDamage();
 	
 	// In action
