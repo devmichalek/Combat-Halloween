@@ -40,9 +40,6 @@ void Forest::mechanics()
 	{
 		hero->weightlessness();
 	}
-	
-	
-	
 	// HERO GLIDE
 	else
 	{
@@ -93,7 +90,7 @@ void Forest::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
-		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -124,7 +121,7 @@ void Forest::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -181,7 +178,7 @@ void Forest::mechanics()
 		kunai->getX( i ) < -kunai->getW() ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		skeleton_factory->harm( kunai->getRect( i ), kunai->getDamage() ) )
+		golem_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
 		{
 			kunai->destroy( i );
 		}
@@ -207,7 +204,7 @@ void Forest::mechanics()
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
-			skeleton_factory->moveX( hero->getDirection(), scope->getVel() );
+			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -221,7 +218,7 @@ void Forest::mechanics()
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
-			skeleton_factory->moveX( hero->getDirection(), -scope->getVel() );
+			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 
@@ -248,6 +245,7 @@ void Forest::mechanics()
 	{
 		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
 		{
+			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
 		}
 		else
@@ -259,7 +257,7 @@ void Forest::mechanics()
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
-			skeleton_factory->undoFall( brick->getGrassValue() );
+			golem_factory.undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -276,13 +274,7 @@ void Forest::mechanics()
 		heart->harm( -wall->getDamage() );
 		effect->runBlood();
 	}
-	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
-	{
-		if( wall->harm( skeleton_factory->getRect( i ) ) )
-		{
-			skeleton_factory->harmDefinite( i, -wall->getDamage() );
-		}
-	}
+
 	
 	// HARM BY MINE
 	mine_factory->checkCollision( hero->getRect() );
@@ -291,18 +283,12 @@ void Forest::mechanics()
 		heart->harm( -mine_factory->getDamage() );
 		effect->runBlood();
 	}
-	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
-	{
-		if( mine_factory->harm( skeleton_factory->getRect( i ) ) )
-		{
-			skeleton_factory->harmDefinite( i, -mine_factory->getDamage() );
-		}
-	}
+
 	
 	// HARM BY SKELETON
-	if( skeleton_factory->isSword( hero->getRect() ) )
+	if( golem_factory.harmSomebody( hero->getRect() ) )
 	{
-		heart->harm( -skeleton_factory->getDamage() );
+		heart->harm( -golem_factory.getDamage() );
 		effect->runBlood();
 	}
 	
@@ -316,7 +302,7 @@ void Forest::mechanics()
 	{
 		wall->mechanics();
 		mine_factory->mechanics();
-		skeleton_factory->mechanics();
+		golem_factory.mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -359,13 +345,13 @@ void Forest::mechanics()
 		greenery->setColor( day->getColor() );
 		
 		mine_factory->setColor( day->getColor() );
-		skeleton_factory->setColor( day->getColor() );
+		golem_factory.setColor( day->getColor() );
 	}
 	
 // ------------------------------------------------------------------------------------------------
 	// SKELETON PART
 	
-	skeleton_factory->appear( hero->getRect() );
-	skeleton_factory->walk( hero->getRect() );
-	skeleton_factory->ableAttack( hero->getRect() );
+	golem_factory.appear( hero->getRect() );
+	golem_factory.walk( hero->getRect() );
+	golem_factory.ableAttack( hero->getRect() );
 }
