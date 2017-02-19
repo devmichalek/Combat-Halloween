@@ -100,6 +100,11 @@ void Heart::draw( sf::RenderWindow* &window )
 	{
 		harm( -4 );
 	}
+	
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 1 ) ) )
+	{
+		harm( 4 );
+	}
 }
 
 void Heart::setLife( int chance )

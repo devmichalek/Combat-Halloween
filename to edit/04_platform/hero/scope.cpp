@@ -41,6 +41,12 @@ void Scope::setFactor( int factor )
 	b = factor;
 }
 
+void Scope::changeMind()
+{
+	// printf( "happen\n" );
+	a = 0;
+}
+
 void Scope::move( int x, int screen_w )
 {
 	if( a == 0 )
