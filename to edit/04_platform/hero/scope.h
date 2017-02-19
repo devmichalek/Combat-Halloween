@@ -20,6 +20,7 @@ public:
 	float getVel();
 	
 	void setFactor( int factor );
+	void changeMind();
 	void move( int x, int screen_w );
 	int getState();
 	void transform();
