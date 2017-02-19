@@ -93,7 +93,8 @@ void Halloween::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
-		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		zombie_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -124,7 +125,8 @@ void Halloween::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		zombie_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -181,7 +183,8 @@ void Halloween::mechanics()
 		kunai->getX( i ) < -kunai->getW() ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) || 
-		skeleton_factory->harm( kunai->getRect( i ), kunai->getDamage() ) )
+		skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage() ) ||
+		zombie_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
 		{
 			kunai->destroy( i );
 		}
@@ -205,7 +208,8 @@ void Halloween::mechanics()
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
-			skeleton_factory->moveX( hero->getDirection(), scope->getVel() );
+			skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
+			zombie_factory.moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -218,7 +222,8 @@ void Halloween::mechanics()
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
-			skeleton_factory->moveX( hero->getDirection(), -scope->getVel() );
+			skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
+			zombie_factory.moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -244,6 +249,7 @@ void Halloween::mechanics()
 	{
 		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
 		{
+			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
 		}
 		else
@@ -254,7 +260,8 @@ void Halloween::mechanics()
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
-			skeleton_factory->undoFall( brick->getGrassValue() );
+			skeleton_factory.undoFall( brick->getGrassValue() );
+			zombie_factory.undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -271,13 +278,6 @@ void Halloween::mechanics()
 		heart->harm( -wall->getDamage() );
 		effect->runBlood();
 	}
-	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
-	{
-		if( wall->harm( skeleton_factory->getRect( i ) ) )
-		{
-			skeleton_factory->harmDefinite( i, -wall->getDamage() );
-		}
-	}
 	
 	// HARM BY MINE
 	mine_factory->checkCollision( hero->getRect() );
@@ -286,18 +286,18 @@ void Halloween::mechanics()
 		heart->harm( -mine_factory->getDamage() );
 		effect->runBlood();
 	}
-	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
-	{
-		if( mine_factory->harm( skeleton_factory->getRect( i ) ) )
-		{
-			skeleton_factory->harmDefinite( i, -mine_factory->getDamage() );
-		}
-	}
 	
 	// HARM BY SKELETON
-	if( skeleton_factory->isSword( hero->getRect() ) )
+	if( skeleton_factory.harmSomebody( hero->getRect() ) )
 	{
-		heart->harm( -skeleton_factory->getDamage() );
+		heart->harm( -skeleton_factory.getDamage() );
+		effect->runBlood();
+	}
+	
+	// HARM BY ZOMBIE
+	if( zombie_factory.harmSomebody( hero->getRect() ) )
+	{
+		heart->harm( -zombie_factory.getDamage() );
 		effect->runBlood();
 	}
 	
@@ -311,7 +311,8 @@ void Halloween::mechanics()
 	{
 		wall->mechanics();
 		mine_factory->mechanics();
-		skeleton_factory->mechanics();
+		skeleton_factory.mechanics();
+		zombie_factory.mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -338,7 +339,11 @@ void Halloween::mechanics()
 // ------------------------------------------------------------------------------------------------
 	// SKELETON PART
 	
-	skeleton_factory->appear( hero->getRect() );
-	skeleton_factory->walk( hero->getRect() );
-	skeleton_factory->ableAttack( hero->getRect() );
+	skeleton_factory.appear( hero->getRect() );
+	skeleton_factory.walk( hero->getRect() );
+	skeleton_factory.ableAttack( hero->getRect() );
+	
+	zombie_factory.appear( hero->getRect() );
+	zombie_factory.walk( hero->getRect() );
+	zombie_factory.ableAttack( hero->getRect() );
 }
