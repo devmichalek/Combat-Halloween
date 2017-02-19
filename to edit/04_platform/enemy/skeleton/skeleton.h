@@ -9,6 +9,7 @@ using namespace std;
 
 class Skeleton
 {
+	protected:
 	enum
 	{
 		APPEAR = 0,
@@ -51,9 +52,9 @@ class Skeleton
 	
 	vector <float> y;
 	vector <float> x;
+	vector <float> x2;
 	vector <int> width;
 	vector <int> height;
-	bool flag;
 	
 public:
 	
@@ -64,6 +65,7 @@ public:
 	
 	// Setters.
 	void setX( vector <float> x );
+	void setX2( vector <float> x2 );
 	void setY( vector <float> y );
 	void setLine( vector <sf::Uint8> line );
 	void setWidth( vector <int> width );
@@ -99,7 +101,7 @@ public:
 	float getVerticalScale();
 	int getHeartPoints();
 	bool isAlive();
-	bool isSword();
+	bool harmSomebody();
 	
 	
 	// Activity.

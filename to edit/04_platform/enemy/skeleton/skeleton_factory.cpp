@@ -59,6 +59,8 @@ void Skeleton_factory::load( int width, int screen_w, int screen_h )
 {
 	free();
 	
+	// printf( "%lu\n", sprites.size() );
+	
 	line.push_back( 10 );
 	line.push_back( 6 );
 	line.push_back( 8 );
@@ -87,23 +89,26 @@ void Skeleton_factory::draw( sf::RenderWindow* &window )
 {
 	for( auto &i :skeletons )
 	{
-		if( i->getX() > -width*3 && i->getX() < screen_w + width*3 && i->isAlive() )
+		if( i->isAlive() )
 		{
-			life.setAlpha( i->getHeartPoints() );
-			life.setPosition( i->getRealX() +life.getWidth()/3, i->getRealY() -life.getHeight() );
-			window->draw( life.get() );
-			
-			frame.setPosition( life.getX(), life.getY() );
-			window->draw( frame.get() );
-			
-			sprites[ i->getState() ]->setOffset( i->getOffset() );
-			sprites[ i->getState() ]->setPosition( i->getX(), i->getY() );
-			sprites[ i->getState() ]->setScale( i->getHorizontalScale(), i->getVerticalScale() );
-			window->draw( sprites[ i->getState() ]->get() );
+			if( i->getX() > -width*3 && i->getX() < screen_w + width*3 )
+			{
+				// life.setAlpha( i->getHeartPoints() );
+				// life.setPosition( i->getRealX() +life.getWidth()/3, i->getRealY() -life.getHeight() );
+				// window->draw( life.get() );
+				
+				// frame.setPosition( life.getX(), life.getY() );
+				// window->draw( frame.get() );
+				
+				sprites[ i->getState() ]->setOffset( i->getOffset() );
+				sprites[ i->getState() ]->setPosition( i->getX(), i->getY() );
+				sprites[ i->getState() ]->setScale( i->getHorizontalScale(), i->getVerticalScale() );
+				window->draw( sprites[ i->getState() ]->get() );
+			}
 		}
 	}
 	
-	/*
+	
 	// create an empty shape
 	sf::ConvexShape convex;
 
@@ -112,13 +117,13 @@ void Skeleton_factory::draw( sf::RenderWindow* &window )
 
 	// define the points
 	skeletons[ 0 ]->setScale( skeletons[ 0 ]->getHorizontalScale(), skeletons[ 0 ]->getVerticalScale() );
-	convex.setPoint( 0, sf::Vector2f( skeletons[ 0 ]->getRealX(), skeletons[ 0 ]->getRealY() ) );
-	convex.setPoint( 1, sf::Vector2f( skeletons[ 0 ]->getRealX() +skeletons[ 0 ]->getRealWidth(), skeletons[ 0 ]->getRealY() ) );
+	convex.setPoint( 0, sf::Vector2f( skeletons[ 0 ]->getAttackX(), skeletons[ 0 ]->getAttackY() ) );
+	convex.setPoint( 1, sf::Vector2f( skeletons[ 0 ]->getAttackX() +skeletons[ 0 ]->getAttackWidth(), skeletons[ 0 ]->getAttackY() ) );
 	
-	convex.setPoint( 2, sf::Vector2f( skeletons[ 0 ]->getRealX() +skeletons[ 0 ]->getRealWidth(), skeletons[ 0 ]->getRealY() +skeletons[ 0 ]->getRealHeight() ) );
-	convex.setPoint( 3, sf::Vector2f( skeletons[ 0 ]->getRealX(), skeletons[ 0 ]->getRealY() +skeletons[ 0 ]->getRealHeight() ) );
+	convex.setPoint( 2, sf::Vector2f( skeletons[ 0 ]->getAttackX() +skeletons[ 0 ]->getAttackWidth(), skeletons[ 0 ]->getAttackY() +skeletons[ 0 ]->getAttackHeight() ) );
+	convex.setPoint( 3, sf::Vector2f( skeletons[ 0 ]->getAttackX(), skeletons[ 0 ]->getAttackY() +skeletons[ 0 ]->getAttackHeight() ) );
 	window->draw( convex );
-	*/
+	
 }
 
 void Skeleton_factory::fadein( int v, int max )
@@ -150,6 +155,7 @@ void Skeleton_factory::addSkeleton( int x, int y, int damage )
 	skeletons.push_back( new Skeleton() );
 	
 	vector <float> myX;
+	vector <float> myX2;
 	vector <float> myY;
 	vector <int> widths;
 	vector <int> heights;
@@ -163,14 +169,22 @@ void Skeleton_factory::addSkeleton( int x, int y, int damage )
 	{
 		sprites[ i ]->setScale( scale, scale );
 		myX.push_back( x -sprites[ i ]->getWidth()/2 +width/2 );
+		myX2.push_back( x -sprites[ i ]->getWidth()/2 +width/2 );
 		myY.push_back( y -sprites[ i ]->getHeight() );
 		widths.push_back( sprites[ i ]->getWidth() );
 		heights.push_back( sprites[ i ]->getHeight() );
 	}
 	
+	myX2[ 0 ] += widths[ 0 ] /2;
+	myX2[ 1 ] += widths[ 0 ] /2;
+	myX2[ 2 ] += widths[ 0 ] /2;
+	myX2[ 3 ] += widths[ 0 ] +( 30*scale );
+	myX2[ 4 ] += widths[ 4 ] *0.75;
+	myX[ 3 ] -= ( 60*scale );
 	myY[ 3 ] += (17*scale);
 	
 	skeletons[ skeletons.size() -1 ]->setX( myX );
+	skeletons[ skeletons.size() -1 ]->setX2( myX2 );
 	skeletons[ skeletons.size() -1 ]->setY( myY );
 	skeletons[ skeletons.size() -1 ]->setLine( line );
 	skeletons[ skeletons.size() -1 ]->setWidth( widths );
@@ -243,19 +257,22 @@ bool Skeleton_factory::harm( Rect* rect, int damage )
 	{
 		for( auto &i :skeletons )
 		{
-			if( i->isAlive() && i->getRealX() > -width*3 && i->getRealX() < screen_w +width*3 && i->getHeartPoints() > 0 )
+			if( i->isAlive() && i->getHeartPoints() > 0 )
 			{
-				Rect r;
-				r.set( i->getRealX(), i->getRealY(), i->getRealWidth(), i->getRealHeight() );
-				if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+				if( i->getRealX() > -width*3 && i->getRealX() < screen_w +width*3 )
 				{
-					i->harm( -damage );
-					if( i->getHeartPoints() <= 0 )
+					Rect r;
+					r.set( i->getRealX(), i->getRealY(), i->getRealWidth(), i->getRealHeight() );
+					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 					{
-						i->setDead();
+						i->harm( -damage );
+						if( i->getHeartPoints() <= 0 )
+						{
+							i->setDead();
+						}
+						
+						return true;
 					}
-					
-					return true;
 				}
 			}
 		}
@@ -270,33 +287,39 @@ void Skeleton_factory::ableAttack( Rect* rect )
 	{
 		for( auto &i :skeletons )
 		{
-			if( i->getX() > -width*3 && i->getX() < screen_w +width*3 && i->isAlive() )
+			if( i->isAlive() )
 			{
-				sprites[ i->getState() ]->setPosition( i->getRealX(), i->getRealY() );
-				if( sprites[ i->getState() ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+				if( i->getX() > -width*3 && i->getX() < screen_w +width*3 )
 				{
-					i->ableAttack();
+					sprites[ i->getState() ]->setPosition( i->getRealX(), i->getRealY() );
+					if( sprites[ i->getState() ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					{
+						i->ableAttack();
+					}
 				}
 			}
 		}
 	}
 }
 
-bool Skeleton_factory::isSword( Rect* rect )
+bool Skeleton_factory::harmSomebody( Rect* rect )
 {
 	if( rect != NULL )
 	{
 		for( vector <Skeleton*> ::iterator i = skeletons.begin(); i != skeletons.end(); i++ )
 		{
-			if( (*i)->isSword() && (*i)->isAlive() && (*i)->getX() > -width*3 && (*i)->getX() < screen_w +width*3 )
+			if( (*i)->isAlive() )
 			{
-				Rect r;
-				r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
-				if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+				if( (*i)->harmSomebody() && (*i)->getX() > -width*3 && (*i)->getX() < screen_w +width*3 )
 				{
-					// printf( "collision!\n" );
-					this->sword = i;
-					return true;
+					Rect r;
+					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
+					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					{
+						// printf( "collision!\n" );
+						this->sword = i;
+						return true;
+					}
 				}
 			}
 		}

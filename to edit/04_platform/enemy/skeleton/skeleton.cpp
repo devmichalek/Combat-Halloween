@@ -23,7 +23,6 @@ Skeleton::Skeleton()
 	attack = 0;
 	attack_line = 0;
 	attack_count = 0;
-	flag = false;
 }
 
 Skeleton::~Skeleton()
@@ -63,6 +62,11 @@ void Skeleton::free()
 		x.clear();
 	}
 	
+	if( !x2.empty() )
+	{
+		x2.clear();
+	}
+	
 	if( !y.empty() )
 	{
 		y.clear();
@@ -77,8 +81,6 @@ void Skeleton::free()
 	{
 		height.clear();
 	}
-	
-	flag = false;
 }
 
 void Skeleton::reset( int distance )
@@ -88,6 +90,11 @@ void Skeleton::reset( int distance )
 		if( distance > 0 )
 		{
 			for( auto &it :x )
+			{
+				it ++;
+			}
+			
+			for( auto &it :x2 )
 			{
 				it ++;
 			}
@@ -110,8 +117,6 @@ void Skeleton::reset( int distance )
 	hp = hp_state;
 	attack = 0;
 	attack_count = 0;
-	
-	flag = false;
 }
 
 
@@ -120,6 +125,11 @@ void Skeleton::reset( int distance )
 void Skeleton::setX( vector <float> x )
 {
 	this->x = x;
+}
+
+void Skeleton::setX2( vector <float> x2 )
+{
+	this->x2 = x2;
 }
 
 void Skeleton::setY( vector <float> y )
@@ -192,23 +202,10 @@ void Skeleton::setDead()
 
 float Skeleton::getX()
 {
-	if( (direction == 2 || direction == 0) && flag )
+	if( direction == 2 || direction == 0 )
 	{
-		if( state < ATTACK )
-		{
-			return x[ state ] +width[ APPEAR ]/2;
-		}
-		else
-		{
-			return x[ state ] +width[ APPEAR ] +(30*yScale);
-		}
-		
+		return x2[ state ];
 	}
-	else if( state == ATTACK )
-	{
-		return x[ state ] -(60*yScale);
-	}
-	
 	
 	return x[ state ];
 }
@@ -246,10 +243,10 @@ float Skeleton::getAttackX()
 {
 	if( direction == 2 || direction == 0 )
 	{
-		return x[ ATTACK ] +194*yScale;
+		return x2[ ATTACK ] -getAttackWidth();
 	}
 	
-	return x[ ATTACK ] -55*yScale;
+	return x[ ATTACK ];
 }
 
 float Skeleton::getAttackY()
@@ -259,7 +256,7 @@ float Skeleton::getAttackY()
 
 int Skeleton::getAttackWidth()
 {
-	return width[ APPEAR ]/3;
+	return width[ APPEAR ] *0.70;
 }
 
 int Skeleton::getAttackHeight()
@@ -302,8 +299,10 @@ float Skeleton::getVerticalScale()
 int Skeleton::getHeartPoints()
 {
 	if( hp < 0 )
+	{
 		return 0;
-		
+	}
+
 	return hp;
 }
 
@@ -317,7 +316,7 @@ bool Skeleton::isAlive()
 	return false;
 }
 
-bool Skeleton::isSword()
+bool Skeleton::harmSomebody()
 {
 	if( state == ATTACK )
 	{
@@ -346,7 +345,13 @@ void Skeleton::appear( Rect* rect )
 	{
 		if( rect->getX() > left && rect->getX() + rect->getWidth() < right )
 		{
-			// printf( "appeared\n" );
+			direction = 0;
+			
+			if( xScale > 0 )
+			{
+				xScale = -xScale;
+			}
+				
 			state = APPEAR;
 		}
 	}
@@ -362,16 +367,23 @@ void Skeleton::walk( Rect* rect )
 		rect->getY() < y[ state ] +height[ state ] &&
 		state < ATTACK )
 		{
-			if( rect->getX() +rect->getWidth()/2 -5 < x[ ATTACK ] && x[ WALK ] > left )
+			if( rect->getX() +rect->getWidth()/4 < x[ WALK ] && x[ WALK ] > left )
 			{
-				if( xScale < 0 )	xScale = -xScale;
+				if( xScale < 0 )
+				{
+					xScale = -xScale;
+				}
+					
 				direction = 1;
 			}
-			else if( rect->getX() +rect->getWidth() > x[ WALK ] +width[ WALK ]/6 && x[ WALK ] < right )
+			else if( rect->getRight() -rect->getWidth()/4 > x2[ WALK ] && x[ WALK ] < right )
 			{
-				if( xScale > 0 )	xScale = -xScale;
+				if( xScale > 0 )
+				{
+					xScale = -xScale;
+				}
+					
 				direction = 2;
-				flag = true;
 			}
 			else
 			{
@@ -426,12 +438,22 @@ void Skeleton::mechanics()
 				{
 					it -= vel;
 				}
+				
+				for( auto &it :x2 )
+				{
+					it -= vel;
+				}
 			}
 			else if( direction == 2 )
 			{
 				state = WALK;
 				
 				for( auto &it :x )
+				{
+					it += vel;
+				}
+				
+				for( auto &it :x2 )
 				{
 					it += vel;
 				}
@@ -460,6 +482,11 @@ void Skeleton::ableAttack()
 void Skeleton::moveX( int vel )
 {
 	for( auto &it :x )
+	{
+		it += vel;
+	}
+	
+	for( auto &it :x2 )
 	{
 		it += vel;
 	}
