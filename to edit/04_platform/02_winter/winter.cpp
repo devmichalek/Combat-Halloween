@@ -79,6 +79,7 @@ void Winter::reset()
 	greenery->reset( distance );
 	
 	mine_factory->reset( distance );
+	skeleton_factory->reset( distance );
 }
 
 
