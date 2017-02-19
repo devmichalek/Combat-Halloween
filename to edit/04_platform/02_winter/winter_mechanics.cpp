@@ -247,6 +247,7 @@ void Winter::mechanics()
 	{
 		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
 		{
+			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
 		}
 		else
@@ -299,7 +300,7 @@ void Winter::mechanics()
 	}
 	
 	// HARM BY SKELETON
-	if( skeleton_factory->isSword( hero->getRect() ) )
+	if( skeleton_factory->harmSomebody( hero->getRect() ) )
 	{
 		heart->harm( -skeleton_factory->getDamage() );
 		effect->runBlood();
