@@ -256,7 +256,7 @@ float Golem::getAttackY()
 
 int Golem::getAttackWidth()
 {
-	return width[ APPEAR ] *0.70;
+	return width[ APPEAR ] *0.50;
 }
 
 int Golem::getAttackHeight()
@@ -320,12 +320,7 @@ bool Golem::harmSomebody()
 {
 	if( state == ATTACK )
 	{
-		if( offset /delay == 4 && attack_count < 1 )
-		{
-			attack_count++;
-			return true;
-		}
-		else if( offset /delay == 7 && attack_count < 2 )
+		if( offset /delay == 3 && attack_count < 1 )
 		{
 			attack_count++;
 			return true;
@@ -367,7 +362,7 @@ void Golem::walk( Rect* rect )
 		rect->getY() < y[ state ] +height[ state ] &&
 		state < ATTACK )
 		{
-			if( rect->getX() < x[ ATTACK ] && x[ WALK ] > left )
+			if( rect->getX() +rect->getWidth()/4 < x[ WALK ] && x[ WALK ] > left )
 			{
 				if( xScale < 0 )
 				{
@@ -376,7 +371,7 @@ void Golem::walk( Rect* rect )
 					
 				direction = 1;
 			}
-			else if( rect->getX() > x2[ WALK ] && x[ WALK ] < right )
+			else if( rect->getRight() -rect->getWidth()/4 > x2[ WALK ] && x[ WALK ] < right )
 			{
 				if( xScale > 0 )
 				{

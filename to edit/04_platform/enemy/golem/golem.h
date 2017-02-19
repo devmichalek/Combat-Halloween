@@ -1,13 +1,8 @@
 #pragma once
 
-#include "04_platform/world/brick/block.h"
-#include "drawable/rect.h"
-#include <SFML/Graphics/Color.hpp>
-#include <vector>
+#include "04_platform/enemy/skeleton/skeleton.h"
 
-using namespace std;
-
-class Golem
+class Golem :public Skeleton
 {
 	enum
 	{
@@ -16,43 +11,6 @@ class Golem
 		ATTACK,
 		DEAD
 	};
-	
-	int8_t state;
-	sf::Uint8 offset;
-	sf::Uint8 delay;
-	sf::Uint8 counter;
-	vector <sf::Uint8> line;
-	
-	// pos x
-	int left;
-	int right;
-	
-	// heart points
-	int hp;
-	int hp_state;
-	
-	// damage
-	sf::Uint8 damage;
-	
-	// velocity
-	float vel;
-	
-	// direction
-	sf::Uint8 direction;
-	
-	// scale
-	float xScale, yScale;
-	
-	// attack stuff
-	sf::Uint8 attack;
-	sf::Uint8 attack_line;
-	sf::Uint8 attack_count;
-	
-	vector <float> y;
-	vector <float> x;
-	vector <float> x2;
-	vector <int> width;
-	vector <int> height;
 	
 public:
 	
