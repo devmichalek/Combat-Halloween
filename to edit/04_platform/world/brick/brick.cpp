@@ -473,24 +473,24 @@ void Brick::createRightBorders()
 
 void Brick::createStuffing( int a, int n )
 {
-	for( vector <Block*>::iterator i = blocks.begin(); i != blocks.end(); i++ )
+	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( (*i)->nr == a || (*i)->nr == n )
+		if( blocks[ i ]->nr == a || blocks[ i ]->nr == n )
 		{
 			// we check if we have free place
 			bool free_place = true;
 			for( auto &j :blocks )
 			{
-				if( (*i)->y == j->y && (*i)->x +width == j->x  )
+				if( blocks[ i ]->y == j->y && blocks[ i ]->x +width == j->x  )
 				{
 					free_place = false;
 					break;
 				}
 			}
 			
-			if( free_place &&  (*i)->x + width <= right )
+			if( free_place && blocks[ i ]->x + width <= right )
 			{
-				addBlock( n, (*i)->x + width, (*i)->y );
+				addBlock( n, blocks[ i ]->x + width, blocks[ i ]->y );
 			}
 		}
 	}
