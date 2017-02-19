@@ -312,7 +312,7 @@ void Islands::createBotIslands( vector <Block*> blocks, int w, int h )
 		// check right
 		if( success == 0 )
 		{
-			for( unsigned j = 0; j < blocks.size()-1; j++ )
+			for( unsigned j = 1; j < blocks.size()-1; j++ )
 			{
 				if( blocks[ j ]->y == posY[ i ] && blocks[ j ]->nr == -1 && blocks[j -1]->nr != -1 )
 				{
@@ -429,16 +429,18 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 	while( rubbish )
 	{
 		rubbish = false;
-		for( unsigned i = 1; i < posX.size() -1; i++ )
+		for( unsigned i = 0; i < posX.size(); i++ )
 		{
 			for( unsigned j = 0; j < blocks.size(); j++ )
 			{
 				if( (posX[ i ] == blocks[ j ]->x -width && posY[ i ] == blocks[ j ]->y -width) ||
-					(posX[ i ] == blocks[ j ]->x +width && posY[ i ] == blocks[ j ]->y -width))
+				(posX[ i ] == blocks[ j ]->x +width && posY[ i ] == blocks[ j ]->y -width))
 				{
 					posX.erase( posX.begin() +i );
 					posY.erase( posY.begin() +i );
 					rubbish = true;
+					break;
+					i = posX.size();
 				}
 			}
 		}
@@ -877,8 +879,8 @@ bool Islands::checkFlyingIslands( Rect* rect )
 {
 	if( rect != NULL )
 	{
-		int l = rect->getX();		// left
-		int r = rect->getRight();	// right
+		int l = rect->getX() -10;		// left
+		int r = rect->getRight() +10;	// right
 		int t = rect->getY();		// top
 		int b = rect->getBot(); 	// bot
 		
@@ -886,20 +888,36 @@ bool Islands::checkFlyingIslands( Rect* rect )
 		{
 			for( unsigned i = 0; i < it->getSize(); i++ )
 			{
-				if( it->getX(i) > -width*2 && it->getX(i) < screen_w +width )
+				if( it->getX(i) > -width && it->getX(i) < screen_w +width )
 				{
 					sprites[ it->getNr(i) ]->setPosition( it->getX(i), it->getY(i) );
 					
 					for( int j = l; j <= r; j++ )
 					{
-						if( sprites[ it->getNr(i) ]->checkPixelCollision( j, t ) )		return true;
-						else if( sprites[ it->getNr(i) ]->checkPixelCollision( j, b ) )	return true;
+						if( sprites[ it->getNr(i) ]->checkPixelCollision( j, t ) )
+						{
+							it->awry();
+							return true;
+						}
+						else if( sprites[ it->getNr(i) ]->checkPixelCollision( j, b ) )
+						{
+							it->awry();
+							return true;
+						}
 					}
 					
 					for( int j = t; j <= b; j++ )
 					{
-						if( sprites[ it->getNr(i) ]->checkPixelCollision( l, j ) )		return true;
-						else if( sprites[ it->getNr(i) ]->checkPixelCollision( r, j ) )	return true;
+						if( sprites[ it->getNr(i) ]->checkPixelCollision( l, j ) )
+						{
+							it->awry();
+							return true;
+						}
+						else if( sprites[ it->getNr(i) ]->checkPixelCollision( r, j ) )
+						{
+							it->awry();
+							return true;
+						}
 					}
 				}
 			}

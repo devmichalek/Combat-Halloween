@@ -13,6 +13,7 @@ class Hover	// flying island
 	int vel;
 	int vel_state;
 	int state;
+	bool awryS;
 	
 public:
 	Hover();
@@ -23,6 +24,7 @@ public:
 	void setPosition( int startX, int endX, int y, int vel );
 	void moveX( float vel );
 	void moving( int width );
+	void awry();
 	
 	void turnOff();
 	void turnOn();
