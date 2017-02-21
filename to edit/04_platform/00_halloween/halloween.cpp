@@ -54,7 +54,7 @@ void Halloween::free()
 	delete greenery;
 	
 	delete mine_factory;
-	skeleton_factory.free();
+	vampire_factory.free();
 	zombie_factory.free();
 }
 
@@ -76,7 +76,7 @@ void Halloween::reset()
 	greenery->reset( distance );
 	
 	mine_factory->reset( distance );
-	skeleton_factory.reset( distance );
+	vampire_factory.reset( distance );
 	zombie_factory.reset( distance );
 }
 
@@ -104,7 +104,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	greenery->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
-	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
+	vampire_factory.load( width, screen_h, screen_h, "vampire" );
 	zombie_factory.load( width, screen_h, screen_h, "zombie" );
 }
 
@@ -133,7 +133,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
-		skeleton_factory.fadeout( value );
+		vampire_factory.fadeout( value );
 		zombie_factory.fadeout( value );
 	}
 	else
@@ -152,7 +152,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
-		skeleton_factory.fadein( value );
+		vampire_factory.fadein( value );
 		zombie_factory.fadein( value );
 	}
 	
@@ -170,7 +170,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
-	skeleton_factory.draw( window );
+	vampire_factory.draw( window );
 	zombie_factory.draw( window );
 	
 	// rest
@@ -268,9 +268,11 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		
 		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
 				 mine_factory->positioning( islands->getBlocks(), difficulty );
-		info = "creating skeleton factory";	break;
+		info = "creating vampire and zombie factory";	break;
 		
-		case 20: zombie_factory.positioning( brick->getBlocks(), difficulty );
+		case 20: vampire_factory.positioning( brick->getBlocks(), difficulty );
+				 vampire_factory.positioning( islands->getBlocks(), difficulty );
+				 zombie_factory.positioning( brick->getBlocks(), difficulty );
 				 zombie_factory.positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
