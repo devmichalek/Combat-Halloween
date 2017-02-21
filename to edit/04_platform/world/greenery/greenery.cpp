@@ -285,7 +285,14 @@ void Greenery::positioning( vector <Block*> blocks )
 					this->blocks[ this->blocks.size() -1 ]->y = plants[ chosen ]->startY +distance +it->y;
 					this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
 					
-					this->blocks[ this->blocks.size() -1 ]->bg = plants[ chosen ]->bg;
+					if( rand()%10 < 2 && !plants[ chosen ]->bg )
+					{
+						this->blocks[ this->blocks.size() -1 ]->bg = false;
+					}
+					else
+					{
+						this->blocks[ this->blocks.size() -1 ]->bg = true;
+					}
 				}
 			}
 		}
