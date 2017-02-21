@@ -1,6 +1,7 @@
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/skeleton/skeleton.h"
 #include "04_platform/enemy/golem/golem.h"
+#include "04_platform/enemy/vampire/vampire.h"
 #include <fstream>
 
 template <typename F>
@@ -10,7 +11,6 @@ Factory<F>::Factory()
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
-	
 }
 
 template <typename F>
@@ -72,6 +72,8 @@ void Factory<F>::free()
 	{
 		features.clear();
 	}
+	
+	hp.free();
 }
 
 template <typename F>
@@ -223,6 +225,10 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 		}
 	}
 	file.close();
+	
+	hp.setName( "factory-hp" );
+	hp.setFont( "data/fonts/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
+	hp.setText( " " );
 }
 
 template <typename F>
@@ -234,6 +240,13 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 		{
 			if( i->getX() > -width*3 && i->getX() < screen_w + width*3 )
 			{
+				if( i->getHeartPoints() > 0 )
+				{
+					hp.setText( to_string( i->getHeartPoints() ) );
+					hp.setPosition( i->getRealX() +i->getRealWidth()/2 -hp.getWidth()/2, i->getRealY() -30 );
+					window->draw( hp.get() );
+				}
+				
 				sprites[ i->getState() ]->setOffset( i->getOffset() );
 				sprites[ i->getState() ]->setPosition( i->getX(), i->getY() );
 				sprites[ i->getState() ]->setScale( i->getHorizontalScale(), i->getVerticalScale() );
@@ -241,11 +254,30 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 			}
 		}
 	}
+	
+	/*
+	// create an empty shape
+	sf::ConvexShape convex;
+	
+	// resize it to 4 points
+	convex.setPointCount(4);
+	
+	// define the points
+	foes[ 0 ]->setScale( foes[ 0 ]->getHorizontalScale(), foes[ 0 ]->getVerticalScale() );
+	convex.setPoint( 0, sf::Vector2f( foes[ 0 ]->getAttackX(), foes[ 0 ]->getAttackY() ) );
+	convex.setPoint( 1, sf::Vector2f( foes[ 0 ]->getAttackX() +foes[ 0 ]->getAttackWidth(), foes[ 0 ]->getAttackY() ) );
+	
+	convex.setPoint( 2, sf::Vector2f( foes[ 0 ]->getAttackX() +foes[ 0 ]->getAttackWidth(), foes[ 0 ]->getAttackY() +foes[ 0 ]->getAttackHeight() ) );
+	convex.setPoint( 3, sf::Vector2f( foes[ 0 ]->getAttackX(), foes[ 0 ]->getAttackY() +foes[ 0 ]->getAttackHeight() ) );
+	window->draw( convex );
+	*/
 }
 
 template <typename F>
 void Factory<F>::fadein( int v, int max )
 {
+	hp.fadein( v, max );
+	
 	for( auto &i :sprites )
 	{
 		i->fadein( v, max );
@@ -255,6 +287,8 @@ void Factory<F>::fadein( int v, int max )
 template <typename F>
 void Factory<F>::fadeout( int v, int min )
 {
+	hp.fadeout( v, min );
+	
 	for( auto &i :sprites )
 	{
 		i->fadeout( v, min );
@@ -388,9 +422,10 @@ void Factory<F>::positioning( vector <Block*> blocks, int chance )
 			
 			if( counter > 2 )
 			{
-				if( rand()%100 < chance )
+				if( rand()%100 < 90 )
 				{
-					add( startX +width*(counter/2), startY, chance );
+					int additional_nr = rand()%counter;
+					add( startX +width*additional_nr, startY, chance );
 					foes[ foes.size() -1 ]->setBorders( startX, startX +width*counter );
 				}
 			}
@@ -455,16 +490,18 @@ void Factory<F>::ableAttack( Rect* rect )
 {
 	if( rect != NULL )
 	{
-		for( auto &i :foes )
+		
+		for( typename vector <F*> ::iterator i = foes.begin(); i != foes.end(); i++ )
 		{
-			if( i->isAlive() )
+			if( (*i)->isAlive() )
 			{
-				if( i->getX() > -width*3 && i->getX() < screen_w +width*3 )
+				if( (*i)->getX() > -width*3 && (*i)->getX() < screen_w +width*3 )
 				{
-					sprites[ i->getState() ]->setPosition( i->getRealX(), i->getRealY() );
-					if( sprites[ i->getState() ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					Rect r;
+					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
+					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 					{
-						i->ableAttack();
+						(*i)->ableAttack();
 					}
 				}
 			}
@@ -559,3 +596,4 @@ void Factory<F>::setColor( sf::Color color )
 
 template class Factory <Skeleton>;
 template class Factory <Golem>;
+template class Factory <Vampire>;

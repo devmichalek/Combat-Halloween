@@ -2,6 +2,7 @@
 
 #include "04_platform/world/brick/block.h"
 #include "drawable/sprite.h"
+#include "drawable/text.h"
 #include <vector>
 
 using namespace std;
@@ -31,6 +32,7 @@ class Factory
 	vector <vector <tuple <int, int, float> >> m;
 	vector <float> features;
 	
+	MyText hp;
 
 public:
 
