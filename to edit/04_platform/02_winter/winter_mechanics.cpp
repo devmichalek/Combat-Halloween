@@ -93,7 +93,7 @@ void Winter::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
-		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -124,7 +124,7 @@ void Winter::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
-		skeleton_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -181,7 +181,7 @@ void Winter::mechanics()
 		kunai->getX( i ) < -kunai->getW() ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		skeleton_factory->harm( kunai->getRect( i ), kunai->getDamage() ) )
+		golem_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
 		{
 			kunai->destroy( i );
 		}
@@ -207,7 +207,7 @@ void Winter::mechanics()
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
-			skeleton_factory->moveX( hero->getDirection(), scope->getVel() );
+			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -221,7 +221,7 @@ void Winter::mechanics()
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
-			skeleton_factory->moveX( hero->getDirection(), -scope->getVel() );
+			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -259,7 +259,7 @@ void Winter::mechanics()
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
-			skeleton_factory->undoFall( brick->getGrassValue() );
+			golem_factory.undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -276,13 +276,6 @@ void Winter::mechanics()
 		heart->harm( -wall->getDamage() );
 		effect->runBlood();
 	}
-	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
-	{
-		if( wall->harm( skeleton_factory->getRect( i ) ) )
-		{
-			skeleton_factory->harmDefinite( i, -wall->getDamage() );
-		}
-	}
 	
 	// HARM BY MINE
 	mine_factory->checkCollision( hero->getRect() );
@@ -291,18 +284,11 @@ void Winter::mechanics()
 		heart->harm( -mine_factory->getDamage() );
 		effect->runBlood();
 	}
-	for( unsigned i = 0; i < skeleton_factory->getSize(); i++ )
-	{
-		if( mine_factory->harm( skeleton_factory->getRect( i ) ) )
-		{
-			skeleton_factory->harmDefinite( i, -mine_factory->getDamage() );
-		}
-	}
 	
 	// HARM BY SKELETON
-	if( skeleton_factory->harmSomebody( hero->getRect() ) )
+	if( golem_factory.harmSomebody( hero->getRect() ) )
 	{
-		heart->harm( -skeleton_factory->getDamage() );
+		heart->harm( -golem_factory.getDamage() );
 		effect->runBlood();
 	}
 	
@@ -316,7 +302,7 @@ void Winter::mechanics()
 	{
 		wall->mechanics();
 		mine_factory->mechanics();
-		skeleton_factory->mechanics();
+		golem_factory.mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -344,7 +330,7 @@ void Winter::mechanics()
 // ------------------------------------------------------------------------------------------------
 	// SKELETON PART
 	
-	skeleton_factory->appear( hero->getRect() );
-	skeleton_factory->walk( hero->getRect() );
-	skeleton_factory->ableAttack( hero->getRect() );
+	golem_factory.appear( hero->getRect() );
+	golem_factory.walk( hero->getRect() );
+	golem_factory.ableAttack( hero->getRect() );
 }
