@@ -23,7 +23,6 @@ Winter::Winter()
 	greenery = new Greenery;
 	
 	mine_factory = new Mine_factory;
-	skeleton_factory = new Skeleton_factory;
 }
 
 Winter::~Winter()
@@ -57,7 +56,7 @@ void Winter::free()
 	delete greenery;
 	
 	delete mine_factory;
-	delete skeleton_factory;
+	golem_factory.free();
 }
 
 void Winter::reset()
@@ -79,7 +78,7 @@ void Winter::reset()
 	greenery->reset( distance );
 	
 	mine_factory->reset( distance );
-	skeleton_factory->reset( distance );
+	golem_factory.reset( distance );
 }
 
 
@@ -107,7 +106,7 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	greenery->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
-	skeleton_factory->load( width, screen_h, screen_h );
+	golem_factory.load( width, screen_h, screen_h, "golem_v2" );
 }
 
 void Winter::handle( sf::Event &event )
@@ -136,7 +135,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
-		skeleton_factory->fadeout( value );
+		golem_factory.fadeout( value );
 	}
 	else
 	{
@@ -155,7 +154,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
-		skeleton_factory->fadein( value );
+		golem_factory.fadein( value );
 	}
 	
 
@@ -172,7 +171,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
-	skeleton_factory->draw( window );
+	golem_factory.draw( window );
 	
 	// rest
 	water->draw( window );
@@ -270,10 +269,10 @@ bool Winter::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
 				 mine_factory->positioning( islands->getBlocks(), difficulty );
-		info = "creating skeleton factory";	break;
+		info = "creating golem factory";	break;
 		
-		case 20: skeleton_factory->positioning( brick->getBlocks(), difficulty );
-				 skeleton_factory->positioning( islands->getBlocks(), difficulty );
+		case 20: golem_factory.positioning( brick->getBlocks(), difficulty );
+				 golem_factory.positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
 		default:

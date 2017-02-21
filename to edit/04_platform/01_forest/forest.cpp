@@ -287,7 +287,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
 				 mine_factory->positioning( islands->getBlocks(), difficulty );
-		info = "creating skeleton factory";	break;
+		info = "creating golem factory";	break;
 		
 		case 20: golem_factory.positioning( brick->getBlocks(), difficulty );
 				 golem_factory.positioning( islands->getBlocks(), difficulty );
