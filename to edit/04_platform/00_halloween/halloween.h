@@ -22,6 +22,7 @@
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/skeleton/skeleton.h"
+#include "04_platform/enemy/vampire/vampire.h"
 
 class Halloween
 {
@@ -51,7 +52,7 @@ class Halloween
 	
 	// enemy
 	Mine_factory* mine_factory;
-	Factory <Skeleton> skeleton_factory;
+	Factory <Vampire> vampire_factory;
 	Factory <Skeleton> zombie_factory;
 	
 public:
