@@ -20,6 +20,7 @@ Halloween::Halloween()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	money_panel = new Money_panel;
 	
 	mine_factory = new Mine_factory;
 }
@@ -52,6 +53,7 @@ void Halloween::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	delete money_panel;
 	
 	delete mine_factory;
 	vampire_factory.free();
@@ -74,6 +76,7 @@ void Halloween::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	money_panel->reset();
 	
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
@@ -102,6 +105,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	money_panel->load( screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	vampire_factory.load( width, screen_h, screen_h, "vampire" );
@@ -131,6 +135,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
+		money_panel->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		vampire_factory.fadeout( value );
@@ -150,6 +155,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
+		money_panel->fadein( value );
 		
 		mine_factory->fadein( value );
 		vampire_factory.fadein( value );
@@ -179,6 +185,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	wall->draw( window );
 	greenery->draw( window );
 	heart->draw( window );
+	money_panel->draw( window );
 	effect->draw( window );
 }
 
