@@ -14,6 +14,7 @@ Mine::Mine()
 	line_two = 0;
 	
 	harmed = false;
+	exploded = false;
 }
 
 Mine::~Mine()
@@ -34,6 +35,7 @@ void Mine::free()
 	line_two = 0;
 	
 	harmed = false;
+	exploded = false;
 }
 
 void Mine::reset()
@@ -44,6 +46,7 @@ void Mine::reset()
 	delay = 24;
 	counter = 0;
 	harmed = false;
+	exploded = false;
 }
 
 
@@ -167,6 +170,17 @@ bool Mine::ableToDestroy()
 {
 	if( state == 3 )
 	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Mine::explosion()
+{
+	if( !exploded && nr == 1 )
+	{
+		exploded = true;
 		return true;
 	}
 	

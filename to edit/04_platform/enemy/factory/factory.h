@@ -4,6 +4,7 @@
 #include "drawable/sprite.h"
 #include "drawable/text.h"
 #include <vector>
+#include "02_menu/click.h"
 
 using namespace std;
 
@@ -33,6 +34,7 @@ class Factory
 	vector <float> features;
 	
 	MyText hp;
+	vector <Click*> hits;
 
 public:
 
