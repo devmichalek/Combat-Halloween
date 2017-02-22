@@ -236,7 +236,7 @@ float Vampire::getRealX()
 
 float Vampire::getRealY()
 {
-	return y[ 0 ];
+	return y[ 0 ] +30*yScale;
 }
 
 float Vampire::getRealWidth()
