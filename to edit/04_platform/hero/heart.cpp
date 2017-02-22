@@ -77,7 +77,7 @@ void Heart::load()
 	{
 		grey_panel.push_back( new MySprite() );
 		grey_panel[ grey_panel.size() -1 ]->setName( "heart-gray_panel[" + to_string( i ) + "]" );
-		grey_panel[ grey_panel.size() -1 ]->load( "data/sprites/hero/heart/grey_panel.png");
+		grey_panel[ grey_panel.size() -1 ]->load( "data/sprites/hero/grey/grey_panel.png");
 		grey_panel[ grey_panel.size() -1 ]->setScale( 0.5, 0.5 );
 		grey_panel[ grey_panel.size() -1 ]->setPosition( 5 + (frame[ 0 ]->getWidth() +10)*i, 5 );
 	}
