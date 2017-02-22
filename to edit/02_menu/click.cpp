@@ -55,3 +55,18 @@ void Click::setVolume( sf::Uint8 volume )
 {
 	click.setVolume( volume );
 }
+
+void Click::setChunkName( std::string text )
+{
+	click.setID( text );
+}
+
+void Click::loadChunk( std::string text )
+{
+	click.load( text, 50 );
+}
+
+void Click::playChunk()
+{
+	click.play();
+}

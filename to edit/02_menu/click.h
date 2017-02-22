@@ -10,6 +10,7 @@
 #pragma once
 
 #include "sound/chunk.h"
+#include <string>
 #include <SFML/Graphics/Export.hpp> // sf::Uint8
 
 class Click
@@ -36,4 +37,8 @@ public:
 	
 	bool isPlayable();
 	void setVolume( sf::Uint8 volume );
+	
+	void setChunkName( std::string text );
+	void loadChunk( std::string text );
+	void playChunk();
 };
