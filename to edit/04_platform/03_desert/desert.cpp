@@ -284,6 +284,8 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 20: skeleton_factory.positioning( brick->getBlocks(), difficulty );
 				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
+				 skeleton_factory.positioning( brick->getBlocks(), difficulty );
+				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
 		default:
