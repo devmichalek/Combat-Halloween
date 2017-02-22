@@ -17,11 +17,12 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
+#include "04_platform/money/money_panel.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
-#include "04_platform/enemy/skeleton/skeleton.h"
+#include "04_platform/enemy/zombie/zombie.h"
 #include "04_platform/enemy/vampire/vampire.h"
 
 class Halloween
@@ -49,11 +50,12 @@ class Halloween
 	Wall* wall;
 	Ladder* ladder;
 	Greenery* greenery;
+	Money_panel* money_panel;
 	
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Vampire> vampire_factory;
-	Factory <Skeleton> zombie_factory;
+	Factory <Zombie> zombie_factory;
 	
 public:
 
