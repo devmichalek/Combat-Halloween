@@ -3,6 +3,7 @@
 #include "drawable/sprite.h"
 #include <vector>
 #include "04_platform/enemy/mine/mine.h"
+#include "02_menu/click.h"
 
 class Mine_factory
 {
@@ -13,6 +14,7 @@ class Mine_factory
 	
 	vector <Mine*> mines;
 	vector <MySprite*> sprites;
+	Click click;
 	
 public:
 	

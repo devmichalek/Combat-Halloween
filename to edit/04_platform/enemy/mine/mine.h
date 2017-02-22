@@ -16,6 +16,7 @@ class Mine
 	sf::Uint8 line_two;
 	
 	bool harmed;
+	bool exploded;
 	
 public:
 
@@ -43,6 +44,7 @@ public:
 	
 	bool ableToDraw();
 	bool ableToDestroy();
+	bool explosion();
 	
 	// getters
 	sf::Uint8 getNr();

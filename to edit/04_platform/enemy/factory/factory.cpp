@@ -2,6 +2,7 @@
 #include "04_platform/enemy/skeleton/skeleton.h"
 #include "04_platform/enemy/golem/golem.h"
 #include "04_platform/enemy/vampire/vampire.h"
+#include "04_platform/enemy/zombie/zombie.h"
 #include <fstream>
 
 template <typename F>
@@ -74,6 +75,16 @@ void Factory<F>::free()
 	}
 	
 	hp.free();
+	
+	if( !hits.empty() )
+	{
+		for( auto &i :hits )
+		{
+			i->free();
+		}
+		
+		hits.clear();
+	}
 }
 
 template <typename F>
@@ -103,6 +114,7 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	string png_sprites = "data/sprites/enemy/" +name +"/";
 	string txt_multiplier = "data/txt/enemy/multiplier/" +name +".txt";
 	string txt_features = "data/txt/enemy/features/" +name +".txt";
+	string txt_chunks = "data/txt/enemy/chunks/" +name +".txt";
 	
 	// load lines
 	fstream file;
@@ -229,6 +241,25 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	hp.setName( "factory-hp" );
 	hp.setFont( "data/fonts/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
 	hp.setText( " " );
+	
+	file.open( txt_chunks );
+	if( file.bad() )
+	{
+		printf( "Something went wrong... %s [file]\n", txt_chunks.c_str() );
+	}
+	else
+	{
+		int number = 0;
+		string line;
+		file >> line;
+		number = strToInt( line );
+		for( int i = 0; i < number; i++ )
+		{
+			hits.push_back( new Click() );
+			hits[ hits.size() -1 ]->setChunkName( "factory-" +name );
+			hits[ hits.size() -1 ]->loadChunk( "data/sounds/" +name +"/hit/" +to_string( i ) +".wav" );
+		}
+	}
 }
 
 template <typename F>
@@ -238,11 +269,11 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 	{
 		if( i->isAlive() )
 		{
-			if( i->getX() > -width*3 && i->getX() < screen_w + width*3 )
+			if( i->getX() > -width*4 && i->getX() < screen_w + width*4 )
 			{
 				if( i->getHeartPoints() > 0 )
 				{
-					hp.setText( to_string( i->getHeartPoints() ) );
+					hp.setText( "HP: " +to_string( i->getHeartPoints() ) );
 					hp.setPosition( i->getRealX() +i->getRealWidth()/2 -hp.getWidth()/2, i->getRealY() -30 );
 					window->draw( hp.get() );
 				}
@@ -469,6 +500,14 @@ bool Factory<F>::harm( Rect* rect, int damage )
 					r.set( i->getRealX(), i->getRealY(), i->getRealWidth(), i->getRealHeight() );
 					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 					{
+						if( hits.size() > 0 )
+						{
+							if( hits[ 0 ]->isPlayable() )
+							{
+								hits[ rand()%hits.size() ]->playChunk();
+							}
+						}
+						
 						i->harm( -damage );
 						if( i->getHeartPoints() <= 0 )
 						{
@@ -597,3 +636,4 @@ void Factory<F>::setColor( sf::Color color )
 template class Factory <Skeleton>;
 template class Factory <Golem>;
 template class Factory <Vampire>;
+template class Factory <Zombie>;

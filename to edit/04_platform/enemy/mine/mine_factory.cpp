@@ -40,6 +40,8 @@ void Mine_factory::free()
 		
 		sprites.clear();
 	}
+	
+	click.free();
 }
 
 void Mine_factory::reset( int distance )
@@ -86,6 +88,9 @@ void Mine_factory::load( int width, int screen_w, int screen_h )
 	this->width = width;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
+	
+	click.setChunkName( "mine_factory-explosion" );
+	click.loadChunk( "data/sounds/mine/explosion.wav" );
 }
 
 void Mine_factory::draw( sf::RenderWindow* &window )
@@ -94,6 +99,11 @@ void Mine_factory::draw( sf::RenderWindow* &window )
 	{
 		if( i->getX() > -width && i->getX() < screen_w + width && i->ableToDraw() )
 		{
+			if( i->explosion() && click.isPlayable() )
+			{
+				click.playChunk();
+			}
+			
 			sprites[ i->getNr() ]->setOffset( i->getOffset() );
 			sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
 			window->draw( sprites[ i->getNr() ]->get() );
@@ -139,7 +149,7 @@ void Mine_factory::positioning( vector <Block*> blocks, int chance )
 				int x1 = i->x +width/2 -sprites[ 0 ]->getWidth()/2;
 				int x2 = i->x +width/2 -sprites[ 1 ]->getWidth()/2;
 				int y = i->y -sprites[ 0 ]->getHeight();
-				addMine( x1, x2, y );
+				addMine( x1, x2, y +3 );
 			}
 		}
 	}

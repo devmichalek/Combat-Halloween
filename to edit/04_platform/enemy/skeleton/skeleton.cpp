@@ -224,12 +224,12 @@ float Skeleton::getRealX()
 
 float Skeleton::getRealY()
 {
-	return y[ 0 ];
+	return y[ 0 ] -25*yScale;
 }
 
 float Skeleton::getRealWidth()
 {
-	return width[ 0 ];
+	return width[ 1 ] -60*yScale;
 }
 
 float Skeleton::getRealHeight()
