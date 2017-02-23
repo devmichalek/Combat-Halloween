@@ -59,7 +59,7 @@ void Money_panel::load( int screen_w )
 	
 	text.setName( "money_panel-text" );
 	text.setFont( "data/fonts/KGALittleSwag.ttf", 50, 0xD9, 0xD9, 0xD9 );
-	bank = 4981;
+
 	setText();
 }
 
@@ -97,7 +97,24 @@ void Money_panel::fadeout( int v, int min )
 
 void Money_panel::setText()
 {
-	text.setText( to_string( bank ) );
+	sf::Uint8 max = 8;
+	
+	if( to_string( bank ).size() > max )
+	{
+		bank = 99999999;
+		text.setText( to_string( bank ) );
+	}
+	else
+	{
+		string additional = "";
+		for( unsigned i = 0; i < max -to_string( bank ).size(); i++ )
+		{
+			additional += '0';
+		}
+		
+		text.setText( additional +to_string( bank ) );
+	}
+	
 	text.setPosition( coin.getX() -text.getWidth() -12, grey.getY() -14 );
 }
 
