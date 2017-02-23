@@ -276,6 +276,21 @@ int Vampire::getAttackHeight()
 	return height[ APPEAR ]/2;
 }
 
+int Vampire::getLeft()
+{
+	return left;
+}
+
+int Vampire::getRight()
+{
+	return right;
+}
+
+int Vampire::getPlane()
+{
+	return y[ 0 ] +height[ 0 ];
+}
+
 
 
 int8_t Vampire::getState()

@@ -264,6 +264,21 @@ int Skeleton::getAttackHeight()
 	return height[ APPEAR ]/2;
 }
 
+int Skeleton::getLeft()
+{
+	return left;
+}
+
+int Skeleton::getRight()
+{
+	return right;
+}
+
+int Skeleton::getPlane()
+{
+	return y[ 0 ] +height[ 0 ];
+}
+
 
 
 int8_t Skeleton::getState()

@@ -49,6 +49,9 @@ public:
 	float getAttackY();
 	int getAttackWidth();
 	int getAttackHeight();
+	int getLeft();
+	int getRight();
+	int getPlane();
 	
 	int8_t getState();
 	sf::Uint8 getOffset();
