@@ -46,6 +46,15 @@ void Choice::free()
 	
 	text.free();
 	information.free();
+	if( !description.empty() )
+	{
+		for( auto &it :description )
+		{
+			it->free();
+		}
+		
+		description.clear();
+	}
 
 	counter = -1;
 	result = -1;
@@ -71,30 +80,30 @@ void Choice::load( int screen_w, int screen_h )
 	text.setName( "choice-text" );
 	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "Choose world or " );
-	text.setPosition( screen_w/2 -text.getWidth()/2 -button.getWidth(), screen_h/4 - text.getHeight()/2 -80 );
-	button.setPosition( text.getRight() +10, text.getY() -5 );
 	
 	
 	information.setName( "choice-information" );
 	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Following worlds will be generated randomly." );
-	information.setPosition( 10, screen_h - information.getHeight() - 10 );
-	
-	
 
-	for( int i = 0; i < 4; i ++ )
+	for( int i = 0; i < 5; i ++ )
 	{
 		world.push_back( new MySprite() );
 		world[ i ]->setName( "choice-world[ " + to_string( i ) + " ]" );
-		world[ i ]->load( "data/sprites/level/" + to_string( i ) + ".png" );
-		world[ i ]->setScale( 0.2, 0.2 );
+		world[ i ]->load( "data/sprites/play/" + to_string( i ) + ".png" );
+		world[ i ]->setScale( 0.1, 0.1 );
+		
+		description.push_back( new MyText() );
+		description[ i ]->setName( "choice-description" );
+		description[ i ]->setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	}
 	
-	int w = world[ 0 ]->getWidth()*4 + 15*4;
-	world[ 0 ]->setPosition( screen_w/2 - w/2, button.getY() +90 );
-	world[ 1 ]->setPosition( world[ 0 ]->getRight() + 15, button.getY() +90 );
-	world[ 2 ]->setPosition( world[ 1 ]->getRight() + 15, button.getY() +90 );
-	world[ 3 ]->setPosition( world[ 2 ]->getRight() + 15, button.getY() +90 );
+	// set text
+	description[ 0 ]->setText( "Halloween" );
+	description[ 1 ]->setText( "Forest" );
+	description[ 2 ]->setText( "Winter" );
+	description[ 3 ]->setText( "Desert" );
+	description[ 4 ]->setText( "Future" );
 	
 
 	
@@ -104,10 +113,11 @@ void Choice::load( int screen_w, int screen_h )
 	frame.setName( "choice-frame" );
 	frame.load( "data/sprites/level/frame.png" );
 	frame.setScale( 0.2, 0.2 );
-	frame.setPosition( -1000, -1000 );
 	
 	alpha_line = 100;
 	counter_line = 150;
+	
+	reset( screen_w, screen_h );
 }
 
 void Choice::handle( sf::Event &event )
@@ -199,6 +209,11 @@ void Choice::draw( sf::RenderWindow &window )
 		window.draw( it->get() );
 	}
 	
+	for( auto &it :description )
+	{
+		window.draw( it->get() );
+	}
+	
 	window.draw( button.get() );
 	window.draw( text.get() );
 	window.draw( information.get() );
@@ -247,6 +262,11 @@ void Choice::fadein( int j, int max )
 	{
 		it->fadein( j, alpha_line );
 	}
+	
+	for( auto &it :description )
+	{
+		it->fadein( j, max );
+	}
 }
 
 void Choice::fadeout( int j, int min )
@@ -255,6 +275,11 @@ void Choice::fadeout( int j, int min )
 	button.fadeout( j, min );
 	information.fadeout( j, min );
 	frame.fadeout( j, min );
+	
+	for( auto &it :description )
+	{
+		it->fadeout( j, min );
+	}
 
 	if( result != -1 )
 	{
@@ -312,18 +337,24 @@ void Choice::reset( int screen_w, int screen_h )
 	result = -1;
 	chosen = -1;
 	
-	text.setPosition( screen_w/2 -text.getWidth()/2 -button.getWidth(), screen_h/4 - text.getHeight()/2 -80 );
+	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/4 - text.getHeight()/2 -80 );
 	button.setPosition( text.getRight() +10, text.getY() -5 );
 
 	information.setPosition( 10, screen_h - information.getHeight() - 10 );
 
-	int w = world[ 0 ]->getWidth()*4 + 15*4;
-	world[ 0 ]->setPosition( screen_w/2 - w/2, button.getY() +90 );
-	world[ 1 ]->setPosition( world[ 0 ]->getRight() + 15, button.getY() +90 );
-	world[ 2 ]->setPosition( world[ 1 ]->getRight() + 15, button.getY() +90 );
-	world[ 3 ]->setPosition( world[ 2 ]->getRight() + 15, button.getY() +90 );
+	int w = world[ 0 ]->getWidth()*world.size() + 15*world.size();
+	world[ 0 ]->setPosition( screen_w/2 - w/2, button.getY() +115 );
+	for( unsigned i = 1; i < world.size(); i++ )
+	{
+		world[ i ]->setPosition( world[ i -1 ]->getRight() + 15, button.getY() +115 );
+	}
 	
-	frame.setPosition( -1000, -1000 );
+	for( unsigned i = 0; i < world.size(); i++ )
+	{
+		description[ i ]->setPosition( world[ i ]->getX() +world[ i ]->getWidth()/2 -description[ i ]->getWidth()/2, world[ i ]->getY() -description[ i ]->getHeight() -10 );
+	}
+	
+	frame.setPosition( -screen_w, -screen_w );
 	
 	range = 0;
 	keep = false;
@@ -355,6 +386,11 @@ bool Choice::move( int vel, int scope )
 		frame.setPosition( frame.getX() +vel, frame.getY() );
 		
 		for( auto &it :world )
+		{
+			it->setPosition( it->getX() +vel, it->getY() );
+		}
+		
+		for( auto &it :description )
 		{
 			it->setPosition( it->getX() +vel, it->getY() );
 		}
