@@ -6,8 +6,11 @@
 // Hero stuff
 #include "04_platform/hero/hero.h"
 #include "04_platform/hero/kunai.h"
-#include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
+
+// Panel stuff
+#include "04_platform/panel/heart/heart.h"
+#include "04_platform/panel/money/money_panel.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -39,8 +42,11 @@ class Forest
 	// hero
 	Hero* hero;
 	Kunai* kunai;
-	Heart* heart;
 	Scope* scope;
+	
+	// panel
+	Heart* heart;
+	Money_panel* money_panel;
 	
 	// world
 	Brick* brick;
