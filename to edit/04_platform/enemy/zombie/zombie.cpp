@@ -219,12 +219,12 @@ float Zombie::getY()
 
 float Zombie::getRealX()
 {
-	return x[ 0 ];
+	return x[ 0 ] -15*yScale;
 }
 
 float Zombie::getRealY()
 {
-	return y[ 0 ] -25*yScale;
+	return y[ 0 ];
 }
 
 float Zombie::getRealWidth()
@@ -262,6 +262,21 @@ int Zombie::getAttackWidth()
 int Zombie::getAttackHeight()
 {
 	return height[ APPEAR ]/2;
+}
+
+int Zombie::getLeft()
+{
+	return left;
+}
+
+int Zombie::getRight()
+{
+	return right;
+}
+
+int Zombie::getPlane()
+{
+	return y[ 0 ] +height[ 0 ];
 }
 
 

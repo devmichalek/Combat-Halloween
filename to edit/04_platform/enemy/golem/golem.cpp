@@ -264,6 +264,21 @@ int Golem::getAttackHeight()
 	return height[ APPEAR ]/2;
 }
 
+int Golem::getLeft()
+{
+	return left;
+}
+
+int Golem::getRight()
+{
+	return right;
+}
+
+int Golem::getPlane()
+{
+	return y[ 0 ] +height[ 0 ];
+}
+
 
 
 int8_t Golem::getState()
