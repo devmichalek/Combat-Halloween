@@ -23,6 +23,7 @@ class Choice :public Click
 	
 	MyText text;	// under sprites
 	MyText information;	// left bottom corner
+	vector <MyText*> description;
 	
 	int counter; 	// for random
 	int result;		// latest result
