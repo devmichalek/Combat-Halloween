@@ -270,5 +270,6 @@ int Level::getFlatness()
 
 int Level::getDifficulty()
 {
+	// printf( "%d\n", difficulty->getDifficulty() );
 	return difficulty->getDifficulty();
 }
