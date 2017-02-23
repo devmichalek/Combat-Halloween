@@ -2,11 +2,8 @@
 
 Difficulty::Difficulty()
 {
-	offset = 0;
-	delay = 0;
-	state = 0;
-	
 	result = 0;
+	alpha_line = 0;
 	
 	range = 0;
 	keep = false;
@@ -19,24 +16,30 @@ Difficulty::~Difficulty()
 
 void Difficulty::free()
 {
-	poi.free();
-	graph.free();
+	corruption.free();
 	
-	if( !text.empty() )
+	if( !texts.empty() )
 	{
-		for( auto &i :text )
+		for( auto &i :texts )
 		{
 			i->free();
 		}
 		
-		text.clear();
+		texts.clear();
 	}
 	
-	offset = 0;
-	delay = 0;
-	state = 0;
+	if( !sprites.empty() )
+	{
+		for( auto &i :sprites )
+		{
+			i->free();
+		}
+		
+		sprites.clear();
+	}
 	
 	result = 0;
+	alpha_line = 0;
 	
 	range = 0;
 	keep = false;
@@ -44,43 +47,48 @@ void Difficulty::free()
 
 void Difficulty::reset( int left, int bot )
 {
-	graph.setPosition( left +200, bot +20 );
-	poi.setPosition( graph.getX(), graph.getY() );
+	corruption.setPosition( left +350, bot +50 );
 	
-	text[ 0 ]->setPosition( graph.getX(), graph.getBot() +5 );
-	text[ 1 ]->setPosition( text[ 0 ]->getRight() +40, graph.getBot() +5 );
-	text[ 2 ]->setPosition( text[ 1 ]->getRight() +73, graph.getBot() +5 );
-	text[ 3 ]->setPosition( text[ 2 ]->getRight() +45, graph.getBot() +5 );
+	texts[ 0 ]->setPosition( corruption.getX() -texts[ 0 ]->getWidth() -40, corruption.getBot() +texts[ 0 ]->getHeight() );
+	texts[ 1 ]->setPosition( texts[ 0 ]->getRight() +texts[ 1 ]->getWidth(), texts[ 0 ]->getY() );
+	texts[ 2 ]->setPosition( texts[ 1 ]->getRight() +texts[ 1 ]->getWidth(), texts[ 0 ]->getY() );
 	
-	setDifficulty( 45 );
+	int y = texts[ 0 ]->getY() -sprites[ 0 ]->getHeight()/7;
+	for( unsigned i = 0; i < sprites.size(); i++ )
+	{
+		sprites[ i ]->setPosition( texts[ i ]->getX() -sprites[ i ]->getWidth(), y );
+	}
 }
+
+
 
 void Difficulty::load( int left, int bot )
 {
 	free();
 	
-	delay = 7;
-	state = 20;
+	corruption.setName( "difficulty-corruption" );
+	corruption.setFont( "data/fonts/Jaapokki-Regular.otf", 25, 255, 255, 255 );
+	corruption.setText( "Corruption" );
 	
-	poi.setName( "difficulty-poi" );
-	poi.load( "data/sprites/level/poi.png", state );
 	
-	graph.setName( "difficulty-graph" );
-	graph.load( "data/sprites/level/graph.png" );
-	
-	int nr = 4;
+	int nr = 3;
 	for( int i = 0; i < nr; i++ )
 	{
-		text.push_back( new MyText() );
-		text[ text.size() -1 ]->setFont( "data/fonts/Jaapokki-Regular.otf", 20, 255, 255, 255 );
+		texts.push_back( new MyText() );
+		texts[ texts.size() -1 ]->setFont( "data/fonts/Jaapokki-Regular.otf", 25, 255, 255, 255 );
+		
+		sprites.push_back( new MySprite() );
+		sprites[ sprites.size() -1 ]->load( "data/sprites/level/" +to_string( i ) +".png" );
 	}
 	
-	text[ 0 ]->setText( "chicken" );
-	text[ 1 ]->setText( "normal" );
-	text[ 2 ]->setText( "hard" );
-	text[ 3 ]->setText( "bad-ass" );
+	texts[ 0 ]->setText( "easy" );
+	texts[ 1 ]->setText( "normal" );
+	texts[ 2 ]->setText( "hard" );
 	
 	reset( left, bot );
+	alpha_line = 100;
+	result = 33;
+	sprites[ 0 ]->setAlpha( 0xFF );
 	
 	
 	click.setID( "worldsize-click" );
@@ -89,7 +97,7 @@ void Difficulty::load( int left, int bot )
 
 void Difficulty::handle( sf::Event &event )
 {
-	if( graph.getAlpha() == 0xFF )
+	if( corruption.getAlpha() == 0xFF )
 	{
 		if( event.type == sf::Event::MouseButtonPressed )
 		{
@@ -97,17 +105,24 @@ void Difficulty::handle( sf::Event &event )
 			
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
-				
-			if( graph.checkCollision( x, y ) )
+			
+			for( unsigned i = 0; i < sprites.size(); i++ )
 			{
-				if( play )
+				if( sprites[ i ]->checkCollision( x, y ) || texts[ i ]->checkCollision( x, y ) )
 				{
-					click.play();
+					for( auto &i :sprites )
+					{
+						i->setAlpha( alpha_line );
+					}
+					
+					if( play )
+					{
+						click.play();
+					}
+					
+					sprites[ i ]->setAlpha( 0xFF );
+					result = 33 *( i +1 );
 				}
-				
-				int v = (x -graph.getX()) *100 /graph.getWidth();
-				
-				setDifficulty( v );
 			}
 		}
 	}
@@ -115,67 +130,57 @@ void Difficulty::handle( sf::Event &event )
 
 void Difficulty::draw( sf::RenderWindow &window )
 {
-	window.draw( graph.get() );
+	window.draw( corruption.get() );
 	
-	offset ++;
-	if( offset == state *delay )
-		offset = 0;
+	for( auto &i :texts )
+	{
+		window.draw( i->get() );
+	}
 	
-	poi.setOffset( offset /delay );
-	window.draw( poi.get() );
-	
-	for( auto &i :text )
+	for( auto &i :sprites )
 	{
 		window.draw( i->get() );
 	}
 }
 
+
+
 void Difficulty::fadein( int j, int max )
 {
-	graph.fadein( j +2, max );
-	poi.fadein( j, max );
+	corruption.fadein( j, max );
 	
-	for( auto &i :text )
+	for( auto &i :texts )
 	{
-		i->fadein( j +2, max );
+		i->fadein( j, max );
+	}
+	
+	for( auto &i :sprites )
+	{
+		i->fadein( j, alpha_line );
 	}
 }
 
 void Difficulty::fadeout( int j, int min )
 {
-	graph.fadeout( j, min );
-	poi.fadeout( j +2, min );
+	corruption.fadeout( j, min );
 	
-	for( auto &i :text )
+	for( auto &i :texts )
+	{
+		i->fadeout( j, min );
+	}
+	
+	for( auto &i :sprites )
 	{
 		i->fadeout( j, min );
 	}
 }
 
 
-void Difficulty::setDifficulty( int value )
-{
-	result = value;
-	float v = static_cast <float> (value) /100;
-	int newX = graph.getX() +graph.getWidth() *v -poi.getWidth()/2;
-	
-	if( newX < graph.getX() )
-	{
-		newX = graph.getX();
-	}
-	else if( newX +poi.getWidth() > graph.getRight() )
-	{
-		newX = graph.getRight() -poi.getWidth();
-	}
-	
-	poi.setPosition( newX, poi.getY() );
-}
 
 int Difficulty::getDifficulty()
 {
 	return result;
 }
-
 
 bool Difficulty::move( int vel, int scope )
 {
@@ -198,10 +203,14 @@ bool Difficulty::move( int vel, int scope )
 	{
 		range += vel;
 		
-		poi.setPosition( poi.getX() +vel, poi.getY() );
-		graph.setPosition( graph.getX() +vel, graph.getY() );
+		corruption.setPosition( corruption.getX() +vel, corruption.getY() );
+
+		for( auto &i :texts )
+		{
+			i->setPosition( i->getX() +vel, i->getY() );
+		}
 		
-		for( auto &i :text )
+		for( auto &i :sprites )
 		{
 			i->setPosition( i->getX() +vel, i->getY() );
 		}

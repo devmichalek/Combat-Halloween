@@ -7,15 +7,13 @@
 
 class Difficulty :public Click
 {
-	MySprite poi;
-	MySprite graph;
-	vector <MyText*> text;
+	MyText corruption;
 	
-	int offset;
-	int delay;
-	int state;
+	vector <MyText*> texts;
+	vector <MySprite*> sprites;
 	
 	int result;
+	int alpha_line;
 	
 	// Moving animation
 	int range;
@@ -27,14 +25,14 @@ public:
 	~Difficulty();
 	void free();
 	void reset( int left, int bot );
+	
 	void load( int left, int bot );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
-	void fadein( int j = 1, int max = 255 );
+	
+	void fadein( int j = 1, int max = 0xFF );
 	void fadeout( int j = 1, int min = 0 );
-	
-	void setDifficulty( int value );
+
 	int getDifficulty();
-	
 	bool move( int vel, int scope );	// move horizontal
 };
