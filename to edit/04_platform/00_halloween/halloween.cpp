@@ -10,8 +10,10 @@ Halloween::Halloween()
 	
 	hero = new Hero;
 	kunai = new Kunai;
-	heart = new Heart;
 	scope = new Scope;
+	
+	heart = new Heart;
+	money_panel = new Money_panel;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -20,7 +22,6 @@ Halloween::Halloween()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
-	money_panel = new Money_panel;
 	
 	mine_factory = new Mine_factory;
 }
@@ -42,9 +43,10 @@ void Halloween::free()
 	
 	delete hero;
 	delete kunai;
-	delete heart;
 	delete scope;
 	
+	delete heart;
+	delete money_panel;
 	
 	delete brick;
 	delete effect;
@@ -53,7 +55,6 @@ void Halloween::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
-	delete money_panel;
 	
 	delete mine_factory;
 	vampire_factory.free();
@@ -66,8 +67,10 @@ void Halloween::reset()
 	
 	hero->reset( screen_h );
 	hero->setKeys();
-	heart->reset();
 	scope->reset();
+	
+	heart->reset();
+	money_panel->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -76,7 +79,6 @@ void Halloween::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
-	money_panel->reset();
 	
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
@@ -97,6 +99,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	
 	kunai->load();
 	heart->load();
+	money_panel->load( screen_w );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -105,7 +108,6 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
-	money_panel->load( screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	vampire_factory.load( width, screen_h, screen_h, "vampire" );
@@ -126,7 +128,9 @@ void Halloween::draw( sf::RenderWindow* &window )
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
+		
 		heart->fadeout( value );
+		money_panel->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -135,7 +139,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
-		money_panel->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		vampire_factory.fadeout( value );
@@ -146,7 +149,9 @@ void Halloween::draw( sf::RenderWindow* &window )
 		sf::Uint8 value = 2;
 		hero->fadein( value );
 		kunai->fadein( value );
+		
 		heart->fadein( value );
+		money_panel->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -155,7 +160,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
-		money_panel->fadein( value );
 		
 		mine_factory->fadein( value );
 		vampire_factory.fadein( value );
@@ -195,8 +199,7 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 {
 	switch( state )
 	{
-		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();
-				heart->setLife( difficulty );			hero->setDamage( difficulty );
+		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();	hero->setDamage( difficulty );
 				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		

@@ -6,8 +6,11 @@
 // Hero stuff
 #include "04_platform/hero/hero.h"
 #include "04_platform/hero/kunai.h"
-#include "04_platform/hero/heart.h"
 #include "04_platform/hero/scope.h"
+
+// Panel stuff
+#include "04_platform/panel/heart/heart.h"
+#include "04_platform/panel/money/money_panel.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -17,7 +20,6 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
-#include "04_platform/money/money_panel.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -39,8 +41,11 @@ class Halloween
 	// hero
 	Hero* hero;
 	Kunai* kunai;
-	Heart* heart;
 	Scope* scope;
+	
+	// panel
+	Heart* heart;
+	Money_panel* money_panel;
 	
 	// world
 	Brick* brick;
@@ -50,7 +55,6 @@ class Halloween
 	Wall* wall;
 	Ladder* ladder;
 	Greenery* greenery;
-	Money_panel* money_panel;
 	
 	// enemy
 	Mine_factory* mine_factory;
