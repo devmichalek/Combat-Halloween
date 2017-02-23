@@ -56,9 +56,9 @@ void Factory<F>::free()
 		sprites.clear();
 	}
 	
-	if( !m.empty() )
+	if( !multiplier.empty() )
 	{
-		for( auto &it :m )
+		for( auto &it :multiplier )
 		{
 			if( !it.empty() )
 			{
@@ -66,7 +66,7 @@ void Factory<F>::free()
 			}
 		}
 		
-		m.clear();
+		multiplier.clear();
 	}
 	
 	if( !features.empty() )
@@ -85,6 +85,17 @@ void Factory<F>::free()
 		
 		hits.clear();
 	}
+	
+	coin.free();
+	if( !coins.empty() )
+	{
+		for( auto &i :coins )
+		{
+			i->free();
+		}
+		
+		coins.clear();
+	}
 }
 
 template <typename F>
@@ -93,6 +104,11 @@ void Factory<F>::reset( int distance )
 	for( auto &it :foes )
 	{
 		it->reset( distance );
+	}
+	
+	for( auto &it :coins )
+	{
+		it->reset();
 	}
 }
 
@@ -151,15 +167,13 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	{
 		int nr = 0;
 		int wide = 0;
-		float mult = 0;
-		vector < tuple <int, int, float> > temporary;
+		vector< pair<int, int> > temporary;
 		
 		string line;
 		while( getline( file, line ) )
 		{
 			nr = 0;
 			wide = 0;
-			mult = 0;
 			
 			if( line != "a" )
 			{
@@ -176,44 +190,30 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 							if( line[ j ] == ' ' )
 							{
 								wide = strToInt( first );
-								first = "";
-								for( unsigned k = j +1; k < line.size(); k++ )
-								{
-									if( line[ k ] == ' ' )
-									{
-										mult = strToInt( first );
-										mult /= 100;
-										break;
-									}
-									
-									first += line[ k ];
-								}
-								
 								break;
 							}
-							
 							first += line[ j ];
 						}
-						
 						break;
 					}
-					
 					first += line[ i ];
 				}
 				
-				temporary.push_back( std::make_tuple(nr, wide, mult) );
+				temporary.push_back( std::make_pair( nr, wide ) );
 				// printf( "%d %d %f\n", nr, wide, mult );
 			}
 			
 			
 			if( line == "a" )
 			{
+				/*
 				for( unsigned i = 0; i < temporary.size(); i++ )
 				{
-					// printf( "-- %d %d %f\n", std::get<0>( temporary[ i ] ), std::get<1>( temporary[ i ] ), std::get<2>( temporary[ i ] ) );
+					printf( "-- %d %d %f\n", std::get<0>( temporary[ i ] ), std::get<1>( temporary[ i ] ), std::get<2>( temporary[ i ] ) );
 				}
+				*/
 				
-				m.push_back( temporary );
+				multiplier.push_back( temporary );
 				temporary.clear();
 			}
 		}
@@ -260,6 +260,21 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 			hits[ hits.size() -1 ]->loadChunk( "data/sounds/" +name +"/hit/" +to_string( i ) +".wav" );
 		}
 	}
+	
+	int coin_line = 10;
+	coin.setName( "factory-coin" );
+	coin.load( "data/sprites/money/0.png", coin_line );
+	coin.setScale( 0.4, 0.4 );
+	
+	// max amount of coins is 100
+	for( unsigned i = 0; i < 100; i++ )
+	{
+		coins.push_back( new Coin() );
+		coins[ coins.size() -1 ]->setJump( rand()% (width /6) +width /2 );
+		coins[ coins.size() -1 ]->setVelocity( static_cast <float> (rand()%4 +10) /10 );
+		coins[ coins.size() -1 ]->setLine( coin_line );
+		coins[ coins.size() -1 ]->setDelay( 10 );
+	}
 }
 
 template <typename F>
@@ -286,6 +301,17 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 		}
 	}
 	
+	// draw coins
+	for( auto &i :coins )
+	{
+		if( i->isActive() )
+		{
+			coin.setOffset( i->getOffset() );
+			coin.setPosition( i->getX(), i->getY() );
+			window->draw( coin.get() );
+		}
+	}
+	
 	/*
 	// create an empty shape
 	sf::ConvexShape convex;
@@ -308,6 +334,7 @@ template <typename F>
 void Factory<F>::fadein( int v, int max )
 {
 	hp.fadein( v, max );
+	coin.fadein( v, max );
 	
 	for( auto &i :sprites )
 	{
@@ -319,6 +346,7 @@ template <typename F>
 void Factory<F>::fadeout( int v, int min )
 {
 	hp.fadeout( v, min );
+	coin.fadeout( v, min );
 	
 	for( auto &i :sprites )
 	{
@@ -382,30 +410,30 @@ void Factory<F>::add( int x, int y, int chance )
 	int wide;
 	
 	// myX
-	for( unsigned i = 0; i < m[ 0 ].size(); i++ )
+	for( unsigned i = 0; i < multiplier[ 0 ].size(); i++ )
 	{
-		nr = std::get<0>( m[ 0 ][ i ] );
-		wide = std::get<1>( m[ 0 ][ i ] ) *std::get<2>( m[ 0 ][ i ] )*scale;
+		nr = std::get<0>( multiplier[ 0 ][ i ] );
+		wide = std::get<1>( multiplier[ 0 ][ i ] ) *scale;
 		
 		// printf( "%d %d %f\n", nr, wide, scale );
 		myX[ nr ] += wide;
 	}
 	
 	// myY
-	for( unsigned i = 0; i < m[ 1 ].size(); i++ )
+	for( unsigned i = 0; i < multiplier[ 1 ].size(); i++ )
 	{
-		nr = std::get<0>( m[ 1 ][ i ] );
-		wide = std::get<1>( m[ 1 ][ i ] ) *std::get<2>( m[ 1 ][ i ] )*scale;
+		nr = std::get<0>( multiplier[ 1 ][ i ] );
+		wide = std::get<1>( multiplier[ 1 ][ i ] ) *scale;
 		
 		// printf( "%d %d %f\n", nr, wide, scale );
 		myY[ nr ] += wide;
 	}
 	
 	// myX2
-	for( unsigned i = 0; i < m[ 2 ].size(); i++ )
+	for( unsigned i = 0; i < multiplier[ 2 ].size(); i++ )
 	{
-		nr = std::get<0>( m[ 2 ][ i ] );
-		wide = std::get<1>( m[ 2 ][ i ] ) *std::get<2>( m[ 2 ][ i ] )*scale;
+		nr = std::get<0>( multiplier[ 2 ][ i ] );
+		wide = std::get<1>( multiplier[ 2 ][ i ] ) *scale;
 		
 		// printf( "%d %d %f\n", nr, wide, scale );
 		myX2[ nr ] += wide;
@@ -456,7 +484,7 @@ void Factory<F>::positioning( vector <Block*> blocks, int chance )
 				if( rand()%100 < 90 )
 				{
 					int additional_nr = rand()%counter;
-					add( startX +width*additional_nr, startY, chance );
+					add( startX +width*additional_nr, startY +2, chance );
 					foes[ foes.size() -1 ]->setBorders( startX, startX +width*counter );
 				}
 			}
@@ -511,6 +539,28 @@ bool Factory<F>::harm( Rect* rect, int damage )
 						i->harm( -damage );
 						if( i->getHeartPoints() <= 0 )
 						{
+							int money_amount = rand()%3 +2;
+							for( unsigned k = 0; k < coins.size(); k++ )
+							{
+								if( money_amount > 0 )
+								{
+									if( !coins[ k ]->isActive() )
+									{
+										money_amount --;
+										
+										coins[ k ]->setAsActive();
+										coins[ k ]->setBorders( i->getLeft(), i->getRight() -coin.getWidth() );
+										coins[ k ]->setPosition( i->getRealX(), i->getPlane() -coin.getHeight() );
+										coins[ k ]->setDirection( rand()%2 +1 );
+										coins[ k ]->setValue( 23 );
+									}
+								}
+								else
+								{
+									break;
+								}
+							}
+							
 							i->setDead();
 						}
 						
@@ -596,10 +646,20 @@ void Factory<F>::moveX( sf::Uint8 direction, float vel )
 		{
 			it->moveX( vel );
 		}
+		
+		for( auto &it :coins )
+		{
+			it->moveX( vel );
+		}
 	}
 	else if( direction == 2 )
 	{
 		for( auto &it :foes )
+		{
+			it->moveX( -vel );
+		}
+		
+		for( auto &it :coins )
 		{
 			it->moveX( -vel );
 		}
@@ -613,6 +673,11 @@ void Factory<F>::undoFall( sf::Uint8 add )
 	{
 		it->moveX( add );
 	}
+	
+	for( auto &it :coins )
+	{
+		it->moveX( add );
+	}
 }
 
 template <typename F>
@@ -621,6 +686,14 @@ void Factory<F>::mechanics()
 	for( auto &i :foes )
 	{
 		i->mechanics();
+	}
+	
+	for( auto &i :coins )
+	{
+		if( i->isActive() )
+		{
+			i->mechanics();
+		}
 	}
 }
 
@@ -631,6 +704,8 @@ void Factory<F>::setColor( sf::Color color )
 	{
 		i->setColor( color );
 	}
+	
+	coin.setColor( color );
 }
 
 template class Factory <Skeleton>;

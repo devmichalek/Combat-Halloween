@@ -5,6 +5,7 @@
 #include "drawable/text.h"
 #include <vector>
 #include "02_menu/click.h"
+#include "04_platform/enemy/coins/coin.h"
 
 using namespace std;
 
@@ -30,11 +31,15 @@ class Factory
 	vector <sf::Uint8> lines;
 	vector <MySprite*> sprites;
 	vector <F*> foes;
-	vector <vector <tuple <int, int, float> >> m;
+	
+	vector <vector <pair <int, int> >> multiplier;
 	vector <float> features;
 	
 	MyText hp;
 	vector <Click*> hits;
+	
+	MySprite coin;
+	vector <Coin*> coins;
 
 public:
 
