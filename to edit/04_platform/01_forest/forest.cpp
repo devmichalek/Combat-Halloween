@@ -10,8 +10,10 @@ Forest::Forest()
 	
 	hero = new Hero;
 	kunai = new Kunai;
-	heart = new Heart;
 	scope = new Scope;
+	
+	heart = new Heart;
+	money_panel = new Money_panel;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -43,9 +45,10 @@ void Forest::free()
 	
 	delete hero;
 	delete kunai;
-	delete heart;
 	delete scope;
 	
+	delete heart;
+	delete money_panel;
 	
 	delete brick;
 	delete effect;
@@ -67,8 +70,10 @@ void Forest::reset()
 	
 	hero->reset( screen_h );
 	hero->setKeys();
-	heart->reset();
 	scope->reset();
+	
+	heart->reset();
+	money_panel->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -112,6 +117,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	
 	kunai->load();
 	heart->load();
+	money_panel->load( screen_w );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -124,7 +130,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	day->set( FPS );
 	
 	mine_factory->load( width, screen_w, screen_h );
-	golem_factory.load( width, screen_h, screen_h, "golem" );
+	golem_factory.load( width, screen_h, screen_h, "golem_wood" );
 }
 
 void Forest::handle( sf::Event &event )
@@ -141,7 +147,9 @@ void Forest::draw( sf::RenderWindow* &window )
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
+		
 		heart->fadeout( value );
+		money_panel->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -160,7 +168,9 @@ void Forest::draw( sf::RenderWindow* &window )
 		sf::Uint8 value = 2;
 		hero->fadein( value );
 		kunai->fadein( value );
+		
 		heart->fadein( value );
+		money_panel->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -198,6 +208,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	wall->draw( window );
 	greenery->draw( window );
 	heart->draw( window );
+	money_panel->draw( window );
 	effect->draw( window );
 }
 
@@ -207,8 +218,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 {
 	switch( state )
 	{
-		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();
-				heart->setLife( difficulty );			hero->setDamage( difficulty );
+		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();	hero->setDamage( difficulty );
 				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		
