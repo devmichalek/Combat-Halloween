@@ -49,7 +49,7 @@ void Difficulty::reset( int left, int bot )
 {
 	corruption.setPosition( left +350, bot +50 );
 	
-	texts[ 0 ]->setPosition( corruption.getX() -texts[ 0 ]->getWidth() -40, corruption.getBot() +texts[ 0 ]->getHeight() );
+	texts[ 0 ]->setPosition( corruption.getX() -texts[ 0 ]->getWidth() -54, corruption.getBot() +texts[ 0 ]->getHeight() );
 	texts[ 1 ]->setPosition( texts[ 0 ]->getRight() +texts[ 1 ]->getWidth(), texts[ 0 ]->getY() );
 	texts[ 2 ]->setPosition( texts[ 1 ]->getRight() +texts[ 1 ]->getWidth(), texts[ 0 ]->getY() );
 	
@@ -81,9 +81,9 @@ void Difficulty::load( int left, int bot )
 		sprites[ sprites.size() -1 ]->load( "data/sprites/level/" +to_string( i ) +".png" );
 	}
 	
-	texts[ 0 ]->setText( "easy" );
-	texts[ 1 ]->setText( "normal" );
-	texts[ 2 ]->setText( "hard" );
+	texts[ 0 ]->setText( "low" );
+	texts[ 1 ]->setText( "medium" );
+	texts[ 2 ]->setText( "high" );
 	
 	reset( left, bot );
 	alpha_line = 100;
