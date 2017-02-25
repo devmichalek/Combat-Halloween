@@ -108,7 +108,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	info = "setting keys";
 	
 	int type = 3;
-	int width = 128;
+	this->width = 128;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
@@ -211,7 +211,7 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 {
 	switch( state )
 	{
-		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();	hero->setDamage( difficulty );
+		case 0:	hero->load( type, screen_w, screen_h, width ); hero->setKeys();	hero->setDamage( difficulty );
 				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		
@@ -293,8 +293,6 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		info = "creating skeleton factory";	break;
 		
 		case 20: skeleton_factory.positioning( brick->getBlocks(), difficulty );
-				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
-				 skeleton_factory.positioning( brick->getBlocks(), difficulty );
 				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
 		info = "done";	break;
 		
