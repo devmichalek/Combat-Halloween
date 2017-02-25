@@ -15,6 +15,7 @@ Mine::Mine()
 	
 	harmed = false;
 	exploded = false;
+	ticktocked = false;
 }
 
 Mine::~Mine()
@@ -36,6 +37,7 @@ void Mine::free()
 	
 	harmed = false;
 	exploded = false;
+	ticktocked = false;
 }
 
 void Mine::reset()
@@ -47,6 +49,7 @@ void Mine::reset()
 	counter = 0;
 	harmed = false;
 	exploded = false;
+	ticktocked = false;
 }
 
 
@@ -181,6 +184,17 @@ bool Mine::explosion()
 	if( !exploded && nr == 1 )
 	{
 		exploded = true;
+		return true;
+	}
+	
+	return false;
+}
+
+bool Mine::ticktock()
+{
+	if( !ticktocked && nr == 0 )
+	{
+		ticktocked = true;
 		return true;
 	}
 	
