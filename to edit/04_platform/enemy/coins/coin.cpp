@@ -18,21 +18,19 @@ void Coin::free()
 	vel = 0;
 	delay = 0;
 	line = 0;
+	jump = 0;
 }
 
 void Coin::reset()
 {
 	active = false;
+	corner = false;
 	x = y = yLine = 0;
 	left = right = 0;
 	
-	jump = 0;
 	jumpState = 0;
 	
-	value = 0;
-	
 	direction = 0;
-	
 	offset = 0;
 }
 
@@ -57,10 +55,6 @@ void Coin::setJump( int jump )
 	this->jump = jump;
 }
 
-void Coin::setValue( int value )
-{
-	this->value = value;
-}
 
 void Coin::setAsActive()
 {
@@ -90,6 +84,12 @@ void Coin::setDelay( int delay )
 {
 	this->delay = delay;
 }
+
+void Coin::setCorner()
+{
+	corner = true;
+}
+
 
 
 int Coin::getOffset()
@@ -122,57 +122,89 @@ void Coin::mechanics()
 			offset = 0;
 		}
 		
-		if( jump > 0 )
+		if( !corner )
 		{
-			if( x < right && x > left )
+			if( jump > 0 )
 			{
-				if( direction == 1 )
+				if( x < right && x > left )
 				{
-					x += vel;
+					if( direction == 1 )
+					{
+						x += vel;
+					}
+					else if( direction == 2 )
+					{
+						x -= vel;
+					}
 				}
-				else if( direction == 2 )
+				
+				if( jumpState == 0 )
 				{
-					x -= vel;
-				}
-			}
-			
-			if( jumpState == 0 )
-			{
-				if( y > yLine -jump )
-				{
-					y -= vel;
+					if( y > yLine -jump )
+					{
+						y -= 2;
+					}
+					else
+					{
+						// printf( "happen1\n" );
+						jump /= 3;
+						jumpState = 1;
+					}
 				}
 				else
 				{
-					// printf( "happen1\n" );
-					jump /= 2;
-					jumpState = 1;
+					if( y < yLine )
+					{
+						y += 2;
+					}
+					else
+					{
+						// printf( "happen2\n" );
+						jumpState = 0;
+					}
 				}
 			}
-			else
+			else if( y < yLine )
 			{
-				if( y < yLine )
-				{
-					y += vel;
-				}
-				else
-				{
-					// printf( "happen2\n" );
-					jump /= 2;
-					jumpState = 0;
-				}
+				y += vel;
 			}
-		}
-		else if( y < yLine )
-		{
-			y += vel;
 		}
 	}
 }
 
+bool Coin::moveToCorner( int x, int y )
+{
+	if( corner )
+	{
+		// printf( "sth\n" );
+		bool added = true;
+		if( this->x < x )
+		{
+			this->x += 8;
+			// printf( "sth\n" );
+			added = false;
+		}
+		
+		if( this->y > y )
+		{
+			this->y -= 7;
+			// printf( "st2h\n" );
+			added = false;
+		}
+		
+		// printf( "%d\n", added );
+		return added;
+	}
+	
+	return false;
+}
+
 void Coin::moveX( int vel )
 {
-	x += vel;
-	left += vel;
-	right += vel;
+	if( !corner )
+	{
+		x += vel;
+		left += vel;
+		right += vel;
+	}
 }

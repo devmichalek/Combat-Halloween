@@ -270,8 +270,7 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	for( unsigned i = 0; i < 100; i++ )
 	{
 		coins.push_back( new Coin() );
-		coins[ coins.size() -1 ]->setJump( rand()% (width /6) +width /2 );
-		coins[ coins.size() -1 ]->setVelocity( static_cast <float> (rand()%4 +10) /10 );
+		coins[ coins.size() -1 ]->setVelocity( static_cast <float> (rand()%4 +5) /10 );
 		coins[ coins.size() -1 ]->setLine( coin_line );
 		coins[ coins.size() -1 ]->setDelay( 10 );
 	}
@@ -284,7 +283,7 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 	{
 		if( i->isAlive() )
 		{
-			if( i->getX() > -width*4 && i->getX() < screen_w + width*4 )
+			if( i->getX() > -width*2 && i->getX() < screen_w + width*2 )
 			{
 				if( i->getHeartPoints() > 0 )
 				{
@@ -306,9 +305,16 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 	{
 		if( i->isActive() )
 		{
-			coin.setOffset( i->getOffset() );
-			coin.setPosition( i->getX(), i->getY() );
-			window->draw( coin.get() );
+			if( i->getX() > -width && i->getX() < screen_w + width )
+			{
+				coin.setOffset( i->getOffset() );
+				coin.setPosition( i->getX(), i->getY() );
+				window->draw( coin.get() );
+			}
+			else
+			{
+				i->reset();
+			}
 		}
 	}
 	
@@ -522,7 +528,7 @@ bool Factory<F>::harm( Rect* rect, int damage )
 		{
 			if( i->isAlive() && i->getHeartPoints() > 0 )
 			{
-				if( i->getRealX() > -width*3 && i->getRealX() < screen_w +width*3 )
+				if( i->getRealX() > -width*2 && i->getRealX() < screen_w +width*2 )
 				{
 					Rect r;
 					r.set( i->getRealX(), i->getRealY(), i->getRealWidth(), i->getRealHeight() );
@@ -539,7 +545,7 @@ bool Factory<F>::harm( Rect* rect, int damage )
 						i->harm( -damage );
 						if( i->getHeartPoints() <= 0 )
 						{
-							int money_amount = rand()%3 +2;
+							int money_amount = rand()%6 +2;
 							for( unsigned k = 0; k < coins.size(); k++ )
 							{
 								if( money_amount > 0 )
@@ -549,10 +555,10 @@ bool Factory<F>::harm( Rect* rect, int damage )
 										money_amount --;
 										
 										coins[ k ]->setAsActive();
+										coins[ k ]->setJump( rand()% (width /5) +width/2 );
 										coins[ k ]->setBorders( i->getLeft(), i->getRight() -coin.getWidth() );
 										coins[ k ]->setPosition( i->getRealX(), i->getPlane() -coin.getHeight() );
 										coins[ k ]->setDirection( rand()%2 +1 );
-										coins[ k ]->setValue( 23 );
 									}
 								}
 								else
@@ -584,7 +590,7 @@ void Factory<F>::ableAttack( Rect* rect )
 		{
 			if( (*i)->isAlive() )
 			{
-				if( (*i)->getX() > -width*3 && (*i)->getX() < screen_w +width*3 )
+				if( (*i)->getX() > -width*2 && (*i)->getX() < screen_w +width*2 )
 				{
 					Rect r;
 					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
@@ -608,7 +614,7 @@ bool Factory<F>::harmSomebody( Rect* rect )
 		{
 			if( (*i)->isAlive() )
 			{
-				if( (*i)->harmSomebody() && (*i)->getX() > -width*3 && (*i)->getX() < screen_w +width*3 )
+				if( (*i)->harmSomebody() && (*i)->getX() > -width*2 && (*i)->getX() < screen_w +width*2 )
 				{
 					Rect r;
 					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
@@ -626,6 +632,46 @@ bool Factory<F>::harmSomebody( Rect* rect )
 	return false;
 }
 
+template <typename F>
+void Factory<F>::upliftMoney( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		for( auto &it :coins )
+		{
+			if( it->isActive() )
+			{
+				coin.setPosition( it->getX(), it->getY() );
+				if( coin.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+				{
+					it->setCorner();
+					break;
+				}
+			}
+		}
+	}
+}
+
+template <typename F>
+bool Factory<F>::coinCorner()
+{
+	for( auto &i :coins )
+	{
+		if( i->isActive() )
+		{
+			if( i->moveToCorner( screen_w -30, 30 ) )
+			{
+				i->reset();
+				// printf( "reset\n" );
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+
 
 
 template <typename F>
@@ -634,6 +680,11 @@ int Factory<F>::getDamage()
 	return (*sword)->getDamage();
 }
 
+template <typename F>
+int Factory<F>::getCash()
+{
+	return 23;
+}
 
 
 
