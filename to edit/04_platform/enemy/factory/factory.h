@@ -69,20 +69,16 @@ public:
 	bool harm( Rect* rect, int damage );
 	void ableAttack(  Rect* rect );
 	bool harmSomebody( Rect* rect );
+	void upliftMoney( Rect* rect );
 	
-	// Get particular damage.
+	// Get particulars.
 	int getDamage();
-	
-	// In action
-	void moveX_Group( sf::Uint8 direction, float vel );
-	void undoFall_Group( sf::Uint8 add );
-	void mechanics_Group();
-	void setColor_Group( sf::Color color );	
-	
-	
+	int getCash();
+
 	// In action.
 	void moveX( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
 	void mechanics();
+	bool coinCorner();
 	void setColor( sf::Color color );
 };

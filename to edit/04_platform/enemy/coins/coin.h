@@ -5,13 +5,12 @@
 class Coin
 {
 	bool active;
+	bool corner;
 	float x, y, yLine;
 	float left, right;
 	
 	int jump;
 	sf::Uint8 jumpState;
-	
-	int value;
 	
 	float vel;
 	sf::Uint8 direction;
@@ -30,12 +29,12 @@ public:
 	void setPosition( int x, int y );
 	void setBorders( int left, int right );
 	void setJump( int jump );
-	void setValue( int value );
 	void setAsActive();
 	void setVelocity( float vel );
 	void setDirection( sf::Uint8 direction );
 	void setLine( int line );
 	void setDelay( int delay );
+	void setCorner();
 	
 	int getOffset();
 	int getX();
@@ -43,5 +42,6 @@ public:
 	bool isActive();
 	
 	void mechanics();
+	bool moveToCorner( int x, int y );
 	void moveX( int vel );
 };
