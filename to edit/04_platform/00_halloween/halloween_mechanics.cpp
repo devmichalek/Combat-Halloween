@@ -227,7 +227,7 @@ void Halloween::mechanics()
 	}
 	
 	// SCOPE MOVE
-	scope->move( hero->getX(), screen_w );
+	scope->move( hero->getX(), this->screen_w );
 	
 	
 // ------------------------------------------------------------------------------------------------
@@ -341,8 +341,18 @@ void Halloween::mechanics()
 	vampire_factory.appear( hero->getRect() );
 	vampire_factory.walk( hero->getRect() );
 	vampire_factory.ableAttack( hero->getRect() );
+	vampire_factory.upliftMoney( hero->getRect() );
+	if( vampire_factory.coinCorner() )
+	{
+		money_panel->add( vampire_factory.getCash() );
+	}
 	
 	zombie_factory.appear( hero->getRect() );
 	zombie_factory.walk( hero->getRect() );
 	zombie_factory.ableAttack( hero->getRect() );
+	zombie_factory.upliftMoney( hero->getRect() );
+	if( zombie_factory.coinCorner() )
+	{
+		money_panel->add( zombie_factory.getCash() );
+	}
 }

@@ -93,7 +93,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	info = "setting keys";
 	
 	int type = 0;
-	int width = 128;
+	this->width = 128;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
@@ -110,8 +110,8 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	greenery->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
-	vampire_factory.load( width, screen_h, screen_h, "vampire" );
-	zombie_factory.load( width, screen_h, screen_h, "zombie" );
+	vampire_factory.load( width, screen_w, screen_h, "vampire" );
+	zombie_factory.load( width, screen_w, screen_h, "zombie" );
 }
 
 void Halloween::handle( sf::Event &event )
@@ -199,7 +199,7 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 {
 	switch( state )
 	{
-		case 0:	hero->load( type, screen_w, screen_h ); hero->setKeys();	hero->setDamage( difficulty );
+		case 0:	hero->load( type, screen_w, screen_h, width ); hero->setKeys();	hero->setDamage( difficulty );
 				kunai->setDamage( difficulty );
 		info = "setting position x, y of background";	break;
 		
