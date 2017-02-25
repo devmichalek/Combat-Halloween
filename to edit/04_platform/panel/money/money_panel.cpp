@@ -146,6 +146,7 @@ void Money_panel::loadMoney()
 void Money_panel::add( int amount )
 {
 	bank += amount;
+	setText();
 }
 
 int Money_panel::strToInt( string s )
