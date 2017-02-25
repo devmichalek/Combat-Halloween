@@ -17,6 +17,7 @@ class Mine
 	
 	bool harmed;
 	bool exploded;
+	bool ticktocked;
 	
 public:
 
@@ -45,6 +46,7 @@ public:
 	bool ableToDraw();
 	bool ableToDestroy();
 	bool explosion();
+	bool ticktock();
 	
 	// getters
 	sf::Uint8 getNr();
