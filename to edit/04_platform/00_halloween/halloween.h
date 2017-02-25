@@ -32,6 +32,7 @@ class Halloween
 	int state;
 	string info;
 	
+	int width;
 	int screen_w;
 	int screen_h;
 	
