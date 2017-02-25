@@ -14,7 +14,8 @@ class Mine_factory
 	
 	vector <Mine*> mines;
 	vector <MySprite*> sprites;
-	Click click;
+	Click ticktock;
+	Click explosion;
 	
 public:
 	

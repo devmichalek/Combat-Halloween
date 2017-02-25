@@ -41,7 +41,8 @@ void Mine_factory::free()
 		sprites.clear();
 	}
 	
-	click.free();
+	ticktock.free();
+	explosion.free();
 }
 
 void Mine_factory::reset( int distance )
@@ -89,24 +90,30 @@ void Mine_factory::load( int width, int screen_w, int screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	click.setChunkName( "mine_factory-explosion" );
-	click.loadChunk( "data/sounds/mine/explosion.wav" );
+	ticktock.setChunkName( "mine_factory-ticktock" );
+	ticktock.loadChunk( "data/sounds/mine/ticktock.wav" );
+	
+	explosion.setChunkName( "mine_factory-explosion" );
+	explosion.loadChunk( "data/sounds/mine/explosion.wav" );
 }
 
 void Mine_factory::draw( sf::RenderWindow* &window )
 {
 	for( auto &i :mines )
 	{
-		if( i->getX() > -width && i->getX() < screen_w + width && i->ableToDraw() )
+		if( i->ableToDraw() )
 		{
-			if( i->explosion() && click.isPlayable() )
+			if( i->getX() > -width && i->getX() < screen_w + width )
 			{
-				click.playChunk();
+				if( i->explosion() && explosion.isPlayable() )
+				{
+					explosion.playChunk();
+				}
+				
+				sprites[ i->getNr() ]->setOffset( i->getOffset() );
+				sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
+				window->draw( sprites[ i->getNr() ]->get() );
 			}
-			
-			sprites[ i->getNr() ]->setOffset( i->getOffset() );
-			sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
-			window->draw( sprites[ i->getNr() ]->get() );
 		}
 	}
 }
@@ -163,13 +170,21 @@ void Mine_factory::checkCollision( Rect* rect )
 	{
 		for( auto &i :mines )
 		{
-			if( i->getX() > -width && i->getX() < screen_w +width )
+			if( i->ableToDraw() )
 			{
-				sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
-				if( sprites[ i->getNr() ]->checkCollision( rect->getX(), rect->getY() -50, rect->getWidth(), rect->getHeight()/2 ) )
+				if( i->getX() > -width && i->getX() < screen_w +width )
 				{
-					i->setActive();
-					break;
+					sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
+					if( sprites[ i->getNr() ]->checkCollision( rect->getX(), rect->getY() -50, rect->getWidth(), rect->getHeight()/2 ) )
+					{
+						if( i->ticktock() && ticktock.isPlayable() )
+						{
+							ticktock.playChunk();
+						}
+							
+						i->setActive();
+						break;
+					}
 				}
 			}
 		}
@@ -182,12 +197,15 @@ bool Mine_factory::harm( Rect* rect )
 	{
 		for( auto &i :mines )
 		{
-			if( i->getX() > -width && i->getX() < screen_w +width && i->harm() )
+			if( i->ableToDraw() )
 			{
-				sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
-				if( sprites[ i->getNr() ]->checkCollision( rect->getX(), rect->getY() -50, rect->getWidth(), rect->getHeight()/2 ) )
+				if( i->getX() > -width && i->getX() < screen_w +width && i->harm() )
 				{
-					return true;
+					sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
+					if( sprites[ i->getNr() ]->checkCollision( rect->getX(), rect->getY() -50, rect->getWidth(), rect->getHeight()/2 ) )
+					{
+						return true;
+					}
 				}
 			}
 		}
