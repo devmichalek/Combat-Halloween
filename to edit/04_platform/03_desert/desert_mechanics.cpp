@@ -224,7 +224,7 @@ void Desert::mechanics()
 	
 	
 	// SCOPE MOVE
-	scope->move( hero->getX(), screen_w );
+	scope->move( hero->getX(), this->screen_w );
 	
 	
 	
