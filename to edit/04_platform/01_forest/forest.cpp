@@ -14,6 +14,7 @@ Forest::Forest()
 	
 	heart = new Heart;
 	money_panel = new Money_panel;
+	coins = new Coins;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -49,6 +50,7 @@ void Forest::free()
 	
 	delete heart;
 	delete money_panel;
+	delete coins;
 	
 	delete brick;
 	delete effect;
@@ -74,6 +76,7 @@ void Forest::reset()
 	
 	heart->reset();
 	money_panel->reset();
+	coins->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -90,6 +93,7 @@ void Forest::reset()
 	
 	// Set color
 	hero->setColor( day->getColor() );
+	coins->setColor( day->getColor() );
 		
 	brick->setColor( day->getColor() );
 	background->setColor( day->getColor() );
@@ -118,6 +122,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	kunai->load();
 	heart->load();
 	money_panel->load( screen_w );
+	coins->load( width, screen_w, type );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -150,6 +155,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		
 		heart->fadeout( value );
 		money_panel->fadeout( value );
+		coins->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -171,6 +177,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		
 		heart->fadein( value );
 		money_panel->fadein( value );
+		coins->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -209,6 +216,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	greenery->draw( window );
 	heart->draw( window );
 	money_panel->draw( window );
+	coins->draw( window );
 	effect->draw( window );
 }
 
@@ -301,6 +309,9 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 20: golem_factory.positioning( brick->getBlocks(), difficulty );
 				 golem_factory.positioning( islands->getBlocks(), difficulty );
+		info = "setting money multiplier";	break;
+		
+		case 21: coins->setChance( difficulty );
 		info = "done";	break;
 		
 		default:
