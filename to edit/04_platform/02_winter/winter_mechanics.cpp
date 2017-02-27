@@ -39,6 +39,7 @@ void Winter::mechanics()
 	else if( islands->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
+		islands->turnOn();
 	}
 	
 	
@@ -208,6 +209,7 @@ void Winter::mechanics()
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
+			coins->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -222,6 +224,7 @@ void Winter::mechanics()
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
+			coins->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -260,6 +263,7 @@ void Winter::mechanics()
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
+			coins->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -303,6 +307,7 @@ void Winter::mechanics()
 		wall->mechanics();
 		mine_factory->mechanics();
 		golem_factory.mechanics();
+		coins->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -328,9 +333,18 @@ void Winter::mechanics()
 	}
 	
 // ------------------------------------------------------------------------------------------------
-	// SKELETON PART
+	// GOLEM PART
 	
 	golem_factory.appear( hero->getRect() );
 	golem_factory.walk( hero->getRect() );
 	golem_factory.ableAttack( hero->getRect() );
+	
+// ------------------------------------------------------------------------------------------------
+	// COINS
+	coins->setCoin( golem_factory.getDeadRect() );
+	
+	if( coins->upliftMoney( hero->getRect() ) )
+	{
+		money_panel->add( coins->getMoney() );
+	}
 }
