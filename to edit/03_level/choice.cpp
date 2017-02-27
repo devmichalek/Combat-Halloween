@@ -343,7 +343,7 @@ void Choice::reset( int screen_w, int screen_h )
 	information.setPosition( 10, screen_h - information.getHeight() - 10 );
 
 	int w = world[ 0 ]->getWidth()*world.size() + 15*world.size();
-	world[ 0 ]->setPosition( screen_w/2 - w/2, button.getY() +115 );
+	world[ 0 ]->setPosition( screen_w/2 - w/2 +7, button.getY() +115 );
 	for( unsigned i = 1; i < world.size(); i++ )
 	{
 		world[ i ]->setPosition( world[ i -1 ]->getRight() + 15, button.getY() +115 );
