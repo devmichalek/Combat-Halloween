@@ -39,6 +39,7 @@ void Desert::mechanics()
 	else if( islands->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
+		islands->turnOn();
 	}
 	
 	
@@ -206,6 +207,7 @@ void Desert::mechanics()
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
+			coins->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -219,6 +221,7 @@ void Desert::mechanics()
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
+			coins->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -258,6 +261,7 @@ void Desert::mechanics()
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			skeleton_factory.undoFall( brick->getGrassValue() );
+			coins->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -301,6 +305,7 @@ void Desert::mechanics()
 		wall->mechanics();
 		mine_factory->mechanics();
 		skeleton_factory.mechanics();
+		coins->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -332,6 +337,7 @@ void Desert::mechanics()
 	if( day->isChange() )
 	{
 		hero->setColor( day->getColor() );
+		coins->setColor( day->getColor() );
 		
 		brick->setColor( day->getColor() );
 		background->setColor( day->getColor() );
@@ -350,4 +356,13 @@ void Desert::mechanics()
 	skeleton_factory.appear( hero->getRect() );
 	skeleton_factory.walk( hero->getRect() );
 	skeleton_factory.ableAttack( hero->getRect() );
+	
+// ------------------------------------------------------------------------------------------------
+	// COINS
+	coins->setCoin( skeleton_factory.getDeadRect() );
+	
+	if( coins->upliftMoney( hero->getRect() ) )
+	{
+		money_panel->add( coins->getMoney() );
+	}
 }
