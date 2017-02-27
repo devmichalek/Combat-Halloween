@@ -11,6 +11,7 @@
 // Panel stuff
 #include "04_platform/panel/heart/heart.h"
 #include "04_platform/panel/money/money_panel.h"
+#include "04_platform/enemy/coins/coins.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -47,6 +48,7 @@ class Winter
 	// panel
 	Heart* heart;
 	Money_panel* money_panel;
+	Coins* coins;
 	
 	// world
 	Brick* brick;
