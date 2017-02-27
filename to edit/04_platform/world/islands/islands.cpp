@@ -625,6 +625,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 							{
 								if( blocks[ j ]->nr != -1 )
 								{
+									// printf( "1sth\n" );
 									addPlank( 1, blocks[ j ]->x -10, blocks[ j ]->y -h );
 									j = blocks.size();
 									break;
@@ -637,6 +638,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 							{
 								if( blocks[ j ]->nr != -1 )
 								{
+									// printf( "2sth\n" );
 									addPlank( 1, blocks[ j ]->x +width +10 -w, blocks[ j ]->y -h );
 									j = blocks.size();
 									break;
