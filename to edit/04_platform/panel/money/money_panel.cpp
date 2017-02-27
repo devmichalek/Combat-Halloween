@@ -58,7 +58,7 @@ void Money_panel::load( int screen_w )
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
 	text.setName( "money_panel-text" );
-	text.setFont( "data/fonts/KGALittleSwag.ttf", 50, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/fonts/BADABB__.TTF", 33, 0xD9, 0xD9, 0xD9 );
 
 	setText();
 }
@@ -115,7 +115,7 @@ void Money_panel::setText()
 		text.setText( additional +to_string( bank ) );
 	}
 	
-	text.setPosition( coin.getX() -text.getWidth() -12, grey.getY() -14 );
+	text.setPosition( coin.getX() -text.getWidth() -9, grey.getY() +4 );
 }
 
 void Money_panel::saveMoney()
