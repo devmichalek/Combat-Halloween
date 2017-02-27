@@ -14,6 +14,7 @@ Halloween::Halloween()
 	
 	heart = new Heart;
 	money_panel = new Money_panel;
+	coins = new Coins;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -47,6 +48,7 @@ void Halloween::free()
 	
 	delete heart;
 	delete money_panel;
+	delete coins;
 	
 	delete brick;
 	delete effect;
@@ -71,6 +73,7 @@ void Halloween::reset()
 	
 	heart->reset();
 	money_panel->reset();
+	coins->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -100,6 +103,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	kunai->load();
 	heart->load();
 	money_panel->load( screen_w );
+	coins->load( width, screen_w, type );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -131,6 +135,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		
 		heart->fadeout( value );
 		money_panel->fadeout( value );
+		coins->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -152,6 +157,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		
 		heart->fadein( value );
 		money_panel->fadein( value );
+		coins->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -188,8 +194,10 @@ void Halloween::draw( sf::RenderWindow* &window )
 	islands->draw( window );
 	wall->draw( window );
 	greenery->draw( window );
+	
 	heart->draw( window );
 	money_panel->draw( window );
+	coins->draw( window );
 	effect->draw( window );
 }
 
@@ -284,6 +292,9 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 				 vampire_factory.positioning( islands->getBlocks(), difficulty );
 				 zombie_factory.positioning( brick->getBlocks(), difficulty );
 				 zombie_factory.positioning( islands->getBlocks(), difficulty );
+		info = "setting money multiplier";	break;
+		
+		case 21: coins->setChance( difficulty );
 		info = "done";	break;
 		
 		default:

@@ -39,6 +39,7 @@ void Halloween::mechanics()
 	else if( islands->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
+		islands->turnOn();
 	}
 	
 	
@@ -204,11 +205,13 @@ void Halloween::mechanics()
 		if( scope->getFactor() == 0 )
 		{
 			islands->moveX( hero->getDirection(), scope->getVel() );
+			wall->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			vampire_factory.moveX( hero->getDirection(), scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), scope->getVel() );
+			coins->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -223,6 +226,7 @@ void Halloween::mechanics()
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			vampire_factory.moveX( hero->getDirection(), -scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), -scope->getVel() );
+			coins->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -261,6 +265,7 @@ void Halloween::mechanics()
 			mine_factory->undoFall( brick->getGrassValue() );
 			vampire_factory.undoFall( brick->getGrassValue() );
 			zombie_factory.undoFall( brick->getGrassValue() );
+			coins->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -312,6 +317,7 @@ void Halloween::mechanics()
 		mine_factory->mechanics();
 		vampire_factory.mechanics();
 		zombie_factory.mechanics();
+		coins->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -328,7 +334,7 @@ void Halloween::mechanics()
 		}
 	}
 	
-	// ------------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 	// CHECK Y AND SHOW EFFECT
 	if( hero->getY() > screen_h )
 	{
@@ -336,23 +342,24 @@ void Halloween::mechanics()
 	}
 	
 // ------------------------------------------------------------------------------------------------
-	// SKELETON PART
+	// VAMPIRE AND ZOMBIE PART
 	
 	vampire_factory.appear( hero->getRect() );
 	vampire_factory.walk( hero->getRect() );
 	vampire_factory.ableAttack( hero->getRect() );
-	vampire_factory.upliftMoney( hero->getRect() );
-	if( vampire_factory.coinCorner() )
-	{
-		money_panel->add( vampire_factory.getCash() );
-	}
+	
 	
 	zombie_factory.appear( hero->getRect() );
 	zombie_factory.walk( hero->getRect() );
 	zombie_factory.ableAttack( hero->getRect() );
-	zombie_factory.upliftMoney( hero->getRect() );
-	if( zombie_factory.coinCorner() )
+	
+// ------------------------------------------------------------------------------------------------
+	// COINS
+	coins->setCoin( vampire_factory.getDeadRect() );
+	coins->setCoin( zombie_factory.getDeadRect() );
+	
+	if( coins->upliftMoney( hero->getRect() ) )
 	{
-		money_panel->add( zombie_factory.getCash() );
+		money_panel->add( coins->getMoney() );
 	}
 }
