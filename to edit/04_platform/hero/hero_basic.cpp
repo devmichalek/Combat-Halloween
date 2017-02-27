@@ -102,12 +102,27 @@ void Hero::free()
 	fallenCounter = 0;
 	fallenLine = 0;
 	fallenY = -1;
+	
+	if( !x.empty() )
+	{
+		x.clear();
+	}
+	
+	if( !x2.empty() )
+	{
+		x2.clear();
+	}
+	
+	if( !y.empty() )
+	{
+		y.clear();
+	}
 }
 
 
 
 
-void Hero::load( int type, int screen_w, int screen_h )
+void Hero::load( int type, int screen_w, int screen_h, int width )
 {
 	free();
 	
@@ -121,18 +136,16 @@ void Hero::load( int type, int screen_w, int screen_h )
 		sprite[ i ]->setName( "hero-sprite[" + to_string( i ) + "]" );
 		sprite[ i ]->load( "data/sprites/hero/" + to_string( type ) + "/" + to_string( i ) + ".png", nr -1 );
 		sprite[ i ]->setScale( scale, scale );
-		sprite[ i ]->setPosition( 70, screen_h -sprite[ i ]->getHeight() -200 );
+		
+		x.push_back( width /2 );
+		x2.push_back( width /2 +sprite[ i ]->getWidth() );
+		y.push_back( screen_h -sprite[ i ]->getHeight() -(static_cast <float> (width)*1.5) );
 	}
-	sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP_ATTACK ]->getX(), sprite[ JUMP_ATTACK ]->getY() + ( sprite[ JUMP_ATTACK ]->getHeight() - sprite[ IDLE ]->getHeight() ) );
-	sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +5, sprite[ THROW ]->getY() );
-	sprite[ RUN ]->setPosition( sprite[ RUN ]->getX(), sprite[ RUN ]->getY() +5 );
 	
 	// Start values.
 	which = IDLE;
 	offset = 0;
-	delay = 6;
-	
-	
+	delay = 7;
 	
 	// Set other values
 	vel = 1;
@@ -149,32 +162,29 @@ void Hero::load( int type, int screen_w, int screen_h )
 	t.setLine( (nr-1)*delay + 2*delay );
 	jt.setLine( (nr-1)*delay + 2*delay );
 	
-	/*
-	box.setName( "hero-box" );
-	box.create( 30, sprite[ ATTACK ]->getHeight() );
-	box.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
-	box.setAlpha( 100 );
-	
-	jumpBox.setName( "hero-box" );
-	jumpBox.create( 35, sprite[ JUMP_ATTACK ]->getHeight() );
-	jumpBox.setColor( sf::Color( 0xFF, 0x00, 0x00 ) );
-	jumpBox.setAlpha( 100 );
-	*/
-
-	for( auto &i :sprite )
-	{
-		i->setPosition( i->getX() - ( i->getWidth() ), i->getY() );
-		i->setPosition( sprite[ IDLE ]->getX() - ( i->getWidth() -sprite[ IDLE ]->getWidth() ), i->getY() );
-	}
-	
-	sprite[ ATTACK ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() );
-	sprite[ SLIDE ]->setPosition( sprite[ IDLE ]->getX(), sprite[ SLIDE ]->getY() );
-	sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
-	sprite[ JUMP_THROW ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
-	sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +11, sprite[ IDLE ]->getY() -1 );
-	sprite[ DEAD ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() -5 );
-
 	fallenLine = 540;
+	
+	// corrections
+	x[ RUN ] -= sprite[ IDLE ]->getWidth() -20*scale;
+	y[ RUN ] += 3;
+	if( type == 1 )
+		x[ RUN ] += 30 *scale;
+	x[ THROW ] -= 21*scale;
+	x2[ THROW ] -= 15*scale;
+	y[ THROW ] ++;
+	x[ ATTACK ] = x[ RUN ];
+	x2[ ATTACK ] = x2[ RUN ];
+	y[ ATTACK ] += 12*scale;
+	x2[ SLIDE ] -= sprite[ IDLE ]->getWidth()/2;
+	x[ JUMP ] -= (sprite[ JUMP ]->getWidth() -sprite[ IDLE ]->getWidth() );
+	x[ JUMP_ATTACK ] -= (sprite[ JUMP ]->getWidth() -sprite[ IDLE ]->getWidth() );
+	y[ JUMP_ATTACK ] += 13*scale;
+	x2[ JUMP_ATTACK ] -= (sprite[ JUMP ]->getWidth() -sprite[ IDLE ]->getWidth() );
+	x[ JUMP_THROW ] -= (sprite[ JUMP ]->getWidth() -sprite[ IDLE ]->getWidth() );
+	y[ JUMP_THROW ] -= 10*scale;
+	x2[ DEAD ] -= (sprite[ DEAD ]->getWidth() -sprite[ IDLE ]->getWidth() );
+	y[ DEAD ] += 5*scale;
+	x[ GLIDE ] -= (sprite[ GLIDE ]->getWidth() -sprite[ IDLE ]->getWidth() );
 }
 
 void Hero::setKeys()
@@ -232,6 +242,16 @@ void Hero::draw( sf::RenderWindow* &window )
 	
 	if( !fallen )
 	{
+		for( unsigned i = 0; i < sprite.size(); i++ )
+		{
+			if( !right )	sprite[ i ]->setPosition( x2[ i ], y[ i ] +1 );
+			else			sprite[ i ]->setPosition( x[ i ], y[ i ] +1 );
+		}
+		
+		float scaleY = scale;
+		if( scaleY < 0 )	scaleY = -scaleY;
+		
+		sprite[ which ]->setScale( scale, scaleY );
 		window->draw( sprite[ which ]->get() );
 	}
 	
@@ -257,29 +277,6 @@ void Hero::draw( sf::RenderWindow* &window )
 			}
 		}
 	}
-	
-	
-	
-	
-	/*
-	if( which == ATTACK )
-	{
-		if( right )
-			box.setPosition( ( sprite[ ATTACK ].getWidth() -box.getWidth() ) + sprite[ ATTACK ].getX(), sprite[ ATTACK ].getY() );
-		else
-			box.setPosition( sprite[ ATTACK ].getX() -sprite[ ATTACK ].getWidth(), sprite[ ATTACK ].getY() );
-		window->draw( box.get() );
-	}
-	
-	if( which == JUMP_ATTACK )
-	{
-		if( right )
-			jumpBox.setPosition( ( sprite[ JUMP_ATTACK ].getWidth() -box.getWidth() ) + sprite[ JUMP_ATTACK ].getX(), sprite[ JUMP_ATTACK ].getY() );
-		else
-			jumpBox.setPosition( sprite[ JUMP_ATTACK ].getX() -sprite[ JUMP_ATTACK ].getWidth(), sprite[ JUMP_ATTACK ].getY() );
-		window->draw( jumpBox.get() );
-	}
-	*/
 }
 
 
@@ -307,7 +304,7 @@ int Hero::strToInt( string s )
     int tmp = 0;
     unsigned i = 0;
 	
-    if (s[ 0 ] == '-' )
+    if( s[ 0 ] == '-' )
     {
           i++;
           m = true;
@@ -315,7 +312,7 @@ int Hero::strToInt( string s )
 	
     while( i < s.size() )
     {
-      tmp = 10*tmp+s[ i ] -48;
+      tmp = 10 *tmp+s[ i ] -48;
       i++;
     }
 	
@@ -340,37 +337,32 @@ bool Hero::checkKeys( int a, int b )
 }
 
 
-const int Hero::getX()
+int Hero::getX()
 {
-	int x = 0;
-	
-	x = sprite[ IDLE ]->getX();
-	
-	if( !right )
-	{
-		x -= getW();
-	}
-	
-	return x;
+	return static_cast <int> (x[ IDLE ]);
 }
 
-const int Hero::getY()
+int Hero::getY()
 {
 	if( which == SLIDE )
-		return sprite[ SLIDE ]->getY();
+	{
+		return y[ SLIDE ];
+	}
 	
-	return sprite[ IDLE ]->getY();
+	return y[ IDLE ];
 }
 
-const int Hero::getW()
+int Hero::getW()
 {
 	return sprite[ IDLE ]->getWidth();
 }
 
-const int Hero::getH()
+int Hero::getH()
 {
 	if( which == SLIDE )
+	{
 		return sprite[ SLIDE ]->getHeight();
+	}
 	
 	return sprite[ IDLE ]->getHeight();
 }
@@ -393,7 +385,7 @@ void Hero::setScope( bool scope )
 
 bool Hero::checkFall( int screen_h )
 {
-	if( getY() > screen_h +getH()/2 && !fallen )
+	if( getY() > screen_h +getH() /2 && !fallen )
 	{
 		fallen = true;
 		return true;
@@ -414,19 +406,16 @@ bool Hero::isFallen()
 
 void Hero::undoFallX( sf::Uint8 add )
 {
-	for( auto &i :sprite )
-	{
-		i->setPosition( i->getX() -add, i->getY() );
-	}
+	moveX( add );
 }
 
 void Hero::undoFallY()
 {
-	if( fallenY < sprite[ IDLE ]->getY() && fallenY != -1 )
+	if( fallenY < y[ IDLE ] && fallenY != -1 )
 	{
-		for( auto &i :sprite )
+		for( auto &i :y )
 		{
-			i->setPosition( i->getX(), i->getY() -10 );
+			i -= 10;
 		}
 	}
 	else
@@ -540,16 +529,8 @@ bool Hero::getSide()
 
 Rect* Hero::getRect()
 {
-	int t_x = sprite[ IDLE ]->getX();
-	if( !right )	t_x -= sprite[ IDLE ]->getWidth();
-	
-	int t_y = sprite[ IDLE ]->getY();
-	int t_w = sprite[ IDLE ]->getWidth();
-	int t_h = sprite[ IDLE ]->getHeight();
-	
-	
 	Rect* rect = new Rect;
-	rect->set( t_x, t_y, t_w, t_h );
+	rect->set( x[ IDLE ], y[ IDLE ], sprite[ IDLE ]->getWidth(), sprite[ IDLE ]->getHeight() );
 	return rect;
 }
 
@@ -560,11 +541,16 @@ void Hero::reset( int posY )
 	
 	while( true )
 	{
-		if( sprite[ IDLE ]->getX() > startX )
+		if( x[ IDLE ] > startX )
 		{
-			for( auto &i :sprite )
+			for( auto &i :x )
 			{
-				i->setPosition( i->getX() -1, i->getY() );
+				i -= 2;
+			}
+			
+			for( auto &i :x2 )
+			{
+				i -= 2;
 			}
 		}
 		else
@@ -575,11 +561,11 @@ void Hero::reset( int posY )
 	
 	while( true )
 	{
-		if( sprite[ IDLE ]->getY() > startY )
+		if( y[ IDLE ] > startY )
 		{
-			for( auto &i :sprite )
+			for( auto &i :y )
 			{
-				i->setPosition( i->getX(), i->getY() -1 );
+				i -= 2;
 			}
 		}
 		else
@@ -588,8 +574,8 @@ void Hero::reset( int posY )
 		}
 	}
 	
-	which = IDLE;
 	dead = 0;
+	which = IDLE;
 }
 
 void Hero::setColor( sf::Color color )

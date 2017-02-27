@@ -24,6 +24,9 @@ class Hero
 	
 	vector <int*> keys; // Which keys are responsible for particular activity.
 	vector <MySprite*> sprite;
+	vector <float> x;
+	vector <float> x2;
+	vector <float> y;
 
 	int which;			// Which sprite is active.
 	unsigned offset;	// Which offset is active.
@@ -32,10 +35,8 @@ class Hero
 	float vel;			// Velocity.
 	float jump_vel;		// Jump velocity;
 	float grav;			// Gravity.
-	float scale;
-	
-	// Damage.
-	float damage;
+	float scale;		// Scale.
+	float damage;		// Damage.
 	
 	// Move.
 	bool right;
@@ -73,13 +74,13 @@ class Hero
 	
 public:
 
-	// IDLE
+	void moveX( float vel );
+	void moveY( float vel );
+
 	void idle();
 	
 	// MOVE
 	bool moving();
-	void mirrorLeft();
-	void mirrorRight();
 	void undoMove();
 	
 	// JUMP
@@ -134,10 +135,10 @@ public:
 	void die();
 	bool isDead();
 	
-	const int getX();
-	const int getY();
-	const int getW();
-	const int getH();
+	int getX();
+	int getY();
+	int getW();
+	int getH();
 	
 	
 	int strToInt( string s );		// Transform string to int.
@@ -150,7 +151,7 @@ public:
 	~Hero();
 	void free();
 	
-	void load( int type, int screen_w, int screen_h );
+	void load( int type, int screen_w, int screen_h, int width );
 	void setKeys();
 	void setDamage( int chance );
 	void draw( sf::RenderWindow* &window );

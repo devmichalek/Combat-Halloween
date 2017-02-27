@@ -1,6 +1,28 @@
 #include "hero.h"
 
-// IDLE
+void Hero::moveX( float vel )
+{
+	for( auto &it :x )
+	{
+		it += vel;
+	}
+	
+	for( auto &it :x2 )
+	{
+		it += vel;
+	}
+}
+
+void Hero::moveY( float vel )
+{
+	for( auto &it :y )
+	{
+		it += vel;
+	}
+}
+
+
+
 void Hero::idle()
 {
 	if( !glide && !slide && climb == 0 && dead == 0 )
@@ -11,11 +33,6 @@ void Hero::idle()
 
 
 
-//--------------------------------------------------------------------------------------------------------
-
-
-
-// MOVE
 bool Hero::moving()
 {
 	// move left
@@ -25,25 +42,22 @@ bool Hero::moving()
 		{
 			which = RUN;
 		}
-		
-		// move left on the ladder
-		else if( climb != 0 )
+		else if( climb != 0 )	// move left on the ladder
 		{
 			climb = 1;
 		}
 		
-		
-		mirrorLeft();
-		
 		if( !scope )
 		{
-			for( auto &i :sprite )
-			{
-				i->setPosition( i->getX() -vel, i->getY() );
-			}
+			moveX( -vel );
 		}
 		
+		if( scale > 0 )
+		{
+			scale = -scale;
+		}
 		
+		right = false;
 		move = true;
 		return true;
 	}
@@ -55,126 +69,46 @@ bool Hero::moving()
 		{
 			which = RUN;
 		}
-		
-		// move right on the ladder
-		else if( climb != 0 )
+		else if( climb != 0 )	// move right on the ladder
 		{
 			climb = 1;
 		}
 		
-		
-		mirrorRight();
-		
 		if( !scope )
 		{
-			for( auto &i :sprite )
-			{
-				i->setPosition( i->getX() +vel, i->getY() );
-			}
+			moveX( vel );
 		}
 		
+		if( scale < 0 )
+		{
+			scale = -scale;
+		}
+		
+		right = true;
 		move = true;
 		return true;
 	}
 	
 	move = false;
-	return move;
-}
-
-void Hero::mirrorLeft()
-{
-	for( unsigned i = 0; i < sprite.size(); i++ )
-	{
-		if( i != CLIMB )
-		{
-			sprite[ i ]->setScale( -scale, scale );
-		}
-	}
-	
-	if( right )
-	{
-		for( unsigned i = 0; i < sprite.size(); i++ )
-		{
-			if( i != IDLE && i != CLIMB )
-			{
-				sprite[ i ]->setPosition( sprite[ IDLE ]->getX() + sprite[ i ]->getWidth(), sprite[ i ]->getY() );
-			}
-		}
-		
-		sprite[ IDLE ]->setPosition( sprite[ IDLE ]->getX() + sprite[ IDLE ]->getWidth(), sprite[ IDLE ]->getY() );
-		sprite[ ATTACK ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() );
-		sprite[ SLIDE ]->setPosition( sprite[ IDLE ]->getX(), sprite[ SLIDE ]->getY() );
-		sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
-		sprite[ JUMP_THROW ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
-		sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() -11, sprite[ IDLE ]->getY() -1 );
-		sprite[ DEAD ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() -5 );
-		
-		right = false;
-	}
-}
-
-void Hero::mirrorRight()
-{
-	for( unsigned i = 0; i < sprite.size(); i++ )
-	{
-		if( i != CLIMB )
-		{
-			sprite[ i ]->setScale( scale, scale );
-		}
-	}
-	
-	if( !right )
-	{
-		for( unsigned i = 0; i < sprite.size(); i++ )
-		{
-			if( i != CLIMB )
-			{
-				sprite[ i ]->setPosition( sprite[ i ]->getX() - ( sprite[ i ]->getWidth() ), sprite[ i ]->getY() );
-				sprite[ i ]->setPosition( sprite[ IDLE ]->getX() - ( sprite[ i ]->getWidth() -sprite[ IDLE ]->getWidth() ), sprite[ i ]->getY() );
-			}
-		}
-		
-		sprite[ ATTACK ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() );
-		sprite[ SLIDE ]->setPosition( sprite[ IDLE ]->getX(), sprite[ SLIDE ]->getY() );
-		sprite[ JUMP_ATTACK ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
-		sprite[ JUMP_THROW ]->setPosition( sprite[ JUMP ]->getX(), sprite[ JUMP ]->getY() );
-		sprite[ THROW ]->setPosition( sprite[ THROW ]->getX() +11, sprite[ IDLE ]->getY() -1 );
-		sprite[ DEAD ]->setPosition( sprite[ IDLE ]->getX(), sprite[ IDLE ]->getY() -5 );
-		
-		right = true;
-	}
+	return false;
 }
 
 void Hero::undoMove()
 {
-	// undo move right
+	move = false;
+	
 	if( right )
 	{
-		move = false;
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX() -vel, i->getY() );
-		}
+		moveX( -vel );
 	}
-	
-	// undo move left
 	else
 	{
-		move = false;
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX() +vel, i->getY() );
-		}
+		moveX( vel );
 	}
 }
 
 
 
-//--------------------------------------------------------------------------------------------------------
-
-
-
-// JUMP
 bool Hero::jump()
 {
 	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide && climb == 0 && !fallen && dead == 0 )
@@ -194,17 +128,11 @@ bool Hero::jump()
 		{
 			if( right )
 			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() +jump_vel, i->getY() );
-				}
+				moveX( jump_vel );
 			}
 			else
 			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() -jump_vel, i->getY() );
-				}
+				moveX( -jump_vel );
 			}
 		}
 	}
@@ -216,27 +144,20 @@ bool Hero::jump()
 
 void Hero::undoJump()
 {
+	move = false;
+	
 	if( right )
 	{
-		move = false;
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX() -jump_vel, i->getY() );
-		}
+		moveX( -jump_vel );
 	}
 	else
 	{
-		move = false;
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX() +jump_vel, i->getY() );
-		}
+		moveX( jump_vel );
 	}
 }
 
 
 
-//--------------------------------------------------------------------------------------------------------
 
 
 
@@ -249,7 +170,6 @@ bool Hero::attack()
 		a.start();
 		a.setActive( true );
 		which = ATTACK;
-		sprite[ ATTACK ]->setPosition( sprite[ RUN ]->getX(), sprite[ RUN ]->getY() -3 );
 	}
 	
 	if( a.isActive() )
@@ -267,33 +187,40 @@ Rect* Hero::getAttackBox()
 {
 	// temporary stuff
 	Rect* rect = NULL;
-	int t_x, t_y;	
-	int t_w, t_h;
+	int t_x, tw;	
 	
 	if( which == ATTACK && offset == 6*delay )
 	{
 		rect = new Rect;
-		t_y = sprite[ ATTACK ]->getY();
-		t_w = 30;
-		t_h = sprite[ ATTACK ]->getHeight();
-
-		if( right )		t_x = ( sprite[ ATTACK ]->getWidth() -t_w ) + sprite[ ATTACK ]->getX();
-		else			t_x = sprite[ ATTACK ]->getX() -sprite[ ATTACK ]->getWidth();
 		
-		rect->set( t_x, t_y, t_w, t_h );
+		tw = 30;
+		if( right )
+		{
+			t_x = x2[ ATTACK ] -tw;
+		}
+		else
+		{
+			t_x = x[ ATTACK ];
+		}
+		
+		rect->set( t_x, sprite[ ATTACK ]->getY(), tw, sprite[ ATTACK ]->getHeight() );
 		return rect;
 	}
 	else if( which == JUMP_ATTACK && offset == 4*delay )
 	{
 		rect = new Rect;
-		t_y = sprite[ JUMP_ATTACK ]->getY();
-		t_w = 40;
-		t_h = sprite[ JUMP_ATTACK ]->getHeight();
-							
-		if( right )		t_x = ( sprite[ JUMP_ATTACK ]->getWidth() -t_w ) + sprite[ JUMP_ATTACK ]->getX();
-		else			t_x = sprite[ JUMP_ATTACK ]->getX() -sprite[ JUMP_ATTACK ]->getWidth();
 		
-		rect->set( t_x, t_y, t_w, t_h );
+		tw = 40;
+		if( right )
+		{
+			t_x = x2[ JUMP_ATTACK ] -tw;
+		}
+		else
+		{
+			t_x = x[ JUMP_ATTACK ];
+		}
+
+		rect->set( t_x, sprite[ JUMP_ATTACK ]->getY(), tw, sprite[ JUMP_ATTACK ]->getHeight() );
 		return rect;
 	}
 
@@ -306,8 +233,6 @@ float Hero::getDamage()
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------
 
 
 
@@ -326,8 +251,6 @@ bool Hero::isGliding()
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------
 
 
 
@@ -350,8 +273,6 @@ void Hero::sliding()
 
 
 
-//--------------------------------------------------------------------------------------------------------
-
 
 
 // JUMP WITH ATTACK
@@ -369,34 +290,26 @@ bool Hero::jumpAttack()
 	{
 		which = JUMP_ATTACK;
 		move = true;
-	
+		
 		if( !scope )
 		{
 			if( right )
 			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() +jump_vel, i->getY() );
-				}
+				moveX( jump_vel );
 			}
 			else
 			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() -jump_vel, i->getY() );
-				}
+				moveX( -jump_vel );
 			}
 		}
 	}
 	
 	ja.check();
-	
 	return ja.isActive();
 }
 
 
 
-//--------------------------------------------------------------------------------------------------------
 
 
 
@@ -420,17 +333,11 @@ bool Hero::jumpThrow()
 		{
 			if( right )
 			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() +jump_vel, i->getY() );
-				}
+				moveX( jump_vel );
 			}
 			else
 			{
-				for( auto &i :sprite )
-				{
-					i->setPosition( i->getX() -jump_vel, i->getY() );
-				}
+				moveX( -jump_vel );
 			}
 		}
 
@@ -443,7 +350,6 @@ bool Hero::jumpThrow()
 
 
 
-//--------------------------------------------------------------------------------------------------------
 
 
 
@@ -464,10 +370,7 @@ void Hero::climbing()
 			climb = 1;
 		}
 		
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX(), i->getY() -vel );
-		}
+		moveY( -vel );
 	}
 	else if( climb == 1 )
 	{
@@ -481,8 +384,6 @@ void Hero::banClimbing()
 }
 
 
-
-//--------------------------------------------------------------------------------------------------------
 
 
 
@@ -521,9 +422,6 @@ bool Hero::throwed()
 
 
 
-//--------------------------------------------------------------------------------------------------------
-
-
 
 // GRAVITY STUFF
 void Hero::gravitation()
@@ -532,27 +430,17 @@ void Hero::gravitation()
 	{
 		if( offset < (sprite.size()-1)*delay/2  )
 		{
-			for( auto &i :sprite )
-			{
-				i->setPosition( i->getX(), i->getY() -1 );
-			}
+			moveY( -1 );
 		}
 		else
 		{
-			for( auto &i :sprite )
-			{
-				i->setPosition( i->getX(), i->getY() +1 );
-			}
+			moveY( 1 );
 		}
 	}
 	
 	if( !j.isActive() && !ja.isActive() && !jt.isActive() && climb == 0 && !fallen && dead == 0 )
 	{
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX(), i->getY() +grav );
-		}
-		
+		moveY( grav );
 		glide = true;
 	}
 	else
@@ -565,10 +453,7 @@ void Hero::pixelGravitation()
 {
 	if( climb != 0 && !fallen && dead == 0 )
 	{
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX(), i->getY() +grav );
-		}
+		moveY( grav );
 	}
 }
 
@@ -577,9 +462,6 @@ void Hero::weightlessness()
 	if( climb == 0 && !fallen && dead == 0 )
 	{
 		glide = false;
-		for( auto &i :sprite )
-		{
-			i->setPosition( i->getX(), i->getY() -grav );
-		}
+		moveY( -grav );
 	}
 }

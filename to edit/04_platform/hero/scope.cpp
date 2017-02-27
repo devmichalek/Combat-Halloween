@@ -49,6 +49,7 @@ void Scope::changeMind()
 
 void Scope::move( int x, int screen_w )
 {
+	// printf( "%d %d\n", x, screen_w );
 	if( a == 0 )
 	{
 		if( x > screen_w/2 )
