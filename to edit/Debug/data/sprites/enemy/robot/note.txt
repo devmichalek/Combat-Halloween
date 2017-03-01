@@ -1,5 +1,0 @@
-offsets
-attack 7
-die 9
-walk 5
-idle 5
