@@ -1,6 +1,7 @@
 #pragma once
 
 #include "drawable/sprite.h"
+#include "02_menu/click.h"
 #include "pug.h"
 
 class Wall
@@ -12,6 +13,7 @@ class Wall
 	
 	vector <Pug*> blocks;
 	vector <MySprite*> sprites;
+	Click hit;
 	
 public:
 	

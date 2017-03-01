@@ -78,12 +78,12 @@ void Mine_factory::load( int width, int screen_w, int screen_h )
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size() -1 ]->setName( "mine_factory-sprites[ 0 ]" );
-	sprites[ sprites.size() -1 ]->load( "data/sprites/enemy/mine/0.png", 2 );
+	sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/mine/0.png", 2 );
 	sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size() -1 ]->setName( "mine_factory-sprites[ 1 ]" );
-	sprites[ sprites.size() -1 ]->load( "data/sprites/enemy/mine/1.png", 7 );
+	sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/mine/1.png", 7 );
 	sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 	
 	this->width = width;
@@ -91,10 +91,10 @@ void Mine_factory::load( int width, int screen_w, int screen_h )
 	this->screen_h = screen_h;
 	
 	ticktock.setChunkName( "mine_factory-ticktock" );
-	ticktock.loadChunk( "data/sounds/mine/ticktock.wav" );
+	ticktock.loadChunk( "data/04_platform/enemy/mine/sounds/ticktock.wav" );
 	
 	explosion.setChunkName( "mine_factory-explosion" );
-	explosion.loadChunk( "data/sounds/mine/explosion.wav" );
+	explosion.loadChunk( "data/04_platform/enemy/mine/sounds/explosion.wav" );
 }
 
 void Mine_factory::draw( sf::RenderWindow* &window )

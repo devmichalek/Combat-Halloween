@@ -201,7 +201,7 @@ void Kunai::load()
 	vel = 4;
 	
 	sprite.setName( "kunai-sprite" );
-	sprite.load( "data/sprites/hero/0.png" );
+	sprite.load( "data/04_platform/hero/0.png" );
 	
 	// Max amount of kunai's is 6
 	for( int i = 0; i < 6; i++ )

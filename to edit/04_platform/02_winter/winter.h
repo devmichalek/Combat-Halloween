@@ -27,6 +27,7 @@
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/golem/golem.h"
+#include "04_platform/enemy/checkActivity/lightning/lightning.h"
 
 class Winter
 {
@@ -63,6 +64,7 @@ class Winter
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Golem> golem_factory;
+	Lightning* lightning;
 	
 public:
 

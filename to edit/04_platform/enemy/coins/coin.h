@@ -5,7 +5,6 @@
 class Coin
 {
 	bool active;
-	bool corner;
 	float x, y, yLine;
 	float left, right;
 	
@@ -34,14 +33,12 @@ public:
 	void setDirection( sf::Uint8 direction );
 	void setLine( int line );
 	void setDelay( int delay );
-	void setCorner();
 	
 	int getOffset();
 	int getX();
 	int getY();
 	bool isActive();
 	
-	void mechanics();
-	bool moveToCorner( int x, int y );
+	bool mechanics();
 	void moveX( int vel );
 };

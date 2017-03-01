@@ -27,6 +27,7 @@
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/zombie/zombie.h"
 #include "04_platform/enemy/vampire/vampire.h"
+#include "04_platform/enemy/checkActivity/lightning/lightning.h"
 
 class Halloween
 {
@@ -63,6 +64,7 @@ class Halloween
 	Mine_factory* mine_factory;
 	Factory <Vampire> vampire_factory;
 	Factory <Zombie> zombie_factory;
+	Lightning* lightning;
 	
 public:
 

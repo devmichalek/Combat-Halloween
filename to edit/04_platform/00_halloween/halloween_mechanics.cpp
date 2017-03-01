@@ -212,6 +212,7 @@ void Halloween::mechanics()
 			vampire_factory.moveX( hero->getDirection(), scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			lightning->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -227,6 +228,7 @@ void Halloween::mechanics()
 			vampire_factory.moveX( hero->getDirection(), -scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			lightning->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -266,6 +268,7 @@ void Halloween::mechanics()
 			vampire_factory.undoFall( brick->getGrassValue() );
 			zombie_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			lightning->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -305,6 +308,16 @@ void Halloween::mechanics()
 		effect->runBlood();
 	}
 	
+	// HARM BY LIGHTNING
+	if( lightning->harmSomebody( hero->getRect() ) )
+	{
+		if( lightning->harmed() )
+		{
+			effect->runLightning();
+			heart->harm( -lightning->getDamage() );
+		}
+	}
+	
 // ------------------------------------------------------------------------------------------------
 	// DEAD
 	if( heart->isDead() )
@@ -318,6 +331,7 @@ void Halloween::mechanics()
 		vampire_factory.mechanics();
 		zombie_factory.mechanics();
 		coins->mechanics();
+		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{

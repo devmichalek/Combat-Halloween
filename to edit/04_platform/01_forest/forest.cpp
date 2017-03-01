@@ -27,6 +27,7 @@ Forest::Forest()
 	day = new Day;
 	
 	mine_factory = new Mine_factory;
+	fireball = new Fireball;
 }
 
 Forest::~Forest()
@@ -64,6 +65,7 @@ void Forest::free()
 	
 	delete mine_factory;
 	golem_factory.free();
+	delete fireball;
 }
 
 void Forest::reset()
@@ -90,6 +92,7 @@ void Forest::reset()
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
+	fireball->reset();
 	
 	// Set color
 	hero->setColor( day->getColor() );
@@ -136,6 +139,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	
 	mine_factory->load( width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_wood" );
+	fireball->load( FPS, screen_w );
 }
 
 void Forest::handle( sf::Event &event )
@@ -168,6 +172,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
+		fireball->fadeout( value );
 	}
 	else
 	{
@@ -190,6 +195,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
+		fireball->fadein( value );
 	}
 	
 
@@ -207,6 +213,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	// enemy
 	mine_factory->draw( window );
 	golem_factory.draw( window );
+	fireball->draw( window );
 	
 	// rest
 	water->draw( window );

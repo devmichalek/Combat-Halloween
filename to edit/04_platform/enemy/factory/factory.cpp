@@ -8,10 +8,12 @@
 template <typename F>
 Factory<F>::Factory()
 {
-	// printf( "called0\n" );
 	width = 0;
 	screen_w = 0;
 	screen_h = 0;
+	
+	deadRect = NULL;
+	expletive = NULL;
 }
 
 template <typename F>
@@ -76,25 +78,16 @@ void Factory<F>::free()
 	
 	hp.free();
 	
-	if( !hits.empty() )
+	if( deadRect != NULL )
 	{
-		for( auto &i :hits )
-		{
-			i->free();
-		}
-		
-		hits.clear();
+		delete deadRect;
+		deadRect = NULL;
 	}
 	
-	coin.free();
-	if( !coins.empty() )
+	if( expletive != NULL )
 	{
-		for( auto &i :coins )
-		{
-			i->free();
-		}
-		
-		coins.clear();
+		delete expletive;
+		expletive = NULL;
 	}
 }
 
@@ -104,11 +97,6 @@ void Factory<F>::reset( int distance )
 	for( auto &it :foes )
 	{
 		it->reset( distance );
-	}
-	
-	for( auto &it :coins )
-	{
-		it->reset();
 	}
 }
 
@@ -127,10 +115,9 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	this->screen_h = screen_h;
 	
 	string txt_lines = "data/txt/enemy/lines/" +name +".txt";
-	string png_sprites = "data/sprites/enemy/" +name +"/";
-	string txt_multiplier = "data/txt/enemy/multiplier/" +name +".txt";
+	string png_sprites = "data/04_platform/enemy/" +name +"/";
+	string txt_multiplier = "data/txt/enemy/multipliers/" +name +".txt";
 	string txt_features = "data/txt/enemy/features/" +name +".txt";
-	string txt_chunks = "data/txt/enemy/chunks/" +name +".txt";
 	
 	// load lines
 	fstream file;
@@ -239,41 +226,11 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	file.close();
 	
 	hp.setName( "factory-hp" );
-	hp.setFont( "data/fonts/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
+	hp.setFont( "data/00_loading/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
 	hp.setText( " " );
 	
-	file.open( txt_chunks );
-	if( file.bad() )
-	{
-		printf( "Something went wrong... %s [file]\n", txt_chunks.c_str() );
-	}
-	else
-	{
-		int number = 0;
-		string line;
-		file >> line;
-		number = strToInt( line );
-		for( int i = 0; i < number; i++ )
-		{
-			hits.push_back( new Click() );
-			hits[ hits.size() -1 ]->setChunkName( "factory-" +name );
-			hits[ hits.size() -1 ]->loadChunk( "data/sounds/" +name +"/hit/" +to_string( i ) +".wav" );
-		}
-	}
-	
-	int coin_line = 10;
-	coin.setName( "factory-coin" );
-	coin.load( "data/sprites/money/0.png", coin_line );
-	coin.setScale( 0.4, 0.4 );
-	
-	// max amount of coins is 100
-	for( unsigned i = 0; i < 100; i++ )
-	{
-		coins.push_back( new Coin() );
-		coins[ coins.size() -1 ]->setVelocity( static_cast <float> (rand()%4 +5) /10 );
-		coins[ coins.size() -1 ]->setLine( coin_line );
-		coins[ coins.size() -1 ]->setDelay( 10 );
-	}
+	expletive = new Expletive;
+	expletive->load( name );
 }
 
 template <typename F>
@@ -283,7 +240,7 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 	{
 		if( i->isAlive() )
 		{
-			if( i->getX() > -width*2 && i->getX() < screen_w + width*2 )
+			if( i->getX() > -width*3 && i->getX() < screen_w + width*3 )
 			{
 				if( i->getHeartPoints() > 0 )
 				{
@@ -296,24 +253,6 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 				sprites[ i->getState() ]->setPosition( i->getX(), i->getY() );
 				sprites[ i->getState() ]->setScale( i->getHorizontalScale(), i->getVerticalScale() );
 				window->draw( sprites[ i->getState() ]->get() );
-			}
-		}
-	}
-	
-	// draw coins
-	for( auto &i :coins )
-	{
-		if( i->isActive() )
-		{
-			if( i->getX() > -width && i->getX() < screen_w + width )
-			{
-				coin.setOffset( i->getOffset() );
-				coin.setPosition( i->getX(), i->getY() );
-				window->draw( coin.get() );
-			}
-			else
-			{
-				i->reset();
 			}
 		}
 	}
@@ -339,8 +278,7 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 template <typename F>
 void Factory<F>::fadein( int v, int max )
 {
-	hp.fadein( v, max );
-	coin.fadein( v, max );
+	hp.fadein( v, max /2 );
 	
 	for( auto &i :sprites )
 	{
@@ -352,7 +290,6 @@ template <typename F>
 void Factory<F>::fadeout( int v, int min )
 {
 	hp.fadeout( v, min );
-	coin.fadeout( v, min );
 	
 	for( auto &i :sprites )
 	{
@@ -532,41 +469,14 @@ bool Factory<F>::harm( Rect* rect, int damage )
 				{
 					Rect r;
 					r.set( i->getRealX(), i->getRealY(), i->getRealWidth(), i->getRealHeight() );
-					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					if( r.checkRectCollision( *rect ) )
 					{
-						if( hits.size() > 0 )
-						{
-							if( hits[ 0 ]->isPlayable() )
-							{
-								hits[ rand()%hits.size() ]->playChunk();
-							}
-						}
-						
+						expletive->playHits();
 						i->harm( -damage );
 						if( i->getHeartPoints() <= 0 )
 						{
-							int money_amount = rand()%6 +2;
-							for( unsigned k = 0; k < coins.size(); k++ )
-							{
-								if( money_amount > 0 )
-								{
-									if( !coins[ k ]->isActive() )
-									{
-										money_amount --;
-										
-										coins[ k ]->setAsActive();
-										coins[ k ]->setJump( rand()% (width /5) +width/2 );
-										coins[ k ]->setBorders( i->getLeft(), i->getRight() -coin.getWidth() );
-										coins[ k ]->setPosition( i->getRealX(), i->getPlane() -coin.getHeight() );
-										coins[ k ]->setDirection( rand()%2 +1 );
-									}
-								}
-								else
-								{
-									break;
-								}
-							}
-							
+							deadRect = new Rect;
+							deadRect->set( i->getX(), i->getPlane(), i->getLeft(), i->getRight() );
 							i->setDead();
 						}
 						
@@ -594,7 +504,7 @@ void Factory<F>::ableAttack( Rect* rect )
 				{
 					Rect r;
 					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
-					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					if( r.checkRectCollision( *rect ) )
 					{
 						(*i)->ableAttack();
 					}
@@ -616,54 +526,16 @@ bool Factory<F>::harmSomebody( Rect* rect )
 			{
 				if( (*i)->harmSomebody() && (*i)->getX() > -width*2 && (*i)->getX() < screen_w +width*2 )
 				{
+					expletive->playAttacks();
 					Rect r;
 					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
-					if( r.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					if( r.checkRectCollision( *rect ) )
 					{
 						// printf( "collision!\n" );
 						this->sword = i;
 						return true;
 					}
 				}
-			}
-		}
-	}
-	
-	return false;
-}
-
-template <typename F>
-void Factory<F>::upliftMoney( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		for( auto &it :coins )
-		{
-			if( it->isActive() )
-			{
-				coin.setPosition( it->getX(), it->getY() );
-				if( coin.checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
-				{
-					it->setCorner();
-					break;
-				}
-			}
-		}
-	}
-}
-
-template <typename F>
-bool Factory<F>::coinCorner()
-{
-	for( auto &i :coins )
-	{
-		if( i->isActive() )
-		{
-			if( i->moveToCorner( screen_w -30, 30 ) )
-			{
-				i->reset();
-				// printf( "reset\n" );
-				return true;
 			}
 		}
 	}
@@ -681,10 +553,21 @@ int Factory<F>::getDamage()
 }
 
 template <typename F>
-int Factory<F>::getCash()
+Rect* Factory<F>::getDeadRect()
 {
-	return 23;
+	if( deadRect != NULL )
+	{
+		Rect* rect = new Rect;
+		rect->set( deadRect->getX(), deadRect->getY(), deadRect->getWidth(), deadRect->getHeight() );
+		delete deadRect;
+		deadRect = NULL;
+		
+		return rect;
+	}
+	
+	return NULL;
 }
+
 
 
 
@@ -697,20 +580,10 @@ void Factory<F>::moveX( sf::Uint8 direction, float vel )
 		{
 			it->moveX( vel );
 		}
-		
-		for( auto &it :coins )
-		{
-			it->moveX( vel );
-		}
 	}
 	else if( direction == 2 )
 	{
 		for( auto &it :foes )
-		{
-			it->moveX( -vel );
-		}
-		
-		for( auto &it :coins )
 		{
 			it->moveX( -vel );
 		}
@@ -724,11 +597,6 @@ void Factory<F>::undoFall( sf::Uint8 add )
 	{
 		it->moveX( add );
 	}
-	
-	for( auto &it :coins )
-	{
-		it->moveX( add );
-	}
 }
 
 template <typename F>
@@ -737,14 +605,6 @@ void Factory<F>::mechanics()
 	for( auto &i :foes )
 	{
 		i->mechanics();
-	}
-	
-	for( auto &i :coins )
-	{
-		if( i->isActive() )
-		{
-			i->mechanics();
-		}
 	}
 }
 
@@ -755,9 +615,9 @@ void Factory<F>::setColor( sf::Color color )
 	{
 		i->setColor( color );
 	}
-	
-	coin.setColor( color );
 }
+
+
 
 template class Factory <Skeleton>;
 template class Factory <Golem>;

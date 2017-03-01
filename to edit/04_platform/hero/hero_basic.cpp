@@ -134,7 +134,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	{
 		sprite.push_back( new MySprite() );
 		sprite[ i ]->setName( "hero-sprite[" + to_string( i ) + "]" );
-		sprite[ i ]->load( "data/sprites/hero/" + to_string( type ) + "/" + to_string( i ) + ".png", nr -1 );
+		sprite[ i ]->load( "data/04_platform/hero/" + to_string( type ) + "/" + to_string( i ) + ".png", nr -1 );
 		sprite[ i ]->setScale( scale, scale );
 		
 		x.push_back( width /2 );
@@ -170,7 +170,11 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	if( type == 1 )
 		x[ RUN ] += 30 *scale;
 	x[ THROW ] -= 21*scale;
+	if( type == 1 )
+		x[ THROW ] += 8 *scale;
 	x2[ THROW ] -= 15*scale;
+	if( type == 1 )
+		x2[ THROW ] += 5 *scale;
 	y[ THROW ] ++;
 	x[ ATTACK ] = x[ RUN ];
 	x2[ ATTACK ] = x2[ RUN ];

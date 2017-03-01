@@ -48,17 +48,17 @@ void Money_panel::load( int screen_w )
 	line = 10;
 	
 	grey.setName( "money_panel-grey" );
-	grey.load( "data/sprites/hero/grey/grey.png" );
+	grey.load( "data/04_platform/panel/grey/grey.png" );
 	grey.setScale( 0.5, 0.5 );
 	grey.setPosition( screen_w -grey.getWidth() -5, 5 );
 	
 	coin.setName( "money_panel-coin" );
-	coin.load( "data/sprites/money/0.png", line );
+	coin.load( "data/04_platform/panel/coin/0.png", line );
 	coin.setScale( 0.65, 0.65 );
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
 	text.setName( "money_panel-text" );
-	text.setFont( "data/fonts/BADABB__.TTF", 33, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/02_menu/BADABB__.TTF", 33, 0xD9, 0xD9, 0xD9 );
 
 	setText();
 }
@@ -115,7 +115,7 @@ void Money_panel::setText()
 		text.setText( additional +to_string( bank ) );
 	}
 	
-	text.setPosition( coin.getX() -text.getWidth() -9, grey.getY() +4 );
+	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +4 );
 }
 
 void Money_panel::saveMoney()

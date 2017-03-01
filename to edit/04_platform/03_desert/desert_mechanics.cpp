@@ -208,6 +208,7 @@ void Desert::mechanics()
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			fireball->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -222,6 +223,7 @@ void Desert::mechanics()
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			fireball->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -262,6 +264,7 @@ void Desert::mechanics()
 			mine_factory->undoFall( brick->getGrassValue() );
 			skeleton_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			fireball->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -294,6 +297,16 @@ void Desert::mechanics()
 		effect->runBlood();
 	}
 	
+	// HARM BY FIREBALL
+	if( fireball->harmSomebody( hero->getRect() ) )
+	{
+		if( fireball->harmed() )
+		{
+			heart->harm( -fireball->getDamage() );
+			effect->runBlood();
+		}
+	}
+	
 // ------------------------------------------------------------------------------------------------
 	// DEAD
 	if( heart->isDead() )
@@ -306,6 +319,7 @@ void Desert::mechanics()
 		mine_factory->mechanics();
 		skeleton_factory.mechanics();
 		coins->mechanics();
+		fireball->mechanics( hero->getY(), hero->getDirection() );
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -326,7 +340,7 @@ void Desert::mechanics()
 	// CHECK Y AND SHOW EFFECT
 	if( hero->getY() > screen_h )
 	{
-		effect->runFall();
+		effect->runSand();
 	}
 	
 // ------------------------------------------------------------------------------------------------

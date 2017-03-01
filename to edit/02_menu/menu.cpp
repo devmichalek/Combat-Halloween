@@ -85,8 +85,8 @@ void Menu::load( int screen_w, int screen_h )
 	title->load( screen_w );
 	
 	// sound buttons
-	music_button->load( "data/sprites/menu/music.png", 10 );
-	chunk_button->load( "data/sprites/menu/chunk.png", music_button->getBot() );
+	music_button->load( "data/02_menu/music.png", 10 );
+	chunk_button->load( "data/02_menu/chunk.png", music_button->getBot() );
 	
 	// volume buttons
 	music_volume->load( 100, screen_h/2 - 100, "Music" );
@@ -101,13 +101,13 @@ void Menu::load( int screen_w, int screen_h )
 	sound.setMusicVolume( music_volume->getVolume() );
 	
 	// link buttons
-	git_button->load( "data/sprites/menu/git.png", screen_w );
-	google_button->load( "data/sprites/menu/google.png", screen_w, git_button->getBot() );
-	twitter_button->load( "data/sprites/menu/twitter.png", screen_w, google_button->getBot() );
-	facebook_button->load( "data/sprites/menu/facebook.png", screen_w, twitter_button->getBot() );
+	git_button->load( "data/02_menu/git.png", screen_w );
+	google_button->load( "data/02_menu/google.png", screen_w, git_button->getBot() );
+	twitter_button->load( "data/02_menu/twitter.png", screen_w, google_button->getBot() );
+	facebook_button->load( "data/02_menu/facebook.png", screen_w, twitter_button->getBot() );
 	
 	// bg
-	background->load( "data/sprites/menu/background.png" );
+	background->load( "data/02_menu/background.png" );
 	
 	// button to start game
 	play_button->load( screen_w, 400 );
@@ -122,11 +122,11 @@ void Menu::load( int screen_w, int screen_h )
 	exit->load( screen_w, screen_h );
 	
 	// music for menu
-	music->load( "data/music/Rayman Legends OST - Moving Ground.mp3", 50 );
+	music->load( "data/02_menu/music.mp3", 50 );
 	
 	// simple text on the right
 	version->setName( "menu-version-text" );
-	version->setFont( "data/fonts/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
+	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
 	version->setText( "latest edition 22.02.2017" );
 	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	

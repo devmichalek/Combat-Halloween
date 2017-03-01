@@ -103,7 +103,7 @@ void Greenery::load( int type, int width, int screen_w )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +to_string( i+min ) +"]" );
-			sprites[ sprites.size() -1 ]->load( "data/sprites/play/" +to_string( type )
+			sprites[ sprites.size() -1 ]->load( "data/04_platform/world/" +to_string( type )
 			+ "/" +to_string( i+min ) + ".png" );
 		}
 		
@@ -284,15 +284,7 @@ void Greenery::positioning( vector <Block*> blocks )
 					distance = rand()%getDistance( plants[ chosen ]->startY, plants[ chosen ]->endY );
 					this->blocks[ this->blocks.size() -1 ]->y = plants[ chosen ]->startY +distance +it->y;
 					this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
-					
-					if( rand()%10 < 2 && !plants[ chosen ]->bg )
-					{
-						this->blocks[ this->blocks.size() -1 ]->bg = false;
-					}
-					else
-					{
-						this->blocks[ this->blocks.size() -1 ]->bg = true;
-					}
+					this->blocks[ this->blocks.size() -1 ]->bg = plants[ chosen ]->bg;
 				}
 			}
 		}

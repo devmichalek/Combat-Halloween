@@ -74,28 +74,28 @@ void Choice::free()
 void Choice::load( int screen_w, int screen_h )
 {
 	button.setName( "choice-button" );
-	button.load( "data/sprites/level/random.png", 4 );
+	button.load( "data/03_level/random.png", 4 );
 	button.setScale( 0.4, 0.4 );
 	
 	text.setName( "choice-text" );
-	text.setFont( "data/fonts/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "Choose world or " );
 	
 	
 	information.setName( "choice-information" );
-	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	information.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Following worlds will be generated randomly." );
 
 	for( int i = 0; i < 5; i ++ )
 	{
 		world.push_back( new MySprite() );
 		world[ i ]->setName( "choice-world[ " + to_string( i ) + " ]" );
-		world[ i ]->load( "data/sprites/play/" + to_string( i ) + ".png" );
+		world[ i ]->load( "data/04_platform/world/" + to_string( i ) + "/bg.png" );
 		world[ i ]->setScale( 0.1, 0.1 );
 		
 		description.push_back( new MyText() );
 		description[ i ]->setName( "choice-description" );
-		description[ i ]->setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+		description[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	}
 	
 	// set text
@@ -108,10 +108,10 @@ void Choice::load( int screen_w, int screen_h )
 
 	
 	click.setID( "choice-click" );
-	click.load( "data/sounds/click.wav", 50 );
+	click.load( "data/02_menu/click.wav", 50 );
 	
 	frame.setName( "choice-frame" );
-	frame.load( "data/sprites/level/frame.png" );
+	frame.load( "data/03_level/frame.png" );
 	frame.setScale( 0.2, 0.2 );
 	
 	alpha_line = 100;

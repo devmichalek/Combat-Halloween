@@ -38,7 +38,7 @@ void Log::free()
 void Log::load( string path, int left, int y )
 {
 	button.setName( "log-button" );
-    button.load( "data/sprites/menu/" + path + ".png", 4 );
+    button.load( "data/02_menu/" + path + ".png", 4 );
 	button.setPosition( left, y +10 );
 	
 	// if is locked we don't have reason to load futher
@@ -49,7 +49,7 @@ void Log::load( string path, int left, int y )
 	else
 	{
 		click.setID( "log-click" );
-		click.load( "data/sounds/click.wav", 50 );
+		click.load( "data/02_menu/click.wav", 50 );
 	}
 }
 

@@ -42,6 +42,8 @@ void Wall::free()
 		
 		sprites.clear();
 	}
+	
+	hit.free();
 }
 
 void Wall::reset( int distance )
@@ -77,12 +79,15 @@ void Wall::load( int type, int width, int screen_w )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "wall-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
+		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
 	}
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size()-1 ]->setName( "wall-sprites[5]" );
-	sprites[ sprites.size()-1 ]->load( "data/sprites/play/" +to_string( type ) +"/15.png" );
+	sprites[ sprites.size()-1 ]->load( "data/04_platform/world/" +to_string( type ) +"/15.png" );
+	
+	hit.setChunkName( "wall-hit" );
+	hit.loadChunk( "data/04_platform/world/sounds/wall/0.wav" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )
@@ -235,9 +240,13 @@ bool Wall::harm( Rect* rect )
 				{
 					if( it->getX(j) > -width*2 && it->getX(j) < screen_w +width*2 )
 					{
+						if( hit.isPlayable() )
+						{
+							hit.playChunk();
+						}
+						
 						if( it->getNr(j) < 10 )
 						{
-							
 							sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
 							if( sprites[ it->getNr(j) ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 							{

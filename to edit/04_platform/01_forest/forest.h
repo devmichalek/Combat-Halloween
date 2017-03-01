@@ -28,6 +28,7 @@
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/golem/golem.h"
+#include "04_platform/enemy/checkActivity/fireball/fireball.h"
 
 class Forest
 {
@@ -65,6 +66,7 @@ class Forest
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Golem> golem_factory;
+	Fireball* fireball;
 	
 public:
 

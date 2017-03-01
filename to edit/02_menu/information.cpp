@@ -51,7 +51,7 @@ void Information::load( int right, int top, int screen_h )
 	{
 		text.push_back( new MyText() );
 		text[ i ]->setName( "information-text nr " + std::to_string( i ) );
-		text[ i ]->setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x98, 0x98, 0x98 );
+		text[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0x98, 0x98, 0x98 );
 	}
 	
 	
@@ -86,14 +86,14 @@ void Information::load( int right, int top, int screen_h )
 		
 		if( i != 1 || i != 3 || i != 5 )
 		{
-			info_text[ i ]->setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+			info_text[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 		}
 	}
 	//8Ca93e
 	//8c001a
-	info_text[ 5 ]->setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x8C, 0x00, 0x1A );
-	info_text[ 1 ]->setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0xFF, 0xDE, 0x00 );
-	info_text[ 3 ]->setFont( "data/fonts/Jaapokki-Regular.otf", 25, 0x8C, 0xA9, 0x3E );
+	info_text[ 5 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0x8C, 0x00, 0x1A );
+	info_text[ 1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0xFF, 0xDE, 0x00 );
+	info_text[ 3 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0x8C, 0xA9, 0x3E );
 	
 	info_text[ 0 ]->setText( "instructions: " );
 	info_text[ 1 ]->setText( "click on" );

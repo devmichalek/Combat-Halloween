@@ -44,11 +44,11 @@ void Sound_button::load( string path, int bot )
 	button.setPosition( 10, bot );
 	
 	scratch.setName( "sound_button-scratch" );
-	scratch.load( "data/sprites/menu/scratch.png" );
+	scratch.load( "data/02_menu/scratch.png" );
 	scratch.setPosition( 10, bot );
 	
 	click.setID( "sound_button-click" );
-	click.load( "data/sounds/click.wav", 50 );
+	click.load( "data/02_menu/click.wav", 50 );
 }
 
 void Sound_button::draw( sf::RenderWindow* &window )
