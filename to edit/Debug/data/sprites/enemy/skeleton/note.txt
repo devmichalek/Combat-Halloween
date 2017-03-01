@@ -1,6 +1,0 @@
-offsets
-appear 10
-attack 8
-die 8
-idle 6
-walk 8

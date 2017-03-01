@@ -1,3 +1,0 @@
-offsets
-explosion 7
-mine 2
