@@ -110,13 +110,13 @@ void Heart::load()
 		int nr = strToInt( line );
 		
 		fill.setName( "heart-fill" );
-		fill.load( "data/sprites/hero/heart/fill.png");
+		fill.load( "data/04_platform/panel/heart/fill.png");
 		
 		frame.setName( "heart-frame" );
-		frame.load( "data/sprites/hero/heart/frame.png");
+		frame.load( "data/04_platform/panel/heart/frame.png");
 		
 		grey.setName( "heart-grey_square" );
-		grey.load( "data/sprites/hero/grey/grey_square.png");
+		grey.load( "data/04_platform/panel/grey/grey_square.png");
 		
 		for( int i = 0; i < nr; i++ )
 		{

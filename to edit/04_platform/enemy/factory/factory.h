@@ -1,11 +1,11 @@
 #pragma once
 
 #include "04_platform/world/brick/block.h"
+#include "04_platform/enemy/expletive/expletive.h"
 #include "drawable/sprite.h"
 #include "drawable/text.h"
 #include <vector>
-#include "02_menu/click.h"
-#include "04_platform/enemy/coins/coin.h"
+
 
 using namespace std;
 
@@ -36,10 +36,8 @@ class Factory
 	vector <float> features;
 	
 	MyText hp;
-	vector <Click*> hits;
-	
-	MySprite coin;
-	vector <Coin*> coins;
+	Rect* deadRect;
+	Expletive* expletive;
 
 public:
 
@@ -69,16 +67,14 @@ public:
 	bool harm( Rect* rect, int damage );
 	void ableAttack(  Rect* rect );
 	bool harmSomebody( Rect* rect );
-	void upliftMoney( Rect* rect );
 	
 	// Get particulars.
 	int getDamage();
-	int getCash();
+	Rect* getDeadRect();	// For money.
 
 	// In action.
 	void moveX( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
 	void mechanics();
-	bool coinCorner();
 	void setColor( sf::Color color );
 };

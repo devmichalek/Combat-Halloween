@@ -25,6 +25,7 @@ Halloween::Halloween()
 	greenery = new Greenery;
 	
 	mine_factory = new Mine_factory;
+	lightning = new Lightning;
 }
 
 Halloween::~Halloween()
@@ -61,6 +62,7 @@ void Halloween::free()
 	delete mine_factory;
 	vampire_factory.free();
 	zombie_factory.free();
+	delete lightning;
 }
 
 void Halloween::reset()
@@ -86,6 +88,7 @@ void Halloween::reset()
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
 	zombie_factory.reset( distance );
+	lightning->reset();
 }
 
 
@@ -116,6 +119,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	mine_factory->load( width, screen_w, screen_h );
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
 	zombie_factory.load( width, screen_w, screen_h, "zombie" );
+	lightning->load( FPS );
 }
 
 void Halloween::handle( sf::Event &event )
@@ -148,6 +152,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		mine_factory->fadeout( value );
 		vampire_factory.fadeout( value );
 		zombie_factory.fadeout( value );
+		lightning->fadeout( value );
 	}
 	else
 	{
@@ -170,6 +175,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		mine_factory->fadein( value );
 		vampire_factory.fadein( value );
 		zombie_factory.fadein( value );
+		lightning->fadein( value );
 	}
 	
 
@@ -188,6 +194,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	mine_factory->draw( window );
 	vampire_factory.draw( window );
 	zombie_factory.draw( window );
+	lightning->draw( window );
 	
 	// rest
 	brick->draw( window );

@@ -64,24 +64,24 @@ void Character::reset( int screen_w, int screen_h )
 void Character::load( int screen_w, int screen_h )
 {
 	one.setName( "character-one" );
-	one.load( "data/sprites/hero/0/choose/0.png", 10 );
+	one.load( "data/03_level/hero0.png", 10 );
 	one.center( screen_w, 100, screen_w/2, screen_h );
 	
 	two.setName( "character-two" );
-	two.load( "data/sprites/hero/1/choose/0.png", 10 );
+	two.load( "data/03_level/hero1.png", 10 );
 	two.setScale( 0.93, 0.93 );
 	two.center( screen_w + screen_w/2, 100, screen_w/2, screen_h ); //RUDA <3
 	
-	click.setID( "music_button-click" );
-	click.load( "data/sounds/click.wav", 50 );
+	click.setID( "character-click" );
+	click.load( "data/02_menu/click.wav", 50 );
 	
 	text.setName( "character-text" );
-	text.setFont( "data/fonts/Jaapokki-Regular.otf", 50, 255, 255, 255 );
+	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 50, 255, 255, 255 );
 	text.setText( "Choose character" );
 	text.center( screen_w, screen_h/2 -40, screen_w );
 	
-	information.setName( "choice-information" );
-	information.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	information.setName( "character-information" );
+	information.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Choose character to start game." );
 	information.setPosition( screen_w + 10, screen_h - information.getHeight() - 10 );
 	

@@ -26,7 +26,7 @@ Desert::Desert()
 	day = new Day;
 	
 	mine_factory = new Mine_factory;
-	// skeleton_factory = new Factory;
+	fireball = new Fireball;
 }
 
 Desert::~Desert()
@@ -63,6 +63,7 @@ void Desert::free()
 	
 	delete mine_factory;
 	skeleton_factory.free();
+	delete fireball;
 }
 
 void Desert::reset()
@@ -88,6 +89,7 @@ void Desert::reset()
 	
 	mine_factory->reset( distance );
 	skeleton_factory.reset( distance );
+	fireball->reset();
 	
 	// Set color
 	hero->setColor( day->getColor() );
@@ -132,6 +134,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	
 	mine_factory->load( width, screen_w, screen_h );
 	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
+	fireball->load( FPS, screen_w );
 }
 
 void Desert::handle( sf::Event &event )
@@ -163,6 +166,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadeout( value );
 		skeleton_factory.fadeout( value );
+		fireball->fadeout( value );
 	}
 	else
 	{
@@ -184,6 +188,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadein( value );
 		skeleton_factory.fadein( value );
+		fireball->fadein( value );
 	}
 	
 
@@ -201,6 +206,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	// enemy
 	mine_factory->draw( window );
 	skeleton_factory.draw( window );
+	fireball->draw( window );
 	
 	// rest
 	brick->draw( window );

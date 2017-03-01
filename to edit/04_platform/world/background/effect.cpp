@@ -55,6 +55,8 @@ void Effect::load( int screen_w, int screen_h )
 	sprites[ WATER ]->setColor( sf::Color( 0x3B, 0x9C, 0xFB ) );
 	sprites[ BLOOD ]->setColor( sf::Color( 0xFF, 0x81, 0x70 ) );
 	sprites[ FALL ]->setColor( sf::Color( 0, 0, 0 ) );
+	sprites[ LIGHTNING ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	sprites[ SAND ]->setColor( sf::Color( 0xBE, 0x7F, 0x19 ) );
 	
 	reset();
 }
@@ -127,4 +129,16 @@ void Effect::runFall()
 {
 	counter = 1;
 	active = FALL;
+}
+
+void Effect::runLightning()
+{
+	counter = 1;
+	active = LIGHTNING;
+}
+
+void Effect::runSand()
+{
+	counter = 1;
+	active = SAND;
 }

@@ -210,6 +210,7 @@ void Winter::mechanics()
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			lightning->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -225,6 +226,7 @@ void Winter::mechanics()
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			lightning->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -264,6 +266,7 @@ void Winter::mechanics()
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			lightning->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -289,11 +292,21 @@ void Winter::mechanics()
 		effect->runBlood();
 	}
 	
-	// HARM BY SKELETON
+	// HARM BY GOLEM
 	if( golem_factory.harmSomebody( hero->getRect() ) )
 	{
 		heart->harm( -golem_factory.getDamage() );
 		effect->runBlood();
+	}
+	
+	// HARM BY LIGHTNING
+	if( lightning->harmSomebody( hero->getRect() ) )
+	{
+		if( lightning->harmed() )
+		{
+			effect->runLightning();
+			heart->harm( -lightning->getDamage() );
+		}
 	}
 	
 // ------------------------------------------------------------------------------------------------
@@ -308,6 +321,7 @@ void Winter::mechanics()
 		mine_factory->mechanics();
 		golem_factory.mechanics();
 		coins->mechanics();
+		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{

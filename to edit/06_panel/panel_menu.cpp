@@ -34,7 +34,7 @@ void Panel_menu::reset()
 void Panel_menu::load( int screen_w, int screen_h )
 {
 	bg->setName( "panel_menu-background" );
-	bg->load( "data/sprites/menu/background.png" );
+	bg->load( "data/02_menu/background.png" );
 	
 	replay_button->load( screen_w, screen_h/2 );
 	

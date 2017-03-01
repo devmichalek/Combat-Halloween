@@ -52,7 +52,7 @@ void Link_button::load( string path, int screen_w, int bot )
 	else
 	{
 		click.setID( "link_button-" + path );
-		click.load( "data/sounds/click.wav", 50 );
+		click.load( "data/02_menu/click.wav", 50 );
 	}
 }
 

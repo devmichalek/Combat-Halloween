@@ -10,6 +10,8 @@ class Effect
 		WATER = 0,
 		BLOOD,
 		FALL,
+		LIGHTNING,
+		SAND,
 		nr
 	};
 	
@@ -36,4 +38,6 @@ public:
 	void runWater();
 	void runBlood();
 	void runFall();
+	void runLightning();
+	void runSand();
 };

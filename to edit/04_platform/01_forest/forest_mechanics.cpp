@@ -207,6 +207,7 @@ void Forest::mechanics()
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			fireball->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -222,6 +223,7 @@ void Forest::mechanics()
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			fireball->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 
@@ -262,6 +264,7 @@ void Forest::mechanics()
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			fireball->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -289,11 +292,21 @@ void Forest::mechanics()
 	}
 
 	
-	// HARM BY SKELETON
+	// HARM BY GOLEM
 	if( golem_factory.harmSomebody( hero->getRect() ) )
 	{
 		heart->harm( -golem_factory.getDamage() );
 		effect->runBlood();
+	}
+	
+	// HARM BY FIREBALL
+	if( fireball->harmSomebody( hero->getRect() ) )
+	{
+		if( fireball->harmed() )
+		{
+			heart->harm( -fireball->getDamage() );
+			effect->runBlood();
+		}
 	}
 	
 // ------------------------------------------------------------------------------------------------
@@ -308,6 +321,7 @@ void Forest::mechanics()
 		mine_factory->mechanics();
 		golem_factory.mechanics();
 		coins->mechanics();
+		fireball->mechanics( hero->getY(), hero->getDirection() );
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{

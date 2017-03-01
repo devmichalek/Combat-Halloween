@@ -26,6 +26,7 @@ Winter::Winter()
 	greenery = new Greenery;
 	
 	mine_factory = new Mine_factory;
+	lightning = new Lightning;
 }
 
 Winter::~Winter()
@@ -62,6 +63,7 @@ void Winter::free()
 	
 	delete mine_factory;
 	golem_factory.free();
+	delete lightning;
 }
 
 void Winter::reset()
@@ -87,6 +89,7 @@ void Winter::reset()
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
+	lightning->reset();
 }
 
 
@@ -117,6 +120,7 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	
 	mine_factory->load( width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_winter" );
+	lightning->load( FPS );
 }
 
 void Winter::handle( sf::Event &event )
@@ -149,6 +153,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
+		lightning->fadeout( value );
 	}
 	else
 	{
@@ -171,6 +176,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
+		lightning->fadein( value );
 	}
 	
 
@@ -188,6 +194,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	// enemy
 	mine_factory->draw( window );
 	golem_factory.draw( window );
+	lightning->draw( window );
 	
 	// rest
 	water->draw( window );

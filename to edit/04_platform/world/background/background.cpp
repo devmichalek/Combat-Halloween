@@ -34,7 +34,7 @@ void Background::load( int type, int screen_w, int screen_h )
 	this->screen_h = screen_h;
 	
 	sprite.setName( "background-sprite" );
-	sprite.load( "data/sprites/play/" +to_string( type ) +".png" );
+	sprite.load( "data/04_platform/world/" +to_string( type ) +"/bg.png" );
 	
 }
 

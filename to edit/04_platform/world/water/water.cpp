@@ -76,7 +76,7 @@ void Water::load( int type, int width, int screen_w, int screen_h )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "water-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/sprites/play/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
+		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
 	}
 }
 

@@ -59,24 +59,24 @@ void Cube::load( int left, int bot )
 	line = 61;
 	
 	down.setName( "cube-down" );
-	down.load( "data/sprites/level/down.png" );
+	down.load( "data/03_level/down.png" );
 	
 	this->left.setName( "cube-left" );
-	this->left.load( "data/sprites/level/left.png" );
+	this->left.load( "data/03_level/left.png" );
 	
 	paper.setName( "cube-paper" );
-	paper.load( "data/sprites/level/paper.png" );
+	paper.load( "data/03_level/paper.png" );
 	
 	cube.setName( "cube-right" );
-	cube.load( "data/sprites/level/cube.png", line );
+	cube.load( "data/03_level/cube.png", line );
 	
-	flatness.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
-	worldSize.setFont( "data/fonts/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	flatness.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	worldSize.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	
 	reset( left, bot );
 	
-	click.setID( "worldsize-click" );
-	click.load( "data/sounds/click.wav", 50 );
+	click.setID( "cube-click" );
+	click.load( "data/02_menu/click.wav", 50 );
 }
 
 void Cube::handle( sf::Event &event )

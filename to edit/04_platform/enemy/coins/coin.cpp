@@ -24,7 +24,6 @@ void Coin::free()
 void Coin::reset()
 {
 	active = false;
-	corner = false;
 	x = y = yLine = 0;
 	left = right = 0;
 	
@@ -85,11 +84,6 @@ void Coin::setDelay( int delay )
 	this->delay = delay;
 }
 
-void Coin::setCorner()
-{
-	corner = true;
-}
-
 
 
 int Coin::getOffset()
@@ -112,7 +106,7 @@ bool Coin::isActive()
 	return active;
 }
 
-void Coin::mechanics()
+bool Coin::mechanics()
 {
 	if( active )
 	{
@@ -122,78 +116,51 @@ void Coin::mechanics()
 			offset = 0;
 		}
 		
-		if( !corner )
+		if( jump > 0 )
 		{
-			if( jump > 0 )
+			if( x < right && x > left )
 			{
-				if( x < right && x > left )
+				if( direction == 1 )
 				{
-					if( direction == 1 )
-					{
-						x += vel;
-					}
-					else if( direction == 2 )
-					{
-						x -= vel;
-					}
+					x += vel;
 				}
-				
-				if( jumpState == 0 )
+				else if( direction == 2 )
 				{
-					if( y > yLine -jump )
-					{
-						y -= 2;
-					}
-					else
-					{
-						// printf( "happen1\n" );
-						jump /= 3;
-						jumpState = 1;
-					}
+					x -= vel;
+				}
+			}
+			
+			if( jumpState == 0 )
+			{
+				if( y > yLine -jump )
+				{
+					y -= 2;
 				}
 				else
 				{
-					if( y < yLine )
-					{
-						y += 2;
-					}
-					else
-					{
-						// printf( "happen2\n" );
-						jumpState = 0;
-					}
+					// printf( "happen1\n" );
+					jump /= 3;
+					jumpState = 1;
 				}
 			}
-			else if( y < yLine )
+			else
 			{
-				y += vel;
+				if( y < yLine )
+				{
+					y += 2;
+				}
+				else
+				{
+					// printf( "happen2\n" );
+					jumpState = 0;
+					return true;
+				}
 			}
 		}
-	}
-}
-
-bool Coin::moveToCorner( int x, int y )
-{
-	if( corner )
-	{
-		// printf( "sth\n" );
-		bool added = true;
-		if( this->x < x )
+		else if( y < yLine )
 		{
-			this->x += 8;
-			// printf( "sth\n" );
-			added = false;
+			y += vel;
 		}
-		
-		if( this->y > y )
-		{
-			this->y -= 7;
-			// printf( "st2h\n" );
-			added = false;
-		}
-		
-		// printf( "%d\n", added );
-		return added;
 	}
 	
 	return false;
@@ -201,10 +168,7 @@ bool Coin::moveToCorner( int x, int y )
 
 void Coin::moveX( int vel )
 {
-	if( !corner )
-	{
-		x += vel;
-		left += vel;
-		right += vel;
-	}
+	x += vel;
+	left += vel;
+	right += vel;
 }
