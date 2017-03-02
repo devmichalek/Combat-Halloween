@@ -90,11 +90,11 @@ void Mine_factory::load( int width, int screen_w, int screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	ticktock.setChunkName( "mine_factory-ticktock" );
-	ticktock.loadChunk( "data/04_platform/enemy/mine/sounds/ticktock.wav" );
+	ticktock.setName( "mine_factory-ticktock" );
+	ticktock.load( "data/04_platform/enemy/mine/sounds/ticktock.wav" );
 	
-	explosion.setChunkName( "mine_factory-explosion" );
-	explosion.loadChunk( "data/04_platform/enemy/mine/sounds/explosion.wav" );
+	explosion.setName( "mine_factory-explosion" );
+	explosion.load( "data/04_platform/enemy/mine/sounds/explosion.wav" );
 }
 
 void Mine_factory::draw( sf::RenderWindow* &window )
@@ -107,7 +107,7 @@ void Mine_factory::draw( sf::RenderWindow* &window )
 			{
 				if( i->explosion() && explosion.isPlayable() )
 				{
-					explosion.playChunk();
+					explosion.play();
 				}
 				
 				sprites[ i->getNr() ]->setOffset( i->getOffset() );
@@ -179,7 +179,7 @@ void Mine_factory::checkCollision( Rect* rect )
 					{
 						if( i->ticktock() && ticktock.isPlayable() )
 						{
-							ticktock.playChunk();
+							ticktock.play();
 						}
 							
 						i->setActive();
