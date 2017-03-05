@@ -119,10 +119,10 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 
 	// load default keys
 	fstream file;
-	file.open( "data/txt/menu/keyboard_default.txt" );
+	file.open( "data/txt/keyboard/keyboard_default.txt" );
 	if( file.bad() )
 	{
-		printf( "Can not load %s\n", "data/txt/menu/keyboard_default.txt" );
+		printf( "Can not load %s\n", "data/txt/keyboard/keyboard_default.txt" );
 	}
 	else
 	{
@@ -143,10 +143,10 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	file.close();
 	
 	// load temporary keys
-	file.open( "data/txt/menu/keyboard_temporary.txt" );
+	file.open( "data/txt/keyboard/keyboard_temporary.txt" );
 	if( file.bad() )
 	{
-		printf( "Can not load %s\n", "data/txt/menu/keyboard_temporary.txt" );
+		printf( "Can not load %s\n", "data/txt/keyboard/keyboard_temporary.txt" );
 	}
 	else
 	{
@@ -211,10 +211,10 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	
 	
 	// load and set banned keys
-	file.open( "data/txt/menu/banned_keys.txt" );
+	file.open( "data/txt/keyboard/banned_keys.txt" );
 	if( file.bad() )
 	{
-		printf( "Can not load %s\n", "data/txt/menu/banned_keys.txt" );
+		printf( "Can not load %s\n", "data/txt/keyboard/banned_keys.txt" );
 	}
 	else
 	{
