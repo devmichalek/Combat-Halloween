@@ -20,6 +20,7 @@
 #include "sound/music.h"
 #include "information.h"
 #include "keyboard.h"
+#include "development/development.h"
 
 
 class Menu
@@ -49,7 +50,7 @@ class Menu
 	Log* author_log;
 	Log* game_log;
 	Log* settings_log;
-	Log* scores_log;
+	Log* skill_log;
 	
 	Exit_log* exit;
 	
@@ -59,6 +60,8 @@ class Menu
 	
 	Information* information;
 	Keyboard* keyboard;
+	
+	Development* development;
 	
 public:
 	
