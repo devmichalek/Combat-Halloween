@@ -15,6 +15,7 @@ Forest::Forest()
 	heart = new Heart;
 	money_panel = new Money_panel;
 	coins = new Coins;
+	skills = new Skills;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -52,6 +53,7 @@ void Forest::free()
 	delete heart;
 	delete money_panel;
 	delete coins;
+	delete skills;
 	
 	delete brick;
 	delete effect;
@@ -79,6 +81,7 @@ void Forest::reset()
 	heart->reset();
 	money_panel->reset();
 	coins->reset();
+	skills->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -126,6 +129,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	heart->load();
 	money_panel->load( screen_w );
 	coins->load( width, screen_w, type );
+	skills->load( FPS );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -160,6 +164,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		heart->fadeout( value );
 		money_panel->fadeout( value );
 		coins->fadeout( value );
+		skills->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -183,6 +188,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		heart->fadein( value );
 		money_panel->fadein( value );
 		coins->fadein( value );
+		skills->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -224,6 +230,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	heart->draw( window );
 	money_panel->draw( window );
 	coins->draw( window );
+	skills->draw( window );
 	effect->draw( window );
 }
 
@@ -233,8 +240,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 {
 	switch( state )
 	{
-		case 0:	hero->load( type, screen_w, screen_h, width ); hero->setKeys();	hero->setDamage( difficulty );
-				kunai->setDamage( difficulty );
+		case 0:	hero->load( type, screen_w, screen_h, width ); hero->setKeys();
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->setPosition( hero->getX(), hero->getY() );
