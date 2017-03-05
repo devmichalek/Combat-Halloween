@@ -11,7 +11,7 @@ Day::Day()
 	sec = 0;
 	line = 0;
 	
-	r = g = b = 0xFF;
+	a = r = g = b = 0xFF;
 }
 
 Day::~Day()
@@ -34,7 +34,7 @@ void Day::free()
 		colors.clear();
 	}
 	
-	r = g = b = 0xFF;
+	a = r = g = b = 0xFF;
 }
 
 void Day::reset()
@@ -46,7 +46,7 @@ void Day::reset()
 	counter = 0;
 	sec = 0;
 	
-	r = g = b = 0xFF;
+	a = r = g = b = 0xFF;
 }
 
 
@@ -57,21 +57,25 @@ void Day::set( unsigned FPS )
 	colors[ colors.size() -1 ].r = 0xFF;
 	colors[ colors.size() -1 ].g = 0xFF;
 	colors[ colors.size() -1 ].b = 0xFF;
+	colors[ colors.size() -1 ].a = 0xFF;
 	
 	colors.push_back( sf::Color() );
 	colors[ colors.size() -1 ].r = 0xFF;
 	colors[ colors.size() -1 ].g = 0xF6;
 	colors[ colors.size() -1 ].b = 0x6C;
+	colors[ colors.size() -1 ].a = 0xBB;
 	
 	colors.push_back( sf::Color() );
 	colors[ colors.size() -1 ].r = 0xFF;
 	colors[ colors.size() -1 ].g = 0x9C;
 	colors[ colors.size() -1 ].b = 0x00;
+	colors[ colors.size() -1 ].a = 0x99;
 	
 	colors.push_back( sf::Color() );
 	colors[ colors.size() -1 ].r = 0x19;
 	colors[ colors.size() -1 ].g = 0x18;
 	colors[ colors.size() -1 ].b = 0x18;
+	colors[ colors.size() -1 ].a = 0x33;
 	
 	line = FPS;
 }
@@ -119,6 +123,17 @@ void Day::setInTime()
 		b--;
 		change = true;
 	}
+	
+	if( a < colors[ which ].a )
+	{
+		a++;
+		change = true;
+	}
+	else if( a > colors[ which ].a )
+	{
+		a--;
+		change = true;
+	}
 }
 
 void Day::mechanics()
@@ -139,7 +154,8 @@ void Day::mechanics()
 		
 		if( r == colors[ which ].r &&
 			g == colors[ which ].g &&
-			b == colors[ which ].b )
+			b == colors[ which ].b &&
+			a == colors[ which ].a )
 		{
 			if( !count )
 			{
@@ -201,5 +217,5 @@ bool Day::isChange()
 
 sf::Color Day::getColor()
 {
-	return sf::Color( r, g, b );
+	return sf::Color( r, g, b, a );
 }

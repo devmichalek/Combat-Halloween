@@ -86,8 +86,8 @@ void Wall::load( int type, int width, int screen_w )
 	sprites[ sprites.size()-1 ]->setName( "wall-sprites[5]" );
 	sprites[ sprites.size()-1 ]->load( "data/04_platform/world/" +to_string( type ) +"/15.png" );
 	
-	hit.setChunkName( "wall-hit" );
-	hit.loadChunk( "data/04_platform/world/sounds/wall/0.wav" );
+	hit.setName( "wall-hit" );
+	hit.load( "data/04_platform/world/sounds/wall/0.wav" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )
@@ -242,7 +242,7 @@ bool Wall::harm( Rect* rect )
 					{
 						if( hit.isPlayable() )
 						{
-							hit.playChunk();
+							hit.play();
 						}
 						
 						if( it->getNr(j) < 10 )
