@@ -85,10 +85,10 @@ void Heart::load()
 	
 	fstream file;
 	
-	file.open( "data/txt/panel/heart.txt" );
+	file.open( "data/txt/heart/heart.txt" );
 	if( file.bad() )
 	{
-		printf( "Cannot open data/txt/panel/heart.txt\n" );
+		printf( "Cannot open data/txt/heart/heart.txt\n" );
 	}
 	else
 	{
@@ -98,10 +98,10 @@ void Heart::load()
 	}
 	file.close();
 	
-	file.open( "data/txt/panel/heart_current.txt" );
+	file.open( "data/txt/heart/heart_current.txt" );
 	if( file.bad() )
 	{
-		printf( "Cannot open data/txt/panel/heart_current.txt\n" );
+		printf( "Cannot open data/txt/heart/heart_current.txt\n" );
 	}
 	else
 	{
@@ -179,8 +179,8 @@ void Heart::draw( sf::RenderWindow* &window )
 
 void Heart::fadein( int v, int max )
 {
-	grey.fadein( v, max );
-	frame.fadein( v, max );
+	grey.fadein( v, max /2 );
+	frame.fadein( v, max /2 );
 }
 
 void Heart::fadeout( int v, int min )

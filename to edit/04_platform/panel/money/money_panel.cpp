@@ -58,7 +58,7 @@ void Money_panel::load( int screen_w )
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
 	text.setName( "money_panel-text" );
-	text.setFont( "data/02_menu/BADABB__.TTF", 33, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/04_platform/panel/coin/Silver Age Queens.ttf", 28, 0xD9, 0xD9, 0xD9 );
 
 	setText();
 }
@@ -81,9 +81,9 @@ void Money_panel::draw( sf::RenderWindow* &window )
 
 void Money_panel::fadein( int v, int max )
 {
-	grey.fadein( v, max );
-	coin.fadein( v, max );
-	text.fadein( v, max );
+	grey.fadein( v, max /2 );
+	coin.fadein( v, max /2 );
+	text.fadein( v, max /3 );
 }
 
 void Money_panel::fadeout( int v, int min )
@@ -115,7 +115,7 @@ void Money_panel::setText()
 		text.setText( additional +to_string( bank ) );
 	}
 	
-	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +4 );
+	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +10 );
 }
 
 void Money_panel::saveMoney()
