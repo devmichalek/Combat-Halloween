@@ -189,6 +189,21 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	x2[ DEAD ] -= (sprite[ DEAD ]->getWidth() -sprite[ IDLE ]->getWidth() );
 	y[ DEAD ] += 5*scale;
 	x[ GLIDE ] -= (sprite[ GLIDE ]->getWidth() -sprite[ IDLE ]->getWidth() );
+	
+	// damage
+	fstream file;
+	file.open( "data/txt/hero/sword_current.txt" );
+	if( file.bad() )
+	{
+		printf( "Something went wrong with data/txt/hero/sword_current.txt\n" );
+	}
+	else
+	{
+		string line;
+		file >> line;
+		damage = stof( line );
+	}
+	file.close();
 }
 
 void Hero::setKeys()
@@ -205,7 +220,7 @@ void Hero::setKeys()
 	
 	// Set keys.
 	fstream file;
-	file.open( "data/txt/menu/keyboard_temporary.txt" );
+	file.open( "data/txt/keyboard/keyboard_temporary.txt" );
 	if( file.bad() )
 	{
 		printf( "Cannot open file! (hero)\n" );
@@ -224,11 +239,6 @@ void Hero::setKeys()
 		}
 	}
 	file.close();
-}
-
-void Hero::setDamage( int chance )
-{
-	damage = 120 -chance;
 }
 
 void Hero::draw( sf::RenderWindow* &window )
@@ -410,7 +420,7 @@ bool Hero::isFallen()
 
 void Hero::undoFallX( sf::Uint8 add )
 {
-	moveX( add );
+	moveX( -add );
 }
 
 void Hero::undoFallY()
