@@ -278,8 +278,6 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 template <typename F>
 void Factory<F>::fadein( int v, int max )
 {
-	hp.fadein( v, max /2 );
-	
 	for( auto &i :sprites )
 	{
 		i->fadein( v, max );
@@ -611,6 +609,8 @@ void Factory<F>::mechanics()
 template <typename F>
 void Factory<F>::setColor( sf::Color color )
 {
+	hp.setAlpha( color.a );
+	
 	for( auto &i :sprites )
 	{
 		i->setColor( color );
