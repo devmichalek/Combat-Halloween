@@ -36,7 +36,7 @@ Menu::Menu()
 	author_log = new Log;
 	game_log = new Log( true );
 	settings_log = new Log();
-	scores_log = new Log;
+	skill_log = new Log;
 	
 	exit = new Exit_log;
 	
@@ -46,6 +46,8 @@ Menu::Menu()
 	
 	information = new Information;
 	keyboard = new Keyboard;
+	
+	development = new Development;
 }
 
 Menu::~Menu()
@@ -69,12 +71,13 @@ void Menu::free()
 	delete author_log;
 	delete game_log;
 	delete settings_log;
-	delete scores_log;
+	delete skill_log;
 	delete exit;
 	delete music;
 	delete version;
 	delete information;
 	delete keyboard;
+	delete development;
 }
 
 
@@ -116,7 +119,7 @@ void Menu::load( int screen_w, int screen_h )
 	author_log->load( "author", play_button->getX() +5, play_button->getBot() );
 	game_log->load( "game", author_log->getRight(), play_button->getBot() );
 	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
-	scores_log->load( "scores", settings_log->getRight(), play_button->getBot() );
+	skill_log->load( "skill", settings_log->getRight(), play_button->getBot() );
 	
 	// exit log
 	exit->load( screen_w, screen_h );
@@ -127,12 +130,14 @@ void Menu::load( int screen_w, int screen_h )
 	// simple text on the right
 	version->setName( "menu-version-text" );
 	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 22.02.2017" );
+	version->setText( "latest edition 06.03.2017" );
 	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	
 	// information (keyboard) and keyboard
 	information->load( music_volume->getRight(), screen_h/2 - 100, screen_h );
 	keyboard->load( 100, music_volume->getRight(), screen_h/2 + 100, screen_w, screen_h );
+	
+	development->load( title->getBot() +140, screen_h );
 	
 	
 	//Set start volume
@@ -144,10 +149,11 @@ void Menu::load( int screen_w, int screen_h )
 	google_button->setVolume( chunk_volume->getVolume() );
 	play_button->setVolume( chunk_volume->getVolume() );
 	author_log->setVolume( chunk_volume->getVolume() );
-	scores_log->setVolume( chunk_volume->getVolume() );
+	skill_log->setVolume( chunk_volume->getVolume() );
 	settings_log->setVolume( chunk_volume->getVolume() );
 	exit->setVolume( chunk_volume->getVolume() );
 	keyboard->setVolume( chunk_volume->getVolume() );
+	development->setVolume( chunk_volume->getVolume() );
 }
 
 void Menu::handle( sf::Event &event )
@@ -157,7 +163,7 @@ void Menu::handle( sf::Event &event )
 		exit->handle( event );
 		if( exit->getState() == 0 ) // if user didn't click quit
 		{
-			if( !author_log->getState() && !scores_log->getState() && !settings_log->getState() ) // if user didn't click logs
+			if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() ) // if user didn't click logs
 			{
 				git_button->handle( event );
 				google_button->handle( event );
@@ -170,17 +176,21 @@ void Menu::handle( sf::Event &event )
 				
 			if( !author_log->getState() && !settings_log->getState() )
 			{
-				scores_log->handle( event );
+				skill_log->handle( event );
 			}
-			if( !scores_log->getState() && !settings_log->getState()  )
+			if( !skill_log->getState() && !settings_log->getState()  )
 			{
 				author_log->handle( event );
 			}
-			if( !scores_log->getState() && !author_log->getState()  )
+			if( !skill_log->getState() && !author_log->getState()  )
 			{
 				settings_log->handle( event );
 			}
 				
+			if( skill_log->getState() )
+			{
+				development->handle( event );
+			}
 				
 			if( settings_log->getState() )
 			{
@@ -216,12 +226,13 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->turn();
 		play_button->turn();
 		author_log->turn();
-		scores_log->turn();
+		skill_log->turn();
 		settings_log->turn();
 		exit->turn();
 		music_volume->turn();
 		chunk_volume->turn();
-		keyboard->turn(); 
+		keyboard->turn();
+		development->turn();
 		sound.setChunkPlay( !sound.getChunkPlay() );
 	}
 	
@@ -241,12 +252,13 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->setVolume( chunk_volume->getVolume() );
 		play_button->setVolume( chunk_volume->getVolume() );
 		author_log->setVolume( chunk_volume->getVolume() );
-		scores_log->setVolume( chunk_volume->getVolume() );
+		skill_log->setVolume( chunk_volume->getVolume() );
 		settings_log->setVolume( chunk_volume->getVolume() );
 		exit->setVolume( chunk_volume->getVolume() );
 		music_volume->setVolume( chunk_volume->getVolume() );
 		chunk_volume->setVolume( chunk_volume->getVolume() );
 		keyboard->setVolume( chunk_volume->getVolume() );
+		development->setVolume( chunk_volume->getVolume() );
 		sound.setChunkVolume( chunk_volume->getVolume() );
 	}
 	
@@ -272,10 +284,11 @@ void Menu::draw( sf::RenderWindow* &window )
 		settings_log->fadein( value );
 		music_volume->fadein( value );
 		chunk_volume->fadein( value );
-		scores_log->fadein( value );
+		skill_log->fadein( value );
 		version->fadein( value );
 		keyboard->fadein( value );
 		information->fadein( value );
+		development->fadein( value );
 	}
 	
 	// Fade out:
@@ -297,10 +310,11 @@ void Menu::draw( sf::RenderWindow* &window )
 		settings_log->fadeout( value );
 		music_volume->fadeout( value );
 		chunk_volume->fadeout( value );
-		scores_log->fadeout( value );
+		skill_log->fadeout( value );
 		version->fadeout( value );
 		keyboard->fadeout( value );
 		information->fadeout( value );
+		development->fadeout( value );
 	}
 	else if( exit->getState() == 1 ) // if user clicked exit
 	{
@@ -320,10 +334,11 @@ void Menu::draw( sf::RenderWindow* &window )
 		settings_log->fadeout( value, alpha );
 		music_volume->fadeout( value, alpha );
 		chunk_volume->fadeout( value, alpha );
-		scores_log->fadeout( value, alpha );
+		skill_log->fadeout( value, alpha );
 		version->fadeout( value, alpha );
 		keyboard->fadeout( value, alpha );
 		information->fadeout( value, alpha );
+		development->fadeout( value, alpha );
 	}
 	else
 	{
@@ -343,10 +358,11 @@ void Menu::draw( sf::RenderWindow* &window )
 		settings_log->fadeout( value );
 		music_volume->fadeout( value );
 		chunk_volume->fadeout( value );
-		scores_log->fadeout( value );
+		skill_log->fadeout( value );
 		version->fadeout( value );
 		keyboard->fadeout( value );
 		information->fadeout( value );
+		development->fadeout( value );
 		if( background->getAlpha() == 0 )
 		{
 			state = 1;
@@ -374,7 +390,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	title->draw( *window );
 	window->draw( version->get() );
 	
-	if( !author_log->getState() && !scores_log->getState() && !settings_log->getState() ) // if user didn't click logs
+	if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() ) // if user didn't click logs
 	{
 		git_button->draw( *window );
 		google_button->draw( *window );
@@ -388,13 +404,13 @@ void Menu::draw( sf::RenderWindow* &window )
 	
 	if( !author_log->getState() && !settings_log->getState() )
 	{
-		scores_log->draw( window );
+		skill_log->draw( window );
 	}
-	if( !scores_log->getState() && !settings_log->getState() )
+	if( !skill_log->getState() && !settings_log->getState() )
 	{
 		author_log->draw( window );
 	}
-	if( !scores_log->getState() && !author_log->getState() )
+	if( !skill_log->getState() && !author_log->getState() )
 	{
 		settings_log->draw( window );
 	}
@@ -406,6 +422,11 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->draw( window );
 		keyboard->draw( *window );
 		information->draw( *window );
+	}
+	
+	if( skill_log->getState() )
+	{
+		development->draw( window );
 	}
 			
 		
