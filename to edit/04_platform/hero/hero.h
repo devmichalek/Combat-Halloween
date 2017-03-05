@@ -153,7 +153,6 @@ public:
 	
 	void load( int type, int screen_w, int screen_h, int width );
 	void setKeys();
-	void setDamage( int chance );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 255 );
