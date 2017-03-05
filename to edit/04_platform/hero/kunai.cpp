@@ -8,6 +8,7 @@
 */
 
 #include "kunai.h"
+#include <fstream>
 
 Bit::Bit()
 {
@@ -152,10 +153,6 @@ Rect* Kunai::getRect( int which )
 	return rect;
 }
 
-void Kunai::setDamage( int chance )
-{
-	damage = (120 -chance);
-}
 
 float Kunai::getDamage()
 {
@@ -197,17 +194,32 @@ void Kunai::free()
 	
 void Kunai::load()
 {
-	scale = 1;
+	scale = 0.5;
 	vel = 4;
 	
 	sprite.setName( "kunai-sprite" );
-	sprite.load( "data/04_platform/hero/0.png" );
+	sprite.load( "data/04_platform/hero/shuriken/1.png" );
 	
 	// Max amount of kunai's is 6
 	for( int i = 0; i < 6; i++ )
 	{
 		bits.push_back( new Bit() );
 	}
+	
+	// damage
+	fstream file;
+	file.open( "data/txt/hero/kunai_current.txt" );
+	if( file.bad() )
+	{
+		printf( "Something went wrong with data/txt/hero/kunai_current.txt\n" );
+	}
+	else
+	{
+		string line;
+		file >> line;
+		damage = stof( line );
+	}
+	file.close();
 }
 
 void Kunai::draw( sf::RenderWindow* &window )

@@ -54,16 +54,13 @@ public:
 	void destroy( int which );
 	
 	Rect* getRect( int which );
-	void setDamage( int chance );
 	float getDamage();
 	
 	Kunai();
 	~Kunai();
 	void free();
-	
 	void load();
 	void draw( sf::RenderWindow* &window );
-	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
 };
