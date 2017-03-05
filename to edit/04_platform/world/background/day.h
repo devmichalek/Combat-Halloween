@@ -11,8 +11,8 @@ class Day
 	{
 		I = 17,
 		F = 20,
-		S = 35,
-		N = 40
+		S = 25,
+		N = 35
 	};
 	
 	bool change;
@@ -23,7 +23,7 @@ class Day
 	sf::Uint8 sec;
 	sf::Uint8 line;
 	
-	sf::Uint8 r, g, b;
+	sf::Uint8 r, g, b, a;
 	vector <sf::Color> colors;
 	
 public:

@@ -7,7 +7,6 @@ Hover::Hover()
 	vel = 0;
 	vel_state = 0;
 	state = 0;
-	awryS = false;
 }
 
 Hover::~Hover()
@@ -31,7 +30,6 @@ void Hover::free()
 	vel = 0;
 	vel_state = 0;
 	state = 0;
-	awryS = false;
 }
 
 
@@ -88,7 +86,6 @@ void Hover::moving( int width )
 		if( blocks[ 0 ]->x <= startX )
 		{
 			state = 1;
-			awryS = false;
 		}
 		else
 		{
@@ -103,7 +100,6 @@ void Hover::moving( int width )
 		if( blocks[ blocks.size()-1 ]->x +width >= endX )
 		{
 			state = 0;
-			awryS = false;
 		}
 		else
 		{
@@ -115,22 +111,6 @@ void Hover::moving( int width )
 	}
 }
 
-void Hover::awry()
-{
-	if( !awryS )
-	{
-		// printf( "awry\n" );
-		awryS = true;
-		if( state = 0 )
-		{
-			state = 1;
-		}
-		else
-		{
-			state = 0;
-		}
-	}
-}
 
 void Hover::turnOff()
 {

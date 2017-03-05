@@ -898,12 +898,10 @@ bool Islands::checkFlyingIslands( Rect* rect )
 					{
 						if( sprites[ it->getNr(i) ]->checkPixelCollision( j, t ) )
 						{
-							it->awry();
 							return true;
 						}
 						else if( sprites[ it->getNr(i) ]->checkPixelCollision( j, b ) )
 						{
-							it->awry();
 							return true;
 						}
 					}
@@ -912,12 +910,10 @@ bool Islands::checkFlyingIslands( Rect* rect )
 					{
 						if( sprites[ it->getNr(i) ]->checkPixelCollision( l, j ) )
 						{
-							it->awry();
 							return true;
 						}
 						else if( sprites[ it->getNr(i) ]->checkPixelCollision( r, j ) )
 						{
-							it->awry();
 							return true;
 						}
 					}
