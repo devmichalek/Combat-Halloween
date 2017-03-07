@@ -1,11 +1,17 @@
+/**
+    loading_world.h
+    Purpose: class Loading_world shows gears working.
+
+    @author Adrian Michalek
+    @version 2017.02.02
+	@email adrmic98@gmail.com
+*/
+
 #include "loading_world.h"
 
 Loading_world::Loading_world()
 {
-	state = 0;
-	ready = false;
-	counter = 0;
-	max = 0;
+	free();
 }
 
 Loading_world::~Loading_world()
@@ -36,6 +42,7 @@ void Loading_world::reset()
 void Loading_world::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
+	
 	max = 20;
 	
 	text.setName( "loading_world-text" );

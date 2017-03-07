@@ -1,3 +1,12 @@
+/**
+    loading_world.h
+    Purpose: class Loading_world shows gears working.
+
+    @author Adrian Michalek
+    @version 2017.02.02
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/text.h"
@@ -6,7 +15,7 @@
 class Loading_world
 {
 	MyText text;	// text
-	MySprite bg;			// background
+	MySprite bg;	// background
 	
 	int state;
 	bool ready;
