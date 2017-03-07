@@ -1,3 +1,12 @@
+/**
+    develop.h
+    Purpose: class Develop - for one special skill in menu state.
+
+    @author Adrian Michalek
+    @version 2017.02.02
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/sprite.h"
@@ -15,10 +24,10 @@ class Develop :public Click
 	MyText name_base;
 	MyText cost_text;
 	
-	int cost;
-	bool locked;
 	int max;
+	int cost;
 	int level;
+	bool locked;
 	
 public:
 	
@@ -39,5 +48,4 @@ public:
 	int getLevel();
 	
 	void setActual( int level, string actual );
-	int strToInt( string s );
 };
