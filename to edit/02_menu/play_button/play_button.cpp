@@ -12,8 +12,7 @@
 
 Play_button::Play_button()
 {
-    state = 0;
-	play = true;
+	free();
 }
 
 Play_button::~Play_button()
