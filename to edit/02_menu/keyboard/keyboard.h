@@ -11,7 +11,7 @@
 
 #include "drawable/text.h"
 #include "drawable/sprite.h"
-#include "click.h"
+#include "02_menu/click.h"
 #include <vector>
 
 class Key
@@ -60,7 +60,6 @@ public:
 	void fadeout( int j = 1, int min = 0 );
 	
 	
-	int strToInt( string s );
 	string getName( int n ); 	// e. g. n == 71, return == "left"
 	
 	

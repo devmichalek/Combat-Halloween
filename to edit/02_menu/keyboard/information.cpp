@@ -9,7 +9,6 @@
 
 #include "information.h"
 
-
 Information::Information()
 {
     // empty
