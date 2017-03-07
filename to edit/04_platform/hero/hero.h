@@ -1,9 +1,17 @@
+/**
+    hero.h
+    Purpose: class Hero contains each hero textures, each mechanics.
+
+    @author Adrian Michalek
+    @version 2016.09.15
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "activity.h"
 #include "drawable/sprite.h"
 #include <vector>
-
 
 class Hero
 {
@@ -23,7 +31,7 @@ class Hero
 	};
 	
 	vector <int*> keys; // Which keys are responsible for particular activity.
-	vector <MySprite*> sprite;
+	vector <MySprite*> sprites;
 	vector <float> x;
 	vector <float> x2;
 	vector <float> y;
@@ -73,13 +81,47 @@ class Hero
 	int fallenY;
 	
 public:
+	
+	// Basics.
+	Hero();
+	~Hero();
+	void free();
+	void reset( int posY );
+	
+	void load( int type, int screen_w, int screen_h, int width );
+	void setKeys();
+	void draw( sf::RenderWindow* &window );
+	
+	void fadein( int v = 1, int max = 255 );
+	void fadeout( int v = 1, int min = 0 );
+	void setColor( sf::Color color );
+	
+	int getX();
+	int getY();
+	int getW();
+	int getH();
+	
+	bool checkKeys( int a, int b );	// Which keys are pressed
+	sf::Uint8 getDirection();		// Return 0 = hero is not moving etc.
+	bool getSide();					// Return true if hero is directed to the right.
+	Rect* getRect();				// Get rectangle of hero.
+	
+	float getVel();
+	float getJump_vel();
+	void setScope( bool scope );
+	
+	void die();
+	bool isDead();
+	bool resume();
+	int getOffset();
 
-	void moveX( float vel );
-	void moveY( float vel );
 
+	// IDLE
 	void idle();
 	
 	// MOVE
+	void moveX( float vel );
+	void moveY( float vel );
 	bool moving();
 	void undoMove();
 	
@@ -118,11 +160,6 @@ public:
 	void pixelGravitation();
 	void weightlessness();
 	
-	// VEL STUFF AND SCOPE
-	float getVel();
-	float getJump_vel();
-	void setScope( bool scope );
-	
 	// DEAD
 	bool checkFall( int screen_h );
 	void setFallenY( int y );
@@ -130,33 +167,4 @@ public:
 	void undoFallX( sf::Uint8 add );
 	void undoFallY();
 	void runFallenCounter();
-	
-	void makeFall();
-	void die();
-	bool isDead();
-	
-	int getX();
-	int getY();
-	int getW();
-	int getH();
-	
-	
-	int strToInt( string s );		// Transform string to int.
-	bool checkKeys( int a, int b );	// Which keys are pressed
-	sf::Uint8 getDirection();		// Return 0 = hero is not moving etc.
-	bool getSide();					// Return true if hero is directed to the right.
-	Rect* getRect();				// Get rectangle of hero.
-	
-	Hero();
-	~Hero();
-	void free();
-	
-	void load( int type, int screen_w, int screen_h, int width );
-	void setKeys();
-	void draw( sf::RenderWindow* &window );
-	
-	void fadein( int v = 1, int max = 255 );
-	void fadeout( int v = 1, int min = 0 );
-	void reset( int posY );
-	void setColor( sf::Color color );
 };
