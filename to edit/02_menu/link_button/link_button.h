@@ -10,7 +10,7 @@
 #pragma once
 
 #include "drawable/sprite.h"
-#include "click.h"
+#include "02_menu/click.h"
 
 class Link_button :public Click
 {
@@ -34,5 +34,8 @@ public:
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
 	
-	int getBot();	// getter
+	// getters
+	int getBot();
+	int getWidth();
+	int getHeight();
 };

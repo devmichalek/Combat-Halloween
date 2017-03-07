@@ -135,3 +135,13 @@ int Link_button::getBot()
 {
 	return button.getBot();
 }
+
+int Link_button::getWidth()
+{
+	return button.getWidth();
+}
+
+int Link_button::getHeight()
+{
+	return button.getHeight();
+}
