@@ -1,29 +1,19 @@
+/**
+    heart.h
+    Purpose: class Heart responsible for drawing hearts, heart mechanis etc.
+
+    @author Adrian Michalek
+    @version 2017.03.06
+	@email adrmic98@gmail.com
+*/
+
 #include "heart.h"
 #include <fstream>
-
-Heart_bit::Heart_bit()
-{
-	x = y = 0;
-	alpha = 0;
-}
-
-Heart_bit::~Heart_bit()
-{
-	free();
-}
-
-void Heart_bit::free()
-{
-	x = y = 0;
-	alpha = 0;
-}
-
 
 
 Heart::Heart()
 {
-	max = 0;
-	life = 0;
+	free();
 }
 
 Heart::~Heart()
@@ -85,29 +75,34 @@ void Heart::load()
 	
 	fstream file;
 	
-	file.open( "data/txt/heart/heart.txt" );
+	// Set max variable.
+	string path = "data/txt/heart/heart.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot open data/txt/heart/heart.txt\n" );
+		printf( "Cannot open %s\n", path.c_str() );
 	}
 	else
 	{
 		string line;
 		file >> line;
-		max = strToInt( line );
+		max = stoi( line );
 	}
 	file.close();
 	
-	file.open( "data/txt/heart/heart_current.txt" );
+	
+	// Set actual amount of hearts.
+	path = "data/txt/heart/heart_current.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot open data/txt/heart/heart_current.txt\n" );
+		printf( "Cannot open %s\n", path.c_str() );
 	}
 	else
 	{
 		string line;
 		file >> line;
-		int nr = strToInt( line );
+		int nr = stoi( line );
 		
 		fill.setName( "heart-fill" );
 		fill.load( "data/04_platform/panel/heart/fill.png");
@@ -163,7 +158,7 @@ void Heart::draw( sf::RenderWindow* &window )
 		window->draw( frame.get() );
 	}
 	
-	
+	// Delete later.
 	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
 	{
 		harm( -4 );
@@ -239,25 +234,4 @@ bool Heart::isDead()
 	}
 	
 	return false;
-}
-
-int Heart::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
 }
