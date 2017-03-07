@@ -1,0 +1,6 @@
+kunai
+sword
+stunt
+critic.
+explos.
+sanat.
