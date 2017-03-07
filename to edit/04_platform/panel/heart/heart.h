@@ -1,25 +1,24 @@
+/**
+    heart.h
+    Purpose: class Heart responsible for drawing hearts, heart mechanis etc.
+
+    @author Adrian Michalek
+    @version 2017.03.06
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/sprite.h"
 #include <vector>
-
-class Heart_bit
-{
-public:
-	
-	int x, y;
-	int alpha;
-	
-	Heart_bit();
-	~Heart_bit();
-	void free();
-};
+#include "04_platform/panel/heart/heart_bit.h"
 
 class Heart
 {
-	int max;
-	int life;
+	int max;	// Max amount of hearts.
+	int life;	// Life.
 	
+	// Heart bit contain x, y and alpha values.
 	vector <Heart_bit*> fill_bits;
 	vector <Heart_bit*> grey_bits;
 	vector <Heart_bit*> frame_bits;
@@ -28,7 +27,6 @@ class Heart
 	MySprite grey;
 	MySprite frame;
 	
-
 public:
 	
 	Heart();
@@ -44,5 +42,4 @@ public:
 	
 	void harm( int damage );
 	bool isDead();
-	int strToInt( string s );
 };
