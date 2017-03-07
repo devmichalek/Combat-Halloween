@@ -76,7 +76,7 @@ void Desert::mechanics()
 		
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -94,6 +94,7 @@ void Desert::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
@@ -114,7 +115,7 @@ void Desert::mechanics()
 	{
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 	}
 	
@@ -124,6 +125,7 @@ void Desert::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
@@ -174,14 +176,14 @@ void Desert::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// KUNAI DESTROY
-	for( unsigned i = 0; i < kunai->getNr(); i++ )
+	for( unsigned i = 0; i < kunai->getSize(); i++ )
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() ||
+		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
+		kunai->getX( i ) < -kunai->getW( i ) ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
+		skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			kunai->destroy( i );
 		}
@@ -275,35 +277,40 @@ void Desert::mechanics()
 	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
-	// HARM BY WALL
-	if( wall->harm( hero->getRect() ) )
-	{
-		heart->harm( -wall->getDamage() );
-		effect->runBlood();
-	}
+	// HARM 
 	
-	// HARM BY MINE
-	mine_factory->checkCollision( hero->getRect() );
-	if( mine_factory->harm( hero->getRect() ) )
+	if( !hero->resume() )
 	{
-		heart->harm( -mine_factory->getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY SKELETON
-	if( skeleton_factory.harmSomebody( hero->getRect() ) )
-	{
-		heart->harm( -skeleton_factory.getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY FIREBALL
-	if( fireball->harmSomebody( hero->getRect() ) )
-	{
-		if( fireball->harmed() )
+		// HARM BY WALL
+		if( wall->harm( hero->getRect() ) )
 		{
-			heart->harm( -fireball->getDamage() );
+			heart->harm( -wall->getDamage() );
 			effect->runBlood();
+		}
+		
+		// HARM BY MINE
+		mine_factory->checkCollision( hero->getRect() );
+		if( mine_factory->harm( hero->getRect() ) )
+		{
+			heart->harm( -mine_factory->getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY SKELETON
+		if( skeleton_factory.harmSomebody( hero->getRect() ) )
+		{
+			heart->harm( -skeleton_factory.getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY FIREBALL
+		if( fireball->harmSomebody( hero->getRect() ) )
+		{
+			if( fireball->harmed() )
+			{
+				heart->harm( -fireball->getDamage() );
+				effect->runBlood();
+			}
 		}
 	}
 	
@@ -320,6 +327,7 @@ void Desert::mechanics()
 		skeleton_factory.mechanics();
 		coins->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
+		skills->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -377,6 +385,6 @@ void Desert::mechanics()
 	
 	if( coins->upliftMoney( hero->getRect() ) )
 	{
-		money_panel->add( coins->getMoney() );
+		money->add( coins->getMoney() );
 	}
 }

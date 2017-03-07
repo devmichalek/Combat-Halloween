@@ -76,7 +76,7 @@ void Halloween::mechanics()
 		
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -93,6 +93,7 @@ void Halloween::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		vampire_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		zombie_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
@@ -115,7 +116,7 @@ void Halloween::mechanics()
 	{
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 	}
 	
@@ -125,6 +126,7 @@ void Halloween::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		vampire_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		zombie_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
@@ -176,15 +178,15 @@ void Halloween::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// KUNAI DESTROY
-	for( unsigned i = 0; i < kunai->getNr(); i++ )
+	for( unsigned i = 0; i < kunai->getSize(); i++ )
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() ||
+		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
+		kunai->getX( i ) < -kunai->getW( i ) ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) || 
-		vampire_factory.harm( kunai->getRect( i ), kunai->getDamage() ) ||
-		zombie_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
+		vampire_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) ||
+		zombie_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			kunai->destroy( i );
 		}
@@ -279,42 +281,47 @@ void Halloween::mechanics()
 	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
-	// HARM BY WALL
-	if( wall->harm( hero->getRect() ) )
-	{
-		heart->harm( -wall->getDamage() );
-		effect->runBlood();
-	}
+	// HARM 
 	
-	// HARM BY MINE
-	mine_factory->checkCollision( hero->getRect() );
-	if( mine_factory->harm( hero->getRect() ) )
+	if( !hero->resume() )
 	{
-		heart->harm( -mine_factory->getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY VAMPIRE
-	if( vampire_factory.harmSomebody( hero->getRect() ) )
-	{
-		heart->harm( -vampire_factory.getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY ZOMBIE
-	if( zombie_factory.harmSomebody( hero->getRect() ) )
-	{
-		heart->harm( -zombie_factory.getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY LIGHTNING
-	if( lightning->harmSomebody( hero->getRect() ) )
-	{
-		if( lightning->harmed() )
+		// HARM BY WALL
+		if( wall->harm( hero->getRect() ) )
 		{
-			effect->runLightning();
-			heart->harm( -lightning->getDamage() );
+			heart->harm( -wall->getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY MINE
+		mine_factory->checkCollision( hero->getRect() );
+		if( mine_factory->harm( hero->getRect() ) )
+		{
+			heart->harm( -mine_factory->getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY VAMPIRE
+		if( vampire_factory.harmSomebody( hero->getRect() ) )
+		{
+			heart->harm( -vampire_factory.getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY ZOMBIE
+		if( zombie_factory.harmSomebody( hero->getRect() ) )
+		{
+			heart->harm( -zombie_factory.getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY LIGHTNING
+		if( lightning->harmSomebody( hero->getRect() ) )
+		{
+			if( lightning->harmed() )
+			{
+				effect->runLightning();
+				heart->harm( -lightning->getDamage() );
+			}
 		}
 	}
 	
@@ -332,6 +339,7 @@ void Halloween::mechanics()
 		zombie_factory.mechanics();
 		coins->mechanics();
 		lightning->mechanics( hero->getRect(), hero->getDirection() );
+		skills->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -374,6 +382,6 @@ void Halloween::mechanics()
 	
 	if( coins->upliftMoney( hero->getRect() ) )
 	{
-		money_panel->add( coins->getMoney() );
+		money->add( coins->getMoney() );
 	}
 }

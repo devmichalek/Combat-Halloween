@@ -13,7 +13,7 @@ Forest::Forest()
 	scope = new Scope;
 	
 	heart = new Heart;
-	money_panel = new Money_panel;
+	money = new Money;
 	coins = new Coins;
 	skills = new Skills;
 	
@@ -51,7 +51,7 @@ void Forest::free()
 	delete scope;
 	
 	delete heart;
-	delete money_panel;
+	delete money;
 	delete coins;
 	delete skills;
 	
@@ -79,7 +79,7 @@ void Forest::reset()
 	scope->reset();
 	
 	heart->reset();
-	money_panel->reset();
+	money->reset();
 	coins->reset();
 	skills->reset();
 	
@@ -124,12 +124,11 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	this->width = 128;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
+	this->FPS = FPS;
 	
-	kunai->load();
 	heart->load();
-	money_panel->load( screen_w );
+	money->load( screen_w );
 	coins->load( width, screen_w, type );
-	skills->load( FPS );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -162,7 +161,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		kunai->fadeout( value );
 		
 		heart->fadeout( value );
-		money_panel->fadeout( value );
+		money->fadeout( value );
 		coins->fadeout( value );
 		skills->fadeout( value );
 		
@@ -186,7 +185,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		kunai->fadein( value );
 		
 		heart->fadein( value );
-		money_panel->fadein( value );
+		money->fadein( value );
 		coins->fadein( value );
 		skills->fadein( value );
 		
@@ -228,7 +227,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	wall->draw( window );
 	greenery->draw( window );
 	heart->draw( window );
-	money_panel->draw( window );
+	money->draw( window );
 	coins->draw( window );
 	skills->draw( window );
 	effect->draw( window );
@@ -241,6 +240,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 	switch( state )
 	{
 		case 0:	hero->load( type, screen_w, screen_h, width ); hero->setKeys();
+		kunai->load();	skills->load( FPS, screen_w, screen_h );
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->setPosition( hero->getX(), hero->getY() );

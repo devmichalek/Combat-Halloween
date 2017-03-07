@@ -5,13 +5,14 @@
 
 // Hero stuff
 #include "04_platform/hero/hero.h"
-#include "04_platform/hero/kunai.h"
-#include "04_platform/hero/scope.h"
+#include "04_platform/hero/kunai/kunai.h"
+#include "04_platform/hero/scope/scope.h"
 
 // Panel stuff
 #include "04_platform/panel/heart/heart.h"
-#include "04_platform/panel/money/money_panel.h"
+#include "04_platform/panel/money/money.h"
 #include "04_platform/enemy/coins/coins.h"
+#include "04_platform/panel/skill/skills.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -34,6 +35,7 @@ class Halloween
 	int state;
 	string info;
 	
+	int FPS;
 	int width;
 	int screen_w;
 	int screen_h;
@@ -48,8 +50,9 @@ class Halloween
 	
 	// panel
 	Heart* heart;
-	Money_panel* money_panel;
+	Money* money;
 	Coins* coins;
+	Skills* skills;
 	
 	// world
 	Brick* brick;

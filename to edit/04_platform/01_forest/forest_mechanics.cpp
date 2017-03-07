@@ -73,7 +73,7 @@ void Forest::mechanics()
 		
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -91,6 +91,7 @@ void Forest::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
@@ -112,7 +113,7 @@ void Forest::mechanics()
 	{
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 	}
 	
@@ -122,6 +123,7 @@ void Forest::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
@@ -172,14 +174,14 @@ void Forest::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// KUNAI DESTROY
-	for( unsigned i = 0; i < kunai->getNr(); i++ )
+	for( unsigned i = 0; i < kunai->getSize(); i++ )
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() ||
+		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
+		kunai->getX( i ) < -kunai->getW( i ) ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		golem_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
+		golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			kunai->destroy( i );
 		}
@@ -275,37 +277,41 @@ void Forest::mechanics()
 	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
-	// HARM BY WALL
-	if( wall->harm( hero->getRect() ) )
-	{
-		heart->harm( -wall->getDamage() );
-		effect->runBlood();
-	}
-
+	// HARM 
 	
-	// HARM BY MINE
-	mine_factory->checkCollision( hero->getRect() );
-	if( mine_factory->harm( hero->getRect() ) )
+	if( !hero->resume() )
 	{
-		heart->harm( -mine_factory->getDamage() );
-		effect->runBlood();
-	}
-
-	
-	// HARM BY GOLEM
-	if( golem_factory.harmSomebody( hero->getRect() ) )
-	{
-		heart->harm( -golem_factory.getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY FIREBALL
-	if( fireball->harmSomebody( hero->getRect() ) )
-	{
-		if( fireball->harmed() )
+		// HARM BY WALL
+		if( wall->harm( hero->getRect() ) )
 		{
-			heart->harm( -fireball->getDamage() );
+			heart->harm( -wall->getDamage() );
 			effect->runBlood();
+		}
+		
+		// HARM BY MINE
+		mine_factory->checkCollision( hero->getRect() );
+		if( mine_factory->harm( hero->getRect() ) )
+		{
+			heart->harm( -mine_factory->getDamage() );
+			effect->runBlood();
+		}
+
+		
+		// HARM BY GOLEM
+		if( golem_factory.harmSomebody( hero->getRect() ) )
+		{
+			heart->harm( -golem_factory.getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY FIREBALL
+		if( fireball->harmSomebody( hero->getRect() ) )
+		{
+			if( fireball->harmed() )
+			{
+				heart->harm( -fireball->getDamage() );
+				effect->runBlood();
+			}
 		}
 	}
 	
@@ -322,6 +328,7 @@ void Forest::mechanics()
 		golem_factory.mechanics();
 		coins->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
+		skills->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -336,6 +343,26 @@ void Forest::mechanics()
 		{
 			islands->turnOn();
 		}
+		
+		// SET COLOR ~ DAY
+		day->mechanics();
+		
+		if( day->isChange() )
+		{
+			hero->setColor( day->getColor() );
+			coins->setColor( day->getColor() );
+			
+			brick->setColor( day->getColor() );
+			background->setColor( day->getColor() );
+			islands->setColor( day->getColor() );
+			water->setColor( day->getColor() );
+			wall->setColor( day->getColor() );
+			ladder->setColor( day->getColor() );
+			greenery->setColor( day->getColor() );
+			
+			mine_factory->setColor( day->getColor() );
+			golem_factory.setColor( day->getColor() );
+		}
 	}
 	
 	
@@ -346,28 +373,7 @@ void Forest::mechanics()
 	{
 		effect->runWater();
 	}
-	
-// ------------------------------------------------------------------------------------------------
-	// SET COLOR ~ DAY
-	day->mechanics();
-	
-	if( day->isChange() )
-	{
-		hero->setColor( day->getColor() );
-		coins->setColor( day->getColor() );
-		
-		brick->setColor( day->getColor() );
-		background->setColor( day->getColor() );
-		islands->setColor( day->getColor() );
-		water->setColor( day->getColor() );
-		wall->setColor( day->getColor() );
-		ladder->setColor( day->getColor() );
-		greenery->setColor( day->getColor() );
-		
-		mine_factory->setColor( day->getColor() );
-		golem_factory.setColor( day->getColor() );
-	}
-	
+
 // ------------------------------------------------------------------------------------------------
 	// GOLEM PART
 	
@@ -381,6 +387,6 @@ void Forest::mechanics()
 	
 	if( coins->upliftMoney( hero->getRect() ) )
 	{
-		money_panel->add( coins->getMoney() );
+		money->add( coins->getMoney() );
 	}
 }

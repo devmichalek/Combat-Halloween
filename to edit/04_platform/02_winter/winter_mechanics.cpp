@@ -76,7 +76,7 @@ void Winter::mechanics()
 		
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 		
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -94,6 +94,7 @@ void Winter::mechanics()
 	// HERO JUMP WITH ATTACK
 	else if( hero->jumpAttack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
@@ -115,7 +116,7 @@ void Winter::mechanics()
 	{
 		if( hero->throwed() )
 		{
-			kunai->throwed( hero->getX(), hero->getY(), hero->getSide() );
+			kunai->throwed( hero->getX(), hero->getY(), hero->getSide(), skills->getTop() );
 		}
 	}
 	
@@ -125,6 +126,7 @@ void Winter::mechanics()
 	// HERO ATTACK
 	else if( hero->attack() )
 	{
+		if( hero->getOffset() == 0 )	skills->swordUsed();
 		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
@@ -175,14 +177,14 @@ void Winter::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// KUNAI DESTROY
-	for( unsigned i = 0; i < kunai->getNr(); i++ )
+	for( unsigned i = 0; i < kunai->getSize(); i++ )
 	{
 		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW() > screen_w +kunai->getW() ||
-		kunai->getX( i ) < -kunai->getW() ||
+		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
+		kunai->getX( i ) < -kunai->getW( i ) ||
 		wall->checkCollision( kunai->getRect( i ) )	||
 		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		golem_factory.harm( kunai->getRect( i ), kunai->getDamage() ) )
+		golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			kunai->destroy( i );
 		}
@@ -277,35 +279,40 @@ void Winter::mechanics()
 	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
-	// HARM BY WALL
-	if( wall->harm( hero->getRect() ) )
-	{
-		heart->harm( -wall->getDamage() );
-		effect->runBlood();
-	}
+	// HARM 
 	
-	// HARM BY MINE
-	mine_factory->checkCollision( hero->getRect() );
-	if( mine_factory->harm( hero->getRect() ) )
+	if( !hero->resume() )
 	{
-		heart->harm( -mine_factory->getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY GOLEM
-	if( golem_factory.harmSomebody( hero->getRect() ) )
-	{
-		heart->harm( -golem_factory.getDamage() );
-		effect->runBlood();
-	}
-	
-	// HARM BY LIGHTNING
-	if( lightning->harmSomebody( hero->getRect() ) )
-	{
-		if( lightning->harmed() )
+		// HARM BY WALL
+		if( wall->harm( hero->getRect() ) )
 		{
-			effect->runLightning();
-			heart->harm( -lightning->getDamage() );
+			heart->harm( -wall->getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY MINE
+		mine_factory->checkCollision( hero->getRect() );
+		if( mine_factory->harm( hero->getRect() ) )
+		{
+			heart->harm( -mine_factory->getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY GOLEM
+		if( golem_factory.harmSomebody( hero->getRect() ) )
+		{
+			heart->harm( -golem_factory.getDamage() );
+			effect->runBlood();
+		}
+		
+		// HARM BY LIGHTNING
+		if( lightning->harmSomebody( hero->getRect() ) )
+		{
+			if( lightning->harmed() )
+			{
+				effect->runLightning();
+				heart->harm( -lightning->getDamage() );
+			}
 		}
 	}
 	
@@ -322,6 +329,7 @@ void Winter::mechanics()
 		golem_factory.mechanics();
 		coins->mechanics();
 		lightning->mechanics( hero->getRect(), hero->getDirection() );
+		skills->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -359,6 +367,6 @@ void Winter::mechanics()
 	
 	if( coins->upliftMoney( hero->getRect() ) )
 	{
-		money_panel->add( coins->getMoney() );
+		money->add( coins->getMoney() );
 	}
 }
