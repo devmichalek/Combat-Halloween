@@ -1,15 +1,28 @@
+/**
+    development.h
+    Purpose: class Development - contains develops.
+
+    @author Adrian Michalek
+    @version 2017.02.20
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
-#include "02_menu/development/develop.h"
 #include <vector>
+#include "02_menu/development/develop.h"
+#include "04_platform/hero/kunai/damage.h"
 
 class Development
 {
+	Damage damage;
+	
 	vector <Develop*> develops;
 	vector <int> levels;
 	vector <float> values;
 	vector <float> costs;
 	int bank;
+	int bot;
 	
 	MyText skill;
 	MyText level;
@@ -27,15 +40,15 @@ public:
 
     void load( int bot, int screen_h );
     void draw( sf::RenderWindow* &window );
+	void reloadTxt();
     void handle( sf::Event &event );
 	
-	void fadein( int i = 1, int max = 255 );
+	void fadein( int i = 1, int max = 0xFF );
 	void fadeout( int i = 1, int min = 0 );
 	
-	string multiply( int which ); // rules
 	float multiplyCost( int which );
 	
-	// other
+	// Other.
 	void setVolume( int volume );
 	void turn();
 };
