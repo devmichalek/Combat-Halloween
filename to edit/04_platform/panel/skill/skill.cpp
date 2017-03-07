@@ -1,3 +1,12 @@
+/**
+    skill.h
+    Purpose: class Skill as a piece with position, own name, own level etc.
+
+    @author Adrian Michalek
+    @version 2016.03.06
+	@email adrmic98@gmail.com
+*/
+
 #include "skill.h"
 
 Skill::Skill()
@@ -20,7 +29,6 @@ void Skill::free()
 void Skill::reset()
 {
 	counter = 0;
-	capacity = capacity_line;
 }
 
 
@@ -47,11 +55,6 @@ void Skill::setLine( int line )
 	this->line = line;
 }
 
-void Skill::setCapacity( int capacity )
-{
-	this->capacity = capacity;
-	this->capacity_line = capacity;
-}
 
 
 
@@ -75,16 +78,18 @@ string Skill::getLevel()
 	return level;
 }
 
-float Skill::getPercent()
+float Skill::getPercent( int h )
 {
-	return static_cast <float> (counter) *100 /line;
+	float percent = static_cast <float> (counter *100 /line );
+	// printf( "%f %d %d\n", percent, counter, line );
+	return percent /100 *h;
 }
 
 
 
 void Skill::mechanics()
 {
-	if( counter > 0 )
+	if( counter > 1 )
 	{
 		counter ++;
 	}
@@ -92,22 +97,24 @@ void Skill::mechanics()
 	if( counter == line )
 	{
 		counter = 0;
-		
-		if( capacity < capacity_line )
-		{
-			capacity ++;
-		}
 	}
 }
 
 bool Skill::isAble()
 {
-	if( capacity > 0 && counter == 0 )
+	if( counter == 0 )
 	{
-		capacity --;
 		counter = 1;
 		return true;
 	}
 	
 	return false;
+}
+
+void Skill::used()
+{
+	if( counter == 1 )
+	{
+		counter = 2;
+	}
 }
