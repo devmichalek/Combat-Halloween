@@ -1,26 +1,30 @@
-#include "money_panel.h"
+/**
+    money.h
+    Purpose: class Money responsible for drawing coins, coin mechanis etc.
+
+    @author Adrian Michalek
+    @version 2017.02.14
+	@email adrmic98@gmail.com
+*/
+
+#include "money.h"
 #include <fstream>
 
-Money_panel::Money_panel()
-{
-	base = 0;
-	bank = 0;
-	
-	offset = 0;
-	delay = 0;
-	line = 0;
-}
-
-Money_panel::~Money_panel()
+Money::Money()
 {
 	free();
 }
 
-void Money_panel::free()
+Money::~Money()
 {
+	free();
+}
+
+void Money::free()
+{
+	text.free();
 	grey.free();
 	coin.free();
-	text.free();
 	
 	base = 0;
 	bank = 0;
@@ -30,14 +34,16 @@ void Money_panel::free()
 	line = 0;
 }
 
-void Money_panel::reset()
+void Money::reset()
 {
 	offset = 0;
 	bank = base;
 	setText();
 }
 
-void Money_panel::load( int screen_w )
+
+
+void Money::load( int screen_w )
 {
 	free();
 	
@@ -63,10 +69,10 @@ void Money_panel::load( int screen_w )
 	setText();
 }
 
-void Money_panel::draw( sf::RenderWindow* &window )
+void Money::draw( sf::RenderWindow* &window )
 {
-	window->draw( grey.get() );
 	window->draw( text.get() );
+	window->draw( grey.get() );
 	
 	offset ++;
 	if( offset == line*delay )
@@ -79,14 +85,14 @@ void Money_panel::draw( sf::RenderWindow* &window )
 }
 
 
-void Money_panel::fadein( int v, int max )
+void Money::fadein( int v, int max )
 {
+	text.fadein( v, max *0.4 );
 	grey.fadein( v, max /2 );
 	coin.fadein( v, max /2 );
-	text.fadein( v, max /3 );
 }
 
-void Money_panel::fadeout( int v, int min )
+void Money::fadeout( int v, int min )
 {
 	grey.fadeout( v, min );
 	coin.fadeout( v, min );
@@ -95,7 +101,7 @@ void Money_panel::fadeout( int v, int min )
 
 
 
-void Money_panel::setText()
+void Money::setText()
 {
 	sf::Uint8 max = 8;
 	
@@ -118,54 +124,48 @@ void Money_panel::setText()
 	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +10 );
 }
 
-void Money_panel::saveMoney()
-{
-	
-}
-
-void Money_panel::loadMoney()
+void Money::saveMoney()
 {
 	fstream file;
 	
-	file.open( "data/txt/money/bank.txt" );
+	string path = "data/txt/money/bank.txt";
+	file.open( path, std::ios::out );
 	if( file.bad() )
 	{
-		printf( "Something went wrong with data/txt/money/bank.txt\n" );
+		printf( "Something went wrong with %s\n", path.c_str() );
+	}
+	else
+	{
+		string line;
+		file << to_string( bank );
+	}
+	
+	file.close();
+}
+
+void Money::loadMoney()
+{
+	fstream file;
+	
+	string path = "data/txt/money/bank.txt";
+	file.open( path );
+	if( file.bad() )
+	{
+		printf( "Something went wrong with %s\n", path.c_str() );
 	}
 	else
 	{
 		string line;
 		file >> line;
-		base = strToInt( line );
+		base = stoi( line );
 		bank = base;
 	}
 	
 	file.close();
 }
 
-void Money_panel::add( int amount )
+void Money::add( int amount )
 {
 	bank += amount;
 	setText();
-}
-
-int Money_panel::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
 }

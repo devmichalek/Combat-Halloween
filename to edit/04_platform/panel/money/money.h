@@ -1,13 +1,22 @@
+/**
+    money.h
+    Purpose: class Money responsible for drawing coins, coin mechanis etc.
+
+    @author Adrian Michalek
+    @version 2017.02.14
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/sprite.h"
 #include "drawable/text.h"
 
-class Money_panel
+class Money
 {
+	MyText text;
 	MySprite grey;
 	MySprite coin;
-	MyText text;
 	
 	int base;
 	int bank;
@@ -18,8 +27,8 @@ class Money_panel
 	
 public:
 	
-	Money_panel();
-	~Money_panel();
+	Money();
+	~Money();
 	void free();
 	void reset();
 	
@@ -33,5 +42,4 @@ public:
 	void saveMoney();
 	void loadMoney();
 	void add( int amount );
-	int strToInt( string s );
 };
