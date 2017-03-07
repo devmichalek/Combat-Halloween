@@ -1,5 +1,14 @@
+/**
+    scope.h
+    Purpose: class Scope responsible for changing view - It means that sometimes hero moves and sometimes other stuff moves.
+
+    @author Adrian Michalek
+    @version 2017.01.28
+	@email adrmic98@gmail.com
+*/
+
 #include "scope.h"
- #include <stdio.h>
+// #include <stdio.h>
 
 Scope::Scope()
 {

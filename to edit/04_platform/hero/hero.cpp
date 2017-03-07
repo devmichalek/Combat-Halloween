@@ -1,5 +1,28 @@
+/**
+    hero.h
+    Purpose: class Hero contains each hero textures, each mechanics.
+
+    @author Adrian Michalek
+    @version 2016.09.15
+	@email adrmic98@gmail.com
+*/
+
 #include "hero.h"
 
+// IDLE
+void Hero::idle()
+{
+	if( !glide && !slide && climb == 0 && dead == 0 )
+	{
+		which = IDLE;
+	}
+}
+
+
+
+
+
+// MOVE
 void Hero::moveX( float vel )
 {
 	for( auto &it :x )
@@ -20,18 +43,6 @@ void Hero::moveY( float vel )
 		it += vel;
 	}
 }
-
-
-
-void Hero::idle()
-{
-	if( !glide && !slide && climb == 0 && dead == 0 )
-	{
-		which = IDLE;
-	}
-}
-
-
 
 bool Hero::moving()
 {
@@ -67,6 +78,8 @@ bool Hero::moving()
 	{
 		if( !glide && !slide && climb == 0 )
 		{
+			x[ ATTACK ] = x[ RUN ];
+			x2[ ATTACK ] = x2[ RUN ];
 			which = RUN;
 		}
 		else if( climb != 0 )	// move right on the ladder
@@ -109,9 +122,12 @@ void Hero::undoMove()
 
 
 
+
+
+// JUMP
 bool Hero::jump()
 {
-	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.Do() && !glide && climb == 0 && !fallen && dead == 0 )
+	if( checkKeys( keys[ 2 ][ 0 ], keys[ 2 ][ 1 ] ) && j.run() && !glide && climb == 0 && !fallen && dead == 0 )
 	{
 		offset = 0;
 		j.start();
@@ -160,11 +176,10 @@ void Hero::undoJump()
 
 
 
-
 // ATTACK
 bool Hero::attack()
 {
-	if( checkKeys( keys[ 5 ][ 0 ], keys[ 5 ][ 1 ] ) && a.Do() && !glide && !j.isActive() && climb == 0 && !fallen && dead == 0 )
+	if( checkKeys( keys[ 5 ][ 0 ], keys[ 5 ][ 1 ] ) && a.run() && !glide && !j.isActive() && climb == 0 && !fallen && dead == 0 )
 	{
 		offset = 0;
 		a.start();
@@ -193,7 +208,7 @@ Rect* Hero::getAttackBox()
 	{
 		rect = new Rect;
 		
-		tw = 30;
+		tw = 38;
 		if( right )
 		{
 			t_x = x2[ ATTACK ] -tw;
@@ -203,14 +218,14 @@ Rect* Hero::getAttackBox()
 			t_x = x[ ATTACK ];
 		}
 		
-		rect->set( t_x, sprite[ ATTACK ]->getY(), tw, sprite[ ATTACK ]->getHeight() );
+		rect->set( t_x, sprites[ ATTACK ]->getY(), tw, sprites[ ATTACK ]->getHeight() );
 		return rect;
 	}
 	else if( which == JUMP_ATTACK && offset == 4*delay )
 	{
 		rect = new Rect;
 		
-		tw = 40;
+		tw = 48;
 		if( right )
 		{
 			t_x = x2[ JUMP_ATTACK ] -tw;
@@ -220,7 +235,7 @@ Rect* Hero::getAttackBox()
 			t_x = x[ JUMP_ATTACK ];
 		}
 
-		rect->set( t_x, sprite[ JUMP_ATTACK ]->getY(), tw, sprite[ JUMP_ATTACK ]->getHeight() );
+		rect->set( t_x, sprites[ JUMP_ATTACK ]->getY(), tw, sprites[ JUMP_ATTACK ]->getHeight() );
 		return rect;
 	}
 
@@ -278,7 +293,7 @@ void Hero::sliding()
 // JUMP WITH ATTACK
 bool Hero::jumpAttack()
 {
-	if( checkKeys( keys[ 6 ][ 0 ], keys[ 6 ][ 1 ] ) && ja.Do() && !glide && j.isActive() && !a.isActive() && !t.isActive() && climb == 0 && !fallen && dead == 0 )
+	if( checkKeys( keys[ 6 ][ 0 ], keys[ 6 ][ 1 ] ) && ja.run() && !glide && j.isActive() && !a.isActive() && !t.isActive() && climb == 0 && !fallen && dead == 0 )
 	{
 		offset = 0;
 		ja.start();
@@ -312,11 +327,10 @@ bool Hero::jumpAttack()
 
 
 
-
 // JUMP WITH THROW
 bool Hero::jumpThrow()
 {
-	if( checkKeys( keys[ 8 ][ 0 ], keys[ 8 ][ 1 ] ) && jt.Do() && !glide && !a.isActive() && !t.isActive() && ( j.isActive() || ja.isActive() ) && climb == 0 && !fallen && dead == 0 )
+	if( checkKeys( keys[ 8 ][ 0 ], keys[ 8 ][ 1 ] ) && jt.run() && !glide && !a.isActive() && !t.isActive() && ( j.isActive() || ja.isActive() ) && climb == 0 && !fallen && dead == 0 )
 	{
 		offset = 0;
 		jt.start();
@@ -347,7 +361,6 @@ bool Hero::jumpThrow()
 	
 	return jt.isActive();
 }
-
 
 
 
@@ -409,7 +422,6 @@ bool Hero::throwing()
 	return t.isActive();
 }
 
-
 bool Hero::throwed()
 {
 	if( offset == 3*delay )
@@ -423,12 +435,13 @@ bool Hero::throwed()
 
 
 
+
 // GRAVITY STUFF
 void Hero::gravitation()
 {
 	if( j.isActive() && !ja.isActive() && !jt.isActive() )
 	{
-		if( offset < (sprite.size()-1)*delay/2  )
+		if( offset < (sprites.size()-1)*delay/2  )
 		{
 			moveY( -1 );
 		}
@@ -463,5 +476,60 @@ void Hero::weightlessness()
 	{
 		glide = false;
 		moveY( -grav );
+	}
+}
+
+
+
+
+
+// DEAD STUFF
+bool Hero::checkFall( int screen_h )
+{
+	if( getY() > screen_h +getH() /2 && !fallen )
+	{
+		fallen = true;
+		return true;
+	}
+	
+	return false;
+}
+
+void Hero::setFallenY( int y )
+{
+	fallenY = y -sprites[ IDLE ]->getHeight() -40;
+}
+
+bool Hero::isFallen()
+{
+	return fallen;
+}
+
+void Hero::undoFallX( sf::Uint8 add )
+{
+	moveX( -add );
+}
+
+void Hero::undoFallY()
+{
+	if( fallenY < y[ IDLE ] && fallenY != -1 )
+	{
+		for( auto &i :y )
+		{
+			i -= 10;
+		}
+	}
+	else
+	{
+		fallenY = -1;
+	}
+}
+
+void Hero::runFallenCounter()
+{
+	if( fallen )
+	{
+		fallen = !fallen;
+		fallenCounter = 1;
 	}
 }

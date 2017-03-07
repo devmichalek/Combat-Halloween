@@ -1,3 +1,12 @@
+/**
+    activity.h
+    Purpose: class Activity contains counter, line for counter, and check if its active.
+
+    @author Adrian Michalek
+    @version 2017.12.12
+	@email adrmic98@gmail.com
+*/
+
 #include "activity.h"
 
 Activity::Activity()
@@ -44,7 +53,7 @@ void Activity::check()
 	}
 }
 
-bool Activity::Do()
+bool Activity::run()
 {
 	if( counter == 0 )
 	{
@@ -53,6 +62,7 @@ bool Activity::Do()
 	
 	return false;
 }
+
 
 
 void Activity::setActive( bool a )
