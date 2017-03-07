@@ -10,18 +10,18 @@
 #pragma once
 
 #include "sound/sound.h"
-#include "title.h"
-#include "sound_button.h"
-#include "volume_button.h"
-#include "link_button.h"
-#include "play_button.h"
-#include "log.h"
-#include "exit_log.h"
+#include "title/title.h"
+#include "sound_button/sound_button.h"
+#include "volume_button/volume_button.h"
+#include "link_button/link_button.h"
+#include "play_button/play_button.h"
+#include "log/log.h"
+#include "play_button/exit_log.h"
 #include "sound/music.h"
-#include "information.h"
-#include "keyboard.h"
+#include "keyboard/information.h"
+#include "keyboard/keyboard.h"
 #include "development/development.h"
-
+#include "reset_button/reset_button.h"
 
 class Menu
 {
@@ -42,6 +42,7 @@ class Menu
 	Link_button* google_button;
 	Link_button* twitter_button;
 	Link_button* facebook_button;
+	Link_button* scores_button;
 	
 	MySprite* background;
 	
@@ -62,6 +63,8 @@ class Menu
 	Keyboard* keyboard;
 	
 	Development* development;
+	
+	Reset_button* reset_button;
 	
 public:
 	
