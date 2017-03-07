@@ -1,3 +1,12 @@
+/**
+    skill.h
+    Purpose: class Skill as a piece with position, own name, own level etc.
+
+    @author Adrian Michalek
+    @version 2016.03.06
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include <string>
@@ -13,9 +22,6 @@ class Skill
 	int line;
 	int counter;
 	
-	int capacity;
-	int capacity_line;
-	
 public:
 	
 	Skill();
@@ -27,14 +33,14 @@ public:
 	void setName( string name );
 	void setLevel( string level );
 	void setLine( int line );
-	void setCapacity( int capacity );
 	
 	int getX();
 	int getY();
 	string getName();
 	string getLevel();
-	float getPercent();
+	float getPercent( int h );
 	
 	void mechanics();
 	bool isAble();
+	void used();
 };
