@@ -26,6 +26,7 @@ Menu::Menu()
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
 	twitter_button = new Link_button( "", true );
 	facebook_button = new Link_button( "", true );
+	scores_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
 	
 
 	background = new MySprite();
@@ -48,6 +49,8 @@ Menu::Menu()
 	keyboard = new Keyboard;
 	
 	development = new Development;
+	
+	reset_button = new Reset_button;
 }
 
 Menu::~Menu()
@@ -66,6 +69,7 @@ void Menu::free()
 	delete google_button;
 	delete twitter_button;
 	delete facebook_button;
+	delete scores_button;
 	delete background;
 	delete play_button;
 	delete author_log;
@@ -78,6 +82,7 @@ void Menu::free()
 	delete information;
 	delete keyboard;
 	delete development;
+	delete reset_button;
 }
 
 
@@ -108,6 +113,7 @@ void Menu::load( int screen_w, int screen_h )
 	google_button->load( "data/02_menu/google.png", screen_w, git_button->getBot() );
 	twitter_button->load( "data/02_menu/twitter.png", screen_w, google_button->getBot() );
 	facebook_button->load( "data/02_menu/facebook.png", screen_w, twitter_button->getBot() );
+	scores_button->load( "data/02_menu/scores.png", facebook_button->getWidth() +20, screen_h -facebook_button->getHeight() -10 );
 	
 	// bg
 	background->load( "data/02_menu/background.png" );
@@ -116,10 +122,10 @@ void Menu::load( int screen_w, int screen_h )
 	play_button->load( screen_w, 400 );
 	
 	// logs
-	author_log->load( "author", play_button->getX() +5, play_button->getBot() );
-	game_log->load( "game", author_log->getRight(), play_button->getBot() );
+	author_log->load( "author", play_button->getX() +9, play_button->getBot() );
+	game_log->load( "game", author_log->getRight() -5, play_button->getBot() );
 	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
-	skill_log->load( "skill", settings_log->getRight(), play_button->getBot() );
+	skill_log->load( "skill", settings_log->getRight() -4, play_button->getBot() );
 	
 	// exit log
 	exit->load( screen_w, screen_h );
@@ -139,6 +145,7 @@ void Menu::load( int screen_w, int screen_h )
 	
 	development->load( title->getBot() +140, screen_h );
 	
+	reset_button->load( screen_w, screen_h );
 	
 	//Set start volume
 	music_button->setVolume( chunk_volume->getVolume() );
@@ -154,14 +161,24 @@ void Menu::load( int screen_w, int screen_h )
 	exit->setVolume( chunk_volume->getVolume() );
 	keyboard->setVolume( chunk_volume->getVolume() );
 	development->setVolume( chunk_volume->getVolume() );
+	reset_button->setVolume( chunk_volume->getVolume() );
 }
 
 void Menu::handle( sf::Event &event )
 {
 	if( play_button->getState() != 2 ) // if user didn't click play
 	{
-		exit->handle( event );
-		if( exit->getState() == 0 ) // if user didn't click quit
+		if( reset_button->getState() == 0 )
+		{
+			exit->handle( event );
+		}
+		
+		if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() && exit->getState() == 0 )
+		{
+			reset_button->handle( event );
+		}
+
+		if( exit->getState() == 0 && reset_button->getState() == 0 ) // if user didn't click quit
 		{
 			if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() ) // if user didn't click logs
 			{
@@ -169,6 +186,7 @@ void Menu::handle( sf::Event &event )
 				google_button->handle( event );
 				twitter_button->handle( event );
 				facebook_button->handle( event );
+				scores_button->handle( event );
 				play_button->handle( event );
 				music_button->handle( event );
 				chunk_button->handle( event );
@@ -233,6 +251,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->turn();
 		keyboard->turn();
 		development->turn();
+		reset_button->turn();
 		sound.setChunkPlay( !sound.getChunkPlay() );
 	}
 	
@@ -259,6 +278,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->setVolume( chunk_volume->getVolume() );
 		keyboard->setVolume( chunk_volume->getVolume() );
 		development->setVolume( chunk_volume->getVolume() );
+		reset_button->setVolume( chunk_volume->getVolume() );
 		sound.setChunkVolume( chunk_volume->getVolume() );
 	}
 	
@@ -266,7 +286,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		
 	
 	// Fade in
-	if( play_button->getState() != 2 && exit->getState() == 0 )// if user didn't click play
+	if( play_button->getState() != 2 && exit->getState() == 0 && reset_button->getState() == 0 )// if user didn't click play
 	{
 		music->fadein( 1, music_volume->getVolume() );
 		sf::Uint8 value = 2;
@@ -275,6 +295,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadein( value );
 		twitter_button->fadein( value );
 		facebook_button->fadein( value );
+		scores_button->fadein( value );
 		play_button->fadein( value );
 		title->fadein( value );
 		music_button->fadein( value );
@@ -289,6 +310,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadein( value );
 		information->fadein( value );
 		development->fadein( value );
+		reset_button->fadein( value );
 	}
 	
 	// Fade out:
@@ -301,6 +323,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadeout( value );
 		twitter_button->fadeout( value );
 		facebook_button->fadeout( value );
+		scores_button->fadeout( value );
 		play_button->fadeout( value );
 		title->fadeout( value );
 		music_button->fadeout( value );
@@ -315,8 +338,9 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( value );
 		information->fadeout( value );
 		development->fadeout( value );
+		reset_button->fadeout( value );
 	}
-	else if( exit->getState() == 1 ) // if user clicked exit
+	else if( exit->getState() == 1 || reset_button->getState() == 1 ) // if user clicked exit
 	{
 		music->fadeout( 3, 20 );
 		int value = 2, alpha = 170;
@@ -325,6 +349,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadeout( value, alpha );
 		twitter_button->fadeout( value, alpha );
 		facebook_button->fadeout( value, alpha );
+		scores_button->fadeout( value, alpha );
 		play_button->fadeout( value, alpha );
 		title->fadeout( value, alpha );
 		music_button->fadeout( value, alpha );
@@ -339,6 +364,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( value, alpha );
 		information->fadeout( value, alpha );
 		development->fadeout( value, alpha );
+		reset_button->fadeout( value, alpha );
 	}
 	else
 	{
@@ -349,6 +375,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->fadeout( value );
 		twitter_button->fadeout( value );
 		facebook_button->fadeout( value );
+		scores_button->fadeout( value );
 		play_button->fadeout( value );
 		title->fadeout( value );
 		music_button->fadeout( value );
@@ -363,6 +390,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( value );
 		information->fadeout( value );
 		development->fadeout( value );
+		reset_button->fadeout( value );
 		if( background->getAlpha() == 0 )
 		{
 			state = 1;
@@ -396,10 +424,12 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->draw( *window );
 		twitter_button->draw( *window );
 		facebook_button->draw( *window );
+		scores_button->draw( *window );
 		play_button->draw( window );
 		music_button->draw( window );
 		chunk_button->draw( window );
 		game_log->draw( window );
+		reset_button->drawButton( window );
 	}
 	
 	if( !author_log->getState() && !settings_log->getState() )
@@ -433,6 +463,13 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( exit->getState() < 2 )
 	{
 		exit->draw( window );
+	}
+	
+	reset_button->draw( window );
+	
+	if( reset_button->doReset() )
+	{
+		development->reloadTxt();
 	}
 }
 
