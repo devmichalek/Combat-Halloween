@@ -132,12 +132,12 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 		{
 			if( a != -2 )
 			{
-				b = strToInt( buf );
+				b = stoi( buf );
 				keys.push_back( new Key( a, b ) );
 				a = -2;
 			}
 			else
-				a = strToInt( buf );
+				a = stoi( buf );
 		}
 	}
 	file.close();
@@ -156,12 +156,12 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 		{
 			if( a != -2 )
 			{
-				b = strToInt( buf );
+				b = stoi( buf );
 				actual_keys.push_back( new Key( a, b ) );
 				a = -2;
 			}
 			else
-				a = strToInt( buf );
+				a = stoi( buf );
 		}
 		
 		for( unsigned i = 1; i < text.size(); i += 2 )
@@ -221,7 +221,7 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 		string buf;
 		while( file >> buf )
 		{
-			banned_keys.push_back( strToInt( buf ) );
+			banned_keys.push_back( stoi( buf ) );
 		}
 	}
 	file.close();
@@ -401,27 +401,6 @@ void Keyboard::fadeout( int j, int min )
 
 
 
-
-int Keyboard::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
 
 string Keyboard::getName( int n )
 {
