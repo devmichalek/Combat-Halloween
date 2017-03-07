@@ -1,10 +1,18 @@
+/**
+    development.h
+    Purpose: class Development - contains develops.
+
+    @author Adrian Michalek
+    @version 2017.02.20
+	@email adrmic98@gmail.com
+*/
+
 #include "02_menu/development/development.h"
 #include <fstream>
-// #include <iomanip>
 
 Development::Development()
 {
-	bank = 0;
+	free();
 }
 
 Development::~Development()
@@ -40,6 +48,7 @@ void Development::free()
 	}
 	
 	bank = 0;
+	bot = 0;
 	
 	skill.free();
 	level.free();
@@ -56,31 +65,13 @@ void Development::load( int bot, int screen_h )
 {
 	free();
 	
-	int space = 70;
-	int max = 6;
-	
-	// set actual levels
+	// Set actual values.
+	string path = "data/txt/skill/skill_values.txt";
 	fstream file;
-	file.open( "data/txt/skill/level_current.txt" );
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/level_current.txt\n" );
-	}
-	else
-	{
-		string line;
-		while( file >> line )
-		{
-			levels.push_back( stof( line ) );
-		}
-	}
-	file.close();
-	
-	// set actual values
-	file.open( "data/txt/skill/skill_values.txt" );
-	if( file.bad() )
-	{
-		printf( "Cannot load data/txt/skill/skill_values.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -92,26 +83,12 @@ void Development::load( int bot, int screen_h )
 	}
 	file.close();
 	
-	
-	// load bank
-	file.open( "data/txt/money/bank.txt" );
+	// Set costs.
+	path = "data/txt/skill/skill_costs.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/money/bank.txt\n" );
-	}
-	else
-	{
-		string line;
-		file >> line;
-		bank = stof( line );
-	}
-	file.close();
-	
-	// set costs
-	file.open( "data/txt/skill/skill_costs.txt" );
-	if( file.bad() )
-	{
-		printf( "Cannot load data/txt/skill/skill_costs.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -123,15 +100,16 @@ void Development::load( int bot, int screen_h )
 	}
 	file.close();
 	
+	int space = 70;
+	int max = 6;
 	int main_x = 80;
 	
 	for( int i = 0; i < max; i++ )
 	{
 		develops.push_back( new Develop() );
 		develops[ develops.size() -1 ]->load( main_x, i, bot +( i*space ) );
-		develops[ develops.size() -1 ]->setActual( levels[ i ], multiply( i ) );
-		develops[ develops.size() -1 ]->setCost( multiplyCost( i ) );
 	}
+	
 	
 	
 	// set other stuff
@@ -163,9 +141,68 @@ void Development::load( int bot, int screen_h )
 	
 	money.setName( "development-money" );
 	money.setFont( "data/00_loading/Jaapokki-Regular.otf", 27, 255, 255, 255 );
-	money.setText( to_string( bank ) );
+	money.setText( "0" );
 	money.setColor( 0xFF, 0xD8, 0x00 );
 	money.setPosition( bank_text.getRight() +20, screen_h -37 );
+	
+	this->bot = bot;
+	reloadTxt();
+}
+
+void Development::reloadTxt()
+{
+	if( !levels.empty() )
+	{
+		levels.clear();
+	}
+	
+	// Set actual levels.
+	fstream file;
+	string path = "data/txt/skill/level_current.txt";
+	file.open( path );
+	if( file.bad() )
+	{
+		printf( "Cannot load %s\n", path.c_str() );
+	}
+	else
+	{
+		string line;
+		while( file >> line )
+		{
+			levels.push_back( stof( line ) );
+		}
+	}
+	file.close();
+	
+	
+	// Load bank.
+	path = "data/txt/money/bank.txt";
+	file.open( path );
+	if( file.bad() )
+	{
+		printf( "Cannot load %s\n", path.c_str() );
+	}
+	else
+	{
+		string line;
+		file >> line;
+		if( line.size() > 8 )
+		{
+			bank = 99999999;
+		}
+		else
+			bank = stof( line );
+	}
+	file.close();
+	
+	for( unsigned i = 0; i < develops.size(); i++ )
+	{
+		develops[ i ]->setActual( levels[ i ], damage.multiply( i, values[ i ], levels[ i ] ) );
+		develops[ i ]->setCost( multiplyCost( i ) );
+	}
+	
+	money.setText( to_string( bank ) );
+	money.reloadPosition();
 }
 
 void Development::draw( sf::RenderWindow* &window )
@@ -195,12 +232,38 @@ void Development::handle( sf::Event &event )
 				levels[ i ] = develops[ i ]->getLevel();
 				bank -= develops[ i ]->getCost();
 				develops[ i ]->setCost( multiplyCost( i ) );
-				develops[ i ]->setActual( levels[ i ], multiply( i ) );
+				develops[ i ]->setActual( levels[ i ], damage.multiply( i, values[ i ], levels[ i ] ) );
 				
 				money.setText( to_string( bank ) );
 				money.reloadPosition();
 				
 				// save file
+				fstream file;
+				file.open( "data/txt/money/bank.txt", std::ios::out );
+				if( file.bad() )
+				{
+					printf( "Cannot open file\n" );
+				}
+				else
+				{
+					file << to_string( bank ) << "\n";
+				}
+				file.close();
+				
+				file.open( "data/txt/skill/level_current.txt", std::ios::out );
+				if( file.bad() )
+				{
+					printf( "Cannot open file\n" );
+				}
+				else
+				{
+					for( unsigned j = 0; j < levels.size(); j++ )
+					{
+						file << to_string( levels[ j ] ) << "\n";
+					}
+					// printf( "happen\n" );
+				}
+				file.close();
 				
 				break;
 			}
@@ -240,69 +303,6 @@ void Development::fadeout( int i, int min )
 	{
 		it->fadeout( i, min );
 	}
-}
-
-string Development::multiply( int which )
-{
-	float value = values[ which ];
-	if( levels[ which ] == 0 )
-	{
-		value = 0;
-	}
-	
-	for( int i = 0; i < levels[ which ] -1; i++ )
-	{
-		switch( which )
-		{
-			case 0:	value += (value *value) /3;		break;
-			case 1:	value = value *1.8;				break;
-			case 2:	value += 10;					break;
-			case 3:	value += 10;					break;
-			case 4:	value += (value *value) /2.3;	break;
-			case 5:	value += (value *value) /3.8;	break;
-		}
-	}
-	
-	// precision 3
-	string base = to_string( value );
-	string newstr = "";
-	int counter = -1;
-	for( unsigned i = 0; i < base.size(); i++ )
-	{
-		if( counter == 0 )
-		{
-			break;
-		}
-		
-		newstr += base[ i ];
-		if( base[ i ] == '.' )
-		{
-			counter = 3;
-		}
-		
-		if( counter > 0 )
-		{
-			counter --;
-		}
-	}
-	
-	if( newstr[ newstr.size() -1 ] == '0' )
-	{
-		newstr.erase( newstr.size() -1 );
-	}
-	
-	if( newstr[ newstr.size() -1 ] == '0' )
-	{
-		newstr.erase( newstr.size() -1 );
-	}
-	
-	if( newstr[ newstr.size() -1 ] == '.' )
-	{
-		newstr.erase( newstr.size() -1 );
-		
-	}
-	
-	return newstr;
 }
 
 float Development::multiplyCost( int which )
