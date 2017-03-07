@@ -1,3 +1,12 @@
+/**
+    difficulty.h
+    Purpose: class Difficulty as a difficulty setter.
+
+    @author Adrian Michalek
+    @version 2017.02.17
+	@email adrmic98@gmail.com
+*/
+
 #include "difficulty.h"
 
 Difficulty::Difficulty()
@@ -7,6 +16,7 @@ Difficulty::Difficulty()
 	
 	range = 0;
 	keep = false;
+	chosen = 0;
 }
 
 Difficulty::~Difficulty()
@@ -38,6 +48,7 @@ void Difficulty::free()
 		sprites.clear();
 	}
 	
+	chosen = 0;
 	result = 0;
 	alpha_line = 0;
 	
@@ -88,7 +99,6 @@ void Difficulty::load( int left, int bot )
 	reset( left, bot );
 	alpha_line = 100;
 	result = 33;
-	sprites[ 0 ]->setAlpha( 0xFF );
 	
 	
 	click.setID( "difficulty-click" );
@@ -120,7 +130,7 @@ void Difficulty::handle( sf::Event &event )
 						click.play();
 					}
 					
-					sprites[ i ]->setAlpha( 0xFF );
+					chosen = i;
 					result = 33 *( i +1 );
 				}
 			}
@@ -158,6 +168,8 @@ void Difficulty::fadein( int j, int max )
 	{
 		i->fadein( j, alpha_line );
 	}
+	
+	sprites[ chosen ]->fadein( j, max );
 }
 
 void Difficulty::fadeout( int j, int min )

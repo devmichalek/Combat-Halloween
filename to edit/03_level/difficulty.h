@@ -1,3 +1,12 @@
+/**
+    difficulty.h
+    Purpose: class Difficulty as a difficulty setter.
+
+    @author Adrian Michalek
+    @version 2017.02.17
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/sprite.h"
@@ -12,6 +21,7 @@ class Difficulty :public Click
 	vector <MyText*> texts;
 	vector <MySprite*> sprites;
 	
+	sf::Uint8 chosen;
 	int result;
 	int alpha_line;
 	

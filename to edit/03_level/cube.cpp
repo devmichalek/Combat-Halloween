@@ -1,3 +1,12 @@
+/**
+    cube.h
+    Purpose: class Cube as a world setter.
+
+    @author Adrian Michalek
+    @version 2017.02.13
+	@email adrmic98@gmail.com
+*/
+
 #include "cube.h"
 
 Cube::Cube()

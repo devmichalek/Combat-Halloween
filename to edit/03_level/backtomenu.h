@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "02_menu/link_button.h"
+#include "02_menu/link_button/link_button.h"
 
 class Backtomenu :public Link_button
 {
