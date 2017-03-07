@@ -1,3 +1,12 @@
+/**
+    replay_button.h
+    Purpose: class Replay_button as a simple button with label 'replay'.
+
+    @author Adrian Michalek
+    @version 2017.02.01
+	@email adrmic98@gmail.com
+*/
+
 #include "replay_button.h"
 
 void Replay_button::load( int screen_w, int bot )
