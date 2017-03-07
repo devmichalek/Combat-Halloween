@@ -1,3 +1,12 @@
+/**
+    backtomenu_panel.h
+    Purpose: class Backtomenu_panel as a simple button with label 'menu'.
+
+    @author Adrian Michalek
+    @version 2017.02.27
+	@email adrmic98@gmail.com
+*/
+
 #include "backtomenu_panel.h"
 
 void Backtomenu_panel::load( int screen_w, int bot )

@@ -1,3 +1,12 @@
+/**
+    panel_menu.h
+    Purpose: class Panel_menu as a main class in panel state.
+
+    @author Adrian Michalek
+    @version 2017.02.22
+	@email adrmic98@gmail.com
+*/
+
 #include "panel_menu.h"
 
 
