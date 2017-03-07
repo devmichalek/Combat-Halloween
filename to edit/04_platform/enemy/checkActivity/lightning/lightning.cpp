@@ -39,6 +39,8 @@ void Lightning::reset()
 
 void Lightning::load( int fps )
 {
+	free();
+	
 	line = 8;
 	sprite.setName( "lightning-sprite" );
 	sprite.load( "data/04_platform/enemy/lightning/0.png", line );

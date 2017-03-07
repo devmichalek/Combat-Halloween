@@ -46,6 +46,8 @@ void Fireball::reset()
 
 void Fireball::load( int fps, int screen_w )
 {
+	free();
+	
 	this->screen_w = screen_w;
 	line = 5;
 	int nr = 2;
