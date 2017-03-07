@@ -1,12 +1,18 @@
+/**
+    develop.h
+    Purpose: class Develop - for one special skill in menu state.
+
+    @author Adrian Michalek
+    @version 2017.02.02
+	@email adrmic98@gmail.com
+*/
+
 #include "02_menu/development/develop.h"
 #include <fstream>
 
 Develop::Develop()
 {
-	cost = 0;
-	locked = true;
-	max = 0;
-	level = 0;
+	free();
 }
 
 Develop::~Develop()
@@ -25,10 +31,10 @@ void Develop::free()
 	name_base.free();
 	cost_text.free();
 	
-	cost = 0;
-	locked = true;
 	max = 0;
+	cost = 0;
 	level = 0;
+	locked = true;
 }
 
 
@@ -37,17 +43,18 @@ void Develop::load( int main_x, int nr, int bot )
 {
 	free();
 	
-	// load button
+	// Load button.
 	button.setName( "develop-button" );
 	button.load( "data/02_menu/upgrade.png", 4 );
 	
 	fstream file;
 	
-	// set name
-	file.open( "data/txt/skill/skill_name.txt" );
+	// Set name.
+	string path = "data/txt/skill/skill_name.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/skill_name.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -69,15 +76,16 @@ void Develop::load( int main_x, int nr, int bot )
 	}
 	file.close();
 	
-	// load sprite
+	// Load sprite.
 	sprite.setName( "develop-sprite" );
 	sprite.load( "data/02_menu/skill/" +to_string( nr ) +".png" );
 	
-	// set name_base
-	file.open( "data/txt/skill/skill_namebase.txt" );
+	// Set name_base.
+	path = "data/txt/skill/skill_namebase.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/skill_namebase.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -99,21 +107,22 @@ void Develop::load( int main_x, int nr, int bot )
 	}
 	file.close();
 	
-	// set actual
+	// Set actual.
 	actual.setName( "develop-actual" );
 	actual.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	actual.setText( " " );
 	
-	// set l2
+	// Set label.
 	label.setName( "develop-label" );
 	label.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	label.setText( " " );
 	
-	// set max
-	file.open( "data/txt/skill/skill_max.txt" );
+	// Set max.
+	path = "data/txt/skill/skill_max.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/skill_max.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -123,8 +132,7 @@ void Develop::load( int main_x, int nr, int bot )
 		{
 			if( counter == 0 )
 			{
-				max = strToInt( line );
-				// printf( "%d\n", max );
+				max = stoi( line );
 				break;
 			}
 			
@@ -134,16 +142,17 @@ void Develop::load( int main_x, int nr, int bot )
 	file.close();
 	
 	
-	// cost_text
+	// Cost_text settings.
 	cost_text.setName( "develop-cost_text" );
 	cost_text.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	cost_text.setText( " " );
 	cost_text.setColor( 0xFF, 0xD8, 0x00 );
 	
-	// load wav
+	// Load click.
 	click.setID( "develop-click" );
 	click.load( "data/02_menu/click.wav", 50 );
 	
+	// Positions.
 	name.setPosition( main_x, bot );
 	sprite.setScale( 0.5, 0.5 );
 	sprite.setPosition( main_x +225, bot -10 );
@@ -303,6 +312,7 @@ int Develop::getLevel()
 }
 
 
+
 void Develop::setActual( int level, string actual )
 {
 	if( this->level != level || this->level == 0 )
@@ -327,25 +337,4 @@ void Develop::setActual( int level, string actual )
 	
 	this->actual.setText( actual );
 	this->actual.reloadPosition();
-}
-
-int Develop::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
 }
