@@ -1,10 +1,19 @@
+/**
+    skills.h
+    Purpose: class Skills as a skills panel in play state.
+
+    @author Adrian Michalek
+    @version 2016.03.06
+	@email adrmic98@gmail.com
+*/
+
 #include "skills.h"
 #include <fstream>
 
 
 Skills::Skills()
 {
-	
+	free();
 }
 
 Skills::~Skills()
@@ -16,14 +25,14 @@ void Skills::free()
 {
 	grey.free();
 	
-	if( !shuriken.empty() )
+	if( !pictures.empty() )
 	{
-		for( auto &it :shuriken )
+		for( auto &it :pictures )
 		{
 			it->free();
 		}
 		
-		shuriken.clear();
+		pictures.clear();
 	}
 
 	curtain.free();
@@ -68,6 +77,23 @@ void Skills::free()
 		
 		skills.clear();
 	}
+	
+	if( !actions.empty() )
+	{
+		actions = std::stack <int> ();
+	}
+	
+	if( !levels.empty() )
+	{
+		levels.clear();
+	}
+	
+	if( !gold.empty() )
+	{
+		gold.clear();
+	}
+	
+	skill_effect.free();
 }
 
 void Skills::reset()
@@ -79,39 +105,45 @@ void Skills::reset()
 			it->reset();
 		}
 	}
+	
+	skill_effect.reset();
 }
 
 
 
-void Skills::load( int FPS )
+void Skills::load( unsigned FPS, int screen_w, int screen_h )
 {
+	free();
+	
+	skill_effect.load( FPS, screen_w, screen_h );
+	
 	grey.setName( "skills-grey" );
 	grey.load( "data/04_platform/panel/grey/grey_square.png" );
 	
 	curtain.setName( "skills-curtain" );
 	curtain.create( grey.getWidth(), 1 );
+	curtain.setColor( sf::Color( 0x00, 0x00, 0x00 ) );
 	
 	
-	
-	int startY = grey.getHeight() *2;
+	int startY = grey.getHeight() *3;
 	int x = 5;
 
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
-		shuriken.push_back( new MySprite() );
-		shuriken[ shuriken.size() -1 ]->setName( "skills-shuriken" );
-		shuriken[ shuriken.size() -1 ]->load( "data/04_platform/panel/skill/" +to_string( i ) +".png" );
-		shuriken[ shuriken.size() -1 ]->center( x, startY +(grey.getHeight() *i) +2*i, grey.getWidth(), grey.getHeight() );
+		pictures.push_back( new MySprite() );
+		pictures[ pictures.size() -1 ]->setName( "skills-shuriken" );
+		pictures[ pictures.size() -1 ]->load( "data/04_platform/panel/skill/" +to_string( i ) +".png" );
+		pictures[ pictures.size() -1 ]->center( x, startY +(grey.getHeight() *i) +2*i, grey.getWidth(), grey.getHeight() );
 	}
 	
-	// file
 	fstream file;
 	
-	// load curtain for skill vector
-	file.open( "data/txt/skill/curtain.txt" );
+	// Load curtain txt.
+	string path = "data/txt/skill/curtain.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/curtain.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -119,20 +151,22 @@ void Skills::load( int FPS )
 		while( file >> line )
 		{
 			skills.push_back( new Skill() );
-			int a = skills.size() -1;
-			skills[ a ]->setPosition( x, startY +(grey.getHeight() *a) +2*a );
-			skills[ a ]->setLine( FPS *strToInt( line ) );
+			int size = skills.size() -1;
+			skills[ size ]->setPosition( x, startY +(grey.getHeight() *size) +2*size );
+			skills[ size ]->setLine( static_cast <int> (static_cast <float> (FPS) *stof( line )) );
+			// printf( "SKILLS. %d\n", static_cast <int> (static_cast <float> (FPS) *stof( line )) );
 		}
 	}
 	file.close();
 
 	
 	
-	// load names
-	file.open( "data/txt/skill/names.txt" );
+	// Load names.
+	path = "data/txt/skill/skill_name_shortcut.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/names.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
@@ -148,62 +182,111 @@ void Skills::load( int FPS )
 	}
 	file.close();
 	
-	// load nr
+	
+	// Load nr.
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
 		nr.push_back( new MyText() );
 		nr[ nr.size() -1 ]->setName( "skills-nr" );
 		nr[ nr.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 10, 0x00, 0x00, 0x00 );
-		nr[ nr.size() -1 ]->setText( to_string( i ) );
+		if( i > 1 )
+			nr[ nr.size() -1 ]->setText( to_string( i -1 ) );
+		else
+			nr[ nr.size() -1 ]->setText( " " );
 		nr[ nr.size() -1 ]->setPosition( skills[ nr.size() -1 ]->getX() +grey.getWidth() -6, skills[ nr.size() -1 ]->getY() +grey.getHeight() -11 );
 	}
 	
-	// load label_one
+	// Load label_one.
 	label_one.setName( "skills-label_one" );
 	label_one.setFont( "data/00_loading/Jaapokki-Regular.otf", 14, 0x38, 0x2E, 0x1C );
 	label_one.setText( "lv" );
 	
-	// load label_two
-	file.open( "data/txt/skill/level_current.txt" );
+	// Load max levels temporary
+	vector <string> max_levels;
+	path = "data/txt/skill/skill_max.txt";
+	file.open( path );
 	if( file.bad() )
 	{
-		printf( "Cannot load data/txt/skill/level_current.txt\n" );
+		printf( "Cannot load %s\n", path.c_str() );
 	}
 	else
 	{
 		string line;
-		int counter = AMOUNT;
 		while( file >> line )
 		{
-			counter --;
-			if( counter == 0 )
-				break;
-			label_two.push_back( new MyText() );
-			label_two[ label_two.size() -1 ]->setName( "skills-label_two" );
-			label_two[ label_two.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 14, 0x45, 0x38, 0x23 );
-			label_two[ label_two.size() -1 ]->setText( line );
-			label_two[ label_two.size() -1 ]->setPosition( x +16, skills[ label_two.size() -1 ]->getY() +grey.getHeight() -16 );
+			max_levels.push_back( line );
 		}
 	}
 	file.close();
+	
+	// Load label_two.
+	path = "data/txt/skill/level_current.txt";
+	file.open( path );
+	if( file.bad() )
+	{
+		printf( "Cannot load %s\n", path.c_str() );
+	}
+	else
+	{
+		string line;
+		int counter = 0;
+		while( file >> line )
+		{
+			levels.push_back( stof( line ) );
+			label_two.push_back( new MyText() );
+			label_two[ label_two.size() -1 ]->setName( "skills-label_two" );
+			label_two[ label_two.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 14, 0x45, 0x38, 0x23 );
+			if( line == max_levels[ counter ] )
+			{
+				gold.push_back( true );
+				label_two[ label_two.size() -1 ]->setText( " " );
+			}
+			else
+			{
+				gold.push_back( false );
+				label_two[ label_two.size() -1 ]->setText( line );
+			}
+			
+			label_two[ label_two.size() -1 ]->setPosition( x +16, skills[ label_two.size() -1 ]->getY() +grey.getHeight() -16 );
+			counter ++;
+		}
+	}
+	file.close();
+	max_levels.clear();
+	
+	actions.push( USUAL );
 }
 
 void Skills::draw( sf::RenderWindow* &window )
 {
-	for( auto &it :skills )
+	skill_effect.draw( window );
+	
+	for( unsigned i = 0; i < skills.size(); i++ )
 	{
-		grey.setPosition( it->getX(), it->getY() );
+		if( gold[ i ] )
+		{
+			grey.setColor( sf::Color( 0xFF, 0xD8, 0x00 ) );
+		}
+		else
+		{
+			grey.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+		}
+		
+		grey.setPosition( skills[ i ]->getX(), skills[ i ]->getY() );
 		window->draw( grey.get() );
 		
-		label_one.setPosition( it->getX() +2, it->getY() +grey.getHeight() -16 );
-		window->draw( label_one.get() );
+		if( !gold[ i ] )
+		{
+			label_one.setPosition( skills[ i ]->getX() +2, skills[ i ]->getY() +grey.getHeight() -16 );
+			window->draw( label_one.get() );
+		}
 		
-		curtain.setScale( 1, it->getPercent() );
-		curtain.setPosition( it->getX(), it->getY() +grey.getHeight() );
+		curtain.setScale( 1, -skills[ i ]->getPercent( grey.getHeight() ) );
+		curtain.setPosition( skills[ i ]->getX(), skills[ i ]->getY() +grey.getHeight() );
 		window->draw( curtain.get() );
 	}
 	
-	for( auto &it :shuriken )
+	for( auto &it :pictures )
 	{
 		window->draw( it->get() );
 	}
@@ -247,7 +330,7 @@ void Skills::fadein( int v, int max )
 		it->fadein( v, max /3 );
 	}
 	
-	for( auto &it :shuriken )
+	for( auto &it :pictures )
 	{
 		it->fadein( v, max /2 );
 	}
@@ -274,29 +357,67 @@ void Skills::fadeout( int v, int min )
 		it->fadeout( v, min );
 	}
 	
-	for( auto &it :shuriken )
+	for( auto &it :pictures )
 	{
 		it->fadeout( v, min );
 	}
 }
 
-int Skills::strToInt( string s )
+
+
+int Skills::getTop()
 {
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
+	if( actions.empty() )
+	{
+		actions.push( USUAL );
+	}
 	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
+	int top = actions.top();
+
+	if( top >= SLOW )
+	{
+		skills[ top ]->used();
+		top --;
+	}
+	else if( top == USUAL )
+	{
+		skills[ USUAL ]->isAble();
+		skills[ USUAL ]->used();
+	}
 	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
+	actions.pop();
 	
-    return m ? -tmp : tmp;   
+	return top;
+}
+
+void Skills::swordUsed()
+{
+	actions.push( SWORD );
+	skills[ SWORD ]->isAble();
+	skills[ SWORD ]->used();
+	actions.pop();
+}
+
+void Skills::mechanics()
+{
+	sf::Uint8 num = 26;
+	sf::Uint8 numpad = 75;
+	
+	for( unsigned i = SLOW; i < AMOUNT; i++ )
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( num +i -1 ) ) ||
+		sf::Keyboard::isKeyPressed( sf::Keyboard::Key( numpad +i -1 ) ) )
+		{
+			if( skills[ i ]->isAble() && levels[ i ] > 0  )
+			{
+				skill_effect.run( i -2 );
+				actions.push( i );
+			}
+		}
+	}
+	
+	for( auto &it :skills )
+	{
+		it->mechanics();
+	}
 }

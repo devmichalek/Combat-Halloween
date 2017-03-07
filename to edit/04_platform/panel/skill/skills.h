@@ -1,25 +1,37 @@
+/**
+    skills.h
+    Purpose: class Skills as a skills panel in play state.
+
+    @author Adrian Michalek
+    @version 2016.03.06
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
+#include "04_platform/panel/skill/skill_effect.h"
+#include "04_platform/panel/skill/skill.h"
 #include "drawable/sprite.h"
 #include "drawable/text.h"
-#include "skill.h"
 #include <vector>
+#include <stack>
 
 class Skills
 {
 	enum
 	{
 		USUAL = 0,
+		SWORD,
 		SLOW,
 		CRITICAL,
 		EXSPLOSIVE,
 		SANATIVE,
-		
 		AMOUNT
 	};
+
 	
 	MySprite grey;
-	vector <MySprite*> shuriken;
+	vector <MySprite*> pictures;
 	MySprite curtain;
 	MyText label_one;
 	vector <MyText*> label_two;
@@ -27,6 +39,10 @@ class Skills
 	vector <MyText*> nr;
 	
 	vector <Skill*> skills;
+	stack <int> actions;
+	vector <int> levels;
+	vector <bool> gold;
+	Skill_effect skill_effect;
 	
 public:
 	
@@ -35,11 +51,13 @@ public:
 	void free();
 	void reset();
 	
-	void load( int FPS );
+	void load( unsigned FPS, int screen_w, int screen_h );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0x00 );
 	
-	int strToInt( string s );
+	int getTop();
+	void swordUsed();
+	void mechanics();
 };
