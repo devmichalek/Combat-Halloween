@@ -10,7 +10,7 @@
 #pragma once
 
 #include "drawable/sprite.h"
-#include "click.h"
+#include "02_menu/click.h"
 
 // Class for chunk/music button
 class Sound_button :public Click
