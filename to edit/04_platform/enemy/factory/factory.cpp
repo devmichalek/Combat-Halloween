@@ -215,12 +215,10 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	else
 	{
 		string line;
-		
-		int t = AMOUNT;
-		while( t-- )
+		while( getline( file, line ) )
 		{
-			getline( file, line );
-			features.push_back( atof( line.c_str() ) );
+			// printf( "%f\n", stof( line ) );
+			features.push_back( stof( line ) );
 		}
 	}
 	file.close();
@@ -228,6 +226,7 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	hp.setName( "factory-hp" );
 	hp.setFont( "data/00_loading/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
 	hp.setText( " " );
+	hp.setAlpha( 0xFF );
 	
 	expletive = new Expletive;
 	expletive->load( name );
@@ -389,8 +388,8 @@ void Factory<F>::add( int x, int y, int chance )
 	foes[ foes.size() -1 ]->setHeight( heights );
 	foes[ foes.size() -1 ]->setVelocity( static_cast <float>(chance) /100 *features[ VEL ] );
 	foes[ foes.size() -1 ]->setDelay( features[ DELAY ] );
-	foes[ foes.size() -1 ]->setDamage( static_cast <float> (chance) /100 *features[ DAMAGE ] );
-	foes[ foes.size() -1 ]->setHeartPoints( rand()%100 +features[ HP ] );
+	foes[ foes.size() -1 ]->setDamage( features[ DAMAGE ] +static_cast <float> (chance) /100 *features[ DAMAGE ] );
+	foes[ foes.size() -1 ]->setHeartPoints( features[ HP ] +static_cast <float> (chance) /100 *features[ HP ] );
 	foes[ foes.size() -1 ]->setAttackLine( rand()%2 +features[ AL ] );
 }
 

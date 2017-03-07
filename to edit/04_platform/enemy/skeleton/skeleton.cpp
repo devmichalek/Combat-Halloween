@@ -219,7 +219,7 @@ float Skeleton::getY()
 
 float Skeleton::getRealX()
 {
-	return x[ 0 ];
+	return x[ 0 ] +20*yScale;
 }
 
 float Skeleton::getRealY()
