@@ -219,3 +219,8 @@ sf::Color Day::getColor()
 {
 	return sf::Color( r, g, b, a );
 }
+
+int Day::getAlpha()
+{
+	return a;
+}

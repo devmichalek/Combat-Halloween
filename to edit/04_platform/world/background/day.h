@@ -39,4 +39,5 @@ public:
 	
 	bool isChange();
 	sf::Color getColor();
+	int getAlpha();
 };
