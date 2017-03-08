@@ -13,6 +13,7 @@
 #include "04_platform/panel/money/money.h"
 #include "04_platform/enemy/coins/coins.h"
 #include "04_platform/panel/skill/skills.h"
+#include "04_platform/panel/action/showdamage.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -54,6 +55,7 @@ class Forest
 	Money* money;
 	Coins* coins;
 	Skills* skills;
+	Showdamage* showdamage;
 	
 	// world
 	Brick* brick;

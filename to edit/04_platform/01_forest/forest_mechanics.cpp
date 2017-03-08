@@ -2,6 +2,8 @@
 
 void Forest::mechanics()
 {
+	showdamage->focus( hero->getX(), hero->getY() );
+	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
 	if( ladder->checkCollision( hero->getRect() ) )
@@ -285,6 +287,7 @@ void Forest::mechanics()
 		if( wall->harm( hero->getRect() ) )
 		{
 			heart->harm( -wall->getDamage() );
+			showdamage->run( to_string( -wall->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -293,6 +296,7 @@ void Forest::mechanics()
 		if( mine_factory->harm( hero->getRect() ) )
 		{
 			heart->harm( -mine_factory->getDamage() );
+			showdamage->run( to_string( -mine_factory->getDamage() ) );
 			effect->runBlood();
 		}
 
@@ -301,6 +305,7 @@ void Forest::mechanics()
 		if( golem_factory.harmSomebody( hero->getRect() ) )
 		{
 			heart->harm( -golem_factory.getDamage() );
+			showdamage->run( to_string( -golem_factory.getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -310,6 +315,7 @@ void Forest::mechanics()
 			if( fireball->harmed() )
 			{
 				heart->harm( -fireball->getDamage() );
+				showdamage->run( to_string( -fireball->getDamage() ) );
 				effect->runBlood();
 			}
 		}
