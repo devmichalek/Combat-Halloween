@@ -25,6 +25,7 @@ Log::~Log()
 
 void Log::free()
 {
+	explanator.free();
 	state = false;
 	locked = false;
 	button.free();
@@ -53,11 +54,17 @@ void Log::load( string path, int left, int y )
 	}
 }
 
+void Log::setExplanator( string line, int screen_w )
+{
+	explanator.load( line, screen_w );
+}
+
 void Log::draw( sf::RenderWindow* &window )
 {
 	if( !state )
 	{
 		window->draw( button.get() );
+		explanator.draw( *window );
 	}
 }
 
@@ -72,6 +79,7 @@ void Log::handle( sf::Event &event )
 			if( !state )
 			{
 				int x, y;
+				explanator.stop();
 				button.setOffset( 0 );
 				
 				if( event.type == sf::Event::MouseMoved )
@@ -81,6 +89,8 @@ void Log::handle( sf::Event &event )
 						
 					if( button.checkCollision( x, y ) && !state )
 					{
+						explanator.run();
+						explanator.focus( x, y );
 						button.setOffset( 1 );
 					}
 				}

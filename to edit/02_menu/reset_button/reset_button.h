@@ -12,9 +12,11 @@
 #include "drawable/sprite.h"
 #include "drawable/text.h"
 #include "02_menu/click.h"
+#include "01_intro/explanator.h"
 
 class Reset_button :public Click
 {
+	Explanator explanator;
 	mutable sf::Uint8 state;
 	mutable MySprite mySprite;
 	MyText myText;

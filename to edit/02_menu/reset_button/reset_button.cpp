@@ -23,6 +23,7 @@ Reset_button::~Reset_button()
 
 void Reset_button::free()
 {
+	explanator.free();
 	state = 0;
 	
 	mySprite.free();
@@ -39,6 +40,8 @@ void Reset_button::free()
 
 void Reset_button::load( int screen_w, int screen_h )
 {
+	explanator.load( "Reset all data irretrievably", screen_w );
+	
 	button.setName( "reset_button-button" );
     button.load( "data/02_menu/reset.png", 4 );
 	button.setPosition( 10, screen_h -10 -button.getHeight()*2 );
@@ -99,10 +102,13 @@ void Reset_button::handle( sf::Event &event )
 				
 			if( button.checkCollision( x, y ) )
 			{
+				explanator.run();
+				explanator.focus( x, y );
 				button.setOffset( 1 );
 			}
 			else
 			{
+				explanator.stop();
 				focus = false;
 			}
 		}
@@ -150,6 +156,7 @@ void Reset_button::draw( sf::RenderWindow* &window )
 void Reset_button::drawButton( sf::RenderWindow* &window )
 {
 	window->draw( button.get() );
+	explanator.draw( *window );
 }
 
 
@@ -163,6 +170,7 @@ void Reset_button::fadein( int i, int max )
 
 void Reset_button::fadeout( int i, int min )
 {
+	explanator.fadeout( i, min );
 	button.fadeout( i, min );
 }
 

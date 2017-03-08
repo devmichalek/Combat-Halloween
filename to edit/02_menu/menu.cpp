@@ -93,8 +93,8 @@ void Menu::load( int screen_w, int screen_h )
 	title->load( screen_w );
 	
 	// sound buttons
-	music_button->load( "data/02_menu/music.png", 10 );
-	chunk_button->load( "data/02_menu/chunk.png", music_button->getBot() );
+	music_button->load( "data/02_menu/music.png", 10, screen_w );
+	chunk_button->load( "data/02_menu/chunk.png", music_button->getBot(), screen_w );
 	
 	// volume buttons
 	music_volume->load( 100, screen_h/2 - 100, "Music" );
@@ -109,11 +109,14 @@ void Menu::load( int screen_w, int screen_h )
 	sound.setMusicVolume( music_volume->getVolume() );
 	
 	// link buttons
-	git_button->load( "data/02_menu/git.png", screen_w );
+	git_button->load( "data/02_menu/git.png", screen_w, 10 );
+	git_button->setExplanator( "Visit github!", screen_w );
 	google_button->load( "data/02_menu/google.png", screen_w, git_button->getBot() );
+	google_button->setExplanator( "Visit wikipedia!", screen_w );
 	twitter_button->load( "data/02_menu/twitter.png", screen_w, google_button->getBot() );
 	facebook_button->load( "data/02_menu/facebook.png", screen_w, twitter_button->getBot() );
 	scores_button->load( "data/02_menu/scores.png", facebook_button->getWidth() +20, screen_h -facebook_button->getHeight() -10 );
+	scores_button->setExplanator( "See scores online!", screen_w );
 	
 	// bg
 	background->load( "data/02_menu/background.png" );
@@ -123,9 +126,12 @@ void Menu::load( int screen_w, int screen_h )
 	
 	// logs
 	author_log->load( "author", play_button->getX() +9, play_button->getBot() );
+	author_log->setExplanator( "Go to the shop.", screen_w );
 	game_log->load( "game", author_log->getRight() -5, play_button->getBot() );
 	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
+	settings_log->setExplanator( "Go to the settings.", screen_w );
 	skill_log->load( "skill", settings_log->getRight() -4, play_button->getBot() );
+	skill_log->setExplanator( "Manage skills.", screen_w );
 	
 	// exit log
 	exit->load( screen_w, screen_h );
@@ -424,25 +430,25 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->draw( *window );
 		twitter_button->draw( *window );
 		facebook_button->draw( *window );
-		scores_button->draw( *window );
 		play_button->draw( window );
 		music_button->draw( window );
 		chunk_button->draw( window );
 		game_log->draw( window );
 		reset_button->drawButton( window );
+		scores_button->draw( *window );
 	}
 	
 	if( !author_log->getState() && !settings_log->getState() )
 	{
 		skill_log->draw( window );
 	}
-	if( !skill_log->getState() && !settings_log->getState() )
-	{
-		author_log->draw( window );
-	}
 	if( !skill_log->getState() && !author_log->getState() )
 	{
 		settings_log->draw( window );
+	}
+	if( !skill_log->getState() && !settings_log->getState() )
+	{
+		author_log->draw( window );
 	}
 		
 			

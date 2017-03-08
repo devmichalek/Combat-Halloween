@@ -35,6 +35,8 @@ void Link_button::free()
 	click.free();
 	focus = false;
 	play = true;
+	
+	explanator.free();
 }
 
 
@@ -56,9 +58,15 @@ void Link_button::load( string path, int screen_w, int bot )
 	}
 }
 
+void Link_button::setExplanator( string line, int screen_w )
+{
+	explanator.load( line, screen_w );
+}
+
 void Link_button::draw( sf::RenderWindow &window )
 {
     window.draw( button.get() );
+	explanator.draw( window );
 }
 
 void Link_button::handle( sf::Event &event )
@@ -75,10 +83,13 @@ void Link_button::handle( sf::Event &event )
 				
 			if( button.checkCollision( x, y ) )
 			{
+				explanator.run();
+				explanator.focus( x, y );
 				button.setOffset( 1 );
 			}
 			else
 			{
+				explanator.stop();
 				focus = false;
 			}
 		}
@@ -127,6 +138,7 @@ void Link_button::fadein( int i, int max )
 void Link_button::fadeout( int i, int min )
 {
 	button.fadeout( i, min );
+	explanator.fadeout( i, min );
 }
 
 
