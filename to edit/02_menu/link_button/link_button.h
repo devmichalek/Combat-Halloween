@@ -11,10 +11,12 @@
 
 #include "drawable/sprite.h"
 #include "02_menu/click.h"
+#include "01_intro/explanator.h"
 
 class Link_button :public Click
 {
     string url;
+	Explanator explanator;
 	
 protected:
 	
@@ -28,6 +30,7 @@ public:
 	void free();
 
     void load( string path, int screen_w, int bot = 10 );
+	void setExplanator( string line, int screen_w );
     void draw( sf::RenderWindow &window );
 	void handle( sf::Event &event );
 	

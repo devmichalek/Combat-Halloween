@@ -12,7 +12,6 @@
 #include "drawable/sprite.h"
 #include "drawable/text.h"
 
-
 class Title
 {
 	MySprite belt;

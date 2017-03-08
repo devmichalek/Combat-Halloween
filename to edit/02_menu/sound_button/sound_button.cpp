@@ -25,6 +25,7 @@ Sound_button::~Sound_button()
 
 void Sound_button::free()
 {
+	explanator.free();
 	button.free();
 	scratch.free();
 	
@@ -37,8 +38,9 @@ void Sound_button::free()
 
 
 
-void Sound_button::load( string path, int bot )
+void Sound_button::load( string path, int bot, int screen_w )
 {
+	explanator.load( "Turn off/on - click me", screen_w );
 	button.setName( "sound_button-button" );
     button.load( path, 4 );
 	button.setPosition( 10, bot );
@@ -59,6 +61,8 @@ void Sound_button::draw( sf::RenderWindow* &window )
 	{
 		window->draw( scratch.get() );
 	}
+	
+	explanator.draw( *window );
 }
 
 void Sound_button::handle( sf::Event &event )
@@ -75,10 +79,13 @@ void Sound_button::handle( sf::Event &event )
 					
 			if( button.checkCollision( x, y ) )
 			{
+				explanator.run();
+				explanator.focus( x, y );
 				button.setOffset( 1 );
 			}
 			else
 			{
+				explanator.stop();
 				focus = false;
 			}
 		}
@@ -153,6 +160,7 @@ void Sound_button::fadein( int i, int max )
 
 void Sound_button::fadeout( int i, int min )
 {
+	explanator.fadeout( i, min );
 	button.fadeout( i, min );
 	scratch.fadeout( i, min );
 }

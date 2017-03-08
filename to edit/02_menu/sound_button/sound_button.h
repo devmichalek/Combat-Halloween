@@ -11,10 +11,12 @@
 
 #include "drawable/sprite.h"
 #include "02_menu/click.h"
+#include "01_intro/explanator.h"
 
 // Class for chunk/music button
 class Sound_button :public Click
 {
+	Explanator explanator;
 	MySprite button;
 	MySprite scratch;
 	
@@ -27,7 +29,7 @@ public:
     ~Sound_button();
 	void free();
 
-	void load( string path, int bot );
+	void load( string path, int bot, int screen_w );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 
