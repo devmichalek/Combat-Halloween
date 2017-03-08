@@ -168,6 +168,8 @@ void Heart::draw( sf::RenderWindow* &window )
 	{
 		harm( 4 );
 	}
+	
+	// printf( "%d\n", life );
 }
 
 
@@ -190,6 +192,11 @@ void Heart::fadeout( int v, int min )
 void Heart::harm( int damage )
 {
 	life += damage;
+	if( life > static_cast <int> (fill_bits.size() *0xFF) )
+	{
+		// printf( "%d\n", life );
+		life = fill_bits.size() *0xFF;
+	}
 	
 	int temporary_life = 0;
 	for( auto &it :fill_bits )
