@@ -13,6 +13,8 @@
 #include "04_platform/panel/money/money.h"
 #include "04_platform/enemy/coins/coins.h"
 #include "04_platform/panel/skill/skills.h"
+#include "04_platform/panel/action/showdamage.h"
+#include "04_platform/panel/action/showheal.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -22,6 +24,7 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
+#include "04_platform/world/weather/rain/rain.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -53,6 +56,8 @@ class Halloween
 	Money* money;
 	Coins* coins;
 	Skills* skills;
+	Showdamage* showdamage;
+	Showheal* showheal;
 	
 	// world
 	Brick* brick;
@@ -62,6 +67,7 @@ class Halloween
 	Wall* wall;
 	Ladder* ladder;
 	Greenery* greenery;
+	Rain* rain;
 	
 	// enemy
 	Mine_factory* mine_factory;
