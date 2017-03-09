@@ -16,6 +16,8 @@ Halloween::Halloween()
 	money = new Money;
 	coins = new Coins;
 	skills = new Skills;
+	showdamage = new Showdamage;
+	showheal = new Showheal;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -24,6 +26,7 @@ Halloween::Halloween()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	rain = new Rain;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
@@ -52,6 +55,8 @@ void Halloween::free()
 	delete money;
 	delete coins;
 	delete skills;
+	delete showdamage;
+	delete showheal;
 	
 	delete brick;
 	delete effect;
@@ -60,6 +65,7 @@ void Halloween::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	delete rain;
 	
 	delete mine_factory;
 	vampire_factory.free();
@@ -79,6 +85,8 @@ void Halloween::reset()
 	money->reset();
 	coins->reset();
 	skills->reset();
+	showdamage->reset();
+	showheal->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -87,6 +95,7 @@ void Halloween::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	rain->reset();
 	
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
@@ -110,6 +119,8 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	heart->load();
 	money->load( screen_w );
 	coins->load( width, screen_w, type );
+	showdamage->load();
+	showheal->load();
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -118,6 +129,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	rain->load( screen_w, screen_h );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
@@ -144,6 +156,8 @@ void Halloween::draw( sf::RenderWindow* &window )
 		money->fadeout( value );
 		coins->fadeout( value );
 		skills->fadeout( value );
+		showdamage->fadeout( value );
+		showheal->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -152,6 +166,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
+		rain->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		vampire_factory.fadeout( value );
@@ -176,6 +191,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
+		rain->fadein( value );
 		
 		mine_factory->fadein( value );
 		vampire_factory.fadein( value );
@@ -202,6 +218,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	lightning->draw( window );
 	
 	// rest
+	rain->draw( window );
 	brick->draw( window );
 	islands->draw( window );
 	wall->draw( window );
@@ -210,6 +227,8 @@ void Halloween::draw( sf::RenderWindow* &window )
 	money->draw( window );
 	coins->draw( window );
 	skills->draw( window );
+	showdamage->draw( *window );
+	showheal->draw( *window );
 	effect->draw( window );
 }
 
