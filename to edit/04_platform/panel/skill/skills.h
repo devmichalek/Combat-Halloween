@@ -58,6 +58,7 @@ public:
 	void fadeout( int v = 1, int min = 0x00 );
 	
 	int getTop();
+	bool isHeal();
 	void swordUsed();
 	void mechanics();
 };
