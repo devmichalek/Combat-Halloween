@@ -17,6 +17,7 @@ Forest::Forest()
 	coins = new Coins;
 	skills = new Skills;
 	showdamage = new Showdamage;
+	showheal = new Showheal;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -56,6 +57,7 @@ void Forest::free()
 	delete coins;
 	delete skills;
 	delete showdamage;
+	delete showheal;
 	
 	delete brick;
 	delete effect;
@@ -85,6 +87,7 @@ void Forest::reset()
 	coins->reset();
 	skills->reset();
 	showdamage->reset();
+	showheal->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -133,6 +136,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	money->load( screen_w );
 	coins->load( width, screen_w, type );
 	showdamage->load();
+	showheal->load();
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -169,6 +173,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		coins->fadeout( value );
 		skills->fadeout( value );
 		showdamage->fadeout( value );
+		showheal->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -236,6 +241,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	coins->draw( window );
 	skills->draw( window );
 	showdamage->draw( *window );
+	showheal->draw( *window );
 	effect->draw( window );
 }
 
