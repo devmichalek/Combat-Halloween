@@ -94,6 +94,7 @@ void Factory<F>::free()
 template <typename F>
 void Factory<F>::reset( int distance )
 {
+	hp.setAlpha( 0xFF );
 	for( auto &it :foes )
 	{
 		it->reset( distance );
@@ -239,7 +240,7 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 	{
 		if( i->isAlive() )
 		{
-			if( i->getX() > -width*3 && i->getX() < screen_w + width*3 )
+			if( i->getX() > -width*3 && i->getX() < screen_w + width*4 )
 			{
 				if( i->getHeartPoints() > 0 )
 				{
