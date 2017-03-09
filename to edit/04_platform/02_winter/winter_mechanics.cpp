@@ -2,6 +2,9 @@
 
 void Winter::mechanics()
 {
+	showdamage->focus( hero->getX(), hero->getY() );
+	showheal->focus( hero->getX(), hero->getY() );
+	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
 	if( ladder->checkCollision( hero->getRect() ) )
@@ -183,9 +186,18 @@ void Winter::mechanics()
 		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
 		kunai->getX( i ) < -kunai->getW( i ) ||
 		wall->checkCollision( kunai->getRect( i ) )	||
-		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+		islands->checkPixelCollision( kunai->getRect( i ) ) )
 		{
+			kunai->destroy( i );
+		}
+		else if( golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+		{
+			if( kunai->isHealKunai( i ) )
+			{
+				showheal->run( kunai->getDamage( i ) );
+				heart->harm( kunai->getDamage( i ) );
+			}
+			
 			kunai->destroy( i );
 		}
 	}
@@ -287,6 +299,7 @@ void Winter::mechanics()
 		if( wall->harm( hero->getRect() ) )
 		{
 			heart->harm( -wall->getDamage() );
+			showdamage->run( to_string( -wall->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -295,6 +308,7 @@ void Winter::mechanics()
 		if( mine_factory->harm( hero->getRect() ) )
 		{
 			heart->harm( -mine_factory->getDamage() );
+			showdamage->run( to_string( -mine_factory->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -302,6 +316,7 @@ void Winter::mechanics()
 		if( golem_factory.harmSomebody( hero->getRect() ) )
 		{
 			heart->harm( -golem_factory.getDamage() );
+			showdamage->run( to_string( -golem_factory.getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -310,8 +325,9 @@ void Winter::mechanics()
 		{
 			if( lightning->harmed() )
 			{
-				effect->runLightning();
 				heart->harm( -lightning->getDamage() );
+				showdamage->run( to_string( -lightning->getDamage() ) );
+				effect->runLightning();
 			}
 		}
 	}

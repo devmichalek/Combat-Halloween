@@ -13,6 +13,8 @@
 #include "04_platform/panel/money/money.h"
 #include "04_platform/enemy/coins/coins.h"
 #include "04_platform/panel/skill/skills.h"
+#include "04_platform/panel/action/showdamage.h"
+#include "04_platform/panel/action/showheal.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -53,6 +55,8 @@ class Winter
 	Money* money;
 	Coins* coins;
 	Skills* skills;
+	Showdamage* showdamage;
+	Showheal* showheal;
 	
 	// world
 	Brick* brick;
