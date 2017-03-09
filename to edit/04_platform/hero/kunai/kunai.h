@@ -38,6 +38,7 @@ public:
 	int getW( int which );
 	Rect* getRect( int which );
 	float getDamage( int which );
+	bool isHealKunai( int which );
 
 	void destroy( int which );
 	void throwed( int x, int y, bool right, int which );
