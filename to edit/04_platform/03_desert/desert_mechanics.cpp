@@ -2,6 +2,9 @@
 
 void Desert::mechanics()
 {
+	showdamage->focus( hero->getX(), hero->getY() );
+	showheal->focus( hero->getX(), hero->getY() );
+	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
 	if( ladder->checkCollision( hero->getRect() ) )
@@ -182,9 +185,18 @@ void Desert::mechanics()
 		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
 		kunai->getX( i ) < -kunai->getW( i ) ||
 		wall->checkCollision( kunai->getRect( i ) )	||
-		islands->checkPixelCollision( kunai->getRect( i ) ) ||
-		skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+		islands->checkPixelCollision( kunai->getRect( i ) ) )
 		{
+			kunai->destroy( i );
+		}
+		else if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+		{
+			if( kunai->isHealKunai( i ) )
+			{
+				showheal->run( kunai->getDamage( i ) );
+				heart->harm( kunai->getDamage( i ) );
+			}
+			
 			kunai->destroy( i );
 		}
 	}
@@ -285,6 +297,7 @@ void Desert::mechanics()
 		if( wall->harm( hero->getRect() ) )
 		{
 			heart->harm( -wall->getDamage() );
+			showdamage->run( to_string( -wall->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -293,6 +306,7 @@ void Desert::mechanics()
 		if( mine_factory->harm( hero->getRect() ) )
 		{
 			heart->harm( -mine_factory->getDamage() );
+			showdamage->run( to_string( -mine_factory->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -300,6 +314,7 @@ void Desert::mechanics()
 		if( skeleton_factory.harmSomebody( hero->getRect() ) )
 		{
 			heart->harm( -skeleton_factory.getDamage() );
+			showdamage->run( to_string( -skeleton_factory.getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -309,6 +324,7 @@ void Desert::mechanics()
 			if( fireball->harmed() )
 			{
 				heart->harm( -fireball->getDamage() );
+				showdamage->run( to_string( -fireball->getDamage() ) );
 				effect->runBlood();
 			}
 		}
