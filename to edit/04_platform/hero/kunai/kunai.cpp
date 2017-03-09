@@ -277,6 +277,17 @@ float Kunai::getDamage( int which )
 	return damage[ bits[ which ]->getWhich() ];
 }
 
+bool Kunai::isHealKunai( int which )
+{
+	// printf( "%d\n", bits[ which ]->getWhich() );
+	if( bits[ which ]->getWhich() == 4 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 
 
 void Kunai::destroy( int which )
