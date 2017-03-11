@@ -13,7 +13,16 @@ Rain_cloud::~Rain_cloud()
 
 void Rain_cloud::free()
 {
+	x = 0;
+	vel = 0;
+	
 	cloud.free();
+	
+	if( !alphas.empty() )
+	{
+		alphas.clear();
+	}
+	
 	if( !drops.empty() )
 	{
 		for( auto &it :drops )
@@ -27,10 +36,12 @@ void Rain_cloud::free()
 
 void Rain_cloud::reset( int screen_w, int screen_h )
 {
-	cloud.setPosition( rand()%screen_w, -rand()%40 );
+	x = static_cast <float> ( rand()%screen_w ) ;
+	setVel();
+	cloud.setPosition( x, -rand()%40 );
 	for( auto &it :drops )
 	{
-		it->setPosition( cloud.getX() +rand()%cloud.getWidth(), cloud.getY() +rand()%screen_h );
+		it->setPosition( x +rand()%cloud.getWidth(), cloud.getY() +rand()%screen_h );
 	}
 }
 
@@ -38,7 +49,7 @@ void Rain_cloud::reset( int screen_w, int screen_h )
 
 void Rain_cloud::create( string path, int screen_w, int screen_h )
 {
-	cloud.setName( "rain-cloud-cloud" );
+	cloud.setName( "rain_cloud-cloud" );
 	cloud.load( path );
 	
 	int amount = rand()%50 +50;
@@ -50,7 +61,8 @@ void Rain_cloud::create( string path, int screen_w, int screen_h )
 		drops[ drops.size()-1 ]->setPoint( 1, sf::Vector2f( 1, 0 ) );
 		drops[ drops.size()-1 ]->setPoint( 2, sf::Vector2f( 1, 1 ) );
 		drops[ drops.size()-1 ]->setPoint( 3, sf::Vector2f( 0, 1 ) );
-		drops[ drops.size()-1 ]->setFillColor( sf::Color( 0x11, 0x11, 0x11, rand()%100 +100 ) );
+		alphas.push_back( rand()%100 +100 );
+		drops[ drops.size()-1 ]->setFillColor( sf::Color( 0x11, 0x11, 0x11, alphas[ alphas.size() -1 ] ) );
 		drops[ drops.size()-1 ]->setScale( 1, rand()%6 +1 );
 	}
 	
@@ -79,12 +91,25 @@ void Rain_cloud::fadeout( int v, int min )
 {
 	cloud.fadeout( v, min );
 	
-	/*
-	for( auto &it :drops )
+	for( auto &it :alphas )
 	{
-		it->fadeout( v, min );
+		it -= v;
+		if( it < min )
+		{
+			it = min;
+			if( it < 0 )
+			{
+				it = 0;
+			}
+		}
 	}
-	*/
+	
+	for( unsigned i = 0; i < drops.size(); i++ )
+	{
+		sf::Color c = drops[ i ]->getFillColor();
+		c.a = alphas[ i ];
+		drops[ i ]->setFillColor( c );
+	}
 }
 
 
@@ -93,11 +118,13 @@ void Rain_cloud::fadeout( int v, int min )
 
 void Rain_cloud::mechanics( int screen_w, int screen_h )
 {
-	cloud.setPosition( cloud.getX() -1, cloud.getY() );
+	x -= vel;
+	cloud.setPosition( x, cloud.getY() );
 	
-	if( cloud.getX() +cloud.getWidth() < 0 )
+	if( x +cloud.getWidth() < 0 )
 	{
-		cloud.setPosition( screen_w +rand()%screen_w, -rand()%40 );
+		// printf( "%f\n", x );
+		setCloud( screen_w );
 	}
 	
 	for( auto &it :drops )
@@ -113,7 +140,8 @@ void Rain_cloud::mechanics( int screen_w, int screen_h )
 
 void Rain_cloud::moveX( int add )
 {
-	cloud.setPosition( cloud.getX() +add, cloud.getY() );
+	x += add;
+	cloud.setPosition( x, cloud.getY() );
 	for( auto &it :drops )
 	{
 		it->setPosition( it->getPosition().x +add, it->getPosition().y );
@@ -124,10 +152,22 @@ void Rain_cloud::moveX( int add )
 
 int Rain_cloud::getX()
 {
-	return cloud.getX();
+	return x;
 }
 
 int Rain_cloud::getWidth()
 {
 	return cloud.getWidth();
+}
+
+void Rain_cloud::setCloud( int screen_w )
+{
+	x = static_cast <float> ( rand()%screen_w +screen_w ) ;
+	setVel();
+	cloud.setPosition( x, -rand()%40 );
+}
+
+void Rain_cloud::setVel()
+{
+	vel = static_cast <float> (rand()%40 +40) /100;
 }

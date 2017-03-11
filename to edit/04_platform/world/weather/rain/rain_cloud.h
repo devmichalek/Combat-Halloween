@@ -1,10 +1,16 @@
 #pragma once
 
 #include "drawable/sprite.h"
+#include <cstdint>
 
 class Rain_cloud
 {
+protected:
+	
+	float x;
+	float vel;
 	MySprite cloud;
+	vector <int16_t> alphas;
 	vector <sf::ConvexShape*> drops;
 	
 public:
@@ -25,4 +31,7 @@ public:
 	
 	int getX();
 	int getWidth();
+	
+	void setCloud( int screen_w );
+	void setVel();
 };
