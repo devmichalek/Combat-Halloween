@@ -1,196 +1,6 @@
 #include "vampire.h"
 #include <stdio.h>
 
-Vampire::Vampire()
-{
-	state = APPEAR -1;
-	offset = 0;
-	delay = 0;
-	counter = 0;
-	
-	left = 0;
-	right = 0;
-	
-	hp = 0;
-	hp_state = 0;
-	
-	damage = 0;
-	vel = 0;
-	direction = 0;
-	
-	xScale = yScale = 0;
-	
-	attack = 0;
-	attack_line = 0;
-	attack_count = 0;
-}
-
-Vampire::~Vampire()
-{
-	free();
-}
-
-void Vampire::free()
-{
-	state = APPEAR -1;
-	offset = 0;
-	delay = 0;
-	counter = 0;
-	if( !line.empty() )
-	{
-		line.clear();
-	}
-	
-	left = 0;
-	right = 0;
-	
-	hp = 0;
-	hp_state = 0;
-	
-	damage = 0;
-	vel = 0;
-	direction = 0;
-	
-	xScale = yScale = 0;
-	
-	attack = 0;
-	attack_line = 0;
-	attack_count = 0;
-	
-	if( !x.empty() )
-	{
-		x.clear();
-	}
-	
-	if( !x2.empty() )
-	{
-		x2.clear();
-	}
-	
-	if( !y.empty() )
-	{
-		y.clear();
-	}
-	
-	if( !width.empty() )
-	{
-		width.clear();
-	}
-	
-	if( !height.empty() )
-	{
-		height.clear();
-	}
-}
-
-void Vampire::reset( int distance )
-{
-	while( true )
-	{
-		if( distance > 0 )
-		{
-			for( auto &it :x )
-			{
-				it ++;
-			}
-			
-			for( auto &it :x2 )
-			{
-				it ++;
-			}
-			
-			left ++;
-			right ++;
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
-	}
-	
-	state = APPEAR -1;
-	offset = 0;
-	counter = 0;
-	direction = 0;
-	hp = hp_state;
-	attack = 0;
-	attack_count = 0;
-}
-
-
-
-
-void Vampire::setX( vector <float> x )
-{
-	this->x = x;
-}
-
-void Vampire::setX2( vector <float> x2 )
-{
-	this->x2 = x2;
-}
-
-void Vampire::setY( vector <float> y )
-{
-	this->y = y;
-}
-
-void Vampire::setLine( vector <sf::Uint8> line )
-{
-	this->line = line;
-}
-
-void Vampire::setWidth( vector <int> width )
-{
-	this->width = width;
-}
-
-void Vampire::setHeight( vector <int> height )
-{
-	this->height = height;
-}
-
-void Vampire::setVelocity( float vel )
-{
-	this->vel = vel;
-}
-
-void Vampire::setDelay( sf::Uint8 delay )
-{
-	this->delay = delay;
-}
-
-void Vampire::setDamage( sf::Uint8 damage )
-{
-	this->damage = damage;
-}
-
-void Vampire::setHeartPoints( int hp )
-{
-	this->hp = hp;
-	hp_state = hp;
-}
-
-void Vampire::setBorders( int left, int right )
-{
-	this->left = left;
-	this->right = right;
-}
-
-void Vampire::setAttackLine( sf::Uint8 attack_line )
-{
-	attack = 0;
-	this->attack_line = attack_line;
-}
-
-void Vampire::setScale( float xScale, float yScale )
-{
-	this->xScale = xScale;
-	this->yScale = yScale;
-}
-
 void Vampire::setDead()
 {
 	offset = 0;
@@ -227,8 +37,6 @@ float Vampire::getY()
 	return y[ result ];
 }
 
-
-
 float Vampire::getRealX()
 {
 	return x[ 0 ];
@@ -244,10 +52,6 @@ float Vampire::getRealWidth()
 	return width[ 0 ];
 }
 
-float Vampire::getRealHeight()
-{
-	return height[ 0 ];
-}
 
 
 
@@ -276,20 +80,6 @@ int Vampire::getAttackHeight()
 	return height[ APPEAR ]/2;
 }
 
-int Vampire::getLeft()
-{
-	return left;
-}
-
-int Vampire::getRight()
-{
-	return right;
-}
-
-int Vampire::getPlane()
-{
-	return y[ 0 ] +height[ 0 ];
-}
 
 
 
@@ -321,31 +111,6 @@ sf::Uint8 Vampire::getOffset()
 	}
 	
 	return offset /delay;
-}
-
-sf::Uint8 Vampire::getDamage()
-{
-	return damage;
-}
-
-float Vampire::getHorizontalScale()
-{
-	return xScale;
-}
-
-float Vampire::getVerticalScale()
-{
-	return yScale;
-}
-
-int Vampire::getHeartPoints()
-{
-	if( hp < 0 )
-	{
-		return 0;
-	}
-
-	return hp;
 }
 
 bool Vampire::isAlive()
@@ -514,25 +279,4 @@ void Vampire::ableAttack()
 		offset = 0;
 		state = ATTACK;
 	}
-}
-
-void Vampire::moveX( int vel )
-{
-	for( auto &it :x )
-	{
-		it += vel;
-	}
-	
-	for( auto &it :x2 )
-	{
-		it += vel;
-	}
-	
-	left += vel;
-	right += vel;
-}
-
-void Vampire::harm( int damage )
-{
-	hp += damage;
 }
