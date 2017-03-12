@@ -16,7 +16,15 @@ void Background::free()
 	screen_w = 0;
 	screen_h = 0;
 	
-	sprite.free();
+	if( !sprites.empty() )
+	{
+		for( auto &it :sprites )
+		{
+			it->free();
+		}
+		
+		sprites.clear();
+	}
 }
 
 void Background::reset( int x, int y )
@@ -33,26 +41,53 @@ void Background::load( int type, int screen_w, int screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	
-	sprite.setName( "background-sprite" );
-	sprite.load( "data/04_platform/world/" +to_string( type ) +"/bg.png" );
-	
+	if( type == 1 )
+	{
+		for( unsigned i = 0; i < 2; i++ )
+		{
+			sprites.push_back( new MySprite() );
+			sprites[ sprites.size() -1 ]->setName( "background-sprite" );
+			sprites[ sprites.size() -1 ]->load( "data/04_platform/world/1/bg" +to_string( i ) +".png" );
+		}
+	}
+	else
+	{
+		sprites.push_back( new MySprite() );
+		sprites[ sprites.size() -1 ]->setName( "background-sprite" );
+		sprites[ sprites.size() -1 ]->load( "data/04_platform/world/" +to_string( type ) +"/bg.png" );
+	}
 }
 
 void Background::draw( sf::RenderWindow* &window )
 {
-	window->draw( sprite.get() );
+	window->draw( sprites[ 0 ]->get() );
+}
+
+void Background::drawFront( sf::RenderWindow* &window )
+{
+	window->draw( sprites[ sprites.size() -1 ]->get() );
 }
 
 
 void Background::fadein( int v, int max )
 {
-	sprite.fadein( v, max );
+	for( auto &it :sprites )
+	{
+		it->fadein( v, max );
+	}
 }
 
 void Background::fadeout( int v, int min )
 {
-	sprite.fadeout( v, min );
+	if( sprites.size() > 1 )
+	{
+		sprites[ sprites.size() -1 ]->setAlpha( min );
+	}
+	
+	for( auto &it :sprites )
+	{
+		it->fadeout( v, min );
+	}
 }
 
 
@@ -62,18 +97,36 @@ void Background::setPosition( int x, int y )
 	float new_x = -( screen_w/2 ) *x /screen_w;
 	float new_y = -150 *( y +300 ) /screen_h;
 	
-	if( new_y > -( sprite.getHeight() -screen_h ) && new_y < 0 )
+	for( auto &it :sprites )
 	{
-		sprite.setPosition( new_x, new_y );
+		if( new_y > -( it->getHeight() -screen_h ) && new_y < 0 )
+		{
+			it->setPosition( new_x, new_y );
+		}
 	}
 }
 
 sf::Uint8 Background::getAlpha()
 {
-	return sprite.getAlpha();
+	return sprites[ 0 ]->getAlpha();
 }
 
 void Background::setColor( sf::Color color )
 {
-	sprite.setColor( color );
+	for( auto &it :sprites )
+	{
+		it->setColor( color );
+	}
+}
+
+
+
+int Background::getX()
+{
+	return sprites[ 0 ]->getX() +sprites[ 0 ]->getWidth() /2;
+}
+
+int Background::getY()
+{
+	return sprites[ 0 ]->getY() +sprites[ 0 ]->getHeight();
 }

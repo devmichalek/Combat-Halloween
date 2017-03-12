@@ -77,7 +77,7 @@ void Day::set( unsigned FPS )
 	colors[ colors.size() -1 ].b = 0x18;
 	colors[ colors.size() -1 ].a = 0x33;
 	
-	line = FPS;
+	line = 10;
 }
 
 void Day::setInTime()
@@ -223,4 +223,14 @@ sf::Color Day::getColor()
 int Day::getAlpha()
 {
 	return a;
+}
+
+bool Day::isNight()
+{
+	if( state == 3 )
+	{
+		return true;
+	}
+	
+	return false;
 }
