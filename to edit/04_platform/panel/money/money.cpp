@@ -87,7 +87,7 @@ void Money::draw( sf::RenderWindow* &window )
 
 void Money::fadein( int v, int max )
 {
-	text.fadein( v, max *0.4 );
+	text.fadein( v, max /2 );
 	grey.fadein( v, max /2 );
 	coin.fadein( v, max /2 );
 }
