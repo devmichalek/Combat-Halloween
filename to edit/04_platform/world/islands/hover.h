@@ -9,9 +9,9 @@ class Hover	// flying island
 {
 	vector <Block*> blocks;
 	
-	int startX, endX;
-	int vel;
-	int vel_state;
+	float startX, endX;
+	float vel;
+	float vel_state;
 	int state;
 	
 public:
@@ -20,7 +20,7 @@ public:
 	void free();
 	
 	void positioning( int width, int type );
-	void setPosition( int startX, int endX, int y, int vel );
+	void setPosition( float startX, float endX, float y, float vel );
 	void moveX( float vel );
 	void moving( int width );
 	

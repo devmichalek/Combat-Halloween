@@ -52,7 +52,7 @@ void Hover::positioning( int width, int type )
 	blocks[ blocks.size() -1 ]->x = blocks[ blocks.size() -2 ]->x +width;
 }
 
-void Hover::setPosition( int startX, int endX, int y, int vel )
+void Hover::setPosition( float startX, float endX, float y, float vel )
 {
 	this->startX = startX;
 	this->endX = endX;

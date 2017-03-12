@@ -150,7 +150,7 @@ void Islands::fadeout( int v, int min )
 
 
 
-void Islands::addHover( int startX, int endX, int y, int vel )
+void Islands::addHover( float startX, float endX, float y, float vel )
 {
 	int nr = 0;
 	if( rand()%2 == 1 )	nr = 1;
