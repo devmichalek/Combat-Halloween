@@ -25,8 +25,8 @@ public:
 	void free();
 	void reset();
 	
-	void setPosition( int x, int y );
-	void setBorders( int left, int right );
+	void setPosition( float x, float y );
+	void setBorders( float left, float right );
 	void setJump( int jump );
 	void setAsActive();
 	void setVelocity( float vel );
@@ -40,5 +40,5 @@ public:
 	bool isActive();
 	
 	bool mechanics();
-	void moveX( int vel );
+	void moveX( float vel );
 };
