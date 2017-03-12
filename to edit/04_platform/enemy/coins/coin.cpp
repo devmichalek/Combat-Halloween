@@ -35,13 +35,13 @@ void Coin::reset()
 
 
 
-void Coin::setPosition( int x, int y )
+void Coin::setPosition( float x, float y )
 {
 	this->x = x;
 	this->y = yLine = y;
 }
 
-void Coin::setBorders( int left, int right )
+void Coin::setBorders( float left, float right )
 {
 	this->left = left;
 	this->right = right;
@@ -166,7 +166,7 @@ bool Coin::mechanics()
 	return false;
 }
 
-void Coin::moveX( int vel )
+void Coin::moveX( float vel )
 {
 	x += vel;
 	left += vel;

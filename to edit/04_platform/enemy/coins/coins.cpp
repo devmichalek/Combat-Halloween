@@ -179,10 +179,10 @@ void Coins::setCoin( Rect* rect )
 {
 	if( rect != NULL )
 	{
-		int x = rect->getX();
-		int y = rect->getY();
-		int l = rect->getWidth();
-		int r = rect->getHeight();
+		float x = rect->getX();
+		float y = rect->getY();
+		float l = rect->getWidth();
+		float r = rect->getHeight();
 		
 		int money_amount = rand()%4 +2;
 		for( auto &it :coins )
