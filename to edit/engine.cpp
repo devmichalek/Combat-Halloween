@@ -9,7 +9,7 @@ Engine::Engine()
 	srand( static_cast <int> ( time( NULL ) ) );
 	
 	// Create and load core.
-    core = new Core( 1000, 750, -2, 160 );	// new FPS
+    core = new Core( 1000, 750, -2, 180 );	// new FPS
     core->load( "Ninja" );
 	
 	loading = new Loading;
