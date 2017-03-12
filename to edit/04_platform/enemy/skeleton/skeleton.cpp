@@ -3,26 +3,7 @@
 
 Skeleton::Skeleton()
 {
-	state = APPEAR -1;
-	offset = 0;
-	delay = 0;
-	counter = 0;
-	
-	left = 0;
-	right = 0;
-	
-	hp = 0;
-	hp_state = 0;
-	
-	damage = 0;
-	vel = 0;
-	direction = 0;
-	
-	xScale = yScale = 0;
-	
-	attack = 0;
-	attack_line = 0;
-	attack_count = 0;
+	free();
 }
 
 Skeleton::~Skeleton()
@@ -173,7 +154,7 @@ void Skeleton::setHeartPoints( int hp )
 	hp_state = hp;
 }
 
-void Skeleton::setBorders( int left, int right )
+void Skeleton::setBorders( float left, float right )
 {
 	this->left = left;
 	this->right = right;
@@ -264,12 +245,12 @@ int Skeleton::getAttackHeight()
 	return height[ APPEAR ]/2;
 }
 
-int Skeleton::getLeft()
+float Skeleton::getLeft()
 {
 	return left;
 }
 
-int Skeleton::getRight()
+float Skeleton::getRight()
 {
 	return right;
 }
@@ -494,7 +475,7 @@ void Skeleton::ableAttack()
 	}
 }
 
-void Skeleton::moveX( int vel )
+void Skeleton::moveX( float vel )
 {
 	for( auto &it :x )
 	{

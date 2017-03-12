@@ -9,7 +9,7 @@ using namespace std;
 
 class Skeleton
 {
-	protected:
+protected:
 	enum
 	{
 		APPEAR = 0,
@@ -26,8 +26,8 @@ class Skeleton
 	vector <sf::Uint8> line;
 	
 	// pos x
-	int left;
-	int right;
+	float left;
+	float right;
 	
 	// heart points
 	int hp;
@@ -74,7 +74,7 @@ public:
 	void setDelay( sf::Uint8 delay );
 	void setDamage( sf::Uint8 damage );
 	void setHeartPoints( int hp );
-	void setBorders( int left, int right );
+	void setBorders( float left, float right );
 	void setAttackLine( sf::Uint8 attack_line );
 	void setScale( float xScale, float yScale );
 	void setDead();
@@ -93,8 +93,8 @@ public:
 	float getAttackY();
 	int getAttackWidth();
 	int getAttackHeight();
-	int getLeft();
-	int getRight();
+	float getLeft();
+	float getRight();
 	int getPlane();
 	
 	int8_t getState();
@@ -112,6 +112,6 @@ public:
 	void walk( Rect* rect );
 	void mechanics();
 	void ableAttack();
-	void moveX( int vel );
+	void moveX( float vel );
 	void harm( int damage );
 };
