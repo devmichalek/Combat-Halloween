@@ -10,8 +10,8 @@ class Brick
 	int screen_w;
 	int screen_h;
 	
-	int left;	// The smallest x.
-	int right;	// The biggest y.
+	float left;	// The smallest x.
+	float right;	// The biggest y.
 	
 	vector <int>::size_type size;
 	vector <Block*> planks;
@@ -65,8 +65,8 @@ public:
 	sf::Uint8 getWidth();	// Get width of divide.
 	vector <Block*> getBlocks();
 	vector <Block*> getPlanks();
-	int getLeft();
-	int getRight();
+	float getLeft();
+	float getRight();
 	
 	
 	// Collision detection.

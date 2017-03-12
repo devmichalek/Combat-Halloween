@@ -7,7 +7,7 @@ class Block
 	
 public:
 
-	int x, y;
+	float x, y;
 	int8_t nr;
 	
 	
