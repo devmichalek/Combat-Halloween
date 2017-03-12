@@ -3,19 +3,6 @@
 void Halloween::mechanics()
 {
 // ------------------------------------------------------------------------------------------------
-	// RAIN
-	/*
-	for( unsigned i = 0; i < rain->getSize(); i ++ )
-	{
-		if( brick->checkPixelCollision( rain->getRect( i ) ) ||
-			islands->checkPixelCollision( rain->getRect( i ) ) )
-		{
-			rain->resetDrop( i );
-		}
-	}
-	*/
-	
-// ------------------------------------------------------------------------------------------------
 	showdamage->focus( hero->getX(), hero->getY() );
 	showheal->focus( hero->getX(), hero->getY() );
 	
@@ -291,7 +278,7 @@ void Halloween::mechanics()
 	
 	if( brick->getGrassDistance() > 0 )
 	{
-		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
+		if( scope->getState() == 0 || scope->getState() == 2 || static_cast <int> (brick->getLeft()) >= -brick->getGrassValue() )
 		{
 			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
