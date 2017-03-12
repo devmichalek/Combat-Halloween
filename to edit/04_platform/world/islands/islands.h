@@ -29,7 +29,7 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	// Support.
-	void addHover( int startX, int endX, int y, int vel );
+	void addHover( float startX, float endX, float y, float vel );
 	void addBlock( int n, int x, int y );
 	void addPlank( int n, int x, int y );
 	
