@@ -27,6 +27,7 @@ Winter::Winter()
 	wall = new Wall;
 	ladder = new Ladder;
 	greenery = new Greenery;
+	snow = new Snow;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
@@ -66,6 +67,7 @@ void Winter::free()
 	delete wall;
 	delete ladder;
 	delete greenery;
+	delete snow;
 	
 	delete mine_factory;
 	golem_factory.free();
@@ -95,6 +97,7 @@ void Winter::reset()
 	wall->reset( distance );
 	ladder->reset( distance );
 	greenery->reset( distance );
+	snow->reset();
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
@@ -128,6 +131,7 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	snow->load( screen_w, screen_h );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_winter" );
@@ -164,6 +168,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
+		snow->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
@@ -188,6 +193,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
+		snow->fadein( value );
 		
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
@@ -212,6 +218,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	lightning->draw( window );
 	
 	// rest
+	snow->draw( window );
 	water->draw( window );
 	brick->draw( window );
 	islands->draw( window );
