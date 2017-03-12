@@ -22,6 +22,7 @@ Forest::Forest()
 	brick = new Brick;
 	effect = new Effect;
 	background = new Background;
+	sun = new Sun;
 	islands = new Islands;
 	water = new Water;
 	wall = new Wall;
@@ -62,6 +63,7 @@ void Forest::free()
 	delete brick;
 	delete effect;
 	delete background;
+	delete sun;
 	delete islands;
 	delete water;
 	delete wall;
@@ -92,6 +94,7 @@ void Forest::reset()
 	int distance = brick->reset();
 	effect->reset();
 	background->reset( hero->getX(), hero->getY() );
+	sun->reset();
 	islands->reset( distance );
 	water->reset( distance );
 	wall->reset( distance );
@@ -106,9 +109,11 @@ void Forest::reset()
 	// Set color
 	hero->setColor( day->getColor() );
 	coins->setColor( day->getColor() );
+	kunai->setColor( day->getColor() );
 		
 	brick->setColor( day->getColor() );
 	background->setColor( day->getColor() );
+	sun->setColor( day->getColor() );
 	islands->setColor( day->getColor() );
 	water->setColor( day->getColor() );
 	wall->setColor( day->getColor() );
@@ -141,6 +146,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
 	background->load( type, screen_w, screen_h );
+	sun->load( screen_w, screen_h );
 	islands->load( type, width, screen_w, screen_h );
 	water->load( type, width, screen_w, screen_h );
 	wall->load( type, width, screen_w );
@@ -178,6 +184,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		brick->fadeout( value );
 		effect->fadeout( value );
 		background->fadeout( value );
+		sun->fadeout( value );
 		islands->fadeout( value );
 		water->fadeout( value );
 		wall->fadeout( value );
@@ -202,6 +209,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		brick->fadein( value );
 		effect->fadein( value );
 		background->fadein( value );
+		sun->fadein( value );
 		islands->fadein( value );
 		water->fadein( value );
 		wall->fadein( value );
@@ -216,6 +224,8 @@ void Forest::draw( sf::RenderWindow* &window )
 
 	// bg
 	background->draw( window );
+	sun->draw( window );
+	background->drawFront( window );
 	greenery->draw_bg( window );
 	
 	// blocks
