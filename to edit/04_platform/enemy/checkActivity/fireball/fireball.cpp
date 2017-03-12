@@ -209,6 +209,7 @@ bool Fireball::harmed()
 {
 	if( offset == 1 *delay && which == 1 )
 	{
+		offset ++;
 		return true;
 	}
 	

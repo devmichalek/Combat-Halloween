@@ -161,6 +161,7 @@ bool Lightning::harmed()
 {
 	if( offset == 5 *delay )
 	{
+		offset ++;
 		return true;
 	}
 	
