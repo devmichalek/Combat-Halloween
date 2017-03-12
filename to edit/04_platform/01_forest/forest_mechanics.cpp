@@ -2,6 +2,12 @@
 
 void Forest::mechanics()
 {
+	if( day->isNight() )
+	{
+		sun->setStartAngle();
+		// printf( "isnight\n" );
+	}
+	
 	showdamage->focus( hero->getX(), hero->getY() );
 	showheal->focus( hero->getX(), hero->getY() );
 	
@@ -263,7 +269,7 @@ void Forest::mechanics()
 	
 	if( brick->getGrassDistance() > 0 )
 	{
-		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
+		if( scope->getState() == 0 || scope->getState() == 2 || static_cast <int> (brick->getLeft()) >= -brick->getGrassValue() )
 		{
 			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
@@ -368,9 +374,11 @@ void Forest::mechanics()
 		{
 			hero->setColor( day->getColor() );
 			coins->setColor( day->getColor() );
+			kunai->setColor( day->getColor() );
 			
 			brick->setColor( day->getColor() );
 			background->setColor( day->getColor() );
+			sun->setColor( day->getColor() );
 			islands->setColor( day->getColor() );
 			water->setColor( day->getColor() );
 			wall->setColor( day->getColor() );
