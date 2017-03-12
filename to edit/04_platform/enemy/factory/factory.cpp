@@ -402,8 +402,8 @@ void Factory<F>::positioning( vector <Block*> blocks, int chance )
 		if( blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0 || blocks[ i ]->nr == 4 )
 		{
 			int counter = 1;
-			int startX = blocks[ i ]->x;
-			int startY = blocks[ i ]->y;
+			float startX = blocks[ i ]->x;
+			float startY = blocks[ i ]->y;
 			
 			for( unsigned j = i +1; j < blocks.size(); j++ )
 			{
