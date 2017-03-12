@@ -1,13 +1,14 @@
 #pragma once
 
 #include "drawable/sprite.h"
+#include <vector>
 
 class Background
 {
 	int screen_w;
 	int screen_h;
 	
-	MySprite sprite;
+	vector <MySprite*> sprites;
 	
 public:
 	
@@ -18,6 +19,7 @@ public:
 	
 	void load( int type, int screen_w, int screen_h );
 	void draw( sf::RenderWindow* &window );
+	void drawFront( sf::RenderWindow* &window ); // if its necessary
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
@@ -25,4 +27,7 @@ public:
 	void setPosition( int x, int y );
 	sf::Uint8 getAlpha();
 	void setColor( sf::Color color );
+	
+	int getX();
+	int getY();
 };
