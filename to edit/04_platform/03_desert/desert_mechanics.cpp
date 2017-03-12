@@ -223,6 +223,7 @@ void Desert::mechanics()
 			skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
+			wind->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -238,6 +239,7 @@ void Desert::mechanics()
 			skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
+			wind->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -263,7 +265,7 @@ void Desert::mechanics()
 	
 	if( brick->getGrassDistance() > 0 )
 	{
-		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
+		if( scope->getState() == 0 || scope->getState() == 2 || static_cast <int> (brick->getLeft()) >= -brick->getGrassValue() )
 		{
 			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
@@ -279,6 +281,7 @@ void Desert::mechanics()
 			skeleton_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
+			wind->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -344,6 +347,7 @@ void Desert::mechanics()
 		coins->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
 		skills->mechanics();
+		wind->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -376,6 +380,7 @@ void Desert::mechanics()
 	{
 		hero->setColor( day->getColor() );
 		coins->setColor( day->getColor() );
+		kunai->setColor( day->getColor() );
 		
 		brick->setColor( day->getColor() );
 		background->setColor( day->getColor() );
