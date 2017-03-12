@@ -27,6 +27,7 @@ Desert::Desert()
 	ladder = new Ladder;
 	greenery = new Greenery;
 	day = new Day;
+	wind = new Wind;
 	
 	mine_factory = new Mine_factory;
 	fireball = new Fireball;
@@ -66,6 +67,7 @@ void Desert::free()
 	delete ladder;
 	delete greenery;
 	delete day;
+	delete wind;
 	
 	delete mine_factory;
 	skeleton_factory.free();
@@ -95,6 +97,7 @@ void Desert::reset()
 	ladder->reset( distance );
 	greenery->reset( distance );
 	day->reset();
+	wind->reset();
 	
 	mine_factory->reset( distance );
 	skeleton_factory.reset( distance );
@@ -103,6 +106,7 @@ void Desert::reset()
 	// Set color
 	hero->setColor( day->getColor() );
 	coins->setColor( day->getColor() );
+	kunai->setColor( day->getColor() );
 		
 	brick->setColor( day->getColor() );
 	background->setColor( day->getColor() );
@@ -142,6 +146,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
 	day->set( FPS );
+	wind->create( screen_w, screen_h );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
@@ -177,6 +182,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
+		wind->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		skeleton_factory.fadeout( value );
@@ -224,6 +230,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	fireball->draw( window );
 	
 	// rest
+	wind->draw( window );
 	brick->draw( window );
 	islands->draw( window );
 	wall->draw( window );

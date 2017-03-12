@@ -25,6 +25,7 @@
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/background/day.h"
+#include "04_platform/world/weather/wind/wind.h"
 
 
 // Enemy
@@ -68,6 +69,7 @@ class Desert
 	Ladder* ladder;
 	Greenery* greenery;
 	Day* day;
+	Wind* wind;
 	
 	// enemy
 	Mine_factory* mine_factory;
