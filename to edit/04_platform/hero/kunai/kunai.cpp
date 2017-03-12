@@ -252,6 +252,9 @@ Rect* Kunai::getRect( int which )
 	// Temporary.
 	int t_x, t_y;	
 	int t_w, t_h;
+	
+	t_w = sprites[ bits[ which ]->getWhich() ]->getWidth();
+	t_h = sprites[ bits[ which ]->getWhich() ]->getHeight();
 		
 	t_x = bits[ which ]->getX();
 	if( bits[ which ]->getVel() > 0 )
@@ -263,10 +266,9 @@ Rect* Kunai::getRect( int which )
 	if( bits[ which ]->getWhich() == 3 )
 	{
 		t_y -= 30;
+		t_w /= 2;
 	}
 	
-	t_w = sprites[ bits[ which ]->getWhich() ]->getWidth();
-	t_h = sprites[ bits[ which ]->getWhich() ]->getHeight();
 	
 	rect->set( t_x, t_y, t_w, t_h );
 	return rect;
@@ -317,5 +319,13 @@ void Kunai::throwed( int x, int y, bool right, int which )
 
 			break;
 		}
+	}
+}
+
+void Kunai::setColor( sf::Color color )
+{
+	for( auto &it :sprites )
+	{
+		it->setColor( color );
 	}
 }

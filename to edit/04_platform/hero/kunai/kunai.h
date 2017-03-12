@@ -42,4 +42,5 @@ public:
 
 	void destroy( int which );
 	void throwed( int x, int y, bool right, int which );
+	void setColor( sf::Color color );
 };
