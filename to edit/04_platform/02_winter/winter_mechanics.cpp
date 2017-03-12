@@ -221,6 +221,7 @@ void Winter::mechanics()
 			wall->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
+			snow->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
@@ -237,6 +238,7 @@ void Winter::mechanics()
 			wall->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
+			snow->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
@@ -264,7 +266,7 @@ void Winter::mechanics()
 	
 	if( brick->getGrassDistance() > 0 )
 	{
-		if( scope->getState() == 0 || scope->getState() == 2 || brick->getLeft() >= -brick->getGrassValue() )
+		if( scope->getState() == 0 || scope->getState() == 2 || static_cast <int> (brick->getLeft()) >= -brick->getGrassValue() )
 		{
 			scope->changeMind();
 			hero->undoFallX( brick->getGrassValue() );
@@ -277,6 +279,7 @@ void Winter::mechanics()
 			wall->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
+			snow->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
@@ -346,6 +349,7 @@ void Winter::mechanics()
 		coins->mechanics();
 		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		skills->mechanics();
+		snow->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
