@@ -175,7 +175,7 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 			{
 				int good_nr = -1;
 				
-				if( blocks[ i ]->x %width == 0 )
+				if( static_cast <int> (blocks[ i ]->x) %width == 0 )
 				{
 					for( int k = blocks[ i ]->x +width; k < right; k += width )
 					{
@@ -211,7 +211,7 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( (blocks[ i ]->nr == 2 || blocks[ i ]->nr == 12) && blocks[ i ]->x%width == 0 ) // right border
+		if( (blocks[ i ]->nr == 2 || blocks[ i ]->nr == 12) && static_cast <int> (blocks[ i ]->x) %width == 0 ) // right border
 		{
 			bool success = false;
 			
