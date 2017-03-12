@@ -481,19 +481,22 @@ void Brick::createStuffing( int a, int n )
 			bool free_place = true;
 			for( auto &j :blocks )
 			{
-				if( blocks[ i ]->y == j->y && blocks[ i ]->x +width == j->x  )
+				if( static_cast <int> (blocks[ i ]->y) == static_cast <int> (j->y) &&
+					static_cast <int> (blocks[ i ]->x) +width == static_cast <int> (j->x)  )
 				{
 					free_place = false;
 					break;
 				}
 			}
 			
-			if( free_place && blocks[ i ]->x + width <= right )
+			if( free_place && static_cast <int> (blocks[ i ]->x) + width <= right )
 			{
-				addBlock( n, blocks[ i ]->x + width, blocks[ i ]->y );
+				addBlock( n, static_cast <int> (blocks[ i ]->x) + width, static_cast <int> (blocks[ i ]->y) );
 			}
 		}
 	}
+	
+	// printf( "happen\n" );
 }
 
 void Brick::setLeft()
@@ -525,6 +528,7 @@ void Brick::setRight()
 
 sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 {
+	// printf( "%f\n", vel );
 	if( direction == 1 )
 	{
 		if( left > -10 )
@@ -626,12 +630,12 @@ vector <Block*> Brick::getPlanks()
 	return planks;
 }
 
-int Brick::getLeft()
+float Brick::getLeft()
 {
 	return left;
 }
 
-int Brick::getRight()
+float Brick::getRight()
 {
 	return right;
 }
