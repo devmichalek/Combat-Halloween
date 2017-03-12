@@ -36,8 +36,9 @@ void Rain_cloud::free()
 
 void Rain_cloud::reset( int screen_w, int screen_h )
 {
-	x = static_cast <float> ( rand()%screen_w ) ;
 	setVel();
+	x = static_cast <float> ( rand()%screen_w ) ;
+	
 	cloud.setPosition( x, -rand()%40 );
 	for( auto &it :drops )
 	{
@@ -121,11 +122,23 @@ void Rain_cloud::mechanics( int screen_w, int screen_h )
 	x -= vel;
 	cloud.setPosition( x, cloud.getY() );
 	
-	if( x +cloud.getWidth() < 0 )
+	if( vel > 0 )
 	{
-		// printf( "%f\n", x );
-		setCloud( screen_w );
+		if( x +cloud.getWidth() < 0 )
+		{
+			// printf( "%f\n", x );
+			setCloud( screen_w );
+		}
 	}
+	else
+	{
+		if( x > screen_w )
+		{
+			// printf( "%f\n", x );
+			setCloud( screen_w );
+		}
+	}
+	
 	
 	for( auto &it :drops )
 	{
@@ -162,12 +175,28 @@ int Rain_cloud::getWidth()
 
 void Rain_cloud::setCloud( int screen_w )
 {
-	x = static_cast <float> ( rand()%screen_w +screen_w ) ;
 	setVel();
+	
+	if( vel > 0 )
+	{
+		x = static_cast <float> ( rand()%screen_w +screen_w ) ;
+	}
+	else
+	{
+		x = static_cast <float> ( (rand()%screen_w) *-1 ) ;
+	}
+	
 	cloud.setPosition( x, -rand()%40 );
 }
 
 void Rain_cloud::setVel()
 {
+	int result = 1;
+	if( rand()%2 == 1 )
+	{
+		result = -1;
+	}
+	
 	vel = static_cast <float> (rand()%40 +40) /100;
+	vel *= result;
 }
