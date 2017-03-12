@@ -171,8 +171,8 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	delay = 7;
 	
 	// Set other values
-	vel = 1;
-	jump_vel = vel*2 +1;
+	vel = 1.25;
+	jump_vel = vel*2;
 	grav = 1;
 	
 	right = true;
