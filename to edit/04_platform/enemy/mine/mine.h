@@ -6,7 +6,7 @@
 class Mine
 {
 	sf::Uint8 nr;
-	int x1, x2, y;
+	float x1, x2, y;
 	int state;
 	int offset;
 	sf::Uint8 delay;
@@ -27,21 +27,21 @@ public:
 	void reset();
 	
 	// Getters.
-	int getX();
-	int getY();
+	float getX();
+	float getY();
 	
 	// Set as active.
 	void setActive();
 	
 	// In action.
-	void moveX( int vel );
+	void moveX( float vel );
 	
 	
 	
 	
 	bool harm();
 	void mechanics();
-	void positioning( int x1, int x2, int y );
+	void positioning( float x1, float x2, float y );
 	
 	bool ableToDraw();
 	bool ableToDestroy();

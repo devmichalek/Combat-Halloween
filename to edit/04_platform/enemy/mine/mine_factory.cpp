@@ -53,7 +53,7 @@ void Mine_factory::reset( int distance )
 		{
 			for( auto &it :mines )
 			{
-				it->moveX( 1 );
+				it->moveX( 1.0 );
 			}
 			
 			distance --;

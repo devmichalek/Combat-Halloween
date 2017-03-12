@@ -54,7 +54,7 @@ void Mine::reset()
 
 
 
-int Mine::getX()
+float Mine::getX()
 {
 	if( state == 2 )
 	{
@@ -64,7 +64,7 @@ int Mine::getX()
 	return x1;
 }
 
-int Mine::getY()
+float Mine::getY()
 {
 	return y;
 }
@@ -82,7 +82,7 @@ void Mine::setActive()
 
 
 
-void Mine::moveX( int vel )
+void Mine::moveX( float vel )
 {
 	x1 += vel;
 	x2 += vel;
@@ -123,7 +123,7 @@ void Mine::mechanics()
 	}
 }
 
-void Mine::positioning( int x1, int x2, int y )
+void Mine::positioning( float x1, float x2, float y )
 {
 	this->x1 = x1;
 	this->x2 = x2;
