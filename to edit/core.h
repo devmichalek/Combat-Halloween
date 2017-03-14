@@ -19,7 +19,7 @@ class Core
 {
     int state;  // state of game
     bool open;
-    unsigned FPS;
+    // unsigned FPS;
 
     unsigned width;
     unsigned height;
@@ -30,7 +30,7 @@ class Core
 
 public:
 
-    Core( unsigned w, unsigned h, int state, int FPS = 60 );
+    Core( unsigned w, unsigned h, int state/*, int FPS = 60*/ );
     ~Core();
 
     void free();
@@ -49,7 +49,7 @@ public:
 
     int& getState();    // get or set state, e.g. from intro to menu
     bool& isOpen();     // get or set open window
-	unsigned getFPS();
+	// unsigned getFPS();
 
 
     const unsigned getWidth() const;
