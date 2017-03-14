@@ -12,16 +12,16 @@
 #include <SDL2/SDL_mixer.h>
 
 #ifdef __linux__
-Core::Core( unsigned w, unsigned h, int state, int FPS )
+Core::Core( unsigned w, unsigned h, int state/*, int FPS*/ )
 {
-    this->state = state;
-    open = true;
-
-    this->FPS = FPS;
-    width = w;
-    height = h;
+	this->state = state;
+	open = true;
 	
-	printf( "\x1B[1mFPS\x1B[0m=%d  \x1B[33mscreen_width\x1B[0m=%d  \x1B[33mscreen_height\x1B[0m=%d\n", FPS, width, height );
+	// this->FPS = FPS;
+    width = w;
+	height = h;
+	
+	printf( /*"\x1B[1mFPS\x1B[0m=%d  */"\x1B[33mscreen_width\x1B[0m=%d  \x1B[33mscreen_height\x1B[0m=%d\n"/*, FPS*/, width, height );
 
     window = NULL;
 }
@@ -72,7 +72,7 @@ bool Core::load( string title )
     }
     else
     {
-        window->setFramerateLimit( FPS );
+        // window->setFramerateLimit( FPS );
         printf( "\x1B[97;1mCreated window!\x1B[0m\n" );
 
 		if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
@@ -143,11 +143,12 @@ bool& Core::isOpen()
     return open;
 }
 
+/*
 unsigned Core::getFPS()
 {
 	return FPS;
 }
-
+*/
 
 
 const unsigned Core::getWidth() const
