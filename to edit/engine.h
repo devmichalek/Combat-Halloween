@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core.h"
+#include "timer.h"
 #include "00_loading/loading.h"
 #include "01_intro/intro.h"
 #include "02_menu/menu.h"
@@ -32,6 +33,7 @@ class Engine
 	};
 	
     Core* core;
+	Timer* timer;
 	Loading* loading;
 	Intro* intro;
 	Menu* menu;

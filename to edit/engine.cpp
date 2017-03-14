@@ -9,8 +9,10 @@ Engine::Engine()
 	srand( static_cast <int> ( time( NULL ) ) );
 	
 	// Create and load core.
-    core = new Core( 1000, 750, -2, 180 );	// new FPS
+    core = new Core( 1000, 750, -2/*, 180*/ );
     core->load( "Ninja" );
+	
+	timer = new Timer( 200 );
 	
 	loading = new Loading;
 	loading->load( core->getWidth(), core->getHeight() );
@@ -36,6 +38,8 @@ Engine::Engine()
 void Engine::free()
 {
 	if( core != NULL )			delete core;
+	if( timer != NULL )			delete timer;
+	
 	if( loading != NULL )		delete loading;
 	if( intro != NULL )			delete intro;
 	if( menu != NULL )			delete menu;
@@ -68,10 +72,10 @@ void Engine::load()
 		
 		case 35:	gears->load( core->getWidth(), core->getHeight() );	break;
 
-		case 40:	halloween->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
-		case 50:	forest->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
-		case 60:	winter->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
-		case 70:	desert->load( core->getWidth(), core->getHeight(), core->getFPS() );	break;
+		case 40:	halloween->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 50:	forest->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 60:	winter->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 70:	desert->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
 		
 		case 80:	panel->load( core->getWidth(), core->getHeight() );	break;
 		
@@ -255,19 +259,19 @@ void Engine::states()
 			
 			if( panel->getState() == HALLOWEEN )
 			{
-				halloween->load( core->getWidth(), core->getHeight(), core->getFPS() );
+				halloween->load( core->getWidth(), core->getHeight(), timer->getFPS() );
 			}
 			else if( panel->getState() == FOREST )
 			{
-				forest->load( core->getWidth(), core->getHeight(), core->getFPS() );
+				forest->load( core->getWidth(), core->getHeight(), timer->getFPS() );
 			}
 			else if( panel->getState() == WINTER )
 			{
-				winter->load( core->getWidth(), core->getHeight(), core->getFPS() );
+				winter->load( core->getWidth(), core->getHeight(), timer->getFPS() );
 			}
 			else if( panel->getState() == DESERT )
 			{
-				desert->load( core->getWidth(), core->getHeight(), core->getFPS() );
+				desert->load( core->getWidth(), core->getHeight(), timer->getFPS() );
 			}
 		
 			panel->reset();
@@ -295,12 +299,14 @@ void Engine::loop()
 {
     while( core->isOpen() )
     {
+		timer->start();
         core->clear();
 
         events();
         states();
 
         core->display();
+		timer->setFPS();
     }
 }
 
