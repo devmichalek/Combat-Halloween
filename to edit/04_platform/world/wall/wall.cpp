@@ -75,16 +75,18 @@ void Wall::load( int type, int width, int screen_w )
 	this->width = width;
 	this->screen_w = screen_w;
 	
-	for( int i = 0; i < 5; i++ )
+	for( int i = 0; i < 6; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "wall-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
 	}
 	
-	sprites.push_back( new MySprite() );
-	sprites[ sprites.size()-1 ]->setName( "wall-sprites[5]" );
-	sprites[ sprites.size()-1 ]->load( "data/04_platform/world/" +to_string( type ) +"/15.png" );
+	sprites[ 0 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 0 ) +".png" );
+	sprites[ 1 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 1 ) +".png" );
+	sprites[ 2 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 10 ) +".png" );
+	sprites[ 3 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 11 ) +".png" );
+	sprites[ 4 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 12 ) +".png" );
+	sprites[ 5 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 2 ) +".png" );
+	
 	
 	hit.setName( "wall-hit" );
 	hit.load( "data/04_platform/world/sounds/wall/0.wav" );
