@@ -379,6 +379,7 @@ void Forest::mechanics()
 			brick->setColor( day->getColor() );
 			background->setColor( day->getColor() );
 			sun->setColor( day->getColor() );
+			sun->setAlpha( day->getAlpha() );
 			islands->setColor( day->getColor() );
 			water->setColor( day->getColor() );
 			wall->setColor( day->getColor() );

@@ -4,9 +4,9 @@
 #include "sound/sound.h"
 
 // Hero stuff
-#include "04_platform/hero/hero.h"
-#include "04_platform/hero/kunai/kunai.h"
-#include "04_platform/hero/scope/scope.h"
+#include "04_platform/ninja/ninja.h"
+#include "04_platform/ninja/kunai/kunai.h"
+#include "04_platform/ninja/scope/scope.h"
 
 // Panel stuff
 #include "04_platform/panel/heart/heart.h"
