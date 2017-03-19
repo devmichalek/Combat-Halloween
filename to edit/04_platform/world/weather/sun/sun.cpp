@@ -48,7 +48,7 @@ void Sun::draw( sf::RenderWindow* &window )
 	window->draw( *sun );
 	sun->setRotation( angle );
 	
-	angle += 0.033; // 0.001833333
+	angle +=  0.001833333; // 0.033
 	if( angle > 360 )
 		angle = 0;
 }
@@ -88,6 +88,13 @@ void Sun::setColor( sf::Color color )
 	c.g = color.g;
 	c.b = color.b;
 	
+	sun->setFillColor( c );
+}
+
+void Sun::setAlpha( int a )
+{
+	sf::Color c = sun->getFillColor();
+	c.a = a;
 	sun->setFillColor( c );
 }
 

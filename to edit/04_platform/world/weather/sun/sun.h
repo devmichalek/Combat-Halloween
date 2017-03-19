@@ -21,5 +21,6 @@ public:
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	void setColor( sf::Color color );
+	void setAlpha( int a );
 	void setStartAngle();
 };
