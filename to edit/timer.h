@@ -4,7 +4,7 @@
 
 class Timer
 {
-    Uint32 fps;
+    float fps;
     Uint32 startTicks;
     Uint32 pausedTicks;
     bool paused;
@@ -12,7 +12,8 @@ class Timer
 
 public:
 
-    Timer( Uint32 fps );
+    Timer( float fps );
+	void set( float fps );
 
     void start();
     void stop();
@@ -21,5 +22,5 @@ public:
 
     Uint32 get_ticks();
     void setFPS();
-	unsigned getFPS();
+	float getFPS();
 };

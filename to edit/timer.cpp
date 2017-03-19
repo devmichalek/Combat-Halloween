@@ -1,14 +1,21 @@
 #include "timer.h"
 
-Timer::Timer( Uint32 fps )
+Timer::Timer( float fps )
 {
     this->fps = 1000 / fps;
+	// printf( "%f\n", fps );
     startTicks = 0;
     pausedTicks = 0;
 
     paused = false;
     started = false;
 }
+
+void Timer::set( float fps )
+{
+	this->fps = 1000 / fps;
+}
+
 
 void Timer::start()
 {
@@ -75,12 +82,16 @@ void Timer::setFPS()
     if( time < fps )
         SDL_Delay( fps - time );
 	
-	// if( time > 0 )
-		// printf( "fps: %d\n", static_cast <int> (1000 /time) );
+	/*
+	if( time > 0 )
+	{
+		// printf( "%f\n", static_cast <float> (1000 /time) );
+	}
+	*/
 }
 
-unsigned Timer::getFPS()
+float Timer::getFPS()
 {
 	// printf( "%d\n", 1000 /fps );
-	return 1000 /fps;
+	return static_cast <float> (1000 /fps);
 }
