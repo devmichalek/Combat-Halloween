@@ -77,7 +77,7 @@ void Day::set( unsigned FPS )
 	colors[ colors.size() -1 ].b = 0x18;
 	colors[ colors.size() -1 ].a = 0x33;
 	
-	line = 10;
+	line = FPS;
 }
 
 void Day::setInTime()

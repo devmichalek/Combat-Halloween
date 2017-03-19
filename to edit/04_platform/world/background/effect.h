@@ -12,6 +12,7 @@ class Effect
 		FALL,
 		LIGHTNING,
 		SAND,
+		ACID,
 		nr
 	};
 	
@@ -40,4 +41,5 @@ public:
 	void runFall();
 	void runLightning();
 	void runSand();
+	void runAcid();
 };
