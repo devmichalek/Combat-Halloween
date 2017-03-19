@@ -12,7 +12,7 @@ Engine::Engine()
     core = new Core( 1000, 750, -2/*, 180*/ );
     core->load( "Ninja" );
 	
-	timer = new Timer( 200 );
+	timer = new Timer( 180 );
 	
 	loading = new Loading;
 	loading->load( core->getWidth(), core->getHeight() );
@@ -29,6 +29,7 @@ Engine::Engine()
 	forest = new Forest;
 	winter = new Winter;
 	desert = new Desert;
+	future = new Future;
 	
 	panel = new Panel_menu;
 }
@@ -50,7 +51,7 @@ void Engine::free()
 	if( forest != NULL )		delete forest;
 	if( winter != NULL )		delete winter;
 	if( desert != NULL )		delete desert;
-	
+	if( future != NULL )		delete future;
 	
 	if( gears != NULL ) 	delete gears;
 	if( panel != NULL )		delete panel;
@@ -64,18 +65,19 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
-		case 10:	intro->load( core->getWidth(), core->getHeight() );	break;
+		case 2:	intro->load( core->getWidth(), core->getHeight() );	break;
 		
-		case 20:	menu->load( core->getWidth(), core->getHeight() );	break;
+		case 10:	menu->load( core->getWidth(), core->getHeight() );	break;
 		
-		case 30:	level->load( core->getWidth(), core->getHeight() );	break;
+		case 12:	level->load( core->getWidth(), core->getHeight() );	break;
 		
-		case 35:	gears->load( core->getWidth(), core->getHeight() );	break;
+		case 14:	gears->load( core->getWidth(), core->getHeight() );	break;
 
-		case 40:	halloween->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
-		case 50:	forest->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
-		case 60:	winter->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
-		case 70:	desert->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 70:	halloween->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 71:	forest->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 72:	winter->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 73:	desert->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
+		case 74:	future->load( core->getWidth(), core->getHeight(), timer->getFPS() );	break;
 		
 		case 80:	panel->load( core->getWidth(), core->getHeight() );	break;
 		
@@ -108,6 +110,7 @@ void Engine::events()
 			case FOREST: forest->handle( core->getEvent() );		break;
 			case WINTER: winter->handle( core->getEvent() );		break;
 			case DESERT: desert->handle( core->getEvent() );		break;
+			case FUTURE: future->handle( core->getEvent() );		break;
 			case PANEL: panel->handle( core->getEvent() );			break;
 		}
     }
@@ -187,6 +190,7 @@ void Engine::states()
 			else if( gears->getState() == FOREST )		load_world( forest );
 			else if( gears->getState() == WINTER )		load_world( winter );
 			else if( gears->getState() == DESERT )		load_world( desert );
+			else if( gears->getState() == FUTURE )		load_world( future );
 		}
 		
 		if( gears->nextState() )
@@ -248,6 +252,19 @@ void Engine::states()
 	}
 	
 	
+	// future state
+	if( core->getState() == FUTURE )
+	{
+		future->draw( core->getWindow() );
+		if( future->nextState() )
+		{
+			panel->setState( core->getState() );
+			core->getState() = PANEL;
+			future->reset();
+		}
+	}
+	
+	
 	// panel state
 	if( core->getState() == PANEL )
 	{
@@ -272,6 +289,10 @@ void Engine::states()
 			else if( panel->getState() == DESERT )
 			{
 				desert->load( core->getWidth(), core->getHeight(), timer->getFPS() );
+			}
+			else if( panel->getState() == FUTURE )
+			{
+				future->load( core->getWidth(), core->getHeight(), timer->getFPS() );
 			}
 		
 			panel->reset();

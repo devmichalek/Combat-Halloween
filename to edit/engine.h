@@ -12,6 +12,7 @@
 #include "04_platform/01_forest/forest.h"
 #include "04_platform/02_winter/winter.h"
 #include "04_platform/03_desert/desert.h"
+#include "04_platform/04_future/future.h"
 
 
 #include "05_loading_world/loading_world.h"
@@ -29,6 +30,7 @@ class Engine
 		FOREST,
 		WINTER,
 		DESERT,
+		FUTURE,
 		PANEL
 	};
 	
@@ -44,6 +46,7 @@ class Engine
 	Forest* forest;
 	Winter* winter;
 	Desert* desert;
+	Future* future;
 	
 	Panel_menu* panel;
 
