@@ -14,6 +14,7 @@ Factory<F>::Factory()
 	
 	deadRect = NULL;
 	expletive = NULL;
+	lastHP = 0;
 }
 
 template <typename F>
@@ -89,6 +90,8 @@ void Factory<F>::free()
 		delete expletive;
 		expletive = NULL;
 	}
+	
+	lastHP = 0;
 }
 
 template <typename F>

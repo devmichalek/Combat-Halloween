@@ -38,6 +38,8 @@ class Factory
 	MyText hp;
 	Rect* deadRect;
 	Expletive* expletive;
+	
+	int lastHP;
 
 public:
 
