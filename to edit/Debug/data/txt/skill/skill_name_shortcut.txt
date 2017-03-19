@@ -1,4 +1,4 @@
-kunai
+shot
 sword
 stunt
 critic.

@@ -1,6 +1,6 @@
-kunai
+shot
 sword
-stunt
-critical shot
-explosive shot
-sanative shot
+stunt hit
+critical hit
+explosive hit
+sanative hit
