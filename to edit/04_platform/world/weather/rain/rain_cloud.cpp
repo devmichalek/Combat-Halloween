@@ -53,15 +53,15 @@ void Rain_cloud::create( string path, int screen_w, int screen_h )
 	cloud.setName( "rain_cloud-cloud" );
 	cloud.load( path );
 	
-	int amount = rand()%50 +50;
+	int amount = rand()%50 +20;
 	for( int i = 0; i < amount; i++ )
 	{
 		drops.push_back( new sf::ConvexShape() );
 		drops[ drops.size()-1 ]->setPointCount( 4 );
 		drops[ drops.size()-1 ]->setPoint( 0, sf::Vector2f( 0, 0 ) );
-		drops[ drops.size()-1 ]->setPoint( 1, sf::Vector2f( 1, 0 ) );
-		drops[ drops.size()-1 ]->setPoint( 2, sf::Vector2f( 1, 1 ) );
-		drops[ drops.size()-1 ]->setPoint( 3, sf::Vector2f( 0, 1 ) );
+		drops[ drops.size()-1 ]->setPoint( 1, sf::Vector2f( 2, 0 ) );
+		drops[ drops.size()-1 ]->setPoint( 2, sf::Vector2f( 2, 2 ) );
+		drops[ drops.size()-1 ]->setPoint( 3, sf::Vector2f( 0, 2 ) );
 		alphas.push_back( rand()%100 +100 );
 		drops[ drops.size()-1 ]->setFillColor( sf::Color( 0x11, 0x11, 0x11, alphas[ alphas.size() -1 ] ) );
 		drops[ drops.size()-1 ]->setScale( 1, rand()%6 +1 );
