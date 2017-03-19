@@ -122,17 +122,17 @@ void Development::load( int bot, int screen_h )
 	level.setName( "development-level" );
 	level.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 255, 255, 255 );
 	level.setText( "Level" );
-	level.setPosition( skill.getRight() +240, our_bot );
+	level.setPosition( skill.getRight() +265, our_bot );
 	
 	value.setName( "development-value" );
 	value.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 255, 255, 255 );
 	value.setText( "Value" );
-	value.setPosition( level.getRight() +30, our_bot );
+	value.setPosition( level.getRight() +85, our_bot );
 	
 	upgrade.setName( "development-upgrade" );
 	upgrade.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 255, 255, 255 );
 	upgrade.setText( "Upgrade/Cost" );
-	upgrade.setPosition( value.getRight() +140, our_bot );
+	upgrade.setPosition( value.getRight() +110, our_bot );
 	
 	bank_text.setName( "development-bank_text" );
 	bank_text.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );

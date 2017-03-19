@@ -11,7 +11,7 @@
 
 #include <vector>
 #include "02_menu/development/develop.h"
-#include "04_platform/hero/kunai/damage.h"
+#include "04_platform/ninja/kunai/damage.h"
 
 class Development
 {
