@@ -1,4 +1,4 @@
-##Introduction
+## Introduction
 
 Work in progress... </br>
 "Future" as a new world [last edition - 18.03.2017] <br/>
