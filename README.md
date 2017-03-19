@@ -1,5 +1,5 @@
-##Introduction
+## Introduction
 
 Work in progress... </br>
-When the Sun goes down [last edition - 12.03.2017] <br/>
-[![yt](https://cloud.githubusercontent.com/assets/19840443/23770932/5f923882-0515-11e7-934f-ef6003e8f2e9.png)](https://youtu.be/ePd5hBHz6CY)
+"Future" as a new world [last edition - 18.03.2017] <br/>
+[![yt](https://cloud.githubusercontent.com/assets/19840443/24084949/b76697a2-0cf3-11e7-838b-5cc481660af0.gif)](https://www.youtube.com/watch?v=f67etUUwpWU&feature=youtu.be)
