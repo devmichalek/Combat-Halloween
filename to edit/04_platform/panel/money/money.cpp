@@ -64,7 +64,7 @@ void Money::load( int screen_w )
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
 	text.setName( "money_panel-text" );
-	text.setFont( "data/04_platform/panel/coin/Silver Age Queens.ttf", 28, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 28, 0xD9, 0xD9, 0xD9 );
 
 	setText();
 }
