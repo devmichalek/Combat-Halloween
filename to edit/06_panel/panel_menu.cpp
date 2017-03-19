@@ -27,9 +27,15 @@ Panel_menu::~Panel_menu()
 void Panel_menu::free()
 {
 	sound.free();
-	delete bg;
-	delete replay_button;
-	delete backtomenu_panel;
+	
+	if( bg != NULL )
+		delete bg;
+		
+	if( replay_button != NULL )
+		delete replay_button;
+	
+	if( backtomenu_panel != NULL )
+		delete backtomenu_panel;
 }
 
 void Panel_menu::reset()
