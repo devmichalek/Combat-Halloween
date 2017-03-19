@@ -12,11 +12,11 @@
 #include "02_menu/click.h"
 #include "drawable/text.h"
 #include "drawable/sprite.h"
+#include <vector>
 
 class Character :public Click
 {
-	MySprite one;
-	MySprite two;
+	vector <MySprite*> sprites;
 	
 	MyText text;
 	MyText information;
