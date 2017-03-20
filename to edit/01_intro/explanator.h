@@ -13,6 +13,9 @@ class Explanator
 	int state;
 	int screen_w;
 	
+	int counter;
+	int line;
+	
 public:
 	
 	Explanator();

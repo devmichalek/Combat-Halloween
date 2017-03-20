@@ -19,6 +19,9 @@ void Explanator::free()
 	vel = 0;
 	state = 0;
 	screen_w = 0;
+	
+	counter = 0;
+	line = 0;
 }
 
 
@@ -38,6 +41,8 @@ void Explanator::load( string str, int screen_w )
 	bg.setName( "explanator-bg" );
 	bg.create( text.getWidth() +5, text.getHeight() +7 );
 	bg.setColor( sf::Color( 0, 0, 0 ) );
+	
+	line = 140;
 }
 
 void Explanator::draw( sf::RenderWindow &window )
@@ -49,7 +54,23 @@ void Explanator::draw( sf::RenderWindow &window )
 		{
 			alpha = 0xFF;
 		}
-		
+	}
+	else
+	{
+		alpha -= vel;
+		if( alpha <= 0 )
+		{
+			alpha = 0;
+		}
+	}
+	
+	if( counter > 0 )
+	{
+		counter ++;
+	}
+	
+	if( alpha > 0 )
+	{
 		bg.setAlpha( alpha );
 		window.draw( bg.get() );
 		
@@ -61,13 +82,25 @@ void Explanator::draw( sf::RenderWindow &window )
 
 void Explanator::run()
 {
-	state = 1;
-	alpha = 0;
+	if( counter == 0 )
+	{
+		counter = 1;
+		state = 1;
+		alpha = 0;
+	}
 }
 
 void Explanator::stop()
 {
-	state = 0;
+	if( counter >= line )
+	{
+		if( alpha == 0 )
+		{
+			counter = 0;
+		}
+		
+		state = 0;
+	}
 }
 
 void Explanator::focus( int x, int y )
@@ -89,6 +122,8 @@ void Explanator::focus( int x, int y )
 
 void Explanator::fadeout( int i, int min )
 {
+	state = 0;
+	alpha = 0;
 	bg.fadeout( i, min );
 	text.fadeout( i, min );
 }
