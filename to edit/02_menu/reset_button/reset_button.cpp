@@ -40,7 +40,7 @@ void Reset_button::free()
 
 void Reset_button::load( int screen_w, int screen_h )
 {
-	explanator.load( "Reset all data irretrievably", screen_w );
+	explanator.load( "Reset all hero experience", screen_w );
 	
 	button.setName( "reset_button-button" );
     button.load( "data/02_menu/reset.png", 4 );
