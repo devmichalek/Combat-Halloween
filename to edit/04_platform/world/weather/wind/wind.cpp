@@ -13,6 +13,8 @@ Wind::~Wind()
 
 void Wind::free()
 {
+	screen_w = 0;
+	screen_h = 0;
 	scope = 0;
 	
 	if( !ways.empty() )
