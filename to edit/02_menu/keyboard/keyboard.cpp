@@ -541,13 +541,14 @@ void Keyboard::handleButton( sf::Event &event )
 		if( save_button.checkCollision( x, y ) )
 		{
 			fstream file;
-			file.open( "data/txt/menu/keyboard_temporary.txt", std::ios::out );
-			
+			file.open( "data/txt/keyboard/keyboard_temporary.txt", std::ios::out );
+			printf( "happend\n" );
 			for( unsigned i = 0; i < actual_keys.size(); i++ )
 			{
 				file << to_string( actual_keys[ i ]->one ) + "\n";
 				file << to_string( actual_keys[ i ]->two ) + "\n";
 			}
+			file.close();
 			
 			save_button.setOffset( 2 );
 			focus = true;
