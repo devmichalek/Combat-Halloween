@@ -41,6 +41,16 @@ void Character::free()
 		sprites.clear();
 	}
 	
+	if( !texts.empty() )
+	{
+		for( auto &it :texts )
+		{
+			it->free();
+		}
+		
+		texts.clear();
+	}
+	
 	text.free();
 	information.free();
 	
@@ -61,15 +71,24 @@ void Character::free()
 
 void Character::reset( int screen_w, int screen_h )
 {
-	sprites[ 0 ]->setPosition( screen_w +screen_w/4 -sprites[ 0 ]->getWidth()/2 -10, screen_h /4 -40 );
-	sprites[ 1 ]->setPosition( screen_w +screen_w /2 -sprites[ 1 ]->getWidth()/2, screen_h /4 -40 );
-	sprites[ 2 ]->setPosition( screen_w +screen_w/4 *3 -sprites[ 2 ]->getWidth()/2 +10, screen_h /4 -40 );
+	int w = screen_w /3;
 	
-	sprites[ 3 ]->setPosition( screen_w +screen_w/4 -sprites[ 0 ]->getWidth()/2 -10, screen_h /3 *2 -30 );
-	sprites[ 4 ]->setPosition( screen_w +screen_w /2 -sprites[ 1 ]->getWidth()/2, screen_h /3 *2 -30 );
-	sprites[ 5 ]->setPosition( screen_w +screen_w /4 *3 -sprites[ 5 ]->getWidth()/2 +10, screen_h /3 *2 -30 ); // RUDA <3
+	sprites[ 0 ]->setPosition( screen_w +30, screen_h /5 -25 );
+	sprites[ 1 ]->setPosition( screen_w +w +25, screen_h /5 -25 );
+	sprites[ 2 ]->setPosition( screen_w +w *2 +20, screen_h /5 -40 );
 	
-	text.center( screen_w, 100, screen_w );
+	sprites[ 3 ]->setPosition( screen_w +10, screen_h /2 +30 );
+	sprites[ 4 ]->setPosition( screen_w +w +5, screen_h /2 +30 );
+	sprites[ 5 ]->setPosition( screen_w +w *2, screen_h /2 +15 ); // RUDA <3
+	
+	texts[ 0 ]->setPosition( sprites[ 0 ]->getX() -5, sprites[ 0 ]->getBot() +5 );
+	texts[ 1 ]->setPosition( sprites[ 1 ]->getX() +13, sprites[ 1 ]->getBot() +5 );
+	texts[ 2 ]->setPosition( sprites[ 2 ]->getX() +4, sprites[ 2 ]->getBot() +5 );
+	texts[ 3 ]->setPosition( sprites[ 3 ]->getX() +55, sprites[ 3 ]->getBot() +5 );
+	texts[ 4 ]->setPosition( sprites[ 4 ]->getX() +35, sprites[ 4 ]->getBot() +5 );
+	texts[ 5 ]->setPosition( sprites[ 5 ]->getX() +20, sprites[ 5 ]->getBot() +5 );
+	
+	text.center( screen_w, 90, screen_w );
 	information.setPosition( screen_w + 10, screen_h - information.getHeight() - 10 );
 }
 
@@ -84,7 +103,18 @@ void Character::load( int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "character-sprite nr" +to_string( i ) );
 		sprites[ sprites.size() -1 ]->load( "data/03_level/hero" +to_string( i ) +".png", 10 );
+		
+		texts.push_back( new MyText() );
+		texts[ texts.size() -1 ]->setName( "character-texts nr" +to_string( i ) );
+		texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	}
+	
+	texts[ 0 ]->setText( "adventure" );
+	texts[ 1 ]->setText( "military" );
+	texts[ 2 ]->setText( "phantom" );
+	texts[ 3 ]->setText( "girl" );
+	texts[ 4 ]->setText( "faded" );
+	texts[ 5 ]->setText( "powerful" );
 	
 	
 	click.setID( "character-click" );
@@ -116,6 +146,11 @@ void Character::draw( sf::RenderWindow* &window )
 		window->draw( it->get() );
 	}
 	
+	for( auto &it :texts )
+	{
+		window->draw( it->get() );
+	}
+	
 	offset ++;
 	if( offset == how_many *delay )
 	{
@@ -142,15 +177,17 @@ void Character::handle( sf::Event &event )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 			
-			for( auto &it :sprites )
+			for( unsigned i = 0; i < sprites.size(); i++ )
 			{
-				if( it->checkCollision( x, y ) )
+				if( sprites[ i ]->checkCollision( x, y ) )
 				{
-					it->setAlpha( 0xFF );
+					texts[ i ]->setAlpha( 0xFF );
+					sprites[ i ]->setAlpha( 0xFF );
 				}
 				else
 				{
-					it->setAlpha( alpha_line );
+					texts[ i ]->setAlpha( alpha_line );
+					sprites[ i ]->setAlpha( alpha_line );
 				}
 			}
 		}
@@ -186,6 +223,11 @@ void Character::fadein( int j, int max )
 		it->fadein( j, alpha_line );
 	}
 	
+	for( auto &it :texts )
+	{
+		it->fadein( j, alpha_line );
+	}
+	
 	if( ready == 0 )
 	{
 		if( sprites[ 0 ]->getAlpha() == alpha_line )
@@ -201,6 +243,11 @@ void Character::fadein( int j, int max )
 void Character::fadeout( int j, int min )
 {
 	for( auto &it :sprites )
+	{
+		it->fadeout( j, min );
+	}
+	
+	for( auto &it :texts )
 	{
 		it->fadeout( j, min );
 	}
@@ -241,6 +288,11 @@ bool Character::move( int vel, int scope )
 		information.setPosition( information.getX() +vel, information.getY() );
 		
 		for( auto &it :sprites )
+		{
+			it->setPosition( it->getX() +vel, it->getY() );
+		}
+		
+		for( auto &it :texts )
 		{
 			it->setPosition( it->getX() +vel, it->getY() );
 		}

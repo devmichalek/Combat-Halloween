@@ -1,6 +1,6 @@
 /**
     character.h
-    Purpose: class Character - shows 2 animations in level state and allow to choose what of them, then game starts.
+    Purpose: class Character - shows animated characters in level state and allow to choose one of them, then game starts.
 
     @author Adrian Michalek
     @version 2016.12.06
@@ -16,6 +16,7 @@
 
 class Character :public Click
 {
+	vector <MyText*> texts;
 	vector <MySprite*> sprites;
 	
 	MyText text;
