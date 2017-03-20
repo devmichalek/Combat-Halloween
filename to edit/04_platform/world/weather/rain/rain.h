@@ -1,14 +1,17 @@
 #pragma once
 
-#include "04_platform/world/weather/rain/rain_cloud.h"
+#include "drawable/sprite.h"
+#include <cstdint>
 #include <vector>
 
 class Rain
 {
 	int screen_w;
 	int screen_h;
+	int scope;
 	
-	vector <Rain_cloud*> clouds;
+	vector <int16_t> alphas;
+	vector <sf::ConvexShape*> drops;
 	
 public:
 	
@@ -24,6 +27,4 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	void mechanics();
-	void moveX( sf::Uint8 direction, float vel );
-	void undoFall( sf::Uint8 add );
 };
