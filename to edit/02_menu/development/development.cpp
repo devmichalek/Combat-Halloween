@@ -136,7 +136,7 @@ void Development::load( int bot, int screen_h )
 	
 	bank_text.setName( "development-bank_text" );
 	bank_text.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
-	bank_text.setText( "Bank: " );
+	bank_text.setText( "Wallet: " );
 	bank_text.setPosition( 10, screen_h -40 );
 	
 	money.setName( "development-money" );
