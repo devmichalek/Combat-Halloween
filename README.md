@@ -1,5 +1,5 @@
 ## Introduction
 
-Work in progress... </br>
-"Future" as a new world - click me [last edition - 18.03.2017] <br/>
-[![yt](https://cloud.githubusercontent.com/assets/19840443/24084949/b76697a2-0cf3-11e7-838b-5cc481660af0.gif)](https://www.youtube.com/watch?v=f67etUUwpWU&feature=youtu.be)
+Work in progress... [18.03.2017] </br>
+
+[![click](https://cloud.githubusercontent.com/assets/19840443/24120363/a21ffa0c-0db4-11e7-9153-d1653ea78379.png)](https://youtu.be/K3Ha4Fy4nYc)
