@@ -4,6 +4,7 @@ Forest::Forest()
 {
 	state = 0;
 	info = "";
+	music = new Music;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -48,6 +49,7 @@ void Forest::free()
 	screen_h = 0;
 	
 	sound.free();
+	delete music;
 	
 	delete hero;
 	delete kunai;
@@ -79,6 +81,7 @@ void Forest::free()
 void Forest::reset()
 {
 	state = 0;
+	reloadMusic();
 	
 	hero->reset( screen_h );
 	hero->setKeys();
@@ -157,6 +160,9 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	mine_factory->load( width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_wood" );
 	fireball->load( FPS, screen_w );
+	
+	music->setID( "forest-music" );
+	music->load( "data/04_platform/world/2/music.mp3", 50 );
 }
 
 void Forest::handle( sf::Event &event )
@@ -166,10 +172,17 @@ void Forest::handle( sf::Event &event )
 
 void Forest::draw( sf::RenderWindow* &window )
 {
+	if( sound.getMusicPlay() )
+	{
+		music->play();
+	}
+	
 	mechanics();
 	
 	if( hero->isDead() )
 	{
+		music->fadeout( 1, 0 );
+		
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
@@ -197,6 +210,8 @@ void Forest::draw( sf::RenderWindow* &window )
 	}
 	else
 	{
+		music->fadein( 1, sound.getMusicVolume() );
+		
 		sf::Uint8 value = 2;
 		hero->fadein( value );
 		kunai->fadein( value );
@@ -347,7 +362,10 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
-		info = "done";	break;
+		info = "loading music";	break;
+		
+		case 22: setSound();	reloadMusic();	break;
+		info = "done";
 		
 		default:
 		return true;
@@ -379,4 +397,28 @@ bool Forest::nextState()
 bool Forest::backToLevel()
 {
 	return false;
+}
+
+void Forest::setSound()
+{
+	// Set chunks
+	/*
+	if( !sound.getChunkPlay() )
+	{
+		backtomenu->turnOff();
+		choice->turnOff();
+		cube->turnOff();
+	}
+	*/
+	
+	// Set music volume
+	music->setVolume( sound.getMusicVolume() );
+	
+	// Set chunk volume
+}
+
+void Forest::reloadMusic()
+{
+	music->reload();
+	Mix_HaltMusic();
 }

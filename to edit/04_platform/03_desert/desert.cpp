@@ -4,6 +4,7 @@ Desert::Desert()
 {
 	state = 0;
 	info = "";
+	music = new Music;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -47,6 +48,7 @@ void Desert::free()
 	screen_h = 0;
 	
 	sound.free();
+	delete music;
 	
 	delete hero;
 	delete kunai;
@@ -77,6 +79,7 @@ void Desert::free()
 void Desert::reset()
 {
 	state = 0;
+	reloadMusic();
 	
 	hero->reset( screen_h );
 	hero->setKeys();
@@ -151,6 +154,9 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	mine_factory->load( width, screen_w, screen_h );
 	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
 	fireball->load( FPS, screen_w );
+	
+	music->setID( "forest-music" );
+	music->load( "data/04_platform/world/3/music.mp3", 50 );
 }
 
 void Desert::handle( sf::Event &event )
@@ -160,10 +166,17 @@ void Desert::handle( sf::Event &event )
 
 void Desert::draw( sf::RenderWindow* &window )
 {
+	if( sound.getMusicPlay() )
+	{
+		music->play();
+	}
+	
 	mechanics();
 	
 	if( hero->isDead() )
 	{
+		music->fadeout( 1, 0 );
+		
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
@@ -190,6 +203,8 @@ void Desert::draw( sf::RenderWindow* &window )
 	}
 	else
 	{
+		music->fadein( 1, sound.getMusicVolume() );
+		
 		sf::Uint8 value = 2;
 		hero->fadein( value );
 		kunai->fadein( value );
@@ -336,7 +351,10 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
-		info = "done";	break;
+		info = "loading world";	break;
+		
+		case 22: setSound();	reloadMusic();	break;
+		info = "done";
 		
 		default:
 		return true;
@@ -368,4 +386,28 @@ bool Desert::nextState()
 bool Desert::backToLevel()
 {
 	return false;
+}
+
+void Desert::setSound()
+{
+	// Set chunks
+	/*
+	if( !sound.getChunkPlay() )
+	{
+		backtomenu->turnOff();
+		choice->turnOff();
+		cube->turnOff();
+	}
+	*/
+	
+	// Set music volume
+	music->setVolume( sound.getMusicVolume() );
+	
+	// Set chunk volume
+}
+
+void Desert::reloadMusic()
+{
+	music->reload();
+	Mix_HaltMusic();
 }

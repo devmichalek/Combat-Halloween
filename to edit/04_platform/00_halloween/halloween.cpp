@@ -4,6 +4,7 @@ Halloween::Halloween()
 {
 	state = 0;
 	info = "";
+	music = new Music;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -46,6 +47,7 @@ void Halloween::free()
 	screen_h = 0;
 	
 	sound.free();
+	delete music;
 	
 	delete hero;
 	delete kunai;
@@ -76,6 +78,7 @@ void Halloween::free()
 void Halloween::reset()
 {
 	state = 0;
+	reloadMusic();
 	
 	hero->reset( screen_h );
 	hero->setKeys();
@@ -135,6 +138,9 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
 	zombie_factory.load( width, screen_w, screen_h, "zombie" );
 	lightning->load( FPS );
+	
+	music->setID( "forest-music" );
+	music->load( "data/04_platform/world/0/music.mp3", 50 );
 }
 
 void Halloween::handle( sf::Event &event )
@@ -144,10 +150,17 @@ void Halloween::handle( sf::Event &event )
 
 void Halloween::draw( sf::RenderWindow* &window )
 {
+	if( sound.getMusicPlay() )
+	{
+		music->play();
+	}
+	
 	mechanics();
 	
 	if( hero->isDead() )
 	{
+		music->fadeout( 1, 0 );
+		
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
@@ -175,6 +188,8 @@ void Halloween::draw( sf::RenderWindow* &window )
 	}
 	else
 	{
+		music->fadein( 1, sound.getMusicVolume() );
+		
 		sf::Uint8 value = 2;
 		hero->fadein( value );
 		kunai->fadein( value );
@@ -326,7 +341,10 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
-		info = "done";	break;
+		info = "loading world";	break;
+		
+		case 22: setSound();	reloadMusic();	break;
+		info = "done";
 		
 		default:
 		return true;
@@ -358,4 +376,28 @@ bool Halloween::nextState()
 bool Halloween::backToLevel()
 {
 	return false;
+}
+
+void Halloween::setSound()
+{
+	// Set chunks
+	/*
+	if( !sound.getChunkPlay() )
+	{
+		backtomenu->turnOff();
+		choice->turnOff();
+		cube->turnOff();
+	}
+	*/
+	
+	// Set music volume
+	music->setVolume( sound.getMusicVolume() );
+	
+	// Set chunk volume
+}
+
+void Halloween::reloadMusic()
+{
+	music->reload();
+	Mix_HaltMusic();
 }

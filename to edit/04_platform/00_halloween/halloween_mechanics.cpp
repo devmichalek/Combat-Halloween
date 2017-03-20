@@ -232,7 +232,6 @@ void Halloween::mechanics()
 			wall->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
-			rain->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			vampire_factory.moveX( hero->getDirection(), scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), scope->getVel() );
@@ -249,7 +248,6 @@ void Halloween::mechanics()
 			wall->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
-			rain->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			vampire_factory.moveX( hero->getDirection(), -scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), -scope->getVel() );
@@ -290,7 +288,6 @@ void Halloween::mechanics()
 			wall->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
-			rain->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			vampire_factory.undoFall( brick->getGrassValue() );
 			zombie_factory.undoFall( brick->getGrassValue() );

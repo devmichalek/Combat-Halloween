@@ -2,6 +2,7 @@
 
 // Sound
 #include "sound/sound.h"
+#include "sound/music.h"
 
 // Hero stuff
 #include "04_platform/ninja/ninja.h"
@@ -46,6 +47,7 @@ class Desert
 	
 	// sound
 	Sound sound;
+	Music* music;
 	
 	// hero
 	Hero* hero;
@@ -94,4 +96,7 @@ public:
 	bool nextState();
 	bool backToLevel();
 	void mechanics();
+	
+	void setSound();
+	void reloadMusic();
 };

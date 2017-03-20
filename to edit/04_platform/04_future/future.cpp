@@ -4,6 +4,7 @@ Future::Future()
 {
 	state = 0;
 	info = "";
+	music = new Music;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -44,6 +45,7 @@ void Future::free()
 	screen_h = 0;
 	
 	sound.free();
+	delete music;
 	
 	delete hero;
 	delete kunai;
@@ -70,6 +72,7 @@ void Future::free()
 void Future::reset()
 {
 	state = 0;
+	music->halt();
 	
 	hero->reset( screen_h );
 	hero->setKeys();
@@ -121,6 +124,9 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	ladder->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
+	
+	music->setID( "future-music" );
+	music->load( "data/04_platform/world/4/music.mp3", 50 );
 }
 
 void Future::handle( sf::Event &event )
@@ -130,10 +136,17 @@ void Future::handle( sf::Event &event )
 
 void Future::draw( sf::RenderWindow* &window )
 {
+	if( sound.getMusicPlay() )
+	{
+		music->play();
+	}
+	
 	mechanics();
 	
 	if( hero->isDead() )
 	{
+		music->fadeout( 1, 0 );
+		
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
@@ -157,6 +170,8 @@ void Future::draw( sf::RenderWindow* &window )
 	}
 	else
 	{
+		music->fadein( 1, sound.getMusicVolume() );
+		
 		sf::Uint8 value = 2;
 		hero->fadein( value );
 		kunai->fadein( value );
@@ -297,7 +312,10 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
-		info = "done";	break;
+		info = "loading music";	break;
+		
+		case 22: setSound();	reloadMusic();	break;
+		info = "done";
 		
 		default:
 		return true;
@@ -329,4 +347,28 @@ bool Future::nextState()
 bool Future::backToLevel()
 {
 	return false;
+}
+
+void Future::setSound()
+{
+	// Set chunks
+	/*
+	if( !sound.getChunkPlay() )
+	{
+		backtomenu->turnOff();
+		choice->turnOff();
+		cube->turnOff();
+	}
+	*/
+	
+	// Set music volume
+	music->setVolume( sound.getMusicVolume() );
+	
+	// Set chunk volume
+}
+
+void Future::reloadMusic()
+{
+	music->reload();
+	Mix_HaltMusic();
 }

@@ -221,7 +221,6 @@ void Winter::mechanics()
 			wall->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
-			snow->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
@@ -238,7 +237,6 @@ void Winter::mechanics()
 			wall->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
-			snow->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
@@ -279,7 +277,6 @@ void Winter::mechanics()
 			wall->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
-			snow->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
