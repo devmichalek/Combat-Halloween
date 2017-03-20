@@ -12,7 +12,7 @@ Engine::Engine()
     core = new Core( 1000, 750, -2/*, 180*/ );
     core->load( "Ninja" );
 	
-	timer = new Timer( 180 );
+	timer = new Timer( 220 );
 	
 	loading = new Loading;
 	loading->load( core->getWidth(), core->getHeight() );
