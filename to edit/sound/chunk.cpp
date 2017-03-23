@@ -46,7 +46,6 @@ void Chunk::setID( std::string name )
 }
 
 
-#ifdef __linux__
 void Chunk::load( std::string path, int volume )
 {
     free();
@@ -79,7 +78,7 @@ void Chunk::load( std::string path, int volume )
 	}
 }
 
-#elif _WIN32
+/*
 void Chunk::setColor( int i )
 {
 	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
@@ -129,7 +128,7 @@ void Chunk::load( std::string path, int volume )
 		std::cerr << msg << std::endl;
 	}
 }
-#endif
+*/
 
 
 void Chunk::play()

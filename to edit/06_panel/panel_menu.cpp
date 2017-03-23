@@ -113,3 +113,33 @@ bool Panel_menu::backToPlatform()
 {
 	return replay_button->nextState();
 }
+
+
+
+void Panel_menu::setSound()
+{
+	// Set chunks
+	if( !sound.getChunkPlay() )
+	{
+		replay_button->turnOff();
+		backtomenu_panel->turnOff();
+	}
+	else
+	{
+		replay_button->turnOn();
+		backtomenu_panel->turnOn();
+		
+		// Set chunk volume
+		replay_button->setVolume( sound.getChunkVolume() );
+		backtomenu_panel->setVolume( sound.getChunkVolume() );
+	}
+	
+	// Set music volume
+	// music->setVolume( sound.getMusicVolume() );
+}
+
+void Panel_menu::reloadMusic()
+{
+	// music->reload();
+	// Mix_HaltMusic();
+}

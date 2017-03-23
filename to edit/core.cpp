@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <SDL2/SDL_mixer.h>
 
-#ifdef __linux__
 Core::Core( unsigned w, unsigned h, int state/*, int FPS*/ )
 {
 	this->state = state;
@@ -25,7 +24,6 @@ Core::Core( unsigned w, unsigned h, int state/*, int FPS*/ )
 
     window = NULL;
 }
-#endif
 
 Core::~Core()
 {

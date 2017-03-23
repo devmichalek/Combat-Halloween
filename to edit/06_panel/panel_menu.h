@@ -38,4 +38,7 @@ public:
 	
 	bool backToMenu();
 	bool backToPlatform();
+	
+	void setSound();
+	void reloadMusic();
 };

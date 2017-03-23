@@ -47,7 +47,6 @@ void Music::setID( std::string name )
 }
 
 
-#ifdef __linux__
 void Music::load( std::string path, int volume )
 {
     free();
@@ -114,7 +113,7 @@ void Music::reload()
 	}
 }
 
-#elif _WIN32
+/*
 void Music::setColor( int i )
 {
 	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
@@ -164,7 +163,7 @@ void Music::load( std::string path, int volume )
 		std::cerr << msg << std::endl;
 	}
 }
-#endif
+*/
 
 
 void Music::play()

@@ -83,7 +83,6 @@ void MySprite::free()
 
 
 
-#ifdef __linux__
 void MySprite::load( string path, int nr )
 {
     free();
@@ -241,7 +240,6 @@ void MySprite::create( int w, int h )
 		cerr << msg << endl;
 	}
 }
-#endif
 
 
 

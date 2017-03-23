@@ -152,6 +152,7 @@ void Engine::states()
 			core->getState() = LEVEL;
 			
 			menu->reloadMusic();
+			level->loadCharacter();
 			level->setSound();
 			level->reloadMusic();
 		}
@@ -207,6 +208,8 @@ void Engine::states()
 		if( halloween->nextState() )
 		{
 			panel->setState( core->getState() );
+			panel->setSound();
+			panel->reloadMusic();
 			core->getState() = PANEL;
 			halloween->reset();
 		}
@@ -220,6 +223,8 @@ void Engine::states()
 		if( forest->nextState() )
 		{
 			panel->setState( core->getState() );
+			panel->setSound();
+			panel->reloadMusic();
 			core->getState() = PANEL;
 			forest->reset();
 		}
@@ -233,6 +238,8 @@ void Engine::states()
 		if( winter->nextState() )
 		{
 			panel->setState( core->getState() );
+			panel->setSound();
+			panel->reloadMusic();
 			core->getState() = PANEL;
 			winter->reset();
 		}
@@ -246,6 +253,8 @@ void Engine::states()
 		if( desert->nextState() )
 		{
 			panel->setState( core->getState() );
+			panel->setSound();
+			panel->reloadMusic();
 			core->getState() = PANEL;
 			desert->reset();
 		}
@@ -259,6 +268,8 @@ void Engine::states()
 		if( future->nextState() )
 		{
 			panel->setState( core->getState() );
+			panel->setSound();
+			panel->reloadMusic();
 			core->getState() = PANEL;
 			future->reset();
 		}

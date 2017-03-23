@@ -65,7 +65,6 @@ void MyText::free()
 
 
 
-#ifdef __linux__
 void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
 {
 	if( font != NULL )
@@ -129,7 +128,7 @@ void MyText::setText( string line )
 	}
 }
 
-#elif _WIN32
+/*
 void MyText::setColor( int i )
 {
 	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
@@ -180,8 +179,7 @@ void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8
 	
 	this->color = sf::Color( r, g, b, 0 );
 }
-#endif
-
+*/
 
 
 void MyText::fadein( int v, int max )
