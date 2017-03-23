@@ -16,6 +16,8 @@
 
 class Character :public Click
 {
+	MySprite tick, cross;
+	vector <bool> unlocked;
 	vector <MyText*> texts;
 	vector <MySprite*> sprites;
 	

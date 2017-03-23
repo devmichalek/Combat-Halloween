@@ -39,6 +39,7 @@ public:
     void free();
 	
     void load( unsigned screen_w, unsigned screen_h );
+	void loadCharacter();
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	

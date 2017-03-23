@@ -10,6 +10,7 @@
 #include "choice.h"
 #include <time.h>
 #include <cstdlib>
+#include <fstream>
 
 Choice::Choice()
 {
@@ -31,6 +32,13 @@ Choice::~Choice()
 
 void Choice::free()
 {
+	tick.free();
+	cross.free();
+	if( !unlocked.empty() )
+	{
+		unlocked.clear();
+	}
+	
 	if( !world.empty() )
 	{
 		for( auto &it :world )
@@ -117,6 +125,30 @@ void Choice::load( int screen_w, int screen_h )
 	alpha_line = 100;
 	counter_line = 150;
 	
+	tick.setName( "choice-tick" );
+	tick.load( "data/03_level/tick.png" );
+	
+	cross.setName( "choice-cross" );
+	cross.load( "data/03_level/x.png" );
+	
+	// load unlocked worlds
+	fstream file;
+	file.open( "data/txt/world/world_temporary.txt" );
+	if( file.bad() )
+	{
+		printf( "Something went wrong with file\n" );
+	}
+	else
+	{
+		string line;
+		while( file >> line )
+		{
+			// printf( "%d\n", stoi( line ) );
+			unlocked.push_back( static_cast <bool> (stoi( line )) );
+		}
+	}
+	file.close();
+	
 	reset( screen_w, screen_h );
 }
 
@@ -145,7 +177,7 @@ void Choice::handle( sf::Event &event )
 			
 			for( unsigned i = 0; i < world.size(); i++ )
 			{
-				if( world[ i ]->checkCollision( x, y ) )
+				if( world[ i ]->checkCollision( x, y ) && unlocked[ i ] )
 				{
 					chosen = i;
 				}
@@ -178,7 +210,7 @@ void Choice::handle( sf::Event &event )
 			
 			for( unsigned i = 0; i < world.size(); i++ )
 			{
-				if( world[ i ]->checkCollision( x, y ) )
+				if( world[ i ]->checkCollision( x, y ) && unlocked[ i ] )
 				{
 					if( play )
 					{
@@ -204,9 +236,22 @@ void Choice::handle( sf::Event &event )
 
 void Choice::draw( sf::RenderWindow &window )
 {
-	for( auto &it :world )
+	for( unsigned i = 0; i < world.size(); i++ )
 	{
-		window.draw( it->get() );
+		if( unlocked[ i ] )
+		{
+			tick.setAlpha( world[ i ]->getAlpha() );
+			tick.setPosition( world[ i ]->getX() -tick.getWidth()/2 +world[ i ]->getWidth()/2, world[ i ]->getBot() +5 );
+			window.draw( tick.get() );
+		}
+		else
+		{
+			cross.setAlpha( world[ i ]->getAlpha() );
+			cross.setPosition( world[ i ]->getX() -cross.getWidth()/2 +world[ i ]->getWidth()/2, world[ i ]->getBot() +5 );
+			window.draw( cross.get() );
+		}
+		
+		window.draw( world[ i ]->get() );
 	}
 	
 	for( auto &it :description )
@@ -241,6 +286,10 @@ void Choice::draw( sf::RenderWindow &window )
 		if( counter %7 == 0 )
 		{
 			result = rand()%(world.size());
+			while( !unlocked[ result ] )
+			{
+				result = rand()%(world.size());
+			}
 		}
 		
 		counter ++;
@@ -253,6 +302,8 @@ void Choice::draw( sf::RenderWindow &window )
 
 void Choice::fadein( int j, int max )
 {
+	tick.fadein( j, alpha_line );
+	cross.fadein( j, alpha_line );
 	frame.fadein( j, max );
 	text.fadein( j, max );
 	button.fadein( j, max );
@@ -271,6 +322,8 @@ void Choice::fadein( int j, int max )
 
 void Choice::fadeout( int j, int min )
 {
+	tick.fadeout( j, min );
+	cross.fadeout( j, min );
 	text.fadeout( j, min );
 	button.fadeout( j, min );
 	information.fadeout( j, min );

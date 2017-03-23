@@ -51,9 +51,14 @@ void Level::load( unsigned screen_w, unsigned screen_h )
 	music->load( "data/03_level/music.mp3" );
 	backtomenu->load( screen_w );
 	choice->load( screen_w, screen_h );
-	character->load( screen_w, screen_h );
+	
 	cube->load( choice->getLeft(), choice->getBot() );
 	difficulty->load( cube->getRight(), cube->getTop() );
+}
+
+void Level::loadCharacter()
+{
+	character->load( screen_w, screen_h );
 }
 
 void Level::handle( sf::Event &event )
@@ -81,7 +86,7 @@ void Level::draw( sf::RenderWindow* &window )
 	{
 		music->play();
 	}
-		
+	
 	
 	if( backtomenu->getState() == 0 )
 	{
@@ -99,11 +104,11 @@ void Level::draw( sf::RenderWindow* &window )
 	
 	
 	window->draw( background->get() );
-	backtomenu->draw( *window );
 	choice->draw( *window );
 	cube->draw( *window );
 	difficulty->draw( *window );
 	character->draw( window );
+	backtomenu->draw( *window );
 	
 	if( backtomenu->getState() == 0 )
 	{
@@ -185,18 +190,28 @@ void Level::setSound()
 	{
 		backtomenu->turnOff();
 		choice->turnOff();
+		character->turnOff();
 		cube->turnOff();
+		difficulty->turnOff();
+	}
+	else
+	{
+		backtomenu->turnOn();
+		choice->turnOn();
+		character->turnOn();
+		cube->turnOn();
+		difficulty->turnOn();
+		
+		// Set chunk volume
+		backtomenu->setVolume( sound.getChunkVolume() );
+		choice->setVolume( sound.getChunkVolume() );
+		character->setVolume( sound.getChunkVolume() );
+		cube->setVolume( sound.getChunkVolume() );
+		difficulty->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume
 	music->setVolume( sound.getMusicVolume() );
-	
-	// Set chunk volume
-	backtomenu->setVolume( sound.getChunkVolume() );
-	choice->setVolume( sound.getChunkVolume() );
-	character->setVolume( sound.getChunkVolume() );
-	cube->setVolume( sound.getChunkVolume() );
-	difficulty->setVolume( sound.getChunkVolume() );
 }
 	
 bool Level::isQuit()

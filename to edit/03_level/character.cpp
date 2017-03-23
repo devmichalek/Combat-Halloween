@@ -8,6 +8,7 @@
 */
 
 #include "character.h"
+#include <fstream>
 
 Character::Character()
 {
@@ -31,6 +32,13 @@ Character::~Character()
 
 void Character::free()
 {
+	tick.free();
+	cross.free();
+	if( !unlocked.empty() )
+	{
+		unlocked.clear();
+	}
+	
 	if( !sprites.empty() )
 	{
 		for( auto &it :sprites )
@@ -71,15 +79,17 @@ void Character::free()
 
 void Character::reset( int screen_w, int screen_h )
 {
-	int w = screen_w /3;
+	int w = 110;
+	int distance = ((sprites[ 0 ]->getWidth()*3) +(w*2)) /2;
+	int distance2 = ((sprites[ sprites.size() -1 ]->getWidth()*3) +(w*2)) /2;
 	
-	sprites[ 0 ]->setPosition( screen_w +30, screen_h /5 -25 );
-	sprites[ 1 ]->setPosition( screen_w +w +25, screen_h /5 -25 );
-	sprites[ 2 ]->setPosition( screen_w +w *2 +20, screen_h /5 -40 );
+	sprites[ 0 ]->setPosition( screen_w +screen_w /2 -distance, screen_h /5 -25 );
+	sprites[ 1 ]->setPosition( sprites[ 0 ]->getRight() +w, screen_h /5 -25 );
+	sprites[ 2 ]->setPosition( sprites[ 1 ]->getRight() +w, screen_h /5 -25 );
 	
-	sprites[ 3 ]->setPosition( screen_w +10, screen_h /2 +30 );
-	sprites[ 4 ]->setPosition( screen_w +w +5, screen_h /2 +30 );
-	sprites[ 5 ]->setPosition( screen_w +w *2, screen_h /2 +15 ); // RUDA <3
+	sprites[ 3 ]->setPosition( screen_w +screen_w /2 -distance2, screen_h /2 +30 );
+	sprites[ 4 ]->setPosition( sprites[ 3 ]->getRight() +w, screen_h /2 +30 );
+	sprites[ 5 ]->setPosition( sprites[ 4 ]->getRight() +w, screen_h /2 +30 ); // RUDA <3
 	
 	texts[ 0 ]->setPosition( sprites[ 0 ]->getX() -5, sprites[ 0 ]->getBot() +5 );
 	texts[ 1 ]->setPosition( sprites[ 1 ]->getX() +13, sprites[ 1 ]->getBot() +5 );
@@ -136,14 +146,50 @@ void Character::load( int screen_w, int screen_h )
 	delay = 8;
 	alpha_line = 100;
 	
+	tick.setName( "choice-tick" );
+	tick.load( "data/03_level/tick.png" );
+	
+	cross.setName( "choice-cross" );
+	cross.load( "data/03_level/x.png" );
+	
+	// load unlocked worlds
+	fstream file;
+	file.open( "data/txt/character/character_temporary.txt" );
+	if( file.bad() )
+	{
+		printf( "Something went wrong with file\n" );
+	}
+	else
+	{
+		string line;
+		while( file >> line )
+		{
+			// printf( "%d\n", stoi( line ) );
+			unlocked.push_back( static_cast <bool> (stoi( line )) );
+		}
+	}
+	file.close();
+	
 	reset( screen_w, screen_h );
 }
 
 void Character::draw( sf::RenderWindow* &window )
 {
-	for( auto &it :sprites )
+	for( unsigned i = 0; i < sprites.size(); i++ )
 	{
-		window->draw( it->get() );
+		if( unlocked[ i ] )
+		{
+			tick.setAlpha( sprites[ i ]->getAlpha() );
+			tick.setPosition( texts[ i ]->getX() -tick.getWidth() -10, sprites[ i ]->getBot() +5 );
+			window->draw( tick.get() );
+		}
+		else
+		{
+			cross.setPosition( texts[ i ]->getX() -cross.getWidth() -10, sprites[ i ]->getBot() +5 );
+			window->draw( cross.get() );
+		}
+		
+		window->draw( sprites[ i ]->get() );
 	}
 	
 	for( auto &it :texts )
@@ -179,7 +225,7 @@ void Character::handle( sf::Event &event )
 			
 			for( unsigned i = 0; i < sprites.size(); i++ )
 			{
-				if( sprites[ i ]->checkCollision( x, y ) )
+				if( sprites[ i ]->checkCollision( x, y ) && unlocked[ i ] )
 				{
 					texts[ i ]->setAlpha( 0xFF );
 					sprites[ i ]->setAlpha( 0xFF );
@@ -199,7 +245,7 @@ void Character::handle( sf::Event &event )
 			
 			for( unsigned i = 0; i < sprites.size(); i++ )
 			{
-				if( sprites[ i ]->checkCollision( x, y ) )
+				if( sprites[ i ]->checkCollision( x, y ) && unlocked[ i ] )
 				{
 					ready = 2;
 					result = i;
@@ -218,6 +264,9 @@ void Character::handle( sf::Event &event )
 
 void Character::fadein( int j, int max )
 {
+	tick.fadein( j, alpha_line );
+	cross.fadein( j, alpha_line );
+	
 	for( auto &it :sprites )
 	{
 		it->fadein( j, alpha_line );
@@ -242,6 +291,9 @@ void Character::fadein( int j, int max )
 
 void Character::fadeout( int j, int min )
 {
+	tick.fadeout( j, min );
+	cross.fadeout( j, min );
+	
 	for( auto &it :sprites )
 	{
 		it->fadeout( j, min );

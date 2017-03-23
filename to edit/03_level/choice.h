@@ -16,6 +16,8 @@
 
 class Choice :public Click
 {
+	MySprite tick, cross;
+	vector <bool> unlocked;
 	vector <MySprite*> world;
 	
 	MySprite frame;		// frame around focused sprite
