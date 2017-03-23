@@ -183,7 +183,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	delay = 7;
 	
 	// Set other values
-	vel = 1.1;
+	vel = 1.25;
 	grav = 1;
 	if( type == 1 || type == 4 )
 	{
