@@ -235,6 +235,7 @@ sf::Uint8 Brick::getNewFloor( sf::Uint8 floor, int chance )
 
 void Brick::createTopBorders( int size, int chance, int w, int h )
 {
+	// printf( "%d\n", blocks.size() );
 	// Set first block.
 	blocks.push_back( new Block() );
 	blocks[ blocks.size()-1 ]->nr = 4;

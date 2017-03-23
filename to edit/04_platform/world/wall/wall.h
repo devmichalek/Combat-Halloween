@@ -44,4 +44,9 @@ public:
 	// Damage
 	int getDamage();
 	int getFallDamage();
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

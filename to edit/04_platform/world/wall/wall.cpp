@@ -87,9 +87,14 @@ void Wall::load( int type, int width, int screen_w )
 	sprites[ 4 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 12 ) +".png" );
 	sprites[ 5 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 2 ) +".png" );
 	
+	int n = 0;
+	if( type == 4 )
+	{
+		n = 1;
+	}
 	
 	hit.setName( "wall-hit" );
-	hit.load( "data/04_platform/world/sounds/wall/0.wav" );
+	hit.load( "data/04_platform/world/sounds/wall/" +to_string( n ) +".wav" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )
@@ -295,4 +300,21 @@ int Wall::getDamage()
 int Wall::getFallDamage()
 {
 	return damage *2;
+}
+
+
+
+void Wall::turnOn()
+{
+	hit.turnOn();
+}
+
+void Wall::turnOff()
+{
+	hit.turnOff();
+}
+
+void Wall::setVolume( int v )
+{
+	hit.setVolume( v );
 }
