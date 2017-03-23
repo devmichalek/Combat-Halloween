@@ -236,6 +236,39 @@ bool Reset_button::doReset()
 		}
 		file.close();
 		
+		vector <int> character_values;
+		path = "data/txt/character/character_default.txt";
+		file.open( path );
+		if( file.bad() )
+		{
+			printf( "Cannot open file %s\n", path.c_str() );
+		}
+		else
+		{
+			string line;
+			while( file >> line )
+			{
+				character_values.push_back( stoi( line ) );
+			}
+		}
+		file.close();
+		
+		path = "data/txt/character/character_temporary.txt";
+		file.open( path, std::ios::out );
+		if( file.bad() )
+		{
+			printf( "Cannot open file %s\n", path.c_str() );
+		}
+		else
+		{
+			for( auto &it :character_values )
+			{
+				file << to_string( it ) << "\n";
+			}
+		}
+		file.close();
+		character_values.clear();
+		
 		return true;
 	}
 	

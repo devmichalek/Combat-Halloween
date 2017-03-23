@@ -39,7 +39,7 @@ void Loading::load( unsigned screen_w, unsigned screen_h )
 	
 	text.setName( "loading-text" );
 	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 255, 255, 255 );
-	text.setText( "Loading " + to_string( state ) + "%"  );
+	text.setText( ("Loading " + to_string( state ) + "%")  );
 	text.setAlpha( 0xFF );
 	text.center( screen_w, screen_h );
 

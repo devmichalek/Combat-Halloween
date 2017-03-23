@@ -155,15 +155,15 @@ void Develop::load( int main_x, int nr, int bot )
 	// Positions.
 	name.setPosition( main_x, bot );
 	sprite.setScale( 0.5, 0.5 );
-	sprite.setPosition( main_x +225, bot -10 );
-	label.setPosition( sprite.getRight() +60, bot );
-	actual.setPosition( sprite.getRight() +160, bot );
-	name_base.setPosition( sprite.getRight() +270, bot );
+	sprite.setPosition( main_x -sprite.getWidth() -10, bot -10 );
+	label.setPosition( main_x +230, bot );
+	actual.setPosition( label.getRight() +100, bot );
+	name_base.setPosition( actual.getRight() +90, bot );
 	
 	button.setOffset( 3 );
 	button.setScale( 0.8, 0.8 );
-	button.setPosition( sprite.getRight() +405, bot -10 );
-	cost_text.setPosition( sprite.getRight() +505, bot );
+	button.setPosition( label.getRight() +430, bot -10 );
+	cost_text.setPosition( label.getRight() +530, bot );
 }
 
 void Develop::draw( sf::RenderWindow* &window )

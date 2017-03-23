@@ -20,8 +20,9 @@
 #include "sound/music.h"
 #include "keyboard/information.h"
 #include "keyboard/keyboard.h"
-#include "development/development.h"
+#include "development/developdeck.h"
 #include "reset_button/reset_button.h"
+#include "development/headdeck.h"
 
 class Menu
 {
@@ -63,6 +64,7 @@ class Menu
 	Keyboard* keyboard;
 	
 	Development* development;
+	Headdeck* headdeck;
 	
 	Reset_button* reset_button;
 	

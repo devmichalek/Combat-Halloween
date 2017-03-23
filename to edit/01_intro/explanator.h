@@ -15,6 +15,7 @@ class Explanator
 	
 	int counter;
 	int line;
+	int alpha_line;
 	
 public:
 	

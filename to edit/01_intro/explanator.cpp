@@ -22,6 +22,7 @@ void Explanator::free()
 	
 	counter = 0;
 	line = 0;
+	alpha_line = 0;
 }
 
 
@@ -43,6 +44,7 @@ void Explanator::load( string str, int screen_w )
 	bg.setColor( sf::Color( 0, 0, 0 ) );
 	
 	line = 140;
+	alpha_line = 100;
 }
 
 void Explanator::draw( sf::RenderWindow &window )
@@ -50,9 +52,9 @@ void Explanator::draw( sf::RenderWindow &window )
 	if( state > 1 )
 	{
 		alpha += vel;
-		if( alpha >= 0xFF )
+		if( alpha >= alpha_line )
 		{
-			alpha = 0xFF;
+			alpha = alpha_line;
 		}
 	}
 	else

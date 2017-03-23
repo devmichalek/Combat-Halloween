@@ -49,6 +49,7 @@ Menu::Menu()
 	keyboard = new Keyboard;
 	
 	development = new Development;
+	headdeck = new Headdeck;
 	
 	reset_button = new Reset_button;
 }
@@ -82,6 +83,7 @@ void Menu::free()
 	delete information;
 	delete keyboard;
 	delete development;
+	delete headdeck;
 	delete reset_button;
 }
 
@@ -142,7 +144,7 @@ void Menu::load( int screen_w, int screen_h )
 	// simple text on the right
 	version->setName( "menu-version-text" );
 	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 20.03.2017" );
+	version->setText( "latest edition 23.03.2017" );
 	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	
 	// information (keyboard) and keyboard
@@ -150,6 +152,7 @@ void Menu::load( int screen_w, int screen_h )
 	keyboard->load( 100, music_volume->getRight(), screen_h/2 + 100, screen_w, screen_h );
 	
 	development->load( title->getBot() +140, screen_h );
+	headdeck->load( title->getBot() +110, screen_h );
 	
 	reset_button->load( screen_w, screen_h );
 	
@@ -167,6 +170,7 @@ void Menu::load( int screen_w, int screen_h )
 	exit->setVolume( chunk_volume->getVolume() );
 	keyboard->setVolume( chunk_volume->getVolume() );
 	development->setVolume( chunk_volume->getVolume() );
+	headdeck->setVolume( chunk_volume->getVolume() );
 	reset_button->setVolume( chunk_volume->getVolume() );
 }
 
@@ -215,6 +219,11 @@ void Menu::handle( sf::Event &event )
 			{
 				development->handle( event );
 			}
+			
+			if( author_log->getState() )
+			{
+				headdeck->handle( event );
+			}
 				
 			if( settings_log->getState() )
 			{
@@ -257,6 +266,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->turn();
 		keyboard->turn();
 		development->turn();
+		headdeck->turn();
 		reset_button->turn();
 		sound.setChunkPlay( !sound.getChunkPlay() );
 	}
@@ -284,6 +294,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_volume->setVolume( chunk_volume->getVolume() );
 		keyboard->setVolume( chunk_volume->getVolume() );
 		development->setVolume( chunk_volume->getVolume() );
+		headdeck->setVolume( chunk_volume->getVolume() );
 		reset_button->setVolume( chunk_volume->getVolume() );
 		sound.setChunkVolume( chunk_volume->getVolume() );
 	}
@@ -316,6 +327,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadein( value );
 		information->fadein( value );
 		development->fadein( value );
+		headdeck->fadein( value );
 		reset_button->fadein( value );
 	}
 	
@@ -344,6 +356,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( value );
 		information->fadeout( value );
 		development->fadeout( value );
+		headdeck->fadeout( value );
 		reset_button->fadeout( value );
 	}
 	else if( exit->getState() == 1 || reset_button->getState() == 1 ) // if user clicked exit
@@ -370,6 +383,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( value, alpha );
 		information->fadeout( value, alpha );
 		development->fadeout( value, alpha );
+		headdeck->fadeout( value, alpha );
 		reset_button->fadeout( value, alpha );
 	}
 	else
@@ -396,6 +410,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		keyboard->fadeout( value );
 		information->fadeout( value );
 		development->fadeout( value );
+		headdeck->fadeout( value );
 		reset_button->fadeout( value );
 		if( background->getAlpha() == 0 )
 		{
@@ -464,6 +479,11 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		development->draw( window );
 	}
+	
+	if( author_log->getState() )
+	{
+		headdeck->draw( window );
+	}
 			
 		
 	if( exit->getState() < 2 )
@@ -476,6 +496,16 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( reset_button->doReset() )
 	{
 		development->reloadTxt();
+		headdeck->reloadText();
+	}
+	
+	if( development->isChange() )
+	{
+		headdeck->setWallet( development->getWallet() );
+	}
+	else if( headdeck->isChange() )
+	{
+		development->setWallet( headdeck->getWallet() );
 	}
 }
 
