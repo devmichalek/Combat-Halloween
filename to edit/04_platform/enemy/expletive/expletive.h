@@ -20,4 +20,9 @@ public:
 	void load( string name );
 	void playHits();
 	void playAttacks();
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

@@ -42,4 +42,9 @@ public:
 	int strToInt( string s );
 	int getMoney();
 	bool upliftMoney( Rect* rect );
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

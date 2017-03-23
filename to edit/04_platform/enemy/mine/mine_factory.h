@@ -46,4 +46,9 @@ public:
 	void setColor( sf::Color color );
 	
 	int getDamage();
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

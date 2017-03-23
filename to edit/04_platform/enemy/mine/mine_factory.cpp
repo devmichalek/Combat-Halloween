@@ -262,3 +262,21 @@ int Mine_factory::getDamage()
 {
 	return damage;
 }
+
+void Mine_factory::turnOn()
+{
+	ticktock.turnOn();
+	explosion.turnOn();
+}
+
+void Mine_factory::turnOff()
+{
+	ticktock.turnOff();
+	explosion.turnOff();
+}
+
+void Mine_factory::setVolume( int v )
+{
+	ticktock.setVolume( v );
+	explosion.setVolume( v );
+}

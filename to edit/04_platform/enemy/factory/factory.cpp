@@ -620,6 +620,23 @@ void Factory<F>::setColor( sf::Color color )
 	}
 }
 
+template <typename F>
+void Factory<F>::turnOn()
+{
+	expletive->turnOn();
+}
+
+template <typename F>
+void Factory<F>::turnOff()
+{
+	expletive->turnOff();
+}
+
+template <typename F>
+void Factory<F>::setVolume( int v )
+{
+	expletive->setVolume( v );
+}
 
 
 template class Factory <Skeleton>;

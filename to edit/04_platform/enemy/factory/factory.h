@@ -79,4 +79,9 @@ public:
 	void undoFall( sf::Uint8 add );
 	void mechanics();
 	void setColor( sf::Color color );
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

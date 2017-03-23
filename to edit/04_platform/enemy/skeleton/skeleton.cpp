@@ -19,6 +19,7 @@ void Skeleton::free()
 	counter = 0;
 	if( !line.empty() )
 	{
+		// printf( "happen %d\n", line[ 0 ] );
 		line.clear();
 	}
 	

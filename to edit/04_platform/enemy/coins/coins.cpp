@@ -329,3 +329,44 @@ bool Coins::upliftMoney( Rect* rect )
 	
 	return false;
 }
+
+
+
+void Coins::turnOn()
+{
+	for( auto &it :dropped_coins )
+	{
+		it->turnOn();
+	}
+	
+	for( auto &it :jumped_coins )
+	{
+		it->turnOn();
+	}
+}
+
+void Coins::turnOff()
+{
+	for( auto &it :dropped_coins )
+	{
+		it->turnOff();
+	}
+	
+	for( auto &it :jumped_coins )
+	{
+		it->turnOff();
+	}
+}
+
+void Coins::setVolume( int v )
+{
+	for( auto &it :dropped_coins )
+	{
+		it->setVolume( v );
+	}
+	
+	for( auto &it :jumped_coins )
+	{
+		it->setVolume( v );
+	}
+}

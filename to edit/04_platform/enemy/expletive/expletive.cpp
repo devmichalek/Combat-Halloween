@@ -120,3 +120,44 @@ void Expletive::playAttacks()
 		}
 	}
 }
+
+
+
+void Expletive::turnOn()
+{
+	for( auto &it :hits )
+	{
+		it->turnOn();
+	}
+	
+	for( auto &it :attacks )
+	{
+		it->turnOn();
+	}
+}
+
+void Expletive::turnOff()
+{
+	for( auto &it :hits )
+	{
+		it->turnOff();
+	}
+	
+	for( auto &it :attacks )
+	{
+		it->turnOff();
+	}
+}
+
+void Expletive::setVolume( int v )
+{
+	for( auto &it :hits )
+	{
+		it->setVolume( v );
+	}
+	
+	for( auto &it :attacks )
+	{
+		it->setVolume( v );
+	}
+}
