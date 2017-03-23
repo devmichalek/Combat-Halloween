@@ -381,19 +381,32 @@ bool Halloween::backToLevel()
 void Halloween::setSound()
 {
 	// Set chunks
-	/*
 	if( !sound.getChunkPlay() )
 	{
-		backtomenu->turnOff();
-		choice->turnOff();
-		cube->turnOff();
+		wall->turnOff();
+		coins->turnOff();
+		mine_factory->turnOff();
+		vampire_factory.turnOff();
+		zombie_factory.turnOff();
 	}
-	*/
+	else
+	{
+		wall->turnOn();
+		coins->turnOn();
+		mine_factory->turnOn();
+		vampire_factory.turnOn();
+		zombie_factory.turnOn();
+		
+		// Set chunk volume
+		wall->setVolume( sound.getChunkVolume() );
+		coins->setVolume( sound.getChunkVolume() );
+		mine_factory->setVolume( sound.getChunkVolume() );
+		vampire_factory.setVolume( sound.getChunkVolume() );
+		zombie_factory.setVolume( sound.getChunkVolume() );
+	}
 	
 	// Set music volume
 	music->setVolume( sound.getMusicVolume() );
-	
-	// Set chunk volume
 }
 
 void Halloween::reloadMusic()
