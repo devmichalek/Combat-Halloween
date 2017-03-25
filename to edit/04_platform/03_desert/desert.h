@@ -33,6 +33,7 @@
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/skeleton/skeleton.h"
+#include "04_platform/enemy/snakes/snakes_factory.h"
 #include "04_platform/enemy/checkActivity/fireball/fireball.h"
 
 class Desert
@@ -76,6 +77,7 @@ class Desert
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Skeleton> skeleton_factory;
+	Snakes_factory* snakes_factory;
 	Fireball* fireball;
 	
 	

@@ -31,6 +31,7 @@ Desert::Desert()
 	wind = new Wind;
 	
 	mine_factory = new Mine_factory;
+	snakes_factory = new Snakes_factory;
 	fireball = new Fireball;
 }
 
@@ -73,6 +74,7 @@ void Desert::free()
 	
 	delete mine_factory;
 	skeleton_factory.free();
+	delete snakes_factory;
 	delete fireball;
 }
 
@@ -104,6 +106,7 @@ void Desert::reset()
 	
 	mine_factory->reset( distance );
 	skeleton_factory.reset( distance );
+	snakes_factory->reset( distance );
 	fireball->reset();
 	
 	// Set color
@@ -120,6 +123,7 @@ void Desert::reset()
 	
 	mine_factory->setColor( day->getColor() );
 	skeleton_factory.setColor( day->getColor() );
+	snakes_factory->setColor( day->getColor() );
 }
 
 
@@ -153,6 +157,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	
 	mine_factory->load( width, screen_w, screen_h );
 	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
+	snakes_factory->load( width, screen_w, screen_h );
 	fireball->load( FPS, screen_w );
 	
 	music->setID( "forest-music" );
@@ -199,6 +204,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadeout( value );
 		skeleton_factory.fadeout( value );
+		snakes_factory->fadeout( value );
 		fireball->fadeout( value );
 	}
 	else
@@ -224,6 +230,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadein( value );
 		skeleton_factory.fadein( value );
+		snakes_factory->fadein( value );
 		fireball->fadein( value );
 	}
 	
@@ -242,6 +249,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	// enemy
 	mine_factory->draw( window );
 	skeleton_factory.draw( window );
+	snakes_factory->draw( window );
 	fireball->draw( window );
 	
 	// rest
@@ -348,12 +356,16 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 20: skeleton_factory.positioning( brick->getBlocks(), difficulty );
 				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
+		info = "creating snakes factory";	break;
+		
+		case 21: snakes_factory->positioning( brick->getBlocks(), difficulty );
+				 snakes_factory->positioning( islands->getBlocks(), difficulty );
 		info = "setting money multiplier";	break;
 		
-		case 21: coins->setChance( difficulty );
+		case 22: coins->setChance( difficulty );
 		info = "loading world";	break;
 		
-		case 22: setSound();	reloadMusic();	break;
+		case 23: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:

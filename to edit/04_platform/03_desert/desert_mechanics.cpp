@@ -130,6 +130,7 @@ void Desert::mechanics()
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
 		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		snakes_factory->harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -199,6 +200,16 @@ void Desert::mechanics()
 			
 			kunai->destroy( i );
 		}
+		else if( snakes_factory->harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+		{
+			if( kunai->isHealKunai( i ) )
+			{
+				showheal->run( kunai->getDamage( i ) );
+				heart->harm( kunai->getDamage( i ) );
+			}
+			
+			kunai->destroy( i );
+		}
 	}
 	
 	
@@ -221,6 +232,7 @@ void Desert::mechanics()
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
+			snakes_factory->moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			wind->moveX( hero->getDirection(), scope->getVel() );
@@ -237,6 +249,7 @@ void Desert::mechanics()
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
+			snakes_factory->moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			wind->moveX( hero->getDirection(), -scope->getVel() );
@@ -279,6 +292,7 @@ void Desert::mechanics()
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			skeleton_factory.undoFall( brick->getGrassValue() );
+			snakes_factory->undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
 			wind->undoFall( brick->getGrassValue() );
@@ -321,6 +335,14 @@ void Desert::mechanics()
 			effect->runBlood();
 		}
 		
+		// HARM BY SNAKES
+		if( snakes_factory->harmSomebody( hero->getRect() ) )
+		{
+			heart->harm( -snakes_factory->getDamage() );
+			showdamage->run( to_string( -snakes_factory->getDamage() ) );
+			effect->runBlood();
+		}
+		
 		// HARM BY FIREBALL
 		if( fireball->harmSomebody( hero->getRect() ) )
 		{
@@ -344,6 +366,7 @@ void Desert::mechanics()
 		wall->mechanics();
 		mine_factory->mechanics();
 		skeleton_factory.mechanics();
+		snakes_factory->mechanics();
 		coins->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
 		skills->mechanics();
@@ -391,6 +414,7 @@ void Desert::mechanics()
 		
 		mine_factory->setColor( day->getColor() );
 		skeleton_factory.setColor( day->getColor() );
+		snakes_factory->setColor( day->getColor() );
 	}
 	
 // ------------------------------------------------------------------------------------------------
@@ -401,8 +425,15 @@ void Desert::mechanics()
 	skeleton_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
+	// SNAKES PART
+	
+	snakes_factory->appear( hero->getX() );
+	snakes_factory->ableAttack( hero->getRect() );
+	
+// ------------------------------------------------------------------------------------------------
 	// COINS
 	coins->setCoin( skeleton_factory.getDeadRect() );
+	coins->setCoin( snakes_factory->getDeadRect() );
 	
 	if( coins->upliftMoney( hero->getRect() ) )
 	{
