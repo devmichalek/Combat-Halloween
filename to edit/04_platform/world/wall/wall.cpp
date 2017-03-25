@@ -103,7 +103,7 @@ void Wall::draw( sf::RenderWindow* &window )
 	{
 		for( unsigned j = 0; j < it->getSize(); j++ )
 		{
-			if( it->getX(j) > -width*2 && it->getX(j) < screen_w +width*2 )
+			if( it->getX(j) > -width*2 && it->getX(j) < screen_w )
 			{
 				sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
 				window->draw( sprites[ it->getNr(j) ]->get() );
@@ -245,7 +245,7 @@ bool Wall::harm( Rect* rect )
 			{
 				for( unsigned j = 0; j < it->getSize(); j++ )
 				{
-					if( it->getX(j) > -width*2 && it->getX(j) < screen_w +width*2 )
+					if( it->getX(j) > -width*2 && it->getX(j) < screen_w )
 					{
 						if( hit.isPlayable() )
 						{
@@ -277,7 +277,7 @@ bool Wall::checkCollision( Rect* rect )
 		{
 			for( unsigned j = 0; j < it->getSize(); j++ )
 			{
-				if( it->getX(j) > -width*2 && it->getX(j) < screen_w +width*2 )
+				if( it->getX(j) > -width*2 && it->getX(j) < screen_w )
 				{
 					sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
 					if( sprites[ it->getNr(j) ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
