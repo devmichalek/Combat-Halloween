@@ -22,16 +22,19 @@ void Snakes::free()
 		line.clear();
 	}
 	
+	alpha_state = 0;
+	alpha = 0xFF;
+	
 	hp = 0;
 	hp_state = 0;
-	
-	damage = 0;
 	
 	xScale = yScale = 0;
 	
 	attack = 0;
 	attack_line = 0;
 	attack_count = 0;
+	
+	left = 0;
 	
 	if( !x.empty() )
 	{
@@ -76,6 +79,8 @@ void Snakes::reset( int distance )
 	state = APPEAR -1;
 	offset = 0;
 	counter = 0;
+	alpha_state = 0;
+	alpha = 0xFF;
 	hp = hp_state;
 	attack = 0;
 	attack_count = 0;
@@ -114,11 +119,6 @@ void Snakes::setDelay( sf::Uint8 delay )
 	this->delay = delay;
 }
 
-void Snakes::setDamage( sf::Uint8 damage )
-{
-	this->damage = damage;
-}
-
 void Snakes::setHeartPoints( int hp )
 {
 	this->hp = hp;
@@ -137,22 +137,46 @@ void Snakes::setScale( float xScale, float yScale )
 	this->yScale = yScale;
 }
 
+void Snakes::setLeft( float x )
+{
+	left = x;
+}
+
 void Snakes::setDead()
 {
 	offset = 0;
 	state = DEAD;
 }
 
+void Snakes::setAlphaState( sf::Uint8 s )
+{
+	alpha_state = s;
+}
+
+void Snakes::setAlpha( sf::Uint8 a )
+{
+	alpha = a;
+}
 
 
 
 float Snakes::getX()
 {
+	if( state == DEAD )
+	{
+		return x[ IDLE ];
+	}
+	
 	return x[ state ];
 }
 
 float Snakes::getY()
 {
+	if( state == DEAD )
+	{
+		return y[ IDLE ];
+	}
+	
 	return y[ state ];
 }
 
@@ -160,17 +184,17 @@ float Snakes::getY()
 
 float Snakes::getRealX()
 {
-	return x[ 0 ] +20*yScale;
+	return x[ 0 ];
 }
 
 float Snakes::getRealY()
 {
-	return y[ 0 ] -25*yScale;
+	return y[ 0 ];
 }
 
 float Snakes::getRealWidth()
 {
-	return width[ 1 ] -60*yScale;
+	return width[ 0 ];
 }
 
 float Snakes::getRealHeight()
@@ -187,12 +211,12 @@ float Snakes::getAttackX()
 
 float Snakes::getAttackY()
 {
-	return y[ ATTACK ] +height[ ATTACK ]/3;
+	return y[ ATTACK ];
 }
 
 int Snakes::getAttackWidth()
 {
-	return width[ APPEAR ] *0.70;
+	return width[ APPEAR ] *0.5;
 }
 
 int Snakes::getAttackHeight()
@@ -200,10 +224,35 @@ int Snakes::getAttackHeight()
 	return height[ APPEAR ]/2;
 }
 
+int Snakes::getPlane()
+{
+	return y[ 0 ] +height[ 0 ];
+}
+
+sf::Uint8 Snakes::getAlpha()
+{
+	return alpha;
+}
+
+bool Snakes::alphaAble()
+{
+	if( alpha_state == 0 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 
 
 int8_t Snakes::getState()
 {
+	if( state == DEAD )
+	{
+		return IDLE;
+	}
+	
 	return state;
 }
 
@@ -211,20 +260,17 @@ sf::Uint8 Snakes::getOffset()
 {
 	if( state == DEAD )
 	{
-		return offset /delay;
+		if( offset >= line[ IDLE ]*delay )
+		{
+			offset = 0;
+		}
 	}
-	
-	if( offset >= line[ state ]*delay )
+	else if( offset >= line[ state ]*delay )
 	{
 		offset = 0;
 	}
 	
 	return offset /delay;
-}
-
-sf::Uint8 Snakes::getDamage()
-{
-	return damage;
 }
 
 float Snakes::getHorizontalScale()
@@ -249,7 +295,7 @@ int Snakes::getHeartPoints()
 
 bool Snakes::isAlive()
 {
-	if( state > APPEAR -1 && state < DEAD +1 )
+	if( state >= APPEAR && state <= DEAD )
 	{
 		return true;
 	}
@@ -261,12 +307,7 @@ bool Snakes::harmSomebody()
 {
 	if( state == ATTACK )
 	{
-		if( offset /delay == 4 && attack_count < 1 )
-		{
-			attack_count++;
-			return true;
-		}
-		else if( offset /delay == 7 && attack_count < 2 )
+		if( offset /delay == 1 && attack_count < 1 )
 		{
 			attack_count++;
 			return true;
@@ -280,17 +321,12 @@ bool Snakes::harmSomebody()
 
 
 
-void Snakes::appear( Rect* rect )
+void Snakes::appear( float x )
 {
-	if( state == APPEAR -1 && rect != NULL )
+	if( state == APPEAR -1 )
 	{
-		if( rect->getX() > x[ 0 ] && rect->getX() + rect->getWidth() < x[ 0 ] +width[ 0 ] )
+		if( x >= left )
 		{
-			if( xScale > 0 )
-			{
-				xScale = -xScale;
-			}
-				
 			state = APPEAR;
 		}
 	}
@@ -298,38 +334,44 @@ void Snakes::appear( Rect* rect )
 
 void Snakes::mechanics()
 {
-	if( state > APPEAR -1 && state < DEAD +1 )
+	if( state >= APPEAR && state <= DEAD )
 	{
 		offset ++;
-		if( offset == line[ state ]*delay )
+		
+		int8_t s;
+		if( state != DEAD )	s = state;
+		else				s = IDLE;
+		
+		if( offset == line[ s ]*delay )
 		{
 			attack ++;
 			attack_count = 0;
 			state = IDLE;	// reset
 			offset = 0;
 		}
-			
-		if( state == APPEAR )
-		{
-			if( offset == 0 )
-			{
-				state = IDLE;
-			}
-		}
-		else if( state == IDLE )
+	}
+	
+	if( state == APPEAR )
+	{
+		if( offset == 0 )
 		{
 			state = IDLE;
-			if( offset >= line[ state ]*delay )
-			{
-				offset = 0;
-			}
 		}
-		else if( state == DEAD )
+	}
+	else if( state == IDLE )
+	{
+		if( offset >= line[ state ]*delay )
 		{
-			if( offset == line[ state ]*delay -1 )
-			{
-				state = DEAD +1;
-			}
+			offset = 0;
+		}
+	}
+	else if( state == DEAD )
+	{
+		if( alpha > 5 )
+			alpha -= 4;
+		if( offset == line[ IDLE ]*delay -1 )
+		{
+			state = DEAD +1;
 		}
 	}
 }
@@ -346,6 +388,8 @@ void Snakes::ableAttack()
 
 void Snakes::moveX( float vel )
 {
+	left += vel;
+	
 	for( auto &it :x )
 	{
 		it += vel;

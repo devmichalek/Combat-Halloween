@@ -24,13 +24,13 @@ protected:
 	sf::Uint8 counter;
 	vector <sf::Uint8> line;
 	
+	// alpha
+	sf::Uint8 alpha_state;
+	sf::Uint8 alpha;
 	
 	// heart points
 	int hp;
 	int hp_state;
-	
-	// damage
-	sf::Uint8 damage;
 	
 	// scale
 	float xScale, yScale;
@@ -40,6 +40,7 @@ protected:
 	sf::Uint8 attack_line;
 	sf::Uint8 attack_count;
 	
+	float left;
 	vector <float> y;
 	vector <float> x;
 	vector <int> width;
@@ -59,11 +60,13 @@ public:
 	void setWidth( vector <int> width );
 	void setHeight( vector <int> height );
 	void setDelay( sf::Uint8 delay );
-	void setDamage( sf::Uint8 damage );
 	void setHeartPoints( int hp );
 	void setAttackLine( sf::Uint8 attack_line );
 	void setScale( float xScale, float yScale );
+	void setLeft( float x );
 	void setDead();
+	void setAlphaState( sf::Uint8 s );
+	void setAlpha( sf::Uint8 a );
 	
 	
 	// Getters.
@@ -79,10 +82,13 @@ public:
 	float getAttackY();
 	int getAttackWidth();
 	int getAttackHeight();
+	int getPlane();
+	sf::Uint8 getAlpha();
+	bool alphaAble();
+	
 	
 	int8_t getState();
 	sf::Uint8 getOffset();
-	sf::Uint8 getDamage();
 	float getHorizontalScale();
 	float getVerticalScale();
 	int getHeartPoints();
@@ -91,7 +97,7 @@ public:
 	
 	
 	// Activity.
-	void appear( Rect* rect );
+	void appear( float x );
 	void mechanics();
 	void ableAttack();
 	void moveX( float vel );
