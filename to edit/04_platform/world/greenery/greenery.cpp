@@ -187,7 +187,7 @@ void Greenery::draw_bg( sf::RenderWindow* &window )
 	{
 		if( it->bg )
 		{
-			if( it->x > -width*3 && it->x < screen_w +width*3 )
+			if( it->x > -width*3 && it->x < screen_w )
 			{
 				sprites[ it->nr -min ]->setPosition( it->x, it->y );
 				window->draw( sprites[ it->nr -min ]->get() );
