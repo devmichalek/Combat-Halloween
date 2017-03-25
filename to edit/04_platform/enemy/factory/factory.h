@@ -36,7 +36,7 @@ class Factory
 	vector <float> features;
 	
 	MyText hp;
-	Rect* deadRect;
+	Rect* deadRect;	// For coins.
 	Expletive* expletive;
 	
 	int lastHP;

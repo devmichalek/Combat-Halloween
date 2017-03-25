@@ -3,6 +3,7 @@
 #include "04_platform/enemy/golem/golem.h"
 #include "04_platform/enemy/vampire/vampire.h"
 #include "04_platform/enemy/zombie/zombie.h"
+#include "04_platform/enemy/robot/robot.h"
 #include <fstream>
 
 template <typename F>
@@ -395,6 +396,12 @@ void Factory<F>::add( int x, int y, int chance )
 	foes[ foes.size() -1 ]->setDamage( features[ DAMAGE ] +static_cast <float> (chance) /100 *features[ DAMAGE ] );
 	foes[ foes.size() -1 ]->setHeartPoints( features[ HP ] +static_cast <float> (chance) /100 *features[ HP ] );
 	foes[ foes.size() -1 ]->setAttackLine( rand()%2 +features[ AL ] );
+	
+	myX.clear();
+	myX2.clear();
+	myY.clear();
+	widths.clear();
+	heights.clear();
 }
 
 template <typename F>
@@ -496,7 +503,6 @@ void Factory<F>::ableAttack( Rect* rect )
 {
 	if( rect != NULL )
 	{
-		
 		for( typename vector <F*> ::iterator i = foes.begin(); i != foes.end(); i++ )
 		{
 			if( (*i)->isAlive() )
@@ -643,3 +649,4 @@ template class Factory <Skeleton>;
 template class Factory <Golem>;
 template class Factory <Vampire>;
 template class Factory <Zombie>;
+template class Factory <Robot>;
