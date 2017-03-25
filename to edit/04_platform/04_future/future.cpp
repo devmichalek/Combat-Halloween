@@ -67,6 +67,7 @@ void Future::free()
 	delete ladder;
 	
 	delete mine_factory;
+	robot_factory.free();
 }
 
 void Future::reset()
@@ -94,6 +95,7 @@ void Future::reset()
 	ladder->reset( distance );
 	
 	mine_factory->reset( distance );
+	robot_factory.reset( distance );
 }
 
 
@@ -124,6 +126,7 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	ladder->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
+	robot_factory.load( width, screen_w, screen_h, "robot" );
 	
 	music->setID( "future-music" );
 	music->load( "data/04_platform/world/4/music.mp3", 50 );
@@ -167,6 +170,7 @@ void Future::draw( sf::RenderWindow* &window )
 		ladder->fadeout( value );
 		
 		mine_factory->fadeout( value );
+		robot_factory.fadeout( value );
 	}
 	else
 	{
@@ -190,6 +194,7 @@ void Future::draw( sf::RenderWindow* &window )
 		ladder->fadein( value );
 		
 		mine_factory->fadein( value );
+		robot_factory.fadein( value );
 	}
 	
 
@@ -206,6 +211,7 @@ void Future::draw( sf::RenderWindow* &window )
 	
 	// enemy
 	mine_factory->draw( window );
+	robot_factory.draw( window );
 	
 	// rest
 	water->draw( window );
@@ -307,8 +313,10 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 				 mine_factory->positioning( islands->getBlocks(), difficulty );
 		info = "creating skeleton factory";	break;
 		
-		case 20: // skeleton_factory.positioning( brick->getBlocks(), difficulty );
-				 // skeleton_factory.positioning( islands->getBlocks(), difficulty );
+		case 20: robot_factory.positioning( brick->getBlocks(), difficulty );
+				 robot_factory.positioning( islands->getBlocks(), difficulty );
+				 robot_factory.positioning( brick->getBlocks(), difficulty );
+				 robot_factory.positioning( islands->getBlocks(), difficulty );
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );

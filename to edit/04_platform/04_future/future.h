@@ -28,6 +28,8 @@
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
+#include "04_platform/enemy/factory/factory.h"
+#include "04_platform/enemy/robot/robot.h"
 
 class Future
 {
@@ -67,6 +69,7 @@ class Future
 	
 	// enemy
 	Mine_factory* mine_factory;
+	Factory <Robot> robot_factory;
 	
 public:
 

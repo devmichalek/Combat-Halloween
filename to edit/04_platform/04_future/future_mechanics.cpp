@@ -98,7 +98,7 @@ void Future::mechanics()
 	else if( hero->jumpAttack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		// skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		robot_factory.harm( hero->getAttackBox(), hero->getDamage() );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -129,7 +129,7 @@ void Future::mechanics()
 	else if( hero->attack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		// skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		robot_factory.harm( hero->getAttackBox(), hero->getDamage() );
 	}
 	
 	
@@ -189,8 +189,8 @@ void Future::mechanics()
 		{
 			kunai->destroy( i );
 		}
-		/*
-		else if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+		
+		else if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			if( kunai->isHealKunai( i ) )
 			{
@@ -200,7 +200,6 @@ void Future::mechanics()
 			
 			kunai->destroy( i );
 		}
-		 * */
 	}
 	
 	
@@ -222,7 +221,7 @@ void Future::mechanics()
 			wall->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
-			// skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
+			robot_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 		}
 
@@ -236,7 +235,7 @@ void Future::mechanics()
 			wall->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
-			// skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
+			robot_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
@@ -276,7 +275,7 @@ void Future::mechanics()
 			wall->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
-			// skeleton_factory.undoFall( brick->getGrassValue() );
+			robot_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 		}
 	}
@@ -309,15 +308,13 @@ void Future::mechanics()
 			effect->runBlood();
 		}
 		
-		/*
-		// HARM BY SKELETON
-		if( skeleton_factory.harmSomebody( hero->getRect() ) )
+		// HARM BY ROBOT
+		if( robot_factory.harmSomebody( hero->getRect() ) )
 		{
-			heart->harm( -skeleton_factory.getDamage() );
-			showdamage->run( to_string( -skeleton_factory.getDamage() ) );
+			heart->harm( -robot_factory.getDamage() );
+			showdamage->run( to_string( -robot_factory.getDamage() ) );
 			effect->runBlood();
 		}
-		*/
 	}
 	
 // ------------------------------------------------------------------------------------------------
@@ -330,7 +327,7 @@ void Future::mechanics()
 	{
 		wall->mechanics();
 		mine_factory->mechanics();
-		// skeleton_factory.mechanics();
+		robot_factory.mechanics();
 		coins->mechanics();
 		skills->mechanics();
 		
@@ -359,16 +356,15 @@ void Future::mechanics()
 	
 	
 // ------------------------------------------------------------------------------------------------
-	// SKELETON PART
-	/*
-	skeleton_factory.appear( hero->getRect() );
-	skeleton_factory.walk( hero->getRect() );
-	skeleton_factory.ableAttack( hero->getRect() );
-	*/
+	// ROBOT PART
+	
+	robot_factory.appear( hero->getRect() );
+	robot_factory.walk( hero->getRect() );
+	robot_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
 	// COINS
-	// coins->setCoin( skeleton_factory.getDeadRect() );
+	coins->setCoin( robot_factory.getDeadRect() );
 	
 	if( coins->upliftMoney( hero->getRect() ) )
 	{
