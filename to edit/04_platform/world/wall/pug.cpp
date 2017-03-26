@@ -56,7 +56,7 @@ void Pug::positioning( int width, int type )
 			addBlock( 3, 0, blocks[ blocks.size()-1 ]->y +width );
 		}
 		
-		addBlock( 5, 0, -width );
+		addBlock( 6, 0, -width );
 	}
 	else
 	{
@@ -83,7 +83,7 @@ void Pug::positioning( int width, int type )
 	}
 }
 
-void Pug::setPosition( int x, int y, int vel, int surplus )
+void Pug::setPosition( int x, int y, float vel, int surplus )
 {
 	for( auto &i :blocks )
 	{

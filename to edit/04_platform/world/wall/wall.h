@@ -6,7 +6,6 @@
 
 class Wall
 {
-	sf::Uint8 min;
 	int width;
 	int screen_w;
 	int damage;
@@ -49,4 +48,7 @@ public:
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );
+	
+	// For boulder.
+	vector <int> getXs();
 };

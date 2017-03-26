@@ -7,7 +7,7 @@ using namespace std;
 
 class Pug
 {
-	int vel;
+	float vel;
 	bool hit;
 	int state;
 	int startY;
@@ -25,7 +25,7 @@ public:
 	void addBlock( int n, int x, int y );
 	
 	void positioning( int width, int type );
-	void setPosition( int x, int y, int vel, int surplus = 0 );
+	void setPosition( int x, int y, float vel, int surplus = 0 );
 	void moveX( float vel );
 	void moving( int width );
 	

@@ -5,10 +5,7 @@
 
 Wall::Wall()
 {
-	min = 0;
-	width = 0;
-	screen_w = 0;
-	damage = 0;
+	free();
 }
 
 Wall::~Wall()
@@ -18,7 +15,6 @@ Wall::~Wall()
 
 void Wall::free()
 {
-	min = 0;
 	width = 0;
 	screen_w = 0;
 	damage = 0;
@@ -71,11 +67,10 @@ void Wall::load( int type, int width, int screen_w )
 {
 	free();
 	
-	min = 8;
 	this->width = width;
 	this->screen_w = screen_w;
 	
-	for( int i = 0; i < 6; i++ )
+	for( int i = 0; i < 7; i++ )
 	{
 		sprites.push_back( new MySprite() );
 	}
@@ -83,9 +78,10 @@ void Wall::load( int type, int width, int screen_w )
 	sprites[ 0 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 0 ) +".png" );
 	sprites[ 1 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 1 ) +".png" );
 	sprites[ 2 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 10 ) +".png" );
-	sprites[ 3 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 11 ) +".png" );
+	sprites[ 3 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 4 ) +".png" );
 	sprites[ 4 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 12 ) +".png" );
 	sprites[ 5 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 2 ) +".png" );
+	sprites[ 6 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 3 ) +".png" );
 	
 	int n = 0;
 	if( type == 4 )
@@ -150,9 +146,7 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 					this->blocks.push_back( new Pug() );
 					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
 					
-					int vel = 0;
-					if( rand()%2 == 1 )	vel = 1;
-					else				vel = 2;
+					float vel = 0.5 +(static_cast <float> (rand()%150) /100);
 					
 					if( vel > 1 )
 					{
@@ -176,9 +170,7 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 					this->blocks.push_back( new Pug() );
 					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
 					
-					int vel = 0;
-					if( rand()%2 == 1 )	vel = 4;
-					else				vel = 3;
+					float vel = 2 +(static_cast <float> (rand()%200) /100);
 					
 					this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, vel, width );
 					
@@ -317,4 +309,26 @@ void Wall::turnOff()
 void Wall::setVolume( int v )
 {
 	hit.setVolume( v );
+}
+
+vector <int> Wall::getXs()
+{
+	// We want to send only x position to know that we have free space.
+	vector <int> temporary;
+	int temporary_x = -1;
+	
+	for( auto &it :blocks )
+	{
+		for( unsigned i = 0; i < it->getSize(); i++ )
+		{
+			if( it->getX( i ) != temporary_x )
+			{
+				temporary_x = it->getX( i );
+				temporary.push_back( temporary_x );
+				// printf( "%d\n", temporary_x );
+			}
+		}
+	}
+	
+	return temporary;
 }
