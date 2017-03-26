@@ -68,6 +68,8 @@ void Snakes::reset( int distance )
 				it ++;
 			}
 			
+			left ++;
+			
 			distance --;
 		}
 		else

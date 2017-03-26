@@ -358,7 +358,7 @@ void Snakes_factory::positioning( vector <Block*> blocks, int chance )
 				if( rand()%100 < 90 )
 				{
 					int additional_nr = rand()%counter;
-					addSnake( startX +width*additional_nr, startY +2, chance );
+					addSnake( startX +width*additional_nr, startY +10, chance );
 					snakes[ snakes.size() -1 ]->setLeft( startX );
 				}
 			}
@@ -532,17 +532,17 @@ int Snakes_factory::getDamage()
 void Snakes_factory::turnOn()
 {
 	hit.turnOn();
-	stand.turnOn();
+	// stand.turnOn();
 }
 
 void Snakes_factory::turnOff()
 {
 	hit.turnOff();
-	stand.turnOff();
+	// stand.turnOff();
 }
 
 void Snakes_factory::setVolume( int v )
 {
 	hit.setVolume( v );
-	stand.setVolume( v );
+	// stand.setVolume( v );
 }
