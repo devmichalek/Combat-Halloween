@@ -27,6 +27,8 @@ Future::Future()
 	water = new Water;
 	wall = new Wall;
 	ladder = new Ladder;
+	greenery = new Greenery;
+	boulder = new Boulder;
 	
 	mine_factory = new Mine_factory;
 }
@@ -65,6 +67,8 @@ void Future::free()
 	delete water;
 	delete wall;
 	delete ladder;
+	delete greenery;
+	delete boulder;
 	
 	delete mine_factory;
 	robot_factory.free();
@@ -93,6 +97,8 @@ void Future::reset()
 	water->reset( distance );
 	wall->reset( distance );
 	ladder->reset( distance );
+	greenery->reset( distance );
+	boulder->reset( distance );
 	
 	mine_factory->reset( distance );
 	robot_factory.reset( distance );
@@ -124,6 +130,8 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	water->load( type, width, screen_w, screen_h );
 	wall->load( type, width, screen_w );
 	ladder->load( type, width, screen_w );
+	greenery->load( type, width, screen_w );
+	boulder->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	robot_factory.load( width, screen_w, screen_h, "robot" );
@@ -167,7 +175,9 @@ void Future::draw( sf::RenderWindow* &window )
 		islands->fadeout( value );
 		water->fadeout( value );
 		wall->fadeout( value );
+		boulder->fadeout( value );
 		ladder->fadeout( value );
+		greenery->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		robot_factory.fadeout( value );
@@ -191,7 +201,9 @@ void Future::draw( sf::RenderWindow* &window )
 		islands->fadein( value );
 		water->fadein( value );
 		wall->fadein( value );
+		boulder->fadein( value );
 		ladder->fadein( value );
+		greenery->fadein( value );
 		
 		mine_factory->fadein( value );
 		robot_factory.fadein( value );
@@ -200,6 +212,7 @@ void Future::draw( sf::RenderWindow* &window )
 
 	// bg
 	background->draw( window );
+	greenery->draw_bg( window );
 	
 	// blocks
 	ladder->draw( window );
@@ -218,6 +231,7 @@ void Future::draw( sf::RenderWindow* &window )
 	brick->draw( window );
 	islands->draw( window );
 	wall->draw( window );
+	boulder->draw( window );
 	heart->draw( window );
 	money->draw( window );
 	coins->draw( window );
@@ -301,7 +315,8 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 					ladder->shrink();
 		info = "setting greenery";	break;
 		
-		case 17:
+		case 17:	greenery->positioning( brick->getBlocks() );
+					greenery->positioning( islands->getBlocks() );
 		info = "setting wall";	break;
 		
 		case 18:	wall->positioning( brick->getBlocks(), difficulty );
@@ -322,7 +337,11 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		case 21: coins->setChance( difficulty );
 		info = "loading music";	break;
 		
-		case 22: setSound();	reloadMusic();	break;
+		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
+				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
+		info = "positioning boulders";	break;
+		
+		case 23: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:
@@ -365,20 +384,23 @@ void Future::setSound()
 		wall->turnOff();
 		coins->turnOff();
 		mine_factory->turnOff();
-		// golem_factory.turnOff();
+		robot_factory.turnOff();
+		boulder->turnOff();
 	}
 	else
 	{
 		wall->turnOn();
 		coins->turnOn();
 		mine_factory->turnOn();
-		// golem_factory.turnOn();
+		robot_factory.turnOn();
+		boulder->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		mine_factory->setVolume( sound.getChunkVolume() );
-		// golem_factory.setVolume( sound.getChunkVolume() );
+		robot_factory.setVolume( sound.getChunkVolume() );
+		boulder->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume

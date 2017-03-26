@@ -219,7 +219,9 @@ void Future::mechanics()
 			islands->moveX( hero->getDirection(), scope->getVel() );
 			water->moveX( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
+			boulder->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
+			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			robot_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
@@ -233,7 +235,9 @@ void Future::mechanics()
 			islands->moveX( hero->getDirection(), -scope->getVel() );
 			water->moveX( hero->getDirection(), -scope->getVel() );
 			wall->moveX( hero->getDirection(), -scope->getVel() );
+			boulder->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
+			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			robot_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
@@ -273,7 +277,9 @@ void Future::mechanics()
 			islands->undoFall( brick->getGrassValue() );
 			water->undoFall( brick->getGrassValue() );
 			wall->undoFall( brick->getGrassValue() );
+			boulder->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
+			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			robot_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
@@ -296,6 +302,14 @@ void Future::mechanics()
 		{
 			heart->harm( -wall->getDamage() );
 			showdamage->run( to_string( -wall->getDamage() ) );
+			effect->runBlood();
+		}
+		
+		// HARM BY BOULDER
+		if( boulder->harm( hero->getRect() ) )
+		{
+			heart->harm( -boulder->getDamage() );
+			showdamage->run( to_string( -boulder->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -326,6 +340,7 @@ void Future::mechanics()
 	else
 	{
 		wall->mechanics();
+		boulder->mechanics( hero->getX(), hero->getY() );
 		mine_factory->mechanics();
 		robot_factory.mechanics();
 		coins->mechanics();

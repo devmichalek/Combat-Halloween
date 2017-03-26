@@ -230,6 +230,7 @@ void Halloween::mechanics()
 		{
 			islands->moveX( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
+			boulder->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
@@ -246,6 +247,7 @@ void Halloween::mechanics()
 			brick->moveX( hero->getDirection(), -scope->getVel() );	// undo
 			islands->moveX( hero->getDirection(), -scope->getVel() );
 			wall->moveX( hero->getDirection(), -scope->getVel() );
+			boulder->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
@@ -286,6 +288,7 @@ void Halloween::mechanics()
 			brick->undoFall();
 			islands->undoFall( brick->getGrassValue() );
 			wall->undoFall( brick->getGrassValue() );
+			boulder->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
@@ -312,6 +315,14 @@ void Halloween::mechanics()
 		{
 			heart->harm( -wall->getDamage() );
 			showdamage->run( to_string( -wall->getDamage() ) );
+			effect->runBlood();
+		}
+		
+		// HARM BY BOULDER
+		if( boulder->harm( hero->getRect() ) )
+		{
+			heart->harm( -boulder->getDamage() );
+			showdamage->run( to_string( -boulder->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -361,6 +372,7 @@ void Halloween::mechanics()
 	else
 	{
 		wall->mechanics();
+		boulder->mechanics( hero->getX(), hero->getY() );
 		mine_factory->mechanics();
 		vampire_factory.mechanics();
 		zombie_factory.mechanics();

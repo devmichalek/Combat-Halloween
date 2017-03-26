@@ -28,6 +28,7 @@ Halloween::Halloween()
 	ladder = new Ladder;
 	greenery = new Greenery;
 	rain = new Rain;
+	boulder = new Boulder;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
@@ -68,6 +69,7 @@ void Halloween::free()
 	delete ladder;
 	delete greenery;
 	delete rain;
+	delete boulder;
 	
 	delete mine_factory;
 	vampire_factory.free();
@@ -99,6 +101,7 @@ void Halloween::reset()
 	ladder->reset( distance );
 	greenery->reset( distance );
 	rain->reset();
+	boulder->reset( distance );
 	
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
@@ -133,6 +136,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
 	rain->load( screen_w, screen_h );
+	boulder->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
@@ -177,6 +181,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		background->fadeout( value );
 		islands->fadeout( value );
 		wall->fadeout( value );
+		boulder->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
 		rain->fadeout( value );
@@ -204,6 +209,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		background->fadein( value );
 		islands->fadein( value );
 		wall->fadein( value );
+		boulder->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
 		rain->fadein( value );
@@ -237,6 +243,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	brick->draw( window );
 	islands->draw( window );
 	wall->draw( window );
+	boulder->draw( window );
 	greenery->draw( window );
 	heart->draw( window );
 	money->draw( window );
@@ -343,7 +350,11 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		case 21: coins->setChance( difficulty );
 		info = "loading world";	break;
 		
-		case 22: setSound();	reloadMusic();	break;
+		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
+				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
+		info = "positioning boulders";	break;
+		
+		case 23: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:
@@ -388,6 +399,7 @@ void Halloween::setSound()
 		mine_factory->turnOff();
 		vampire_factory.turnOff();
 		zombie_factory.turnOff();
+		boulder->turnOff();
 	}
 	else
 	{
@@ -396,6 +408,7 @@ void Halloween::setSound()
 		mine_factory->turnOn();
 		vampire_factory.turnOn();
 		zombie_factory.turnOn();
+		boulder->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
@@ -403,6 +416,7 @@ void Halloween::setSound()
 		mine_factory->setVolume( sound.getChunkVolume() );
 		vampire_factory.setVolume( sound.getChunkVolume() );
 		zombie_factory.setVolume( sound.getChunkVolume() );
+		boulder->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume

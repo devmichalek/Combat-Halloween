@@ -26,6 +26,7 @@
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/weather/rain/rain.h"
+#include "04_platform/world/boulder/boulder.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -70,6 +71,7 @@ class Halloween
 	Ladder* ladder;
 	Greenery* greenery;
 	Rain* rain;
+	Boulder* boulder;
 	
 	// enemy
 	Mine_factory* mine_factory;

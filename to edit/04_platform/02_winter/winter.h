@@ -27,6 +27,7 @@
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/weather/snow/snow.h"
+#include "04_platform/world/boulder/boulder.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -71,6 +72,7 @@ class Winter
 	Ladder* ladder;
 	Greenery* greenery;
 	Snow* snow;
+	Boulder* boulder;
 	
 	// enemy
 	Mine_factory* mine_factory;

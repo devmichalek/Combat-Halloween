@@ -25,6 +25,8 @@
 #include "04_platform/world/water/water.h"
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/ladder/ladder.h"
+#include "04_platform/world/greenery/greenery.h"
+#include "04_platform/world/boulder/boulder.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -66,6 +68,8 @@ class Future
 	Water* water;
 	Wall* wall;
 	Ladder* ladder;
+	Greenery* greenery;
+	Boulder* boulder;
 	
 	// enemy
 	Mine_factory* mine_factory;

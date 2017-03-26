@@ -28,6 +28,7 @@
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/background/day.h"
 #include "04_platform/world/weather/sun/sun.h"
+#include "04_platform/world/boulder/boulder.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -73,6 +74,7 @@ class Forest
 	Greenery* greenery;
 	Day* day;
 	Sun* sun;
+	Boulder* boulder;
 	
 	// enemy
 	Mine_factory* mine_factory;

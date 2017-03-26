@@ -223,6 +223,7 @@ void Forest::mechanics()
 			islands->moveX( hero->getDirection(), scope->getVel() );
 			water->moveX( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
+			boulder->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
@@ -239,6 +240,7 @@ void Forest::mechanics()
 			islands->moveX( hero->getDirection(), -scope->getVel() );
 			water->moveX( hero->getDirection(), -scope->getVel() );
 			wall->moveX( hero->getDirection(), -scope->getVel() );
+			boulder->moveX( hero->getDirection(), -scope->getVel() );
 			ladder->moveX( hero->getDirection(), -scope->getVel() );
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
@@ -280,6 +282,7 @@ void Forest::mechanics()
 			islands->undoFall( brick->getGrassValue() );
 			water->undoFall( brick->getGrassValue() );
 			wall->undoFall( brick->getGrassValue() );
+			boulder->undoFall( brick->getGrassValue() );
 			ladder->undoFall( brick->getGrassValue() );
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
@@ -305,6 +308,14 @@ void Forest::mechanics()
 		{
 			heart->harm( -wall->getDamage() );
 			showdamage->run( to_string( -wall->getDamage() ) );
+			effect->runBlood();
+		}
+		
+		// HARM BY BOULDER
+		if( boulder->harm( hero->getRect() ) )
+		{
+			heart->harm( -boulder->getDamage() );
+			showdamage->run( to_string( -boulder->getDamage() ) );
 			effect->runBlood();
 		}
 		
@@ -347,6 +358,7 @@ void Forest::mechanics()
 	else
 	{
 		wall->mechanics();
+		boulder->mechanics( hero->getX(), hero->getY() );
 		mine_factory->mechanics();
 		golem_factory.mechanics();
 		coins->mechanics();
@@ -383,6 +395,7 @@ void Forest::mechanics()
 			islands->setColor( day->getColor() );
 			water->setColor( day->getColor() );
 			wall->setColor( day->getColor() );
+			boulder->setColor( day->getColor() );
 			ladder->setColor( day->getColor() );
 			greenery->setColor( day->getColor() );
 			

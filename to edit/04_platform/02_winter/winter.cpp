@@ -29,6 +29,7 @@ Winter::Winter()
 	ladder = new Ladder;
 	greenery = new Greenery;
 	snow = new Snow;
+	boulder = new Boulder;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
@@ -70,6 +71,7 @@ void Winter::free()
 	delete ladder;
 	delete greenery;
 	delete snow;
+	delete boulder;
 	
 	delete mine_factory;
 	golem_factory.free();
@@ -101,6 +103,7 @@ void Winter::reset()
 	ladder->reset( distance );
 	greenery->reset( distance );
 	snow->reset();
+	boulder->reset( distance );
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
@@ -135,6 +138,7 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
 	snow->load( screen_w, screen_h );
+	boulder->load( type, width, screen_w );
 	
 	mine_factory->load( width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_winter" );
@@ -179,6 +183,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		islands->fadeout( value );
 		water->fadeout( value );
 		wall->fadeout( value );
+		boulder->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
 		snow->fadeout( value );
@@ -206,6 +211,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		islands->fadein( value );
 		water->fadein( value );
 		wall->fadein( value );
+		boulder->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
 		snow->fadein( value );
@@ -238,6 +244,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	brick->draw( window );
 	islands->draw( window );
 	wall->draw( window );
+	boulder->draw( window );
 	greenery->draw( window );
 	heart->draw( window );
 	money->draw( window );
@@ -342,7 +349,11 @@ bool Winter::positioning( int type, int size, int flatness, int difficulty )
 		case 21: coins->setChance( difficulty );
 		info = "loading music";	break;
 		
-		case 22: setSound();	reloadMusic();	break;
+		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
+				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
+		info = "positioning boulders";	break;
+		
+		case 23: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:
@@ -386,6 +397,7 @@ void Winter::setSound()
 		coins->turnOff();
 		mine_factory->turnOff();
 		golem_factory.turnOff();
+		boulder->turnOff();
 	}
 	else
 	{
@@ -393,12 +405,14 @@ void Winter::setSound()
 		coins->turnOn();
 		mine_factory->turnOn();
 		golem_factory.turnOn();
+		boulder->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		mine_factory->setVolume( sound.getChunkVolume() );
 		golem_factory.setVolume( sound.getChunkVolume() );
+		boulder->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume
