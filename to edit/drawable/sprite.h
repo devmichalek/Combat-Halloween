@@ -49,6 +49,8 @@ public:
    
     void setPosition( float x, float y );
 	void center( int x, int y, int w, int h );
+	void setAngle( double angle );
+	void setOrigin( int x, int y );
 	
 	
 	

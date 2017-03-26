@@ -368,6 +368,36 @@ void MySprite::center( int x, int y, int w, int h )
     }
 }
 
+void MySprite::setAngle( double angle )
+{
+	if( nr == 0 || nr == 1 )
+    {
+        sprite->setRotation( angle );
+    }
+    else if( nr > 1 )
+    {
+        for( int i = 0; i < nr; i++ )
+        {
+            sprite[ i ].setRotation( angle );
+        }
+    }
+}
+
+void MySprite::setOrigin( int x, int y )
+{
+	if( nr == 0 || nr == 1 )
+    {
+        sprite->setOrigin( x, y );
+    }
+    else if( nr > 1 )
+    {
+        for( int i = 0; i < nr; i++ )
+        {
+            sprite[ i ].setOrigin( x, y );
+        }
+    }
+}
+
 
 
 void MySprite::setColor( sf::Color color )
