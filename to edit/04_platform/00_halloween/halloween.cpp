@@ -4,6 +4,7 @@ Halloween::Halloween()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	music = new Music;
 	
 	screen_w = 0;
@@ -43,6 +44,7 @@ void Halloween::free()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -80,6 +82,7 @@ void Halloween::free()
 void Halloween::reset()
 {
 	state = 0;
+	fade = 0;
 	reloadMusic();
 	
 	hero->reset( screen_h );
@@ -161,10 +164,10 @@ void Halloween::draw( sf::RenderWindow* &window )
 	
 	mechanics();
 	
-	if( hero->isDead() )
+	if( hero->isDead() && fade == 1 )
 	{
 		music->fadeout( 1, 0 );
-		
+	
 		sf::Uint8 value = 1;
 		hero->fadeout( value );
 		kunai->fadeout( value );
@@ -190,8 +193,11 @@ void Halloween::draw( sf::RenderWindow* &window )
 		vampire_factory.fadeout( value );
 		zombie_factory.fadeout( value );
 		lightning->fadeout( value );
+		
+		// set fade
+		if( background->getAlpha() == 0 )	fade = 0;
 	}
-	else
+	else if( fade == 0 )
 	{
 		music->fadein( 1, sound.getMusicVolume() );
 		
@@ -218,6 +224,9 @@ void Halloween::draw( sf::RenderWindow* &window )
 		vampire_factory.fadein( value );
 		zombie_factory.fadein( value );
 		lightning->fadein( value );
+		
+		// set fade
+		if( background->getAlpha() == 0xFF )	fade = 1;
 	}
 	
 
