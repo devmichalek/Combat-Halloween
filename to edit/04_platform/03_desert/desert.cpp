@@ -4,6 +4,7 @@ Desert::Desert()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	music = new Music;
 	
 	screen_w = 0;
@@ -45,6 +46,7 @@ void Desert::free()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -83,6 +85,7 @@ void Desert::free()
 void Desert::reset()
 {
 	state = 0;
+	fade = 0;
 	reloadMusic();
 	
 	hero->reset( screen_h );
@@ -183,7 +186,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	
 	mechanics();
 	
-	if( hero->isDead() )
+	if( hero->isDead() && fade == 1 )
 	{
 		music->fadeout( 1, 0 );
 		
@@ -212,8 +215,11 @@ void Desert::draw( sf::RenderWindow* &window )
 		skeleton_factory.fadeout( value );
 		snakes_factory->fadeout( value );
 		fireball->fadeout( value );
+		
+		// set fade
+		if( background->getAlpha() == 0 )	fade = 0;
 	}
-	else
+	else if( fade == 0 )
 	{
 		music->fadein( 1, sound.getMusicVolume() );
 		
@@ -239,6 +245,9 @@ void Desert::draw( sf::RenderWindow* &window )
 		skeleton_factory.fadein( value );
 		snakes_factory->fadein( value );
 		fireball->fadein( value );
+		
+		// set fade
+		if( background->getAlpha() == 0xFF )	fade = 1;
 	}
 	
 
