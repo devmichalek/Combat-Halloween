@@ -40,6 +40,7 @@ class Forest
 {
 	int state;
 	string info;
+	sf::Uint8 fade;
 	
 	int FPS;
 	int width;
