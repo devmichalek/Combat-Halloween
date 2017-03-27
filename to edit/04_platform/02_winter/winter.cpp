@@ -4,6 +4,7 @@ Winter::Winter()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	music = new Music;
 	
 	screen_w = 0;
@@ -44,6 +45,7 @@ void Winter::free()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -81,6 +83,7 @@ void Winter::free()
 void Winter::reset()
 {
 	state = 0;
+	fade = 0;
 	reloadMusic();
 	
 	hero->reset( screen_h );
@@ -162,7 +165,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	
 	mechanics();
 	
-	if( hero->isDead() )
+	if( hero->isDead() && fade == 1 )
 	{
 		music->fadeout( 1, 0 );
 		
@@ -191,8 +194,11 @@ void Winter::draw( sf::RenderWindow* &window )
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
 		lightning->fadeout( value );
+		
+		// set fade
+		if( background->getAlpha() == 0 )	fade = 0;
 	}
-	else
+	else if( fade == 0 )
 	{
 		music->fadein( 1, sound.getMusicVolume() );
 		
@@ -219,6 +225,9 @@ void Winter::draw( sf::RenderWindow* &window )
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
 		lightning->fadein( value );
+		
+		// set fade
+		if( background->getAlpha() == 0xFF )	fade = 1;
 	}
 	
 
