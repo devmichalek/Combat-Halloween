@@ -224,6 +224,7 @@ void Future::mechanics()
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			robot_factory.moveX( hero->getDirection(), scope->getVel() );
+			lightning->moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 		}
 
@@ -240,6 +241,7 @@ void Future::mechanics()
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			robot_factory.moveX( hero->getDirection(), -scope->getVel() );
+			lightning->moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
@@ -282,6 +284,7 @@ void Future::mechanics()
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			robot_factory.undoFall( brick->getGrassValue() );
+			lightning->undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 		}
 	}
@@ -329,6 +332,17 @@ void Future::mechanics()
 			showdamage->run( to_string( -robot_factory.getDamage() ) );
 			effect->runBlood();
 		}
+		
+		// HARM BY LIGHTNING
+		if( lightning->harmSomebody( hero->getRect() ) )
+		{
+			if( lightning->harmed() )
+			{
+				heart->harm( -lightning->getDamage() );
+				showdamage->run( to_string( -lightning->getDamage() ) );
+				effect->runLightning();
+			}
+		}
 	}
 	
 // ------------------------------------------------------------------------------------------------
@@ -343,6 +357,7 @@ void Future::mechanics()
 		boulder->mechanics( hero->getX(), hero->getY() );
 		mine_factory->mechanics();
 		robot_factory.mechanics();
+		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		coins->mechanics();
 		skills->mechanics();
 		

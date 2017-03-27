@@ -32,11 +32,13 @@
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/robot/robot.h"
+#include "04_platform/enemy/checkActivity/lightning/lightning.h"
 
 class Future
 {
 	int state;
 	string info;
+	sf::Uint8 fade;
 	
 	int FPS;
 	int width;
@@ -74,6 +76,7 @@ class Future
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Robot> robot_factory;
+	Lightning* lightning;
 	
 public:
 

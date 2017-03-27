@@ -4,6 +4,7 @@ Future::Future()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	music = new Music;
 	
 	screen_w = 0;
@@ -31,6 +32,7 @@ Future::Future()
 	boulder = new Boulder;
 	
 	mine_factory = new Mine_factory;
+	lightning = new Lightning;
 }
 
 Future::~Future()
@@ -42,6 +44,7 @@ void Future::free()
 {
 	state = 0;
 	info = "";
+	fade = 0;
 	
 	screen_w = 0;
 	screen_h = 0;
@@ -72,11 +75,13 @@ void Future::free()
 	
 	delete mine_factory;
 	robot_factory.free();
+	delete lightning;
 }
 
 void Future::reset()
 {
 	state = 0;
+	fade = 0;
 	music->halt();
 	
 	hero->reset( screen_h );
@@ -102,6 +107,7 @@ void Future::reset()
 	
 	mine_factory->reset( distance );
 	robot_factory.reset( distance );
+	lightning->reset();
 }
 
 
@@ -135,6 +141,7 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	
 	mine_factory->load( width, screen_w, screen_h );
 	robot_factory.load( width, screen_w, screen_h, "robot" );
+	lightning->load( FPS );
 	
 	music->setID( "future-music" );
 	music->load( "data/04_platform/world/4/music.mp3", 50 );
@@ -154,7 +161,7 @@ void Future::draw( sf::RenderWindow* &window )
 	
 	mechanics();
 	
-	if( hero->isDead() )
+	if( hero->isDead() && fade == 1 )
 	{
 		music->fadeout( 1, 0 );
 		
@@ -181,8 +188,12 @@ void Future::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadeout( value );
 		robot_factory.fadeout( value );
+		lightning->fadeout( value );
+		
+		// set fade
+		if( background->getAlpha() == 0 )	fade = 0;
 	}
-	else
+	else if( fade == 0 )
 	{
 		music->fadein( 1, sound.getMusicVolume() );
 		
@@ -207,6 +218,10 @@ void Future::draw( sf::RenderWindow* &window )
 		
 		mine_factory->fadein( value );
 		robot_factory.fadein( value );
+		lightning->fadein( value );
+		
+		// set fade
+		if( background->getAlpha() == 0xFF )	fade = 1;
 	}
 	
 
@@ -225,6 +240,7 @@ void Future::draw( sf::RenderWindow* &window )
 	// enemy
 	mine_factory->draw( window );
 	robot_factory.draw( window );
+	lightning->draw( window );
 	
 	// rest
 	water->draw( window );
