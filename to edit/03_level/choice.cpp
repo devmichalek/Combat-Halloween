@@ -10,7 +10,7 @@
 #include "choice.h"
 #include <time.h>
 #include <cstdlib>
-#include <fstream>
+#include "file/file.h"
 
 Choice::Choice()
 {
@@ -97,8 +97,8 @@ void Choice::load( int screen_w, int screen_h )
 	for( int i = 0; i < 5; i ++ )
 	{
 		world.push_back( new MySprite() );
-		world[ i ]->setName( "choice-world[ " + to_string( i ) + " ]" );
-		world[ i ]->load( "data/04_platform/world/" + to_string( i ) + "/bg.png" );
+		world[ i ]->setName( "choice-world[ " + con::itos( i ) + " ]" );
+		world[ i ]->load( "data/04_platform/world/" + con::itos( i ) + "/bg.png" );
 		world[ i ]->setScale( 0.1, 0.1 );
 		
 		description.push_back( new MyText() );
@@ -132,22 +132,18 @@ void Choice::load( int screen_w, int screen_h )
 	cross.load( "data/03_level/x.png" );
 	
 	// load unlocked worlds
-	fstream file;
-	file.open( "data/txt/world/world_temporary.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with file\n" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/world/world_temporary.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			// printf( "%d\n", stoi( line ) );
-			unlocked.push_back( static_cast <bool> (stoi( line )) );
+			// printf( "%d\n", con::stoi( line ) );
+			unlocked.push_back( static_cast <bool> (con::stoi( line )) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	reset( screen_w, screen_h );
 }

@@ -8,6 +8,7 @@
 */
 
 #include "difficulty.h"
+#include "file/file.h"
 
 Difficulty::Difficulty()
 {
@@ -89,7 +90,7 @@ void Difficulty::load( int left, int bot )
 		texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 		
 		sprites.push_back( new MySprite() );
-		sprites[ sprites.size() -1 ]->load( "data/03_level/" +to_string( i ) +".png" );
+		sprites[ sprites.size() -1 ]->load( "data/03_level/" +con::itos( i ) +".png" );
 	}
 	
 	texts[ 0 ]->setText( "low" );

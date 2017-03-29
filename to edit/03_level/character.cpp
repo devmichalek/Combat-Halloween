@@ -8,7 +8,7 @@
 */
 
 #include "character.h"
-#include <fstream>
+#include "file/file.h"
 
 Character::Character()
 {
@@ -111,11 +111,11 @@ void Character::load( int screen_w, int screen_h )
 	for( unsigned i = 0; i < 6; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ sprites.size() -1 ]->setName( "character-sprite nr" +to_string( i ) );
-		sprites[ sprites.size() -1 ]->load( "data/03_level/hero" +to_string( i ) +".png", 10 );
+		sprites[ sprites.size() -1 ]->setName( "character-sprite nr" +con::itos( i ) );
+		sprites[ sprites.size() -1 ]->load( "data/03_level/hero" +con::itos( i ) +".png", 10 );
 		
 		texts.push_back( new MyText() );
-		texts[ texts.size() -1 ]->setName( "character-texts nr" +to_string( i ) );
+		texts[ texts.size() -1 ]->setName( "character-texts nr" +con::itos( i ) );
 		texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	}
 	
@@ -153,22 +153,18 @@ void Character::load( int screen_w, int screen_h )
 	cross.load( "data/03_level/x.png" );
 	
 	// load unlocked worlds
-	fstream file;
-	file.open( "data/txt/character/character_temporary.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with file\n" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/character/character_temporary.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			// printf( "%d\n", stoi( line ) );
-			unlocked.push_back( static_cast <bool> (stoi( line )) );
+			// printf( "%d\n", con::stoi( line ) );
+			unlocked.push_back( static_cast <bool> (con::stoi( line )) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	reset( screen_w, screen_h );
 }

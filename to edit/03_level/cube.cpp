@@ -8,6 +8,7 @@
 */
 
 #include "cube.h"
+#include "file/file.h"
 
 Cube::Cube()
 {
@@ -158,7 +159,7 @@ void Cube::fadeout( int j, int min )
 void Cube::setFlatness( int value )
 {
 	flatness_value = value;
-	flatness.setText( "flatness " +to_string( value ) + " %" );
+	flatness.setText( "flatness " +con::itos( value ) + " %" );
 	flatness.reloadPosition();
 	flatness.setRotation( 270 );
 	
@@ -170,7 +171,7 @@ void Cube::setFlatness( int value )
 void Cube::setWorldSize( int value )
 {
 	worldSize_value = value *15 +30;
-	worldSize.setText( "length: " +to_string( worldSize_value ) );
+	worldSize.setText( "length: " +con::itos( worldSize_value ) );
 	worldSize.reloadPosition();
 	
 	float surplus = static_cast <float> (value) /100;
