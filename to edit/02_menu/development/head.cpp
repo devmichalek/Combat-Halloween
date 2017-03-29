@@ -1,5 +1,5 @@
 #include "02_menu/development/head.h"
-#include <fstream>
+#include "file/file.h"
 #include <vector>
 
 Head::Head()
@@ -54,7 +54,7 @@ void Head::load( int type, int y )
 	
 	// load head
 	sprite.setName( "head-sprite" );
-	sprite.load( "data/02_menu/head/" +to_string( type ) +".png" );
+	sprite.load( "data/02_menu/head/" +con::itos( type ) +".png" );
 	sprite.setScale( 0.75, 0.75 );
 	
 	// load button
@@ -62,18 +62,14 @@ void Head::load( int type, int y )
 	button.load( "data/02_menu/upgrade.png", 4 );
 	
 	// load name
-	fstream file;
-	file.open( "data/txt/character/character_name.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/character/character_name.txt" );
+	if( file.is_good() )
 	{
 		int c = kind;
 		
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( c == 0 )
 			{
@@ -85,19 +81,15 @@ void Head::load( int type, int y )
 			c--;
 		}
 	}
-	file.close();
+	file.free();
 	
 	// load specs
-	file.open( "data/txt/character/character_specs.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	file.load( "data/txt/character/character_specs.txt" );
+	if( file.is_good() )
 	{
 		int c = type;
 		string line;
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
 			if( c == 0 )
 			{
@@ -109,7 +101,7 @@ void Head::load( int type, int y )
 			c--;
 		}
 	}
-	file.close();
+	file.free();
 	
 	sprite.setPosition( 20, y );
 	name.setPosition( sprite.getRight() +18, y +sprite.getHeight() /3 );
@@ -134,50 +126,42 @@ void Head::draw( sf::RenderWindow* &window )
 void Head::reloadText()
 {
 	// set cost
-	fstream file;
-	file.open( "data/txt/character/character_costs.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/character/character_costs.txt" );
+	if( file.is_good() )
 	{
 		int c = type;
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( c == 0 )
 			{
 				cost_text.setText( line );
 				cost_text.setPosition( button.getRight() +20, name.getY() );
 				cost_text.setColor( 0xFF, 0xD8, 0x00 );
-				cost = stoi( line );
+				cost = con::stoi( line );
 				break;
 			}
 			
 			c--;
 		}
 	}
-	file.close();
+	file.free();
 	
 	locked = true;
 	state = 0;
 	
-	file.open( "data/txt/character/character_temporary.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	file.load( "data/txt/character/character_temporary.txt" );
+	if( file.is_good() )
 	{
 		int c = kind;
 		
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( c == 0 )
 			{
-				if( stoi( line ) == 1 )
+				if( con::stoi( line ) == 1 )
 				{
 					cost = 0;
 					state = 1;
@@ -191,7 +175,7 @@ void Head::reloadText()
 			c--;
 		}
 	}
-	file.close();
+	file.free();
 }
 
 void Head::handle( sf::Event &event )
@@ -304,36 +288,28 @@ void Head::makeNought()
 	
 	vector <string> a;
 	
-	fstream file;
-	file.open( "data/txt/character/character_temporary.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/character/character_temporary.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			a.push_back( line );
 		}
 		
 		a[ kind ] = "1";
 	}
-	file.close();
+	file.free();
 	
-	file.open( "data/txt/character/character_temporary.txt", std::ios::out );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	file.load( "data/txt/character/character_temporary.txt", std::ios::out );
+	if( file.is_good() )
 	{
 		for( auto &it :a )
 		{
-			file << it << "\n";
+			file.get() << it << "\n";
 		}
 	}
-	file.close();
+	file.free();
 	a.clear();
 }

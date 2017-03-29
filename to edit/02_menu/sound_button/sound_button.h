@@ -11,7 +11,7 @@
 
 #include "drawable/sprite.h"
 #include "02_menu/click.h"
-#include "01_intro/explanator.h"
+#include "02_menu/explanator/explanator.h"
 
 // Class for chunk/music button
 class Sound_button :public Click

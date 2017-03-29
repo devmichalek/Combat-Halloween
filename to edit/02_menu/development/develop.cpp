@@ -8,7 +8,7 @@
 */
 
 #include "02_menu/development/develop.h"
-#include <fstream>
+#include "file/file.h"
 
 Develop::Develop()
 {
@@ -47,20 +47,15 @@ void Develop::load( int main_x, int nr, int bot )
 	button.setName( "develop-button" );
 	button.load( "data/02_menu/upgrade.png", 4 );
 	
-	fstream file;
+	MyFile file;
 	
 	// Set name.
-	string path = "data/txt/skill/skill_name.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_name.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int counter = nr;
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
 			if( counter == 0 )
 			{
@@ -74,24 +69,19 @@ void Develop::load( int main_x, int nr, int bot )
 			counter --;
 		}
 	}
-	file.close();
+	file.free();
 	
 	// Load sprite.
 	sprite.setName( "develop-sprite" );
-	sprite.load( "data/02_menu/skill/" +to_string( nr ) +".png" );
+	sprite.load( "data/02_menu/skill/" +con::itos( nr ) +".png" );
 	
 	// Set name_base.
-	path = "data/txt/skill/skill_namebase.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_namebase.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int counter = nr;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( counter == 0 )
 			{
@@ -105,7 +95,26 @@ void Develop::load( int main_x, int nr, int bot )
 			counter --;
 		}
 	}
-	file.close();
+	file.free();
+	
+	// Set max.
+	file.load( "data/txt/skill/skill_max.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int counter = nr;
+		while( file.get() >> line )
+		{
+			if( counter == 0 )
+			{
+				max = con::stoi( line );
+				break;
+			}
+			
+			counter --;
+		}
+	}
+	file.free();
 	
 	// Set actual.
 	actual.setName( "develop-actual" );
@@ -116,31 +125,6 @@ void Develop::load( int main_x, int nr, int bot )
 	label.setName( "develop-label" );
 	label.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	label.setText( " " );
-	
-	// Set max.
-	path = "data/txt/skill/skill_max.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
-	{
-		string line;
-		int counter = nr;
-		while( file >> line )
-		{
-			if( counter == 0 )
-			{
-				max = stoi( line );
-				break;
-			}
-			
-			counter --;
-		}
-	}
-	file.close();
-	
 	
 	// Cost_text settings.
 	cost_text.setName( "develop-cost_text" );
@@ -222,7 +206,7 @@ void Develop::handle( sf::Event &event )
 				}
 				else
 				{
-					this->label.setText( to_string( level ) );
+					this->label.setText( con::itos( level ) );
 					
 					if( level == 0 )	this->label.setColor( 0xE8, 0x68, 0x50 );
 					else				this->label.setColor( 0x58, 0x70, 0x58 );
@@ -295,7 +279,7 @@ void Develop::setCost( int newcost )
 	else
 	{
 		cost = newcost;
-		cost_text.setText( to_string( newcost ) );
+		cost_text.setText( con::itos( newcost ) );
 	}
 	
 	cost_text.reloadPosition();
@@ -326,7 +310,7 @@ void Develop::setActual( int level, string actual )
 		}
 		else
 		{
-			this->label.setText( to_string( level ) );
+			this->label.setText( con::itos( level ) );
 			
 			if( level == 0 )	this->label.setColor( 0xE8, 0x68, 0x50 );
 			else				this->label.setColor( 0x58, 0x70, 0x58 );

@@ -8,6 +8,7 @@
 */
 
 #include "volume_button.h"
+#include "file/file.h"
 
 Volume_button::Volume_button( float volume )
 {
@@ -71,7 +72,7 @@ void Volume_button::load( int left, int y, string new_name )
 	
 	percent.setName( "volume_button-percent" );
 	percent.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
-	percent.setText( std::to_string( static_cast<int>( volume*100/max ) ) + "%" );
+	percent.setText( con::itos( static_cast<int>( volume*100/max ) ) + "%" );
 	percent.setPosition( plus.getRight() + 10, y );
 	
 	
@@ -109,7 +110,7 @@ void Volume_button::draw( sf::RenderWindow* &window )
 	
 	if( last_volume != volume )
 	{
-		percent.setText( std::to_string( static_cast<int>( volume*100/max ) ) + "%" );
+		percent.setText( con::itos( static_cast<int>( volume*100/max ) ) + "%" );
 		percent.reloadPosition();
 	}
 }

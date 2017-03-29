@@ -1,5 +1,5 @@
 #include "02_menu/development/headdeck.h"
-#include <fstream>
+#include "file/file.h"
 
 Headdeck::Headdeck()
 {
@@ -54,7 +54,7 @@ void Headdeck::load( int y, int screen_h )
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
 		texts.push_back( new MyText() );
-		texts[ texts.size() -1 ]->setName( "headdeck-text nr" +to_string( i ) );
+		texts[ texts.size() -1 ]->setName( "headdeck-text nr" +con::itos( i ) );
 		if( i == WALLET )	texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
 		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 27, 0xFF, 0xD8, 0x00 );
 		else				texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
@@ -92,25 +92,23 @@ void Headdeck::draw( sf::RenderWindow* &window )
 	{
 		it->draw( window );
 	}
+	
+	window->draw( line.get() );
 }
 
 void Headdeck::reloadText()
 {
-	fstream file;
-	file.open( "data/txt/money/bank.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong\n" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/money/bank.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		file >> line;
-		wallet = stoi( line );
+		file.get() >> line;
+		wallet = con::stoi( line );
 	}
-	file.close();
+	file.free();
 
-	texts[ MONEY ]->setText( to_string( wallet ) );
+	texts[ MONEY ]->setText( con::itos( wallet ) );
 	texts[ MONEY ]->reloadPosition();
 	
 	for( auto &it :heads )
@@ -139,23 +137,19 @@ void Headdeck::handle( sf::Event &event )
 		if( it->sellOut() )
 		{
 			wallet -= it->getCost();
-			texts[ MONEY ]->setText( to_string( wallet ) );
+			texts[ MONEY ]->setText( con::itos( wallet ) );
 			texts[ MONEY ]->reloadPosition();
 			it->makeNought();
 			change = true;
 			
 			// save file
-			fstream file;
-			file.open( "data/txt/money/bank.txt", std::ios::out );
-			if( file.bad() )
+			MyFile file;
+			file.load( "data/txt/money/bank.txt", std::ios::out );
+			if( file.is_good() )
 			{
-				printf( "Cannot open file\n" );
+				file.get() << con::itos( wallet ) << "\n";
 			}
-			else
-			{
-				file << to_string( wallet ) << "\n";
-			}
-			file.close();
+			file.free();
 		}
 	}
 }
@@ -226,7 +220,7 @@ bool Headdeck::isChange()
 void Headdeck::setWallet( int money )
 {
 	wallet = money;
-	texts[ MONEY ]->setText( to_string( wallet ) );
+	texts[ MONEY ]->setText( con::itos( wallet ) );
 	texts[ MONEY ]->reloadPosition();
 }
 

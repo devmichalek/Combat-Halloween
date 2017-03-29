@@ -8,6 +8,7 @@
 */
 
 #include "information.h"
+#include "file/file.h"
 
 Information::Information()
 {
@@ -49,7 +50,7 @@ void Information::load( int right, int top, int screen_h )
 	for( int i = 0; i < 8; i++ )
 	{
 		text.push_back( new MyText() );
-		text[ i ]->setName( "information-text nr " + std::to_string( i ) );
+		text[ i ]->setName( "information-text nr " + con::itos( i ) );
 		text[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0x98, 0x98, 0x98 );
 	}
 	
@@ -81,7 +82,7 @@ void Information::load( int right, int top, int screen_h )
 	for( int i = 0; i < 7; i ++ )
 	{
 		info_text.push_back( new MyText() );
-		info_text[ i ]->setName( "information-text nr " + std::to_string( i ) );
+		info_text[ i ]->setName( "information-text nr " + con::itos( i ) );
 		
 		if( i != 1 || i != 3 || i != 5 )
 		{

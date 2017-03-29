@@ -8,7 +8,7 @@
 */
 
 #include "keyboard.h"
-#include <fstream>
+#include "file/file.h"
 
 
 Key::Key(int one, int two )
@@ -113,55 +113,47 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	for( int i = 0; i < 18; i++ )
 	{
 		text.push_back( new MyText() );
-		text[ i ]->setName( "keyboard-text nr " + std::to_string( i ) );
+		text[ i ]->setName( "keyboard-text nr " + con::itos( i ) );
 		text[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	}
 
 	// load default keys
-	fstream file;
-	file.open( "data/txt/keyboard/keyboard_default.txt" );
-	if( file.bad() )
-	{
-		printf( "Can not load %s\n", "data/txt/keyboard/keyboard_default.txt" );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/keyboard/keyboard_default.txt" );
+	if( file.is_good() )
 	{
 		int a = -2, b = -2;
 		string buf;
-		while( file >> buf )
+		while( file.get() >> buf )
 		{
 			if( a != -2 )
 			{
-				b = stoi( buf );
+				b = con::stoi( buf );
 				keys.push_back( new Key( a, b ) );
 				a = -2;
 			}
 			else
-				a = stoi( buf );
+				a = con::stoi( buf );
 		}
 	}
-	file.close();
+	file.free();
 	
 	// load temporary keys
-	file.open( "data/txt/keyboard/keyboard_temporary.txt" );
-	if( file.bad() )
-	{
-		printf( "Can not load %s\n", "data/txt/keyboard/keyboard_temporary.txt" );
-	}
-	else
+	file.load( "data/txt/keyboard/keyboard_temporary.txt" );
+	if( file.is_good() )
 	{
 		int a = -2, b = -2;
 		string buf;
-		while( file >> buf )
+		while( file.get() >> buf )
 		{
 			if( a != -2 )
 			{
-				b = stoi( buf );
+				b = con::stoi( buf );
 				actual_keys.push_back( new Key( a, b ) );
 				a = -2;
 			}
 			else
-				a = stoi( buf );
+				a = con::stoi( buf );
 		}
 		
 		for( unsigned i = 1; i < text.size(); i += 2 )
@@ -178,7 +170,7 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 			text[ i ]->setText( newName );
 		}
 	}
-	file.close();
+	file.free();
 	
 	
 	// set text
@@ -211,20 +203,16 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	
 	
 	// load and set banned keys
-	file.open( "data/txt/keyboard/banned_keys.txt" );
-	if( file.bad() )
-	{
-		printf( "Can not load %s\n", "data/txt/keyboard/banned_keys.txt" );
-	}
-	else
+	file.load( "data/txt/keyboard/banned_keys.txt" );
+	if( file.is_good() )
 	{
 		string buf;
-		while( file >> buf )
+		while( file.get() >> buf )
 		{
-			banned_keys.push_back( stoi( buf ) );
+			banned_keys.push_back( con::stoi( buf ) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	click.setID( "keyboard-click" );
 	click.load( "data/02_menu/click.wav", 50 );
@@ -540,15 +528,15 @@ void Keyboard::handleButton( sf::Event &event )
 		
 		if( save_button.checkCollision( x, y ) )
 		{
-			fstream file;
-			file.open( "data/txt/keyboard/keyboard_temporary.txt", std::ios::out );
+			MyFile file;
+			file.load( "data/txt/keyboard/keyboard_temporary.txt", std::ios::out );
 			printf( "happend\n" );
 			for( unsigned i = 0; i < actual_keys.size(); i++ )
 			{
-				file << to_string( actual_keys[ i ]->one ) + "\n";
-				file << to_string( actual_keys[ i ]->two ) + "\n";
+				file.get() << con::itos( actual_keys[ i ]->one ) + "\n";
+				file.get() << con::itos( actual_keys[ i ]->two ) + "\n";
 			}
-			file.close();
+			file.free();
 			
 			save_button.setOffset( 2 );
 			focus = true;

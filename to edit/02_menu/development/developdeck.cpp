@@ -8,7 +8,7 @@
 */
 
 #include "02_menu/development/developdeck.h"
-#include <fstream>
+#include "file/file.h"
 
 Development::Development()
 {
@@ -71,39 +71,29 @@ void Development::load( int bot, int screen_h )
 	free();
 	
 	// Set actual values.
-	string path = "data/txt/skill/skill_values.txt";
-	fstream file;
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/skill/skill_values.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			values.push_back( stof( line ) );
+			values.push_back( con::stof( line.c_str() ) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	// Set costs.
-	path = "data/txt/skill/skill_costs.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_costs.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			costs.push_back( stof( line ) );
+			costs.push_back( con::stof( line.c_str() ) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	int space = 70;
 	int max = 6;
@@ -118,7 +108,7 @@ void Development::load( int bot, int screen_h )
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
 		texts.push_back( new MyText() );
-		texts[ texts.size() -1 ]->setName( "development-texts nr" +to_string( i ) );
+		texts[ texts.size() -1 ]->setName( "development-texts nr" +con::itos( i ) );
 		
 		
 		if( i == WALLET )	texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
@@ -161,43 +151,35 @@ void Development::reloadTxt()
 	}
 	
 	// Set actual levels.
-	fstream file;
-	string path = "data/txt/skill/level_current.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/skill/level_current.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			levels.push_back( stof( line ) );
+			levels.push_back( con::stof( line.c_str() ) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	
 	// Load bank.
-	path = "data/txt/money/bank.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/money/bank.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		file >> line;
+		file.get() >> line;
 		if( line.size() > 8 )
 		{
 			wallet = 99999999;
 		}
 		else
-			wallet = stof( line );
+		{
+			wallet = con::stof( line.c_str() );
+		}
 	}
-	file.close();
+	file.free();
 	
 	Damage damage;
 	for( unsigned i = 0; i < develops.size(); i++ )
@@ -206,7 +188,7 @@ void Development::reloadTxt()
 		develops[ i ]->setCost( multiplyCost( i ) );
 	}
 	
-	texts[ MONEY ]->setText( to_string( wallet ) );
+	texts[ MONEY ]->setText( con::itos( wallet ) );
 	texts[ MONEY ]->reloadPosition();
 }
 
@@ -240,36 +222,28 @@ void Development::handle( sf::Event &event )
 				Damage damage;
 				develops[ i ]->setActual( levels[ i ], damage.multiply( i, values[ i ], levels[ i ] ) );
 				
-				texts[ MONEY ]->setText( to_string( wallet ) );
+				texts[ MONEY ]->setText( con::itos( wallet ) );
 				texts[ MONEY ]->reloadPosition();
 				
 				// save file
-				fstream file;
-				file.open( "data/txt/money/bank.txt", std::ios::out );
-				if( file.bad() )
+				MyFile file;
+				file.load( "data/txt/money/bank.txt", std::ios::out );
+				if( file.is_good() )
 				{
-					printf( "Cannot open file\n" );
+					file.get() << con::itos( wallet ) << "\n";
 				}
-				else
-				{
-					file << to_string( wallet ) << "\n";
-				}
-				file.close();
+				file.free();
 				
-				file.open( "data/txt/skill/level_current.txt", std::ios::out );
-				if( file.bad() )
-				{
-					printf( "Cannot open file\n" );
-				}
-				else
+				file.load( "data/txt/skill/level_current.txt", std::ios::out );
+				if( file.is_good() )
 				{
 					for( unsigned j = 0; j < levels.size(); j++ )
 					{
-						file << to_string( levels[ j ] ) << "\n";
+						file.get() << con::itos( levels[ j ] ) << "\n";
 					}
 					// printf( "happen\n" );
 				}
-				file.close();
+				file.free();
 				change = true;
 				
 				break;
@@ -358,7 +332,7 @@ bool Development::isChange()
 void Development::setWallet( int money )
 {
 	wallet = money;
-	texts[ MONEY ]->setText( to_string( wallet ) );
+	texts[ MONEY ]->setText( con::itos( wallet ) );
 	texts[ MONEY ]->reloadPosition();
 }
 

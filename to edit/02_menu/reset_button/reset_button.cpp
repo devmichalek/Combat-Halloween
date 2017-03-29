@@ -8,7 +8,7 @@
 */
 
 #include "reset_button.h"
-#include <fstream>
+#include "file/file.h"
 #include <vector>
 
 Reset_button::Reset_button()
@@ -186,87 +186,61 @@ bool Reset_button::doReset()
 		button.setOffset( 0 );
 		// printf( "happened\n" );
 		
-		fstream file;
-		string path;
+		MyFile file;
 		vector <string> lines;
 		
-		path = "data/txt/skill/level_reset.txt";
-		file.open( path );
-		if( file.bad() )
-		{
-			printf( "Cannot open file %s\n", path.c_str() );
-		}
-		else
+		file.load( "data/txt/skill/level_reset.txt" );
+		if( file.is_good() )
 		{
 			string line;
-			while( file >> line )
+			while( file.get() >> line )
 			{
 				lines.push_back( line );
 			}
 		}
-		file.close();
+		file.free();
 		
 		// reset
-		path = "data/txt/skill/level_current.txt";
-		file.open( path, std::ios::out );
-		if( file.bad() )
-		{
-			printf( "Cannot open file %s\n", path.c_str() );
-		}
-		else
+		file.load( "data/txt/skill/level_current.txt", std::ios::out );
+		if( file.is_good() )
 		{
 			for( auto &it :lines )
 			{
-				file << it << '\n';
+				file.get() << it << '\n';
 			}
 		}
-		file.close();
+		file.free();
 		lines.clear();
 		
 		
-		path = "data/txt/money/bank.txt";
-		file.open( path, std::ios::out );
-		if( file.bad() )
+		file.load( "data/txt/money/bank.txt", std::ios::out );
+		if( file.is_good() )
 		{
-			printf( "Cannot open file %s\n", path.c_str() );
+			file.get() << "0\n";
 		}
-		else
-		{
-			file << "0\n";
-		}
-		file.close();
+		file.free();
 		
 		vector <int> character_values;
-		path = "data/txt/character/character_default.txt";
-		file.open( path );
-		if( file.bad() )
-		{
-			printf( "Cannot open file %s\n", path.c_str() );
-		}
-		else
+		file.load( "data/txt/character/character_default.txt" );
+		if( file.is_good() )
 		{
 			string line;
-			while( file >> line )
+			while( file.get() >> line )
 			{
-				character_values.push_back( stoi( line ) );
+				character_values.push_back( con::stoi( line ) );
 			}
 		}
-		file.close();
+		file.free();
 		
-		path = "data/txt/character/character_temporary.txt";
-		file.open( path, std::ios::out );
-		if( file.bad() )
-		{
-			printf( "Cannot open file %s\n", path.c_str() );
-		}
-		else
+		file.load( "data/txt/character/character_temporary.txt", std::ios::out );
+		if( file.is_good() )
 		{
 			for( auto &it :character_values )
 			{
-				file << to_string( it ) << "\n";
+				file.get() << con::itos( it ) << "\n";
 			}
 		}
-		file.close();
+		file.free();
 		character_values.clear();
 		
 		return true;
