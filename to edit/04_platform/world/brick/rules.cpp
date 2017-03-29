@@ -1,7 +1,7 @@
 #include "rules.h"
 #include <cstdlib>
 #include <stdio.h>
-#include <fstream>
+#include "file/file.h"
 
 
 Rules::Rules()
@@ -153,17 +153,13 @@ int Rules::fillForBot( int nr )
 void Rules::rule()
 {
 	vector <int8_t> temporary;
-	fstream file;
+	MyFile file;
 	
-	file.open( "data/txt/rules/right_rules.txt" );
-	if( file.bad() )
-	{
-		printf( "Cannot open %s\n", "data/txt/rules/right_rules.txt" );
-	}
-	else
+	file.load( "data/txt/rules/right_rules.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
 			temporary.clear();
 			string l = "";
@@ -171,7 +167,7 @@ void Rules::rule()
 			{
 				if( line[ i ] == ' ' )
 				{
-					temporary.push_back( to_int( l ) );
+					temporary.push_back( con::stoi( l ) );
 					l = "";
 				}
 				else
@@ -197,27 +193,7 @@ void Rules::rule()
 	
 	// printf( "\n\n\n\n" );
 	
-	file.close();
-}
-
-int Rules::to_int( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
+	file.free();
 }
 
 unsigned Rules::getSize( int which )

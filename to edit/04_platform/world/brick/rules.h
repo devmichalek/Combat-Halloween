@@ -25,7 +25,6 @@ public:
 	int fillForTop( int nr, int need );
 	int fillForBot( int nr );
 	
-	int to_int( string s );
 	unsigned getSize( int which );
 	int8_t getBlock( int which );
 };

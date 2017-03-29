@@ -38,7 +38,6 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	// Support.
-	int to_int( string s );						// Transform string into int.
 	void addPlank( int n, int x, int y );
 	void addBlock( int n, int x, int y );
 	sf::Uint8 getNewFloor( sf::Uint8 floor, int chance );	// For createTopBorders() function to decide about new floor.

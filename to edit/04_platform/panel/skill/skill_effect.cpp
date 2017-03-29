@@ -1,4 +1,5 @@
 #include "skill_effect.h"
+#include "file/file.h"
 
 Skill_effect::Skill_effect()
 {
@@ -84,7 +85,7 @@ void Skill_effect::load( unsigned FPS, int screen_w, int screen_h )
 		counters.push_back( 0 );
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "skill_effect-sprites" );
-		sprites[ sprites.size() -1 ]->load( "data/04_platform/panel/skill/effect/" +to_string( i+2 ) +".png" );
+		sprites[ sprites.size() -1 ]->load( "data/04_platform/panel/skill/effect/" +con::itos( i+2 ) +".png" );
 		sprites[ sprites.size() -1 ]->center( 0, 0, screen_w, screen_h );
 		sprites[ sprites.size() -1 ]->setAlpha( 0xFF );
 	}

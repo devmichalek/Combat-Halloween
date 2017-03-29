@@ -1,6 +1,6 @@
 #include "islands.h"
 #include <cstdlib>
-#include <fstream>
+#include "file/file.h"
 
 Islands::Islands()
 {
@@ -96,8 +96,8 @@ void Islands::load( int type, int width, int screen_w, int screen_h )
 	for( int i = 0; i < 16; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "islands-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( i ) +".png" );
+		sprites[ i ]->setName( "islands-sprites[" +con::itos( i ) +"]" );
+		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( i ) +".png" );
 	}
 	
 	this->width = width;
@@ -194,15 +194,15 @@ void Islands::createFlyingIslands( vector <Block*> blocks, vector <Block*> plank
 					int endX = blocks[ i ]->x + (distance +2)*width;
 					int y = blocks[ i ]->y;
 					
-					int vel = 0;
+					float vel = 0.75;
 					
 					if( rand()%6 < 2 )
 					{
-						vel = 2;
+						vel += static_cast <float> (rand()%150) /100;
 					}
 					else
 					{
-						vel = 1;
+						vel += static_cast <float> (rand()%50) /100;
 					}
 					
 					addHover( startX, endX, y, vel );

@@ -1,5 +1,5 @@
 #include "04_platform/enemy/coins/coins.h"
-#include <fstream>
+#include "file/file.h"
 
 Coins::Coins()
 {
@@ -65,19 +65,15 @@ void Coins::load( int width, int screen_w, int type )
 	this->width = width;
 	this->screen_w = screen_w;
 	
-	fstream file;
+	MyFile file;
 	
-	file.open( "data/txt/money/cash.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with data/txt/money/cash.txt\n" );
-	}
-	else
+	file.load( "data/txt/money/cash.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		while( true )
 		{
-			file >> line;
+			file.get() >> line;
 			
 			if( type == 0 )
 			{
@@ -89,40 +85,36 @@ void Coins::load( int width, int screen_w, int type )
 			type --;
 		}
 	}
-	file.close();
+	file.free();
 	
-	file.open( "data/txt/money/settings.txt" );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with data/txt/money/settings.txt\n" );
-	}
-	else
+	file.load( "data/txt/money/settings.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int dropped = 0;
 		int jumped = 0;
 		
-		file >> line;
+		file.get() >> line;
 		dropped = strToInt( line );
 		
-		file >> line;
+		file.get() >> line;
 		jumped = strToInt( line );
 		
 		for( int i = 0; i < dropped; i ++ )
 		{
 			dropped_coins.push_back( new Slab() );
 			dropped_coins[ dropped_coins.size() -1 ]->setName( "coins-dropped_coins" );
-			dropped_coins[ dropped_coins.size() -1 ]->load( "data/04_platform/panel/coin/sounds/dropped/" +to_string( i ) +".wav" );
+			dropped_coins[ dropped_coins.size() -1 ]->load( "data/04_platform/panel/coin/sounds/dropped/" +con::itos( i ) +".wav" );
 		}
 		
 		for( int i = 0; i < jumped; i ++ )
 		{
 			jumped_coins.push_back( new Slab() );
 			jumped_coins[ jumped_coins.size() -1 ]->setName( "coins-jumped_coins" );
-			jumped_coins[ jumped_coins.size() -1 ]->load( "data/04_platform/panel/coin/sounds/jumped/" +to_string( i ) +".wav" );
+			jumped_coins[ jumped_coins.size() -1 ]->load( "data/04_platform/panel/coin/sounds/jumped/" +con::itos( i ) +".wav" );
 		}
 	}
-	file.close();
+	file.free();
 	
 	
 	int coin_line = 10;

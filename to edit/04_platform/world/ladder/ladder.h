@@ -24,9 +24,6 @@ public:
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	
-	// Support.
-	int to_int( string s );
-	
 	// Setter.
 	void positioning( vector <Block*> planks );
 	void shrink();

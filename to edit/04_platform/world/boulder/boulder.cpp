@@ -1,6 +1,7 @@
 #include "boulder.h"
 #include <time.h>
 #include <cstdlib>
+#include "file/file.h"
 
 
 Boulder::Boulder()
@@ -79,12 +80,12 @@ void Boulder::load( int type, int width, int screen_w )
 	for( int i = 0; i < 2; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "boulder-sprite nr" +to_string( i ) );
-		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +path );
+		sprites[ i ]->setName( "boulder-sprite nr" +con::itos( i ) );
+		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +path );
 	}
 	
 	sprites.push_back( new MySprite() );
-	sprites[ sprites.size() -1 ]->setName( "boulder-sprite nr" +to_string( sprites.size() -1 ) );
+	sprites[ sprites.size() -1 ]->setName( "boulder-sprite nr" +con::itos( sprites.size() -1 ) );
 	hit.setName( "boulder-hit" );
 	
 	if( type == 4 )

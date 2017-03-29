@@ -15,7 +15,6 @@ public:
 	Expletive();
 	~Expletive();
 	void free();
-	int strToInt( string s );
 	
 	void load( string name );
 	void playHits();

@@ -8,7 +8,7 @@
 */
 
 #include "skills.h"
-#include <fstream>
+#include "file/file.h"
 
 
 Skills::Skills()
@@ -132,46 +132,35 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 	{
 		pictures.push_back( new MySprite() );
 		pictures[ pictures.size() -1 ]->setName( "skills-shuriken" );
-		pictures[ pictures.size() -1 ]->load( "data/04_platform/panel/skill/" +to_string( i ) +".png" );
+		pictures[ pictures.size() -1 ]->load( "data/04_platform/panel/skill/" +con::itos( i ) +".png" );
 		pictures[ pictures.size() -1 ]->center( x, startY +(grey.getHeight() *i) +2*i, grey.getWidth(), grey.getHeight() );
 	}
 	
-	fstream file;
-	
+	MyFile file;
 	// Load curtain txt.
-	string path = "data/txt/skill/curtain.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/curtain.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			skills.push_back( new Skill() );
 			int size = skills.size() -1;
 			skills[ size ]->setPosition( x, startY +(grey.getHeight() *size) +2*size );
-			skills[ size ]->setLine( static_cast <int> (static_cast <float> (FPS) *stof( line )) );
-			// printf( "SKILLS. %d\n", static_cast <int> (static_cast <float> (FPS) *stof( line )) );
+			skills[ size ]->setLine( static_cast <int> (static_cast <float> (FPS) *con::stof( line.c_str() )) );
+			// printf( "SKILLS. %d\n", static_cast <int> (static_cast <float> (FPS) *con::stof( line )) );
 		}
 	}
-	file.close();
+	file.free();
 
 	
 	
 	// Load names.
-	path = "data/txt/skill/skill_name_shortcut.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_name_shortcut.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			names.push_back( new MyText() );
 			names[ names.size() -1 ]->setName( "skills-names" );
@@ -180,7 +169,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 			names[ names.size() -1 ]->setPosition( x +1, skills[ names.size() -1 ]->getY() -1 );
 		}
 	}
-	file.close();
+	file.free();
 	
 	
 	// Load nr.
@@ -190,7 +179,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 		nr[ nr.size() -1 ]->setName( "skills-nr" );
 		nr[ nr.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 10, 0x00, 0x00, 0x00 );
 		if( i > 1 )
-			nr[ nr.size() -1 ]->setText( to_string( i -1 ) );
+			nr[ nr.size() -1 ]->setText( con::itos( i -1 ) );
 		else
 			nr[ nr.size() -1 ]->setText( " " );
 		nr[ nr.size() -1 ]->setPosition( skills[ nr.size() -1 ]->getX() +grey.getWidth() -6, skills[ nr.size() -1 ]->getY() +grey.getHeight() -11 );
@@ -203,36 +192,26 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 	
 	// Load max levels temporary
 	vector <string> max_levels;
-	path = "data/txt/skill/skill_max.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_max.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			max_levels.push_back( line );
 		}
 	}
-	file.close();
+	file.free();
 	
 	// Load label_two.
-	path = "data/txt/skill/level_current.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot load %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/level_current.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int counter = 0;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			levels.push_back( stof( line ) );
+			levels.push_back( con::stof( line.c_str() ) );
 			label_two.push_back( new MyText() );
 			label_two[ label_two.size() -1 ]->setName( "skills-label_two" );
 			label_two[ label_two.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 14, 0x45, 0x38, 0x23 );
@@ -251,7 +230,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 			counter ++;
 		}
 	}
-	file.close();
+	file.free();
 	max_levels.clear();
 	
 	actions.push( USUAL );

@@ -1,6 +1,7 @@
 #include "wall.h"
 #include <time.h>
 #include <cstdlib>
+#include "file/file.h"
 
 
 Wall::Wall()
@@ -75,13 +76,13 @@ void Wall::load( int type, int width, int screen_w )
 		sprites.push_back( new MySprite() );
 	}
 	
-	sprites[ 0 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 0 ) +".png" );
-	sprites[ 1 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 1 ) +".png" );
-	sprites[ 2 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 10 ) +".png" );
-	sprites[ 3 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 4 ) +".png" );
-	sprites[ 4 ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( 12 ) +".png" );
-	sprites[ 5 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 2 ) +".png" );
-	sprites[ 6 ]->load( "data/04_platform/world/" +to_string( type ) +"/pug/" +to_string( 3 ) +".png" );
+	sprites[ 0 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 0 ) +".png" );
+	sprites[ 1 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 1 ) +".png" );
+	sprites[ 2 ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( 10 ) +".png" );
+	sprites[ 3 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 4 ) +".png" );
+	sprites[ 4 ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( 12 ) +".png" );
+	sprites[ 5 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 2 ) +".png" );
+	sprites[ 6 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 3 ) +".png" );
 	
 	int n = 0;
 	if( type == 4 )
@@ -90,7 +91,7 @@ void Wall::load( int type, int width, int screen_w )
 	}
 	
 	hit.setName( "wall-hit" );
-	hit.load( "data/04_platform/world/sounds/wall/" +to_string( n ) +".wav" );
+	hit.load( "data/04_platform/world/sounds/wall/" +con::itos( n ) +".wav" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )

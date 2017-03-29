@@ -58,8 +58,6 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	// Creating.
-	void deallocate();
-	int strToInt( string s );
 	void add( int x, int y, int chance );
 	void positioning( vector <Block*> blocks, int chance );
 	

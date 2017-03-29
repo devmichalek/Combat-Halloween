@@ -1,6 +1,6 @@
 #include "ladder.h"
 #include <cstdlib>
-#include <fstream>
+#include "file/file.h"
 
 Ladder::Ladder()
 {
@@ -66,8 +66,8 @@ void Ladder::load( int type, int width, int screen_w )
 	for( int i = 0; i < 2; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "ladder-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/ladder/" +to_string( i ) +".png" );
+		sprites[ i ]->setName( "ladder-sprites[" +con::itos( i ) +"]" );
+		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +"/ladder/" +con::itos( i ) +".png" );
 	}
 	
 	this->width = width;
@@ -104,26 +104,6 @@ void Ladder::fadeout( int v, int min )
 
 
 
-int Ladder::to_int( string s )
-{
-	bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-		i++;
-		m = true;
-    }
-	
-    while( i < s.size() )
-    {
-		tmp = 10*tmp +s[ i ] -48;
-		i++;
-    }
-	
-    return m ? -tmp : tmp; 
-}
 
 
 

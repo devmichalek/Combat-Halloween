@@ -1,6 +1,6 @@
 #include "greenery.h"
 #include <cstdlib>
-#include <fstream>
+#include "file/file.h"
 
 
 Greenery::Greenery()
@@ -78,37 +78,33 @@ void Greenery::load( int type, int width, int screen_w )
 {
 	free();
 	
-	fstream file;
-	file.open( "data/txt/greenery/" +to_string( type ) +".txt" );
-	if( file.bad() )
-	{
-		printf( "Can not open file: %s\n", ("data/txt/greenery/" +to_string( type ) +".txt").c_str() );
-	}
-	else
+	MyFile file;
+	file.load( "data/txt/greenery/" +con::itos( type ) +".txt" );
+	if( file.is_good() )
 	{
 		vector <int> types;
 		string line;
 		sf::Uint8 max;
 		
 		// set min
-		getline( file, line );
-		min = to_int( line );
+		getline( file.get(), line );
+		min = con::stoi( line );
 		
 		// set max
-		getline( file, line );
-		max = to_int( line );
+		getline( file.get(), line );
+		max = con::stoi( line );
 		
 		// load sprites
 		for( sf::Uint8 i = 0; i < max-min; i++ )
 		{
 			sprites.push_back( new MySprite() );
-			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +to_string( i+min ) +"]" );
-			sprites[ sprites.size() -1 ]->load( "data/04_platform/world/" +to_string( type )
-			+ "/" +to_string( i+min ) + ".png" );
+			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +con::itos( i+min ) +"]" );
+			sprites[ sprites.size() -1 ]->load( "data/04_platform/world/" +con::itos( type )
+			+ "/" +con::itos( i+min ) + ".png" );
 		}
 		
 		// load rules
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
 			types.clear();
 			
@@ -118,7 +114,7 @@ void Greenery::load( int type, int width, int screen_w )
 			{
 				if( line[ i ] == ' ' )
 				{
-					types.push_back( to_int( l ) );
+					types.push_back( con::stoi( l ) );
 					l = "";
 				}
 				else
@@ -147,7 +143,7 @@ void Greenery::load( int type, int width, int screen_w )
 		this->screen_w = screen_w;
 	}
 	
-	file.close();
+	file.free();
 	
 	// Test.
 	/*
@@ -216,26 +212,6 @@ void Greenery::fadeout( int v, int min )
 
 
 
-int Greenery::to_int( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-')
-    {
-		i++;
-		m = true;
-    }
-	
-    while( i < s.size() )
-    {
-		tmp = 10*tmp +s[ i ] -48;
-		i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
 
 unsigned Greenery::getDistance( int v1, int v2 )
 {

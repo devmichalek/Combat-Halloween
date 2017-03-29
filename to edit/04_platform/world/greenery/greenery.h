@@ -31,7 +31,6 @@ public:
 	
 	
 	// Creating
-	int to_int( string s );
 	unsigned getDistance( int v1, int v2 );
 	void positioning( vector <Block*> blocks );
 	

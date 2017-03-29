@@ -1,9 +1,9 @@
 #include "04_platform/enemy/expletive/expletive.h"
-#include <fstream>
+#include "file/file.h"
 
 Expletive::Expletive()
 {
-	
+	free();
 }
 
 Expletive::~Expletive()
@@ -34,69 +34,42 @@ void Expletive::free()
 	}
 }
 
-int Expletive::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
-
 
 
 void Expletive::load( string name )
 {
 	free();
 	
-	string txt_chunks = "data/txt/enemy/sounds/" +name +".txt";
+	MyFile file;
 	
-	fstream file;
-	
-	file.open( txt_chunks );
-	if( file.bad() )
-	{
-		printf( "Something went wrong... %s [file]\n", txt_chunks.c_str() );
-	}
-	else
+	file.load( "data/txt/enemy/sounds/" +name +".txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int hit_number = 0;
 		int attack_number = 0;
 		
-		file >> line;
-		hit_number = strToInt( line );
+		file.get() >> line;
+		hit_number = con::stoi( line );
 		
-		file >> line;
-		attack_number = strToInt( line );
+		file.get() >> line;
+		attack_number = con::stoi( line );
 		
 		for( int i = 0; i < hit_number; i++ )
 		{
 			hits.push_back( new Slab() );
 			hits[ hits.size() -1 ]->setName( "expletive-" +name );
-			hits[ hits.size() -1 ]->load( "data/04_platform/enemy/" +name +"/sounds/hit/" +to_string( i ) +".wav" );
+			hits[ hits.size() -1 ]->load( "data/04_platform/enemy/" +name +"/sounds/hit/" +con::itos( i ) +".wav" );
 		}
 		
 		for( int i = 0; i < attack_number; i++ )
 		{
 			attacks.push_back( new Slab() );
 			attacks[ attacks.size() -1 ]->setName( "expletive-" +name );
-			attacks[ attacks.size() -1 ]->load( "data/04_platform/enemy/" +name +"/sounds/attack/" +to_string( i ) +".wav" );
+			attacks[ attacks.size() -1 ]->load( "data/04_platform/enemy/" +name +"/sounds/attack/" +con::itos( i ) +".wav" );
 		}
 	}
-	file.close();
+	file.free();
 }
 
 void Expletive::playHits()

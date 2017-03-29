@@ -9,7 +9,7 @@
 
 #include "04_platform/ninja/kunai/kunai.h"
 #include "04_platform/ninja/kunai/damage.h"
-#include <fstream>
+#include "file/file.h"
 
 
 Kunai::Kunai()
@@ -62,25 +62,20 @@ void Kunai::load()
 	scale = 0.5;
 	vel = 4.0;
 	
-	fstream file;
+	MyFile file;
 	
 	// Set explosive level.
 	int explosive_level = 0;
-	string path = "data/txt/skill/level_current.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/level_current.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int counter = 4;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( counter == 0 )
 			{
-				explosive_level = stoi( line );
+				explosive_level = con::stoi( line );
 				// printf( "%d\n", explosive_level );
 				
 				if( explosive_level < 3 )		explosive_level = 31;
@@ -92,7 +87,7 @@ void Kunai::load()
 			counter --;
 		}
 	}
-	file.close();
+	file.free();
 	
 	
 	// Load sprites.
@@ -100,8 +95,8 @@ void Kunai::load()
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "kunai-sprites" );
-		if( i == 3 )	sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/shuriken/" +to_string( explosive_level ) +".png", 6 );
-		else			sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/shuriken/" +to_string( i ) +".png" );
+		if( i == 3 )	sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/shuriken/" +con::itos( explosive_level ) +".png", 6 );
+		else			sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/shuriken/" +con::itos( i ) +".png" );
 	}
 	
 	
@@ -114,57 +109,47 @@ void Kunai::load()
 	
 	// Temporary levels.
 	vector <int> levels;
-	path = "data/txt/skill/level_current.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/level_current.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( file >> line )
+		while( file.get() >> line )
 		{
-			levels.push_back( stof( line ) );
+			levels.push_back( con::stof( line.c_str() ) );
 		}
 	}
-	file.close();
+	file.free();
 
 	// Then set damage.
-	path = "data/txt/skill/skill_values.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_values.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		float value = 0;
 		int counter = 0;
 		
 		Damage DAMAGE;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( counter == 0 || counter == 4 || counter == 5 )
 			{
-				value = stof( line );
-				damage.push_back( stof( DAMAGE.multiply( counter, value, levels[ counter ] ) ) );
+				value = con::stof( line.c_str() );
+				damage.push_back( con::stof( DAMAGE.multiply( counter, value, levels[ counter ] ).c_str() ) );
 				// printf( "%f\n", damage[ damage.size() -1 ] );
 			}
 			
 			else if( counter == 2 )
 			{
-				value = stof( line );
-				float newDamage = stof( DAMAGE.multiply( counter, value, levels[ counter ] ) ) *damage[ 0 ] /100;
+				value = con::stof( line.c_str() );
+				float newDamage = con::stof( DAMAGE.multiply( counter, value, levels[ counter ] ).c_str() ) *damage[ 0 ] /100;
 				damage.push_back( newDamage );
 				// printf( "%f\n", damage[ damage.size() -1 ] );
 			}
 			
 			else if( counter == 3 )
 			{
-				value = stof( line );
-				float newDamage = stof( DAMAGE.multiply( counter, value, levels[ counter ] ) ) *damage[ 0 ] /100;
+				value = con::stof( line.c_str() );
+				float newDamage = con::stof( DAMAGE.multiply( counter, value, levels[ counter ] ).c_str() ) *damage[ 0 ] /100;
 				damage.push_back( newDamage +damage[ 0 ] );
 				// printf( "%f\n", damage[ damage.size() -1 ] );
 			}
@@ -172,7 +157,7 @@ void Kunai::load()
 			counter ++;
 		}
 	}
-	file.close();
+	file.free();
 	levels.clear();
 }
 

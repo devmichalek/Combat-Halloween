@@ -1,4 +1,5 @@
 #include "effect.h"
+#include "file/file.h"
 
 Effect::Effect()
 {
@@ -48,7 +49,7 @@ void Effect::load( int screen_w, int screen_h )
 	for( int i = 0; i < nr; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "effect-sprites[" + to_string( i ) +"]" );
+		sprites[ i ]->setName( "effect-sprites[" + con::itos( i ) +"]" );
 		sprites[ i ]->create( screen_w, screen_h );
 	}
 	

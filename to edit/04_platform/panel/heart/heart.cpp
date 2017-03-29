@@ -8,7 +8,7 @@
 */
 
 #include "heart.h"
-#include <fstream>
+#include "file/file.h"
 
 
 Heart::Heart()
@@ -73,36 +73,26 @@ void Heart::load()
 {
 	free();
 	
-	fstream file;
+	MyFile file;
 	
 	// Set max variable.
-	string path = "data/txt/heart/heart.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot open %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/heart/heart.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		file >> line;
-		max = stoi( line );
+		file.get() >> line;
+		max = con::stoi( line );
 	}
-	file.close();
+	file.free();
 	
 	
 	// Set actual amount of hearts.
-	path = "data/txt/heart/heart_current.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Cannot open %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/heart/heart_current.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		file >> line;
-		int nr = stoi( line );
+		file.get() >> line;
+		int nr = con::stoi( line );
 		
 		fill.setName( "heart-fill" );
 		fill.load( "data/04_platform/panel/heart/fill.png");
@@ -132,7 +122,7 @@ void Heart::load()
 			grey_bits[ grey_bits.size() -1 ]->y = 5;
 		}
 	}
-	file.close();
+	file.free();
 
 	reset();
 }

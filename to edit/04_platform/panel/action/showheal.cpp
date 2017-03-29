@@ -1,4 +1,5 @@
 #include "showheal.h"
+#include "file/file.h"
 
 void Showheal::load()
 {
@@ -10,7 +11,7 @@ void Showheal::load()
 
 void Showheal::run( int dmg )
 {
-	string str = "+" +to_string( dmg );
+	string str = "+" +con::itos( dmg );
 	// printf( "happened\n" );
 	vels.push_back( static_cast <float> (rand()%20 +80) /100 );
 	lines.push_back( rand()%20 +50 );

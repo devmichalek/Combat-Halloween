@@ -8,7 +8,7 @@
 */
 
 #include "ninja.h"
-#include <fstream>
+#include "file/file.h"
 #include "04_platform/ninja/kunai/damage.h"
 
 Hero::Hero()
@@ -168,8 +168,8 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	for( int i = 0; i < nr; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "hero-sprite[" + to_string( i ) + "]" );
-		sprites[ i ]->load( "data/04_platform/hero/" + to_string( type ) + "/" + to_string( i ) + ".png", nr -1 );
+		sprites[ i ]->setName( "hero-sprite[" + con::itos( i ) + "]" );
+		sprites[ i ]->load( "data/04_platform/hero/" + con::itos( type ) + "/" + con::itos( i ) + ".png", nr -1 );
 		sprites[ i ]->setScale( scale, scale );
 		
 		x.push_back( width /2 );
@@ -249,19 +249,14 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	float val = 0;
 	int lev = 0;
 	
-	fstream file;
-	string path = "data/txt/skill/skill_values.txt";
+	MyFile file;
 	
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/skill_values.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int counter = 1;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( counter == 0 )
 			{
@@ -272,22 +267,15 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 			counter --;
 		}
 	}
+	file.free();
 	
-	file.close();
 	
-	
-	path = "data/txt/skill/level_current.txt";
-	file.open( path );
-	
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/skill/level_current.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		int counter = 1;
-		while( file >> line )
+		while( file.get() >> line )
 		{
 			if( counter == 0 )
 			{
@@ -297,8 +285,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 			counter --;
 		}
 	}
-	
-	file.close();
+	file.free();
 	
 	
 	// printf( "%f\n", val );
@@ -321,17 +308,10 @@ void Hero::setKeys()
 	}
 	
 	// Set keys.
-	fstream file;
+	MyFile file;
 	
-	string path = "data/txt/keyboard/keyboard_temporary.txt";
-	
-	file.open( path );
-	
-	if( file.bad() )
-	{
-		printf( "Cannot open %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/keyboard/keyboard_temporary.txt" );
+	if( file.is_good() )
 	{
 		string line;
 		for( unsigned i = 0; i < sprites.size(); i ++ )
@@ -340,12 +320,11 @@ void Hero::setKeys()
 			keys.push_back( arrow );
 			keys[ i ] = new int[ 2 ];
 			
-			file >> line;	keys[ i ][ 0 ] = stoi( line );
-			file >> line;	keys[ i ][ 1 ] = stoi( line );
+			file.get() >> line;	keys[ i ][ 0 ] = con::stoi( line );
+			file.get() >> line;	keys[ i ][ 1 ] = con::stoi( line );
 		}
 	}
-	
-	file.close();
+	file.free();
 }
 
 void Hero::draw( sf::RenderWindow* &window )

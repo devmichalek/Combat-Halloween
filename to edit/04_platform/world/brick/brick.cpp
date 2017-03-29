@@ -1,6 +1,7 @@
 #include "brick.h"
 #include "rules.h"
 #include <cstdlib>
+#include "file/file.h"
 
 void Brick::reserve( unsigned size )
 {
@@ -118,8 +119,8 @@ void Brick::load( int type, int width, int screen_w, int screen_h )
 	for( int i = 0; i < 16; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "brick-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( i ) +".png" );
+		sprites[ i ]->setName( "brick-sprites[" +con::itos( i ) +"]" );
+		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( i ) +".png" );
 	}
 	
 	this->width = width;
@@ -162,26 +163,6 @@ void Brick::fadeout( int v, int min )
 }
 
 
-
-int Brick::to_int( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
 
 void Brick::addPlank( int n, int x, int y )
 {

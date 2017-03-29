@@ -8,7 +8,7 @@
 */
 
 #include "money.h"
-#include <fstream>
+#include "file/file.h"
 
 Money::Money()
 {
@@ -105,20 +105,20 @@ void Money::setText()
 {
 	sf::Uint8 max = 8;
 	
-	if( to_string( bank ).size() > max )
+	if( con::itos( bank ).size() > max )
 	{
 		bank = 99999999;
-		text.setText( to_string( bank ) );
+		text.setText( con::itos( bank ) );
 	}
 	else
 	{
 		string additional = "";
-		for( unsigned i = 0; i < max -to_string( bank ).size(); i++ )
+		for( unsigned i = 0; i < max -con::itos( bank ).size(); i++ )
 		{
 			additional += '0';
 		}
 		
-		text.setText( additional +to_string( bank ) );
+		text.setText( additional +con::itos( bank ) );
 	}
 	
 	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +10 );
@@ -126,21 +126,16 @@ void Money::setText()
 
 void Money::saveMoney()
 {
-	fstream file;
+	MyFile file;
 	
-	string path = "data/txt/money/bank.txt";
-	file.open( path, std::ios::out );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/money/bank.txt", std::ios::out );
+	if( file.is_good() )
 	{
 		string line;
-		file << to_string( bank );
+		file.get() << con::itos( bank );
 	}
 	
-	file.close();
+	file.free();
 }
 
 void Money::loadMoney()
@@ -157,7 +152,7 @@ void Money::loadMoney()
 	{
 		string line;
 		file >> line;
-		base = stoi( line );
+		base = con::stoi( line );
 		bank = base;
 	}
 	

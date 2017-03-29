@@ -1,4 +1,5 @@
 #include "water.h"
+#include "file/file.h"
 
 Water::Water()
 {
@@ -75,8 +76,8 @@ void Water::load( int type, int width, int screen_w, int screen_h )
 	for( unsigned i = 0; i < 2; i++ )
 	{
 		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "water-sprites[" +to_string( i ) +"]" );
-		sprites[ i ]->load( "data/04_platform/world/" +to_string( type ) +"/" +to_string( i +min ) +".png" );
+		sprites[ i ]->setName( "water-sprites[" +con::itos( i ) +"]" );
+		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( i +min ) +".png" );
 	}
 }
 

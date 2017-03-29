@@ -4,7 +4,7 @@
 #include "04_platform/enemy/vampire/vampire.h"
 #include "04_platform/enemy/zombie/zombie.h"
 #include "04_platform/enemy/robot/robot.h"
-#include <fstream>
+#include "file/file.h"
 
 template <typename F>
 Factory<F>::Factory()
@@ -119,50 +119,37 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	string txt_lines = "data/txt/enemy/lines/" +name +".txt";
-	string png_sprites = "data/04_platform/enemy/" +name +"/";
-	string txt_multiplier = "data/txt/enemy/multipliers/" +name +".txt";
-	string txt_features = "data/txt/enemy/features/" +name +".txt";
-	
 	// load lines
-	fstream file;
+	MyFile file;
 	
-	file.open( txt_lines );
-	if( file.bad() )
-	{
-		printf( "Something went wrong... %s [file]\n", txt_lines.c_str() );
-	}
-	else
+	file.load( "data/txt/enemy/lines/" +name +".txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
-			lines.push_back( strToInt( line ) );
+			lines.push_back( con::stoi( line ) );
 			// printf( "%d\n", lines[ lines.size() -1 ] );
 		}
 		
 		for( unsigned i = 0; i < lines.size(); i++ )
 		{
 			sprites.push_back( new MySprite() );
-			sprites[ sprites.size() -1 ]->setName( name +"-sprites[ " +to_string( i ) +" ]" );
-			sprites[ sprites.size() -1 ]->load( png_sprites +to_string( i ) +".png", lines[ i ] );
+			sprites[ sprites.size() -1 ]->setName( name +"-sprites[ " +con::itos( i ) +" ]" );
+			sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/" +name +"/" +con::itos( i ) +".png", lines[ i ] );
 		}
 	}
-	file.close();
+	file.free();
 	
-	file.open( txt_multiplier );
-	if( file.bad() )
-	{
-		printf( "Something went wrong... %s [file]\n", txt_multiplier.c_str() );
-	}
-	else
+	file.load( "data/txt/enemy/multipliers/" +name +".txt" );
+	if( file.is_good() )
 	{
 		int nr = 0;
 		int wide = 0;
 		vector< pair<int, int> > temporary;
 		
 		string line;
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
 			nr = 0;
 			wide = 0;
@@ -175,13 +162,13 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 				{
 					if( line[ i ] == ' ' )
 					{
-						nr = strToInt( first );
+						nr = con::stoi( first );
 						first = "";
 						for( unsigned j = i +1; j < line.size(); j++ )
 						{
 							if( line[ j ] == ' ' )
 							{
-								wide = strToInt( first );
+								wide = con::stoi( first );
 								break;
 							}
 							first += line[ j ];
@@ -210,23 +197,19 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 			}
 		}
 	}
-	file.close();
+	file.free();
 	
-	file.open( txt_features );
-	if( file.bad() )
-	{
-		printf( "Something went wrong... %s [file]\n", txt_features.c_str() );
-	}
-	else
+	file.load( "data/txt/enemy/features/" +name +".txt" );
+	if( file.is_good() )
 	{
 		string line;
-		while( getline( file, line ) )
+		while( getline( file.get(), line ) )
 		{
-			// printf( "%f\n", stof( line ) );
-			features.push_back( stof( line ) );
+			// printf( "%f\n", con::stof( line ) );
+			features.push_back( con::stof( line.c_str() ) );
 		}
 	}
-	file.close();
+	file.free();
 	
 	hp.setName( "factory-hp" );
 	hp.setFont( "data/00_loading/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
@@ -248,7 +231,7 @@ void Factory<F>::draw( sf::RenderWindow* &window )
 			{
 				if( i->getHeartPoints() > 0 )
 				{
-					hp.setText( "HP: " +to_string( i->getHeartPoints() ) );
+					hp.setText( "HP: " +con::itos( i->getHeartPoints() ) );
 					hp.setPosition( i->getRealX() +i->getRealWidth()/2 -hp.getWidth()/2, i->getRealY() -30 );
 					window->draw( hp.get() );
 				}
@@ -303,27 +286,6 @@ void Factory<F>::fadeout( int v, int min )
 
 
 
-template <typename F>
-int Factory<F>::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
 
 template <typename F>
 void Factory<F>::add( int x, int y, int chance )
