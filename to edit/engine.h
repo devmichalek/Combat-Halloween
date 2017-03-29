@@ -3,7 +3,6 @@
 #include "core.h"
 #include "timer.h"
 #include "00_loading/loading.h"
-#include "01_intro/intro.h"
 #include "02_menu/menu.h"
 #include "03_level/level.h"
 
@@ -37,7 +36,6 @@ class Engine
     Core* core;
 	Timer* timer;
 	Loading* loading;
-	Intro* intro;
 	Menu* menu;
 	Level* level;
 	Loading_world* gears;

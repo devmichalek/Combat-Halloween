@@ -17,8 +17,6 @@ Engine::Engine()
 	loading = new Loading;
 	loading->load( core->getWidth(), core->getHeight() );
 	
-	intro = new Intro;
-	
 	menu = new Menu;
 	
 	level = new Level;
@@ -42,7 +40,7 @@ void Engine::free()
 	if( timer != NULL )			delete timer;
 	
 	if( loading != NULL )		delete loading;
-	if( intro != NULL )			delete intro;
+
 	if( menu != NULL )			delete menu;
 	if( level != NULL )			delete level;
 	
@@ -65,8 +63,6 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
-		case 2:	intro->load( core->getWidth(), core->getHeight() );	break;
-		
 		case 10:	menu->load( core->getWidth(), core->getHeight() );	break;
 		
 		case 12:	level->load( core->getWidth(), core->getHeight() );	break;
@@ -123,19 +119,6 @@ void Engine::states()
 	if( core->getState() == -2 )
 	{
 		load();
-	}
-	
-
-	// intro state
-	if( core->getState() == INTRO )
-	{
-		intro->draw( core->getWindow() );
-		if( intro->isQuit() )
-		{
-			delete intro;
-			intro = NULL;
-			core->getState() = MENU;
-		}
 	}
 	
 	
