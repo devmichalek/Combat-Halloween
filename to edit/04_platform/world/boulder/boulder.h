@@ -33,7 +33,7 @@ public:
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
-	void mechanics( int x, int y );
+	void mechanics( Rect* rect );
 	void setColor( sf::Color color );
 	
 	// Check collision.

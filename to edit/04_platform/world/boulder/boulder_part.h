@@ -2,6 +2,7 @@
 
 #include "04_platform/world/brick/block.h"
 #include "SFML/Graphics.hpp"
+#include "drawable/rect.h"
 #include <vector>
 
 using namespace std;
@@ -11,7 +12,7 @@ class Boulder_part
 	double angle;
 	double angle_vel;
 	float vel;
-	int hit;
+	bool hit;
 	
 	sf::Uint8 alpha;
 	int state;
@@ -33,7 +34,7 @@ public:
 	void positioning( int width );
 	void setPosition( int x, int y, float vel, double angle_vel );
 	void moveX( float vel );
-	void moving( int x, int y, int width );
+	void moving( Rect* rect, int width );
 	
 	// till 2
 	unsigned getSize();

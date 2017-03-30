@@ -15,7 +15,7 @@ void Boulder_part::free()
 	angle = 0;
 	angle_vel = 0;
 	vel = 0;
-	hit = 0;
+	hit = false;
 	
 	alpha = 0;
 	state = 0;
@@ -36,7 +36,7 @@ void Boulder_part::free()
 void Boulder_part::reset( int distance )
 {
 	angle = 0;
-	hit = 0;
+	hit = false;
 	alpha = 0;
 	state = 0;
 	
@@ -95,11 +95,13 @@ void Boulder_part::moveX( float vel )
 	startX += vel;
 }
 
-void Boulder_part::moving( int x, int y, int width )
+void Boulder_part::moving( Rect* rect, int width )
 {
 	if( state == 0 )
 	{
-		if( x > startX && y < startY && x < startX +width )
+		if( rect->getX() +rect->getWidth() > startX &&
+			rect->getY() +rect->getHeight() /2 < startY &&
+			rect->getX() < startX +width )
 		{
 			state = 1;
 		}
@@ -190,9 +192,9 @@ void Boulder_part::setBoulderAlpha( sf::Uint8 a )
 
 bool Boulder_part::harm( int width )
 {
-	if( blocks[ blocks.size()-1 ]->y >= startY -width*2.5 && hit < 20 && state == 1 )
+	if( blocks[ blocks.size()-1 ]->y >= startY -width*1.75 && !hit && state == 1 )
 	{
-		hit ++;
+		hit = true;
 		return true;
 	}
 	

@@ -99,6 +99,24 @@ void Boulder::load( int type, int width, int screen_w )
 		sprites[ sprites.size() -1 ]->load( "data/04_platform/world/0/boulder/1.png" );
 	}
 	
+	MyFile file;
+	file.load( "data/txt/world/boulder.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int c = type;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				damage = con::stoi( line );
+				// printf( "%d\n", damage );
+			}
+			c--;
+		}
+	}
+	file.free();
+	
 	sprites[ sprites.size() -1 ]->setOrigin( sprites[ sprites.size() -1 ]->getWidth() /2, sprites[ sprites.size() -1 ]->getHeight() /2 );
 }
 
@@ -163,8 +181,6 @@ void Boulder::fadeout( int v, int min )
 
 void Boulder::positioning( vector <Block*> blocks, vector <int> xs, int chance )
 {
-	damage = 1;
-	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
@@ -235,11 +251,14 @@ void Boulder::undoFall( sf::Uint8 add )
 	}
 }
 
-void Boulder::mechanics( int x, int y )
+void Boulder::mechanics( Rect* rect )
 {
-	for( auto &it :blocks )
+	if( rect != NULL )
 	{
-		it->moving( x, y, width );
+		for( auto &it :blocks )
+		{
+			it->moving( rect, width );
+		}
 	}
 }
 
