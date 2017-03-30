@@ -11,6 +11,7 @@ class Effect
 		BLOOD,
 		FALL,
 		LIGHTNING,
+		CRUNCHER,
 		SAND,
 		ACID,
 		nr
@@ -42,4 +43,5 @@ public:
 	void runLightning();
 	void runSand();
 	void runAcid();
+	void runCruncher();
 };

@@ -57,6 +57,7 @@ void Effect::load( int screen_w, int screen_h )
 	sprites[ BLOOD ]->setColor( sf::Color( 0xFF, 0x81, 0x70 ) );
 	sprites[ FALL ]->setColor( sf::Color( 0, 0, 0 ) );
 	sprites[ LIGHTNING ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	sprites[ CRUNCHER ]->setColor( sf::Color( 0xA6, 0xA8, 0xAB ) );
 	sprites[ SAND ]->setColor( sf::Color( 0xBE, 0x7F, 0x19 ) );
 	sprites[ ACID ]->setColor( sf::Color( 0xA2, 0xF1, 0x49 ) );
 	
@@ -149,4 +150,10 @@ void Effect::runAcid()
 {
 	counter = 1;
 	active = ACID;
+}
+
+void Effect::runCruncher()
+{
+	counter = 1;
+	active = CRUNCHER;
 }
