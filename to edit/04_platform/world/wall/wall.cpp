@@ -90,6 +90,24 @@ void Wall::load( int type, int width, int screen_w )
 		n = 1;
 	}
 	
+	MyFile file;
+	file.load( "data/txt/world/wall.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int c = type;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				damage = con::stoi( line );
+				// printf( "%d\n", damage );
+			}
+			c--;
+		}
+	}
+	file.free();
+	
 	hit.setName( "wall-hit" );
 	hit.load( "data/04_platform/world/sounds/wall/" +con::itos( n ) +".wav" );
 }
@@ -131,8 +149,6 @@ void Wall::fadeout( int v, int min )
 
 void Wall::positioning( vector <Block*> blocks, int chance )
 {
-	damage = chance;
-	
 	for( unsigned i = 0; i < blocks.size() -2; i++ )
 	{
 		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
