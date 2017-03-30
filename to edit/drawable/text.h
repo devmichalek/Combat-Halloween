@@ -23,6 +23,8 @@ class MyText :public Rect, public Color
 	sf::Text* text;
 	
 	int size;
+	int safe_width;
+	int safe_height;
 	
 public:
 	
@@ -43,6 +45,7 @@ public:
 	void setName( string name );	// To find errors.
 	const string& getName() const;
 	
+	void setScale( float x = 1, float y = 1 );
 	
 	void setPosition( float x, float y );
 	void reloadPosition();	// Set the same position as it was.

@@ -19,8 +19,8 @@ MyText::MyText()
 {
 	name = "";
 	
-	width = height = 0;
-    left = top = 0;
+	safe_width = width = height = 0;
+    safe_height = left = top = 0;
 
     font = NULL;
 	text = NULL;
@@ -40,8 +40,8 @@ MyText::~MyText()
 
 void MyText::free()
 {
-	width = height = 0;
-    left = top = 0;
+	safe_width = width = height = 0;
+    safe_height = left = top = 0;
 
     if( font != NULL )
     {
@@ -119,8 +119,8 @@ void MyText::setText( string line )
 		text->setColor( color );
 		text->setFont( *font );
 		
-		width = text->getLocalBounds().width;
-		height = text->getLocalBounds().height;
+		safe_width = width = text->getLocalBounds().width;
+		safe_height = height = text->getLocalBounds().height;
 	}
 	catch( string msg )
 	{
@@ -226,6 +226,17 @@ void MyText::setName( string name )
 const string& MyText::getName() const
 {
 	return name;
+}
+
+void MyText::setScale( float x, float y )
+{
+	text->setScale( x, y );
+	
+	if( x < 0 ) x = -x;
+	if( y < 0 ) y = -y;
+	
+	width = safe_width * x;
+	height = safe_height * y;
 }
 
 
