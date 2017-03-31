@@ -77,7 +77,7 @@ void Coins::load( int width, int screen_w, int type )
 			
 			if( type == 0 )
 			{
-				money = strToInt( line );
+				money = con::stoi( line );
 				// printf( "%d\n", money );
 				break;
 			}
@@ -95,10 +95,10 @@ void Coins::load( int width, int screen_w, int type )
 		int jumped = 0;
 		
 		file.get() >> line;
-		dropped = strToInt( line );
+		dropped = con::stoi( line );
 		
 		file.get() >> line;
-		jumped = strToInt( line );
+		jumped = con::stoi( line );
 		
 		for( int i = 0; i < dropped; i ++ )
 		{
@@ -167,7 +167,7 @@ void Coins::fadeout( int v, int min )
 	coin.fadeout( v, min );
 }
 
-void Coins::setCoin( Rect* rect )
+Rect* Coins::drop( Rect* rect )
 {
 	if( rect != NULL )
 	{
@@ -206,7 +206,11 @@ void Coins::setCoin( Rect* rect )
 				dropped_coins[ rand()%dropped_coins.size() ]->play();
 			}
 		}
+		
+		return rect;
 	}
+	
+	return NULL;
 }
 
 
@@ -264,36 +268,13 @@ void Coins::setColor( sf::Color color )
 	coin.setColor( color );
 }
 
-
-
-int Coins::strToInt( string s )
-{
-    bool m = false;
-    int tmp = 0;
-    unsigned i = 0;
-	
-    if( s[ 0 ] == '-' )
-    {
-          i++;
-          m = true;
-    }
-	
-    while( i < s.size() )
-    {
-      tmp = 10*tmp +s[ i ] -48;
-      i++;
-    }
-	
-    return m ? -tmp : tmp;   
-}
-
 int Coins::getMoney()
 {
 	float multiplier = rand()%10;
 	return money +(money *multiplier);
 }
 
-bool Coins::upliftMoney( Rect* rect )
+bool Coins::uplift( Rect* rect )
 {
 	if( rect != NULL )
 	{

@@ -446,7 +446,7 @@ bool Factory<F>::harm( Rect* rect, int damage )
 						if( i->getHeartPoints() <= 0 )
 						{
 							deadRect = new Rect;
-							deadRect->set( i->getX(), i->getPlane(), i->getLeft(), i->getRight() );
+							deadRect->set( i->getRealX() +i->getRealWidth()/2, i->getPlane(), i->getLeft(), i->getRight() );
 							i->setDead();
 						}
 						

@@ -1,5 +1,6 @@
 #include "04_platform/enemy/mine/mine_factory.h"
 #include <cstdlib>
+#include "file/file.h"
 
 Mine_factory::Mine_factory()
 {
@@ -72,9 +73,29 @@ void Mine_factory::reset( int distance )
 
 
 
-void Mine_factory::load( int width, int screen_w, int screen_h )
+void Mine_factory::load( int type, int width, int screen_w, int screen_h )
 {
 	free();
+	
+	// Set damage.
+	MyFile file;
+	file.load( "data/txt/enemy/mine.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int c = type;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				damage = con::stoi( line );
+				break;
+			}
+			
+			c --;
+		}
+	}
+	file.free();
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size() -1 ]->setName( "mine_factory-sprites[ 0 ]" );
@@ -146,7 +167,7 @@ void Mine_factory::addMine( int x1, int x2, int y )
 
 void Mine_factory::positioning( vector <Block*> blocks, int chance )
 {
-	damage = chance /2;
+	damage +=  damage*(static_cast <float> (chance) /100);
 	for( auto &i :blocks )
 	{
 		if( i->nr >= 0 && i->nr <= 7 )

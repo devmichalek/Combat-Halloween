@@ -29,7 +29,7 @@ public:
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	
-	void setCoin( Rect* rect );
+	Rect* drop( Rect* rect );
 	void playDropped_coin();
 	void playJumped_coin();
 	
@@ -39,9 +39,8 @@ public:
 	void mechanics();
 	void setColor( sf::Color color );
 	
-	int strToInt( string s );
 	int getMoney();
-	bool upliftMoney( Rect* rect );
+	bool uplift( Rect* rect );
 	
 	// Sound stuff.
 	void turnOn();

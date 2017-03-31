@@ -25,7 +25,7 @@ public:
 	void free();
 	void reset( int distance );
 	
-	void load( int width, int screen_w, int screen_h );
+	void load( int type, int width, int screen_w, int screen_h );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int v = 1, int max = 0xFF );
