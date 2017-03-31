@@ -16,6 +16,8 @@
 #include "04_platform/panel/skill/skills.h"
 #include "04_platform/panel/action/showdamage.h"
 #include "04_platform/panel/action/showheal.h"
+#include "04_platform/panel/scores/scores.h"
+#include "04_platform/panel/hp_dot/hp_dots.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -29,12 +31,14 @@
 #include "04_platform/world/background/day.h"
 #include "04_platform/world/weather/sun/sun.h"
 #include "04_platform/world/boulder/boulder.h"
+#include "04_platform/world/door/door.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
 #include "04_platform/enemy/factory/factory.h"
 #include "04_platform/enemy/golem/golem.h"
 #include "04_platform/enemy/checkActivity/fireball/fireball.h"
+#include "04_platform/enemy/flying/fly_factory.h"
 
 class Forest
 {
@@ -63,6 +67,8 @@ class Forest
 	Skills* skills;
 	Showdamage* showdamage;
 	Showheal* showheal;
+	Scores* scores;
+	Hp_dots* hp_dots;
 	
 	// world
 	Brick* brick;
@@ -76,11 +82,13 @@ class Forest
 	Day* day;
 	Sun* sun;
 	Boulder* boulder;
+	Door* door;
 	
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Golem> golem_factory;
 	Fireball* fireball;
+	Fly_factory* fly_factory;
 	
 public:
 
@@ -96,7 +104,8 @@ public:
 	bool positioning( int type, int size, int flatness, int difficuly );
 	string getInfo();
 	
-	bool nextState();
+	bool defeatState();
+	bool winState();
 	bool backToLevel();
 	void mechanics();
 	

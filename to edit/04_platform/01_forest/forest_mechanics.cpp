@@ -229,7 +229,10 @@ void Forest::mechanics()
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), scope->getVel() );
+			door->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -246,7 +249,10 @@ void Forest::mechanics()
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
+			door->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 
@@ -288,7 +294,10 @@ void Forest::mechanics()
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			hp_dots->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
+			fly_factory->undoFall( brick->getGrassValue() );
+			door->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -358,12 +367,15 @@ void Forest::mechanics()
 	else
 	{
 		wall->mechanics();
-		boulder->mechanics( hero->getX(), hero->getY() );
+		boulder->mechanics( hero->getRect() );
 		mine_factory->mechanics();
 		golem_factory.mechanics();
 		coins->mechanics();
+		hp_dots->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
+		fly_factory->mechanics();
 		skills->mechanics();
+		scores->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -386,6 +398,7 @@ void Forest::mechanics()
 		{
 			hero->setColor( day->getColor() );
 			coins->setColor( day->getColor() );
+			hp_dots->setAlpha( day->getAlpha() );
 			kunai->setColor( day->getColor() );
 			
 			brick->setColor( day->getColor() );
@@ -398,9 +411,11 @@ void Forest::mechanics()
 			boulder->setColor( day->getColor() );
 			ladder->setColor( day->getColor() );
 			greenery->setColor( day->getColor() );
+			door->setColor( day->getColor() );
 			
 			mine_factory->setColor( day->getColor() );
 			golem_factory.setColor( day->getColor() );
+			fly_factory->setColor( day->getColor() );
 		}
 	}
 	
@@ -421,11 +436,21 @@ void Forest::mechanics()
 	golem_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS
-	coins->setCoin( golem_factory.getDeadRect() );
+	// COINS AND HP DOTS
+	hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) );
 	
-	if( coins->upliftMoney( hero->getRect() ) )
+	if( coins->uplift( hero->getRect() ) )
 	{
 		money->add( coins->getMoney() );
 	}
+	
+	if( hp_dots->uplift( hero->getRect() ) )
+	{
+		showheal->run( hp_dots->getHP() );
+		heart->harm( hp_dots->getHP() );
+	}
+
+// ------------------------------------------------------------------------------------------------
+	// DOOR
+	door->checkHero( hero->getRect() );
 }
