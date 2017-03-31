@@ -22,11 +22,11 @@ Menu::Menu()
 	music_volume = new Volume_button( 64 );	// 50% of 128, 128 is max value.
 	chunk_volume = new Volume_button( 52 );	// 40% of 128
 	
-	git_button = new Link_button( "https://github.com/Adriqun" );
+	git_button = new Link_button( "https://github.com/Adriqun/Ninja" );
 	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
 	twitter_button = new Link_button( "", true );
 	facebook_button = new Link_button( "", true );
-	scores_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
+	scores_button = new Link_button( "http://ninja2d.netne.net/" );
 	
 
 	background = new MySprite();
