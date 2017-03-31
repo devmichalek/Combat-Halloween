@@ -40,6 +40,11 @@ void Boulder_part::reset( int distance )
 	alpha = 0;
 	state = 0;
 	
+	for( auto &i :blocks )
+	{
+		i->y = 0;
+	}
+	
 	while( true )
 	{
 		if( distance > 0 )

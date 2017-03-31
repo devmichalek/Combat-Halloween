@@ -66,6 +66,7 @@ public:
 	vector <Block*> getPlanks();
 	float getLeft();
 	float getRight();
+	Rect* getLastBlock();
 	
 	
 	// Collision detection.

@@ -622,6 +622,34 @@ float Brick::getRight()
 	return right;
 }
 
+Rect* Brick::getLastBlock()
+{
+	float x = 0;
+	float y = 0;
+	int min = 0;
+	int max = 7;
+	
+	Rect* r = new Rect;
+	
+	for( auto &it :blocks )
+	{
+		if( it->nr >= min && it->nr <= max )
+		{
+			if( x < it->x )
+			{
+				// printf( "%f\n", it->x );
+				x = it->x;
+				y = it->y;
+			}
+		}
+	}
+	
+	// printf( "right %f, last %f\n", getRight(), x );
+	
+	r->set( static_cast <int> (x), static_cast <int> (y), width, width );
+	return r;
+}
+
 
 
 

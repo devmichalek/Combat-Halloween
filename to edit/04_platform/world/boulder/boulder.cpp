@@ -51,7 +51,7 @@ void Boulder::reset( int distance )
 		{
 			for( auto &it :blocks )
 			{
-				it->moveX( 1 );
+				it->reset( 1 );
 			}
 			
 			distance --;
