@@ -188,13 +188,13 @@ void Engine::states()
 	if( core->getState() == HALLOWEEN )
 	{
 		halloween->draw( core->getWindow() );
-		if( halloween->nextState() )
+		if( halloween->defeatState() )
 		{
+			halloween->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
 			core->getState() = PANEL;
-			halloween->reset();
 		}
 	}
 	
@@ -203,13 +203,13 @@ void Engine::states()
 	if( core->getState() == FOREST )
 	{
 		forest->draw( core->getWindow() );
-		if( forest->nextState() )
+		if( forest->defeatState() )
 		{
+			forest->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
 			core->getState() = PANEL;
-			forest->reset();
 		}
 	}
 	
@@ -218,13 +218,13 @@ void Engine::states()
 	if( core->getState() == WINTER )
 	{
 		winter->draw( core->getWindow() );
-		if( winter->nextState() )
+		if( winter->defeatState() )
 		{
+			winter->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
 			core->getState() = PANEL;
-			winter->reset();
 		}
 	}
 	
@@ -233,13 +233,13 @@ void Engine::states()
 	if( core->getState() == DESERT )
 	{
 		desert->draw( core->getWindow() );
-		if( desert->nextState() )
+		if( desert->defeatState() )
 		{
+			desert->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
 			core->getState() = PANEL;
-			desert->reset();
 		}
 	}
 	
@@ -248,13 +248,13 @@ void Engine::states()
 	if( core->getState() == FUTURE )
 	{
 		future->draw( core->getWindow() );
-		if( future->nextState() )
+		if( future->defeatState() )
 		{
+			future->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
 			core->getState() = PANEL;
-			future->reset();
 		}
 	}
 	

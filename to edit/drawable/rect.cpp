@@ -10,7 +10,7 @@
 #include "drawable/rect.h"
 #include <stdio.h>
 
-void Rect::set( int x, int y, int w, int h )
+void Rect::set( float x, float y, float w, float h )
 {
 	left = x;
 	top = y;
@@ -19,54 +19,54 @@ void Rect::set( int x, int y, int w, int h )
 }
 
 
-const int& Rect::getX() const
+const float& Rect::getX() const
 {
     return left;
 }
 
-const int& Rect::getY() const
+const float& Rect::getY() const
 {
     return top;
 }
 
 
 
-const int& Rect::getWidth() const
+const float& Rect::getWidth() const
 {
     return width;
 }
 
-const int& Rect::getHeight() const
+const float& Rect::getHeight() const
 {
     return height;
 }
 
 
 
-const int& Rect::getLeft() const
+const float& Rect::getLeft() const
 {
     return left;
 }
 
-const int Rect::getRight() const
+const float Rect::getRight() const
 {
     return left + width;
 }
 
 
 
-const int& Rect::getTop() const
+const float& Rect::getTop() const
 {
     return top;
 }
 
-const int Rect::getBot() const
+const float Rect::getBot() const
 {
     return top + height;
 }
 
 
-bool Rect::checkCollision( int x, int y, int w, int h )
+bool Rect::checkCollision( float x, float y, float w, float h )
 {
 	if( y + h <= top )
         return false;

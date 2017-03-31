@@ -556,11 +556,12 @@ std::ostream& MySprite::operator <<( std::ostream& str )
 {
 	std::string result = "";
 	result += name;
+	/*
 	result += " x: " + left;
 	result += " y: " + top;
 	result += " w: " + width;
 	result += " h: " + height;
 	result += " alpha: " + color.a;
-	
+	*/
 	return str << result;
 }
