@@ -12,12 +12,14 @@
 #include "sound/sound.h"
 #include "replay_button.h"
 #include "backtomenu_panel.h"
+#include "sound/music.h"
 
 class Panel_menu
 {
 	int state;
 	
 	Sound sound;
+	Music* music;
 	MySprite* bg;
 	Replay_button* replay_button;
 	Backtomenu_panel* backtomenu_panel;
