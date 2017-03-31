@@ -20,6 +20,8 @@ Desert::Desert()
 	skills = new Skills;
 	showdamage = new Showdamage;
 	showheal = new Showheal;
+	scores = new Scores;
+	hp_dots = new Hp_dots;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -31,10 +33,12 @@ Desert::Desert()
 	day = new Day;
 	wind = new Wind;
 	boulder = new Boulder;
+	door = new Door;
 	
 	mine_factory = new Mine_factory;
 	snakes_factory = new Snakes_factory;
 	fireball = new Fireball;
+	fly_factory = new Fly_factory;
 }
 
 Desert::~Desert()
@@ -64,6 +68,8 @@ void Desert::free()
 	delete skills;
 	delete showdamage;
 	delete showheal;
+	delete scores;
+	delete hp_dots;
 	
 	delete brick;
 	delete effect;
@@ -75,11 +81,13 @@ void Desert::free()
 	delete day;
 	delete wind;
 	delete boulder;
+	delete door;
 	
 	delete mine_factory;
 	skeleton_factory.free();
 	delete snakes_factory;
 	delete fireball;
+	delete fly_factory;
 }
 
 void Desert::reset()
@@ -98,6 +106,8 @@ void Desert::reset()
 	skills->reset();
 	showdamage->reset();
 	showheal->reset();
+	scores->reset();
+	hp_dots->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -109,11 +119,13 @@ void Desert::reset()
 	day->reset();
 	wind->reset();
 	boulder->reset( distance );
+	door->reset( distance );
 	
 	mine_factory->reset( distance );
 	skeleton_factory.reset( distance );
 	snakes_factory->reset( distance );
 	fireball->reset();
+	fly_factory->reset();
 	
 	// Set color
 	hero->setColor( day->getColor() );
@@ -127,10 +139,13 @@ void Desert::reset()
 	ladder->setColor( day->getColor() );
 	greenery->setColor( day->getColor() );
 	boulder->setColor( day->getColor() );
+	door->setColor( day->getColor() );
+	hp_dots->setAlpha( day->getAlpha() );
 	
 	mine_factory->setColor( day->getColor() );
 	skeleton_factory.setColor( day->getColor() );
 	snakes_factory->setColor( day->getColor() );
+	fly_factory->setColor( day->getColor() );
 }
 
 
@@ -151,6 +166,8 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	coins->load( width, screen_w, type );
 	showdamage->load();
 	showheal->load();
+	scores->load( screen_w );
+	hp_dots->load( type, screen_w );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -162,11 +179,13 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	day->set( FPS );
 	wind->create( screen_w, screen_h );
 	boulder->load( type, width, screen_w );
+	door->load( type );
 	
-	mine_factory->load( width, screen_w, screen_h );
+	mine_factory->load( type, width, screen_w, screen_h );
 	skeleton_factory.load( width, screen_h, screen_h, "skeleton" );
 	snakes_factory->load( width, screen_w, screen_h );
 	fireball->load( FPS, screen_w );
+	fly_factory->load( type, screen_w, screen_h );
 	
 	music->setID( "forest-music" );
 	music->load( "data/04_platform/world/3/music.mp3", 50 );
@@ -200,6 +219,8 @@ void Desert::draw( sf::RenderWindow* &window )
 		skills->fadeout( value );
 		showdamage->fadeout( value );
 		showheal->fadeout( value );
+		scores->fadeout( value );
+		hp_dots->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -210,11 +231,13 @@ void Desert::draw( sf::RenderWindow* &window )
 		ladder->fadeout( value );
 		greenery->fadeout( value );
 		wind->fadeout( value );
+		door->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		skeleton_factory.fadeout( value );
 		snakes_factory->fadeout( value );
 		fireball->fadeout( value );
+		fly_factory->fadeout( value );
 		
 		// set fade
 		if( background->getAlpha() == 0 )	fade = 0;
@@ -231,6 +254,8 @@ void Desert::draw( sf::RenderWindow* &window )
 		money->fadein( value );
 		coins->fadein( value );
 		skills->fadein( value );
+		scores->fadein( value );
+		hp_dots->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -240,11 +265,13 @@ void Desert::draw( sf::RenderWindow* &window )
 		boulder->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
+		door->fadein( value );
 		
 		mine_factory->fadein( value );
 		skeleton_factory.fadein( value );
 		snakes_factory->fadein( value );
 		fireball->fadein( value );
+		fly_factory->fadein( value );
 		
 		// set fade
 		if( background->getAlpha() == 0xFF )	fade = 1;
@@ -259,6 +286,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	ladder->draw( window );
 	
 	// hero
+	door->draw( window );
 	hero->draw( window );
 	kunai->draw( window );
 	
@@ -267,8 +295,10 @@ void Desert::draw( sf::RenderWindow* &window )
 	skeleton_factory.draw( window );
 	snakes_factory->draw( window );
 	fireball->draw( window );
+	fly_factory->draw( window );
 	
 	// rest
+	hp_dots->draw( window );
 	wind->draw( window );
 	brick->draw( window );
 	islands->draw( window );
@@ -281,6 +311,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	skills->draw( window );
 	showdamage->draw( *window );
 	showheal->draw( *window );
+	scores->draw( window );
 	effect->draw( window );
 }
 
@@ -380,13 +411,16 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting money multiplier";	break;
 		
 		case 22: coins->setChance( difficulty );
-		info = "loading world";	break;
+		info = "positioning boulders";	break;
 		
 		case 23: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
-		info = "positioning boulders";	break;
+		info = "setting doors";	break;
 		
-		case 24: setSound();	reloadMusic();	break;
+		case 24: door->positioning( brick->getLastBlock() );
+		info = "loading music";	break;
+		
+		case 25: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:
@@ -406,9 +440,19 @@ string Desert::getInfo()
 
 
 
-bool Desert::nextState()
+bool Desert::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Desert::winState()
+{
+	if( door->nextState() )
 	{
 		return true;
 	}

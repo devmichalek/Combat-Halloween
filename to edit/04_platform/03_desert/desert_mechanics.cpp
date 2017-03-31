@@ -235,8 +235,11 @@ void Desert::mechanics()
 			skeleton_factory.moveX( hero->getDirection(), scope->getVel() );
 			snakes_factory->moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			wind->moveX( hero->getDirection(), scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), scope->getVel() );
+			door->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -253,8 +256,11 @@ void Desert::mechanics()
 			skeleton_factory.moveX( hero->getDirection(), -scope->getVel() );
 			snakes_factory->moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			wind->moveX( hero->getDirection(), -scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
+			door->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -297,8 +303,11 @@ void Desert::mechanics()
 			skeleton_factory.undoFall( brick->getGrassValue() );
 			snakes_factory->undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			hp_dots->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
 			wind->undoFall( brick->getGrassValue() );
+			fly_factory->undoFall( brick->getGrassValue() );
+			door->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -375,13 +384,16 @@ void Desert::mechanics()
 	else
 	{
 		wall->mechanics();
-		boulder->mechanics( hero->getX(), hero->getY() );
+		boulder->mechanics( hero->getRect() );
 		mine_factory->mechanics();
 		skeleton_factory.mechanics();
 		snakes_factory->mechanics();
 		coins->mechanics();
+		hp_dots->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
+		fly_factory->mechanics();
 		skills->mechanics();
+		scores->mechanics();
 		wind->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
@@ -415,6 +427,7 @@ void Desert::mechanics()
 	{
 		hero->setColor( day->getColor() );
 		coins->setColor( day->getColor() );
+		hp_dots->setAlpha( day->getAlpha() );
 		kunai->setColor( day->getColor() );
 		
 		brick->setColor( day->getColor() );
@@ -428,6 +441,8 @@ void Desert::mechanics()
 		mine_factory->setColor( day->getColor() );
 		skeleton_factory.setColor( day->getColor() );
 		snakes_factory->setColor( day->getColor() );
+		fly_factory->setColor( day->getColor() );
+		door->setColor( day->getColor() );
 	}
 	
 // ------------------------------------------------------------------------------------------------
@@ -444,12 +459,22 @@ void Desert::mechanics()
 	snakes_factory->ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS
-	coins->setCoin( skeleton_factory.getDeadRect() );
-	coins->setCoin( snakes_factory->getDeadRect() );
+	// COINS AND HP DOTS
+	hp_dots->drop( coins->drop( skeleton_factory.getDeadRect() ) );
+	hp_dots->drop( coins->drop( snakes_factory->getDeadRect() ) );
 	
-	if( coins->upliftMoney( hero->getRect() ) )
+	if( coins->uplift( hero->getRect() ) )
 	{
 		money->add( coins->getMoney() );
 	}
+	
+	if( hp_dots->uplift( hero->getRect() ) )
+	{
+		showheal->run( hp_dots->getHP() );
+		heart->harm( hp_dots->getHP() );
+	}
+	
+// ------------------------------------------------------------------------------------------------
+	// DOOR
+	door->checkHero( hero->getRect() );
 }

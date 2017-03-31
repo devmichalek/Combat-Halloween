@@ -16,6 +16,8 @@
 #include "04_platform/panel/skill/skills.h"
 #include "04_platform/panel/action/showdamage.h"
 #include "04_platform/panel/action/showheal.h"
+#include "04_platform/panel/scores/scores.h"
+#include "04_platform/panel/hp_dot/hp_dots.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -28,6 +30,7 @@
 #include "04_platform/world/background/day.h"
 #include "04_platform/world/weather/wind/wind.h"
 #include "04_platform/world/boulder/boulder.h"
+#include "04_platform/world/door/door.h"
 
 
 // Enemy
@@ -36,6 +39,7 @@
 #include "04_platform/enemy/skeleton/skeleton.h"
 #include "04_platform/enemy/snakes/snakes_factory.h"
 #include "04_platform/enemy/checkActivity/fireball/fireball.h"
+#include "04_platform/enemy/flying/fly_factory.h"
 
 class Desert
 {
@@ -64,6 +68,8 @@ class Desert
 	Skills* skills;
 	Showdamage* showdamage;
 	Showheal* showheal;
+	Scores* scores;
+	Hp_dots* hp_dots;
 	
 	// world
 	Brick* brick;
@@ -76,12 +82,14 @@ class Desert
 	Day* day;
 	Wind* wind;
 	Boulder* boulder;
+	Door* door;
 	
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Skeleton> skeleton_factory;
 	Snakes_factory* snakes_factory;
 	Fireball* fireball;
+	Fly_factory* fly_factory;
 	
 	
 public:
@@ -98,7 +106,8 @@ public:
 	bool positioning( int type, int size, int flatness, int difficulty );
 	string getInfo();
 	
-	bool nextState();
+	bool defeatState();
+	bool winState();
 	bool backToLevel();
 	void mechanics();
 	
