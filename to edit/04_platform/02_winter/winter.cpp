@@ -20,6 +20,8 @@ Winter::Winter()
 	skills = new Skills;
 	showdamage = new Showdamage;
 	showheal = new Showheal;
+	scores = new Scores;
+	hp_dots = new Hp_dots;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -31,9 +33,11 @@ Winter::Winter()
 	greenery = new Greenery;
 	snow = new Snow;
 	boulder = new Boulder;
+	door = new Door;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
+	fly_factory = new Fly_factory;
 }
 
 Winter::~Winter()
@@ -63,6 +67,8 @@ void Winter::free()
 	delete skills;
 	delete showdamage;
 	delete showheal;
+	delete scores;
+	delete hp_dots;
 	
 	delete brick;
 	delete effect;
@@ -74,10 +80,12 @@ void Winter::free()
 	delete greenery;
 	delete snow;
 	delete boulder;
+	delete door;
 	
 	delete mine_factory;
 	golem_factory.free();
 	delete lightning;
+	delete fly_factory;
 }
 
 void Winter::reset()
@@ -96,6 +104,8 @@ void Winter::reset()
 	skills->reset();
 	showdamage->reset();
 	showheal->reset();
+	scores->reset();
+	hp_dots->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -107,10 +117,12 @@ void Winter::reset()
 	greenery->reset( distance );
 	snow->reset();
 	boulder->reset( distance );
+	door->reset( distance );
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
 	lightning->reset();
+	fly_factory->reset();
 }
 
 
@@ -131,6 +143,8 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	coins->load( width, screen_w, type );
 	showdamage->load();
 	showheal->load();
+	scores->load( screen_w );
+	hp_dots->load( type, screen_w );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -142,10 +156,12 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	greenery->load( type, width, screen_w );
 	snow->load( screen_w, screen_h );
 	boulder->load( type, width, screen_w );
+	door->load( type );
 	
-	mine_factory->load( width, screen_w, screen_h );
+	mine_factory->load( type, width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_winter" );
 	lightning->load( FPS );
+	fly_factory->load( type, screen_w, screen_h );
 	
 	music->setID( "winter-music" );
 	music->load( "data/04_platform/world/2/music.mp3", 50 );
@@ -179,6 +195,8 @@ void Winter::draw( sf::RenderWindow* &window )
 		skills->fadeout( value );
 		showdamage->fadeout( value );
 		showheal->fadeout( value );
+		scores->fadeout( value );
+		hp_dots->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -190,10 +208,12 @@ void Winter::draw( sf::RenderWindow* &window )
 		ladder->fadeout( value );
 		greenery->fadeout( value );
 		snow->fadeout( value );
+		door->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
 		lightning->fadeout( value );
+		fly_factory->fadeout( value );
 		
 		// set fade
 		if( background->getAlpha() == 0 )	fade = 0;
@@ -210,6 +230,8 @@ void Winter::draw( sf::RenderWindow* &window )
 		money->fadein( value );
 		coins->fadein( value );
 		skills->fadein( value );
+		scores->fadein( value );
+		hp_dots->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -221,10 +243,12 @@ void Winter::draw( sf::RenderWindow* &window )
 		ladder->fadein( value );
 		greenery->fadein( value );
 		snow->fadein( value );
+		door->fadein( value );
 		
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
 		lightning->fadein( value );
+		fly_factory->fadein( value );
 		
 		// set fade
 		if( background->getAlpha() == 0xFF )	fade = 1;
@@ -239,6 +263,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	ladder->draw( window );
 	
 	// hero
+	door->draw( window );
 	hero->draw( window );
 	kunai->draw( window );
 	
@@ -246,8 +271,10 @@ void Winter::draw( sf::RenderWindow* &window )
 	mine_factory->draw( window );
 	golem_factory.draw( window );
 	lightning->draw( window );
+	fly_factory->draw( window );
 	
 	// rest
+	hp_dots->draw( window );
 	snow->draw( window );
 	water->draw( window );
 	brick->draw( window );
@@ -261,6 +288,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	skills->draw( window );
 	showdamage->draw( *window );
 	showheal->draw( *window );
+	scores->draw( window );
 	effect->draw( window );
 }
 
@@ -356,13 +384,16 @@ bool Winter::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
-		info = "loading music";	break;
+		info = "positioning boulders";	break;
 		
 		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
-		info = "positioning boulders";	break;
+		info = "setting doors";	break;
 		
-		case 23: setSound();	reloadMusic();	break;
+		case 23: door->positioning( brick->getLastBlock() );
+		info = "loading music";	break;
+		
+		case 24: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:
@@ -382,9 +413,19 @@ string Winter::getInfo()
 
 
 
-bool Winter::nextState()
+bool Winter::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Winter::winState()
+{
+	if( door->nextState() )
 	{
 		return true;
 	}

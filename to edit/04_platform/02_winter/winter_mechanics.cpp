@@ -225,7 +225,10 @@ void Winter::mechanics()
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), scope->getVel() );
 			lightning->moveX( hero->getDirection(), scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), scope->getVel() );
+			door->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -242,7 +245,10 @@ void Winter::mechanics()
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
 			lightning->moveX( hero->getDirection(), -scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
+			door->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -283,7 +289,10 @@ void Winter::mechanics()
 			mine_factory->undoFall( brick->getGrassValue() );
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			hp_dots->undoFall( brick->getGrassValue() );
 			lightning->undoFall( brick->getGrassValue() );
+			fly_factory->undoFall( brick->getGrassValue() );
+			door->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -352,12 +361,15 @@ void Winter::mechanics()
 	else
 	{
 		wall->mechanics();
-		boulder->mechanics( hero->getX(), hero->getY() );
+		boulder->mechanics( hero->getRect() );
 		mine_factory->mechanics();
 		golem_factory.mechanics();
 		coins->mechanics();
+		hp_dots->mechanics();
 		lightning->mechanics( hero->getRect(), hero->getDirection() );
+		fly_factory->mechanics();
 		skills->mechanics();
+		scores->mechanics();
 		snow->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
@@ -391,11 +403,21 @@ void Winter::mechanics()
 	golem_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS
-	coins->setCoin( golem_factory.getDeadRect() );
+	// COINS AND HP DOTS
+	hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) );
 	
-	if( coins->upliftMoney( hero->getRect() ) )
+	if( coins->uplift( hero->getRect() ) )
 	{
 		money->add( coins->getMoney() );
 	}
+	
+	if( hp_dots->uplift( hero->getRect() ) )
+	{
+		showheal->run( hp_dots->getHP() );
+		heart->harm( hp_dots->getHP() );
+	}
+	
+// ------------------------------------------------------------------------------------------------
+	// DOOR
+	door->checkHero( hero->getRect() );
 }
