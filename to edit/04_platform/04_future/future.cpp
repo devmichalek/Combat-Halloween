@@ -20,6 +20,8 @@ Future::Future()
 	skills = new Skills;
 	showdamage = new Showdamage;
 	showheal = new Showheal;
+	scores = new Scores;
+	hp_dots = new Hp_dots;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -30,9 +32,10 @@ Future::Future()
 	ladder = new Ladder;
 	greenery = new Greenery;
 	boulder = new Boulder;
+	door = new Door;
 	
 	mine_factory = new Mine_factory;
-	lightning = new Lightning;
+	cruncher = new Cruncher;
 }
 
 Future::~Future()
@@ -62,6 +65,8 @@ void Future::free()
 	delete skills;
 	delete showdamage;
 	delete showheal;
+	delete scores;
+	delete hp_dots;
 	
 	delete brick;
 	delete effect;
@@ -72,10 +77,11 @@ void Future::free()
 	delete ladder;
 	delete greenery;
 	delete boulder;
+	delete door;
 	
 	delete mine_factory;
 	robot_factory.free();
-	delete lightning;
+	delete cruncher;
 }
 
 void Future::reset()
@@ -94,6 +100,8 @@ void Future::reset()
 	skills->reset();
 	showdamage->reset();
 	showheal->reset();
+	scores->reset();
+	hp_dots->reset();
 	
 	int distance = brick->reset();
 	effect->reset();
@@ -104,10 +112,11 @@ void Future::reset()
 	ladder->reset( distance );
 	greenery->reset( distance );
 	boulder->reset( distance );
+	door->reset( distance );
 	
 	mine_factory->reset( distance );
 	robot_factory.reset( distance );
-	lightning->reset();
+	cruncher->reset();
 }
 
 
@@ -128,6 +137,8 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	coins->load( width, screen_w, type );
 	showdamage->load();
 	showheal->load();
+	scores->load( screen_w );
+	hp_dots->load( type, screen_w );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -138,10 +149,11 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
+	door->load( type );
 	
-	mine_factory->load( width, screen_w, screen_h );
+	mine_factory->load( type, width, screen_w, screen_h );
 	robot_factory.load( width, screen_w, screen_h, "robot" );
-	lightning->load( FPS );
+	cruncher->load( FPS, screen_w );
 	
 	music->setID( "future-music" );
 	music->load( "data/04_platform/world/4/music.mp3", 50 );
@@ -175,6 +187,8 @@ void Future::draw( sf::RenderWindow* &window )
 		skills->fadeout( value );
 		showdamage->fadeout( value );
 		showheal->fadeout( value );
+		scores->fadeout( value );
+		hp_dots->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -185,10 +199,11 @@ void Future::draw( sf::RenderWindow* &window )
 		boulder->fadeout( value );
 		ladder->fadeout( value );
 		greenery->fadeout( value );
+		door->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		robot_factory.fadeout( value );
-		lightning->fadeout( value );
+		cruncher->fadeout( value );
 		
 		// set fade
 		if( background->getAlpha() == 0 )	fade = 0;
@@ -205,6 +220,8 @@ void Future::draw( sf::RenderWindow* &window )
 		money->fadein( value );
 		coins->fadein( value );
 		skills->fadein( value );
+		scores->fadein( value );
+		hp_dots->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -215,10 +232,11 @@ void Future::draw( sf::RenderWindow* &window )
 		boulder->fadein( value );
 		ladder->fadein( value );
 		greenery->fadein( value );
+		door->fadein( value );
 		
 		mine_factory->fadein( value );
 		robot_factory.fadein( value );
-		lightning->fadein( value );
+		cruncher->fadein( value );
 		
 		// set fade
 		if( background->getAlpha() == 0xFF )	fade = 1;
@@ -233,6 +251,7 @@ void Future::draw( sf::RenderWindow* &window )
 	ladder->draw( window );
 	
 	// hero
+	door->draw( window );
 	hero->draw( window );
 	kunai->draw( window );
 	
@@ -240,9 +259,10 @@ void Future::draw( sf::RenderWindow* &window )
 	// enemy
 	mine_factory->draw( window );
 	robot_factory.draw( window );
-	lightning->draw( window );
+	cruncher->draw( window );
 	
 	// rest
+	hp_dots->draw( window );
 	water->draw( window );
 	brick->draw( window );
 	islands->draw( window );
@@ -254,6 +274,7 @@ void Future::draw( sf::RenderWindow* &window )
 	skills->draw( window );
 	showdamage->draw( *window );
 	showheal->draw( *window );
+	scores->draw( window );
 	effect->draw( window );
 }
 
@@ -351,13 +372,16 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
-		info = "loading music";	break;
+		info = "positioning boulders";	break;
 		
 		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
-		info = "positioning boulders";	break;
+		info = "setting doors";	break;
 		
-		case 23: setSound();	reloadMusic();	break;
+		case 23: door->positioning( brick->getLastBlock() );
+		info = "loading music";	break;
+		
+		case 24: setSound();	reloadMusic();	break;
 		info = "done";
 		
 		default:
@@ -377,9 +401,19 @@ string Future::getInfo()
 
 
 
-bool Future::nextState()
+bool Future::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Future::winState()
+{
+	if( door->nextState() )
 	{
 		return true;
 	}

@@ -224,8 +224,10 @@ void Future::mechanics()
 			greenery->moveX( hero->getDirection(), scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), scope->getVel() );
 			robot_factory.moveX( hero->getDirection(), scope->getVel() );
-			lightning->moveX( hero->getDirection(), scope->getVel() );
+			cruncher->moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), scope->getVel() );
+			door->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -241,8 +243,10 @@ void Future::mechanics()
 			greenery->moveX( hero->getDirection(), -scope->getVel() );
 			mine_factory->moveX( hero->getDirection(), -scope->getVel() );
 			robot_factory.moveX( hero->getDirection(), -scope->getVel() );
-			lightning->moveX( hero->getDirection(), -scope->getVel() );
+			cruncher->moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
+			door->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -284,8 +288,10 @@ void Future::mechanics()
 			greenery->undoFall( brick->getGrassValue() );
 			mine_factory->undoFall( brick->getGrassValue() );
 			robot_factory.undoFall( brick->getGrassValue() );
-			lightning->undoFall( brick->getGrassValue() );
+			cruncher->undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			hp_dots->undoFall( brick->getGrassValue() );
+			door->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -333,15 +339,12 @@ void Future::mechanics()
 			effect->runBlood();
 		}
 		
-		// HARM BY LIGHTNING
-		if( lightning->harmSomebody( hero->getRect() ) )
+		// HARM BY cruncher
+		if( cruncher->harmSomebody( hero->getRect() ) )
 		{
-			if( lightning->harmed() )
-			{
-				heart->harm( -lightning->getDamage() );
-				showdamage->run( to_string( -lightning->getDamage() ) );
-				effect->runLightning();
-			}
+			heart->harm( -cruncher->getDamage() );
+			showdamage->run( to_string( -cruncher->getDamage() ) );
+			effect->runCruncher();
 		}
 	}
 	
@@ -354,12 +357,14 @@ void Future::mechanics()
 	else
 	{
 		wall->mechanics();
-		boulder->mechanics( hero->getX(), hero->getY() );
+		boulder->mechanics( hero->getRect() );
 		mine_factory->mechanics();
 		robot_factory.mechanics();
-		lightning->mechanics( hero->getRect(), hero->getDirection() );
+		cruncher->mechanics( hero->getY(), hero->getDirection() );
 		coins->mechanics();
+		hp_dots->mechanics();
 		skills->mechanics();
+		scores->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -393,11 +398,21 @@ void Future::mechanics()
 	robot_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS
-	coins->setCoin( robot_factory.getDeadRect() );
+	// COINS AND HP DOTS
+	hp_dots->drop( coins->drop( robot_factory.getDeadRect() ) );
 	
-	if( coins->upliftMoney( hero->getRect() ) )
+	if( coins->uplift( hero->getRect() ) )
 	{
 		money->add( coins->getMoney() );
 	}
+	
+	if( hp_dots->uplift( hero->getRect() ) )
+	{
+		showheal->run( hp_dots->getHP() );
+		heart->harm( hp_dots->getHP() );
+	}
+	
+// ------------------------------------------------------------------------------------------------
+	// DOOR
+	door->checkHero( hero->getRect() );
 }
