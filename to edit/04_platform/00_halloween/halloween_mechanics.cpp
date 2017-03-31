@@ -237,7 +237,10 @@ void Halloween::mechanics()
 			vampire_factory.moveX( hero->getDirection(), scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), scope->getVel() );
 			lightning->moveX( hero->getDirection(), scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), scope->getVel() );
+			door->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -254,7 +257,10 @@ void Halloween::mechanics()
 			vampire_factory.moveX( hero->getDirection(), -scope->getVel() );
 			zombie_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
+			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
 			lightning->moveX( hero->getDirection(), -scope->getVel() );
+			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
+			door->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -295,7 +301,10 @@ void Halloween::mechanics()
 			vampire_factory.undoFall( brick->getGrassValue() );
 			zombie_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
+			hp_dots->undoFall( brick->getGrassValue() );
 			lightning->undoFall( brick->getGrassValue() );
+			fly_factory->undoFall( brick->getGrassValue() );
+			door->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -372,13 +381,16 @@ void Halloween::mechanics()
 	else
 	{
 		wall->mechanics();
-		boulder->mechanics( hero->getX(), hero->getY() );
+		boulder->mechanics( hero->getRect() );
 		mine_factory->mechanics();
 		vampire_factory.mechanics();
 		zombie_factory.mechanics();
 		coins->mechanics();
+		hp_dots->mechanics();
 		lightning->mechanics( hero->getRect(), hero->getDirection() );
+		fly_factory->mechanics();
 		skills->mechanics();
+		scores->mechanics();
 		rain->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
@@ -416,12 +428,22 @@ void Halloween::mechanics()
 	zombie_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS
-	coins->setCoin( vampire_factory.getDeadRect() );
-	coins->setCoin( zombie_factory.getDeadRect() );
+	// COINS AND HP DOTS
+	hp_dots->drop( coins->drop( vampire_factory.getDeadRect() ) );
+	hp_dots->drop( coins->drop( zombie_factory.getDeadRect() ) );
 	
-	if( coins->upliftMoney( hero->getRect() ) )
+	if( coins->uplift( hero->getRect() ) )
 	{
 		money->add( coins->getMoney() );
 	}
+	
+	if( hp_dots->uplift( hero->getRect() ) )
+	{
+		showheal->run( hp_dots->getHP() );
+		heart->harm( hp_dots->getHP() );
+	}
+	
+// ------------------------------------------------------------------------------------------------
+	// DOOR
+	door->checkHero( hero->getRect() );
 }

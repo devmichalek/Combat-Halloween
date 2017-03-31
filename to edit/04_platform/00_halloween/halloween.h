@@ -16,6 +16,8 @@
 #include "04_platform/panel/skill/skills.h"
 #include "04_platform/panel/action/showdamage.h"
 #include "04_platform/panel/action/showheal.h"
+#include "04_platform/panel/scores/scores.h"
+#include "04_platform/panel/hp_dot/hp_dots.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -27,6 +29,7 @@
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/weather/rain/rain.h"
 #include "04_platform/world/boulder/boulder.h"
+#include "04_platform/world/door/door.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -34,6 +37,7 @@
 #include "04_platform/enemy/zombie/zombie.h"
 #include "04_platform/enemy/vampire/vampire.h"
 #include "04_platform/enemy/checkActivity/lightning/lightning.h"
+#include "04_platform/enemy/flying/fly_factory.h"
 
 class Halloween
 {
@@ -62,6 +66,8 @@ class Halloween
 	Skills* skills;
 	Showdamage* showdamage;
 	Showheal* showheal;
+	Scores* scores;
+	Hp_dots* hp_dots;
 	
 	// world
 	Brick* brick;
@@ -73,12 +79,14 @@ class Halloween
 	Greenery* greenery;
 	Rain* rain;
 	Boulder* boulder;
+	Door* door;
 	
 	// enemy
 	Mine_factory* mine_factory;
 	Factory <Vampire> vampire_factory;
 	Factory <Zombie> zombie_factory;
 	Lightning* lightning;
+	Fly_factory* fly_factory;
 	
 public:
 
@@ -94,7 +102,8 @@ public:
 	bool positioning( int type, int size, int flatness, int difficulty );
 	string getInfo();
 	
-	bool nextState();
+	bool defeatState();
+	bool winState();
 	bool backToLevel();
 	void mechanics();
 	
