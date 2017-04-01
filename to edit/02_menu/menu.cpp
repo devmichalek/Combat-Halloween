@@ -144,7 +144,7 @@ void Menu::load( int screen_w, int screen_h )
 	// simple text on the right
 	version->setName( "menu-version-text" );
 	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 25.03.2017" );
+	version->setText( "latest edition 01.04.2017" );
 	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	
 	// information (keyboard) and keyboard
