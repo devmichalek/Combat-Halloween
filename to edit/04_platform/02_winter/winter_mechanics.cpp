@@ -226,6 +226,7 @@ void Winter::mechanics()
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), scope->getVel() );
+			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			lightning->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
@@ -246,6 +247,7 @@ void Winter::mechanics()
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
+			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			lightning->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
@@ -290,6 +292,7 @@ void Winter::mechanics()
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 			hp_dots->undoFall( brick->getGrassValue() );
+			score_dots->undoFall( brick->getGrassValue() );
 			lightning->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
@@ -366,6 +369,7 @@ void Winter::mechanics()
 		golem_factory.mechanics();
 		coins->mechanics();
 		hp_dots->mechanics();
+		score_dots->mechanics();
 		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		fly_factory->mechanics();
 		skills->mechanics();
@@ -404,7 +408,10 @@ void Winter::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// COINS AND HP DOTS
-	hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) );
+	if( hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) ) )
+	{
+		scores->addFoePoint();
+	}
 	
 	if( coins->uplift( hero->getRect() ) )
 	{
@@ -415,6 +422,12 @@ void Winter::mechanics()
 	{
 		showheal->run( hp_dots->getHP() );
 		heart->harm( hp_dots->getHP() );
+	}
+	
+		
+	if( score_dots->uplift( hero->getRect() ) )
+	{
+		scores->addPoint();
 	}
 	
 // ------------------------------------------------------------------------------------------------
