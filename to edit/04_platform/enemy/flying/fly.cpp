@@ -219,12 +219,12 @@ void Fly::mechanics()
 				
 				if( direction == 1 )
 				{
-					x = -screen_w;
+					x = -rand()%screen_w;
 					sprite.setScale( scale, scale );
 				}
 				else
 				{
-					x = screen_w*2;
+					x = screen_w +rand()%screen_w;
 					sprite.setScale( -scale, scale );
 				}
 				
