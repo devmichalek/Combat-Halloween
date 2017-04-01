@@ -230,6 +230,7 @@ void Forest::mechanics()
 			golem_factory.moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), scope->getVel() );
+			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
@@ -250,6 +251,7 @@ void Forest::mechanics()
 			golem_factory.moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
+			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
@@ -295,6 +297,7 @@ void Forest::mechanics()
 			golem_factory.undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 			hp_dots->undoFall( brick->getGrassValue() );
+			score_dots->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
@@ -399,6 +402,7 @@ void Forest::mechanics()
 			hero->setColor( day->getColor() );
 			coins->setColor( day->getColor() );
 			hp_dots->setAlpha( day->getAlpha() );
+			score_dots->setAlpha( day->getAlpha() );
 			kunai->setColor( day->getColor() );
 			
 			brick->setColor( day->getColor() );
@@ -436,8 +440,11 @@ void Forest::mechanics()
 	golem_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS AND HP DOTS
-	hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) );
+	// COINS, HP DOTS AND SCORES
+	if( hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) ) )
+	{
+		scores->addFoePoint();
+	}
 	
 	if( coins->uplift( hero->getRect() ) )
 	{
@@ -448,6 +455,11 @@ void Forest::mechanics()
 	{
 		showheal->run( hp_dots->getHP() );
 		heart->harm( hp_dots->getHP() );
+	}
+	
+	if( score_dots->uplift( hero->getRect() ) )
+	{
+		scores->addPoint();
 	}
 
 // ------------------------------------------------------------------------------------------------

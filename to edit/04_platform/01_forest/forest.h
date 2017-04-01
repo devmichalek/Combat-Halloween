@@ -18,6 +18,7 @@
 #include "04_platform/panel/action/showheal.h"
 #include "04_platform/panel/scores/scores.h"
 #include "04_platform/panel/hp_dot/hp_dots.h"
+#include "04_platform/panel/score_dot/score_dots.h"
 
 // World stuff
 #include "04_platform/world/brick/brick.h"
@@ -69,6 +70,7 @@ class Forest
 	Showheal* showheal;
 	Scores* scores;
 	Hp_dots* hp_dots;
+	Score_dots* score_dots;
 	
 	// world
 	Brick* brick;
