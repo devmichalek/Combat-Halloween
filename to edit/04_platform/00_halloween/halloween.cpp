@@ -22,6 +22,7 @@ Halloween::Halloween()
 	showheal = new Showheal;
 	scores = new Scores;
 	hp_dots = new Hp_dots;
+	score_dots = new Score_dots;
 	
 	brick = new Brick;
 	effect = new Effect;
@@ -68,6 +69,7 @@ void Halloween::free()
 	delete showheal;
 	delete scores;
 	delete hp_dots;
+	delete score_dots;
 	
 	delete brick;
 	delete effect;
@@ -107,6 +109,7 @@ void Halloween::reset()
 	hp_dots->reset();
 	
 	int distance = brick->reset();
+	score_dots->reset( distance );
 	effect->reset();
 	background->reset( hero->getX(), hero->getY() );
 	islands->reset( distance );
@@ -142,8 +145,9 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	coins->load( width, screen_w, type );
 	showdamage->load();
 	showheal->load();
-	scores->load( screen_w );
+	scores->load( type, screen_w );
 	hp_dots->load( type, screen_w );
+	score_dots->load( screen_w );
 	
 	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
@@ -196,6 +200,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		showheal->fadeout( value );
 		scores->fadeout( value );
 		hp_dots->fadeout( value );
+		score_dots->fadeout( value );
 		
 		brick->fadeout( value );
 		effect->fadeout( value );
@@ -231,6 +236,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		skills->fadein( value );
 		scores->fadein( value );
 		hp_dots->fadein( value );
+		score_dots->fadein( value );
 		
 		brick->fadein( value );
 		effect->fadein( value );
@@ -274,6 +280,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	fly_factory->draw( window );
 	
 	// rest
+	score_dots->draw( window );
 	hp_dots->draw( window );
 	rain->draw( window );
 	brick->draw( window );
@@ -394,8 +401,18 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		case 23: door->positioning( brick->getLastBlock() );
 		info = "loading music";	break;
 		
-		case 24: setSound();	reloadMusic();	break;
-		info = "done";
+		case 24: setSound();	reloadMusic();
+		info = "loading money";	break;
+		
+		case 25: money->loadMoney();	money->setText();
+		info = "settings scores";	break;
+		
+		case 26: scores->positioning( difficulty );
+		info = "positioning score dots";	break;
+		
+		case 27: score_dots->positioning( difficulty, brick->getBlocks(), brick->getWidth() );
+				 score_dots->positioning( difficulty, islands->getBlocks(), brick->getWidth() );
+		info = "done";	break;
 		
 		default:
 		return true;
