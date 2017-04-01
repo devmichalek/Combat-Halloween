@@ -601,6 +601,10 @@ void Brick::setColor( sf::Color color )
 }
 
 
+sf::Uint8 Brick::getWidth()
+{
+	return width;
+}
 
 vector <Block*> Brick::getBlocks()
 {
