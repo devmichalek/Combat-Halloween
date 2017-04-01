@@ -227,6 +227,7 @@ void Future::mechanics()
 			cruncher->moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), scope->getVel() );
+			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
 		}
 
@@ -246,6 +247,7 @@ void Future::mechanics()
 			cruncher->moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
+			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
@@ -291,6 +293,7 @@ void Future::mechanics()
 			cruncher->undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 			hp_dots->undoFall( brick->getGrassValue() );
+			score_dots->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
 		}
 	}
@@ -363,6 +366,7 @@ void Future::mechanics()
 		cruncher->mechanics( hero->getY(), hero->getDirection() );
 		coins->mechanics();
 		hp_dots->mechanics();
+		score_dots->mechanics();
 		skills->mechanics();
 		scores->mechanics();
 		
@@ -398,8 +402,11 @@ void Future::mechanics()
 	robot_factory.ableAttack( hero->getRect() );
 	
 // ------------------------------------------------------------------------------------------------
-	// COINS AND HP DOTS
-	hp_dots->drop( coins->drop( robot_factory.getDeadRect() ) );
+	// COINS, HP DOTS AND SCORES
+	if( hp_dots->drop( coins->drop( robot_factory.getDeadRect() ) ) )
+	{
+		scores->addFoePoint();
+	}
 	
 	if( coins->uplift( hero->getRect() ) )
 	{
@@ -410,6 +417,12 @@ void Future::mechanics()
 	{
 		showheal->run( hp_dots->getHP() );
 		heart->harm( hp_dots->getHP() );
+	}
+	
+		
+	if( score_dots->uplift( hero->getRect() ) )
+	{
+		scores->addPoint();
 	}
 	
 // ------------------------------------------------------------------------------------------------
