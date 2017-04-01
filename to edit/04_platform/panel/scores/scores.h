@@ -12,8 +12,12 @@ class Scores
 	
 	float scale;
 	float scale_bot;
-	float scale_top;
+	float point_scale_top;
+	float foe_point_scale_top;
 	float scale_vel;
+	
+	int point;
+	int foe_point;
 	
 public:
 	
@@ -22,12 +26,14 @@ public:
 	void free();
 	void reset();
 	
-	void load( int screen_w );
+	void load( int type, int screen_w );
 	void draw( sf::RenderWindow* &window );
+	void positioning( int chance );
 	void mechanics();
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0x00 );
 	
-	void add( int amount );
+	void addPoint();
+	void addFoePoint();
 };

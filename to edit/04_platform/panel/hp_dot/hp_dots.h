@@ -1,7 +1,7 @@
 #pragma once
 
+#include "drawable/sprite.h"
 #include "04_platform/panel/hp_dot/hp_dot.h"
-#include "drawable/rect.h"
 #include <vector>
 
 using namespace std;
@@ -11,7 +11,7 @@ class Hp_dots
 	int hp;
 	int screen_w;
 	int main_alpha;
-	sf::CircleShape shape;
+	MySprite sprite;
 	vector <Hp_dot*> dots;
 	
 public:
@@ -33,7 +33,7 @@ public:
 	void mechanics();
 	void setAlpha( int alpha );
 	
-	void drop( Rect* rect );
+	bool drop( Rect* rect );
 	bool uplift( Rect* rect );
 	int getHP();
 };

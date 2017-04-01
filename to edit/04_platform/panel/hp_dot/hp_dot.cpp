@@ -4,11 +4,13 @@
 Hp_dot::Hp_dot()
 {
 	active = false;
-	radius = x = y = alpha = 0;
+	scale = x = y = 0;
+	angle = 0;
 }
 
 Hp_dot::~Hp_dot()
 {
 	active = false;
-	radius = x = y = alpha = 0;
+	scale = x = y = 0;
+	angle = 0;
 }

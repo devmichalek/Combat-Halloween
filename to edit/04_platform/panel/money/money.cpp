@@ -47,26 +47,22 @@ void Money::load( int screen_w )
 {
 	free();
 	
-	loadMoney();
-	
 	offset = 0;
 	delay = 8;
 	line = 10;
 	
-	grey.setName( "money_panel-grey" );
+	grey.setName( "money-grey" );
 	grey.load( "data/04_platform/panel/grey/grey.png" );
 	grey.setScale( 0.5, 0.5 );
 	grey.setPosition( screen_w -grey.getWidth() -5, 5 );
 	
-	coin.setName( "money_panel-coin" );
+	coin.setName( "money-coin" );
 	coin.load( "data/04_platform/panel/coin/0.png", line );
 	coin.setScale( 0.65, 0.65 );
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
-	text.setName( "money_panel-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 28, 0xD9, 0xD9, 0xD9 );
-
-	setText();
+	text.setName( "money-text" );
+	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 32, 0xD9, 0xD9, 0xD9 );
 }
 
 void Money::draw( sf::RenderWindow* &window )
@@ -103,11 +99,11 @@ void Money::fadeout( int v, int min )
 
 void Money::setText()
 {
-	sf::Uint8 max = 8;
+	sf::Uint8 max = 6;
 	
 	if( con::itos( bank ).size() > max )
 	{
-		bank = 99999999;
+		bank = 999999;
 		text.setText( con::itos( bank ) );
 	}
 	else
@@ -121,7 +117,7 @@ void Money::setText()
 		text.setText( additional +con::itos( bank ) );
 	}
 	
-	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +10 );
+	text.setPosition( coin.getX() -text.getWidth() -27, grey.getY() +5 );
 }
 
 void Money::saveMoney()
@@ -140,23 +136,17 @@ void Money::saveMoney()
 
 void Money::loadMoney()
 {
-	fstream file;
+	MyFile file;
 	
-	string path = "data/txt/money/bank.txt";
-	file.open( path );
-	if( file.bad() )
-	{
-		printf( "Something went wrong with %s\n", path.c_str() );
-	}
-	else
+	file.load( "data/txt/money/bank.txt" );
+	if( file.is_good() )
 	{
 		string line;
-		file >> line;
+		file.get() >> line;
 		base = con::stoi( line );
 		bank = base;
 	}
-	
-	file.close();
+	file.free();
 }
 
 void Money::add( int amount )

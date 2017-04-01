@@ -18,6 +18,7 @@ void Hp_dots::free()
 	hp = 0;
 	screen_w = 0;
 	main_alpha = 0;
+	sprite.free();
 	if( !dots.empty() )
 	{
 		for( auto &it :dots )
@@ -68,9 +69,12 @@ void Hp_dots::load( int type, int screen_w )
 	for( unsigned i = 0; i < size; i++ )
 	{
 		dots.push_back( new Hp_dot() );
-		dots[ dots.size() -1 ]->radius = static_cast <float> (rand()%150) /10;
-		dots[ dots.size() -1 ]->alpha = rand()%(0xFF /2) +(0xFF /2);
+		dots[ dots.size() -1 ]->scale = static_cast <float> (rand()%50 +25) /100;
+		dots[ dots.size() -1 ]->angle = static_cast <double> (rand()%360);
 	}
+	
+	sprite.setName( "hp_dots-sprite" );
+	sprite.load( "data/04_platform/panel/hp_dot/0.png" );
 }
 
 void Hp_dots::draw( sf::RenderWindow* &window )
@@ -80,17 +84,16 @@ void Hp_dots::draw( sf::RenderWindow* &window )
 		if( it->active )
 		{
 			// Set scale.
-			shape.setRadius( it->radius );
-			shape.setPointCount( 4 );
+			sprite.setScale( it->scale, it->scale );
 			
 			// Set XY.
-			shape.setPosition( it->x, it->y );
+			sprite.setPosition( it->x, it->y );
 			
-			// Set alpha.
-			shape.setFillColor( sf::Color( 0xD6, 0x3E, 0x59, main_alpha /it->alpha *0xFF ) );
+			// Set angle.
+			sprite.setAngle( it->angle );
 			
 			// Draw.
-			window->draw( shape );
+			window->draw( sprite.get() );
 		}
 	}
 }
@@ -99,18 +102,12 @@ void Hp_dots::draw( sf::RenderWindow* &window )
 
 void Hp_dots::fadein( int v, int max )
 {
-	if( main_alpha +v <= max )
-	{
-		main_alpha += v;
-	}
+	sprite.fadein( v, max );
 }
 
 void Hp_dots::fadeout( int v, int min )
 {
-	if( main_alpha -v >= min )
-	{
-		main_alpha -= v;
-	}
+	sprite.fadeout( v, min );
 }
 
 
@@ -150,6 +147,15 @@ void Hp_dots::mechanics()
 		{
 			it->active = false;
 		}
+		
+		if( it->active )
+		{
+			it->angle += 0.2;
+			if( it->angle >= 360 )
+			{
+				it->angle = 0;
+			}
+		}
 	}
 }
 
@@ -160,7 +166,7 @@ void Hp_dots::setAlpha( int alpha )
 
 
 
-void Hp_dots::drop( Rect* rect )
+bool Hp_dots::drop( Rect* rect )
 {
 	if( rect != NULL )
 	{
@@ -178,7 +184,11 @@ void Hp_dots::drop( Rect* rect )
 				it->y = rect->getY() +rand()%30 -90;
 			}
 		}
+		
+		return true;
 	}
+	
+	return false;
 }
 
 bool Hp_dots::uplift( Rect* rect )
@@ -189,20 +199,17 @@ bool Hp_dots::uplift( Rect* rect )
 		{
 			if( it->active )
 			{
-				if( rect->getY() +rect->getHeight() <= it->y )
-					continue;
-
-				if( rect->getY() >= it->y + shape.getRadius() )
-					continue;
-
-				if( rect->getX() + rect->getWidth() <= it->x )
-					continue;
-
-				if( rect->getX() >= it->x + shape.getRadius() )
-					continue;
+				// Set scale.
+				sprite.setScale( it->scale, it->scale );
 				
-				it->active = false;
-				return true;
+				// Set XY.
+				sprite.setPosition( it->x, it->y );
+				
+				if( sprite.checkRectCollision( *rect ) )
+				{
+					it->active = false;
+					return true;
+				}
 			}
 		}
 	}

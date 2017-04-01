@@ -21,7 +21,8 @@ void Scores::free()
 	
 	scale = 0;
 	scale_bot = 0;
-	scale_top = 0;
+	point_scale_top = 0;
+	foe_point_scale_top = 0;
 	scale_vel = 0;
 }
 
@@ -38,26 +39,73 @@ void Scores::reset()
 
 
 
-void Scores::load( int screen_w )
+void Scores::load( int type, int screen_w )
 {
 	free();
 	
 	this->screen_w = screen_w;
 	
 	text.setName( "scores-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 42, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 46, 0xFF, 0xFF, 0xFF );
 	text.setText( "0" );
 	text.setPosition( screen_w /2 -text.getWidth() /2, 5 );
 	
 	scale_bot = 1;
-	scale_top = 1.85;
+	point_scale_top = 1.85;
+	foe_point_scale_top = 2.5;
 	scale_vel = 0.05;
 	scale = scale_bot;
+	
+	// Set point.
+	MyFile file;
+	file.load( "data/txt/scores/points.txt" );
+	if( file.is_good() )
+	{
+		int c = type;
+		string line;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				point = con::stoi( line );
+				// printf( "%d\n", point );
+				break;
+			}
+			
+			c--;
+		}
+	}
+	file.free();
+	
+	// Set foe point.
+	file.load( "data/txt/scores/foes.txt" );
+	if( file.is_good() )
+	{
+		int c = type;
+		string line;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				foe_point = con::stoi( line );
+				break;
+			}
+			
+			c--;
+		}
+	}
+	file.free();
 }
 
 void Scores::draw( sf::RenderWindow* &window )
 {
 	window->draw( text.get() );
+}
+
+void Scores::positioning( int chance )
+{
+	point += point *(static_cast <float> (chance) /100);
+	foe_point += foe_point *(static_cast <float> (chance) /100);
 }
 
 void Scores::mechanics()
@@ -91,8 +139,14 @@ void Scores::fadeout( int v, int min )
 
 
 
-void Scores::add( int amount )
+void Scores::addPoint()
 {
-	result += amount;
-	scale = scale_top;
+	result += rand()%(point /2) +(point /2);
+	scale = point_scale_top;
+}
+
+void Scores::addFoePoint()
+{
+	result += rand()%(foe_point /2) +(foe_point /2);
+	scale = foe_point_scale_top;
 }

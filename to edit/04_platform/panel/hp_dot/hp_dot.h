@@ -8,8 +8,8 @@ public:
 	
 	bool active;
 	float x, y;
-	float radius;
-	sf::Uint8 alpha;
+	float scale;
+	double angle;
 	
 	Hp_dot();
 	~Hp_dot();
