@@ -236,6 +236,7 @@ void Desert::mechanics()
 			snakes_factory->moveX( hero->getDirection(), scope->getVel() );
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), scope->getVel() );
+			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			wind->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
@@ -257,6 +258,7 @@ void Desert::mechanics()
 			snakes_factory->moveX( hero->getDirection(), -scope->getVel() );
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
+			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			wind->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
@@ -304,6 +306,7 @@ void Desert::mechanics()
 			snakes_factory->undoFall( brick->getGrassValue() );
 			coins->undoFall( brick->getGrassValue() );
 			hp_dots->undoFall( brick->getGrassValue() );
+			score_dots->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
 			wind->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
@@ -390,6 +393,7 @@ void Desert::mechanics()
 		snakes_factory->mechanics();
 		coins->mechanics();
 		hp_dots->mechanics();
+		score_dots->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
 		fly_factory->mechanics();
 		skills->mechanics();
@@ -428,6 +432,7 @@ void Desert::mechanics()
 		hero->setColor( day->getColor() );
 		coins->setColor( day->getColor() );
 		hp_dots->setAlpha( day->getAlpha() );
+		score_dots->setAlpha( day->getAlpha() );
 		kunai->setColor( day->getColor() );
 		
 		brick->setColor( day->getColor() );
@@ -460,8 +465,15 @@ void Desert::mechanics()
 	
 // ------------------------------------------------------------------------------------------------
 	// COINS AND HP DOTS
-	hp_dots->drop( coins->drop( skeleton_factory.getDeadRect() ) );
-	hp_dots->drop( coins->drop( snakes_factory->getDeadRect() ) );
+	if( hp_dots->drop( coins->drop( skeleton_factory.getDeadRect() ) ) )
+	{
+		scores->addFoePoint();
+	}
+	
+	if( hp_dots->drop( coins->drop( snakes_factory->getDeadRect() ) ) )
+	{
+		scores->addFoePoint();
+	}
 	
 	if( coins->uplift( hero->getRect() ) )
 	{
@@ -472,6 +484,12 @@ void Desert::mechanics()
 	{
 		showheal->run( hp_dots->getHP() );
 		heart->harm( hp_dots->getHP() );
+	}
+	
+		
+	if( score_dots->uplift( hero->getRect() ) )
+	{
+		scores->addPoint();
 	}
 	
 // ------------------------------------------------------------------------------------------------
