@@ -1,49 +1,55 @@
 #pragma once
 
-#include "drawable/sprite.h"
-#include "04_platform/enemy/expletive/slab.h"
-#include "boulder_part.h"
+#include "04_platform/world/brick/block.h"
+#include "SFML/Graphics.hpp"
+#include "drawable/rect.h"
+#include <vector>
 
-class Boulder
+using namespace std;
+
+class Boulder_part
 {
-	int width;
-	int screen_w;
-	int damage;
+	double angle;
+	double angle_vel;
+	float vel;
+	bool hit;
 	
-	vector <Boulder_part*> blocks;
-	vector <MySprite*> sprites;
-	Slab hit;
+	sf::Uint8 alpha;
+	int state;
+	float startX;
+	int startY;
+	
+	vector <Block*> blocks;
 	
 public:
-	
-	// Basics.
-	Boulder();
-	~Boulder();
+
+	Boulder_part();
+	~Boulder_part();
 	void free();
 	void reset( int distance );
-	void load( int type, int width, int screen_w );
-	void draw( sf::RenderWindow* &window );
-	void fadein( int v = 1, int max = 0xFF );
-	void fadeout( int v = 1, int min = 0 );
 	
+	// Support.
+	void addBlock( int n, int x, int y );
 	
-	// Creating.
-	void positioning( vector <Block*> blocks, vector <int> xs, int chance );
+	void positioning( int width );
+	void setPosition( int x, int y, float vel, double angle_vel );
+	void moveX( float vel );
+	void moving( Rect* rect, int width );
 	
-	// In action
-	void moveX( sf::Uint8 direction, float vel );
-	void undoFall( sf::Uint8 add );
-	void mechanics( Rect* rect );
-	void setColor( sf::Color color );
+	// till 2
+	unsigned getSize();
+	float getX( unsigned which );
+	float getY( unsigned which );
+	int getNr( unsigned which );
 	
-	// Check collision.
-	bool harm( Rect* rect );
-	
-	// Damage
-	int getDamage();
-	
-	// Sound stuff.
-	void turnOn();
-	void turnOff();
-	void setVolume( int v );
+	// only 3
+	bool renderBoulder();
+	float getBoulderX();
+	float getBoulderY();
+	double getBoulderAngle();
+	sf::Uint8 getBoulderAlpha();
+	void setBoulderAlpha( sf::Uint8 a );
+		
+	// other
+	bool harm( int width );
 };

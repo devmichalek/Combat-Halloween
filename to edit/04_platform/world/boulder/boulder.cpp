@@ -1,24 +1,26 @@
 #include "boulder.h"
-#include <time.h>
-#include <cstdlib>
-#include "file/file.h"
 
-
-Boulder::Boulder()
+Boulder_part::Boulder_part()
 {
 	free();
 }
 
-Boulder::~Boulder()
+Boulder_part::~Boulder_part()
 {
 	free();
 }
 
-void Boulder::free()
+void Boulder_part::free()
 {
-	width = 0;
-	screen_w = 0;
-	damage = 0;
+	angle = 0;
+	angle_vel = 0;
+	vel = 0;
+	hit = false;
+	
+	alpha = 0;
+	state = 0;
+	startX = 0;
+	startY = 0;
 	
 	if( !blocks.empty() )
 	{
@@ -29,31 +31,25 @@ void Boulder::free()
 		
 		blocks.clear();
 	}
-	
-	if( !sprites.empty() )
-	{
-		for( auto &i :sprites )
-		{
-			i->free();
-		}
-		
-		sprites.clear();
-	}
-	
-	hit.free();
 }
 
-void Boulder::reset( int distance )
+void Boulder_part::reset( int distance )
 {
+	angle = 0;
+	hit = false;
+	alpha = 0;
+	state = 0;
+	
+	for( auto &i :blocks )
+	{
+		i->y = 0;
+	}
+	
 	while( true )
 	{
 		if( distance > 0 )
 		{
-			for( auto &it :blocks )
-			{
-				it->reset( 1 );
-			}
-			
+			moveX( 1 );
 			distance --;
 		}
 		else
@@ -64,264 +60,148 @@ void Boulder::reset( int distance )
 }
 
 
-void Boulder::load( int type, int width, int screen_w )
-{
-	free();
 
-	this->width = width;
-	this->screen_w = screen_w;
-	
-	string path = "/boulder/0.png";
-	if( type == 4 )
-	{
-		path = "/saw/0.png";
-	}
-	
-	for( int i = 0; i < 2; i++ )
-	{
-		sprites.push_back( new MySprite() );
-		sprites[ i ]->setName( "boulder-sprite nr" +con::itos( i ) );
-		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +path );
-	}
-	
-	sprites.push_back( new MySprite() );
-	sprites[ sprites.size() -1 ]->setName( "boulder-sprite nr" +con::itos( sprites.size() -1 ) );
-	hit.setName( "boulder-hit" );
-	
-	if( type == 4 )
-	{
-		hit.load( "data/04_platform/world/sounds/wall/1.wav" );
-		sprites[ sprites.size() -1 ]->load( "data/04_platform/world/4/saw/1.png" );
-	}
-	else
-	{
-		hit.load( "data/04_platform/world/sounds/wall/0.wav" );
-		sprites[ sprites.size() -1 ]->load( "data/04_platform/world/0/boulder/1.png" );
-	}
-	
-	MyFile file;
-	file.load( "data/txt/world/boulder.txt" );
-	if( file.is_good() )
-	{
-		string line;
-		int c = type;
-		while( file.get() >> line )
-		{
-			if( c == 0 )
-			{
-				damage = con::stoi( line );
-				// printf( "%d\n", damage );
-			}
-			c--;
-		}
-	}
-	file.free();
-	
-	sprites[ sprites.size() -1 ]->setOrigin( sprites[ sprites.size() -1 ]->getWidth() /2, sprites[ sprites.size() -1 ]->getHeight() /2 );
+
+void Boulder_part::addBlock( int n, int x, int y )
+{
+	blocks.push_back( new Block() ); 	// add block.
+	blocks[ blocks.size()-1 ]->nr = n; 	// set chosen.
+	blocks[ blocks.size()-1 ]->x = x; 	// set x.
+	blocks[ blocks.size()-1 ]->y = y; 	// set y.
 }
 
-void Boulder::draw( sf::RenderWindow* &window )
+void Boulder_part::positioning( int width )
+{
+	addBlock( 0, 0, 0 );
+	addBlock( 0, width*2, 0 );
+	addBlock( 1, width +width/2, 0 );
+}
+
+void Boulder_part::setPosition( int x, int y, float vel, double angle_vel )
+{
+	this->startX = x +blocks[ 1 ]->x/2;
+	this->startY = y;
+	this->vel = vel;
+	this->angle_vel = angle_vel;
+	
+	for( auto &i :blocks )
+	{
+		i->x += x;
+	}
+}
+
+void Boulder_part::moveX( float vel )
 {
 	for( auto &it :blocks )
 	{
-		for( unsigned j = 0; j < it->getSize(); j++ )
+		it->x += vel;
+	}
+	
+	startX += vel;
+}
+
+void Boulder_part::moving( Rect* rect, int width )
+{
+	if( state == 0 )
+	{
+		if( rect->getX() +rect->getWidth() > startX &&
+			rect->getY() +rect->getHeight() /2 < startY &&
+			rect->getX() < startX +width )
 		{
-			if( it->getX(j) > -width && it->getX(j) < screen_w )
-			{
-				sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
-				window->draw( sprites[ it->getNr(j) ]->get() );
-			}
+			state = 1;
 		}
-		
-		if( it->getBoulderX() > -width*2 && it->getBoulderX() < screen_w +width && it->renderBoulder() )
+	}
+	else if( state == 1 )
+	{
+		angle += angle_vel;
+		blocks[ blocks.size() -1 ]->y += vel;
+		if( blocks[ blocks.size() -1 ]->y >= startY -width/2 -width )
 		{
-			sprites[ sprites.size() -1 ]->setPosition( it->getBoulderX(), it->getBoulderY() );
-			sprites[ sprites.size() -1 ]->setAlpha( it->getBoulderAlpha() );
-			sprites[ sprites.size() -1 ]->setAngle( it->getBoulderAngle() );
-			window->draw( sprites[ sprites.size() -1 ]->get() );
+			state = 2;
+		}
+	}
+	else if( state == 2 )
+	{
+		if( alpha > 3 )
+		{
+			alpha -= 2;
+		}
+		else
+		{
+			state = 3;
 		}
 	}
 }
-
-
-void Boulder::fadein( int v, int max )
+	
+	
+	
+unsigned Boulder_part::getSize()
 {
-	if( sprites[ 0 ]->getAlpha() < max )
-	{
-		for( auto &i :sprites )
-		{
-			i->fadein( v, max );
-		}
-		
-		for( auto &it :blocks )
-		{
-			it->setBoulderAlpha( sprites[ 0 ]->getAlpha() );
-		}
-	}
+	return blocks.size() -1;
 }
 
-void Boulder::fadeout( int v, int min )
+float Boulder_part::getX( unsigned which )
 {
-	if( sprites[ 0 ]->getAlpha() > min )
-	{
-		for( auto &i :sprites )
-		{
-			i->fadeout( v, min );
-		}
-		
-		for( auto &it :blocks )
-		{
-			it->setBoulderAlpha( sprites[ 0 ]->getAlpha() );
-		}
-	}
+	return blocks[ which ]->x;
 }
 
-
-
-
-void Boulder::positioning( vector <Block*> blocks, vector <int> xs, int chance )
+float Boulder_part::getY( unsigned which )
 {
-	for( unsigned i = 0; i < blocks.size(); i++ )
-	{
-		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
-		{
-			if( blocks[ i ]->nr == 0 || blocks[ i ]->nr == 1 || blocks[ i ]->nr == 4
-			 || blocks[ i ]->nr == 5 || blocks[ i ]->nr == 6 )
-			{
-				bool success = true;
-				for( auto &it :xs )
-				{
-					if( it >= blocks[ i ]->x && it <= blocks[ i ]->x +width*3 )
-					{
-						success = false;
-						break;
-					}
-				}
-				
-				if( success )
-				{
-					this->blocks.push_back( new Boulder_part() );
-					this->blocks[ this->blocks.size()-1 ]->positioning( width );
-					
-					float vel = 2 +(static_cast <float> (rand()%150) /100);
-					
-					double angle_vel = 3 +rand()%3;
-					if( rand()%2 == 1 )	angle_vel = -angle_vel;
-					
-					this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y +width, vel, angle_vel );
-					if( i +5 < blocks.size() )
-					{
-						i += 5;
-					}
-					else
-					{
-						break;
-					}
-				}
-			}
-		}
-	}
+	return blocks[ which ]->y;
+}
+
+int Boulder_part::getNr( unsigned which )
+{
+	return blocks[ which ]->nr;
 }
 
 
 
-void Boulder::moveX( sf::Uint8 direction, float vel )
+bool Boulder_part::renderBoulder()
 {
-	if( direction == 1 )
+	if( state < 3 )
 	{
-		for( auto &it :blocks )
-		{
-			it->moveX( vel );
-		}
-	}
-	else if( direction == 2 )
-	{
-		for( auto &it :blocks )
-		{
-			it->moveX( -vel );
-		}
-	}
-}
-
-void Boulder::undoFall( sf::Uint8 add )
-{
-	for( auto &it :blocks )
-	{
-		it->moveX( add );
-	}
-}
-
-void Boulder::mechanics( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		for( auto &it :blocks )
-		{
-			it->moving( rect, width );
-		}
-	}
-}
-
-void Boulder::setColor( sf::Color color )
-{
-	for( auto &i :sprites )
-	{
-		i->setColor( color );
-	}
-}
-
-
-
-bool Boulder::harm( Rect* rect )
-{
-	if( rect != NULL )
-	{
-		for( auto &it :blocks )
-		{
-			if( it->harm( width ) )
-			{
-				for( unsigned j = 0; j < it->getSize(); j++ )
-				{
-					if( it->getX(j) > 0 && it->getX(j) < screen_w )
-					{
-						if( hit.isPlayable() )
-						{
-							hit.play();
-						}
-						
-						sprites[ sprites.size() -1 ]->setPosition( it->getBoulderX() -width/2, it->getBoulderY() -width/2 );
-						if( sprites[ sprites.size() -1 ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
+		return true;
 	}
 	
 	return false;
 }
 
-
-int Boulder::getDamage()
+float Boulder_part::getBoulderX()
 {
-	return damage;
+	return blocks[ blocks.size() -1 ]->x;
+}
+
+float Boulder_part::getBoulderY()
+{
+	return blocks[ blocks.size() -1 ]->y;
+}
+
+double Boulder_part::getBoulderAngle()
+{
+	return angle;
+}
+
+sf::Uint8 Boulder_part::getBoulderAlpha()
+{
+	return alpha;
+}
+
+void Boulder_part::setBoulderAlpha( sf::Uint8 a )
+{
+	alpha = a;
 }
 
 
 
-void Boulder::turnOn()
-{
-	hit.turnOn();
-}
 
-void Boulder::turnOff()
+bool Boulder_part::harm( int width )
 {
-	hit.turnOff();
-}
-
-void Boulder::setVolume( int v )
-{
-	hit.setVolume( v );
+	if( blocks[ blocks.size()-1 ]->y >= startY -width*1.75 && !hit && state == 1 )
+	{
+		hit = true;
+		return true;
+	}
+	
+	return false;
 }
