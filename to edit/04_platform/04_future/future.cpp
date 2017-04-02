@@ -376,6 +376,8 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 				 robot_factory.positioning( islands->getBlocks(), difficulty );
 				 robot_factory.positioning( brick->getBlocks(), difficulty );
 				 robot_factory.positioning( islands->getBlocks(), difficulty );
+				 robot_factory.positioning( brick->getBlocks(), difficulty );
+				 robot_factory.positioning( islands->getBlocks(), difficulty );
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
@@ -422,6 +424,7 @@ bool Future::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
 	{
+		money->saveMoney();
 		return true;
 	}
 	
@@ -432,6 +435,7 @@ bool Future::winState()
 {
 	if( door->nextState() )
 	{
+		money->saveMoney();
 		return true;
 	}
 	

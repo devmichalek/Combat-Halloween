@@ -31,7 +31,7 @@
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/background/day.h"
 #include "04_platform/world/weather/sun/sun.h"
-#include "04_platform/world/boulder/boulder.h"
+#include "04_platform/world/boulder/boulders.h"
 #include "04_platform/world/door/door.h"
 
 // Enemy

@@ -462,6 +462,7 @@ bool Desert::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
 	{
+		money->saveMoney();
 		return true;
 	}
 	
@@ -472,6 +473,7 @@ bool Desert::winState()
 {
 	if( door->nextState() )
 	{
+		money->saveMoney();
 		return true;
 	}
 	

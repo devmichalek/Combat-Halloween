@@ -434,6 +434,7 @@ bool Winter::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
 	{
+		money->saveMoney();
 		return true;
 	}
 	
@@ -444,6 +445,7 @@ bool Winter::winState()
 {
 	if( door->nextState() )
 	{
+		money->saveMoney();
 		return true;
 	}
 	

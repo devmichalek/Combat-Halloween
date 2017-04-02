@@ -195,7 +195,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	fly_factory->load( type, screen_w, screen_h );
 	
 	music->setID( "forest-music" );
-	music->load( "data/04_platform/world/2/music.mp3", 50 );
+	music->load( "data/04_platform/world/1/music.mp3", 50 );
 }
 
 void Forest::handle( sf::Event &event )
@@ -416,6 +416,8 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 20: golem_factory.positioning( brick->getBlocks(), difficulty );
 				 golem_factory.positioning( islands->getBlocks(), difficulty );
+				 golem_factory.positioning( brick->getBlocks(), difficulty );
+				 golem_factory.positioning( islands->getBlocks(), difficulty );
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
@@ -462,6 +464,7 @@ bool Forest::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
 	{
+		money->saveMoney();
 		return true;
 	}
 	
@@ -472,6 +475,7 @@ bool Forest::winState()
 {
 	if( door->nextState() )
 	{
+		money->saveMoney();
 		return true;
 	}
 	

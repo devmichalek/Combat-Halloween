@@ -389,6 +389,8 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 				 vampire_factory.positioning( islands->getBlocks(), difficulty );
 				 zombie_factory.positioning( brick->getBlocks(), difficulty );
 				 zombie_factory.positioning( islands->getBlocks(), difficulty );
+				 vampire_factory.positioning( islands->getBlocks(), difficulty );
+				 zombie_factory.positioning( brick->getBlocks(), difficulty );
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
@@ -435,6 +437,7 @@ bool Halloween::defeatState()
 {
 	if( hero->isDead() && background->getAlpha() == 0 )
 	{
+		money->saveMoney();
 		return true;
 	}
 	
@@ -445,6 +448,7 @@ bool Halloween::winState()
 {
 	if( door->nextState() )
 	{
+		money->saveMoney();
 		return true;
 	}
 	

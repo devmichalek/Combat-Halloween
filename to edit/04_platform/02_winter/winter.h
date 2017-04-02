@@ -30,7 +30,7 @@
 #include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/weather/snow/snow.h"
-#include "04_platform/world/boulder/boulder.h"
+#include "04_platform/world/boulder/boulders.h"
 #include "04_platform/world/door/door.h"
 
 // Enemy
