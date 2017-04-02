@@ -267,6 +267,7 @@ void Engine::states()
 		if( panel->backToMenu() )
 		{
 			core->getState() = MENU;
+			menu->checkMoney();
 			
 			if( panel->getState() == HALLOWEEN )
 			{

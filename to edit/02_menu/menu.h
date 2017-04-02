@@ -81,4 +81,5 @@ public:
 	bool isQuit();
 	bool nextState();
 	void reloadMusic();
+	void checkMoney();
 };

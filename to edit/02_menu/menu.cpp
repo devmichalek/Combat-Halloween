@@ -537,3 +537,9 @@ void Menu::reloadMusic()
 	music->reload();
 	Mix_HaltMusic();
 }
+
+void Menu::checkMoney()
+{
+	development->reloadTxt();
+	headdeck->reloadText();
+}
