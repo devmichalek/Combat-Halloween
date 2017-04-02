@@ -14,6 +14,8 @@ class Wall
 	vector <MySprite*> sprites;
 	Slab hit;
 	
+	float main_vel;
+	
 public:
 	
 	// Basics.

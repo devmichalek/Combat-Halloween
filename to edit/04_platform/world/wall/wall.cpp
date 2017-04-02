@@ -41,6 +41,7 @@ void Wall::free()
 	}
 	
 	hit.free();
+	main_vel = 0;
 }
 
 void Wall::reset( int distance )
@@ -84,12 +85,6 @@ void Wall::load( int type, int width, int screen_w )
 	sprites[ 5 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 2 ) +".png" );
 	sprites[ 6 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 3 ) +".png" );
 	
-	int n = 0;
-	if( type == 4 )
-	{
-		n = 1;
-	}
-	
 	MyFile file;
 	file.load( "data/txt/world/wall.txt" );
 	if( file.is_good() )
@@ -108,7 +103,29 @@ void Wall::load( int type, int width, int screen_w )
 	}
 	file.free();
 	
+	// Set main vel.
+	file.load( "data/txt/world/wall_vel.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int c = type;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				main_vel = con::stof( line.c_str() );
+			}
+			c--;
+		}
+	}
+	file.free();
+	
 	hit.setName( "wall-hit" );
+	int n = 0;
+	if( type == 4 )
+	{
+		n = 1;
+	}
 	hit.load( "data/04_platform/world/sounds/wall/" +con::itos( n ) +".wav" );
 }
 
@@ -163,7 +180,7 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 					this->blocks.push_back( new Pug() );
 					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
 					
-					float vel = 0.5 +(static_cast <float> (rand()%150) /100);
+					float vel = main_vel +(static_cast <float> (rand()%135) /100);
 					
 					if( vel > 1 )
 					{
@@ -187,7 +204,7 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 					this->blocks.push_back( new Pug() );
 					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
 					
-					float vel = 2 +(static_cast <float> (rand()%200) /100);
+					float vel = main_vel*4 +(static_cast <float> (rand()%180) /100);
 					
 					this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, vel, width );
 					
