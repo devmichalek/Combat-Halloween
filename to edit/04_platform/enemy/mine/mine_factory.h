@@ -11,6 +11,7 @@ class Mine_factory
 	int screen_w;
 	int screen_h;
 	int damage;
+	sf::Uint8 type;
 	
 	vector <Mine*> mines;
 	vector <MySprite*> sprites;

@@ -108,7 +108,7 @@ void Mine::mechanics()
 			state = 2;
 			counter = 0;
 			offset = 0;
-			delay = 6;
+			delay = 8;
 		}
 	}
 	else if( state == 2 )

@@ -21,6 +21,7 @@ void Mine_factory::free()
 	screen_w = 0;
 	screen_h = 0;
 	damage = 0;
+	type = 0;
 	
 	if( !mines.empty() )
 	{
@@ -76,6 +77,7 @@ void Mine_factory::reset( int distance )
 void Mine_factory::load( int type, int width, int screen_w, int screen_h )
 {
 	free();
+	this->type = type;
 	
 	// Set damage.
 	MyFile file;
@@ -99,12 +101,12 @@ void Mine_factory::load( int type, int width, int screen_w, int screen_h )
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size() -1 ]->setName( "mine_factory-sprites[ 0 ]" );
-	sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/mine/0.png", 2 );
+	sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/mine/" +con::itos(type) +"/0.png", 2 );
 	sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 	
 	sprites.push_back( new MySprite() );
 	sprites[ sprites.size() -1 ]->setName( "mine_factory-sprites[ 1 ]" );
-	sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/mine/1.png", 7 );
+	sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/mine/" +con::itos(type) +"/1.png", 7 );
 	sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 	
 	this->width = width;
