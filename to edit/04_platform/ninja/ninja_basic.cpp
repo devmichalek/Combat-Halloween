@@ -180,24 +180,26 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	// Start values.
 	which = IDLE;
 	offset = 0;
-	delay = 7;
 	
 	// Set other values
 	vel = 1.25;
 	grav = 1;
 	if( type == 1 || type == 4 )
 	{
+		delay = 7;
 		vel += 0.25;
 		j.setLine( (nr-1)*delay + 7*delay );
 	}
 	else if( type == 2 || type == 5 )
 	{
+		delay = 6;
 		vel += 0.5;
 		grav += 0.5;
 		j.setLine( (nr-1)*delay + 2*delay );
 	}
 	else
 	{
+		delay = 8;
 		j.setLine( (nr-1)*delay + 10*delay );
 	}
 	
