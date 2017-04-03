@@ -35,8 +35,8 @@ Menu::Menu()
 	play_button = new Play_button;
 	
 	author_log = new Log;
-	game_log = new Log( true );
-	settings_log = new Log();
+	game_log = new Log;
+	settings_log = new Log;
 	skill_log = new Log;
 	
 	exit = new Exit_log;
@@ -130,6 +130,7 @@ void Menu::load( int screen_w, int screen_h )
 	author_log->load( "author", play_button->getX() +9, play_button->getBot() );
 	author_log->setExplanator( "Go to the shop.", screen_w );
 	game_log->load( "game", author_log->getRight() -5, play_button->getBot() );
+	game_log->setExplanator( "More games.", screen_w );
 	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
 	settings_log->setExplanator( "Go to the settings.", screen_w );
 	skill_log->load( "skill", settings_log->getRight() -4, play_button->getBot() );
@@ -165,6 +166,7 @@ void Menu::load( int screen_w, int screen_h )
 	google_button->setVolume( chunk_volume->getVolume() );
 	play_button->setVolume( chunk_volume->getVolume() );
 	author_log->setVolume( chunk_volume->getVolume() );
+	game_log->setVolume( chunk_volume->getVolume() );
 	skill_log->setVolume( chunk_volume->getVolume() );
 	settings_log->setVolume( chunk_volume->getVolume() );
 	exit->setVolume( chunk_volume->getVolume() );
@@ -183,14 +185,21 @@ void Menu::handle( sf::Event &event )
 			exit->handle( event );
 		}
 		
-		if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() && exit->getState() == 0 )
+		if( !author_log->getState() &&
+			!game_log->getState() &&
+			!skill_log->getState() &&
+			!settings_log->getState() &&
+			exit->getState() == 0 )
 		{
 			reset_button->handle( event );
 		}
 
 		if( exit->getState() == 0 && reset_button->getState() == 0 ) // if user didn't click quit
 		{
-			if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() ) // if user didn't click logs
+			if( !author_log->getState() &&
+				!skill_log->getState() &&
+				!settings_log->getState() &&
+				!game_log->getState() ) // if user didn't click logs
 			{
 				git_button->handle( event );
 				google_button->handle( event );
@@ -202,17 +211,21 @@ void Menu::handle( sf::Event &event )
 				chunk_button->handle( event );
 			}
 				
-			if( !author_log->getState() && !settings_log->getState() )
+			if( !author_log->getState() && !settings_log->getState() && !game_log->getState() )
 			{
 				skill_log->handle( event );
 			}
-			if( !skill_log->getState() && !settings_log->getState()  )
+			if( !skill_log->getState() && !settings_log->getState() && !game_log->getState() )
 			{
 				author_log->handle( event );
 			}
-			if( !skill_log->getState() && !author_log->getState()  )
+			if( !skill_log->getState() && !author_log->getState() && !game_log->getState() )
 			{
 				settings_log->handle( event );
+			}
+			if( !skill_log->getState() && !author_log->getState() && !settings_log->getState() )
+			{
+				game_log->handle( event );
 			}
 				
 			if( skill_log->getState() )
@@ -230,6 +243,11 @@ void Menu::handle( sf::Event &event )
 				music_volume->handle( event );
 				chunk_volume->handle( event );
 				keyboard->handle( event );
+			}
+			
+			if( game_log->getState() )
+			{
+				
 			}
 		}
 	}
@@ -259,6 +277,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->turn();
 		play_button->turn();
 		author_log->turn();
+		game_log->turn();
 		skill_log->turn();
 		settings_log->turn();
 		exit->turn();
@@ -287,6 +306,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		google_button->setVolume( chunk_volume->getVolume() );
 		play_button->setVolume( chunk_volume->getVolume() );
 		author_log->setVolume( chunk_volume->getVolume() );
+		game_log->setVolume( chunk_volume->getVolume() );
 		skill_log->setVolume( chunk_volume->getVolume() );
 		settings_log->setVolume( chunk_volume->getVolume() );
 		exit->setVolume( chunk_volume->getVolume() );
@@ -439,7 +459,10 @@ void Menu::draw( sf::RenderWindow* &window )
 	title->draw( *window );
 	window->draw( version->get() );
 	
-	if( !author_log->getState() && !skill_log->getState() && !settings_log->getState() ) // if user didn't click logs
+	if( !author_log->getState() &&
+		!game_log->getState() &&
+		!skill_log->getState() &&
+		!settings_log->getState() ) // if user didn't click logs
 	{
 		git_button->draw( *window );
 		google_button->draw( *window );
@@ -448,22 +471,25 @@ void Menu::draw( sf::RenderWindow* &window )
 		play_button->draw( window );
 		music_button->draw( window );
 		chunk_button->draw( window );
-		game_log->draw( window );
 		reset_button->drawButton( window );
 		scores_button->draw( *window );
 	}
 	
-	if( !author_log->getState() && !settings_log->getState() )
+	if( !author_log->getState() && !settings_log->getState() && !game_log->getState() )
 	{
 		skill_log->draw( window );
 	}
-	if( !skill_log->getState() && !author_log->getState() )
+	if( !skill_log->getState() && !author_log->getState() && !game_log->getState() )
 	{
 		settings_log->draw( window );
 	}
-	if( !skill_log->getState() && !settings_log->getState() )
+	if( !skill_log->getState() && !settings_log->getState() && !game_log->getState() )
 	{
 		author_log->draw( window );
+	}
+	if( !skill_log->getState() && !settings_log->getState() && !author_log->getState() )
+	{
+		game_log->draw( window );
 	}
 		
 			
