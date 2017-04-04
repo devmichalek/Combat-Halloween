@@ -12,36 +12,51 @@ Spike::~Spike()
 
 void Spike::free()
 {
-	x = y = 0;
-	state = 0;
-	line = 0;
-	counter = 0;
 	vel = 0;
+	x = y = 0;
+	endY = 0;
+	harmed = false;
+	
+	state = 0;
+	alpha = 0;
 }
 
 void Spike::reset( int distance )
 {
 	x += distance;
 	state = 0;
-	counter = 0;
+	alpha = 0;
+	harmed = false;
 }
 
 
 
-void Spike::setPosition( float x, float y )
+void Spike::setPosition( float x, float y, float endY )
 {
 	this->x = x;
 	this->y = y;
-}
-
-void Spike::setLine( int line )
-{
-	this->line = line;
+	this->endY = endY;
 }
 
 void Spike::setVel( float vel )
 {
 	this->vel = vel;
+}
+
+void Spike::setAlpha( sf::Uint8 alpha )
+{
+	if( state < 2 )
+	{
+		this->alpha = alpha;
+	}
+}
+
+void Spike::doFall()
+{
+	if( state == 0 )
+	{
+		state = 1;
+	}
 }
 
 
@@ -63,37 +78,27 @@ void Spike::undoFall( sf::Uint8 add )
 	x += add;
 }
 
-
-
-void Spike::mechanics( int screen_h, int width )
+void Spike::mechanics()
 {
-	if( state == 0 )
-	{
-		counter ++;
-		if( counter >= line )
-		{
-			counter = 0;
-			state = 1;
-			if( vel < 0 )
-			{
-				y = screen_h;
-			}
-			else
-			{
-				y = -width;
-			}
-		}
-	}
-	else
+	if( state == 1 )
 	{
 		y += vel;
-		if( (vel < 0 && y < -width) ||
-			(vel > 0 && y > screen_h) )
+		if( y >= endY )
 		{
-			state = 0;
+			state = 2;
+		}
+	}
+	else if( state == 2 )
+	{
+		alpha --;
+		if( alpha == 0 )
+		{
+			state = 3;
 		}
 	}
 }
+
+
 
 float Spike::getX()
 {
@@ -105,12 +110,37 @@ float Spike::getY()
 	return y;
 }
 
+float Spike::getEndY()
+{
+	return endY;
+}
+
+sf::Uint8 Spike::getAlpha()
+{
+	return alpha;
+}
+
 bool Spike::isAlive()
 {
-	if( state == 1 )
+	if( state != 3 )
 	{
 		return true;
 	}
 	
 	return false;
+}
+
+bool Spike::ableToHarm()
+{
+	if( !harmed && state == 1 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+void Spike::setAsHarmed()
+{
+	harmed = true;
 }

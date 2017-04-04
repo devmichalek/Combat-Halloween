@@ -548,15 +548,20 @@ sf::Uint8 Brick::moveX( sf::Uint8 direction, float vel )
 
 int Brick::getNearGrassY( int hero_x )
 {
+	bool flag = false;
 	for( unsigned i = blocks.size()-1; i >= 0; i-- )
 	{
 		if( blocks[ i ]->nr >= 0 && blocks[ i ]->nr <= 7 )
 		{
 			if( blocks[ i ]->x < hero_x )
 			{
-				grass_distance = hero_x -blocks[ i ]->x;
-				// printf( "%d\n", grass_distance );
-				return blocks[ i ]->y;
+				if( flag )
+				{
+					grass_distance = hero_x -blocks[ i ]->x;
+					// printf( "%d\n", grass_distance );
+					return blocks[ i ]->y;
+				}
+				flag = true;
 			}
 		}
 	}

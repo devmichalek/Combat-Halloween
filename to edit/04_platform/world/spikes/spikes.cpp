@@ -13,11 +13,14 @@ Spikes::~Spikes()
 
 void Spikes::free()
 {
+	type = 0;
+	width = 0;
 	screen_w = 0;
-	screen_h = 0;
 	
 	damage = 0;
 	main_vel = 0;
+	
+	hit.free();
 	sprite.free();
 	
 	if( !spikes.empty() )
@@ -29,8 +32,6 @@ void Spikes::free()
 		
 		spikes.clear();
 	}
-	
-	hit.free();
 }
 
 void Spikes::reset( int distance )
@@ -43,12 +44,14 @@ void Spikes::reset( int distance )
 
 
 
-void Spikes::load( int type, int screen_w, int screen_h )
+void Spikes::load( int type, int screen_w, int width )
 {
 	free();
 	
+	this->type = type;
+	this->width = width;
 	this->screen_w = screen_w;
-	this->screen_h = screen_h;
+	
 	
 	sprite.setName( "spikes-sprite" );
 	sprite.load( "data/04_platform/world/" +con::itos( type ) +"/traps/2.png" );
@@ -91,15 +94,8 @@ void Spikes::load( int type, int screen_w, int screen_h )
 	file.free();
 	
 	// Set hit.
-	hit.setName( "boulder-hit" );
-	if( type == 4 )
-	{
-		hit.load( "data/04_platform/world/sounds/wall/1.wav" );
-	}
-	else
-	{
-		hit.load( "data/04_platform/world/sounds/wall/0.wav" );
-	}
+	hit.setName( "spikes-hit" );
+	hit.load( "data/04_platform/world/sounds/wall/0.wav" );
 }
 
 void Spikes::draw( sf::RenderWindow* &window )
@@ -108,6 +104,7 @@ void Spikes::draw( sf::RenderWindow* &window )
 	{
 		if( it->isAlive() && it->getX() +sprite.getWidth() > 0 && it->getX() < screen_w )
 		{
+			sprite.setAlpha( it->getAlpha() );
 			sprite.setPosition( it->getX(), it->getY() );
 			window->draw( sprite.get() );
 		}
@@ -117,36 +114,128 @@ void Spikes::draw( sf::RenderWindow* &window )
 void Spikes::fadein( int v, int max )
 {
 	sprite.fadein( v, max );
+	for( auto &it :spikes )
+	{
+		if( it->getAlpha() <= max -v )
+		{
+			it->setAlpha( it->getAlpha() +v );
+		}
+	}
 }
 
 void Spikes::fadeout( int v, int min )
 {
 	sprite.fadeout( v, min );
+	for( auto &it :spikes )
+	{
+		if( it->getAlpha() >= min +v )
+		{
+			it->setAlpha( it->getAlpha() -v );
+		}
+	}
 }
 
 
 
-void Spikes::positioning( vector <Block*> blocks, int width, int chance )
+void Spikes::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 {
-	for( auto &it :blocks )
+	damage += damage *(static_cast <float> (chance) /100);
+	
+	int w = 0;
+	int h = 0;
+	
+	if( type == 0 )
 	{
-		if( it->nr == 12 || it->nr == 2 || it->nr == 7 )
+		w = 8;
+		h = 42;
+	}
+	else if( type == 1 )
+	{
+		w = 22;
+		h = 50;
+	}
+	else if( type == 2 )
+	{
+		w = 22;
+		h = 50;
+	}
+	
+	// First brick blocks.
+	for( auto &it :b1 )
+	{
+		if( it->nr == 5 )
 		{
-			if( it->y >= screen_h -width )
+			for( auto &jt :b2 )
 			{
-				if( rand()%100 < chance )
+				if( jt->nr >= 0 && jt->nr <= 7 )
 				{
-					spikes.push_back( new Spike() );
-					spikes[ spikes.size() -1 ]->setLine( 200 );
-					if( rand() %2 == 1 )
+					if( jt->x <= it->x +w &&
+						jt->x +width >= it->x +w +sprite.getWidth() &&
+						jt->y > it->y &&
+						jt->y <= it->y +width*3 )
 					{
-						spikes[ spikes.size() -1 ]->setPosition( it->x +width/4, it->y +width );
-						spikes[ spikes.size() -1 ]->setVel( -main_vel -(static_cast <float> (rand()%100) /100) );
+						spikes.push_back( new Spike() );
+						spikes[ spikes.size() -1 ]->setVel( main_vel );
+						spikes[ spikes.size() -1 ]->setPosition( it->x +w, it->y +h, jt->y -h );
 					}
-					else
+				}
+			}
+		}
+		else if( it->nr == 7 )
+		{
+			for( auto &jt :b2 )
+			{
+				if( jt->nr >= 0 && jt->nr <= 7 )
+				{
+					if( jt->x <= it->x -w +width -sprite.getWidth() &&
+						jt->x +width >= it->x -w +width &&
+						jt->y > it->y &&
+						jt->y <= it->y +width*3 )
 					{
-						spikes[ spikes.size() -1 ]->setPosition( it->x +width/4, -sprite.getWidth() );
-						spikes[ spikes.size() -1 ]->setVel( main_vel +(static_cast <float> (rand()%100) /100) );
+						spikes.push_back( new Spike() );
+						spikes[ spikes.size() -1 ]->setVel( main_vel );
+						spikes[ spikes.size() -1 ]->setPosition( it->x -w +width -sprite.getWidth(), it->y +h, jt->y -h );
+					}
+				}
+			}
+		}
+	}
+	
+	// Second islands blocks.
+	for( auto &it :b2 )
+	{
+		if( it->nr == 5 )
+		{
+			for( auto &jt :b1 )
+			{
+				if( jt->nr >= 0 && jt->nr <= 7 )
+				{
+					if( jt->x <= it->x +w &&
+						jt->x +width >= it->x +w +sprite.getWidth() &&
+						jt->y > it->y &&
+						jt->y <= it->y +width*3 )
+					{
+						spikes.push_back( new Spike() );
+						spikes[ spikes.size() -1 ]->setVel( main_vel );
+						spikes[ spikes.size() -1 ]->setPosition( it->x +w, it->y +h, jt->y -h );
+					}
+				}
+			}
+		}
+		else if( it->nr == 7 )
+		{
+			for( auto &jt :b1 )
+			{
+				if( jt->nr >= 0 && jt->nr <= 7 )
+				{
+					if( jt->x <= it->x -w +width -sprite.getWidth() &&
+						jt->x +width >= it->x -w +width &&
+						jt->y > it->y &&
+						jt->y <= it->y +width*3 )
+					{
+						spikes.push_back( new Spike() );
+						spikes[ spikes.size() -1 ]->setVel( main_vel );
+						spikes[ spikes.size() -1 ]->setPosition( it->x -w +width -sprite.getWidth(), it->y +h, jt->y -h );
 					}
 				}
 			}
@@ -178,7 +267,7 @@ void Spikes::mechanics()
 	{
 		if( it->isAlive() || (it->getX() +sprite.getWidth() > 0 && it->getX() < screen_w) )
 		{
-			it->mechanics( screen_h, sprite.getHeight() );
+			it->mechanics();
 		}
 	}
 }
@@ -190,21 +279,42 @@ void Spikes::setColor( sf::Color color )
 
 
 
+void Spikes::check( Rect* rect )
+{
+	for( auto &it :spikes )
+	{
+		if( it->isAlive() && it->getX() +sprite.getWidth() > 0 && it->getX() < screen_w )
+		{
+			if( rect->getX() +rect->getWidth() >= it->getX() &&
+				rect->getX() <= it->getX() +sprite.getWidth() &&
+				rect->getY() +rect->getHeight() >= it->getY() &&
+				rect->getY() <= it->getEndY() )
+			{
+				it->doFall();
+				break;
+			}
+		}
+	}
+}
+
 bool Spikes::harm( Rect* rect )
 {
 	if( rect != NULL )
 	{
 		for( auto &it :spikes )
 		{
-			if( it->isAlive() && it->getX() +sprite.getWidth() > 0 && it->getX() < screen_w )
+			if( it->ableToHarm() )
 			{
 				sprite.setPosition( it->getX(), it->getY() );
-				if( sprite.checkRectCollision( *rect ) )
+				if( sprite.checkCollision( rect->getX(), rect->getY() +rect->getHeight() /2, rect->getWidth(), rect->getHeight() ) )
 				{
 					if( hit.isPlayable() )
 					{
 						hit.play();
 					}
+					
+					it->setAsHarmed();
+					
 					return true;
 				}
 			}

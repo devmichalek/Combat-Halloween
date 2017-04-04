@@ -8,14 +8,16 @@
 
 class Spikes
 {
+	int type;
+	int width;
 	int screen_w;
-	int screen_h;
 	
 	int damage;
 	float main_vel;
+	
+	Slab hit;
 	MySprite sprite;
 	vector <Spike*> spikes;
-	Slab hit;
 	
 public:
 	// Basics.
@@ -23,13 +25,13 @@ public:
 	~Spikes();
 	void free();
 	void reset( int distance );
-	void load( int type, int screen_w, int screen_h );
+	void load( int type, int screen_w, int width );
 	void draw( sf::RenderWindow* &window );
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	
 	// Creating.
-	void positioning( vector <Block*> blocks, int width, int chance );
+	void positioning( vector <Block*> b1, vector <Block*> b2, int chance );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
@@ -38,6 +40,7 @@ public:
 	void setColor( sf::Color color );
 	
 	// Check collision.
+	void check( Rect* rect );
 	bool harm( Rect* rect );
 	
 	// Damage
