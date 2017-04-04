@@ -234,6 +234,7 @@ void Forest::mechanics()
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
+			spikes->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -255,6 +256,7 @@ void Forest::mechanics()
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
+			spikes->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 
@@ -301,6 +303,7 @@ void Forest::mechanics()
 			fireball->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
+			spikes->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -309,57 +312,6 @@ void Forest::mechanics()
 	}
 	
 	hero->undoFallY();
-	
-// ------------------------------------------------------------------------------------------------
-	// HARM 
-	
-	if( !hero->resume() )
-	{
-		// HARM BY WALL
-		if( wall->harm( hero->getRect() ) )
-		{
-			heart->harm( -wall->getDamage() );
-			showdamage->run( to_string( -wall->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY BOULDER
-		if( boulder->harm( hero->getRect() ) )
-		{
-			heart->harm( -boulder->getDamage() );
-			showdamage->run( to_string( -boulder->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY MINE
-		mine_factory->checkCollision( hero->getRect() );
-		if( mine_factory->harm( hero->getRect() ) )
-		{
-			heart->harm( -mine_factory->getDamage() );
-			showdamage->run( to_string( -mine_factory->getDamage() ) );
-			effect->runBlood();
-		}
-
-		
-		// HARM BY GOLEM
-		if( golem_factory.harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -golem_factory.getDamage() );
-			showdamage->run( to_string( -golem_factory.getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY FIREBALL
-		if( fireball->harmSomebody( hero->getRect() ) )
-		{
-			if( fireball->harmed() )
-			{
-				heart->harm( -fireball->getDamage() );
-				showdamage->run( to_string( -fireball->getDamage() ) );
-				effect->runBlood();
-			}
-		}
-	}
 	
 // ------------------------------------------------------------------------------------------------
 	// DEAD
@@ -375,10 +327,12 @@ void Forest::mechanics()
 		golem_factory.mechanics();
 		coins->mechanics();
 		hp_dots->mechanics();
+		score_dots->mechanics();
 		fireball->mechanics( hero->getY(), hero->getDirection() );
 		fly_factory->mechanics();
 		skills->mechanics();
 		scores->mechanics();
+		spikes->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -416,53 +370,111 @@ void Forest::mechanics()
 			ladder->setColor( day->getColor() );
 			greenery->setColor( day->getColor() );
 			door->setColor( day->getColor() );
+			spikes->setColor( day->getColor() );
 			
 			mine_factory->setColor( day->getColor() );
 			golem_factory.setColor( day->getColor() );
 			fly_factory->setColor( day->getColor() );
 		}
-	}
-	
-	
+		
+		// HARM 
+		if( !hero->resume() )
+		{
+			// HARM BY WALL
+			if( wall->harm( hero->getRect() ) )
+			{
+				heart->harm( -wall->getDamage() );
+				showdamage->run( to_string( -wall->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY BOULDER
+			if( boulder->harm( hero->getRect() ) )
+			{
+				heart->harm( -boulder->getDamage() );
+				showdamage->run( to_string( -boulder->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY MINE
+			mine_factory->checkCollision( hero->getRect() );
+			if( mine_factory->harm( hero->getRect() ) )
+			{
+				heart->harm( -mine_factory->getDamage() );
+				showdamage->run( to_string( -mine_factory->getDamage() ) );
+				effect->runBlood();
+			}
+
+			
+			// HARM BY GOLEM
+			if( golem_factory.harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -golem_factory.getDamage() );
+				showdamage->run( to_string( -golem_factory.getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY FIREBALL
+			if( fireball->harmSomebody( hero->getRect() ) )
+			{
+				if( fireball->harmed() )
+				{
+					heart->harm( -fireball->getDamage() );
+					showdamage->run( to_string( -fireball->getDamage() ) );
+					effect->runBlood();
+				}
+			}
+			
+			// HARM BY SPIKES
+			spikes->check( hero->getRect() );
+			if( spikes->harm( hero->getRect() ) )
+			{
+				heart->harm( -spikes->getDamage() );
+				showdamage->run( to_string( -spikes->getDamage() ) );
+				effect->runBlood();
+			}
+		}
+		
 // ------------------------------------------------------------------------------------------------
-	// CHECK Y AND SHOW EFFECT
-	if( hero->getY() > screen_h ||
-		water->checkCollision( hero->getRect() ))
-	{
-		effect->runWater();
-	}
+		// CHECK Y AND SHOW EFFECT
+		if( hero->getY() > screen_h ||
+			water->checkCollision( hero->getRect() ))
+		{
+			effect->runWater();
+		}
 
 // ------------------------------------------------------------------------------------------------
-	// GOLEM PART
-	
-	golem_factory.appear( hero->getRect() );
-	golem_factory.walk( hero->getRect() );
-	golem_factory.ableAttack( hero->getRect() );
-	
+		// GOLEM PART
+		
+		golem_factory.appear( hero->getRect() );
+		golem_factory.walk( hero->getRect() );
+		golem_factory.ableAttack( hero->getRect() );
+		
 // ------------------------------------------------------------------------------------------------
-	// COINS, HP DOTS AND SCORES
-	if( hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) ) )
-	{
-		scores->addFoePoint();
-	}
-	
-	if( coins->uplift( hero->getRect() ) )
-	{
-		money->add( coins->getMoney() );
-	}
-	
-	if( hp_dots->uplift( hero->getRect() ) )
-	{
-		showheal->run( hp_dots->getHP() );
-		heart->harm( hp_dots->getHP() );
-	}
-	
-	if( score_dots->uplift( hero->getRect() ) )
-	{
-		scores->addPoint();
-	}
+		// COINS, HP DOTS AND SCORES
+		if( hp_dots->drop( coins->drop( golem_factory.getDeadRect() ) ) )
+		{
+			scores->addFoePoint();
+		}
+		
+		if( coins->uplift( hero->getRect() ) )
+		{
+			money->add( coins->getMoney() );
+		}
+		
+		if( hp_dots->uplift( hero->getRect() ) )
+		{
+			showheal->run( hp_dots->getHP() );
+			heart->harm( hp_dots->getHP() );
+		}
+		
+		if( score_dots->uplift( hero->getRect() ) )
+		{
+			scores->addPoint();
+		}
 
 // ------------------------------------------------------------------------------------------------
-	// DOOR
-	door->checkHero( hero->getRect() );
+		// DOOR
+		door->checkHero( hero->getRect() );
+	}
 }

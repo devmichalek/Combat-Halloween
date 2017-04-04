@@ -31,6 +31,7 @@
 #include "04_platform/world/weather/rain/rain.h"
 #include "04_platform/world/boulder/boulders.h"
 #include "04_platform/world/door/door.h"
+#include "04_platform/world/spikes/spikes.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -82,6 +83,7 @@ class Halloween
 	Rain* rain;
 	Boulder* boulder;
 	Door* door;
+	Spikes* spikes;
 	
 	// enemy
 	Mine_factory* mine_factory;

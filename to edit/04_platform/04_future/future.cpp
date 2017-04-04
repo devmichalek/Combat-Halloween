@@ -34,6 +34,7 @@ Future::Future()
 	greenery = new Greenery;
 	boulder = new Boulder;
 	door = new Door;
+	saws = new Saws;
 	
 	mine_factory = new Mine_factory;
 	cruncher = new Cruncher;
@@ -80,6 +81,7 @@ void Future::free()
 	delete greenery;
 	delete boulder;
 	delete door;
+	delete saws;
 	
 	delete mine_factory;
 	robot_factory.free();
@@ -116,6 +118,7 @@ void Future::reset()
 	greenery->reset( distance );
 	boulder->reset( distance );
 	door->reset( distance );
+	saws->reset( distance );
 	
 	mine_factory->reset( distance );
 	robot_factory.reset( distance );
@@ -154,6 +157,7 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	greenery->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
 	door->load( type );
+	saws->load( type, screen_w, width );
 	
 	mine_factory->load( type, width, screen_w, screen_h );
 	robot_factory.load( width, screen_w, screen_h, "robot" );
@@ -205,6 +209,7 @@ void Future::draw( sf::RenderWindow* &window )
 		ladder->fadeout( value );
 		greenery->fadeout( value );
 		door->fadeout( value );
+		saws->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		robot_factory.fadeout( value );
@@ -239,6 +244,7 @@ void Future::draw( sf::RenderWindow* &window )
 		ladder->fadein( value );
 		greenery->fadein( value );
 		door->fadein( value );
+		saws->fadein( value );
 		
 		mine_factory->fadein( value );
 		robot_factory.fadein( value );
@@ -268,6 +274,7 @@ void Future::draw( sf::RenderWindow* &window )
 	cruncher->draw( window );
 	
 	// rest
+	saws->draw( window );
 	score_dots->draw( window );
 	hp_dots->draw( window );
 	water->draw( window );
@@ -401,7 +408,10 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 27: score_dots->positioning( difficulty, brick->getBlocks(), brick->getWidth() );
 				 score_dots->positioning( difficulty, islands->getBlocks(), brick->getWidth() );
-		info = "done";	break;
+		info = "positioning saws";	break;
+		
+		case 28: saws->positioning( brick->getBlocks(), islands->getBlocks(), difficulty );
+		info = "done"; break;
 		
 		default:
 		return true;
@@ -457,6 +467,7 @@ void Future::setSound()
 		mine_factory->turnOff();
 		robot_factory.turnOff();
 		boulder->turnOff();
+		saws->turnOff();
 	}
 	else
 	{
@@ -465,6 +476,7 @@ void Future::setSound()
 		mine_factory->turnOn();
 		robot_factory.turnOn();
 		boulder->turnOn();
+		saws->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
@@ -472,6 +484,7 @@ void Future::setSound()
 		mine_factory->setVolume( sound.getChunkVolume() );
 		robot_factory.setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
+		saws->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume

@@ -32,6 +32,7 @@
 #include "04_platform/world/weather/snow/snow.h"
 #include "04_platform/world/boulder/boulders.h"
 #include "04_platform/world/door/door.h"
+#include "04_platform/world/spikes/spikes.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -83,6 +84,7 @@ class Winter
 	Snow* snow;
 	Boulder* boulder;
 	Door* door;
+	Spikes* spikes;
 	
 	// enemy
 	Mine_factory* mine_factory;

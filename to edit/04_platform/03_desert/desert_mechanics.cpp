@@ -321,64 +321,6 @@ void Desert::mechanics()
 	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
-	// HARM 
-	
-	if( !hero->resume() )
-	{
-		// HARM BY WALL
-		if( wall->harm( hero->getRect() ) )
-		{
-			heart->harm( -wall->getDamage() );
-			showdamage->run( to_string( -wall->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY BOULDER
-		if( boulder->harm( hero->getRect() ) )
-		{
-			heart->harm( -boulder->getDamage() );
-			showdamage->run( to_string( -boulder->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY MINE
-		mine_factory->checkCollision( hero->getRect() );
-		if( mine_factory->harm( hero->getRect() ) )
-		{
-			heart->harm( -mine_factory->getDamage() );
-			showdamage->run( to_string( -mine_factory->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY SKELETON
-		if( skeleton_factory.harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -skeleton_factory.getDamage() );
-			showdamage->run( to_string( -skeleton_factory.getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY SNAKES
-		if( snakes_factory->harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -snakes_factory->getDamage() );
-			showdamage->run( to_string( -snakes_factory->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY FIREBALL
-		if( fireball->harmSomebody( hero->getRect() ) )
-		{
-			if( fireball->harmed() )
-			{
-				heart->harm( -fireball->getDamage() );
-				showdamage->run( to_string( -fireball->getDamage() ) );
-				effect->runBlood();
-			}
-		}
-	}
-	
-// ------------------------------------------------------------------------------------------------
 	// DEAD
 	if( heart->isDead() )
 	{
@@ -413,86 +355,142 @@ void Desert::mechanics()
 		{
 			islands->turnOn();
 		}
-	}
-	
+		
+		// HARM 
+		if( !hero->resume() )
+		{
+			// HARM BY WALL
+			if( wall->harm( hero->getRect() ) )
+			{
+				heart->harm( -wall->getDamage() );
+				showdamage->run( to_string( -wall->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY BOULDER
+			if( boulder->harm( hero->getRect() ) )
+			{
+				heart->harm( -boulder->getDamage() );
+				showdamage->run( to_string( -boulder->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY MINE
+			mine_factory->checkCollision( hero->getRect() );
+			if( mine_factory->harm( hero->getRect() ) )
+			{
+				heart->harm( -mine_factory->getDamage() );
+				showdamage->run( to_string( -mine_factory->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY SKELETON
+			if( skeleton_factory.harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -skeleton_factory.getDamage() );
+				showdamage->run( to_string( -skeleton_factory.getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY SNAKES
+			if( snakes_factory->harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -snakes_factory->getDamage() );
+				showdamage->run( to_string( -snakes_factory->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY FIREBALL
+			if( fireball->harmSomebody( hero->getRect() ) )
+			{
+				if( fireball->harmed() )
+				{
+					heart->harm( -fireball->getDamage() );
+					showdamage->run( to_string( -fireball->getDamage() ) );
+					effect->runBlood();
+				}
+			}
+		}
+		
 // ------------------------------------------------------------------------------------------------
-	// CHECK Y AND SHOW EFFECT
-	if( hero->getY() > screen_h )
-	{
-		effect->runSand();
-	}
-	
+		// CHECK Y AND SHOW EFFECT
+		if( hero->getY() > screen_h )
+		{
+			effect->runSand();
+		}
+		
 // ------------------------------------------------------------------------------------------------
-	// SET COLOR ~ DAY
-	day->mechanics();
+		// SET COLOR ~ DAY
+		day->mechanics();
 
-	
-	if( day->isChange() )
-	{
-		hero->setColor( day->getColor() );
-		coins->setColor( day->getColor() );
-		hp_dots->setAlpha( day->getAlpha() );
-		score_dots->setAlpha( day->getAlpha() );
-		kunai->setColor( day->getColor() );
 		
-		brick->setColor( day->getColor() );
-		background->setColor( day->getColor() );
-		islands->setColor( day->getColor() );
-		wall->setColor( day->getColor() );
-		boulder->setColor( day->getColor() );
-		ladder->setColor( day->getColor() );
-		greenery->setColor( day->getColor() );
+		if( day->isChange() )
+		{
+			hero->setColor( day->getColor() );
+			coins->setColor( day->getColor() );
+			hp_dots->setAlpha( day->getAlpha() );
+			score_dots->setAlpha( day->getAlpha() );
+			kunai->setColor( day->getColor() );
+			
+			brick->setColor( day->getColor() );
+			background->setColor( day->getColor() );
+			islands->setColor( day->getColor() );
+			wall->setColor( day->getColor() );
+			boulder->setColor( day->getColor() );
+			ladder->setColor( day->getColor() );
+			greenery->setColor( day->getColor() );
+			
+			mine_factory->setColor( day->getColor() );
+			skeleton_factory.setColor( day->getColor() );
+			snakes_factory->setColor( day->getColor() );
+			fly_factory->setColor( day->getColor() );
+			door->setColor( day->getColor() );
+		}
 		
-		mine_factory->setColor( day->getColor() );
-		skeleton_factory.setColor( day->getColor() );
-		snakes_factory->setColor( day->getColor() );
-		fly_factory->setColor( day->getColor() );
-		door->setColor( day->getColor() );
-	}
-	
 // ------------------------------------------------------------------------------------------------
-	// SKELETON PART
-	
-	skeleton_factory.appear( hero->getRect() );
-	skeleton_factory.walk( hero->getRect() );
-	skeleton_factory.ableAttack( hero->getRect() );
-	
-// ------------------------------------------------------------------------------------------------
-	// SNAKES PART
-	
-	snakes_factory->appear( hero->getX() );
-	snakes_factory->ableAttack( hero->getRect() );
-	
-// ------------------------------------------------------------------------------------------------
-	// COINS AND HP DOTS
-	if( hp_dots->drop( coins->drop( skeleton_factory.getDeadRect() ) ) )
-	{
-		scores->addFoePoint();
-	}
-	
-	if( hp_dots->drop( coins->drop( snakes_factory->getDeadRect() ) ) )
-	{
-		scores->addFoePoint();
-	}
-	
-	if( coins->uplift( hero->getRect() ) )
-	{
-		money->add( coins->getMoney() );
-	}
-	
-	if( hp_dots->uplift( hero->getRect() ) )
-	{
-		showheal->run( hp_dots->getHP() );
-		heart->harm( hp_dots->getHP() );
-	}
-	
+		// SKELETON PART
 		
-	if( score_dots->uplift( hero->getRect() ) )
-	{
-		scores->addPoint();
-	}
-	
+		skeleton_factory.appear( hero->getRect() );
+		skeleton_factory.walk( hero->getRect() );
+		skeleton_factory.ableAttack( hero->getRect() );
+		
 // ------------------------------------------------------------------------------------------------
-	// DOOR
-	door->checkHero( hero->getRect() );
+		// SNAKES PART
+		
+		snakes_factory->appear( hero->getX() );
+		snakes_factory->ableAttack( hero->getRect() );
+		
+// ------------------------------------------------------------------------------------------------
+		// COINS AND HP DOTS
+		if( hp_dots->drop( coins->drop( skeleton_factory.getDeadRect() ) ) )
+		{
+			scores->addFoePoint();
+		}
+		
+		if( hp_dots->drop( coins->drop( snakes_factory->getDeadRect() ) ) )
+		{
+			scores->addFoePoint();
+		}
+		
+		if( coins->uplift( hero->getRect() ) )
+		{
+			money->add( coins->getMoney() );
+		}
+		
+		if( hp_dots->uplift( hero->getRect() ) )
+		{
+			showheal->run( hp_dots->getHP() );
+			heart->harm( hp_dots->getHP() );
+		}
+		
+			
+		if( score_dots->uplift( hero->getRect() ) )
+		{
+			scores->addPoint();
+		}
+		
+// ------------------------------------------------------------------------------------------------
+		// DOOR
+		door->checkHero( hero->getRect() );
+	}
 }

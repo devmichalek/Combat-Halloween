@@ -229,6 +229,7 @@ void Future::mechanics()
 			hp_dots->moveX( hero->getDirection(), scope->getVel() );
 			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
+			saws->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -249,6 +250,7 @@ void Future::mechanics()
 			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
 			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
+			saws->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -261,8 +263,6 @@ void Future::mechanics()
 // ------------------------------------------------------------------------------------------------
 	// BACKGROUND SET XY
 	background->setPosition( hero->getX(), hero->getY() );
-	
-	
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO FALLEN
@@ -295,6 +295,7 @@ void Future::mechanics()
 			hp_dots->undoFall( brick->getGrassValue() );
 			score_dots->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
+			saws->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -305,51 +306,7 @@ void Future::mechanics()
 	hero->undoFallY();
 	
 // ------------------------------------------------------------------------------------------------
-	// HARM 
 	
-	if( !hero->resume() )
-	{
-		// HARM BY WALL
-		if( wall->harm( hero->getRect() ) )
-		{
-			heart->harm( -wall->getDamage() );
-			showdamage->run( to_string( -wall->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY BOULDER
-		if( boulder->harm( hero->getRect() ) )
-		{
-			heart->harm( -boulder->getDamage() );
-			showdamage->run( to_string( -boulder->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY MINE
-		mine_factory->checkCollision( hero->getRect() );
-		if( mine_factory->harm( hero->getRect() ) )
-		{
-			heart->harm( -mine_factory->getDamage() );
-			showdamage->run( to_string( -mine_factory->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY ROBOT
-		if( robot_factory.harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -robot_factory.getDamage() );
-			showdamage->run( to_string( -robot_factory.getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY cruncher
-		if( cruncher->harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -cruncher->getDamage() );
-			showdamage->run( to_string( -cruncher->getDamage() ) );
-			effect->runCruncher();
-		}
-	}
 	
 // ------------------------------------------------------------------------------------------------
 	// DEAD
@@ -369,6 +326,7 @@ void Future::mechanics()
 		score_dots->mechanics();
 		skills->mechanics();
 		scores->mechanics();
+		saws->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -383,49 +341,104 @@ void Future::mechanics()
 		{
 			islands->turnOn();
 		}
-	}
-	
-// ------------------------------------------------------------------------------------------------
-	// CHECK Y AND SHOW EFFECT
-	if( hero->getY() > screen_h ||
-		water->checkCollision( hero->getRect() ))
-	{
-		effect->runAcid();
-	}
-	
-	
-// ------------------------------------------------------------------------------------------------
-	// ROBOT PART
-	
-	robot_factory.appear( hero->getRect() );
-	robot_factory.walk( hero->getRect() );
-	robot_factory.ableAttack( hero->getRect() );
-	
-// ------------------------------------------------------------------------------------------------
-	// COINS, HP DOTS AND SCORES
-	if( hp_dots->drop( coins->drop( robot_factory.getDeadRect() ) ) )
-	{
-		scores->addFoePoint();
-	}
-	
-	if( coins->uplift( hero->getRect() ) )
-	{
-		money->add( coins->getMoney() );
-	}
-	
-	if( hp_dots->uplift( hero->getRect() ) )
-	{
-		showheal->run( hp_dots->getHP() );
-		heart->harm( hp_dots->getHP() );
-	}
-	
 		
-	if( score_dots->uplift( hero->getRect() ) )
-	{
-		scores->addPoint();
-	}
+		// HARM 
 	
+		if( !hero->resume() )
+		{
+			// HARM BY WALL
+			if( wall->harm( hero->getRect() ) )
+			{
+				heart->harm( -wall->getDamage() );
+				showdamage->run( to_string( -wall->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY BOULDER
+			if( boulder->harm( hero->getRect() ) )
+			{
+				heart->harm( -boulder->getDamage() );
+				showdamage->run( to_string( -boulder->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY MINE
+			mine_factory->checkCollision( hero->getRect() );
+			if( mine_factory->harm( hero->getRect() ) )
+			{
+				heart->harm( -mine_factory->getDamage() );
+				showdamage->run( to_string( -mine_factory->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY ROBOT
+			if( robot_factory.harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -robot_factory.getDamage() );
+				showdamage->run( to_string( -robot_factory.getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY cruncher
+			if( cruncher->harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -cruncher->getDamage() );
+				showdamage->run( to_string( -cruncher->getDamage() ) );
+				effect->runCruncher();
+			}
+			
+			// HARM BY SPIKES
+			saws->check( hero->getRect() );
+			if( saws->harm( hero->getRect() ) )
+			{
+				heart->harm( -saws->getDamage() );
+				showdamage->run( to_string( -saws->getDamage() ) );
+				effect->runBlood();
+			}
+		}
+		
 // ------------------------------------------------------------------------------------------------
-	// DOOR
-	door->checkHero( hero->getRect() );
+		// CHECK Y AND SHOW EFFECT
+		if( hero->getY() > screen_h ||
+			water->checkCollision( hero->getRect() ))
+		{
+			effect->runAcid();
+		}
+		
+		
+// ------------------------------------------------------------------------------------------------
+		// ROBOT PART
+		
+		robot_factory.appear( hero->getRect() );
+		robot_factory.walk( hero->getRect() );
+		robot_factory.ableAttack( hero->getRect() );
+		
+// ------------------------------------------------------------------------------------------------
+		// COINS, HP DOTS AND SCORES
+		if( hp_dots->drop( coins->drop( robot_factory.getDeadRect() ) ) )
+		{
+			scores->addFoePoint();
+		}
+		
+		if( coins->uplift( hero->getRect() ) )
+		{
+			money->add( coins->getMoney() );
+		}
+		
+		if( hp_dots->uplift( hero->getRect() ) )
+		{
+			showheal->run( hp_dots->getHP() );
+			heart->harm( hp_dots->getHP() );
+		}
+		
+			
+		if( score_dots->uplift( hero->getRect() ) )
+		{
+			scores->addPoint();
+		}
+		
+// ------------------------------------------------------------------------------------------------
+		// DOOR
+		door->checkHero( hero->getRect() );
+	}
 }

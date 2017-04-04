@@ -34,6 +34,7 @@ Halloween::Halloween()
 	rain = new Rain;
 	boulder = new Boulder;
 	door = new Door;
+	spikes = new Spikes;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
@@ -81,6 +82,7 @@ void Halloween::free()
 	delete rain;
 	delete boulder;
 	delete door;
+	delete spikes;
 	
 	delete mine_factory;
 	vampire_factory.free();
@@ -119,6 +121,7 @@ void Halloween::reset()
 	rain->reset();
 	boulder->reset( distance );
 	door->reset( distance );
+	spikes->reset( distance );
 	
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
@@ -159,6 +162,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	rain->load( screen_w, screen_h );
 	boulder->load( type, width, screen_w );
 	door->load( type );
+	spikes->load( type, screen_w, width );
 	
 	mine_factory->load( type, width, screen_w, screen_h );
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
@@ -212,6 +216,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		rain->fadeout( value );
 		door->fadeout( value );
+		spikes->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		vampire_factory.fadeout( value );
@@ -248,6 +253,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		rain->fadein( value );
 		door->fadein( value );
+		spikes->fadein( value );
 		
 		mine_factory->fadein( value );
 		vampire_factory.fadein( value );
@@ -280,6 +286,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	fly_factory->draw( window );
 	
 	// rest
+	spikes->draw( window );
 	score_dots->draw( window );
 	hp_dots->draw( window );
 	rain->draw( window );
@@ -414,7 +421,10 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		
 		case 27: score_dots->positioning( difficulty, brick->getBlocks(), brick->getWidth() );
 				 score_dots->positioning( difficulty, islands->getBlocks(), brick->getWidth() );
-		info = "done";	break;
+		info = "positioning spikes";	break;
+		
+		case 28: spikes->positioning( brick->getBlocks(), islands->getBlocks(), difficulty );
+		info = "done"; break;
 		
 		default:
 		return true;
@@ -471,6 +481,7 @@ void Halloween::setSound()
 		vampire_factory.turnOff();
 		zombie_factory.turnOff();
 		boulder->turnOff();
+		spikes->turnOff();
 	}
 	else
 	{
@@ -480,6 +491,7 @@ void Halloween::setSound()
 		vampire_factory.turnOn();
 		zombie_factory.turnOn();
 		boulder->turnOn();
+		spikes->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
@@ -488,6 +500,7 @@ void Halloween::setSound()
 		vampire_factory.setVolume( sound.getChunkVolume() );
 		zombie_factory.setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
+		spikes->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume

@@ -242,6 +242,7 @@ void Halloween::mechanics()
 			lightning->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
+			spikes->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -263,6 +264,7 @@ void Halloween::mechanics()
 			lightning->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
+			spikes->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -308,6 +310,7 @@ void Halloween::mechanics()
 			lightning->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
+			spikes->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -317,63 +320,6 @@ void Halloween::mechanics()
 	
 	hero->undoFallY();
 	
-// ------------------------------------------------------------------------------------------------
-	// HARM 
-	
-	if( !hero->resume() )
-	{
-		// HARM BY WALL
-		if( wall->harm( hero->getRect() ) )
-		{
-			heart->harm( -wall->getDamage() );
-			showdamage->run( to_string( -wall->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY BOULDER
-		if( boulder->harm( hero->getRect() ) )
-		{
-			heart->harm( -boulder->getDamage() );
-			showdamage->run( to_string( -boulder->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY MINE
-		mine_factory->checkCollision( hero->getRect() );
-		if( mine_factory->harm( hero->getRect() ) )
-		{
-			heart->harm( -mine_factory->getDamage() );
-			showdamage->run( to_string( -mine_factory->getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY VAMPIRE
-		if( vampire_factory.harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -vampire_factory.getDamage() );
-			showdamage->run( to_string( -vampire_factory.getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY ZOMBIE
-		if( zombie_factory.harmSomebody( hero->getRect() ) )
-		{
-			heart->harm( -zombie_factory.getDamage() );
-			showdamage->run( to_string( -zombie_factory.getDamage() ) );
-			effect->runBlood();
-		}
-		
-		// HARM BY LIGHTNING
-		if( lightning->harmSomebody( hero->getRect() ) )
-		{
-			if( lightning->harmed() )
-			{
-				heart->harm( -lightning->getDamage() );
-				showdamage->run( to_string( -lightning->getDamage() ) );
-				effect->runLightning();
-			}
-		}
-	}
 	
 // ------------------------------------------------------------------------------------------------
 	// DEAD
@@ -396,6 +342,7 @@ void Halloween::mechanics()
 		skills->mechanics();
 		scores->mechanics();
 		rain->mechanics();
+		spikes->mechanics();
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -410,57 +357,122 @@ void Halloween::mechanics()
 		{
 			islands->turnOn();
 		}
-	}
-	
-// ------------------------------------------------------------------------------------------------
-	// CHECK Y AND SHOW EFFECT
-	if( hero->getY() > screen_h )
-	{
-		effect->runFall();
-	}
-	
-// ------------------------------------------------------------------------------------------------
-	// VAMPIRE AND ZOMBIE PART
-	
-	vampire_factory.appear( hero->getRect() );
-	vampire_factory.walk( hero->getRect() );
-	vampire_factory.ableAttack( hero->getRect() );
-	
-	
-	zombie_factory.appear( hero->getRect() );
-	zombie_factory.walk( hero->getRect() );
-	zombie_factory.ableAttack( hero->getRect() );
-	
-// ------------------------------------------------------------------------------------------------
-	// COINS, HP DOTS AND SCORES
-	if( hp_dots->drop( coins->drop( vampire_factory.getDeadRect() ) ) )
-	{
-		scores->addFoePoint();
-	}
-	
-	if( hp_dots->drop( coins->drop( zombie_factory.getDeadRect() ) ) )
-	{
-		scores->addFoePoint();
-	}
-	
-	if( coins->uplift( hero->getRect() ) )
-	{
-		money->add( coins->getMoney() );
-	}
-	
-	if( hp_dots->uplift( hero->getRect() ) )
-	{
-		showheal->run( hp_dots->getHP() );
-		heart->harm( hp_dots->getHP() );
-	}
-	
 		
-	if( score_dots->uplift( hero->getRect() ) )
-	{
-		scores->addPoint();
-	}
-	
+		// HARM 
+		if( !hero->resume() )
+		{
+			// HARM BY WALL
+			if( wall->harm( hero->getRect() ) )
+			{
+				heart->harm( -wall->getDamage() );
+				showdamage->run( to_string( -wall->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY BOULDER
+			if( boulder->harm( hero->getRect() ) )
+			{
+				heart->harm( -boulder->getDamage() );
+				showdamage->run( to_string( -boulder->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY MINE
+			mine_factory->checkCollision( hero->getRect() );
+			if( mine_factory->harm( hero->getRect() ) )
+			{
+				heart->harm( -mine_factory->getDamage() );
+				showdamage->run( to_string( -mine_factory->getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY VAMPIRE
+			if( vampire_factory.harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -vampire_factory.getDamage() );
+				showdamage->run( to_string( -vampire_factory.getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY ZOMBIE
+			if( zombie_factory.harmSomebody( hero->getRect() ) )
+			{
+				heart->harm( -zombie_factory.getDamage() );
+				showdamage->run( to_string( -zombie_factory.getDamage() ) );
+				effect->runBlood();
+			}
+			
+			// HARM BY LIGHTNING
+			if( lightning->harmSomebody( hero->getRect() ) )
+			{
+				if( lightning->harmed() )
+				{
+					heart->harm( -lightning->getDamage() );
+					showdamage->run( to_string( -lightning->getDamage() ) );
+					effect->runLightning();
+				}
+			}
+			
+			// HARM BY SPIKES
+			spikes->check( hero->getRect() );
+			if( spikes->harm( hero->getRect() ) )
+			{
+				heart->harm( -spikes->getDamage() );
+				showdamage->run( to_string( -spikes->getDamage() ) );
+				effect->runBlood();
+			}
+		}
+		
 // ------------------------------------------------------------------------------------------------
-	// DOOR
-	door->checkHero( hero->getRect() );
+		// CHECK Y AND SHOW EFFECT
+		if( hero->getY() > screen_h )
+		{
+			effect->runFall();
+		}
+		
+// ------------------------------------------------------------------------------------------------
+		// VAMPIRE AND ZOMBIE PART
+		
+		vampire_factory.appear( hero->getRect() );
+		vampire_factory.walk( hero->getRect() );
+		vampire_factory.ableAttack( hero->getRect() );
+		
+		
+		zombie_factory.appear( hero->getRect() );
+		zombie_factory.walk( hero->getRect() );
+		zombie_factory.ableAttack( hero->getRect() );
+		
+// ------------------------------------------------------------------------------------------------
+		// COINS, HP DOTS AND SCORES
+		if( hp_dots->drop( coins->drop( vampire_factory.getDeadRect() ) ) )
+		{
+			scores->addFoePoint();
+		}
+		
+		if( hp_dots->drop( coins->drop( zombie_factory.getDeadRect() ) ) )
+		{
+			scores->addFoePoint();
+		}
+		
+		if( coins->uplift( hero->getRect() ) )
+		{
+			money->add( coins->getMoney() );
+		}
+		
+		if( hp_dots->uplift( hero->getRect() ) )
+		{
+			showheal->run( hp_dots->getHP() );
+			heart->harm( hp_dots->getHP() );
+		}
+		
+			
+		if( score_dots->uplift( hero->getRect() ) )
+		{
+			scores->addPoint();
+		}
+		
+// ------------------------------------------------------------------------------------------------
+		// DOOR
+		door->checkHero( hero->getRect() );
+	}
 }

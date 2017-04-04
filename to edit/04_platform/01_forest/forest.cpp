@@ -36,6 +36,7 @@ Forest::Forest()
 	day = new Day;
 	boulder = new Boulder;
 	door = new Door;
+	spikes = new Spikes;
 	
 	mine_factory = new Mine_factory;
 	fireball = new Fireball;
@@ -85,6 +86,7 @@ void Forest::free()
 	delete day;
 	delete boulder;
 	delete door;
+	delete spikes;
 	
 	delete mine_factory;
 	golem_factory.free();
@@ -125,6 +127,7 @@ void Forest::reset()
 	day->reset();
 	boulder->reset( distance );
 	door->reset( distance );
+	spikes->reset( distance );
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
@@ -146,6 +149,7 @@ void Forest::reset()
 	greenery->setColor( day->getColor() );
 	boulder->setColor( day->getColor() );
 	door->setColor( day->getColor() );
+	spikes->setColor( day->getColor() );
 	hp_dots->setAlpha( day->getAlpha() );
 	score_dots->setAlpha( day->getAlpha() );
 	
@@ -188,6 +192,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	day->set( FPS );
 	boulder->load( type, width, screen_w );
 	door->load( type );
+	spikes->load( type, screen_w, width );
 	
 	mine_factory->load( type, width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_wood" );
@@ -241,6 +246,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		boulder->fadeout( value );
 		door->fadeout( value );
+		spikes->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
@@ -277,6 +283,7 @@ void Forest::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		boulder->fadein( value );
 		door->fadein( value );
+		spikes->fadein( value );
 		
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
@@ -309,6 +316,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	fly_factory->draw( window );
 	
 	// rest
+	spikes->draw( window );
 	score_dots->draw( window );
 	hp_dots->draw( window );
 	water->draw( window );
@@ -441,7 +449,10 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 27: score_dots->positioning( difficulty, brick->getBlocks(), brick->getWidth() );
 				 score_dots->positioning( difficulty, islands->getBlocks(), brick->getWidth() );
-		info = "done";	break;
+		info = "positioning spikes";	break;
+		
+		case 28: spikes->positioning( brick->getBlocks(), islands->getBlocks(), difficulty );
+		info = "done"; break;
 		
 		default:
 		return true;
@@ -497,6 +508,7 @@ void Forest::setSound()
 		mine_factory->turnOff();
 		golem_factory.turnOff();
 		boulder->turnOff();
+		spikes->turnOff();
 	}
 	else
 	{
@@ -505,6 +517,7 @@ void Forest::setSound()
 		mine_factory->turnOn();
 		golem_factory.turnOn();
 		boulder->turnOn();
+		spikes->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
@@ -512,6 +525,7 @@ void Forest::setSound()
 		mine_factory->setVolume( sound.getChunkVolume() );
 		golem_factory.setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
+		spikes->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume

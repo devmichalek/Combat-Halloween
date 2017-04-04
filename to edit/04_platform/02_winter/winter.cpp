@@ -35,6 +35,7 @@ Winter::Winter()
 	snow = new Snow;
 	boulder = new Boulder;
 	door = new Door;
+	spikes = new Spikes;
 	
 	mine_factory = new Mine_factory;
 	lightning = new Lightning;
@@ -83,6 +84,7 @@ void Winter::free()
 	delete snow;
 	delete boulder;
 	delete door;
+	delete spikes;
 	
 	delete mine_factory;
 	golem_factory.free();
@@ -121,6 +123,7 @@ void Winter::reset()
 	snow->reset();
 	boulder->reset( distance );
 	door->reset( distance );
+	spikes->reset( distance );
 	
 	mine_factory->reset( distance );
 	golem_factory.reset( distance );
@@ -161,6 +164,7 @@ void Winter::load( int screen_w, int screen_h, unsigned FPS )
 	snow->load( screen_w, screen_h );
 	boulder->load( type, width, screen_w );
 	door->load( type );
+	spikes->load( type, screen_w, width );
 	
 	mine_factory->load( type, width, screen_w, screen_h );
 	golem_factory.load( width, screen_h, screen_h, "golem_winter" );
@@ -214,6 +218,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		greenery->fadeout( value );
 		snow->fadeout( value );
 		door->fadeout( value );
+		spikes->fadeout( value );
 		
 		mine_factory->fadeout( value );
 		golem_factory.fadeout( value );
@@ -250,6 +255,7 @@ void Winter::draw( sf::RenderWindow* &window )
 		greenery->fadein( value );
 		snow->fadein( value );
 		door->fadein( value );
+		spikes->fadein( value );
 		
 		mine_factory->fadein( value );
 		golem_factory.fadein( value );
@@ -280,6 +286,7 @@ void Winter::draw( sf::RenderWindow* &window )
 	fly_factory->draw( window );
 	
 	// rest
+	spikes->draw( window );
 	score_dots->draw( window );
 	hp_dots->draw( window );
 	snow->draw( window );
@@ -411,7 +418,10 @@ bool Winter::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 27: score_dots->positioning( difficulty, brick->getBlocks(), brick->getWidth() );
 				 score_dots->positioning( difficulty, islands->getBlocks(), brick->getWidth() );
-		info = "done";	break;
+		info = "positioning spikes";	break;
+		
+		case 28: spikes->positioning( brick->getBlocks(), islands->getBlocks(), difficulty );
+		info = "done"; break;
 		
 		default:
 		return true;
@@ -467,6 +477,7 @@ void Winter::setSound()
 		mine_factory->turnOff();
 		golem_factory.turnOff();
 		boulder->turnOff();
+		spikes->turnOff();
 	}
 	else
 	{
@@ -475,6 +486,7 @@ void Winter::setSound()
 		mine_factory->turnOn();
 		golem_factory.turnOn();
 		boulder->turnOn();
+		spikes->turnOn();
 		
 		// Set chunk volume
 		wall->setVolume( sound.getChunkVolume() );
@@ -482,6 +494,7 @@ void Winter::setSound()
 		mine_factory->setVolume( sound.getChunkVolume() );
 		golem_factory.setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
+		spikes->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume

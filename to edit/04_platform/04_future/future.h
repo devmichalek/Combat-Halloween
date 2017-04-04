@@ -31,6 +31,7 @@
 #include "04_platform/world/greenery/greenery.h"
 #include "04_platform/world/boulder/boulders.h"
 #include "04_platform/world/door/door.h"
+#include "04_platform/world/saws/saws.h"
 
 // Enemy
 #include "04_platform/enemy/mine/mine_factory.h"
@@ -80,6 +81,7 @@ class Future
 	Greenery* greenery;
 	Boulder* boulder;
 	Door* door;
+	Saws* saws;
 	
 	// enemy
 	Mine_factory* mine_factory;
