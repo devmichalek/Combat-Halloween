@@ -2,8 +2,8 @@
 
 void Desert::mechanics()
 {
-	showdamage->focus( hero->getX(), hero->getY() );
-	showheal->focus( hero->getX(), hero->getY() );
+// HERO ANIMATION
+	hero->doOffset();
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
@@ -44,9 +44,6 @@ void Desert::mechanics()
 		hero->weightlessness();
 		islands->turnOn();
 	}
-	
-	
-	
 	// HERO GLIDE
 	else
 	{
@@ -271,13 +268,6 @@ void Desert::mechanics()
 	scope->move( hero->getX(), this->screen_w );
 	
 	
-	
-// ------------------------------------------------------------------------------------------------
-	// BACKGROUND SET XY
-	background->setPosition( hero->getX(), hero->getY() );
-	
-	
-	
 // ------------------------------------------------------------------------------------------------
 	// HERO FALLEN
 	if( hero->checkFall( screen_h ) )
@@ -328,19 +318,36 @@ void Desert::mechanics()
 	}
 	else
 	{
+		kunai->mechanics();
+		
+		skills->mechanics();
+		scores->mechanics();
+		money->mechanics();
+		pause->allow();
+		
+		hp_dots->mechanics();
+		coins->mechanics();
+		showdamage->focus( hero->getX(), hero->getY() );
+		showdamage->mechanics();
+		showheal->focus( hero->getX(), hero->getY() );
+		showheal->mechanics();
+		effect->mechanics();
+		
+		background->mechanics( hero->getX(), hero->getY() );
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
+		score_dots->mechanics();
+		door->checkHero( hero->getRect() );
+		day->mechanics();
+		wind->mechanics();
+		
+		fireball->mechanics( hero->getY(), hero->getDirection() );
 		mine_factory->mechanics();
 		skeleton_factory.mechanics();
 		snakes_factory->mechanics();
-		coins->mechanics();
-		hp_dots->mechanics();
-		score_dots->mechanics();
-		fireball->mechanics( hero->getY(), hero->getDirection() );
 		fly_factory->mechanics();
-		skills->mechanics();
-		scores->mechanics();
-		wind->mechanics();
+		
+		
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -421,9 +428,6 @@ void Desert::mechanics()
 		
 // ------------------------------------------------------------------------------------------------
 		// SET COLOR ~ DAY
-		day->mechanics();
-
-		
 		if( day->isChange() )
 		{
 			hero->setColor( day->getColor() );
@@ -488,9 +492,5 @@ void Desert::mechanics()
 		{
 			scores->addPoint();
 		}
-		
-// ------------------------------------------------------------------------------------------------
-		// DOOR
-		door->checkHero( hero->getRect() );
 	}
 }
