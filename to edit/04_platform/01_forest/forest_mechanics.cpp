@@ -2,14 +2,8 @@
 
 void Forest::mechanics()
 {
-	if( day->isNight() )
-	{
-		sun->setStartAngle();
-		// printf( "isnight\n" );
-	}
-	
-	showdamage->focus( hero->getX(), hero->getY() );
-	showheal->focus( hero->getX(), hero->getY() );
+// HERO ANIMATION
+	hero->doOffset();
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
@@ -265,11 +259,6 @@ void Forest::mechanics()
 	scope->move( hero->getX(), this->screen_w );
 	
 	
-// ------------------------------------------------------------------------------------------------
-	// BACKGROUND SET XY
-	background->setPosition( hero->getX(), hero->getY() );
-	
-	
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO FALLEN
@@ -321,18 +310,34 @@ void Forest::mechanics()
 	}
 	else
 	{
-		wall->mechanics();
-		boulder->mechanics( hero->getRect() );
-		mine_factory->mechanics();
-		golem_factory.mechanics();
-		coins->mechanics();
-		hp_dots->mechanics();
-		score_dots->mechanics();
-		fireball->mechanics( hero->getY(), hero->getDirection() );
-		fly_factory->mechanics();
+		kunai->mechanics();
+		
 		skills->mechanics();
 		scores->mechanics();
+		money->mechanics();
+		pause->allow();
+		
+		hp_dots->mechanics();
+		coins->mechanics();
+		showdamage->focus( hero->getX(), hero->getY() );
+		showdamage->mechanics();
+		showheal->focus( hero->getX(), hero->getY() );
+		showheal->mechanics();
+		effect->mechanics();
+		
+		background->mechanics( hero->getX(), hero->getY() );
+		wall->mechanics();
+		boulder->mechanics( hero->getRect() );
+		score_dots->mechanics();
+		door->checkHero( hero->getRect() );
+		day->mechanics();
 		spikes->mechanics();
+		
+		fireball->mechanics( hero->getY(), hero->getDirection() );
+		mine_factory->mechanics();
+		golem_factory.mechanics();
+		fly_factory->mechanics();
+		
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -349,7 +354,10 @@ void Forest::mechanics()
 		}
 		
 		// SET COLOR ~ DAY
-		day->mechanics();
+		if( day->isNight() )
+		{
+			sun->setStartAngle();
+		}
 		
 		if( day->isChange() )
 		{
@@ -359,8 +367,9 @@ void Forest::mechanics()
 			score_dots->setAlpha( day->getAlpha() );
 			kunai->setColor( day->getColor() );
 			
-			brick->setColor( day->getColor() );
 			background->setColor( day->getColor() );
+			brick->setColor( day->getColor() );
+			
 			sun->setColor( day->getColor() );
 			sun->setAlpha( day->getAlpha() );
 			islands->setColor( day->getColor() );
@@ -372,6 +381,7 @@ void Forest::mechanics()
 			door->setColor( day->getColor() );
 			spikes->setColor( day->getColor() );
 			
+			fireball->setColor( day->getColor() );
 			mine_factory->setColor( day->getColor() );
 			golem_factory.setColor( day->getColor() );
 			fly_factory->setColor( day->getColor() );
@@ -472,9 +482,5 @@ void Forest::mechanics()
 		{
 			scores->addPoint();
 		}
-
-// ------------------------------------------------------------------------------------------------
-		// DOOR
-		door->checkHero( hero->getRect() );
 	}
 }

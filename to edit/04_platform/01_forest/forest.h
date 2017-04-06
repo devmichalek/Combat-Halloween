@@ -1,46 +1,56 @@
 #pragma once
 
-// Sound
+
+// Sound.
 #include "sound/sound.h"
 #include "sound/music.h"
 
-// Hero stuff
-#include "04_platform/ninja/ninja.h"
+
+// Hero.
+#include "04_platform/ninja/base/ninja.h"
 #include "04_platform/ninja/kunai/kunai.h"
 #include "04_platform/ninja/scope/scope.h"
 
-// Panel stuff
-#include "04_platform/panel/heart/heart.h"
-#include "04_platform/panel/money/money.h"
-#include "04_platform/enemy/coins/coins.h"
-#include "04_platform/panel/skill/skills.h"
-#include "04_platform/panel/action/showdamage.h"
-#include "04_platform/panel/action/showheal.h"
-#include "04_platform/panel/scores/scores.h"
-#include "04_platform/panel/hp_dot/hp_dots.h"
-#include "04_platform/panel/score_dot/score_dots.h"
 
-// World stuff
-#include "04_platform/world/brick/brick.h"
-#include "04_platform/world/background/effect.h"
+// Panel.
+#include "04_platform/panel/skill/skills.h"
+#include "04_platform/panel/heart/heart.h"
+#include "04_platform/panel/scores/scores.h"
+#include "04_platform/panel/money/money.h"
+#include "04_platform/panel/pause/pause.h"
+
+
+// Actions.
+#include "04_platform/enemy/actions/hp_dots/hp_dots.h"
+#include "04_platform/enemy/actions/coins/coins.h"
+#include "04_platform/enemy/actions/show/showdamage.h"
+#include "04_platform/enemy/actions/show/showheal.h"
+#include "04_platform/enemy/actions/effect/effect.h"
+
+
+// World,
 #include "04_platform/world/background/background.h"
+#include "04_platform/world/brick/brick.h"
 #include "04_platform/world/islands/islands.h"
-#include "04_platform/world/water/water.h"
-#include "04_platform/world/wall/wall.h"
-#include "04_platform/world/ladder/ladder.h"
 #include "04_platform/world/greenery/greenery.h"
+#include "04_platform/world/ladder/ladder.h"
+#include "04_platform/world/wall/wall.h"
+#include "04_platform/world/boulder/boulders.h"
+#include "04_platform/world/score_dots/score_dots.h"
+#include "04_platform/world/door/door.h"
+// in addition.
+#include "04_platform/world/water/water.h"
 #include "04_platform/world/background/day.h"
 #include "04_platform/world/weather/sun/sun.h"
-#include "04_platform/world/boulder/boulders.h"
-#include "04_platform/world/door/door.h"
 #include "04_platform/world/spikes/spikes.h"
 
-// Enemy
-#include "04_platform/enemy/mine/mine_factory.h"
-#include "04_platform/enemy/factory/factory.h"
-#include "04_platform/enemy/golem/golem.h"
-#include "04_platform/enemy/checkActivity/fireball/fireball.h"
-#include "04_platform/enemy/flying/fly_factory.h"
+
+// Enemy.
+#include "04_platform/enemy/foes/checkActivity/fireball/fireball.h"
+#include "04_platform/enemy/foes/mines/mine_factory.h"
+#include "04_platform/enemy/foes/factory/factory.h"
+#include "04_platform/enemy/foes/golem/golem.h"
+#include "04_platform/enemy/foes/flying/fly_factory.h"
 
 class Forest
 {
@@ -53,45 +63,50 @@ class Forest
 	int screen_w;
 	int screen_h;
 	
-	// sound
+	// Sound.
 	Sound sound;
 	Music* music;
 	
-	// hero
+	// Hero.
 	Hero* hero;
 	Kunai* kunai;
 	Scope* scope;
 	
-	// panel
-	Heart* heart;
-	Money* money;
-	Coins* coins;
+	// Panel.
 	Skills* skills;
+	Heart* heart;
+	Scores* scores;
+	Money* money;
+	Pause* pause;
+	
+	// Actions.
+	Hp_dots* hp_dots;
+	Coins* coins;
 	Showdamage* showdamage;
 	Showheal* showheal;
-	Scores* scores;
-	Hp_dots* hp_dots;
-	Score_dots* score_dots;
-	
-	// world
-	Brick* brick;
 	Effect* effect;
+	
+	// World,
 	Background* background;
+	Brick* brick;
 	Islands* islands;
-	Water* water;
-	Wall* wall;
-	Ladder* ladder;
 	Greenery* greenery;
+	Ladder* ladder;
+	Wall* wall;
+	Boulder* boulder;
+	Score_dots* score_dots;
+	Door* door;
+	// in addition.
+	Water* water;
 	Day* day;
 	Sun* sun;
-	Boulder* boulder;
-	Door* door;
 	Spikes* spikes;
 	
-	// enemy
+	
+	// Enemy.
+	Fireball* fireball;
 	Mine_factory* mine_factory;
 	Factory <Golem> golem_factory;
-	Fireball* fireball;
 	Fly_factory* fly_factory;
 	
 public:
@@ -105,7 +120,7 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	bool positioning( int type, int size, int flatness, int difficuly );
+	bool positioning( int type, int size, int flatness, int difficulty );
 	string getInfo();
 	
 	bool defeatState();
