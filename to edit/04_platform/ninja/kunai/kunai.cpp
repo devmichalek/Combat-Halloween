@@ -167,7 +167,6 @@ void Kunai::draw( sf::RenderWindow* &window )
 	{
 		if( bits[ i ]->isActive() )
 		{
-			bits[ i ]->run();
 			sprites[ bits[ i ]->getWhich() ]->setPosition( bits[ i ]->getX(), bits[ i ]->getY() );
 			
 			if( bits[ i ]->getVel() < 0 )
@@ -183,8 +182,18 @@ void Kunai::draw( sf::RenderWindow* &window )
 			{
 				sprites[ bits[ i ]->getWhich() ]->setOffset( bits[ i ]->getOffset() );
 			}
-			
 			window->draw( sprites[ bits[ i ]->getWhich() ]->get() );
+		}
+	}
+}
+
+void Kunai::mechanics()
+{
+	for( unsigned i = 0; i < bits.size(); i++ )
+	{
+		if( bits[ i ]->isActive() )
+		{
+			bits[ i ]->run();
 		}
 	}
 }
