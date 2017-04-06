@@ -351,7 +351,10 @@ void Hero::draw( sf::RenderWindow* &window )
 		sprites[ which ]->setScale( scale, scaleY );
 		window->draw( sprites[ which ]->get() );
 	}
-	
+}
+
+void Hero::doOffset()
+{
 	if( dead != 2 )
 	{
 		if( climb == 1 || ( climb == 0 && which != CLIMB ) )
@@ -375,7 +378,6 @@ void Hero::draw( sf::RenderWindow* &window )
 		}
 	}
 }
-
 
 
 

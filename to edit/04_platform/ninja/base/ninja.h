@@ -93,6 +93,7 @@ public:
 	void load( int type, int screen_w, int screen_h, int width );
 	void setKeys();
 	void draw( sf::RenderWindow* &window );
+	void doOffset();
 	
 	void fadein( int v = 1, int max = 255 );
 	void fadeout( int v = 1, int min = 0 );
