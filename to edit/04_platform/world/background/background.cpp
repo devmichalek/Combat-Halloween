@@ -30,7 +30,7 @@ void Background::free()
 
 void Background::reset( int x, int y )
 {
-	setPosition( x, y );
+	mechanics( x, y );
 }
 
 
@@ -93,7 +93,7 @@ void Background::fadeout( int v, int min )
 
 
 
-void Background::setPosition( int x, int y )
+void Background::mechanics( int x, int y )
 {
 	float new_x = -( screen_w/2 ) *x /screen_w;
 	float new_y = -150 *( y +300 ) /screen_h;

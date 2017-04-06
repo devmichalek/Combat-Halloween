@@ -24,7 +24,7 @@ public:
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
 	
-	void setPosition( int x, int y );
+	void mechanics( int x, int y );
 	sf::Uint8 getAlpha();
 	void setColor( sf::Color color );
 	

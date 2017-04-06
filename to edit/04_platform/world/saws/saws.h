@@ -1,7 +1,7 @@
 #pragma once
 
 #include "drawable/sprite.h"
-#include "04_platform/enemy/expletive/slab.h"
+#include "04_platform/enemy/actions/expletive/slab.h"
 #include "04_platform/world/brick/block.h"
 #include <vector>
 #include "saw.h"
