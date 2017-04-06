@@ -1,44 +1,59 @@
 #include "halloween.h"
+#include "file/file.h"	// itos()
 
 Halloween::Halloween()
 {
+	// Base.
 	state = 0;
 	info = "";
 	fade = 0;
-	music = new Music;
 	
+	FPS = 0;
+	width = 0;
 	screen_w = 0;
 	screen_h = 0;
 	
+	// Sound.
+	music = new Music;
+	
+	// Hero.
 	hero = new Hero;
 	kunai = new Kunai;
 	scope = new Scope;
 	
-	heart = new Heart;
-	money = new Money;
-	coins = new Coins;
+	// Panel.
 	skills = new Skills;
+	heart = new Heart;
+	scores = new Scores;
+	money = new Money;
+	pause = new Pause;
+	
+	// Actions.
+	hp_dots = new Hp_dots;
+	coins = new Coins;
 	showdamage = new Showdamage;
 	showheal = new Showheal;
-	scores = new Scores;
-	hp_dots = new Hp_dots;
-	score_dots = new Score_dots;
-	
-	brick = new Brick;
 	effect = new Effect;
+	
+	// World,
 	background = new Background;
+	brick = new Brick;
 	islands = new Islands;
-	wall = new Wall;
-	ladder = new Ladder;
 	greenery = new Greenery;
-	rain = new Rain;
+	ladder = new Ladder;
+	wall = new Wall;
 	boulder = new Boulder;
+	score_dots = new Score_dots;
 	door = new Door;
+	// in addition.
+	rain = new Rain;
 	spikes = new Spikes;
 	
-	mine_factory = new Mine_factory;
+	// Enemy.
 	lightning = new Lightning;
+	mine_factory = new Mine_factory;
 	fly_factory = new Fly_factory;
+	skulls = new Skulls;
 }
 
 Halloween::~Halloween()
@@ -48,86 +63,110 @@ Halloween::~Halloween()
 
 void Halloween::free()
 {
+	// Base.
 	state = 0;
 	info = "";
 	fade = 0;
 	
+	FPS = 0;
+	width = 0;
 	screen_w = 0;
 	screen_h = 0;
 	
+	// Sound.
 	sound.free();
 	delete music;
 	
+	// Hero.
 	delete hero;
 	delete kunai;
 	delete scope;
 	
-	delete heart;
-	delete money;
-	delete coins;
+	// Panel.
 	delete skills;
+	delete heart;
+	delete scores;
+	delete money;
+	delete pause;
+	
+	// Actions.
+	delete hp_dots;
+	delete coins;
 	delete showdamage;
 	delete showheal;
-	delete scores;
-	delete hp_dots;
-	delete score_dots;
-	
-	delete brick;
 	delete effect;
+	
+	// World,
 	delete background;
+	delete brick;
 	delete islands;
-	delete wall;
-	delete ladder;
 	delete greenery;
-	delete rain;
+	delete ladder;
+	delete wall;
 	delete boulder;
+	delete score_dots;
 	delete door;
+	// in addition.
+	delete rain;
 	delete spikes;
 	
+	// Enemy.
+	delete lightning;
 	delete mine_factory;
 	vampire_factory.free();
 	zombie_factory.free();
-	delete lightning;
 	delete fly_factory;
+	delete skulls;
 }
 
 void Halloween::reset()
 {
+	// Base.
 	state = 0;
 	fade = 0;
+	
+	// Sound.
 	reloadMusic();
 	
+	// Hero.
 	hero->reset( screen_h );
 	hero->setKeys();
 	scope->reset();
 	
-	heart->reset();
-	money->reset();
-	coins->reset();
+	// Panel.
 	skills->reset();
+	heart->reset();
+	scores->reset();
+	money->reset();
+	
+	// Actions.
+	hp_dots->reset();
+	coins->reset();
 	showdamage->reset();
 	showheal->reset();
-	scores->reset();
-	hp_dots->reset();
-	
-	int distance = brick->reset();
-	score_dots->reset( distance );
 	effect->reset();
+	
+	// World,
 	background->reset( hero->getX(), hero->getY() );
+	int distance = brick->reset();
 	islands->reset( distance );
-	wall->reset( distance );
-	ladder->reset( distance );
 	greenery->reset( distance );
-	rain->reset();
+	ladder->reset( distance );
+	wall->reset( distance );
 	boulder->reset( distance );
+	score_dots->reset( distance );
 	door->reset( distance );
+	// in addition.
+	rain->reset();
 	spikes->reset( distance );
 	
+	// Enemy.
+	lightning->reset();
 	mine_factory->reset( distance );
 	vampire_factory.reset( distance );
 	zombie_factory.reset( distance );
-	lightning->reset();
 	fly_factory->reset();
+	skulls->reset();
 }
 
 
@@ -138,171 +177,226 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	info = "setting keys";
 	
 	int type = 0;
+	this->FPS = FPS;
 	this->width = 128;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	this->FPS = FPS;
 	
+	// Sound.
+	music->setID( "forest-music" );
+	music->load( "data/04_platform/world/" +con::itos(type) +"/music.mp3", 50 );
+	
+	// Panel.
 	heart->load();
+	scores->load( type, screen_w );
 	money->load( screen_w );
+	pause->load( screen_w, screen_h );
+	
+	// Actions.
+	hp_dots->load( type, screen_w );
 	coins->load( width, screen_w, type );
 	showdamage->load();
 	showheal->load();
-	scores->load( type, screen_w );
-	hp_dots->load( type, screen_w );
-	score_dots->load( screen_w );
-	
-	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
+	
+	// World, 
 	background->load( type, screen_w, screen_h );
+	brick->load( type, width, screen_w, screen_h );
 	islands->load( type, width, screen_w, screen_h );
-	wall->load( type, width, screen_w );
-	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
-	rain->load( screen_w, screen_h );
+	ladder->load( type, width, screen_w );
+	wall->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
+	score_dots->load( screen_w );
 	door->load( type );
+	// in addition.
+	rain->load( screen_w, screen_h );
 	spikes->load( type, screen_w, width );
 	
+	// Enemy.
+	lightning->load( FPS );
 	mine_factory->load( type, width, screen_w, screen_h );
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
 	zombie_factory.load( width, screen_w, screen_h, "zombie" );
-	lightning->load( FPS );
 	fly_factory->load( type, screen_w, screen_h );
-	
-	music->setID( "forest-music" );
-	music->load( "data/04_platform/world/0/music.mp3", 50 );
+	skulls->load( type, screen_w, screen_h );
 }
 
 void Halloween::handle( sf::Event &event )
 {
-	//...
+	pause->handle( event );
 }
 
 void Halloween::draw( sf::RenderWindow* &window )
 {
+	// Sound.
 	if( sound.getMusicPlay() )
 	{
 		music->play();
 	}
 	
-	mechanics();
+	// Pause
+	if( !pause->isPaused() )
+	{
+		mechanics();
+		music->fadein( 1, sound.getMusicVolume() );
+	}
+	else
+	{
+		music->fadeout( 1, 15 );
+	}
 	
+	
+	// Fade out, fade in.
 	if( hero->isDead() && fade == 1 )
 	{
-		music->fadeout( 1, 0 );
-	
+		// Value.
 		sf::Uint8 value = 1;
+		
+		// Sound.
+		music->fadeout( value );
+		
+		// Hero.
 		hero->fadeout( value );
 		kunai->fadeout( value );
 		
-		heart->fadeout( value );
-		money->fadeout( value );
-		coins->fadeout( value );
+		// Panel.
 		skills->fadeout( value );
+		heart->fadeout( value );
+		scores->fadeout( value );
+		money->fadeout( value );
+		
+		// Actions.
+		hp_dots->fadeout( value );
+		coins->fadeout( value );
 		showdamage->fadeout( value );
 		showheal->fadeout( value );
-		scores->fadeout( value );
-		hp_dots->fadeout( value );
-		score_dots->fadeout( value );
-		
-		brick->fadeout( value );
 		effect->fadeout( value );
+		
+		// World,
 		background->fadeout( value );
+		brick->fadeout( value );
 		islands->fadeout( value );
+		greenery->fadeout( value );
+		ladder->fadeout( value );
 		wall->fadeout( value );
 		boulder->fadeout( value );
-		ladder->fadeout( value );
-		greenery->fadeout( value );
-		rain->fadeout( value );
+		score_dots->fadeout( value );
 		door->fadeout( value );
+		// in addition.
+		rain->fadeout( value );
 		spikes->fadeout( value );
 		
+		// Enemy.
+		lightning->fadeout( value );
 		mine_factory->fadeout( value );
 		vampire_factory.fadeout( value );
 		zombie_factory.fadeout( value );
-		lightning->fadeout( value );
 		fly_factory->fadeout( value );
+		skulls->fadeout( value );
 		
-		// set fade
-		if( background->getAlpha() == 0 )	fade = 0;
+		// Set fade.
+		if( background->getAlpha() == 0 )
+		{
+			fade = 0;
+		}
 	}
 	else if( fade == 0 )
 	{
-		music->fadein( 1, sound.getMusicVolume() );
-		
+		// Value.
 		sf::Uint8 value = 2;
+		
+		// Hero.
 		hero->fadein( value );
 		kunai->fadein( value );
 		
-		heart->fadein( value );
-		money->fadein( value );
-		coins->fadein( value );
+		// Panel.
 		skills->fadein( value );
+		heart->fadein( value );
 		scores->fadein( value );
-		hp_dots->fadein( value );
-		score_dots->fadein( value );
+		money->fadein( value );
 		
-		brick->fadein( value );
+		// Actions.
+		hp_dots->fadein( value );
+		coins->fadein( value );
 		effect->fadein( value );
+		
+		// World,
 		background->fadein( value );
+		brick->fadein( value );
 		islands->fadein( value );
+		greenery->fadein( value );
+		ladder->fadein( value );
 		wall->fadein( value );
 		boulder->fadein( value );
-		ladder->fadein( value );
-		greenery->fadein( value );
-		rain->fadein( value );
+		score_dots->fadein( value );
 		door->fadein( value );
+		// in addition.
+		rain->fadein( value );
 		spikes->fadein( value );
 		
+		// Enemy.
+		lightning->fadein( value );
 		mine_factory->fadein( value );
 		vampire_factory.fadein( value );
 		zombie_factory.fadein( value );
-		lightning->fadein( value );
 		fly_factory->fadein( value );
+		skulls->fadein( value );
 		
-		// set fade
-		if( background->getAlpha() == 0xFF )	fade = 1;
+		// Set fade.
+		if( background->getAlpha() == 0xFF )
+		{
+			fade = 1;
+		}
 	}
 	
 
-	// bg
+	// Background.
 	background->draw( window );
+	background->drawFront( window );
 	greenery->draw_bg( window );
-	
-	// blocks
 	ladder->draw( window );
-	
-	// hero
 	door->draw( window );
+	
+	// Hero.
 	hero->draw( window );
 	kunai->draw( window );
 	
-	// enemy
+	// Enemy.
+	lightning->draw( window );
 	mine_factory->draw( window );
 	vampire_factory.draw( window );
 	zombie_factory.draw( window );
-	lightning->draw( window );
 	fly_factory->draw( window );
+	skulls->draw( window );
 	
-	// rest
-	spikes->draw( window );
+	// Dots.
 	score_dots->draw( window );
 	hp_dots->draw( window );
+	
+	// Rest.
+	coins->draw( window );
 	rain->draw( window );
-	brick->draw( window );
-	islands->draw( window );
+	spikes->draw( window );
 	wall->draw( window );
 	boulder->draw( window );
+	brick->draw( window );
+	islands->draw( window );
 	greenery->draw( window );
-	heart->draw( window );
-	money->draw( window );
-	coins->draw( window );
-	skills->draw( window );
+	
+	// Show.
 	showdamage->draw( *window );
 	showheal->draw( *window );
+	
+	// Some panel stuff.
+	skills->draw( window );
+	heart->draw( window );
 	scores->draw( window );
+	money->draw( window );
+	
+	// Effect and pause.
 	effect->draw( window );
+	pause->draw( window );
 }
 
 
@@ -315,7 +409,7 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		kunai->load();	skills->load( FPS, screen_w, screen_h );
 		info = "setting position x, y of background";	break;
 		
-		case 1:	background->setPosition( hero->getX(), hero->getY() );
+		case 1:	background->mechanics( hero->getX(), hero->getY() );
 		info = "reserving memory (it can take a while)";	break;
 		
 		case 2:	brick->reserve( size );
@@ -472,38 +566,38 @@ bool Halloween::backToLevel()
 
 void Halloween::setSound()
 {
-	// Set chunks
+	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
-		wall->turnOff();
 		coins->turnOff();
+		wall->turnOff();
+		boulder->turnOff();
+		spikes->turnOff();
 		mine_factory->turnOff();
 		vampire_factory.turnOff();
 		zombie_factory.turnOff();
-		boulder->turnOff();
-		spikes->turnOff();
 	}
 	else
 	{
-		wall->turnOn();
 		coins->turnOn();
+		wall->turnOn();
+		boulder->turnOn();
+		spikes->turnOn();
 		mine_factory->turnOn();
 		vampire_factory.turnOn();
 		zombie_factory.turnOn();
-		boulder->turnOn();
-		spikes->turnOn();
 		
-		// Set chunk volume
-		wall->setVolume( sound.getChunkVolume() );
+		// Set chunks volume.
 		coins->setVolume( sound.getChunkVolume() );
+		wall->setVolume( sound.getChunkVolume() );
+		boulder->setVolume( sound.getChunkVolume() );
+		spikes->setVolume( sound.getChunkVolume() );
 		mine_factory->setVolume( sound.getChunkVolume() );
 		vampire_factory.setVolume( sound.getChunkVolume() );
 		zombie_factory.setVolume( sound.getChunkVolume() );
-		boulder->setVolume( sound.getChunkVolume() );
-		spikes->setVolume( sound.getChunkVolume() );
 	}
 	
-	// Set music volume
+	// Set music volume.
 	music->setVolume( sound.getMusicVolume() );
 }
 

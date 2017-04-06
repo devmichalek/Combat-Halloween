@@ -2,9 +2,8 @@
 
 void Halloween::mechanics()
 {
-// ------------------------------------------------------------------------------------------------
-	showdamage->focus( hero->getX(), hero->getY() );
-	showheal->focus( hero->getX(), hero->getY() );
+// HERO ANIMATION
+	hero->doOffset();
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO CLIMB
@@ -45,9 +44,6 @@ void Halloween::mechanics()
 		hero->weightlessness();
 		islands->turnOn();
 	}
-	
-	
-	
 	// HERO GLIDE
 	else
 	{
@@ -243,6 +239,7 @@ void Halloween::mechanics()
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
 			door->moveX( hero->getDirection(), scope->getVel() );
 			spikes->moveX( hero->getDirection(), scope->getVel() );
+			skulls->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -265,17 +262,12 @@ void Halloween::mechanics()
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
 			door->moveX( hero->getDirection(), -scope->getVel() );
 			spikes->moveX( hero->getDirection(), -scope->getVel() );
+			skulls->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
 	// SCOPE MOVE
 	scope->move( hero->getX(), this->screen_w );
-	
-	
-// ------------------------------------------------------------------------------------------------
-	// BACKGROUND SET XY
-	background->setPosition( hero->getX(), hero->getY() );
-	
 	
 	
 // ------------------------------------------------------------------------------------------------
@@ -311,6 +303,7 @@ void Halloween::mechanics()
 			fly_factory->undoFall( brick->getGrassValue() );
 			door->undoFall( brick->getGrassValue() );
 			spikes->undoFall( brick->getGrassValue() );
+			skulls->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -329,20 +322,37 @@ void Halloween::mechanics()
 	}
 	else
 	{
+		kunai->mechanics();
+		
+		skills->mechanics();
+		scores->mechanics();
+		money->mechanics();
+		pause->allow();
+		
+		hp_dots->mechanics();
+		coins->mechanics();
+		showdamage->focus( hero->getX(), hero->getY() );
+		showdamage->mechanics();
+		showheal->focus( hero->getX(), hero->getY() );
+		showheal->mechanics();
+		effect->mechanics();
+		
+		background->mechanics( hero->getX(), hero->getY() );
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
+		score_dots->mechanics();
+		door->checkHero( hero->getRect() );
+		rain->mechanics();
+		spikes->mechanics();
+		
+		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		mine_factory->mechanics();
 		vampire_factory.mechanics();
 		zombie_factory.mechanics();
-		coins->mechanics();
-		hp_dots->mechanics();
-		score_dots->mechanics();
-		lightning->mechanics( hero->getRect(), hero->getDirection() );
 		fly_factory->mechanics();
-		skills->mechanics();
-		scores->mechanics();
-		rain->mechanics();
-		spikes->mechanics();
+		skulls->mechanics( hero->getX(), hero->getY() );
+		
+		
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
@@ -470,9 +480,5 @@ void Halloween::mechanics()
 		{
 			scores->addPoint();
 		}
-		
-// ------------------------------------------------------------------------------------------------
-		// DOOR
-		door->checkHero( hero->getRect() );
 	}
 }
