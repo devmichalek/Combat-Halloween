@@ -1,43 +1,57 @@
 #include "future.h"
+#include "file/file.h"	// itos()
 
 Future::Future()
 {
+	// Base.
 	state = 0;
 	info = "";
 	fade = 0;
-	music = new Music;
 	
+	FPS = 0;
+	width = 0;
 	screen_w = 0;
 	screen_h = 0;
 	
+	// Sound.
+	music = new Music;
+	
+	// Hero.
 	hero = new Hero;
 	kunai = new Kunai;
 	scope = new Scope;
 	
-	heart = new Heart;
-	money = new Money;
-	coins = new Coins;
+	// Panel.
 	skills = new Skills;
+	heart = new Heart;
+	scores = new Scores;
+	money = new Money;
+	pause = new Pause;
+	
+	// Actions.
+	hp_dots = new Hp_dots;
+	coins = new Coins;
 	showdamage = new Showdamage;
 	showheal = new Showheal;
-	scores = new Scores;
-	hp_dots = new Hp_dots;
-	score_dots = new Score_dots;
-	
-	brick = new Brick;
 	effect = new Effect;
+	
+	// World,
 	background = new Background;
+	brick = new Brick;
 	islands = new Islands;
-	water = new Water;
-	wall = new Wall;
-	ladder = new Ladder;
 	greenery = new Greenery;
+	ladder = new Ladder;
+	wall = new Wall;
 	boulder = new Boulder;
+	score_dots = new Score_dots;
 	door = new Door;
+	// in addition.
+	water = new Water;
 	saws = new Saws;
 	
-	mine_factory = new Mine_factory;
+	// Enemy.
 	cruncher = new Cruncher;
+	mine_factory = new Mine_factory;
 }
 
 Future::~Future()
@@ -47,82 +61,104 @@ Future::~Future()
 
 void Future::free()
 {
+	// Base.
 	state = 0;
 	info = "";
 	fade = 0;
 	
+	FPS = 0;
+	width = 0;
 	screen_w = 0;
 	screen_h = 0;
 	
+	// Sound.
 	sound.free();
 	delete music;
 	
+	// Hero.
 	delete hero;
 	delete kunai;
 	delete scope;
 	
-	delete heart;
-	delete money;
-	delete coins;
+	// Panel.
 	delete skills;
+	delete heart;
+	delete scores;
+	delete money;
+	delete pause;
+	
+	// Actions.
+	delete hp_dots;
+	delete coins;
 	delete showdamage;
 	delete showheal;
-	delete scores;
-	delete hp_dots;
-	delete score_dots;
-	
-	delete brick;
 	delete effect;
+	
+	// World,
 	delete background;
+	delete brick;
 	delete islands;
-	delete water;
-	delete wall;
-	delete ladder;
 	delete greenery;
+	delete ladder;
+	delete wall;
 	delete boulder;
+	delete score_dots;
 	delete door;
+	// in addition.
+	delete water;
 	delete saws;
 	
+	// Enemy.
+	delete cruncher;
 	delete mine_factory;
 	robot_factory.free();
-	delete cruncher;
 }
 
 void Future::reset()
 {
+	// Base.
 	state = 0;
 	fade = 0;
-	music->halt();
 	
+	// Sound.
+	reloadMusic();
+	
+	// Hero.
 	hero->reset( screen_h );
 	hero->setKeys();
 	scope->reset();
 	
-	heart->reset();
-	money->reset();
-	coins->reset();
+	// Panel.
 	skills->reset();
+	heart->reset();
+	scores->reset();
+	money->reset();
+	
+	// Actions.
+	hp_dots->reset();
+	coins->reset();
 	showdamage->reset();
 	showheal->reset();
-	scores->reset();
-	hp_dots->reset();
-	
-	int distance = brick->reset();
-	score_dots->reset( distance );
 	effect->reset();
+	
+	// World,
 	background->reset( hero->getX(), hero->getY() );
+	int distance = brick->reset();
 	islands->reset( distance );
-	water->reset( distance );
-	wall->reset( distance );
-	ladder->reset( distance );
 	greenery->reset( distance );
+	ladder->reset( distance );
+	wall->reset( distance );
 	boulder->reset( distance );
+	score_dots->reset( distance );
 	door->reset( distance );
+	// in addition.
+	water->reset( distance );
 	saws->reset( distance );
 	
+	// Enemy.
+	cruncher->reset();
 	mine_factory->reset( distance );
 	robot_factory.reset( distance );
-	cruncher->reset();
 }
 
 
@@ -133,163 +169,213 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	info = "setting keys";
 	
 	int type = 4;
+	this->FPS = FPS;
 	this->width = 128;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	this->FPS = FPS;
 	
+	// Sound.
+	music->setID( "forest-music" );
+	music->load( "data/04_platform/world/" +con::itos(type) +"/music.mp3", 50 );
+	
+	// Panel.
 	heart->load();
+	scores->load( type, screen_w );
 	money->load( screen_w );
+	pause->load( screen_w, screen_h );
+	
+	// Actions.
+	hp_dots->load( type, screen_w );
 	coins->load( width, screen_w, type );
 	showdamage->load();
 	showheal->load();
-	scores->load( type, screen_w );
-	hp_dots->load( type, screen_w );
-	score_dots->load( screen_w );
-	
-	brick->load( type, width, screen_w, screen_h );
 	effect->load( screen_w, screen_h );
+	
+	// World, 
 	background->load( type, screen_w, screen_h );
+	brick->load( type, width, screen_w, screen_h );
 	islands->load( type, width, screen_w, screen_h );
-	water->load( type, width, screen_w, screen_h );
-	wall->load( type, width, screen_w );
-	ladder->load( type, width, screen_w );
 	greenery->load( type, width, screen_w );
+	ladder->load( type, width, screen_w );
+	wall->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
+	score_dots->load( screen_w );
 	door->load( type );
+	// in addition.
+	water->load( type, width, screen_w, screen_h );
 	saws->load( type, screen_w, width );
 	
+	// Enemy.
+	cruncher->load( FPS, screen_w );
 	mine_factory->load( type, width, screen_w, screen_h );
 	robot_factory.load( width, screen_w, screen_h, "robot" );
-	cruncher->load( FPS, screen_w );
-	
-	music->setID( "future-music" );
-	music->load( "data/04_platform/world/4/music.mp3", 50 );
 }
 
 void Future::handle( sf::Event &event )
 {
-	//...
+	pause->handle( event );
 }
 
 void Future::draw( sf::RenderWindow* &window )
 {
+	// Sound.
 	if( sound.getMusicPlay() )
 	{
 		music->play();
 	}
 	
-	mechanics();
+	// Pause
+	if( !pause->isPaused() )
+	{
+		mechanics();
+		music->fadein( 1, sound.getMusicVolume() );
+	}
+	else
+	{
+		music->fadeout( 1, 15 );
+	}
 	
+	// Fade out, fade in.
 	if( hero->isDead() && fade == 1 )
 	{
-		music->fadeout( 1, 0 );
-		
+		// Value.
 		sf::Uint8 value = 1;
+		
+		// Sound.
+		music->fadeout( value );
+		
+		// Hero.
 		hero->fadeout( value );
 		kunai->fadeout( value );
 		
-		heart->fadeout( value );
-		money->fadeout( value );
-		coins->fadeout( value );
+		// Panel.
 		skills->fadeout( value );
+		heart->fadeout( value );
+		scores->fadeout( value );
+		money->fadeout( value );
+		
+		// Actions.
+		hp_dots->fadeout( value );
+		coins->fadeout( value );
 		showdamage->fadeout( value );
 		showheal->fadeout( value );
-		scores->fadeout( value );
-		hp_dots->fadeout( value );
-		score_dots->fadeout( value );
-		
-		brick->fadeout( value );
 		effect->fadeout( value );
+		
+		// World,
 		background->fadeout( value );
+		brick->fadeout( value );
 		islands->fadeout( value );
-		water->fadeout( value );
+		greenery->fadeout( value );
+		ladder->fadeout( value );
 		wall->fadeout( value );
 		boulder->fadeout( value );
-		ladder->fadeout( value );
-		greenery->fadeout( value );
+		score_dots->fadeout( value );
 		door->fadeout( value );
+		// in addition.
+		water->fadeout( value );
 		saws->fadeout( value );
 		
+		// Enemy.
 		mine_factory->fadeout( value );
-		robot_factory.fadeout( value );
 		cruncher->fadeout( value );
+		robot_factory.fadeout( value );
 		
-		// set fade
-		if( background->getAlpha() == 0 )	fade = 0;
+		// Set fade.
+		if( background->getAlpha() == 0 )
+		{
+			fade = 0;
+		}
 	}
 	else if( fade == 0 )
 	{
-		music->fadein( 1, sound.getMusicVolume() );
-		
+		// Value.
 		sf::Uint8 value = 2;
+		
+		// Hero.
 		hero->fadein( value );
 		kunai->fadein( value );
 		
-		heart->fadein( value );
-		money->fadein( value );
-		coins->fadein( value );
+		// Panel.
 		skills->fadein( value );
+		heart->fadein( value );
 		scores->fadein( value );
-		hp_dots->fadein( value );
-		score_dots->fadein( value );
+		money->fadein( value );
 		
-		brick->fadein( value );
+		// Actions.
+		hp_dots->fadein( value );
+		coins->fadein( value );
 		effect->fadein( value );
+		
+		// World,
 		background->fadein( value );
+		brick->fadein( value );
 		islands->fadein( value );
-		water->fadein( value );
+		greenery->fadein( value );
+		ladder->fadein( value );
 		wall->fadein( value );
 		boulder->fadein( value );
-		ladder->fadein( value );
-		greenery->fadein( value );
+		score_dots->fadein( value );
 		door->fadein( value );
+		// in addition.
+		water->fadein( value );
 		saws->fadein( value );
 		
+		// Enemy.
 		mine_factory->fadein( value );
-		robot_factory.fadein( value );
 		cruncher->fadein( value );
+		robot_factory.fadein( value );
 		
-		// set fade
-		if( background->getAlpha() == 0xFF )	fade = 1;
+		// Set fade.
+		if( background->getAlpha() == 0xFF )
+		{
+			fade = 1;
+		}
 	}
 	
 
-	// bg
+	// Background.
 	background->draw( window );
+	background->drawFront( window );
 	greenery->draw_bg( window );
-	
-	// blocks
 	ladder->draw( window );
-	
-	// hero
 	door->draw( window );
+	
+	// Hero.
 	hero->draw( window );
 	kunai->draw( window );
 	
-	
-	// enemy
+	// Enemy.
+	cruncher->draw( window );
 	mine_factory->draw( window );
 	robot_factory.draw( window );
-	cruncher->draw( window );
 	
-	// rest
-	saws->draw( window );
+	// Dots.
 	score_dots->draw( window );
 	hp_dots->draw( window );
+	
+	// Rest.
+	coins->draw( window );
+	saws->draw( window );
+	wall->draw( window );
+	boulder->draw( window );
 	water->draw( window );
 	brick->draw( window );
 	islands->draw( window );
-	wall->draw( window );
-	boulder->draw( window );
-	heart->draw( window );
-	money->draw( window );
-	coins->draw( window );
-	skills->draw( window );
+	greenery->draw( window );
+	
+	// Show.
 	showdamage->draw( *window );
 	showheal->draw( *window );
+	
+	// Some panel stuff.
+	skills->draw( window );
+	heart->draw( window );
 	scores->draw( window );
+	money->draw( window );
+	
+	// Effect and pause.
 	effect->draw( window );
+	pause->draw( window );
 }
 
 
@@ -302,7 +388,7 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		kunai->load();	skills->load( FPS, screen_w, screen_h );
 		info = "setting position x, y of background";	break;
 		
-		case 1:	background->setPosition( hero->getX(), hero->getY() );
+		case 1:	background->mechanics( hero->getX(), hero->getY() );
 		info = "reserving memory (it can take a while)";	break;
 		
 		case 2:	brick->reserve( size );
@@ -459,35 +545,35 @@ bool Future::backToLevel()
 
 void Future::setSound()
 {
-	// Set chunks
+	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
-		wall->turnOff();
 		coins->turnOff();
-		mine_factory->turnOff();
-		robot_factory.turnOff();
+		wall->turnOff();
 		boulder->turnOff();
 		saws->turnOff();
+		mine_factory->turnOff();
+		robot_factory.turnOff();
 	}
 	else
 	{
-		wall->turnOn();
 		coins->turnOn();
-		mine_factory->turnOn();
-		robot_factory.turnOn();
+		wall->turnOn();
 		boulder->turnOn();
 		saws->turnOn();
+		mine_factory->turnOn();
+		robot_factory.turnOn();
 		
-		// Set chunk volume
-		wall->setVolume( sound.getChunkVolume() );
+		// Set chunks volume.
 		coins->setVolume( sound.getChunkVolume() );
-		mine_factory->setVolume( sound.getChunkVolume() );
-		robot_factory.setVolume( sound.getChunkVolume() );
+		wall->setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
 		saws->setVolume( sound.getChunkVolume() );
+		mine_factory->setVolume( sound.getChunkVolume() );
+		robot_factory.setVolume( sound.getChunkVolume() );
 	}
 	
-	// Set music volume
+	// Set music volume.
 	music->setVolume( sound.getMusicVolume() );
 }
 
