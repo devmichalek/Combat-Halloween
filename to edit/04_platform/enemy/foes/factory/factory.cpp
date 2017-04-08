@@ -427,8 +427,9 @@ void Factory<F>::walk( Rect* rect )
 }
 
 template <typename F>
-bool Factory<F>::harm( Rect* rect, int damage )
+bool Factory<F>::harm( Rect* rect, int damage, bool group )
 {
+	bool harmed = false;
 	if( rect != NULL )
 	{
 		for( auto &i :foes )
@@ -450,14 +451,18 @@ bool Factory<F>::harm( Rect* rect, int damage )
 							i->setDead();
 						}
 						
-						return true;
+						harmed = true;
+						if( !group )
+						{
+							break;
+						}
 					}
 				}
 			}
 		}
 	}
 	
-	return false;
+	return harmed;
 }
 
 template <typename F>

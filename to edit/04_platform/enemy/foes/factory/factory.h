@@ -64,7 +64,7 @@ public:
 	// Collision stuff.
 	void appear( Rect* rect );
 	void walk( Rect* rect );
-	bool harm( Rect* rect, int damage );
+	bool harm( Rect* rect, int damage, bool group = false );
 	void ableAttack(  Rect* rect );
 	bool harmSomebody( Rect* rect );
 	

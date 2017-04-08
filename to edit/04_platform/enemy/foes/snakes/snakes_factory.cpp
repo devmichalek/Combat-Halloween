@@ -377,8 +377,9 @@ void Snakes_factory::appear( float x )
 	}
 }
 
-bool Snakes_factory::harm( Rect* rect, int damage )
+bool Snakes_factory::harm( Rect* rect, int damage, bool group )
 {
+	bool harmed = false;
 	if( rect != NULL )
 	{
 		for( auto &i :snakes )
@@ -404,14 +405,18 @@ bool Snakes_factory::harm( Rect* rect, int damage )
 							i->setDead();
 						}
 						
-						return true;
+						harmed = true;
+						if( !group )
+						{
+							break;
+						}
 					}
 				}
 			}
 		}
 	}
 	
-	return false;
+	return harmed;
 }
 
 void Snakes_factory::ableAttack( Rect* rect )

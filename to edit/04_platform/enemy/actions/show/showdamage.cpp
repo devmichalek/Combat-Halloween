@@ -13,6 +13,8 @@ Showdamage::~Showdamage()
 
 void Showdamage::free()
 {
+	fadedout = false;
+	
 	if( !vels.empty() )
 	{
 		vels.clear();
@@ -44,6 +46,8 @@ void Showdamage::free()
 
 void Showdamage::reset()
 {
+	fadedout = false;
+	
 	if( !vels.empty() )
 	{
 		vels.clear();
@@ -84,7 +88,10 @@ void Showdamage::draw( sf::RenderWindow &window )
 	for( unsigned i = 0; i < texts.size(); i++ )
 	{
 		text.setText( texts[ i ] );
-		text.setAlpha( alphas[ i ] );
+		if( !fadedout )
+		{
+			text.setAlpha( alphas[ i ] );
+		}
 		text.setPosition( x, y -distances[ i ] );
 		window.draw( text.get() );
 	}
@@ -128,5 +135,6 @@ void Showdamage::focus( int x, int y )
 
 void Showdamage::fadeout( int i, int min )
 {
+	fadedout = true;
 	text.fadeout( i, min );
 }

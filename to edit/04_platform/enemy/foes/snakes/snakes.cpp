@@ -59,24 +59,12 @@ void Snakes::free()
 
 void Snakes::reset( int distance )
 {
-	while( true )
+	for( auto &it :x )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :x )
-			{
-				it ++;
-			}
-			
-			left ++;
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it += distance;
 	}
+	
+	left += distance;
 	
 	state = APPEAR -1;
 	offset = 0;

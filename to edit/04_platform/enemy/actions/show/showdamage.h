@@ -7,6 +7,7 @@ class Showdamage
 {
 protected:
 	
+	bool fadedout;
 	int x, y;
 	vector <float> vels;
 	vector <float> lines;
