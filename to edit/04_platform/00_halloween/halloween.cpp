@@ -44,7 +44,7 @@ Halloween::Halloween()
 	wall = new Wall;
 	boulder = new Boulder;
 	score_dots = new Score_dots;
-	door = new Door;
+	exit = new Exit;
 	// in addition.
 	rain = new Rain;
 	spikes = new Spikes;
@@ -105,7 +105,7 @@ void Halloween::free()
 	delete wall;
 	delete boulder;
 	delete score_dots;
-	delete door;
+	delete exit;
 	// in addition.
 	delete rain;
 	delete spikes;
@@ -129,7 +129,7 @@ void Halloween::reset()
 	reloadMusic();
 	
 	// Hero.
-	hero->reset( screen_h );
+	hero->reset( screen_h, width );
 	hero->setKeys();
 	scope->reset();
 	
@@ -155,7 +155,7 @@ void Halloween::reset()
 	wall->reset( distance );
 	boulder->reset( distance );
 	score_dots->reset( distance );
-	door->reset( distance );
+	exit->reset( distance );
 	// in addition.
 	rain->reset();
 	spikes->reset( distance );
@@ -208,7 +208,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
 	score_dots->load( screen_w );
-	door->load( type );
+	exit->load( width );
 	// in addition.
 	rain->load( screen_w, screen_h );
 	spikes->load( type, screen_w, width );
@@ -236,7 +236,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	}
 	
 	// Pause
-	if( !pause->isPaused() )
+	if( !pause->isPaused() && !hero->isDead() )
 	{
 		mechanics();
 		music->fadein( 1, sound.getMusicVolume() );
@@ -282,7 +282,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		boulder->fadeout( value );
 		score_dots->fadeout( value );
-		door->fadeout( value );
 		// in addition.
 		rain->fadeout( value );
 		spikes->fadeout( value );
@@ -330,7 +329,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		boulder->fadein( value );
 		score_dots->fadein( value );
-		door->fadein( value );
 		// in addition.
 		rain->fadein( value );
 		spikes->fadein( value );
@@ -356,7 +354,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 	background->drawFront( window );
 	greenery->draw_bg( window );
 	ladder->draw( window );
-	door->draw( window );
 	
 	// Hero.
 	hero->draw( window );
@@ -369,6 +366,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 	zombie_factory.draw( window );
 	fly_factory->draw( window );
 	skulls->draw( window );
+	kunai->drawEffects( window );
 	
 	// Dots.
 	score_dots->draw( window );
@@ -490,8 +488,13 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 				 vampire_factory.positioning( islands->getBlocks(), difficulty );
 				 zombie_factory.positioning( brick->getBlocks(), difficulty );
 				 zombie_factory.positioning( islands->getBlocks(), difficulty );
-				 vampire_factory.positioning( islands->getBlocks(), difficulty );
+				 zombie_factory.positioning( islands->getBlocks(), difficulty );
 				 zombie_factory.positioning( brick->getBlocks(), difficulty );
+				 if( difficulty > 66 )
+				 {
+					vampire_factory.positioning( brick->getBlocks(), difficulty );
+					vampire_factory.positioning( islands->getBlocks(), difficulty );
+				 }
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
@@ -499,9 +502,9 @@ bool Halloween::positioning( int type, int size, int flatness, int difficulty  )
 		
 		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
-		info = "setting doors";	break;
+		info = "setting exit";	break;
 		
-		case 23: door->positioning( brick->getLastBlock() );
+		case 23: exit->positioning( brick->getLastBlock() );
 		info = "loading music";	break;
 		
 		case 24: setSound();	reloadMusic();
@@ -550,7 +553,7 @@ bool Halloween::defeatState()
 
 bool Halloween::winState()
 {
-	if( door->nextState() )
+	if( exit->nextState() )
 	{
 		money->saveMoney();
 		return true;

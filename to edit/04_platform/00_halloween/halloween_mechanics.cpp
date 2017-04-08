@@ -94,8 +94,8 @@ void Halloween::mechanics()
 	else if( hero->jumpAttack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		vampire_factory.harm( hero->getAttackBox(), hero->getDamage() );
-		zombie_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		vampire_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
+		zombie_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -127,8 +127,8 @@ void Halloween::mechanics()
 	else if( hero->attack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		vampire_factory.harm( hero->getAttackBox(), hero->getDamage() );
-		zombie_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		vampire_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
+		zombie_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 	}
 	
 	
@@ -188,6 +188,15 @@ void Halloween::mechanics()
 		{
 			kunai->destroy( i );
 		}
+		
+		else if( kunai->isExplosiveKunai( i ) )
+		{
+			if( vampire_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) || 
+				zombie_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			{
+				kunai->destroy( i );
+			}
+		}
 		else if( vampire_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			if( kunai->isHealKunai( i ) )
@@ -237,9 +246,10 @@ void Halloween::mechanics()
 			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			lightning->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
-			door->moveX( hero->getDirection(), scope->getVel() );
 			spikes->moveX( hero->getDirection(), scope->getVel() );
 			skulls->moveX( hero->getDirection(), scope->getVel() );
+			exit->moveX( hero->getDirection(), scope->getVel() );
+			kunai->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -260,9 +270,10 @@ void Halloween::mechanics()
 			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			lightning->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
-			door->moveX( hero->getDirection(), -scope->getVel() );
 			spikes->moveX( hero->getDirection(), -scope->getVel() );
 			skulls->moveX( hero->getDirection(), -scope->getVel() );
+			exit->moveX( hero->getDirection(), -scope->getVel() );
+			kunai->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -301,9 +312,10 @@ void Halloween::mechanics()
 			score_dots->undoFall( brick->getGrassValue() );
 			lightning->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
-			door->undoFall( brick->getGrassValue() );
 			spikes->undoFall( brick->getGrassValue() );
 			skulls->undoFall( brick->getGrassValue() );
+			exit->undoFall( brick->getGrassValue() );
+			kunai->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -341,7 +353,7 @@ void Halloween::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		door->checkHero( hero->getRect() );
+		exit->checkHero( hero->getRect() );
 		rain->mechanics();
 		spikes->mechanics();
 		
