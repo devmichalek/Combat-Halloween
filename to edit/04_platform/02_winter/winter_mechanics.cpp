@@ -95,7 +95,7 @@ void Winter::mechanics()
 	else if( hero->jumpAttack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -127,7 +127,7 @@ void Winter::mechanics()
 	else if( hero->attack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 	}
 	
 	
@@ -187,6 +187,13 @@ void Winter::mechanics()
 		{
 			kunai->destroy( i );
 		}
+		else if( kunai->isExplosiveKunai( i ) )
+		{
+			if( golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			{
+				kunai->destroy( i );
+			}
+		}
 		else if( golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			if( kunai->isHealKunai( i ) )
@@ -226,8 +233,9 @@ void Winter::mechanics()
 			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			lightning->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
-			door->moveX( hero->getDirection(), scope->getVel() );
+			exit->moveX( hero->getDirection(), scope->getVel() );
 			spikes->moveX( hero->getDirection(), scope->getVel() );
+			kunai->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -248,8 +256,9 @@ void Winter::mechanics()
 			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			lightning->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
-			door->moveX( hero->getDirection(), -scope->getVel() );
+			exit->moveX( hero->getDirection(), -scope->getVel() );
 			spikes->moveX( hero->getDirection(), -scope->getVel() );
+			kunai->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -288,8 +297,9 @@ void Winter::mechanics()
 			score_dots->undoFall( brick->getGrassValue() );
 			lightning->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
-			door->undoFall( brick->getGrassValue() );
+			exit->undoFall( brick->getGrassValue() );
 			spikes->undoFall( brick->getGrassValue() );
+			kunai->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -326,7 +336,7 @@ void Winter::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		door->checkHero( hero->getRect() );
+		exit->checkHero( hero->getRect() );
 		snow->mechanics();
 		spikes->mechanics();
 		
