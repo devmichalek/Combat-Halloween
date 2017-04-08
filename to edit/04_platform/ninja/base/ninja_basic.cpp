@@ -99,44 +99,25 @@ void Hero::free()
 	}
 }
 
-void Hero::reset( int posY )
+void Hero::reset( int screen_h, int width )
 {
-	int startX = 100;
-	int startY = posY -sprites[ IDLE ]->getHeight() -600;
+	int x_distance = x[ IDLE ] -(width /2);
+	int y_distance = y[ IDLE ] -(screen_h -width -width*3/4);
 	
-	while( true )
+
+	for( auto &i :x )
 	{
-		if( x[ IDLE ] > startX )
-		{
-			for( auto &i :x )
-			{
-				i -= 2;
-			}
-			
-			for( auto &i :x2 )
-			{
-				i -= 2;
-			}
-		}
-		else
-		{
-			break;
-		}
+		i -= x_distance;
 	}
 	
-	while( true )
+	for( auto &i :x2 )
 	{
-		if( y[ IDLE ] > startY )
-		{
-			for( auto &i :y )
-			{
-				i -= 2;
-			}
-		}
-		else
-		{
-			break;
-		}
+		i -= x_distance;
+	}
+	
+	for( auto &i :y )
+	{
+		i -= y_distance;
 	}
 	
 	dead = 0;

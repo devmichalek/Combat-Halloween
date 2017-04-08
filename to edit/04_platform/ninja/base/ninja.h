@@ -87,7 +87,7 @@ public:
 	Hero();
 	~Hero();
 	void free();
-	void reset( int posY );
+	void reset( int screen_h, int width );
 	// void setFPS( float FPS );
 	
 	void load( int type, int screen_w, int screen_h, int width );

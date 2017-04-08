@@ -51,6 +51,8 @@ void Kunai::free()
 		
 		sprites.clear();
 	}
+	
+	kunai_effects.free();
 }
 
 
@@ -89,14 +91,17 @@ void Kunai::load()
 	}
 	file.free();
 	
+	// Load effects.
+	kunai_effects.load( explosive_level );
+	
 	
 	// Load sprites.
 	for( unsigned i = 0; i < 5; i++ )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "kunai-sprites" );
-		if( i == 3 )	sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/shuriken/" +con::itos( explosive_level ) +".png", 6 );
-		else			sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/shuriken/" +con::itos( i ) +".png" );
+		if( i == 3 )	sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/kunai/" +con::itos( explosive_level ) +".png", 6 );
+		else			sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/kunai/" +con::itos( i ) +".png" );
 	}
 	
 	
@@ -185,6 +190,13 @@ void Kunai::draw( sf::RenderWindow* &window )
 			window->draw( sprites[ bits[ i ]->getWhich() ]->get() );
 		}
 	}
+	
+	
+}
+
+void Kunai::drawEffects( sf::RenderWindow* &window  )
+{
+	kunai_effects.draw( window );
 }
 
 void Kunai::mechanics()
@@ -196,6 +208,8 @@ void Kunai::mechanics()
 			bits[ i ]->run();
 		}
 	}
+	
+	kunai_effects.mechanics();
 }
 
 
@@ -206,6 +220,8 @@ void Kunai::fadein( int v, int max )
 	{
 		it->fadein( v, max );
 	}
+	
+	kunai_effects.fadein( v, max );
 }
 
 void Kunai::fadeout( int v, int min )
@@ -214,6 +230,8 @@ void Kunai::fadeout( int v, int min )
 	{
 		it->fadeout( v, min );
 	}
+	
+	kunai_effects.fadeout( v, min );
 }
 
 
@@ -268,6 +286,28 @@ Rect* Kunai::getRect( int which )
 	return rect;
 }
 
+Rect* Kunai::getEffectRect( int which )
+{
+	Rect* rect = new Rect;
+	// Temporary.
+	int t_x, t_y;	
+	int t_w, t_h;
+	
+	t_w = sprites[ bits[ which ]->getWhich() ]->getWidth();
+	t_h = sprites[ bits[ which ]->getWhich() ]->getHeight();
+		
+	t_x = bits[ which ]->getX();
+	if( bits[ which ]->getVel() > 0 )
+	{
+		t_x -= sprites[ bits[ which ]->getWhich() ]->getWidth();
+	}
+	
+	t_y = bits[ which ]->getY();
+	
+	rect->set( t_x, t_y, t_w, t_h );
+	return rect;
+}
+
 float Kunai::getDamage( int which )
 {
 	return damage[ bits[ which ]->getWhich() ];
@@ -284,10 +324,27 @@ bool Kunai::isHealKunai( int which )
 	return false;
 }
 
+bool Kunai::isExplosiveKunai( int which )
+{
+	// printf( "%d\n", bits[ which ]->getWhich() );
+	if( bits[ which ]->getWhich() == 3 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+
 
 
 void Kunai::destroy( int which )
 {
+	if( bits[ which ]->getWhich() > 0 && bits[ which ]->getWhich() < 4 )
+	{
+		kunai_effects.run( bits[ which ]->getWhich() -1, getEffectRect( which ) );
+	}
+	
 	bits[ which ]->free();
 }
 
@@ -314,6 +371,38 @@ void Kunai::throwed( int x, int y, bool right, int which )
 			break;
 		}
 	}
+}
+
+void Kunai::moveX( sf::Uint8 direction, float vel )
+{
+	if( direction == 1 )
+	{
+		for( auto &it :bits )
+		{
+			it->moveX( vel );
+		}
+		
+		kunai_effects.moveX( vel );
+	}
+	else if( direction == 2 )
+	{
+		for( auto &it :bits )
+		{
+			it->moveX( -vel );
+		}
+		
+		kunai_effects.moveX( -vel );
+	}
+}
+
+void Kunai::undoFall( sf::Uint8 add )
+{
+	for( auto &it :bits )
+	{
+		it->moveX( add );
+	}
+	
+	kunai_effects.moveX( add );
 }
 
 void Kunai::setColor( sf::Color color )

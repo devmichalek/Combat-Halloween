@@ -40,4 +40,5 @@ public:
 	
 	void run();
 	void destroy();
+	void moveX( float vel );
 };

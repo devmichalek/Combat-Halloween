@@ -101,3 +101,8 @@ void Kunai_bit::run()
 		}
 	}
 }
+
+void Kunai_bit::moveX( float vel )
+{
+	x += vel;
+}
