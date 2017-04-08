@@ -44,7 +44,7 @@ Future::Future()
 	wall = new Wall;
 	boulder = new Boulder;
 	score_dots = new Score_dots;
-	door = new Door;
+	exit = new Exit;
 	// in addition.
 	water = new Water;
 	saws = new Saws;
@@ -103,7 +103,7 @@ void Future::free()
 	delete wall;
 	delete boulder;
 	delete score_dots;
-	delete door;
+	delete exit;
 	// in addition.
 	delete water;
 	delete saws;
@@ -124,7 +124,7 @@ void Future::reset()
 	reloadMusic();
 	
 	// Hero.
-	hero->reset( screen_h );
+	hero->reset( screen_h, width );
 	hero->setKeys();
 	scope->reset();
 	
@@ -150,7 +150,7 @@ void Future::reset()
 	wall->reset( distance );
 	boulder->reset( distance );
 	score_dots->reset( distance );
-	door->reset( distance );
+	exit->reset( distance );
 	// in addition.
 	water->reset( distance );
 	saws->reset( distance );
@@ -200,7 +200,7 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
 	score_dots->load( screen_w );
-	door->load( type );
+	exit->load( width );
 	// in addition.
 	water->load( type, width, screen_w, screen_h );
 	saws->load( type, screen_w, width );
@@ -225,7 +225,7 @@ void Future::draw( sf::RenderWindow* &window )
 	}
 	
 	// Pause
-	if( !pause->isPaused() )
+	if( !pause->isPaused() && !hero->isDead() )
 	{
 		mechanics();
 		music->fadein( 1, sound.getMusicVolume() );
@@ -270,7 +270,6 @@ void Future::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		boulder->fadeout( value );
 		score_dots->fadeout( value );
-		door->fadeout( value );
 		// in addition.
 		water->fadeout( value );
 		saws->fadeout( value );
@@ -315,7 +314,6 @@ void Future::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		boulder->fadein( value );
 		score_dots->fadein( value );
-		door->fadein( value );
 		// in addition.
 		water->fadein( value );
 		saws->fadein( value );
@@ -338,7 +336,6 @@ void Future::draw( sf::RenderWindow* &window )
 	background->drawFront( window );
 	greenery->draw_bg( window );
 	ladder->draw( window );
-	door->draw( window );
 	
 	// Hero.
 	hero->draw( window );
@@ -348,6 +345,7 @@ void Future::draw( sf::RenderWindow* &window )
 	cruncher->draw( window );
 	mine_factory->draw( window );
 	robot_factory.draw( window );
+	kunai->drawEffects( window );
 	
 	// Dots.
 	score_dots->draw( window );
@@ -478,9 +476,9 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
-		info = "setting doors";	break;
+		info = "setting exit";	break;
 		
-		case 23: door->positioning( brick->getLastBlock() );
+		case 23: exit->positioning( brick->getLastBlock() );
 		info = "loading music";	break;
 		
 		case 24: setSound();	reloadMusic();
@@ -529,7 +527,7 @@ bool Future::defeatState()
 
 bool Future::winState()
 {
-	if( door->nextState() )
+	if( exit->nextState() )
 	{
 		money->saveMoney();
 		return true;

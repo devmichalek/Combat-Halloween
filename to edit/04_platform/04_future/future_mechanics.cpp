@@ -95,7 +95,7 @@ void Future::mechanics()
 	else if( hero->jumpAttack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		robot_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		robot_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -126,7 +126,7 @@ void Future::mechanics()
 	else if( hero->attack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		robot_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		robot_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 	}
 	
 	
@@ -187,6 +187,13 @@ void Future::mechanics()
 			kunai->destroy( i );
 		}
 		
+		else if( kunai->isExplosiveKunai( i ) )
+		{
+			if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			{
+				kunai->destroy( i );
+			}
+		}
 		else if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			if( kunai->isHealKunai( i ) )
@@ -225,8 +232,9 @@ void Future::mechanics()
 			coins->moveX( hero->getDirection(), scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), scope->getVel() );
 			score_dots->moveX( hero->getDirection(), scope->getVel() );
-			door->moveX( hero->getDirection(), scope->getVel() );
+			exit->moveX( hero->getDirection(), scope->getVel() );
 			saws->moveX( hero->getDirection(), scope->getVel() );
+			kunai->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -246,8 +254,9 @@ void Future::mechanics()
 			coins->moveX( hero->getDirection(), -scope->getVel() );
 			hp_dots->moveX( hero->getDirection(), -scope->getVel() );
 			score_dots->moveX( hero->getDirection(), -scope->getVel() );
-			door->moveX( hero->getDirection(), -scope->getVel() );
+			exit->moveX( hero->getDirection(), -scope->getVel() );
 			saws->moveX( hero->getDirection(), -scope->getVel() );
+			kunai->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -285,8 +294,9 @@ void Future::mechanics()
 			coins->undoFall( brick->getGrassValue() );
 			hp_dots->undoFall( brick->getGrassValue() );
 			score_dots->undoFall( brick->getGrassValue() );
-			door->undoFall( brick->getGrassValue() );
+			exit->undoFall( brick->getGrassValue() );
 			saws->undoFall( brick->getGrassValue() );
+			kunai->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -326,7 +336,7 @@ void Future::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		door->checkHero( hero->getRect() );
+		exit->checkHero( hero->getRect() );
 		saws->mechanics();
 		
 		cruncher->mechanics( hero->getY(), hero->getDirection() );
