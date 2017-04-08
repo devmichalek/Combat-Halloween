@@ -47,21 +47,9 @@ void Boulder::free()
 
 void Boulder::reset( int distance )
 {
-	while( true )
+	for( auto &it :blocks )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :blocks )
-			{
-				it->reset( 1 );
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->reset( distance );
 	}
 }
 

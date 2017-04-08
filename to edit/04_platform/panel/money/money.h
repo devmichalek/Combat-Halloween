@@ -34,6 +34,7 @@ public:
 	
 	void load( int screen_w );
 	void draw( sf::RenderWindow* &window );
+	void mechanics();
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0x00 );

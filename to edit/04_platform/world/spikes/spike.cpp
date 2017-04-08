@@ -14,7 +14,7 @@ void Spike::free()
 {
 	vel = 0;
 	x = y = 0;
-	endY = 0;
+	startY = endY = 0;
 	harmed = false;
 	
 	state = 0;
@@ -26,6 +26,7 @@ void Spike::reset( int distance )
 	x += distance;
 	state = 0;
 	alpha = 0;
+	y = startY;
 	harmed = false;
 }
 
@@ -35,6 +36,7 @@ void Spike::setPosition( float x, float y, float endY )
 {
 	this->x = x;
 	this->y = y;
+	this->startY = y;
 	this->endY = endY;
 }
 

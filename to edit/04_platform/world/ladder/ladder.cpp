@@ -41,21 +41,9 @@ void Ladder::free()
 
 void Ladder::reset( int distance )
 {
-	while( true )
+	for( auto &it :planks )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :planks )
-			{
-				it->x ++;
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->x += distance;
 	}
 }
 

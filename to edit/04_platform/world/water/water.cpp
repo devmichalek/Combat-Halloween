@@ -44,21 +44,9 @@ void Water::free()
 
 void Water::reset( int distance )
 {
-	while( true )
+	for( auto &it :waterblocks )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :waterblocks )
-			{
-				it->x ++;
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->x += distance;
 	}
 }
 

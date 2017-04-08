@@ -69,7 +69,11 @@ void Money::draw( sf::RenderWindow* &window )
 {
 	window->draw( text.get() );
 	window->draw( grey.get() );
-	
+	window->draw( coin.get() );
+}
+
+void Money::mechanics()
+{
 	offset ++;
 	if( offset == line*delay )
 	{
@@ -77,7 +81,6 @@ void Money::draw( sf::RenderWindow* &window )
 	}
 	
 	coin.setOffset( offset /delay );
-	window->draw( coin.get() );
 }
 
 

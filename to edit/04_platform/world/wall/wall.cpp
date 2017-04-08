@@ -46,21 +46,9 @@ void Wall::free()
 
 void Wall::reset( int distance )
 {
-	while( true )
+	for( auto &it :blocks )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :blocks )
-			{
-				it->moveX( 1 );
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->moveX( distance );
 	}
 }
 

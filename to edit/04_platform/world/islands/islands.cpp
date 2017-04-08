@@ -65,26 +65,14 @@ void Islands::free()
 
 void Islands::reset( int distance )
 {
-	while( true )
+	for( auto &it :hovers )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :hovers )
-			{
-				it->moveX( 1 );
-			}
-			
-			for( auto &it :blocks )
-			{
-				it->x ++;
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->moveX( distance );
+	}
+	
+	for( auto &it :blocks )
+	{
+		it->x += distance;
 	}
 }
 

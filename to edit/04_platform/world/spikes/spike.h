@@ -8,7 +8,7 @@ protected:
 	
 	float vel;
 	float x, y;
-	float endY;
+	float startY, endY;
 	bool harmed;
 	
 	sf::Uint8 state;

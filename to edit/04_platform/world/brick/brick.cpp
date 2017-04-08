@@ -85,26 +85,22 @@ void Brick::free()
 int Brick::reset()
 {
 	grass_distance = 0;
-	int distance = 0;
+	int distance = static_cast <int> (left) +10;
 	
-	while( true )
+	if( distance < 0 )
 	{
-		if( left < -10 )
-		{
-			for( auto &it :blocks )
-			{
-				it->x ++;
-			}
-			
-			left ++;
-			right ++;
-			distance ++;
-		}
-		else
-		{
-			break;
-		}
+		distance = -distance;
 	}
+	
+	for( auto &it :blocks )
+	{
+		it->x += distance;
+	}
+	
+	left += distance;
+	right += distance;
+	
+	// printf( "%d\n", distance );
 	
 	return distance;
 }

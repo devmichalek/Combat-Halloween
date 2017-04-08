@@ -45,18 +45,7 @@ void Boulder_part::reset( int distance )
 		i->y = 0;
 	}
 	
-	while( true )
-	{
-		if( distance > 0 )
-		{
-			moveX( 1 );
-			distance --;
-		}
-		else
-		{
-			break;
-		}
-	}
+	moveX( distance );
 }
 
 

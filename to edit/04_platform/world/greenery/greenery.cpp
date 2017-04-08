@@ -54,21 +54,9 @@ void Greenery::free()
 
 void Greenery::reset( int distance )
 {
-	while( true )
+	for( auto &it :blocks )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :blocks )
-			{
-				it->x ++;
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->x += distance;
 	}
 }
 
