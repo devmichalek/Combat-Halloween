@@ -95,7 +95,7 @@ void Forest::mechanics()
 	else if( hero->jumpAttack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -127,7 +127,7 @@ void Forest::mechanics()
 	else if( hero->attack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		golem_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		golem_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 	}
 	
 	
@@ -188,6 +188,13 @@ void Forest::mechanics()
 			kunai->destroy( i );
 		}
 		
+		else if( kunai->isExplosiveKunai( i ) )
+		{
+			if( golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			{
+				kunai->destroy( i );
+			}
+		}
 		else if( golem_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			if( kunai->isHealKunai( i ) )
@@ -227,8 +234,9 @@ void Forest::mechanics()
 			score_dots->moveX( hero->getDirection(), scope->getVel() );
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
-			door->moveX( hero->getDirection(), scope->getVel() );
+			exit->moveX( hero->getDirection(), scope->getVel() );
 			spikes->moveX( hero->getDirection(), scope->getVel() );
+			kunai->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -249,8 +257,9 @@ void Forest::mechanics()
 			score_dots->moveX( hero->getDirection(), -scope->getVel() );
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
-			door->moveX( hero->getDirection(), -scope->getVel() );
+			exit->moveX( hero->getDirection(), -scope->getVel() );
 			spikes->moveX( hero->getDirection(), -scope->getVel() );
+			kunai->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 
@@ -291,8 +300,9 @@ void Forest::mechanics()
 			score_dots->undoFall( brick->getGrassValue() );
 			fireball->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
-			door->undoFall( brick->getGrassValue() );
+			exit->undoFall( brick->getGrassValue() );
 			spikes->undoFall( brick->getGrassValue() );
+			kunai->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -329,7 +339,7 @@ void Forest::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		door->checkHero( hero->getRect() );
+		exit->checkHero( hero->getRect() );
 		day->mechanics();
 		spikes->mechanics();
 		
@@ -378,7 +388,6 @@ void Forest::mechanics()
 			boulder->setColor( day->getColor() );
 			ladder->setColor( day->getColor() );
 			greenery->setColor( day->getColor() );
-			door->setColor( day->getColor() );
 			spikes->setColor( day->getColor() );
 			
 			fireball->setColor( day->getColor() );

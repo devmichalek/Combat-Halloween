@@ -37,7 +37,7 @@
 #include "04_platform/world/wall/wall.h"
 #include "04_platform/world/boulder/boulders.h"
 #include "04_platform/world/score_dots/score_dots.h"
-#include "04_platform/world/door/door.h"
+#include "04_platform/world/exit/exit.h"
 // in addition.
 #include "04_platform/world/water/water.h"
 #include "04_platform/world/background/day.h"
@@ -95,7 +95,7 @@ class Forest
 	Wall* wall;
 	Boulder* boulder;
 	Score_dots* score_dots;
-	Door* door;
+	Exit* exit;
 	// in addition.
 	Water* water;
 	Day* day;
