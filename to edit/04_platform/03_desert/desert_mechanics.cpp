@@ -95,7 +95,7 @@ void Desert::mechanics()
 	else if( hero->jumpAttack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
+		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
 		
 		scope->setVel( hero->getJump_vel() );
 		
@@ -126,8 +126,8 @@ void Desert::mechanics()
 	else if( hero->attack() )
 	{
 		if( hero->getOffset() == 0 )	skills->swordUsed();
-		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage() );
-		snakes_factory->harm( hero->getAttackBox(), hero->getDamage() );
+		skeleton_factory.harm( hero->getAttackBox(), hero->getDamage(), true );
+		snakes_factory->harm( hero->getAttackBox(), hero->getDamage(), true );
 	}
 	
 	
@@ -187,6 +187,14 @@ void Desert::mechanics()
 		{
 			kunai->destroy( i );
 		}
+		else if( kunai->isExplosiveKunai( i ) )
+		{
+			if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) || 
+				snakes_factory->harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			{
+				kunai->destroy( i );
+			}
+		}
 		else if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
 		{
 			if( kunai->isHealKunai( i ) )
@@ -237,7 +245,8 @@ void Desert::mechanics()
 			fireball->moveX( hero->getDirection(), scope->getVel() );
 			wind->moveX( hero->getDirection(), scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), scope->getVel() );
-			door->moveX( hero->getDirection(), scope->getVel() );
+			exit->moveX( hero->getDirection(), scope->getVel() );
+			kunai->moveX( hero->getDirection(), scope->getVel() );
 		}
 
 		if( brick->checkPixelCollision( hero->getRect() ) ||
@@ -259,7 +268,8 @@ void Desert::mechanics()
 			fireball->moveX( hero->getDirection(), -scope->getVel() );
 			wind->moveX( hero->getDirection(), -scope->getVel() );
 			fly_factory->moveX( hero->getDirection(), -scope->getVel() );
-			door->moveX( hero->getDirection(), -scope->getVel() );
+			exit->moveX( hero->getDirection(), -scope->getVel() );
+			kunai->moveX( hero->getDirection(), -scope->getVel() );
 		}
 	}
 	
@@ -300,7 +310,8 @@ void Desert::mechanics()
 			fireball->undoFall( brick->getGrassValue() );
 			wind->undoFall( brick->getGrassValue() );
 			fly_factory->undoFall( brick->getGrassValue() );
-			door->undoFall( brick->getGrassValue() );
+			exit->undoFall( brick->getGrassValue() );
+			kunai->undoFall( brick->getGrassValue() );
 		}
 	}
 	else
@@ -337,7 +348,7 @@ void Desert::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		door->checkHero( hero->getRect() );
+		exit->checkHero( hero->getRect() );
 		day->mechanics();
 		wind->mechanics();
 		
@@ -448,7 +459,6 @@ void Desert::mechanics()
 			skeleton_factory.setColor( day->getColor() );
 			snakes_factory->setColor( day->getColor() );
 			fly_factory->setColor( day->getColor() );
-			door->setColor( day->getColor() );
 		}
 		
 // ------------------------------------------------------------------------------------------------

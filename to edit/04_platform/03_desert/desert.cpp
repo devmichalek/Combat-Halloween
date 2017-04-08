@@ -44,7 +44,7 @@ Desert::Desert()
 	wall = new Wall;
 	boulder = new Boulder;
 	score_dots = new Score_dots;
-	door = new Door;
+	exit = new Exit;
 	// in addition.
 	day = new Day;
 	wind = new Wind;
@@ -105,7 +105,7 @@ void Desert::free()
 	delete wall;
 	delete boulder;
 	delete score_dots;
-	delete door;
+	delete exit;
 	// in addition.
 	delete day;
 	delete wind;
@@ -128,7 +128,7 @@ void Desert::reset()
 	reloadMusic();
 	
 	// Hero.
-	hero->reset( screen_h );
+	hero->reset( screen_h, width );
 	hero->setKeys();
 	scope->reset();
 	
@@ -154,7 +154,7 @@ void Desert::reset()
 	wall->reset( distance );
 	boulder->reset( distance );
 	score_dots->reset( distance );
-	door->reset( distance );
+	exit->reset( distance );
 	// in addition.
 	day->reset();
 	wind->reset();
@@ -185,7 +185,6 @@ void Desert::reset()
 	wall->setColor( day->getColor() );
 	boulder->setColor( day->getColor() );
 	score_dots->setAlpha( day->getAlpha() );
-	door->setColor( day->getColor() );
 	
 	// Enemy.
 	fireball->setColor( day->getColor() );
@@ -234,7 +233,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
 	score_dots->load( screen_w );
-	door->load( type );
+	exit->load( width );
 	// in addition.
 	day->set( FPS );
 	wind->create( screen_w, screen_h );
@@ -261,7 +260,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	}
 	
 	// Pause
-	if( !pause->isPaused() )
+	if( !pause->isPaused() && !hero->isDead() )
 	{
 		mechanics();
 		music->fadein( 1, sound.getMusicVolume() );
@@ -307,7 +306,6 @@ void Desert::draw( sf::RenderWindow* &window )
 		wall->fadeout( value );
 		boulder->fadeout( value );
 		score_dots->fadeout( value );
-		door->fadeout( value );
 		// in addition.
 		wind->fadeout( value );
 		
@@ -353,7 +351,6 @@ void Desert::draw( sf::RenderWindow* &window )
 		wall->fadein( value );
 		boulder->fadein( value );
 		score_dots->fadein( value );
-		door->fadein( value );
 		// in addition.
 		
 		// Enemy.
@@ -376,7 +373,6 @@ void Desert::draw( sf::RenderWindow* &window )
 	background->drawFront( window );
 	greenery->draw_bg( window );
 	ladder->draw( window );
-	door->draw( window );
 	
 	// Hero.
 	hero->draw( window );
@@ -388,6 +384,7 @@ void Desert::draw( sf::RenderWindow* &window )
 	skeleton_factory.draw( window );
 	snakes_factory->draw( window );
 	fly_factory->draw( window );
+	kunai->drawEffects( window );
 	
 	// Dots.
 	score_dots->draw( window );
@@ -506,10 +503,20 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 20: skeleton_factory.positioning( brick->getBlocks(), difficulty );
 				 skeleton_factory.positioning( islands->getBlocks(), difficulty );
+				 if( difficulty > 66 )
+				 {
+					skeleton_factory.positioning( brick->getBlocks(), difficulty );
+					skeleton_factory.positioning( islands->getBlocks(), difficulty );
+				 }
 		info = "creating snakes factory";	break;
 		
 		case 21: snakes_factory->positioning( brick->getBlocks(), difficulty );
 				 snakes_factory->positioning( islands->getBlocks(), difficulty );
+				 if( difficulty > 66 )
+				 {
+					snakes_factory->positioning( brick->getBlocks(), difficulty );
+					snakes_factory->positioning( islands->getBlocks(), difficulty );
+				 }
 		info = "setting money multiplier";	break;
 		
 		case 22: coins->setChance( difficulty );
@@ -517,9 +524,9 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		
 		case 23: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
-		info = "setting doors";	break;
+		info = "setting exit";	break;
 		
-		case 24: door->positioning( brick->getLastBlock() );
+		case 24: exit->positioning( brick->getLastBlock() );
 		info = "loading music";	break;
 		
 		case 25: setSound();	reloadMusic();
@@ -565,7 +572,7 @@ bool Desert::defeatState()
 
 bool Desert::winState()
 {
-	if( door->nextState() )
+	if( exit->nextState() )
 	{
 		money->saveMoney();
 		return true;
