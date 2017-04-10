@@ -30,7 +30,28 @@ void Desert::mechanics()
 	// HERO GRAVITY
 	hero->gravitation();
 	
-	
+	// ISLANDS WORLD IS MOVING
+	islands->checkStands( hero->getRect() );
+	if( islands->isStand() )
+	{
+		brick->moveX( islands->getDirection(), islands->getVel() );
+		islands->moveX( islands->getDirection(), islands->getVel() );
+		wall->moveX( islands->getDirection(), islands->getVel() );
+		boulder->moveX( islands->getDirection(), islands->getVel() );
+		ladder->moveX( islands->getDirection(), islands->getVel() );
+		greenery->moveX( islands->getDirection(), islands->getVel() );
+		mine_factory->moveX( islands->getDirection(), islands->getVel() );
+		skeleton_factory.moveX( islands->getDirection(), islands->getVel() );
+		snakes_factory->moveX( islands->getDirection(), islands->getVel() );
+		coins->moveX( islands->getDirection(), islands->getVel() );
+		hp_dots->moveX( islands->getDirection(), islands->getVel() );
+		score_dots->moveX( islands->getDirection(), islands->getVel() );
+		fireball->moveX( islands->getDirection(), islands->getVel() );
+		wind->moveX( islands->getDirection(), islands->getVel() );
+		fly_factory->moveX( islands->getDirection(), islands->getVel() );
+		exit->moveX( islands->getDirection(), islands->getVel() );
+		kunai->moveX( islands->getDirection(), islands->getVel() );
+	}
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO WEIGHTLESSNESS
@@ -232,6 +253,7 @@ void Desert::mechanics()
 		if( scope->getFactor() == 0 )
 		{
 			islands->moveX( hero->getDirection(), scope->getVel() );
+			islands->moveX_stand( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
 			boulder->moveX( hero->getDirection(), scope->getVel() );
 			ladder->moveX( hero->getDirection(), scope->getVel() );
@@ -348,7 +370,7 @@ void Desert::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		exit->checkHero( hero->getRect() );
+		exit->checkHero( hero->getX() );
 		day->mechanics();
 		wind->mechanics();
 		
@@ -362,7 +384,7 @@ void Desert::mechanics()
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
-			islands->moving();
+			islands->mechanics();
 		}
 		else
 		{
@@ -455,6 +477,7 @@ void Desert::mechanics()
 			ladder->setColor( day->getColor() );
 			greenery->setColor( day->getColor() );
 			
+			fireball->setColor( day->getColor() );
 			mine_factory->setColor( day->getColor() );
 			skeleton_factory.setColor( day->getColor() );
 			snakes_factory->setColor( day->getColor() );
