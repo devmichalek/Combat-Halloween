@@ -70,7 +70,11 @@ int Rules::fillForTop( int nr, int need )
 	{
 		switch( nr )
 		{
-			case 0: result = 3; 	break;
+			case 0: if( rand()%3 == 1 )
+						result = 3;
+					else
+						result = 1;
+						break;
 			case 1: result = 3; 	break;
 			case 2: result = -1; 	break;
 			case 3: result = 14; 	break;
