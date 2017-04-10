@@ -166,11 +166,11 @@ void Islands::addPlank( int n, int x, int y )
 
 
 
-void Islands::createFlyingIslands( vector <Block*> blocks, vector <Block*> planks, int chance )
+void Islands::createFlyingIslands( vector <Block*> blocks, vector <Block*> planks, int chance, float min, float max )
 {
 	for( unsigned i = 0; i < blocks.size()-2; i++ )
 	{
-		if( blocks[ i ]->nr == 2 || blocks[ i ]->nr == 7 )
+		if( (blocks[ i ]->nr == 2 || blocks[ i ]->nr == 7) && blocks[ i ]->x > min && blocks[ i ]->x < max )
 		{
 			if( blocks[ i ]->y == blocks[ i +2 ]->y && blocks[ i +2 ]->nr != -1 )
 			{
@@ -686,6 +686,26 @@ void Islands::moveX( sf::Uint8 direction, float vel )
 	}
 }
 
+void Islands::moveX_stand( sf::Uint8 direction, float vel )
+{
+	if( direction == 1 )
+	{
+		for( auto &it :hovers )
+		{
+			it->moveX_stand( vel );
+		}
+	}
+	else if( direction == 2 )
+	{
+		for( auto &it :hovers )
+		{
+			it->moveX_stand( -vel );
+		}
+	}
+}
+
+
+
 void Islands::undoFall( sf::Uint8 add )
 {
 	for( auto &it :hovers )
@@ -709,11 +729,11 @@ void Islands::setColor( sf::Color color )
 
 
 
-void Islands::moving()
+void Islands::mechanics()
 {
 	for( auto &it :hovers )
 	{
-		it->moving( width );
+		it->mechanics( width );
 	}
 }
 
@@ -947,4 +967,84 @@ bool Islands::checkOtherIslands( Rect* rect )
 	}
 	
 	return false;
+}
+
+void Islands::checkStands( Rect* rect )
+{
+	if( rect != NULL )
+	{
+		for( auto &it :hovers )
+		{
+			for( unsigned i = 0; i < it->getSize(); i++ )
+			{
+				if( it->getX(i) > -width*2 && it->getX(i) < screen_w +width )
+				{
+					sprites[ it->getNr(i) ]->setPosition( it->getX(i), it->getY(i) -5 );
+					if( sprites[ it->getNr(i) ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
+					{
+						it->setStand( true );
+						break;
+					}
+					else
+					{
+						it->setStand( false );
+					}
+				}
+			}
+		}
+	}
+}
+
+bool Islands::isStand()
+{
+	for( auto &it :hovers )
+	{
+		for( unsigned i = 0; i < it->getSize(); i++ )
+		{
+			if( it->isStand() )
+			{
+				return true;
+			}
+		}
+	}
+	
+	return false;
+}
+
+float Islands::getVel()
+{
+	for( auto &it :hovers )
+	{
+		for( unsigned i = 0; i < it->getSize(); i++ )
+		{
+			if( it->getX(i) > -width*2 && it->getX(i) < screen_w +width )
+			{
+				if( it->isStand() )
+				{
+					return it->getVel();
+				}
+			}
+		}
+	}
+	
+	return 0;
+}
+
+sf::Uint8 Islands::getDirection()
+{
+	for( auto &it :hovers )
+	{
+		for( unsigned i = 0; i < it->getSize(); i++ )
+		{
+			if( it->getX(i) > -width*2 && it->getX(i) < screen_w +width )
+			{
+				if( it->isStand() )
+				{
+					return it->getDirection();
+				}
+			}
+		}
+	}
+	
+	return 0;
 }

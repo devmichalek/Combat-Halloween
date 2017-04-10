@@ -3,10 +3,7 @@
 
 Hover::Hover()
 {
-	startX = endX = 0;
-	vel = 0;
-	vel_state = 0;
-	state = 0;
+	free();
 }
 
 Hover::~Hover()
@@ -25,11 +22,14 @@ void Hover::free()
 		
 		blocks.clear();
 	}
-	
-	startX = endX = 0;
+
 	vel = 0;
 	vel_state = 0;
-	state = 0;
+	state = false;
+	stand = false;
+	
+	startX = 0;
+	endX = 0;
 }
 
 
@@ -54,52 +54,54 @@ void Hover::positioning( int width, int type )
 
 void Hover::setPosition( float startX, float endX, float y, float vel )
 {
-	this->startX = startX;
-	this->endX = endX;
 	this->vel = vel;
 	vel_state = vel;
+	
+	this->startX = startX;
+	this->endX = endX;
 	
 	for( auto &i :blocks )
 	{
 		i->y = y;
 		i->x += startX;
 	}
-	
-
 }
 
 void Hover::moveX( float vel )
 {
-	for( auto &it :blocks )
+	if( !stand )
 	{
-		it->x += vel;
+		for( auto &it :blocks )
+		{
+			it->x += vel;
+		}
 	}
 	
 	startX += vel;
 	endX += vel;
 }
 
-void Hover::moving( int width )
+void Hover::moveX_stand( float vel )
 {
-	if( state == 0 )
+	if( stand )
 	{
-		if( blocks[ 0 ]->x <= startX )
+		for( auto &it :blocks )
 		{
-			state = 1;
+			it->x += vel;
 		}
-		else
+	}
+}
+
+void Hover::mechanics( int width )
+{
+	if( !stand )
+	{
+		if( state )
 		{
 			for( auto &i :blocks )
 			{
 				i->x -= vel;
 			}
-		}
-	}
-	else
-	{
-		if( blocks[ blocks.size()-1 ]->x +width >= endX )
-		{
-			state = 0;
 		}
 		else
 		{
@@ -108,6 +110,11 @@ void Hover::moving( int width )
 				i->x += vel;
 			}
 		}
+	}
+	
+	if( blocks[ 0 ]->x <= startX || blocks[ blocks.size() -1 ]->x +width >= endX )
+	{
+		state = !state;
 	}
 }
 
@@ -128,17 +135,56 @@ unsigned Hover::getSize()
 	return blocks.size();
 }
 
-int Hover::getX( unsigned which )
+float Hover::getMainX()
+{
+	return blocks[ 0 ]->x;
+}
+
+float Hover::getMainY()
+{
+	return blocks[ 0 ]->y;
+}
+
+float Hover::getX( unsigned which )
 {
 	return blocks[ which ]->x;
 }
 
-int Hover::getY( unsigned which )
+float Hover::getY( unsigned which )
 {
 	return blocks[ which ]->y;
 }
 
-int Hover::getNr( unsigned which )
+float Hover::getNr( unsigned which )
 {
 	return blocks[ which ]->nr;
+}
+
+
+
+void Hover::setStand( bool s )
+{
+	stand = s;
+}
+
+bool Hover::isStand()
+{
+	return stand;
+}
+
+float Hover::getVel()
+{
+	return vel;
+}
+
+sf::Uint8 Hover::getDirection()
+{
+	// right
+	if( state )
+	{
+		return 1;
+	}
+	
+	// left
+	return 2;
 }

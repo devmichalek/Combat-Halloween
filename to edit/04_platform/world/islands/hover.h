@@ -1,6 +1,7 @@
 #pragma once
 
 #include "04_platform/world/brick/block.h"
+#include "SFML/Graphics.hpp"
 #include <vector>
 
 using namespace std;
@@ -9,10 +10,13 @@ class Hover	// flying island
 {
 	vector <Block*> blocks;
 	
-	float startX, endX;
 	float vel;
 	float vel_state;
-	int state;
+	bool state;
+	bool stand;
+	
+	float startX;
+	float endX;
 	
 public:
 	Hover();
@@ -22,13 +26,22 @@ public:
 	void positioning( int width, int type );
 	void setPosition( float startX, float endX, float y, float vel );
 	void moveX( float vel );
-	void moving( int width );
+	void moveX_stand( float vel );
+	void mechanics( int width );
 	
 	void turnOff();
 	void turnOn();
 	
 	unsigned getSize();
-	int getX( unsigned which );
-	int getY( unsigned which );
-	int getNr( unsigned which );
+	float getMainX();
+	float getMainY();
+	float getX( unsigned which );
+	float getY( unsigned which );
+	float getNr( unsigned which );
+	
+	// world moving...
+	void setStand( bool s );
+	bool isStand();
+	float getVel();
+	sf::Uint8 getDirection();
 };

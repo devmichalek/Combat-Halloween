@@ -34,15 +34,16 @@ public:
 	void addPlank( int n, int x, int y );
 	
 	// Creating.
-	void createFlyingIslands( vector <Block*> blocks, vector <Block*> planks, int chance );
+	void createFlyingIslands( vector <Block*> blocks, vector <Block*> planks, int chance, float min, float max );
 	void createTopIslands( vector <Block*> blocks, int w, int h, int h2 );
 	void createBotIslands( vector <Block*> blocks, int w, int h );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
+	void moveX_stand( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
 	void setColor( sf::Color color );
-	void moving();
+	void mechanics();
 	void turnOff( sf::Uint8 direction );
 	void turnOn();
 	
@@ -55,4 +56,10 @@ public:
 	bool checkPixelCollision( Rect* rect );
 	bool checkFlyingIslands( Rect* rect );
 	bool checkOtherIslands( Rect* rect );
+	
+	// World moving...
+	void checkStands( Rect* rect );
+	bool isStand();
+	float getVel();
+	sf::Uint8 getDirection();
 };
