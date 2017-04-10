@@ -13,33 +13,31 @@ Exit::~Exit()
 
 void Exit::free()
 {
+	screen_w = 0;
 	next = false;
-	sprite.free();
+	main_x = 0;
 }
 
 void Exit::reset( int distance )
 {
 	next = false;
-	sprite.setPosition( sprite.getX() +distance, sprite.getY() );
+	main_x += distance;
 }
 
 
 
-void Exit::load( int width )
+void Exit::load( int width, int screen_w )
 {
 	free();
 	
-	sprite.setName( "exit-sprite" );
-	sprite.create( width, width );
+	this->screen_w = screen_w;
+	main_x = 0;
 }
 
 
-void Exit::positioning( Rect* rect )
+void Exit::positioning( float right, int screen_w )
 {
-	if( rect != NULL )
-	{
-		sprite.setPosition( rect->getX() +rect->getWidth() /2 -sprite.getWidth() /2, rect->getY() -sprite.getHeight() );
-	}
+	main_x = right -screen_w /2;
 }
 
 
@@ -48,25 +46,28 @@ void Exit::moveX( sf::Uint8 direction, float vel )
 {
 	if( direction == 1 )
 	{
-		sprite.setPosition( sprite.getX() +vel, sprite.getY() );
+		main_x += vel;
 	}
 	else if( direction == 2 )
 	{
-		sprite.setPosition( sprite.getX() -vel, sprite.getY() );
+		main_x -= vel;
 	}
 }
 
 void Exit::undoFall( sf::Uint8 add )
 {
-	sprite.setPosition( sprite.getX() +add, sprite.getY() );
+	main_x += add;
 }
 
 
-void Exit::checkHero( Rect* rect )
+void Exit::checkHero( float x )
 {
-	if( sprite.checkRectCollision( *rect ) )
+	// printf( "%f %f\n", x, main_x  );
+	if( x > main_x )
 	{
+		// main_x = 0;
 		next = true;
+		// printf( "yeap\n" );
 	}
 }
 

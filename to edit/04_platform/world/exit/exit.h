@@ -4,8 +4,9 @@
 
 class Exit
 {
+	int screen_w;
 	bool next;
-	MySprite sprite;
+	float main_x;
 	
 public:
 	
@@ -14,14 +15,14 @@ public:
 	void free();
 	void reset( int distance );
 	
-	void load( int width );
-	void positioning( Rect* rect );
+	void load( int width, int screen_w );
+	void positioning( float right, int screen_w );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
 	
 	// Check, then turn into boss state.
-	void checkHero( Rect* rect );
+	void checkHero( float x );
 	bool nextState();
 };
