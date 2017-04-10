@@ -15,11 +15,6 @@ void Kunai_effects::free()
 {
 	delay = 0;
 	
-	if( !x.empty() )
-	{
-		x.clear();
-	}
-	
 	if( !offset.empty() )
 	{
 		offset.clear();
@@ -73,7 +68,6 @@ void Kunai_effects::load( int which )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "kunai_effects-sprite" );
-		x.push_back( 0 );
 		offset.push_back( 0 );
 		active.push_back( false );
 	}
@@ -140,9 +134,8 @@ void Kunai_effects::run( int which, Rect* rect )
 {
 	if( rect != NULL )
 	{
-		// then
-		this->x[ which ] = rect->getX() +rect->getWidth()/2 -sprites[ which ]->getWidth() /2;
-		sprites[ which ]->setPosition( this->x[ which ], rect->getY() +rect->getHeight()/2 -sprites[ which ]->getHeight()/2 );
+		sprites[ which ]->setPosition( rect->getX() +rect->getWidth()/2 -sprites[ which ]->getWidth() /2,
+									   rect->getY() +rect->getHeight()/2 -sprites[ which ]->getHeight()/2 );
 		active[ which ] = true;
 	}
 }
@@ -155,8 +148,7 @@ void Kunai_effects::moveX( float vel )
 	{
 		if( active[ i ] )
 		{
-			x[ i ] += vel;
-			sprites[ i ]->setPosition( x[ i ], sprites[ i ]->getY() );
+			sprites[ i ]->setPosition( sprites[ i ]->getX() +vel, sprites[ i ]->getY() );
 		}
 	}
 }
@@ -167,8 +159,7 @@ void Kunai_effects::undoFall( sf::Uint8 add )
 	{
 		if( active[ i ] )
 		{
-			x[ i ] += add;
-			sprites[ i ]->setPosition( x[ i ], sprites[ i ]->getY() );
+			sprites[ i ]->setPosition( sprites[ i ]->getX() +add, sprites[ i ]->getY() );
 		}
 	}
 }

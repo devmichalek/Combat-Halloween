@@ -6,7 +6,6 @@
 class Kunai_effects
 {
 	int delay;
-	vector <float> x;
 	vector <int> offset;
 	vector <int> lines;
 	vector <bool> active;

@@ -411,4 +411,6 @@ void Kunai::setColor( sf::Color color )
 	{
 		it->setColor( color );
 	}
+	
+	kunai_effects.setColor( color );
 }
