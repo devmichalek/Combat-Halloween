@@ -207,7 +207,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	state = 0;
 	info = "setting keys";
 	
-	int type = 1;
+	type = 1;
 	this->FPS = FPS;
 	this->width = 128;
 	this->screen_w = screen_w;
@@ -239,7 +239,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	wall->load( type, width, screen_w );
 	boulder->load( type, width, screen_w );
 	score_dots->load( screen_w );
-	exit->load( width );
+	exit->load( width, screen_w );
 	// in addition.
 	water->load( type, width, screen_w, screen_h );
 	day->set( FPS );
@@ -267,7 +267,7 @@ void Forest::draw( sf::RenderWindow* &window )
 	}
 	
 	// Pause
-	if( !pause->isPaused() && !hero->isDead() )
+	if( !pause->isPaused() && !hero->isDead() && !exit->nextState() )
 	{
 		mechanics();
 		music->fadein( 1, sound.getMusicVolume() );
@@ -277,8 +277,9 @@ void Forest::draw( sf::RenderWindow* &window )
 		music->fadeout( 1, 15 );
 	}
 	
+	
 	// Fade out, fade in.
-	if( hero->isDead() && fade == 1 )
+	if( (hero->isDead() || exit->nextState()) && fade == 1 )
 	{
 		// Value.
 		sf::Uint8 value = 1;
@@ -443,24 +444,23 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		case 3:	brick->createTopBorders( size, flatness, ladder->getW( 0 ), ladder->getH( 0 ) );
 		info = "creating flying islands";	break;
 		
-		case 4:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), difficulty );
+		case 4:	brick->setLeft();
+		info = "setting the biggest x of world";	break;
+		
+		case 5:	brick->setRight();
+		info = "filling hills step 1";	break;
+		
+		case 6:	islands->createFlyingIslands( brick->getBlocks(), brick->getPlanks(), difficulty,
+				static_cast <float> (screen_w), brick->getRight() -(screen_w*2) );
 		info = "creating left borders of hill";	break;
 		
 		
 		
-		case 5:	brick->createLeftBorders();
+		case 7:	brick->createLeftBorders();
 		info = "creating right borders of hill";	break;
 
-		case 6:	brick->createRightBorders();
+		case 8:	brick->createRightBorders();
 		info = "setting the smallest x of world";	break;
-		
-		
-		
-		case 7:	brick->setLeft();
-		info = "setting the biggest x of world";	break;
-		
-		case 8:	brick->setRight();
-		info = "filling hills step 1";	break;
 		
 		
 		
@@ -529,7 +529,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
 		info = "setting exit";	break;
 		
-		case 23: exit->positioning( brick->getLastBlock() );
+		case 23: exit->positioning( brick->getRight(), screen_w );
 		info = "loading music";	break;
 		
 		case 24: setSound();	reloadMusic();
@@ -578,13 +578,23 @@ bool Forest::defeatState()
 
 bool Forest::winState()
 {
-	if( exit->nextState() )
+	if( exit->nextState() && background->getAlpha() == 0 )
 	{
 		money->saveMoney();
 		return true;
 	}
 	
 	return false;
+}
+
+int Forest::getScores()
+{
+	return scores->getScores();
+}
+
+int Forest::getType()
+{
+	return type;
 }
 
 bool Forest::backToLevel()
