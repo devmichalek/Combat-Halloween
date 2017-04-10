@@ -71,6 +71,23 @@ void Link_button::draw( sf::RenderWindow &window )
 
 void Link_button::handle( sf::Event &event )
 {
+	if( event.type == sf::Event::MouseMoved )
+	{
+		int x, y;
+		x = event.mouseMove.x;
+		y = event.mouseMove.y;
+			
+		if( button.checkCollision( x, y ) )
+		{
+			explanator.run();
+			explanator.focus( x, y );
+		}
+		else
+		{
+			explanator.stop();
+		}
+	}
+	
 	if( !locked && button.getAlpha() == 0xFF )
 	{
 		int x, y;
@@ -83,13 +100,10 @@ void Link_button::handle( sf::Event &event )
 				
 			if( button.checkCollision( x, y ) )
 			{
-				explanator.run();
-				explanator.focus( x, y );
 				button.setOffset( 1 );
 			}
 			else
 			{
-				explanator.stop();
 				focus = false;
 			}
 		}

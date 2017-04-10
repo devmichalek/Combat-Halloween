@@ -30,6 +30,7 @@ public:
 	void free();
 
 	void load( string path, int bot, int screen_w );
+	void setExplanator( string text, int screen_w );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 

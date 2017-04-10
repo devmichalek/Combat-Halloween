@@ -178,7 +178,6 @@ void Reset_button::fadeout( int i, int min )
 
 bool Reset_button::doReset()
 {
-	
 	if( reset )
 	{
 		reset = false;
@@ -242,6 +241,31 @@ bool Reset_button::doReset()
 		}
 		file.free();
 		character_values.clear();
+		
+		
+		
+		vector <int> world_values;
+		file.load( "data/txt/world/world_default.txt" );
+		if( file.is_good() )
+		{
+			string line;
+			while( file.get() >> line )
+			{
+				world_values.push_back( con::stoi( line ) );
+			}
+		}
+		file.free();
+		
+		file.load( "data/txt/world/world_temporary.txt", std::ios::out );
+		if( file.is_good() )
+		{
+			for( auto &it :world_values )
+			{
+				file.get() << con::itos( it ) << "\n";
+			}
+		}
+		file.free();
+		world_values.clear();
 		
 		return true;
 	}

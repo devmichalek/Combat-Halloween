@@ -23,10 +23,10 @@ Menu::Menu()
 	chunk_volume = new Volume_button( 52 );	// 40% of 128
 	
 	git_button = new Link_button( "https://github.com/Adriqun/Ninja" );
-	google_button = new Link_button( "https://en.wikipedia.org/wiki/Ninja" );
+	google_button = new Link_button( "http://ninja2d.netne.net/" );
 	twitter_button = new Link_button( "", true );
 	facebook_button = new Link_button( "", true );
-	scores_button = new Link_button( "http://ninja2d.netne.net/" );
+	scores_button = new Link_button( "http://ninja2d.netne.net/", true );
 	
 
 	background = new MySprite();
@@ -96,7 +96,9 @@ void Menu::load( int screen_w, int screen_h )
 	
 	// sound buttons
 	music_button->load( "data/02_menu/music.png", 10, screen_w );
+	music_button->setExplanator( "Turn on/off music.", screen_w );
 	chunk_button->load( "data/02_menu/chunk.png", music_button->getBot(), screen_w );
+	chunk_button->setExplanator( "Turn on/off chunks.", screen_w );
 	
 	// volume buttons
 	music_volume->load( 100, screen_h/2 - 100, "Music" );
@@ -114,11 +116,13 @@ void Menu::load( int screen_w, int screen_h )
 	git_button->load( "data/02_menu/git.png", screen_w, 10 );
 	git_button->setExplanator( "Visit github!", screen_w );
 	google_button->load( "data/02_menu/google.png", screen_w, git_button->getBot() );
-	google_button->setExplanator( "Visit wikipedia!", screen_w );
+	google_button->setExplanator( "Visit ninja2d.netne.net!", screen_w );
 	twitter_button->load( "data/02_menu/twitter.png", screen_w, google_button->getBot() );
+	twitter_button->setExplanator( "Twitter? Not today...", screen_w );
 	facebook_button->load( "data/02_menu/facebook.png", screen_w, twitter_button->getBot() );
+	facebook_button->setExplanator( "Damm, who needs facebook?", screen_w );
 	scores_button->load( "data/02_menu/scores.png", facebook_button->getWidth() +20, screen_h -facebook_button->getHeight() -10 );
-	scores_button->setExplanator( "See scores online!", screen_w );
+	scores_button->setExplanator( "Sorry dude, it's not ready", screen_w );
 	
 	// bg
 	background->load( "data/02_menu/background.png" );
@@ -128,7 +132,7 @@ void Menu::load( int screen_w, int screen_h )
 	
 	// logs
 	author_log->load( "author", play_button->getX() +9, play_button->getBot() );
-	author_log->setExplanator( "Go to the shop.", screen_w );
+	author_log->setExplanator( "Champions", screen_w );
 	game_log->load( "game", author_log->getRight() -5, play_button->getBot() );
 	game_log->setExplanator( "More games.", screen_w );
 	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
@@ -145,7 +149,7 @@ void Menu::load( int screen_w, int screen_h )
 	// simple text on the right
 	version->setName( "menu-version-text" );
 	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "latest edition 05.04.2017" );
+	version->setText( "The last update    10.04.2017" );
 	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	
 	// information (keyboard) and keyboard
@@ -483,14 +487,15 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		settings_log->draw( window );
 	}
-	if( !skill_log->getState() && !settings_log->getState() && !game_log->getState() )
-	{
-		author_log->draw( window );
-	}
 	if( !skill_log->getState() && !settings_log->getState() && !author_log->getState() )
 	{
 		game_log->draw( window );
 	}
+	if( !skill_log->getState() && !settings_log->getState() && !game_log->getState() )
+	{
+		author_log->draw( window );
+	}
+	
 		
 			
 	if( settings_log->getState() )

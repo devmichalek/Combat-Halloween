@@ -13,6 +13,7 @@
 #include "replay_button.h"
 #include "backtomenu_panel.h"
 #include "sound/music.h"
+#include "show_scores.h"
 
 class Panel_menu
 {
@@ -23,6 +24,7 @@ class Panel_menu
 	MySprite* bg;
 	Replay_button* replay_button;
 	Backtomenu_panel* backtomenu_panel;
+	Show_scores* show_scores;
 	
 public:
 	
@@ -41,6 +43,7 @@ public:
 	bool backToMenu();
 	bool backToPlatform();
 	
+	void set( int scores, int type, bool status );
 	void setSound();
 	void reloadMusic();
 };

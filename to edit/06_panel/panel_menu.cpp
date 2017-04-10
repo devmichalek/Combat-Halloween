@@ -8,6 +8,7 @@
 */
 
 #include "panel_menu.h"
+#include "file/file.h"
 
 
 Panel_menu::Panel_menu()
@@ -18,6 +19,7 @@ Panel_menu::Panel_menu()
 	bg = new MySprite;
 	replay_button = new Replay_button;
 	backtomenu_panel = new Backtomenu_panel;
+	show_scores = new Show_scores;
 }
 
 Panel_menu::~Panel_menu()
@@ -39,6 +41,9 @@ void Panel_menu::free()
 	
 	if( backtomenu_panel != NULL )
 		delete backtomenu_panel;
+		
+	if( show_scores != NULL )
+		delete show_scores;
 }
 
 void Panel_menu::reset()
@@ -61,6 +66,8 @@ void Panel_menu::load( int screen_w, int screen_h )
 	
 	music->setID( "panel_menu-music" );
 	music->load( "data/06_panel/music.mp3", 50 );
+	
+	show_scores->load( screen_w, screen_h );
 }
 
 void Panel_menu::handle( sf::Event &event )
@@ -86,6 +93,7 @@ void Panel_menu::draw( sf::RenderWindow* &window )
 	window->draw( bg->get() );
 	replay_button->draw( window );
 	backtomenu_panel->draw( window );
+	show_scores->draw( window );
 	
 	
 	if( replay_button->getState() == 2 || backtomenu_panel->getState() == 2 )
@@ -95,6 +103,7 @@ void Panel_menu::draw( sf::RenderWindow* &window )
 		bg->fadeout( value );
 		replay_button->fadeout( value );
 		backtomenu_panel->fadeout( value );
+		show_scores->fadeout( value );
 	}
 	else
 	{
@@ -103,6 +112,7 @@ void Panel_menu::draw( sf::RenderWindow* &window )
 		bg->fadein( value );
 		replay_button->fadein(value );
 		backtomenu_panel->fadein( value );
+		show_scores->fadein( value );
 	}
 }
 
@@ -131,6 +141,55 @@ bool Panel_menu::backToPlatform()
 }
 
 
+void Panel_menu::set( int scores, int type, bool status )
+{
+	show_scores->set( scores );
+	
+	MyFile file;
+	vector <int> world_values;
+	
+	file.load( "data/txt/world/world_temporary.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		while( file.get() >> line )
+		{
+			world_values.push_back( con::stoi( line ) );
+		}
+	}
+	file.free();
+	
+	int look = 0;
+	file.load( "data/txt/world/world_whatsnext.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int c = type;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				look = con::stoi( line );
+				break;
+			}
+			c --;
+		}
+	}
+	file.free();
+	
+	world_values[ look ] = 1;
+	
+	file.load( "data/txt/world/world_temporary.txt", std::ios::out );
+	if( file.is_good() )
+	{
+		for( auto &it :world_values )
+		{
+			file.get() << con::itos( it ) << "\n";
+		}
+	}
+	file.free();
+	world_values.clear();
+}
 
 void Panel_menu::setSound()
 {

@@ -48,6 +48,7 @@ public:
 
 
 	void load( int screen_w, int screen_h );
+	void loadWorlds( int screen_w, int screen_h );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	

@@ -40,6 +40,7 @@ public:
 	
     void load( unsigned screen_w, unsigned screen_h );
 	void loadCharacter();
+	void loadWorlds();
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	

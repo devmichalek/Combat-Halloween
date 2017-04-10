@@ -130,7 +130,10 @@ void Choice::load( int screen_w, int screen_h )
 	
 	cross.setName( "choice-cross" );
 	cross.load( "data/03_level/x.png" );
-	
+}
+
+void Choice::loadWorlds( int screen_w, int screen_h )
+{
 	// load unlocked worlds
 	MyFile file;
 	file.load( "data/txt/world/world_temporary.txt" );

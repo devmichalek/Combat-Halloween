@@ -170,7 +170,7 @@ void Cube::setFlatness( int value )
 
 void Cube::setWorldSize( int value )
 {
-	worldSize_value = value *15 +30;
+	worldSize_value = value *3 +30;
 	worldSize.setText( "length: " +con::itos( worldSize_value ) );
 	worldSize.reloadPosition();
 	

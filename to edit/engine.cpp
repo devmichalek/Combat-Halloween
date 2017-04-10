@@ -136,6 +136,7 @@ void Engine::states()
 			
 			menu->reloadMusic();
 			level->loadCharacter();
+			level->loadWorlds();
 			level->setSound();
 			level->reloadMusic();
 		}
@@ -188,12 +189,13 @@ void Engine::states()
 	if( core->getState() == HALLOWEEN )
 	{
 		halloween->draw( core->getWindow() );
-		if( halloween->defeatState() )
+		if( halloween->defeatState() ||halloween->winState() )
 		{
-			halloween->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
+			panel->set( halloween->getScores(), halloween->getType(), halloween->winState() );
+			halloween->reset();
 			core->getState() = PANEL;
 		}
 	}
@@ -203,12 +205,13 @@ void Engine::states()
 	if( core->getState() == FOREST )
 	{
 		forest->draw( core->getWindow() );
-		if( forest->defeatState() )
+		if( forest->defeatState() ||forest->winState() )
 		{
-			forest->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
+			panel->set( forest->getScores(), forest->getType(), forest->winState() );
+			forest->reset();
 			core->getState() = PANEL;
 		}
 	}
@@ -218,12 +221,13 @@ void Engine::states()
 	if( core->getState() == WINTER )
 	{
 		winter->draw( core->getWindow() );
-		if( winter->defeatState() )
+		if( winter->defeatState() ||winter->winState() )
 		{
-			winter->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
+			panel->set( winter->getScores(), winter->getType(), winter->winState() );
+			winter->reset();
 			core->getState() = PANEL;
 		}
 	}
@@ -233,12 +237,13 @@ void Engine::states()
 	if( core->getState() == DESERT )
 	{
 		desert->draw( core->getWindow() );
-		if( desert->defeatState() )
+		if( desert->defeatState() ||desert->winState() )
 		{
-			desert->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
+			panel->set( desert->getScores(), desert->getType(), desert->winState() );
+			desert->reset();
 			core->getState() = PANEL;
 		}
 	}
@@ -248,12 +253,13 @@ void Engine::states()
 	if( core->getState() == FUTURE )
 	{
 		future->draw( core->getWindow() );
-		if( future->defeatState() )
+		if( future->defeatState() ||future->winState() )
 		{
-			future->reset();
 			panel->setState( core->getState() );
 			panel->setSound();
 			panel->reloadMusic();
+			panel->set( future->getScores(), future->getType(), future->winState() );
+			future->reset();
 			core->getState() = PANEL;
 		}
 	}
@@ -292,6 +298,7 @@ void Engine::states()
 		
 			panel->reset();
 			level->reset();
+			level->loadWorlds();
 			gears->reset();
 			Mix_HaltMusic();
 		}
@@ -299,6 +306,7 @@ void Engine::states()
 		{
 			core->getState() = panel->getState();
 			panel->reset();
+			level->loadWorlds();
 		}
 	}
 }

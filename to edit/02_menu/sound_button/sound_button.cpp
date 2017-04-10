@@ -40,7 +40,6 @@ void Sound_button::free()
 
 void Sound_button::load( string path, int bot, int screen_w )
 {
-	explanator.load( "Turn off/on - click me", screen_w );
 	button.setName( "sound_button-button" );
     button.load( path, 4 );
 	button.setPosition( 10, bot );
@@ -51,6 +50,11 @@ void Sound_button::load( string path, int bot, int screen_w )
 	
 	click.setID( "sound_button-click" );
 	click.load( "data/02_menu/click.wav", 50 );
+}
+
+void Sound_button::setExplanator( string text, int screen_w )
+{
+	explanator.load( text, screen_w );
 }
 
 void Sound_button::draw( sf::RenderWindow* &window )

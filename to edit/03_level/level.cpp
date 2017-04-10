@@ -51,14 +51,19 @@ void Level::load( unsigned screen_w, unsigned screen_h )
 	music->load( "data/03_level/music.mp3" );
 	backtomenu->load( screen_w );
 	choice->load( screen_w, screen_h );
-	
-	cube->load( choice->getLeft(), choice->getBot() );
-	difficulty->load( cube->getRight(), cube->getTop() );
 }
 
 void Level::loadCharacter()
 {
 	character->load( screen_w, screen_h );
+}
+
+void Level::loadWorlds()
+{
+	choice->loadWorlds( screen_w, screen_h );
+	
+	cube->load( choice->getLeft(), choice->getBot() );
+	difficulty->load( cube->getRight(), cube->getTop() );
 }
 
 void Level::handle( sf::Event &event )
