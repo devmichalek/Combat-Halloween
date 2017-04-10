@@ -52,6 +52,7 @@
 class Future
 {
 	int state;
+	int type;
 	string info;
 	sf::Uint8 fade;
 	
@@ -118,6 +119,8 @@ public:
 	
 	bool defeatState();
 	bool winState();
+	int getScores();
+	int getType();
 	bool backToLevel();
 	void mechanics();
 	

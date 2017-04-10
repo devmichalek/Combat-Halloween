@@ -30,7 +30,27 @@ void Future::mechanics()
 	// HERO GRAVITY
 	hero->gravitation();
 	
-	
+	// ISLANDS WORLD IS MOVING
+	islands->checkStands( hero->getRect() );
+	if( islands->isStand() )
+	{
+		brick->moveX( islands->getDirection(), islands->getVel() );
+		islands->moveX( islands->getDirection(), islands->getVel() );
+		water->moveX( islands->getDirection(), islands->getVel() );
+		wall->moveX( islands->getDirection(), islands->getVel() );
+		boulder->moveX( islands->getDirection(), islands->getVel() );
+		ladder->moveX( islands->getDirection(), islands->getVel() );
+		greenery->moveX( islands->getDirection(), islands->getVel() );
+		mine_factory->moveX( islands->getDirection(), islands->getVel() );
+		robot_factory.moveX( islands->getDirection(), islands->getVel() );
+		cruncher->moveX( islands->getDirection(), islands->getVel() );
+		coins->moveX( islands->getDirection(), islands->getVel() );
+		hp_dots->moveX( islands->getDirection(), islands->getVel() );
+		score_dots->moveX( islands->getDirection(), islands->getVel() );
+		exit->moveX( islands->getDirection(), islands->getVel() );
+		saws->moveX( islands->getDirection(), islands->getVel() );
+		kunai->moveX( islands->getDirection(), islands->getVel() );
+	}
 	
 // ------------------------------------------------------------------------------------------------
 	// HERO WEIGHTLESSNESS
@@ -221,6 +241,7 @@ void Future::mechanics()
 		if( scope->getFactor() == 0 )
 		{
 			islands->moveX( hero->getDirection(), scope->getVel() );
+			islands->moveX_stand( hero->getDirection(), scope->getVel() );
 			water->moveX( hero->getDirection(), scope->getVel() );
 			wall->moveX( hero->getDirection(), scope->getVel() );
 			boulder->moveX( hero->getDirection(), scope->getVel() );
@@ -336,7 +357,7 @@ void Future::mechanics()
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();
-		exit->checkHero( hero->getRect() );
+		exit->checkHero( hero->getX() );
 		saws->mechanics();
 		
 		cruncher->mechanics( hero->getY(), hero->getDirection() );
@@ -345,7 +366,7 @@ void Future::mechanics()
 		
 		if( !islands->checkFlyingIslands( hero->getRect() ) )
 		{
-			islands->moving();
+			islands->mechanics();
 		}
 		else
 		{
