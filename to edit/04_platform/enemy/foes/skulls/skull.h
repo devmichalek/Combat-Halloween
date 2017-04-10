@@ -4,17 +4,20 @@
 
 class Skull
 {
+	int screen_w;
+	int screen_h;
+	
 	MySprite sprite;
 	
 	float x, y;
-	float g_x, g_y;
-	int screen_w;
-	int screen_h;
+	float startX, endX;
+	float g_x, g_y;	// our goal
+	
 	double angle;
 	
+	int line;
 	int offset;
 	sf::Uint8 delay;
-	int line;
 	
 	sf::Uint8 alpha;
 	bool alpha_state;
@@ -25,6 +28,7 @@ class Skull
 	
 	int counter;
 	int counter_line;
+	sf::Uint8 direction;
 	
 public:
 	

@@ -13,12 +13,15 @@ Skull::~Skull()
 
 void Skull::free()
 {
+	screen_w = 0;
+	screen_h = 0;
+	
 	sprite.free();
 	
 	x = y = 0;
+	startX = endX = 0;
 	g_x = g_y = 0;
-	screen_w = 0;
-	screen_h = 0;
+	
 	angle = 0;
 	
 	offset = 0;
@@ -34,6 +37,7 @@ void Skull::free()
 	
 	counter = 0;
 	counter_line = 0;
+	direction = 2;
 }
 
 void Skull::reset()
