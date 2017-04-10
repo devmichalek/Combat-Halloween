@@ -150,3 +150,8 @@ void Scores::addFoePoint()
 	result += rand()%(foe_point /2) +(foe_point /2);
 	scale = foe_point_scale_top;
 }
+
+int Scores::getScores()
+{
+	return result;
+}

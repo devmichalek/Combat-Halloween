@@ -36,4 +36,6 @@ public:
 	
 	void addPoint();
 	void addFoePoint();
+	
+	int getScores();
 };
