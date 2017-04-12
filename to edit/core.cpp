@@ -78,7 +78,10 @@ bool Core::load( string title )
 			printf( "Mix could not initialize! Error: %s\n", Mix_GetError() );
 			success = false;
 		}
-		
+		else
+		{
+			Mix_AllocateChannels(0xFF);
+		}
 	}
 
 
