@@ -6,9 +6,13 @@ Sprites:
 5. http://opengameart.org/content/ui-pack	(Buttons)
 6. http://opengameart.org/content/game-coins-sprite (Coins)
 7. http://opengameart.org/content/high-res-fire-ball (Fireball -skill)
-8. http://cliparts101.com/free_clipart/72806/Skull_and_Crossbones (Skull - skill)
-9. https://www.wpclipart.com/animals/S/snail/snail.png.html (Snail - skill)
+8. https://opengameart.org/content/radial-lightning-effect (Lightning -skill)
+9. https://opengameart.org/content/smoke-aura (Smoke -skill)
 10. http://scribblenauts.wikia.com/wiki/File:Fixed_Ladder.png (Ladder)
+11. https://opengameart.org/content/arw-explosion (explosion)
+12. https://opengameart.org/content/game-asset-cruncher-enemy-game-character-sprite-sheets (Cruncher)
+13. https://opengameart.org/users/bevouliincom (Flying monsters)
+
 
 Fonts:
 1. http://freebiesbug.com/free-fonts/jaapokki-free-font/ (Global Font)
@@ -16,7 +20,8 @@ Fonts:
 
 Sounds:
 1. https://www.youtube.com/watch?v=wg8u3AQj1Ac 	(Zombie)
-2. http://soundbible.com/ (Other)
+2. http://soundbible.com/
+3. http://www.freesound.org/
 
 Music:
 1. https://soundcloud.com/simon_hjort		(Music - majority)
