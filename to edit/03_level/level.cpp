@@ -60,7 +60,7 @@ void Level::loadCharacter()
 
 void Level::loadWorlds()
 {
-	choice->loadWorlds( screen_w, screen_h );
+	choice->reset( screen_w, screen_h );
 	
 	cube->load( choice->getLeft(), choice->getBot() );
 	difficulty->load( cube->getRight(), cube->getTop() );

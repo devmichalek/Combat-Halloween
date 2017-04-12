@@ -132,25 +132,6 @@ void Choice::load( int screen_w, int screen_h )
 	cross.load( "data/03_level/x.png" );
 }
 
-void Choice::loadWorlds( int screen_w, int screen_h )
-{
-	// load unlocked worlds
-	MyFile file;
-	file.load( "data/txt/world/world_temporary.txt" );
-	if( file.is_good() )
-	{
-		string line;
-		while( file.get() >> line )
-		{
-			// printf( "%d\n", con::stoi( line ) );
-			unlocked.push_back( static_cast <bool> (con::stoi( line )) );
-		}
-	}
-	file.free();
-	
-	reset( screen_w, screen_h );
-}
-
 void Choice::handle( sf::Event &event )
 {
 	chosen = -1;
@@ -385,6 +366,25 @@ bool Choice::isChosen()
 
 void Choice::reset( int screen_w, int screen_h )
 {
+	if( !unlocked.empty() )
+	{
+		unlocked.clear();
+	}
+	
+	// load unlocked worlds
+	MyFile file;
+	file.load( "data/txt/world/world_temporary.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		while( file.get() >> line )
+		{
+			// printf( "%d\n", con::stoi( line ) );
+			unlocked.push_back( static_cast <bool> (con::stoi( line )) );
+		}
+	}
+	file.free();
+	
 	counter = -1;
 	result = -1;
 	chosen = -1;
