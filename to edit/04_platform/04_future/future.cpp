@@ -478,7 +478,7 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
 		info = "setting exit";	break;
 		
-		case 23: exit->positioning( brick->getRight(), screen_w );
+		case 23: exit->positioning( brick->getRight() );
 		info = "loading music";	break;
 		
 		case 24: setSound();	reloadMusic();
@@ -556,27 +556,39 @@ void Future::setSound()
 	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
+		hero->turnOff();
 		coins->turnOff();
 		wall->turnOff();
 		boulder->turnOff();
 		saws->turnOff();
+		score_dots->turnOff();
+		exit->turnOff();
+		islands->turnOff();
 		mine_factory->turnOff();
 		robot_factory.turnOff();
 	}
 	else
 	{
+		hero->turnOn();
 		coins->turnOn();
 		wall->turnOn();
 		boulder->turnOn();
 		saws->turnOn();
+		score_dots->turnOn();
+		exit->turnOn();
+		islands->turnOn();
 		mine_factory->turnOn();
 		robot_factory.turnOn();
 		
 		// Set chunks volume.
+		hero->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		wall->setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
 		saws->setVolume( sound.getChunkVolume() );
+		score_dots->setVolume( sound.getChunkVolume() );
+		exit->setVolume( sound.getChunkVolume() );
+		islands->setVolume( sound.getChunkVolume() );
 		mine_factory->setVolume( sound.getChunkVolume() );
 		robot_factory.setVolume( sound.getChunkVolume() );
 	}
