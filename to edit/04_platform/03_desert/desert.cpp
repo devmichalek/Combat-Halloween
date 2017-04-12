@@ -525,7 +525,7 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
 		info = "setting exit";	break;
 		
-		case 24: exit->positioning( brick->getRight(), screen_w );
+		case 24: exit->positioning( brick->getRight() );
 		info = "loading music";	break;
 		
 		case 25: setSound();	reloadMusic();
@@ -600,26 +600,38 @@ void Desert::setSound()
 	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
+		hero->turnOff();
 		coins->turnOff();
 		wall->turnOff();
 		boulder->turnOff();
+		score_dots->turnOff();
+		exit->turnOff();
+		islands->turnOff();
 		mine_factory->turnOff();
 		skeleton_factory.turnOff();
 		snakes_factory->turnOff();
 	}
 	else
 	{
+		hero->turnOn();
 		coins->turnOn();
 		wall->turnOn();
 		boulder->turnOn();
+		score_dots->turnOn();
+		exit->turnOn();
+		islands->turnOn();
 		mine_factory->turnOn();
 		skeleton_factory.turnOn();
 		snakes_factory->turnOn();
 		
 		// Set chunks volume.
+		hero->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		wall->setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
+		score_dots->setVolume( sound.getChunkVolume() );
+		exit->setVolume( sound.getChunkVolume() );
+		islands->setVolume( sound.getChunkVolume() );
 		mine_factory->setVolume( sound.getChunkVolume() );
 		skeleton_factory.setVolume( sound.getChunkVolume() );
 		snakes_factory->setVolume( sound.getChunkVolume() );
