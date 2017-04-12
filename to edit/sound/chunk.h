@@ -20,6 +20,7 @@ protected:
 	std::string ID;	// Universal
 
 	Uint8 volume;
+	Uint8 channel;
 	std::string path;
     Mix_Chunk* chunk;
 

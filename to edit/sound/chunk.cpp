@@ -19,8 +19,9 @@ Chunk::Chunk()
 	ID = "";
 	
 	volume = 0;
+	channel = 0;
 	path = "";
-    chunk = NULL;
+	chunk = NULL;
 }
 
 Chunk::~Chunk()
@@ -31,6 +32,7 @@ Chunk::~Chunk()
 void Chunk::free()
 {
 	volume = 0;
+	channel = 0;
 	path = "";
 	
     if( chunk != NULL )
@@ -68,6 +70,13 @@ void Chunk::load( std::string path, int volume )
 	{
 		Mix_VolumeChunk( chunk, volume );
 		this->volume = volume;
+		
+		static int c = 0;
+		// printf( "%d\n", c );
+		c ++;
+		if( c > 0xFF )
+			c = 0;
+		channel = c;
 		
 		if( volume < 0 || volume > 128 )
 			throw "ID: " + ID + " file: "+ path + ": volume \x1B[91mneed to be between\x1B[0m 0 and 128";
@@ -133,7 +142,7 @@ void Chunk::load( std::string path, int volume )
 
 void Chunk::play()
 {
-    Mix_PlayChannel( -1, chunk, 0 );
+    Mix_PlayChannel( channel, chunk, 0 );
 }
 
 
@@ -144,7 +153,7 @@ Mix_Chunk* Chunk::get()
 
 void Chunk::setVolume( int volume )
 {
-    Mix_VolumeChunk( chunk, volume );
+	Mix_VolumeChunk( chunk, volume );
 }
 
 
