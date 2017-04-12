@@ -25,6 +25,7 @@ void Heart::free()
 {
 	max = 0;
 	life = 0;
+	fadedout = false;
 	
 	if( !fill_bits.empty() )
 	{
@@ -63,6 +64,7 @@ void Heart::free()
 
 void Heart::reset()
 {
+	fadedout = false;
 	life = fill_bits.size() *0xFF;
 	harm( 0 );
 }
@@ -172,6 +174,16 @@ void Heart::fadein( int v, int max )
 
 void Heart::fadeout( int v, int min )
 {
+	for( auto &it :fill_bits )
+	{
+		if( it->alpha > min )
+		{
+			it->alpha -= v;
+			if( it->alpha < min )
+				it->alpha = min;
+		}
+	}
+	
 	fill.fadeout( v, min );
 	grey.fadeout( v, min );
 	frame.fadeout( v, min );

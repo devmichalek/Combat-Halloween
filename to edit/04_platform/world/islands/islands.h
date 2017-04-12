@@ -3,6 +3,7 @@
 #include "hover.h"
 #include "drawable/sprite.h"
 #include "04_platform/world/brick/block.h"
+#include "04_platform/enemy/actions/expletive/slab.h"
 
 class Islands
 {
@@ -10,11 +11,14 @@ class Islands
 	int screen_w;
 	int screen_h;
 	bool moved;
+	float main_vel;
 	
 	vector <Hover*> hovers;	// Flying islands.
 	vector <Block*> blocks;	// Bottom and top islands.
 	vector <Block*> planks;	// Planks.
 	vector <MySprite*> sprites;
+	
+	Slab hit;
 	
 public:
 	
@@ -44,8 +48,8 @@ public:
 	void undoFall( sf::Uint8 add );
 	void setColor( sf::Color color );
 	void mechanics();
-	void turnOff( sf::Uint8 direction );
-	void turnOn();
+	void stop( sf::Uint8 direction );
+	void start();
 	
 	// Getters.
 	vector <Block*> getBlocks();
@@ -62,4 +66,9 @@ public:
 	bool isStand();
 	float getVel();
 	sf::Uint8 getDirection();
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

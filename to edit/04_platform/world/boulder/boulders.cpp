@@ -41,6 +41,7 @@ void Boulder::free()
 	}
 	
 	hit.free();
+	plush.free();
 	main_vel = 0;
 	main_angle = 0;
 }
@@ -77,6 +78,9 @@ void Boulder::load( int type, int width, int screen_w )
 	{
 		hit.load( "data/04_platform/world/sounds/wall/0.wav" );
 	}
+	
+	plush.setName( "boulder-plush" );
+	plush.load( "data/04_platform/world/sounds/wall/2.wav" );
 	
 	MyFile file;
 	file.load( "data/txt/world/boulder.txt" );
@@ -305,6 +309,11 @@ bool Boulder::harm( Rect* rect )
 						sprites[ sprites.size() -1 ]->setPosition( it->getBoulderX() -width/2, it->getBoulderY() -width/2 );
 						if( sprites[ sprites.size() -1 ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 						{
+							if( plush.isPlayable() )
+							{
+								plush.play();
+							}
+							
 							return true;
 						}
 					}
@@ -327,14 +336,17 @@ int Boulder::getDamage()
 void Boulder::turnOn()
 {
 	hit.turnOn();
+	plush.turnOn();
 }
 
 void Boulder::turnOff()
 {
 	hit.turnOff();
+	plush.turnOff();
 }
 
 void Boulder::setVolume( int v )
 {
 	hit.setVolume( v );
+	plush.setVolume( v );
 }

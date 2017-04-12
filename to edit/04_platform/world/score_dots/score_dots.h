@@ -3,6 +3,7 @@
 #include "drawable/sprite.h"
 #include "04_platform/enemy/actions/hp_dots/hp_dot.h"
 #include "04_platform/world/brick/block.h"
+#include "04_platform/enemy/actions/expletive/slab.h"
 #include <vector>
 
 using namespace std;
@@ -13,6 +14,8 @@ class Score_dots
 	int main_alpha;
 	MySprite sprite;
 	vector <Hp_dot*> dots;
+	
+	Slab point;
 	
 public:
 	
@@ -35,4 +38,9 @@ public:
 	void setAlpha( int alpha );
 	
 	bool uplift( Rect* rect );
+	
+	// Sound stuff.
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

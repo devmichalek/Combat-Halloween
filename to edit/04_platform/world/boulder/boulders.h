@@ -13,6 +13,7 @@ class Boulder
 	vector <Boulder_part*> blocks;
 	vector <MySprite*> sprites;
 	Slab hit;
+	Slab plush;
 	
 	float main_vel;
 	float main_angle;

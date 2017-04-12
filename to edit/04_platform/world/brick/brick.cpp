@@ -85,7 +85,7 @@ void Brick::free()
 int Brick::reset()
 {
 	grass_distance = 0;
-	int distance = static_cast <int> (left) +10;
+	int distance = static_cast <int> (left);
 	
 	if( distance < 0 )
 	{
@@ -213,10 +213,15 @@ sf::Uint8 Brick::getNewFloor( sf::Uint8 floor, int chance )
 void Brick::createTopBorders( int size, int chance, int w, int h )
 {
 	// printf( "%d\n", blocks.size() );
-	// Set first block.
+	// Set first and second block.
 	blocks.push_back( new Block() );
 	blocks[ blocks.size()-1 ]->nr = 4;
 	blocks[ blocks.size()-1 ]->x = 0;
+	blocks[ blocks.size()-1 ]->y = screen_h -width;
+	
+	blocks.push_back( new Block() );
+	blocks[ blocks.size()-1 ]->nr = 1;
+	blocks[ blocks.size()-1 ]->x = width;
 	blocks[ blocks.size()-1 ]->y = screen_h -width;
 	
 	// Create rules.
@@ -224,7 +229,7 @@ void Brick::createTopBorders( int size, int chance, int w, int h )
 	rules->rule();
 	
 	sf::Uint8 floor = 1;
-	size --;
+	size -= 2;
 	while( size-- )
 	{
 		// add block to the right
@@ -304,6 +309,13 @@ void Brick::createTopBorders( int size, int chance, int w, int h )
 			addPlank( 0, blocks[ blocks.size()-1 ]->x -10, blocks[ blocks.size()-1 ]->y -h );
 		}
 	}
+	
+	// Creating unvisible wall.
+	setRight();
+	blocks.push_back( new Block() );
+	blocks[ blocks.size()-1 ]->nr = 0;
+	blocks[ blocks.size()-1 ]->x = right;
+	blocks[ blocks.size()-1 ]->y = screen_h -width;
 	
 	delete rules;
 }

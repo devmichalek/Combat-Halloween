@@ -16,6 +16,7 @@ void Exit::free()
 	screen_w = 0;
 	next = false;
 	main_x = 0;
+	rhythm.free();
 }
 
 void Exit::reset( int distance )
@@ -32,12 +33,15 @@ void Exit::load( int width, int screen_w )
 	
 	this->screen_w = screen_w;
 	main_x = 0;
+	
+	rhythm.setName( "exit-rhythm" );
+	rhythm.load( "data/04_platform/world/sounds/exit/0.wav" );
 }
 
 
-void Exit::positioning( float right, int screen_w )
+void Exit::positioning( float right )
 {
-	main_x = right -screen_w /2;
+	main_x = right;
 }
 
 
@@ -63,9 +67,13 @@ void Exit::undoFall( sf::Uint8 add )
 void Exit::checkHero( float x )
 {
 	// printf( "%f %f\n", x, main_x  );
-	if( x > main_x )
+	if( x > main_x && !next )
 	{
-		// main_x = 0;
+		if( rhythm.isPlayable() )
+		{
+			rhythm.play();
+		}
+		
 		next = true;
 		// printf( "yeap\n" );
 	}
@@ -74,4 +82,21 @@ void Exit::checkHero( float x )
 bool Exit::nextState()
 {
 	return next;
+}
+
+
+
+void Exit::turnOn()
+{
+	rhythm.turnOn();
+}
+
+void Exit::turnOff()
+{
+	rhythm.turnOff();
+}
+
+void Exit::setVolume( int v )
+{
+	rhythm.setVolume( v );
 }

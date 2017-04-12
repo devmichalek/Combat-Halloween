@@ -10,8 +10,8 @@ class Brick
 	int screen_w;
 	int screen_h;
 	
-	float left;	// The smallest x.
-	float right;	// The biggest y.
+	float left;		// The smallest x.
+	float right;	// The biggest x.
 	
 	vector <int>::size_type size;
 	vector <Block*> planks;

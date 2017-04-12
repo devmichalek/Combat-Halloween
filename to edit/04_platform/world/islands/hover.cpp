@@ -92,7 +92,7 @@ void Hover::moveX_stand( float vel )
 	}
 }
 
-void Hover::mechanics( int width )
+bool Hover::mechanics( int width )
 {
 	if( !stand )
 	{
@@ -115,7 +115,10 @@ void Hover::mechanics( int width )
 	if( blocks[ 0 ]->x <= startX || blocks[ blocks.size() -1 ]->x +width >= endX )
 	{
 		state = !state;
+		return true;
 	}
+	
+	return false;
 }
 
 

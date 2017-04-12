@@ -17,6 +17,7 @@ class Heart
 {
 	int max;	// Max amount of hearts.
 	int life;	// Life.
+	bool fadedout;
 	
 	// Heart bit contain x, y and alpha values.
 	vector <Heart_bit*> fill_bits;

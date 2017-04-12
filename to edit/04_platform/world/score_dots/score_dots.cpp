@@ -27,6 +27,8 @@ void Score_dots::free()
 		
 		dots.clear();
 	}
+	
+	point.free();
 }
 
 void Score_dots::reset( int distance )
@@ -48,6 +50,10 @@ void Score_dots::load( int screen_w )
 	
 	sprite.setName( "score_dots-sprite" );
 	sprite.load( "data/04_platform/panel/score/0.png" );
+	
+	
+	point.setName( "score_dots-point" );
+	point.load( "data/04_platform/world/sounds/score_dot/0.wav" );
 }
 
 void Score_dots::draw( sf::RenderWindow* &window )
@@ -173,6 +179,12 @@ bool Score_dots::uplift( Rect* rect )
 				if( sprite.checkRectCollision( *rect ) )
 				{
 					it->active = false;
+					
+					if( point.isPlayable() )
+					{
+						point.play();
+					}
+					
 					return true;
 				}
 			}
@@ -180,4 +192,19 @@ bool Score_dots::uplift( Rect* rect )
 	}
 	
 	return false;
+}
+
+void Score_dots::turnOn()
+{
+	point.turnOn();
+}
+
+void Score_dots::turnOff()
+{
+	point.turnOff();
+}
+
+void Score_dots::setVolume( int v )
+{
+	point.setVolume( v );
 }

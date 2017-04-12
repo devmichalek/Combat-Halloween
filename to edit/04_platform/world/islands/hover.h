@@ -27,7 +27,7 @@ public:
 	void setPosition( float startX, float endX, float y, float vel );
 	void moveX( float vel );
 	void moveX_stand( float vel );
-	void mechanics( int width );
+	bool mechanics( int width );
 	
 	void turnOff();
 	void turnOn();

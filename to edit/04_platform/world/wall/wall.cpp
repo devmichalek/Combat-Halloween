@@ -41,6 +41,7 @@ void Wall::free()
 	}
 	
 	hit.free();
+	plush.free();
 	main_vel = 0;
 }
 
@@ -85,6 +86,7 @@ void Wall::load( int type, int width, int screen_w )
 			{
 				damage = con::stoi( line );
 				// printf( "%d\n", damage );
+				break;
 			}
 			c--;
 		}
@@ -102,6 +104,7 @@ void Wall::load( int type, int width, int screen_w )
 			if( c == 0 )
 			{
 				main_vel = con::stof( line.c_str() );
+				break;
 			}
 			c--;
 		}
@@ -115,6 +118,9 @@ void Wall::load( int type, int width, int screen_w )
 		n = 1;
 	}
 	hit.load( "data/04_platform/world/sounds/wall/" +con::itos( n ) +".wav" );
+	
+	plush.setName( "wall-plush" );
+	plush.load( "data/04_platform/world/sounds/wall/2.wav" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )
@@ -271,6 +277,11 @@ bool Wall::harm( Rect* rect )
 							sprites[ it->getNr(j) ]->setPosition( it->getX(j), it->getY(j) );
 							if( sprites[ it->getNr(j) ]->checkCollision( rect->getX(), rect->getY(), rect->getWidth(), rect->getHeight() ) )
 							{
+								if( plush.isPlayable() )
+								{
+									plush.play();
+								}
+								
 								return true;
 							}
 						}
@@ -321,16 +332,19 @@ int Wall::getFallDamage()
 void Wall::turnOn()
 {
 	hit.turnOn();
+	plush.turnOn();
 }
 
 void Wall::turnOff()
 {
 	hit.turnOff();
+	plush.turnOff();
 }
 
 void Wall::setVolume( int v )
 {
 	hit.setVolume( v );
+	plush.setVolume( v );
 }
 
 vector <int> Wall::getXs()

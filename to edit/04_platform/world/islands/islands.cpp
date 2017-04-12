@@ -4,10 +4,7 @@
 
 Islands::Islands()
 {
-	width = 0;
-	screen_w = 0;
-	screen_h = 0;
-	moved = false;
+	free();
 }
 
 Islands::~Islands()
@@ -21,6 +18,7 @@ void Islands::free()
 	screen_w = 0;
 	screen_h = 0;
 	moved = false;
+	main_vel = 0;
 	
 	if( !hovers.empty() )
 	{
@@ -61,6 +59,8 @@ void Islands::free()
 		
 		sprites.clear();
 	}
+	
+	hit.free();
 }
 
 void Islands::reset( int distance )
@@ -91,6 +91,29 @@ void Islands::load( int type, int width, int screen_w, int screen_h )
 	this->width = width;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
+	
+	
+	// Set main vel.
+	MyFile file;
+	file.load( "data/txt/world/island_vel.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		int c = type;
+		while( file.get() >> line )
+		{
+			if( c == 0 )
+			{
+				main_vel = con::stof( line.c_str() );
+				break;
+			}
+			c--;
+		}
+	}
+	file.free();
+	
+	hit.setName( "islands-hit" );
+	hit.load( "data/04_platform/world/sounds/island/0.wav" );
 }
 
 void Islands::draw( sf::RenderWindow* &window )
@@ -182,15 +205,15 @@ void Islands::createFlyingIslands( vector <Block*> blocks, vector <Block*> plank
 					int endX = blocks[ i ]->x + (distance +2)*width;
 					int y = blocks[ i ]->y;
 					
-					float vel = 0.75;
+					float vel = main_vel;
 					
 					if( rand()%6 < 2 )
 					{
-						vel += static_cast <float> (rand()%150) /100;
+						vel += static_cast <float> (rand()%80) /100;
 					}
 					else
 					{
-						vel += static_cast <float> (rand()%50) /100;
+						vel += static_cast <float> (rand()%40) /100;
 					}
 					
 					addHover( startX, endX, y, vel );
@@ -733,11 +756,20 @@ void Islands::mechanics()
 {
 	for( auto &it :hovers )
 	{
-		it->mechanics( width );
+		if( it->mechanics( width ) )
+		{
+			if( it->getX(0) > -width*2 && it->getX(it->getSize() -1) < screen_w +width )
+			{
+				if( hit.isPlayable() )
+				{
+					hit.play();
+				}
+			}
+		}
 	}
 }
 
-void Islands::turnOff( sf::Uint8 direction )
+void Islands::stop( sf::Uint8 direction )
 {
 	if( !moved )
 	{
@@ -765,7 +797,7 @@ void Islands::turnOff( sf::Uint8 direction )
 	}
 }
 
-void Islands::turnOn()
+void Islands::start()
 {
 	moved = false;
 	
@@ -1047,4 +1079,21 @@ sf::Uint8 Islands::getDirection()
 	}
 	
 	return 0;
+}
+
+
+
+void Islands::turnOn()
+{
+	hit.turnOn();
+}
+
+void Islands::turnOff()
+{
+	hit.turnOff();
+}
+
+void Islands::setVolume( int v )
+{
+	hit.setVolume( v );
 }

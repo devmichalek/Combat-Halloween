@@ -13,6 +13,7 @@ class Wall
 	vector <Pug*> blocks;
 	vector <MySprite*> sprites;
 	Slab hit;
+	Slab plush;
 	
 	float main_vel;
 	
