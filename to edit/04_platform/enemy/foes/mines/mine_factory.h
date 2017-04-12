@@ -17,6 +17,7 @@ class Mine_factory
 	vector <MySprite*> sprites;
 	Slab ticktock;
 	Slab explosion;
+	Slab plush;
 	
 public:
 	

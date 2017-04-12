@@ -45,6 +45,7 @@ void Mine_factory::free()
 	
 	ticktock.free();
 	explosion.free();
+	plush.free();
 }
 
 void Mine_factory::reset( int distance )
@@ -118,6 +119,9 @@ void Mine_factory::load( int type, int width, int screen_w, int screen_h )
 	
 	explosion.setName( "mine_factory-explosion" );
 	explosion.load( "data/04_platform/enemy/mine/sounds/explosion.wav" );
+	
+	plush.setName( "mine_factory-plush" );
+	plush.load( "data/04_platform/world/sounds/wall/2.wav" );
 }
 
 void Mine_factory::draw( sf::RenderWindow* &window )
@@ -227,6 +231,11 @@ bool Mine_factory::harm( Rect* rect )
 					sprites[ i->getNr() ]->setPosition( i->getX(), i->getY() );
 					if( sprites[ i->getNr() ]->checkCollision( rect->getX(), rect->getY() -50, rect->getWidth(), rect->getHeight()/2 ) )
 					{
+						if( plush.isPlayable() )
+						{
+							plush.play();
+						}
+						
 						return true;
 					}
 				}
@@ -290,16 +299,19 @@ void Mine_factory::turnOn()
 {
 	ticktock.turnOn();
 	explosion.turnOn();
+	plush.turnOn();
 }
 
 void Mine_factory::turnOff()
 {
 	ticktock.turnOff();
 	explosion.turnOff();
+	plush.turnOff();
 }
 
 void Mine_factory::setVolume( int v )
 {
 	ticktock.setVolume( v );
 	explosion.setVolume( v );
+	plush.setVolume( v );
 }
