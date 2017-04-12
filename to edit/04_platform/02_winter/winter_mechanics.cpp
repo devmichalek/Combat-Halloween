@@ -58,12 +58,12 @@ void Winter::mechanics()
 	if( brick->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
-		islands->turnOn();
+		islands->start();
 	}
 	else if( islands->checkPixelCollision( hero->getRect() ) )
 	{
 		hero->weightlessness();
-		islands->turnOn();
+		islands->start();
 	}
 	// HERO GLIDE
 	else
@@ -375,12 +375,12 @@ void Winter::mechanics()
 		}
 		else
 		{
-			islands->turnOff( hero->getDirection() );
+			islands->stop( hero->getDirection() );
 		}
 		
 		if( islands->checkOtherIslands( hero->getRect() ) )
 		{
-			islands->turnOn();
+			islands->start();
 		}
 		
 		// HARM 
