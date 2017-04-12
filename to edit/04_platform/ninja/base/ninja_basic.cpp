@@ -52,7 +52,6 @@ void Hero::free()
 	delay = 0;
 	
 	vel = 0;
-	// vel_state = 0;
 	jump_vel = 0;
 	grav = 0;
 	scale = 0;
@@ -97,6 +96,43 @@ void Hero::free()
 	{
 		y.clear();
 	}
+	
+	run_sound.free();
+	if( !run_sounds.empty() )
+	{
+		for( auto &i :run_sounds )
+			i->free();
+		
+		run_sounds.clear();
+	}
+	if( !sword_sounds.empty() )
+	{
+		for( auto &i :sword_sounds )
+			i->free();
+		
+		sword_sounds.clear();
+	}
+	if( !jump_sounds.empty() )
+	{
+		for( auto &i :jump_sounds )
+			i->free();
+		
+		jump_sounds.clear();
+	}
+	if( !throw_sounds.empty() )
+	{
+		for( auto &i :throw_sounds )
+			i->free();
+		
+		throw_sounds.clear();
+	}
+	if( !dead_sounds.empty() )
+	{
+		for( auto &i :dead_sounds )
+			i->free();
+		
+		dead_sounds.clear();
+	}
 }
 
 void Hero::reset( int screen_h, int width )
@@ -123,18 +159,6 @@ void Hero::reset( int screen_h, int width )
 	dead = 0;
 	which = IDLE;
 }
-
-/*
-void Hero::setFPS( float FPS )
-{
-	vel = (1000 -FPS) *0.0015;
-	jump_vel = 2*vel;
-	grav = (1000 -FPS) *0.0012;
-	delay = FPS /20;
-	
-	printf( "%f\n", vel );
-}
-*/
 
 
 
@@ -189,6 +213,9 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	
 	right = true;
 	move = false;
+	
+	// Sounds.
+	run_sound.setLine( (nr-1)*delay );
 	
 	// Duration
 	a.setLine( (nr-1)*delay + 2*delay );
@@ -276,6 +303,83 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	string newstr = DAMAGE.multiply( 1, val, lev );
 	damage =  stof( newstr );
 	// printf( "%f\n", damage );
+	
+	
+	// Load sounds.
+	file.load( "data/txt/hero/run_sound.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		int c = con::stoi( line );
+		for( int i = 0; i < c; i ++ )
+		{
+			run_sounds.push_back( new Slab() );
+			run_sounds[ run_sounds.size() -1 ]->setName( "hero-run sound" );
+			run_sounds[ run_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/run/" +con::itos(i) +".wav" );
+		}
+	}
+	file.free();
+	
+	file.load( "data/txt/hero/sword_sound.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		int c = con::stoi( line );
+		for( int i = 0; i < c; i ++ )
+		{
+			sword_sounds.push_back( new Slab() );
+			sword_sounds[ sword_sounds.size() -1 ]->setName( "hero-sword sound" );
+			sword_sounds[ sword_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/sword/" +con::itos(i) +".wav" );
+		}
+	}
+	file.free();
+	
+	file.load( "data/txt/hero/jump_sound.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		int c = con::stoi( line );
+		for( int i = 0; i < c; i ++ )
+		{
+			jump_sounds.push_back( new Slab() );
+			jump_sounds[ jump_sounds.size() -1 ]->setName( "hero-jump sound" );
+			jump_sounds[ jump_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/jump/" +con::itos(i) +".wav" );
+		}
+	}
+	file.free();
+	 
+	file.load( "data/txt/hero/throw_sound.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		int c = con::stoi( line );
+		for( int i = 0; i < c; i ++ )
+		{
+			throw_sounds.push_back( new Slab() );
+			throw_sounds[ throw_sounds.size() -1 ]->setName( "hero-throw sound" );
+			throw_sounds[ throw_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/throw/" +con::itos(i) +".wav" );
+		}
+	}
+	file.free();
+	
+	file.load( "data/txt/hero/dead_sound.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		int c = con::stoi( line );
+		for( int i = 0; i < c; i ++ )
+		{
+			dead_sounds.push_back( new Slab() );
+			dead_sounds[ dead_sounds.size() -1 ]->setName( "hero-dead sound" );
+			dead_sounds[ dead_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/dead/" +con::itos(i) +".wav" );
+		}
+	}
+	file.free();
 }
 
 void Hero::setKeys()
@@ -495,6 +599,14 @@ void Hero::die()
 	{
 		dead = 1;
 		
+		if( !dead_sounds.empty() )
+		{
+			if( dead_sounds[ 0 ]->isPlayable() )
+			{
+				dead_sounds[ rand() %dead_sounds.size() ]->play();
+			}
+		}
+		
 		if( which <= SLIDE )
 		{
 			offset = 0;
@@ -573,4 +685,68 @@ bool Hero::resume()
 int Hero::getOffset()
 {
 	return offset /delay;
+}
+
+
+template <typename s>
+void Hero::turnOnSounds( vector <s> v )
+{
+	if( !v.empty() )
+	{
+		for( auto &it :v )
+		{
+			it->turnOn();
+		}
+	}
+}
+
+template <typename s>
+void Hero::turnOffSounds( vector <s> v )
+{
+	if( !v.empty() )
+	{
+		for( auto &it :v )
+		{
+			it->turnOff();
+		}
+	}
+}
+
+template <typename s>
+void Hero::setVolumeSounds( vector <s> v, int volume )
+{
+	if( !v.empty() )
+	{
+		for( auto &it :v )
+		{
+			it->setVolume( volume );
+		}
+	}
+}
+
+void Hero::turnOn()
+{
+	turnOnSounds( run_sounds );
+	turnOnSounds( sword_sounds );
+	turnOnSounds( jump_sounds );
+	turnOnSounds( throw_sounds );
+	turnOnSounds( dead_sounds );
+}
+
+void Hero::turnOff()
+{
+	turnOffSounds( run_sounds );
+	turnOffSounds( sword_sounds );
+	turnOffSounds( jump_sounds );
+	turnOffSounds( throw_sounds );
+	turnOffSounds( dead_sounds );
+}
+
+void Hero::setVolume( int v )
+{
+	setVolumeSounds( run_sounds, v );
+	setVolumeSounds( sword_sounds, v );
+	setVolumeSounds( jump_sounds, v );
+	setVolumeSounds( throw_sounds, v );
+	setVolumeSounds( dead_sounds, v );
 }

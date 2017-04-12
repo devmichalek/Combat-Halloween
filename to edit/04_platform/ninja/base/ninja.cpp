@@ -51,6 +51,18 @@ bool Hero::moving()
 	{
 		if( !glide && !slide && climb == 0 )
 		{
+			if( run_sound.run() )
+			{
+				run_sound.start();
+				if( !run_sounds.empty() )
+				{
+					if( run_sounds[ 0 ]->isPlayable() )
+					{
+						run_sounds[ rand() %run_sounds.size() ]->play();
+					}
+				}
+			}
+			run_sound.check();
 			which = RUN;
 		}
 		else if( climb != 0 )	// move left on the ladder
@@ -80,6 +92,18 @@ bool Hero::moving()
 		{
 			x[ ATTACK ] = x[ RUN ];
 			x2[ ATTACK ] = x2[ RUN ];
+			if( run_sound.run() )
+			{
+				run_sound.start();
+				if( !run_sounds.empty() )
+				{
+					if( run_sounds[ 0 ]->isPlayable() )
+					{
+						run_sounds[ rand() %run_sounds.size() ]->play();
+					}
+				}
+			}
+			run_sound.check();
 			which = RUN;
 		}
 		else if( climb != 0 )	// move right on the ladder
@@ -133,6 +157,14 @@ bool Hero::jump()
 		j.start();
 		j.setActive( true );
 		which = JUMP;
+		
+		if( !jump_sounds.empty() )
+		{
+			if( jump_sounds[ 0 ]->isPlayable() )
+			{
+				jump_sounds[ rand() %jump_sounds.size() ]->play();
+			}
+		}
 	}
 	
 	if( j.isActive() )
@@ -185,6 +217,14 @@ bool Hero::attack()
 		a.start();
 		a.setActive( true );
 		which = ATTACK;
+		
+		if( !sword_sounds.empty() )
+		{
+			if( sword_sounds[ 0 ]->isPlayable() )
+			{
+				sword_sounds[ rand() %sword_sounds.size() ]->play();
+			}
+		}
 	}
 	
 	if( a.isActive() )
@@ -299,6 +339,14 @@ bool Hero::jumpAttack()
 		ja.start();
 		ja.setActive( true );
 		which = JUMP_ATTACK;
+		
+		if( !sword_sounds.empty() )
+		{
+			if( sword_sounds[ 0 ]->isPlayable() )
+			{
+				sword_sounds[ rand() %sword_sounds.size() ]->play();
+			}
+		}
 	}
 	
 	if( ja.isActive() )
@@ -336,6 +384,14 @@ bool Hero::jumpThrow()
 		jt.start();
 		jt.setActive( true );
 		which = JUMP_THROW;
+		
+		if( !throw_sounds.empty() )
+		{
+			if( throw_sounds[ 0 ]->isPlayable() )
+			{
+				throw_sounds[ rand() %throw_sounds.size() ]->play();
+			}
+		}
 	}
 	
 	if( jt.isActive() )
@@ -409,6 +465,14 @@ bool Hero::throwing()
 		t.start();
 		t.setActive( true );
 		which = THROW;
+		
+		if( !throw_sounds.empty() )
+		{
+			if( throw_sounds[ 0 ]->isPlayable() )
+			{
+				throw_sounds[ rand() %throw_sounds.size() ]->play();
+			}
+		}
 	}
 	
 	if( t.isActive() )

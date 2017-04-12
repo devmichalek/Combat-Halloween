@@ -20,12 +20,12 @@ string Damage::multiply( int which, float value, int number )
 	{
 		switch( which )
 		{
-			case 0:	value += (value *value) /2.45;		break;
-			case 1:	value = value *1.94;				break;
-			case 2:	value += 10;					break;
-			case 3:	value += 10;					break;
-			case 4:	value += (value *value) /2.9;	break;
-			case 5:	value += (value *value) /3.8;	break;
+			case 0:	value = value *2;	break;
+			case 1:	value = value *2;	break;
+			case 2:	value += 9;	break;
+			case 3:	value += 9;	break;
+			case 4:	value = value *2.15;	break;
+			case 5:	value = value *2.07;	break;
 		}
 	}
 	

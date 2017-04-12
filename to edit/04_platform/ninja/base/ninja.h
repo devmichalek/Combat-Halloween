@@ -12,6 +12,7 @@
 #include "activity.h"
 #include "drawable/sprite.h"
 #include <vector>
+#include "04_platform/enemy/actions/expletive/slab.h"
 
 class Hero
 {
@@ -81,6 +82,13 @@ class Hero
 	int fallenLine;
 	int fallenY;
 	
+	Activity run_sound;
+	vector <Slab*> run_sounds;
+	vector <Slab*> sword_sounds;
+	vector <Slab*> jump_sounds;
+	vector <Slab*> throw_sounds;
+	vector <Slab*> dead_sounds;
+	
 public:
 	
 	// Basics.
@@ -88,7 +96,6 @@ public:
 	~Hero();
 	void free();
 	void reset( int screen_h, int width );
-	// void setFPS( float FPS );
 	
 	void load( int type, int screen_w, int screen_h, int width );
 	void setKeys();
@@ -170,4 +177,18 @@ public:
 	void undoFallX( sf::Uint8 add );
 	void undoFallY();
 	void runFallenCounter();
+	
+	// Sound stuff.
+	template <typename s>
+	void turnOnSounds( vector <s> v );
+	
+	template <typename s>
+	void turnOffSounds( vector <s> v );
+	
+	template <typename s>
+	void setVolumeSounds( vector <s> v, int volume );
+	
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };
