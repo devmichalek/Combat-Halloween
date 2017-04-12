@@ -292,7 +292,7 @@ float Development::multiplyCost( int which )
 	
 	for( int i = 0; i < levels[ which ]; i++ )
 	{
-		value *= 2.1;
+		value *= 4;
 	}
 	
 	return value;
