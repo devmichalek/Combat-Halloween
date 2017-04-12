@@ -159,36 +159,39 @@ void Panel_menu::set( int scores, int type, bool status )
 	}
 	file.free();
 	
-	int look = 0;
-	file.load( "data/txt/world/world_whatsnext.txt" );
-	if( file.is_good() )
+	if( status && type < 4 )
 	{
-		string line;
-		int c = type;
-		while( file.get() >> line )
+		int look = 0;
+		file.load( "data/txt/world/world_whatsnext.txt" );
+		if( file.is_good() )
 		{
-			if( c == 0 )
+			string line;
+			int c = type;
+			while( file.get() >> line )
 			{
-				look = con::stoi( line );
-				break;
+				if( c == 0 )
+				{
+					look = con::stoi( line );
+					break;
+				}
+				c --;
 			}
-			c --;
 		}
-	}
-	file.free();
-	
-	world_values[ look ] = 1;
-	
-	file.load( "data/txt/world/world_temporary.txt", std::ios::out );
-	if( file.is_good() )
-	{
-		for( auto &it :world_values )
+		file.free();
+		
+		world_values[ look ] = 1;
+		
+		file.load( "data/txt/world/world_temporary.txt", std::ios::out );
+		if( file.is_good() )
 		{
-			file.get() << con::itos( it ) << "\n";
+			for( auto &it :world_values )
+			{
+				file.get() << con::itos( it ) << "\n";
+			}
 		}
+		file.free();
+		world_values.clear();
 	}
-	file.free();
-	world_values.clear();
 }
 
 void Panel_menu::setSound()
