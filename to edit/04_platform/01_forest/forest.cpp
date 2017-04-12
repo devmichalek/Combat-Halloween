@@ -529,7 +529,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
 		info = "setting exit";	break;
 		
-		case 23: exit->positioning( brick->getRight(), screen_w );
+		case 23: exit->positioning( brick->getRight() );
 		info = "loading music";	break;
 		
 		case 24: setSound();	reloadMusic();
@@ -607,27 +607,39 @@ void Forest::setSound()
 	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
+		hero->turnOff();
 		coins->turnOff();
 		wall->turnOff();
 		boulder->turnOff();
 		spikes->turnOff();
+		score_dots->turnOff();
+		exit->turnOff();
+		islands->turnOff();
 		mine_factory->turnOff();
 		golem_factory.turnOff();
 	}
 	else
 	{
+		hero->turnOn();
 		coins->turnOn();
 		wall->turnOn();
 		boulder->turnOn();
 		spikes->turnOn();
+		score_dots->turnOn();
+		exit->turnOn();
+		islands->turnOn();
 		mine_factory->turnOn();
 		golem_factory.turnOn();
 		
 		// Set chunks volume.
+		hero->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		wall->setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
 		spikes->setVolume( sound.getChunkVolume() );
+		score_dots->setVolume( sound.getChunkVolume() );
+		exit->setVolume( sound.getChunkVolume() );
+		islands->setVolume( sound.getChunkVolume() );
 		mine_factory->setVolume( sound.getChunkVolume() );
 		golem_factory.setVolume( sound.getChunkVolume() );
 	}
