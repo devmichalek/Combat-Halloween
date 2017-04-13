@@ -107,11 +107,11 @@ void Choice::load( int screen_w, int screen_h )
 	}
 	
 	// set text
-	description[ 0 ]->setText( "Halloween" );
-	description[ 1 ]->setText( "Forest" );
-	description[ 2 ]->setText( "Winter" );
-	description[ 3 ]->setText( "Desert" );
-	description[ 4 ]->setText( "Future" );
+	description[ 0 ]->setText( "The last stand" );
+	description[ 1 ]->setText( "As nature goes" );
+	description[ 2 ]->setText( "Winter's Embrace" );
+	description[ 3 ]->setText( "Zany Gorge Race" );
+	description[ 4 ]->setText( "Lost in Cyberspace" );
 	
 
 	
@@ -394,16 +394,18 @@ void Choice::reset( int screen_w, int screen_h )
 
 	information.setPosition( 10, screen_h - information.getHeight() - 10 );
 
-	int w = world[ 0 ]->getWidth()*world.size() + 15*world.size();
+	int w = world[ 0 ]->getWidth()*world.size() + 35*world.size();
 	world[ 0 ]->setPosition( screen_w/2 - w/2 +7, button.getY() +115 );
 	for( unsigned i = 1; i < world.size(); i++ )
 	{
-		world[ i ]->setPosition( world[ i -1 ]->getRight() + 15, button.getY() +115 );
+		world[ i ]->setPosition( world[ i -1 ]->getRight() + 40, button.getY() +115 );
 	}
+	
+	int y = world[ 0 ]->getY() -description[ 0 ]->getHeight() -10;
 	
 	for( unsigned i = 0; i < world.size(); i++ )
 	{
-		description[ i ]->setPosition( world[ i ]->getX() +world[ i ]->getWidth()/2 -description[ i ]->getWidth()/2, world[ i ]->getY() -description[ i ]->getHeight() -10 );
+		description[ i ]->setPosition( world[ i ]->getX() +world[ i ]->getWidth()/2 -description[ i ]->getWidth()/2, y );
 	}
 	
 	frame.setPosition( -screen_w, -screen_w );

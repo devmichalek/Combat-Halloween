@@ -123,7 +123,7 @@ void Character::load( int screen_w, int screen_h )
 	texts[ 1 ]->setText( "military" );
 	texts[ 2 ]->setText( "phantom" );
 	texts[ 3 ]->setText( "girl" );
-	texts[ 4 ]->setText( "faded" );
+	texts[ 4 ]->setText( "gorgeous" );
 	texts[ 5 ]->setText( "powerful" );
 	
 	
