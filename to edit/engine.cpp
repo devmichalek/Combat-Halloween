@@ -134,7 +134,6 @@ void Engine::states()
 		{
 			core->getState() = LEVEL;
 			
-			menu->reloadMusic();
 			level->loadCharacter();
 			level->loadWorlds();
 			level->setSound();
@@ -274,6 +273,7 @@ void Engine::states()
 		{
 			core->getState() = MENU;
 			menu->checkMoney();
+			menu->reloadMusic();
 			
 			if( panel->getState() == HALLOWEEN )
 			{
