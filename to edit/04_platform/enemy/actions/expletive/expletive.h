@@ -21,6 +21,7 @@ public:
 	void playAttacks();
 	
 	// Sound stuff.
+	void turn();
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );

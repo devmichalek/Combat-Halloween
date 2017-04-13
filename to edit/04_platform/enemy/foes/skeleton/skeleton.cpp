@@ -496,3 +496,9 @@ void Skeleton::harm( int damage )
 {
 	hp += damage;
 }
+
+void Skeleton::stunt( float s )
+{
+	float v = vel *s /100;
+	vel -= v;
+}

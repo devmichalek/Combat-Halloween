@@ -295,6 +295,15 @@ int Mine_factory::getDamage()
 	return damage;
 }
 
+
+
+void Mine_factory::turn()
+{
+	ticktock.turn();
+	explosion.turn();
+	plush.turn();
+}
+
 void Mine_factory::turnOn()
 {
 	ticktock.turnOn();

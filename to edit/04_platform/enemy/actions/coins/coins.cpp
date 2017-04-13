@@ -305,6 +305,19 @@ bool Coins::uplift( Rect* rect )
 
 
 
+void Coins::turn()
+{
+	for( auto &it :dropped_coins )
+	{
+		it->turn();
+	}
+	
+	for( auto &it :jumped_coins )
+	{
+		it->turn();
+	}
+}
+
 void Coins::turnOn()
 {
 	for( auto &it :dropped_coins )

@@ -34,7 +34,7 @@ class Snakes_factory
 	Rect* deadRect;	// For coins.
 	
 	Slab hit;
-	Slab stand;
+	Slab attack;
 	
 public:
 	
@@ -70,6 +70,7 @@ public:
 	int getDamage();
 	
 	// Sound stuff.
+	void turn();
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );

@@ -72,7 +72,7 @@ void Snakes_factory::free()
 	}
 	
 	hit.free();
-	stand.free();
+	attack.free();
 }
 
 void Snakes_factory::reset( int distance )
@@ -131,8 +131,8 @@ void Snakes_factory::load( int width, int screen_w, int screen_h )
 	hit.setName( "snakes_factory-hit" );
 	hit.load( "data/04_platform/enemy/snakes/sounds/hit/0.wav" );
 	
-	stand.setName( "snakes_factory-stand" );
-	//stand.load( "data/04_platform/enemy/mine/sounds/explosion.wav" );
+	attack.setName( "snakes_factory-attack" );
+	attack.load( "data/04_platform/enemy/snakes/sounds/attack/0.wav" );
 	
 	// Set HP.
 	hp.setName( "snakes_factory-hp" );
@@ -455,6 +455,11 @@ bool Snakes_factory::harmSomebody( Rect* rect )
 					r.set( (*i)->getAttackX(), (*i)->getAttackY(), (*i)->getAttackWidth(), (*i)->getAttackHeight() );
 					if( r.checkRectCollision( *rect ) )
 					{
+						if( attack.isPlayable() )
+						{
+							attack.play();
+						}
+						
 						return true;
 					}
 				}
@@ -534,20 +539,26 @@ int Snakes_factory::getDamage()
 
 
 
+void Snakes_factory::turn()
+{
+	hit.turn();
+	attack.turn();
+}
+
 void Snakes_factory::turnOn()
 {
 	hit.turnOn();
-	// stand.turnOn();
+	attack.turnOn();
 }
 
 void Snakes_factory::turnOff()
 {
 	hit.turnOff();
-	// stand.turnOff();
+	attack.turnOff();
 }
 
 void Snakes_factory::setVolume( int v )
 {
 	hit.setVolume( v );
-	// stand.setVolume( v );
+	attack.setVolume( v );
 }

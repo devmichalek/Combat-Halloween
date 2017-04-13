@@ -96,6 +96,19 @@ void Expletive::playAttacks()
 
 
 
+void Expletive::turn()
+{
+	for( auto &it :hits )
+	{
+		it->turn();
+	}
+	
+	for( auto &it :attacks )
+	{
+		it->turn();
+	}
+}
+
 void Expletive::turnOn()
 {
 	for( auto &it :hits )

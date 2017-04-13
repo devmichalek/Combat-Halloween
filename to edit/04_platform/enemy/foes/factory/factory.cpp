@@ -466,6 +466,34 @@ bool Factory<F>::harm( Rect* rect, int damage, bool group )
 }
 
 template <typename F>
+bool Factory<F>::stunt( Rect* rect, float s )
+{
+	bool harmed = false;
+	if( rect != NULL )
+	{
+		for( auto &i :foes )
+		{
+			if( i->isAlive() && i->getHeartPoints() > 0 )
+			{
+				if( i->getRealX() > -width*2 && i->getRealX() < screen_w +width*2 )
+				{
+					Rect r;
+					r.set( i->getRealX(), i->getRealY(), i->getRealWidth(), i->getRealHeight() );
+					if( r.checkRectCollision( *rect ) )
+					{
+						expletive->playHits();
+						i->stunt( s );
+						harmed = true;
+					}
+				}
+			}
+		}
+	}
+	
+	return harmed;
+}
+
+template <typename F>
 void Factory<F>::ableAttack( Rect* rect )
 {
 	if( rect != NULL )
@@ -591,6 +619,14 @@ void Factory<F>::setColor( sf::Color color )
 	{
 		i->setColor( color );
 	}
+}
+
+
+
+template <typename F>
+void Factory<F>::turn()
+{
+	expletive->turn();
 }
 
 template <typename F>

@@ -65,6 +65,7 @@ public:
 	void appear( Rect* rect );
 	void walk( Rect* rect );
 	bool harm( Rect* rect, int damage, bool group = false );
+	bool stunt( Rect* rect, float s );
 	void ableAttack(  Rect* rect );
 	bool harmSomebody( Rect* rect );
 	
@@ -79,6 +80,7 @@ public:
 	void setColor( sf::Color color );
 	
 	// Sound stuff.
+	void turn();
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );

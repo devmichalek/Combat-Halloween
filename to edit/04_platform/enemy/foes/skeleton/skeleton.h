@@ -114,4 +114,5 @@ public:
 	void ableAttack();
 	void moveX( float vel );
 	void harm( int damage );
+	void stunt( float s );
 };
