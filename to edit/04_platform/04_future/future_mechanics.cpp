@@ -198,31 +198,41 @@ void Future::mechanics()
 	// KUNAI DESTROY
 	for( unsigned i = 0; i < kunai->getSize(); i++ )
 	{
-		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
-		kunai->getX( i ) < -kunai->getW( i ) ||
-		wall->checkCollision( kunai->getRect( i ) )	||
-		islands->checkPixelCollision( kunai->getRect( i ) ) )
+		if( kunai->isActive( i ) )
 		{
-			kunai->destroy( i );
-		}
-		
-		else if( kunai->isExplosiveKunai( i ) )
-		{
-			if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
+			kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
+			kunai->getX( i ) < -kunai->getW( i ) ||
+			wall->checkCollision( kunai->getRect( i ) )	||
+			islands->checkPixelCollision( kunai->getRect( i ) ) )
 			{
 				kunai->destroy( i );
 			}
-		}
-		else if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
-		{
-			if( kunai->isHealKunai( i ) )
-			{
-				showheal->run( kunai->getDamage( i ) );
-				heart->harm( kunai->getDamage( i ) );
-			}
 			
-			kunai->destroy( i );
+			else if( kunai->isStuntKunai( i ) )
+			{
+				if( robot_factory.stunt( kunai->getRect( i ), kunai->getDamage( i ) ) )
+				{
+					kunai->destroy( i );
+				}
+			}
+			else if( kunai->isExplosiveKunai( i ) )
+			{
+				if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+				{
+					kunai->destroy( i );
+				}
+			}
+			else if( robot_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+			{
+				if( kunai->isHealKunai( i ) )
+				{
+					showheal->run( kunai->getDamage( i ) );
+					heart->harm( kunai->getDamage( i ) );
+				}
+				
+				kunai->destroy( i );
+			}
 		}
 	}
 	
