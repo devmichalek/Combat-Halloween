@@ -309,13 +309,7 @@ void Brick::createTopBorders( int size, int chance, int w, int h )
 			addPlank( 0, blocks[ blocks.size()-1 ]->x -10, blocks[ blocks.size()-1 ]->y -h );
 		}
 	}
-	
-	// Creating unvisible wall.
-	setRight();
-	blocks.push_back( new Block() );
-	blocks[ blocks.size()-1 ]->nr = 0;
-	blocks[ blocks.size()-1 ]->x = right;
-	blocks[ blocks.size()-1 ]->y = screen_h -width;
+
 	
 	delete rules;
 }

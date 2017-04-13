@@ -68,6 +68,7 @@ public:
 	sf::Uint8 getDirection();
 	
 	// Sound stuff.
+	void turn();
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );

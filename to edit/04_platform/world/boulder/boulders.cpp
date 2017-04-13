@@ -333,6 +333,12 @@ int Boulder::getDamage()
 
 
 
+void Boulder::turn()
+{
+	hit.turn();
+	plush.turn();
+}
+
 void Boulder::turnOn()
 {
 	hit.turnOn();

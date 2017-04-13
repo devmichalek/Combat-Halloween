@@ -86,6 +86,12 @@ bool Exit::nextState()
 
 
 
+
+void Exit::turn()
+{
+	rhythm.turn();
+}
+
 void Exit::turnOn()
 {
 	rhythm.turnOn();

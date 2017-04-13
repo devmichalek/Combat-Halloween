@@ -325,6 +325,10 @@ int Saws::getDamage()
 }
 
 
+void Saws::turn()
+{
+	hit.turn();
+}
 
 void Saws::turnOn()
 {

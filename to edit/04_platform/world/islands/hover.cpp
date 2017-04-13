@@ -112,7 +112,7 @@ bool Hover::mechanics( int width )
 		}
 	}
 	
-	if( blocks[ 0 ]->x <= startX || blocks[ blocks.size() -1 ]->x +width >= endX )
+	if( blocks[ 0 ]->x < startX || blocks[ blocks.size() -1 ]->x +width > endX )
 	{
 		state = !state;
 		return true;

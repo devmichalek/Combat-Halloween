@@ -145,7 +145,7 @@ void Water::setColor( sf::Color color )
 
 
 
-void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
+void Water::createWater( vector <Block*> b1, vector <Block*> b2, float right )
 {
 	vector <Block*> blocks = b1;
 	for( unsigned i = 0; i < b2.size(); i++ )
@@ -346,6 +346,25 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, int right )
 				}
 			}
 		}
+	}
+	
+	// set right.
+	float r = 0;
+	for( auto &i :waterblocks )
+	{
+		if( i->x > r )
+		{
+			r = i->x;
+		}
+	}
+	
+	r += width;
+	
+	// printf( "%f %f\n", r, right );
+	
+	for( int i = static_cast <int> (r); i <= static_cast <int> (right); i += width )
+	{
+		addBlock( 0, i, screen_h -width );
 	}
 }
 

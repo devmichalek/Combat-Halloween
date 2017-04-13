@@ -194,6 +194,13 @@ bool Score_dots::uplift( Rect* rect )
 	return false;
 }
 
+
+
+void Score_dots::turn()
+{
+	point.turn();
+}
+
 void Score_dots::turnOn()
 {
 	point.turnOn();

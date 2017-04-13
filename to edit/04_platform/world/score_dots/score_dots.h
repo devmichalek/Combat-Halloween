@@ -40,6 +40,7 @@ public:
 	bool uplift( Rect* rect );
 	
 	// Sound stuff.
+	void turn();
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );

@@ -329,6 +329,12 @@ int Wall::getFallDamage()
 
 
 
+void Wall::turn()
+{
+	hit.turn();
+	plush.turn();
+}
+
 void Wall::turnOn()
 {
 	hit.turnOn();

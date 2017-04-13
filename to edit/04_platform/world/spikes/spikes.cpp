@@ -332,6 +332,10 @@ int Spikes::getDamage()
 }
 
 
+void Spikes::turn()
+{
+	hit.turn();
+}
 
 void Spikes::turnOn()
 {

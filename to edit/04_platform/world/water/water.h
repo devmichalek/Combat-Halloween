@@ -35,7 +35,7 @@ public:
 	void setColor( sf::Color color );
 	
 	// Creating.
-	void createWater( vector <Block*> b1, vector <Block*> b2, int right );	// Add water.
+	void createWater( vector <Block*> b1, vector <Block*> b2, float right );	// Add water.
 	
 	// Collision detection.
 	bool checkCollision( Rect* rect );

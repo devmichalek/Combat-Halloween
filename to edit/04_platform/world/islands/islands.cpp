@@ -1083,6 +1083,11 @@ sf::Uint8 Islands::getDirection()
 
 
 
+void Islands::turn()
+{
+	hit.turn();
+}
+
 void Islands::turnOn()
 {
 	hit.turnOn();
