@@ -36,6 +36,7 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	unsigned getSize();
+	bool isActive( int which );
 	int getX( int which );
 	int getW( int which );
 	Rect* getRect( int which );
@@ -43,6 +44,7 @@ public:
 	float getDamage( int which );
 	bool isHealKunai( int which );
 	bool isExplosiveKunai( int which );
+	bool isStuntKunai( int which );
 
 	void destroy( int which );
 	void throwed( int x, int y, bool right, int which );
@@ -51,4 +53,10 @@ public:
 	void moveX( sf::Uint8 direction, float vel );
 	void undoFall( sf::Uint8 add );
 	void setColor( sf::Color color );
+	
+	// Sound stuff.
+	void turn();
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

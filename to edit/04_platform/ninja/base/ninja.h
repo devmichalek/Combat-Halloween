@@ -180,6 +180,9 @@ public:
 	
 	// Sound stuff.
 	template <typename s>
+	void turnSounds( vector <s> v );
+	
+	template <typename s>
 	void turnOnSounds( vector <s> v );
 	
 	template <typename s>
@@ -188,6 +191,7 @@ public:
 	template <typename s>
 	void setVolumeSounds( vector <s> v, int volume );
 	
+	void turn();
 	void turnOn();
 	void turnOff();
 	void setVolume( int v );

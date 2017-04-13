@@ -688,6 +688,19 @@ int Hero::getOffset()
 }
 
 
+
+template <typename s>
+void Hero::turnSounds( vector <s> v )
+{
+	if( !v.empty() )
+	{
+		for( auto &it :v )
+		{
+			it->turn();
+		}
+	}
+}
+
 template <typename s>
 void Hero::turnOnSounds( vector <s> v )
 {
@@ -722,6 +735,16 @@ void Hero::setVolumeSounds( vector <s> v, int volume )
 			it->setVolume( volume );
 		}
 	}
+}
+
+
+void Hero::turn()
+{
+	turnSounds( run_sounds );
+	turnSounds( sword_sounds );
+	turnSounds( jump_sounds );
+	turnSounds( throw_sounds );
+	turnSounds( dead_sounds );
 }
 
 void Hero::turnOn()

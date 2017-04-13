@@ -2,6 +2,7 @@
 
 #include "drawable/sprite.h"
 #include <vector>
+#include "04_platform/enemy/actions/expletive/slab.h"
 
 class Kunai_effects
 {
@@ -10,6 +11,7 @@ class Kunai_effects
 	vector <int> lines;
 	vector <bool> active;
 	vector <MySprite*> sprites;
+	vector <Slab*> slabs;
 	
 public:
 	
@@ -30,4 +32,10 @@ public:
 	void moveX( float vel );
 	void undoFall( sf::Uint8 add );
 	void setColor( sf::Color color );
+	
+	// Sound stuff.
+	void turn();
+	void turnOn();
+	void turnOff();
+	void setVolume( int v );
 };

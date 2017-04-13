@@ -241,6 +241,11 @@ unsigned Kunai::getSize()
 	return bits.size();
 }
 
+bool Kunai::isActive( int which )
+{
+	return bits[ which ]->isActive();
+}
+
 int Kunai::getX( int which )
 {
 	int x = bits[ which ]->getX();
@@ -310,6 +315,7 @@ Rect* Kunai::getEffectRect( int which )
 
 float Kunai::getDamage( int which )
 {
+	// printf( "%f\n", damage[ bits[ which ]->getWhich() ] );
 	return damage[ bits[ which ]->getWhich() ];
 }
 
@@ -328,6 +334,17 @@ bool Kunai::isExplosiveKunai( int which )
 {
 	// printf( "%d\n", bits[ which ]->getWhich() );
 	if( bits[ which ]->getWhich() == 3 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Kunai::isStuntKunai( int which )
+{
+	// printf( "%d\n", bits[ which ]->getWhich() );
+	if( bits[ which ]->getWhich() == 1 )
 	{
 		return true;
 	}
@@ -413,4 +430,26 @@ void Kunai::setColor( sf::Color color )
 	}
 	
 	kunai_effects.setColor( color );
+}
+
+
+
+void Kunai::turn()
+{
+	kunai_effects.turn();
+}
+
+void Kunai::turnOn()
+{
+	kunai_effects.turnOn();
+}
+
+void Kunai::turnOff()
+{
+	kunai_effects.turnOff();
+}
+
+void Kunai::setVolume( int v )
+{
+	kunai_effects.setVolume( v );
 }
