@@ -18,6 +18,7 @@
 #include "04_platform/panel/scores/scores.h"
 #include "04_platform/panel/money/money.h"
 #include "04_platform/panel/pause/pause.h"
+#include "04_platform/panel/sound_pad/sound_pad.h"
 
 
 // Actions.
@@ -78,6 +79,7 @@ class Desert
 	Scores* scores;
 	Money* money;
 	Pause* pause;
+	Sound_pad* sound_pad;
 	
 	// Actions.
 	Hp_dots* hp_dots;

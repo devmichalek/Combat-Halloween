@@ -200,41 +200,53 @@ void Desert::mechanics()
 	// KUNAI DESTROY
 	for( unsigned i = 0; i < kunai->getSize(); i++ )
 	{
-		if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
-		kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
-		kunai->getX( i ) < -kunai->getW( i ) ||
-		wall->checkCollision( kunai->getRect( i ) )	||
-		islands->checkPixelCollision( kunai->getRect( i ) ) )
+		if( kunai->isActive( i ) )
 		{
-			kunai->destroy( i );
-		}
-		else if( kunai->isExplosiveKunai( i ) )
-		{
-			if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) || 
-				snakes_factory->harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+			if( brick->checkPixelCollision( kunai->getRect( i ) ) ||
+			kunai->getX( i ) + kunai->getW( i ) > screen_w +kunai->getW( i ) ||
+			kunai->getX( i ) < -kunai->getW( i ) ||
+			wall->checkCollision( kunai->getRect( i ) )	||
+			islands->checkPixelCollision( kunai->getRect( i ) ) )
 			{
 				kunai->destroy( i );
 			}
-		}
-		else if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
-		{
-			if( kunai->isHealKunai( i ) )
-			{
-				showheal->run( kunai->getDamage( i ) );
-				heart->harm( kunai->getDamage( i ) );
-			}
 			
-			kunai->destroy( i );
-		}
-		else if( snakes_factory->harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
-		{
-			if( kunai->isHealKunai( i ) )
+			else if( kunai->isStuntKunai( i ) )
 			{
-				showheal->run( kunai->getDamage( i ) );
-				heart->harm( kunai->getDamage( i ) );
+				if( skeleton_factory.stunt( kunai->getRect( i ), kunai->getDamage( i ) ) || 
+					snakes_factory->harm( kunai->getRect( i ), 0 ) )
+				{
+					kunai->destroy( i );
+				}
 			}
-			
-			kunai->destroy( i );
+			else if( kunai->isExplosiveKunai( i ) )
+			{
+				if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ), true ) || 
+					snakes_factory->harm( kunai->getRect( i ), kunai->getDamage( i ), true ) )
+				{
+					kunai->destroy( i );
+				}
+			}
+			else if( skeleton_factory.harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+			{
+				if( kunai->isHealKunai( i ) )
+				{
+					showheal->run( kunai->getDamage( i ) );
+					heart->harm( kunai->getDamage( i ) );
+				}
+				
+				kunai->destroy( i );
+			}
+			else if( snakes_factory->harm( kunai->getRect( i ), kunai->getDamage( i ) ) )
+			{
+				if( kunai->isHealKunai( i ) )
+				{
+					showheal->run( kunai->getDamage( i ) );
+					heart->harm( kunai->getDamage( i ) );
+				}
+				
+				kunai->destroy( i );
+			}
 		}
 	}
 	

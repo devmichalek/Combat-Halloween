@@ -27,6 +27,7 @@ Desert::Desert()
 	scores = new Scores;
 	money = new Money;
 	pause = new Pause;
+	sound_pad = new Sound_pad;
 	
 	// Actions.
 	hp_dots = new Hp_dots;
@@ -88,6 +89,7 @@ void Desert::free()
 	delete scores;
 	delete money;
 	delete pause;
+	delete sound_pad;
 	
 	// Actions.
 	delete hp_dots;
@@ -216,6 +218,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	scores->load( type, screen_w );
 	money->load( screen_w );
 	pause->load( screen_w, screen_h );
+	sound_pad->load( screen_w, screen_h );
 	
 	// Actions.
 	hp_dots->load( type, screen_w );
@@ -249,6 +252,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 void Desert::handle( sf::Event &event )
 {
 	pause->handle( event );
+	sound_pad->handle( event );
 }
 
 void Desert::draw( sf::RenderWindow* &window )
@@ -289,6 +293,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		heart->fadeout( value );
 		scores->fadeout( value );
 		money->fadeout( value );
+		sound_pad->fadeout( value );
 		
 		// Actions.
 		hp_dots->fadeout( value );
@@ -336,6 +341,7 @@ void Desert::draw( sf::RenderWindow* &window )
 		heart->fadein( value );
 		scores->fadein( value );
 		money->fadein( value );
+		sound_pad->fadein( value );
 		
 		// Actions.
 		hp_dots->fadein( value );
@@ -408,10 +414,34 @@ void Desert::draw( sf::RenderWindow* &window )
 	heart->draw( window );
 	scores->draw( window );
 	money->draw( window );
+	sound_pad->draw( window );
 	
 	// Effect and pause.
 	effect->draw( window );
 	pause->draw( window );
+	
+	// Sound changing
+	if( sound_pad->musicChanged() )
+	{
+		music->pause();
+		sound.setMusicPlay( !sound.getMusicPlay() );
+	}
+	
+	if( sound_pad->chunkChanged() )
+	{
+		hero->turn();
+		kunai->turn();
+		coins->turn();
+		wall->turn();
+		boulder->turn();
+		score_dots->turn();
+		exit->turn();
+		islands->turn();
+		mine_factory->turn();
+		skeleton_factory.turn();
+		snakes_factory->turn();
+		sound.setChunkPlay( !sound.getChunkPlay() );
+	}
 }
 
 
@@ -598,9 +628,14 @@ bool Desert::backToLevel()
 void Desert::setSound()
 {
 	// Set chunks.
+	sound_pad->setChunk( sound.getChunkPlay() );
+	sound_pad->setMusic( sound.getMusicPlay() );
+	
+	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
 		hero->turnOff();
+		kunai->turnOff();
 		coins->turnOff();
 		wall->turnOff();
 		boulder->turnOff();
@@ -614,6 +649,7 @@ void Desert::setSound()
 	else
 	{
 		hero->turnOn();
+		kunai->turnOn();
 		coins->turnOn();
 		wall->turnOn();
 		boulder->turnOn();
@@ -626,6 +662,7 @@ void Desert::setSound()
 		
 		// Set chunks volume.
 		hero->setVolume( sound.getChunkVolume() );
+		kunai->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		wall->setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );
