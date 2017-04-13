@@ -27,6 +27,7 @@ Halloween::Halloween()
 	scores = new Scores;
 	money = new Money;
 	pause = new Pause;
+	sound_pad = new Sound_pad;
 	
 	// Actions.
 	hp_dots = new Hp_dots;
@@ -53,7 +54,6 @@ Halloween::Halloween()
 	lightning = new Lightning;
 	mine_factory = new Mine_factory;
 	fly_factory = new Fly_factory;
-	skulls = new Skulls;
 }
 
 Halloween::~Halloween()
@@ -88,6 +88,7 @@ void Halloween::free()
 	delete scores;
 	delete money;
 	delete pause;
+	delete sound_pad;
 	
 	// Actions.
 	delete hp_dots;
@@ -116,7 +117,6 @@ void Halloween::free()
 	vampire_factory.free();
 	zombie_factory.free();
 	delete fly_factory;
-	delete skulls;
 }
 
 void Halloween::reset()
@@ -166,7 +166,6 @@ void Halloween::reset()
 	vampire_factory.reset( distance );
 	zombie_factory.reset( distance );
 	fly_factory->reset();
-	skulls->reset();
 }
 
 
@@ -191,6 +190,7 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	scores->load( type, screen_w );
 	money->load( screen_w );
 	pause->load( screen_w, screen_h );
+	sound_pad->load( screen_w, screen_h );
 	
 	// Actions.
 	hp_dots->load( type, screen_w );
@@ -219,12 +219,12 @@ void Halloween::load( int screen_w, int screen_h, unsigned FPS )
 	vampire_factory.load( width, screen_w, screen_h, "vampire" );
 	zombie_factory.load( width, screen_w, screen_h, "zombie" );
 	fly_factory->load( type, screen_w, screen_h );
-	skulls->load( type, screen_w, screen_h );
 }
 
 void Halloween::handle( sf::Event &event )
 {
 	pause->handle( event );
+	sound_pad->handle( event );
 }
 
 void Halloween::draw( sf::RenderWindow* &window )
@@ -265,6 +265,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		heart->fadeout( value );
 		scores->fadeout( value );
 		money->fadeout( value );
+		sound_pad->fadeout( value );
 		
 		// Actions.
 		hp_dots->fadeout( value );
@@ -292,7 +293,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 		vampire_factory.fadeout( value );
 		zombie_factory.fadeout( value );
 		fly_factory->fadeout( value );
-		skulls->fadeout( value );
 		
 		// Set fade.
 		if( background->getAlpha() == 0 )
@@ -314,6 +314,7 @@ void Halloween::draw( sf::RenderWindow* &window )
 		heart->fadein( value );
 		scores->fadein( value );
 		money->fadein( value );
+		sound_pad->fadein( value );
 		
 		// Actions.
 		hp_dots->fadein( value );
@@ -339,7 +340,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 		vampire_factory.fadein( value );
 		zombie_factory.fadein( value );
 		fly_factory->fadein( value );
-		skulls->fadein( value );
 		
 		// Set fade.
 		if( background->getAlpha() == 0xFF )
@@ -365,7 +365,6 @@ void Halloween::draw( sf::RenderWindow* &window )
 	vampire_factory.draw( window );
 	zombie_factory.draw( window );
 	fly_factory->draw( window );
-	skulls->draw( window );
 	kunai->drawEffects( window );
 	
 	// Dots.
@@ -391,10 +390,35 @@ void Halloween::draw( sf::RenderWindow* &window )
 	heart->draw( window );
 	scores->draw( window );
 	money->draw( window );
+	sound_pad->draw( window );
 	
 	// Effect and pause.
 	effect->draw( window );
 	pause->draw( window );
+	
+	// Sound changing
+	if( sound_pad->musicChanged() )
+	{
+		music->pause();
+		sound.setMusicPlay( !sound.getMusicPlay() );
+	}
+	
+	if( sound_pad->chunkChanged() )
+	{
+		hero->turn();
+		kunai->turn();
+		coins->turn();
+		wall->turn();
+		boulder->turn();
+		spikes->turn();
+		score_dots->turn();
+		exit->turn();
+		islands->turn();
+		mine_factory->turn();
+		vampire_factory.turn();
+		zombie_factory.turn();
+		sound.setChunkPlay( !sound.getChunkPlay() );
+	}
 }
 
 
@@ -579,9 +603,14 @@ bool Halloween::backToLevel()
 void Halloween::setSound()
 {
 	// Set chunks.
+	sound_pad->setChunk( sound.getChunkPlay() );
+	sound_pad->setMusic( sound.getMusicPlay() );
+	
+	// Set chunks.
 	if( !sound.getChunkPlay() )
 	{
 		hero->turnOff();
+		kunai->turnOff();
 		coins->turnOff();
 		wall->turnOff();
 		boulder->turnOff();
@@ -596,6 +625,7 @@ void Halloween::setSound()
 	else
 	{
 		hero->turnOn();
+		kunai->turnOn();
 		coins->turnOn();
 		wall->turnOn();
 		boulder->turnOn();
@@ -609,6 +639,7 @@ void Halloween::setSound()
 		
 		// Set chunks volume.
 		hero->setVolume( sound.getChunkVolume() );
+		kunai->setVolume( sound.getChunkVolume() );
 		coins->setVolume( sound.getChunkVolume() );
 		wall->setVolume( sound.getChunkVolume() );
 		boulder->setVolume( sound.getChunkVolume() );

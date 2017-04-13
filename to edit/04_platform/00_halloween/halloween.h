@@ -18,6 +18,7 @@
 #include "04_platform/panel/scores/scores.h"
 #include "04_platform/panel/money/money.h"
 #include "04_platform/panel/pause/pause.h"
+#include "04_platform/panel/sound_pad/sound_pad.h"
 
 
 // Actions.
@@ -50,7 +51,6 @@
 #include "04_platform/enemy/foes/zombie/zombie.h"
 #include "04_platform/enemy/foes/vampire/vampire.h"
 #include "04_platform/enemy/foes/flying/fly_factory.h"
-#include "04_platform/enemy/foes/skulls/skulls.h"
 
 class Halloween
 {
@@ -79,6 +79,7 @@ class Halloween
 	Scores* scores;
 	Money* money;
 	Pause* pause;
+	Sound_pad* sound_pad;
 	
 	// Actions.
 	Hp_dots* hp_dots;
@@ -108,7 +109,6 @@ class Halloween
 	Factory <Vampire> vampire_factory;
 	Factory <Zombie> zombie_factory;
 	Fly_factory* fly_factory;
-	Skulls* skulls;
 	
 public:
 
