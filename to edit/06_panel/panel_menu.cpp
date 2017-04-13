@@ -145,22 +145,22 @@ void Panel_menu::set( int scores, int type, bool status )
 {
 	show_scores->set( scores );
 	
-	MyFile file;
-	vector <int> world_values;
-	
-	file.load( "data/txt/world/world_temporary.txt" );
-	if( file.is_good() )
-	{
-		string line;
-		while( file.get() >> line )
-		{
-			world_values.push_back( con::stoi( line ) );
-		}
-	}
-	file.free();
-	
 	if( status && type < 4 )
 	{
+		MyFile file;
+		vector <int> world_values;
+		
+		file.load( "data/txt/world/world_temporary.txt" );
+		if( file.is_good() )
+		{
+			string line;
+			while( file.get() >> line )
+			{
+				world_values.push_back( con::stoi( line ) );
+			}
+		}
+		file.free();
+		
 		int look = 0;
 		file.load( "data/txt/world/world_whatsnext.txt" );
 		if( file.is_good() )
@@ -190,7 +190,48 @@ void Panel_menu::set( int scores, int type, bool status )
 			}
 		}
 		file.free();
+		
 		world_values.clear();
+		
+// ---------------------------------------------------------------------------------------------------
+		
+		int actual = 0;
+		file.load( "data/txt/heart/heart_current.txt" );
+		if( file.is_good() )
+		{
+			string line;
+			file.get() >> line;
+			actual = con::stoi( line );
+		}
+		file.free();
+		
+		look = 0;
+		file.load( "data/txt/heart/heart_whatsnext.txt" );
+		if( file.is_good() )
+		{
+			string line;
+			int c = type;
+			while( file.get() >> line )
+			{
+				if( c == 0 )
+				{
+					look = con::stoi( line );
+					break;
+				}
+				c --;
+			}
+		}
+		file.free();
+
+		if( look > actual )
+		{
+			file.load( "data/txt/heart/heart_current.txt", std::ios::out );
+			if( file.is_good() )
+			{
+				file.get() << con::itos( look ) << "\n";
+			}
+			file.free();
+		}
 	}
 }
 

@@ -20,6 +20,7 @@ void Show_scores::free()
 	n = 0;
 	vel = 0;
 	text.free();
+	summary.free();
 }
 
 void Show_scores::reset()
@@ -28,7 +29,7 @@ void Show_scores::reset()
 	vel = 1;
 	
 	text.setText( con::itos( n ) );
-	text.center( screen_w, screen_h/3 );
+	text.center( screen_w /2, screen_h/3 );
 }
 
 
@@ -41,6 +42,11 @@ void Show_scores::load( int screen_w, int screen_h )
 	
 	text.setName( "show_scores-text" );
 	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 70, 0xFF, 0xFF, 0xFF );
+	
+	summary.setName( "show_scores-summary" );
+	summary.setFont( "data/00_loading/Jaapokki-Regular.otf", 100, 0xFF, 0xFF, 0xFF );
+	summary.setText( "Summary" );
+	summary.center( screen_w, screen_h/3 );
 	
 	reset();
 }
@@ -62,16 +68,18 @@ void Show_scores::mechanics()
 		n += vel;
 		if( n > max )	n = max;
 		text.setText( con::itos( n ) );
-		text.center( screen_w, screen_h/3 );
+		text.center( screen_w /2, screen_h/3 );
 	}
 }
 
 void Show_scores::set( int scores )
 {
+	n = 0;
 	min = 0;
 	max = scores;
 	vel += scores /500;
-	// printf( "%d\n", max );
+	text.setText( "0" );
+	text.center( screen_w /2, screen_h/3 );
 }
 
 

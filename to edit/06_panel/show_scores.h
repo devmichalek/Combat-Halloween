@@ -11,6 +11,7 @@ class Show_scores
 	int n;
 	int vel;
 	MyText text;
+	MyText summary;
 	
 public:
 	
