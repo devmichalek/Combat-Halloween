@@ -149,7 +149,7 @@ void Menu::load( int screen_w, int screen_h )
 	// simple text on the right
 	version->setName( "menu-version-text" );
 	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "The last update    10.04.2017" );
+	version->setText( "Beta Testing" );
 	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
 	
 	// information (keyboard) and keyboard
@@ -565,6 +565,59 @@ bool Menu::nextState()
 
 void Menu::reloadMusic()
 {
+	if( sound.getMusicPlay() )
+	{
+		music_button->setState( 0 );
+	}
+	else
+	{
+		music_button->setState( 2 );
+	}
+	
+	
+
+	// Turn off/on chunks
+	if( sound.getChunkPlay() )
+	{
+		chunk_button->setState( 0 );
+		music_button->turnOn();
+		chunk_button->turnOn();
+		git_button->turnOn();
+		google_button->turnOn();
+		play_button->turnOn();
+		author_log->turnOn();
+		game_log->turnOn();
+		skill_log->turnOn();
+		settings_log->turnOn();
+		exit->turnOn();
+		music_volume->turnOn();
+		chunk_volume->turnOn();
+		keyboard->turnOn();
+		development->turnOn();
+		headdeck->turnOn();
+		reset_button->turnOn();
+	}
+	else
+	{
+		chunk_button->setState( 2 );
+		music_button->turnOff();
+		chunk_button->turnOff();
+		git_button->turnOff();
+		google_button->turnOff();
+		play_button->turnOff();
+		author_log->turnOff();
+		game_log->turnOff();
+		skill_log->turnOff();
+		settings_log->turnOff();
+		exit->turnOff();
+		music_volume->turnOff();
+		chunk_volume->turnOff();
+		keyboard->turnOff();
+		development->turnOff();
+		headdeck->turnOff();
+		reset_button->turnOff();
+	}
+	
 	music->reload();
 	Mix_HaltMusic();
 }

@@ -132,6 +132,10 @@ void Sound_button::handle( sf::Event &event )
 	}
 }
 
+void Sound_button::setState( sf::Uint8 s )
+{
+	state = s;
+}
 
 int Sound_button::getBot()
 {

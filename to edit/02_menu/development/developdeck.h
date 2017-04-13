@@ -56,6 +56,8 @@ public:
 	// Other.
 	void setVolume( int volume );
 	void turn();
+	void turnOn();
+	void turnOff();
 	
 	// To communicate
 	bool isChange();

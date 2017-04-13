@@ -33,7 +33,8 @@ public:
 	void setExplanator( string text, int screen_w );
     void draw( sf::RenderWindow* &window );
     void handle( sf::Event &event );
-
+	
+	void setState( sf::Uint8 s );
 	int getBot();
 	bool isChanged();
 

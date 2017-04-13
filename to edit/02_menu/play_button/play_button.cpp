@@ -45,7 +45,7 @@ void Play_button::load( int screen_w, int bot )
 	myText.setPosition( screen_w/2 - myText.getWidth()/2 +10, bot -5 );
 	
 	click.setID( "play_button-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/02_menu/sfx.wav", 50 );
 }
 
 void Play_button::draw( sf::RenderWindow* &window )

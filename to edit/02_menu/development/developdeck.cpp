@@ -316,6 +316,22 @@ void Development::turn()
 	}
 }
 
+void Development::turnOn()
+{
+	for( auto &it :develops )
+	{
+		it->turnOn();
+	}
+}
+
+void Development::turnOff()
+{
+	for( auto &it :develops )
+	{
+		it->turnOff();
+	}
+}
+
 
 
 bool Development::isChange()

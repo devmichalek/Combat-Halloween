@@ -204,6 +204,22 @@ void Headdeck::turn()
 	}
 }
 
+void Headdeck::turnOn()
+{
+	for( auto &it :heads )
+	{
+		it->turnOn();
+	}
+}
+
+void Headdeck::turnOff()
+{
+	for( auto &it :heads )
+	{
+		it->turnOff();
+	}
+}
+
 
 
 bool Headdeck::isChange()
