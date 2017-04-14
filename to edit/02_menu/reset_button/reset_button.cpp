@@ -267,6 +267,13 @@ bool Reset_button::doReset()
 		file.free();
 		world_values.clear();
 		
+		file.load( "data/txt/heart/heart_current.txt", std::ios::out );
+		if( file.is_good() )
+		{
+			file.get() <<"2\n";
+		}
+		file.free();
+		
 		return true;
 	}
 	
