@@ -60,14 +60,14 @@ void Panel_menu::load( int screen_w, int screen_h )
 	bg->setName( "panel_menu-background" );
 	bg->load( "data/02_menu/background.png" );
 	
-	replay_button->load( screen_w, screen_h/2 );
+	replay_button->load( screen_h );
 	
-	backtomenu_panel->load( screen_w, replay_button->getBot() +10 );
+	backtomenu_panel->load( replay_button->getRight(), replay_button->getTop() );
 	
 	music->setID( "panel_menu-music" );
 	music->load( "data/06_panel/music.mp3", 50 );
 	
-	show_scores->load( screen_w, screen_h );
+	show_scores->load( screen_w, screen_h, replay_button->getTop() );
 }
 
 void Panel_menu::handle( sf::Event &event )
@@ -141,9 +141,15 @@ bool Panel_menu::backToPlatform()
 }
 
 
-void Panel_menu::set( int scores, int type, bool status )
+void Panel_menu::set( int scores, int type, bool status, int coruption )
 {
-	show_scores->set( scores );
+	show_scores->setScores( scores );
+	show_scores->setResult( status );
+	show_scores->setCoruption( coruption );
+	show_scores->setWorld( type );
+	show_scores->setMoney( 1383 );
+	show_scores->setMine( 40, type );
+	show_scores->setTimePlayed( "15min 41sec" );
 	
 	if( status && type < 4 )
 	{

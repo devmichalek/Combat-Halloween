@@ -43,7 +43,7 @@ public:
 	bool backToMenu();
 	bool backToPlatform();
 	
-	void set( int scores, int type, bool status );
+	void set( int scores, int type, bool status, int coruption );
 	void setSound();
 	void reloadMusic();
 };
