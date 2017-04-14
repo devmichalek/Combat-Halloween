@@ -16,5 +16,8 @@ class Replay_button :public Play_button
 	
 public:
 	
-	void load( int screen_w, int bot );
+	void load( int bot );
+	
+	int getRight();
+	int getTop();
 };

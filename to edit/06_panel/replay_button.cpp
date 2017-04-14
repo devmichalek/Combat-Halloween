@@ -9,17 +9,28 @@
 
 #include "replay_button.h"
 
-void Replay_button::load( int screen_w, int bot )
+void Replay_button::load( int bot )
 {
 	mySprite.setName( "replay_button-mySprite" );
 	mySprite.load( "data/02_menu/blankbutton.png", 4 );
-	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
+	mySprite.setScale( 0.4, 0.4 );
+	mySprite.setPosition( 10, bot -10 -mySprite.getHeight() );
 	
 	myText.setName( "replay_button-myText" );
-	myText.setFont( "data/02_menu/BADABB__.TTF", 108, 0x82, 0xae, 0x20 );
+	myText.setFont( "data/02_menu/BADABB__.TTF", 40, 0x82, 0xae, 0x20 );
 	myText.setText( "replay" );
-	myText.setPosition( screen_w/2 - myText.getWidth()/2 +10, bot +3 );
+	myText.setPosition( mySprite.getX() +17, mySprite.getY() +5 );
 	
 	click.setID( "replay_button-click" );
 	click.load( "data/02_menu/click.wav", 50 );
+}
+
+int Replay_button::getRight()
+{
+	return mySprite.getRight();
+}
+
+int Replay_button::getTop()
+{
+	return mySprite.getTop();
 }

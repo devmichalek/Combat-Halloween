@@ -16,5 +16,5 @@ class Backtomenu_panel :public Play_button
 	
 public:
 	
-	void load( int screen_w, int bot );
+	void load( int r, int t );
 };
