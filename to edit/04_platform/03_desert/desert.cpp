@@ -7,6 +7,7 @@ Desert::Desert()
 	state = 0;
 	info = "";
 	fade = 0;
+	coruption = 0;
 	
 	FPS = 0;
 	width = 0;
@@ -68,6 +69,7 @@ void Desert::free()
 	state = 0;
 	info = "";
 	fade = 0;
+	coruption = 0;
 	
 	FPS = 0;
 	width = 0;
@@ -455,6 +457,7 @@ bool Desert::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->mechanics( hero->getX(), hero->getY() );
+		coruption = difficulty;
 		info = "reserving memory (it can take a while)";	break;
 		
 		case 2:	brick->reserve( size );
@@ -619,6 +622,13 @@ int Desert::getType()
 {
 	return type;
 }
+
+int Desert::getCoruption()
+{
+	return coruption;
+}
+
+
 
 bool Desert::backToLevel()
 {

@@ -195,7 +195,14 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 		vel += 0.25;
 		j.setLine( (nr-1)*delay + 7*delay );
 	}
-	else if( type == 2 || type == 5 )
+	else if( type == 2 )
+	{
+		delay = 5;
+		vel += 0.68;
+		grav += 0.5;
+		j.setLine( (nr-1)*delay + 2*delay );
+	}
+	else if( type == 5 )
 	{
 		delay = 6;
 		vel += 0.5;

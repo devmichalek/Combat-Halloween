@@ -348,7 +348,7 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, float right )
 		}
 	}
 	
-	// set right.
+	// Fill till right.
 	float r = 0;
 	for( auto &i :waterblocks )
 	{
@@ -365,6 +365,32 @@ void Water::createWater( vector <Block*> b1, vector <Block*> b2, float right )
 	for( int i = static_cast <int> (r); i <= static_cast <int> (right); i += width )
 	{
 		addBlock( 0, i, screen_h -width );
+	}
+	
+	for( unsigned i = 0; i < waterblocks.size(); i++ )
+	{
+		if( (waterblocks[ i ]->nr == 0 || waterblocks[ i ]->nr == 1) && 
+			waterblocks[ i ]->y < screen_h -width )
+		{
+			bool suc = false;
+			
+			for( unsigned j = 0; j < waterblocks.size(); j++ )
+			{
+				if( waterblocks[ i ]->x == waterblocks[ j ]->x &&
+					waterblocks[ j ]->nr == 1 &&
+					waterblocks[ j ]->y -width == waterblocks[ i ]->y )
+				{
+					suc = true;
+					break;
+				}
+			}
+			
+			if( !suc )
+			{
+				addBlock( 1, waterblocks[ i ]->x, waterblocks[ i ]->y +width );
+				// printf( "bad %f %f\n", waterblocks[ i ]->x, waterblocks[ i ]->y );
+			}
+		}
 	}
 }
 

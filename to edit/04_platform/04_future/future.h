@@ -56,6 +56,7 @@ class Future
 	int type;
 	string info;
 	sf::Uint8 fade;
+	int coruption;
 	
 	int FPS;
 	int width;
@@ -123,6 +124,8 @@ public:
 	bool winState();
 	int getScores();
 	int getType();
+	int getCoruption();
+	
 	bool backToLevel();
 	void mechanics();
 	
