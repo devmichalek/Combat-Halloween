@@ -1,6 +1,6 @@
 <?php
-	$con = mysql_connect("localhost", "unvisible", "password" );
-	$db = mysql_select_db('unvisible');
+	$con = mysql_connect("localhost", "id959266_adriqun_scores", "100krotka" );
+	$db = mysql_select_db('id959266_scores');
 
 	if($con) {
 		if($db) {
