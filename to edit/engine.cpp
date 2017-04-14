@@ -82,7 +82,7 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = 0;	// intro state = -1
+		core->getState() = MENU;	// intro state = -1
 		break;
 	}
 }
@@ -191,7 +191,8 @@ void Engine::states()
 		if( halloween->defeatState() ||halloween->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( halloween->getScores(), halloween->getType(), halloween->winState() );
+			panel->set( halloween->getScores(), halloween->getType(), 
+						halloween->winState(), halloween->getCoruption() );
 			halloween->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -207,7 +208,8 @@ void Engine::states()
 		if( forest->defeatState() ||forest->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( forest->getScores(), forest->getType(), forest->winState() );
+			panel->set( forest->getScores(), forest->getType(), 
+						forest->winState(), forest->getCoruption() );
 			forest->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -223,7 +225,8 @@ void Engine::states()
 		if( winter->defeatState() ||winter->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( winter->getScores(), winter->getType(), winter->winState() );
+			panel->set( winter->getScores(), winter->getType(), 
+						winter->winState(), winter->getCoruption() );
 			winter->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -239,7 +242,8 @@ void Engine::states()
 		if( desert->defeatState() ||desert->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( desert->getScores(), desert->getType(), desert->winState() );
+			panel->set( desert->getScores(), desert->getType(), 
+						desert->winState(), desert->getCoruption() );
 			desert->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -255,7 +259,8 @@ void Engine::states()
 		if( future->defeatState() ||future->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( future->getScores(), future->getType(), future->winState() );
+			panel->set( future->getScores(), future->getType(), 
+						future->winState(), future->getCoruption() );
 			future->reset();
 			panel->setSound();
 			panel->reloadMusic();
