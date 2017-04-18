@@ -16,6 +16,8 @@ class Title
 {
 	MySprite belt;
 	MyText title;
+	MyText title_sec;
+	MyText version;
 	
 public:
 	
