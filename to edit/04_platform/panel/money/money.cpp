@@ -157,3 +157,8 @@ void Money::add( int amount )
 	bank += amount;
 	setText();
 }
+
+int Money::getEarnedMoney()
+{
+	return bank -base;
+}

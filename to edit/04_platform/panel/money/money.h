@@ -43,4 +43,5 @@ public:
 	void saveMoney();
 	void loadMoney();
 	void add( int amount );
+	int getEarnedMoney();
 };
