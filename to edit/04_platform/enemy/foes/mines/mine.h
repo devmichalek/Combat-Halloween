@@ -32,6 +32,7 @@ public:
 	
 	// Set as active.
 	void setActive();
+	bool isActive();
 	
 	// In action.
 	void moveX( float vel );

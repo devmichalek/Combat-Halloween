@@ -80,6 +80,16 @@ void Mine::setActive()
 	}
 }
 
+bool Mine::isActive()
+{
+	if( state == 0 )
+	{
+		return false;
+	}
+	
+	return true;
+}
+
 
 
 void Mine::moveX( float vel )

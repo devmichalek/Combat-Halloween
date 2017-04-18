@@ -8,6 +8,7 @@ Mine_factory::Mine_factory()
 	screen_w = 0;
 	screen_h = 0;
 	damage = 0;
+	counter = 0;
 }
 
 Mine_factory::~Mine_factory()
@@ -22,6 +23,7 @@ void Mine_factory::free()
 	screen_h = 0;
 	damage = 0;
 	type = 0;
+	counter = 0;
 	
 	if( !mines.empty() )
 	{
@@ -50,21 +52,11 @@ void Mine_factory::free()
 
 void Mine_factory::reset( int distance )
 {
-	while( true )
+	counter = 0;
+	
+	for( auto &it :mines )
 	{
-		if( distance > 0 )
-		{
-			for( auto &it :mines )
-			{
-				it->moveX( 1.0 );
-			}
-			
-			distance --;
-		}
-		else
-		{
-			break;
-		}
+		it->moveX( distance );
 	}
 	
 	for( auto &it :mines )
@@ -208,7 +200,12 @@ void Mine_factory::checkCollision( Rect* rect )
 						{
 							ticktock.play();
 						}
-							
+						
+						if( !i->isActive() )
+						{
+							counter ++;
+						}
+						
 						i->setActive();
 						break;
 					}
@@ -293,6 +290,11 @@ void Mine_factory::setColor( sf::Color color )
 int Mine_factory::getDamage()
 {
 	return damage;
+}
+
+int Mine_factory::getCounter()
+{
+	return counter;
 }
 
 

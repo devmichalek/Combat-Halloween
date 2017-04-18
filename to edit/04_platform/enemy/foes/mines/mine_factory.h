@@ -12,6 +12,7 @@ class Mine_factory
 	int screen_h;
 	int damage;
 	sf::Uint8 type;
+	int counter;
 	
 	vector <Mine*> mines;
 	vector <MySprite*> sprites;
@@ -48,6 +49,7 @@ public:
 	void setColor( sf::Color color );
 	
 	int getDamage();
+	int getCounter();
 	
 	// Sound stuff.
 	void turn();
