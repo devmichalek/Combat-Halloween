@@ -29,6 +29,7 @@ Forest::Forest()
 	money = new Money;
 	pause = new Pause;
 	sound_pad = new Sound_pad;
+	time_box = new Time_box;
 	
 	// Actions.
 	hp_dots = new Hp_dots;
@@ -93,6 +94,7 @@ void Forest::free()
 	delete money;
 	delete pause;
 	delete sound_pad;
+	delete time_box;
 	
 	// Actions.
 	delete hp_dots;
@@ -143,6 +145,7 @@ void Forest::reset()
 	heart->reset();
 	scores->reset();
 	money->reset();
+	time_box->reset();
 	
 	// Actions.
 	hp_dots->reset();
@@ -227,6 +230,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	money->load( screen_w );
 	pause->load( screen_w, screen_h );
 	sound_pad->load( screen_w, screen_h );
+	time_box->load( FPS );
 	
 	// Actions.
 	hp_dots->load( type, screen_w );
@@ -633,6 +637,21 @@ int Forest::getType()
 int Forest::getCoruption()
 {
 	return coruption;
+}
+
+string Forest::getTimePlayed()
+{
+	return time_box->getTimePlayed();
+}
+
+int Forest::getDeactivatedMines()
+{
+	return mine_factory->getCounter();
+}
+
+int Forest::getEarnedMoney()
+{
+	return money->getEarnedMoney();
 }
 
 
