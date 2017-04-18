@@ -36,12 +36,12 @@ void Explanator::load( string str, int screen_w )
 	
 	// Your text
 	text.setName( "explanator-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0, 0, 0 );
 	text.setText( str );
 	
 	bg.setName( "explanator-bg" );
 	bg.create( text.getWidth() +5, text.getHeight() +7 );
-	bg.setColor( sf::Color( 0, 0, 0 ) );
+	bg.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 	
 	line = 140;
 	alpha_line = 100;
