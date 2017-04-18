@@ -17,6 +17,8 @@ Engine::Engine()
 	loading = new Loading;
 	loading->load( core->getWidth(), core->getHeight() );
 	
+	initialization = new Initialization;
+	
 	menu = new Menu;
 	
 	level = new Level;
@@ -40,6 +42,8 @@ void Engine::free()
 	if( timer != NULL )			delete timer;
 	
 	if( loading != NULL )		delete loading;
+	
+	if( initialization != NULL )	delete initialization;
 
 	if( menu != NULL )			delete menu;
 	if( level != NULL )			delete level;
@@ -63,6 +67,8 @@ void Engine::load()
 	
 	switch( loading->getState() )
 	{
+		case 1:		initialization->load( core->getWidth(), core->getHeight() );	break;
+		
 		case 10:	menu->load( core->getWidth(), core->getHeight() );	break;
 		
 		case 12:	level->load( core->getWidth(), core->getHeight() );	break;
@@ -82,7 +88,7 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		core->getState() = MENU;	// intro state = -1
+		core->getState() = INIT;
 		break;
 	}
 }
@@ -100,6 +106,7 @@ void Engine::events()
 		
 		switch( core->getState() )
 		{
+			case INIT:	initialization->handle( core->getEvent() );	break;
 			case MENU: 	menu->handle( core->getEvent() ); 			break;
 			case LEVEL:	level->handle( core->getEvent() );			break;
 			case HALLOWEEN: halloween->handle( core->getEvent() );	break;
@@ -119,6 +126,20 @@ void Engine::states()
 	if( core->getState() == -2 )
 	{
 		load();
+	}
+	
+	// initialization state
+	if( core->getState() == INIT )
+	{
+		initialization->draw( core->getWindow() );
+		if( initialization->nextState() )
+		{
+			delete initialization;
+			initialization = NULL;
+			
+			core->getState() = MENU;
+			menu->setNick();
+		}
 	}
 	
 	
@@ -159,6 +180,7 @@ void Engine::states()
 		{
 			core->getState() = MENU;
 			level->reset();
+			menu->reloadMusic();
 		}
 	}
 	
@@ -191,8 +213,7 @@ void Engine::states()
 		if( halloween->defeatState() ||halloween->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( halloween->getScores(), halloween->getType(), 
-						halloween->winState(), halloween->getCoruption() );
+			setPanel( halloween );
 			halloween->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -208,8 +229,7 @@ void Engine::states()
 		if( forest->defeatState() ||forest->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( forest->getScores(), forest->getType(), 
-						forest->winState(), forest->getCoruption() );
+			setPanel( forest );
 			forest->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -225,8 +245,7 @@ void Engine::states()
 		if( winter->defeatState() ||winter->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( winter->getScores(), winter->getType(), 
-						winter->winState(), winter->getCoruption() );
+			setPanel( winter );
 			winter->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -242,8 +261,7 @@ void Engine::states()
 		if( desert->defeatState() ||desert->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( desert->getScores(), desert->getType(), 
-						desert->winState(), desert->getCoruption() );
+			setPanel( desert );
 			desert->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -259,8 +277,7 @@ void Engine::states()
 		if( future->defeatState() ||future->winState() )
 		{
 			panel->setState( core->getState() );
-			panel->set( future->getScores(), future->getType(), 
-						future->winState(), future->getCoruption() );
+			setPanel( future );
 			future->reset();
 			panel->setSound();
 			panel->reloadMusic();
@@ -356,4 +373,13 @@ void Engine::load_world( world w )
 	{
 		gears->setReady();
 	}
+}
+
+template <typename world>
+void Engine::setPanel( world w )
+{
+	panel->set( w->getScores(), w->getType(), 
+				w->winState(), w->getCoruption(),
+				w->getTimePlayed(), w->getDeactivatedMines(),
+				w->getEarnedMoney() );
 }

@@ -3,6 +3,7 @@
 #include "core.h"
 #include "timer.h"
 #include "00_loading/loading.h"
+#include "01_initialization/initialization.h"
 #include "02_menu/menu.h"
 #include "03_level/level.h"
 
@@ -21,7 +22,7 @@ class Engine
 {
 	enum
 	{
-		INTRO = -1,
+		INIT = -1,
 		MENU,
 		LEVEL,
 		GEARS,
@@ -36,6 +37,7 @@ class Engine
     Core* core;
 	Timer* timer;
 	Loading* loading;
+	Initialization* initialization;
 	Menu* menu;
 	Level* level;
 	Loading_world* gears;
@@ -63,4 +65,7 @@ public:
 	
 	template <typename world>
 	void load_world( world w );
+	
+	template <typename world>
+	void setPanel( world w );
 };
