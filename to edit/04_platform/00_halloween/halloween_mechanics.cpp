@@ -2,6 +2,9 @@
 
 void Halloween::mechanics()
 {
+// TIME
+	time_box->mechanics();
+	
 // HERO ANIMATION
 	hero->doOffset();
 	

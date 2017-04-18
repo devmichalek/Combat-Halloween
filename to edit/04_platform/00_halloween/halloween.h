@@ -19,6 +19,7 @@
 #include "04_platform/panel/money/money.h"
 #include "04_platform/panel/pause/pause.h"
 #include "04_platform/panel/sound_pad/sound_pad.h"
+#include "04_platform/panel/time_box/time_box.h"
 
 
 // Actions.
@@ -81,6 +82,7 @@ class Halloween
 	Money* money;
 	Pause* pause;
 	Sound_pad* sound_pad;
+	Time_box* time_box;
 	
 	// Actions.
 	Hp_dots* hp_dots;
@@ -130,6 +132,9 @@ public:
 	int getScores();
 	int getType();
 	int getCoruption();
+	string getTimePlayed();
+	int getDeactivatedMines();
+	int getEarnedMoney();
 	
 	bool backToLevel();
 	void mechanics();
