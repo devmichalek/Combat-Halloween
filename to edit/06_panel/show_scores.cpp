@@ -138,19 +138,19 @@ void Show_scores::draw( sf::RenderWindow* &window )
 	
 	window->draw( coruption.get() );
 	window->draw( coruption_word.get() );
-	window->draw( coruption_dot.get() );
+	// window->draw( coruption_dot.get() );
 	
 	window->draw( world.get() );
 	window->draw( world_word.get() );
-	window->draw( world_sprite.get() );
+	// window->draw( world_sprite.get() );
 	
 	window->draw( money.get() );
 	window->draw( money_word.get() );
-	window->draw( money_sprite.get() );
+	// window->draw( money_sprite.get() );
 	
 	window->draw( mine.get() );
 	window->draw( mine_word.get() );
-	window->draw( mine_sprite.get() );
+	// window->draw( mine_sprite.get() );
 	
 	window->draw( time.get() );
 	window->draw( time_word.get() );
