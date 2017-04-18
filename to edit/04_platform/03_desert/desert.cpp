@@ -29,6 +29,7 @@ Desert::Desert()
 	money = new Money;
 	pause = new Pause;
 	sound_pad = new Sound_pad;
+	time_box = new Time_box;
 	
 	// Actions.
 	hp_dots = new Hp_dots;
@@ -92,6 +93,7 @@ void Desert::free()
 	delete money;
 	delete pause;
 	delete sound_pad;
+	delete time_box;
 	
 	// Actions.
 	delete hp_dots;
@@ -141,6 +143,7 @@ void Desert::reset()
 	heart->reset();
 	scores->reset();
 	money->reset();
+	time_box->reset();
 	
 	// Actions.
 	hp_dots->reset();
@@ -221,6 +224,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	money->load( screen_w );
 	pause->load( screen_w, screen_h );
 	sound_pad->load( screen_w, screen_h );
+	time_box->load( FPS );
 	
 	// Actions.
 	hp_dots->load( type, screen_w );
@@ -627,6 +631,22 @@ int Desert::getCoruption()
 {
 	return coruption;
 }
+
+string Desert::getTimePlayed()
+{
+	return time_box->getTimePlayed();
+}
+
+int Desert::getDeactivatedMines()
+{
+	return mine_factory->getCounter();
+}
+
+int Desert::getEarnedMoney()
+{
+	return money->getEarnedMoney();
+}
+
 
 
 
