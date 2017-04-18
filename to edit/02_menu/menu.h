@@ -23,6 +23,8 @@
 #include "development/developdeck.h"
 #include "reset_button/reset_button.h"
 #include "development/headdeck.h"
+#include "nick/nick.h"
+#include "author_log/author.h"
 
 class Menu
 {
@@ -58,8 +60,6 @@ class Menu
 	
 	Music* music;
 	
-	MyText* version;
-	
 	Information* information;
 	Keyboard* keyboard;
 	
@@ -67,6 +67,9 @@ class Menu
 	Headdeck* headdeck;
 	
 	Reset_button* reset_button;
+	
+	Nick* nick;
+	Author* author;
 	
 public:
 	
@@ -82,4 +85,5 @@ public:
 	bool nextState();
 	void reloadMusic();
 	void checkMoney();
+	void setNick();
 };

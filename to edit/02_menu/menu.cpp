@@ -43,8 +43,6 @@ Menu::Menu()
 	
 	music = new Music; music->setID( "menu-music" );
 	
-	version = new MyText;
-	
 	information = new Information;
 	keyboard = new Keyboard;
 	
@@ -52,6 +50,9 @@ Menu::Menu()
 	headdeck = new Headdeck;
 	
 	reset_button = new Reset_button;
+	
+	nick = new Nick;
+	author = new Author;
 }
 
 Menu::~Menu()
@@ -79,12 +80,13 @@ void Menu::free()
 	delete skill_log;
 	delete exit;
 	delete music;
-	delete version;
 	delete information;
 	delete keyboard;
 	delete development;
 	delete headdeck;
 	delete reset_button;
+	delete nick;
+	delete author;
 }
 
 
@@ -146,20 +148,17 @@ void Menu::load( int screen_w, int screen_h )
 	// music for menu
 	music->load( "data/02_menu/music.mp3", 50 );
 	
-	// simple text on the right
-	version->setName( "menu-version-text" );
-	version->setFont( "data/02_menu/BADABB__.TTF", 20, 0xFF, 0xFF, 0xFF );
-	version->setText( "Alpha Testing" );
-	version->setPosition( screen_w - version->getWidth() - 3, screen_h - version->getHeight() -7 );
-	
 	// information (keyboard) and keyboard
-	information->load( music_volume->getRight(), screen_h/2 - 100, screen_h );
+	information->load( music_volume->getRight(), screen_h/2 - 100, screen_w, screen_h );
 	keyboard->load( 100, music_volume->getRight(), screen_h/2 + 100, screen_w, screen_h );
 	
 	development->load( title->getBot() +140, screen_h );
 	headdeck->load( title->getBot() +110, screen_h );
 	
 	reset_button->load( screen_w, screen_h );
+	
+	nick->load( screen_w, screen_h );
+	author->load( screen_w, screen_h );
 	
 	//Set start volume
 	music_button->setVolume( chunk_volume->getVolume() );
@@ -251,7 +250,7 @@ void Menu::handle( sf::Event &event )
 			
 			if( game_log->getState() )
 			{
-				
+				author->handle( event );
 			}
 		}
 	}
@@ -347,12 +346,13 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadein( value );
 		chunk_volume->fadein( value );
 		skill_log->fadein( value );
-		version->fadein( value );
 		keyboard->fadein( value );
 		information->fadein( value );
 		development->fadein( value );
 		headdeck->fadein( value );
 		reset_button->fadein( value );
+		nick->fadein( value );
+		author->fadein( value );
 	}
 	
 	// Fade out:
@@ -376,12 +376,13 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadeout( value );
 		chunk_volume->fadeout( value );
 		skill_log->fadeout( value );
-		version->fadeout( value );
 		keyboard->fadeout( value );
 		information->fadeout( value );
 		development->fadeout( value );
 		headdeck->fadeout( value );
 		reset_button->fadeout( value );
+		nick->fadeout( value );
+		author->fadeout( value );
 	}
 	else if( exit->getState() == 1 || reset_button->getState() == 1 ) // if user clicked exit
 	{
@@ -403,12 +404,13 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadeout( value, alpha );
 		chunk_volume->fadeout( value, alpha );
 		skill_log->fadeout( value, alpha );
-		version->fadeout( value, alpha );
 		keyboard->fadeout( value, alpha );
 		information->fadeout( value, alpha );
 		development->fadeout( value, alpha );
 		headdeck->fadeout( value, alpha );
 		reset_button->fadeout( value, alpha );
+		nick->fadeout( value, alpha );
+		author->fadeout( value, alpha );
 	}
 	else
 	{
@@ -430,12 +432,14 @@ void Menu::draw( sf::RenderWindow* &window )
 		music_volume->fadeout( value );
 		chunk_volume->fadeout( value );
 		skill_log->fadeout( value );
-		version->fadeout( value );
 		keyboard->fadeout( value );
 		information->fadeout( value );
 		development->fadeout( value );
 		headdeck->fadeout( value );
 		reset_button->fadeout( value );
+		nick->fadeout( value );
+		author->fadeout( value );
+		
 		if( background->getAlpha() == 0 )
 		{
 			state = 1;
@@ -461,7 +465,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	// Draw
 	window->draw( background->get() );
 	title->draw( *window );
-	window->draw( version->get() );
 	
 	if( !author_log->getState() &&
 		!game_log->getState() &&
@@ -477,6 +480,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		chunk_button->draw( window );
 		reset_button->drawButton( window );
 		scores_button->draw( *window );
+		nick->draw( *window );
 	}
 	
 	if( !author_log->getState() && !settings_log->getState() && !game_log->getState() )
@@ -515,6 +519,15 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		headdeck->draw( window );
 	}
+	
+	if( game_log->getState() )
+	{
+		author->draw( window );
+	}
+	else
+	{
+		author->reset();
+	}
 			
 		
 	if( exit->getState() < 2 )
@@ -528,6 +541,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		development->reloadTxt();
 		headdeck->reloadText();
+		nick->setNick();
 	}
 	
 	if( development->isChange() )
@@ -626,4 +640,9 @@ void Menu::checkMoney()
 {
 	development->reloadTxt();
 	headdeck->reloadText();
+}
+
+void Menu::setNick()
+{
+	nick->setNick();
 }
