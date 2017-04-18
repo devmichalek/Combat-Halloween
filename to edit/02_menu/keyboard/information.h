@@ -17,6 +17,7 @@ class Information
 {
 	vector <MyText*> text;
 	vector <MyText*> info_text;
+	MySprite arrow;
 	
 public:
 
@@ -24,7 +25,7 @@ public:
     ~Information();
 	void free();
 
-    void load( int right, int top, int screen_h );
+    void load( int right, int top, int screen_w, int screen_h );
     void draw( sf::RenderWindow &window );
 
 	void fadein( int j = 1, int max = 255 );

@@ -41,11 +41,13 @@ void Information::free()
 
 		info_text.clear();
 	}
+	
+	arrow.free();
 }
 
 
 
-void Information::load( int right, int top, int screen_h )
+void Information::load( int right, int top, int screen_w, int screen_h )
 {
 	for( int i = 0; i < 8; i++ )
 	{
@@ -109,6 +111,10 @@ void Information::load( int right, int top, int screen_h )
 	{
 		info_text[ i ]->setPosition( info_text[ i -1 ]->getRight() + 10, info_text[ 0 ]->getY() );
 	}
+	
+	arrow.setName( "information-arrow" );
+	arrow.load( "data/02_menu/arrow.png" );
+	arrow.setPosition( screen_w -arrow.getWidth() -58, 175 );
 }
 
 void Information::draw( sf::RenderWindow &window )
@@ -122,6 +128,8 @@ void Information::draw( sf::RenderWindow &window )
 	{
 		window.draw( it->get() );
 	}
+	
+	window.draw( arrow.get() );
 }
 
 void Information::fadein( int j, int max )
@@ -135,6 +143,8 @@ void Information::fadein( int j, int max )
 	{
 		it->fadein( j, max );
 	}
+	
+	arrow.fadein( j, max );
 }
 
 void Information::fadeout( int j, int min )
@@ -148,4 +158,6 @@ void Information::fadeout( int j, int min )
 	{
 		it->fadeout( j, min );
 	}
+	
+	arrow.fadeout( j, min );
 }
