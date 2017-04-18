@@ -274,6 +274,20 @@ bool Reset_button::doReset()
 		}
 		file.free();
 		
+		file.load( "data/txt/nick/nick_status.txt", std::ios::out );
+		if( file.is_good() )
+		{
+			file.get() << "0";
+		}
+		file.free();
+		
+		file.load( "data/txt/nick/nick_current.txt", std::ios::out );
+		if( file.is_good() )
+		{
+			file.get() << "___________";
+		}
+		file.free();
+		
 		return true;
 	}
 	
