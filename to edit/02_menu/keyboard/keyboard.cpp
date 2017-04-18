@@ -530,7 +530,7 @@ void Keyboard::handleButton( sf::Event &event )
 		{
 			MyFile file;
 			file.load( "data/txt/keyboard/keyboard_temporary.txt", std::ios::out );
-			printf( "happend\n" );
+			// printf( "happend\n" );
 			for( unsigned i = 0; i < actual_keys.size(); i++ )
 			{
 				file.get() << con::itos( actual_keys[ i ]->one ) + "\n";
