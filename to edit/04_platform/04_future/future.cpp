@@ -29,6 +29,7 @@ Future::Future()
 	money = new Money;
 	pause = new Pause;
 	sound_pad = new Sound_pad;
+	time_box = new Time_box;
 	
 	// Actions.
 	hp_dots = new Hp_dots;
@@ -90,6 +91,7 @@ void Future::free()
 	delete money;
 	delete pause;
 	delete sound_pad;
+	delete time_box;
 	
 	// Actions.
 	delete hp_dots;
@@ -137,6 +139,7 @@ void Future::reset()
 	heart->reset();
 	scores->reset();
 	money->reset();
+	time_box->reset();
 	
 	// Actions.
 	hp_dots->reset();
@@ -188,6 +191,7 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	money->load( screen_w );
 	pause->load( screen_w, screen_h );
 	sound_pad->load( screen_w, screen_h );
+	time_box->load( FPS );
 	
 	// Actions.
 	hp_dots->load( type, screen_w );
@@ -582,6 +586,21 @@ int Future::getType()
 int Future::getCoruption()
 {
 	return coruption;
+}
+
+string Future::getTimePlayed()
+{
+	return time_box->getTimePlayed();
+}
+
+int Future::getDeactivatedMines()
+{
+	return mine_factory->getCounter();
+}
+
+int Future::getEarnedMoney()
+{
+	return money->getEarnedMoney();
 }
 
 
