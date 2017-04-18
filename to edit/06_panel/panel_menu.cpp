@@ -141,15 +141,15 @@ bool Panel_menu::backToPlatform()
 }
 
 
-void Panel_menu::set( int scores, int type, bool status, int coruption )
+void Panel_menu::set( int scores, int type, bool status, int coruption, string timePlayed, int mines, int money )
 {
 	show_scores->setScores( scores );
 	show_scores->setResult( status );
 	show_scores->setCoruption( coruption );
 	show_scores->setWorld( type );
-	show_scores->setMoney( 1383 );
-	show_scores->setMine( 40, type );
-	show_scores->setTimePlayed( "15min 41sec" );
+	show_scores->setMoney( money );
+	show_scores->setMine( mines, type );
+	show_scores->setTimePlayed( timePlayed );
 	
 	if( status && type < 4 )
 	{
