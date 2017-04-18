@@ -165,7 +165,7 @@ void Head::reloadText()
 				{
 					cost = 0;
 					state = 1;
-					cost_text.setText( "You own it" );
+					cost_text.setText( "Already owned" );
 					cost_text.setPosition( specs.getRight(), cost_text.getY() );
 					cost_text.setColor( 0xFF, 0xFF, 0xFF );
 					// printf( "happen\n" );
@@ -282,7 +282,7 @@ bool Head::sellOut()
 void Head::makeNought()
 {
 	cost = 0;
-	cost_text.setText( "You own it" );
+	cost_text.setText( "Already owned" );
 	cost_text.setPosition( button.getX() -10, cost_text.getY() );
 	cost_text.setColor( 0xFF, 0xFF, 0xFF );
 	
