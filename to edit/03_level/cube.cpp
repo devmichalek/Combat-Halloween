@@ -54,7 +54,7 @@ void Cube::reset( int left, int bot )
 	cube.center( paper.getX() -5, paper.getY() -5, paper.getWidth(), paper.getHeight() );
 	
 	flatness_value = 50;
-	worldSize_value = 10;
+	worldSize_value = 27;
 	setFlatness( flatness_value );
 	setWorldSize( worldSize_value );
 	flatness.setPosition( paper.getX() -30, paper.getBot() -paper.getHeight()/6 );
