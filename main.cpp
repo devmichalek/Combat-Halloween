@@ -3,7 +3,7 @@
     Purpose: Create engine, call loop then delete.
 
     @author Adrian Michalek
-    @version 2016.08.13
+    @version 2016.08.14
 	@email adrmic98@gmail.com
 */
 
