@@ -1,5 +1,6 @@
 #include "timer.h"
 
+
 Timer::Timer( float fps )
 {
     this->fps = 1000 / fps;
