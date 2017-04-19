@@ -1,4 +1,0 @@
-amount of offsets
-delay
-velocity
-scale

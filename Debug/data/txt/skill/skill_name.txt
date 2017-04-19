@@ -1,6 +1,0 @@
-shot
-sword
-stunt hit
-critical hit
-explosive hit
-sanative hit

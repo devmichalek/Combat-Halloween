@@ -1,4 +1,0 @@
-speed x1.2
-speed x1.5, gravity x2
-speed x1.2
-speed x1.4, gravity x2

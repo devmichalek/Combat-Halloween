@@ -1,9 +1,0 @@
-delay (change frequency of drawing next offset)
-scale of sprite
-damage
-velocity, speed
-heart points - hp
-attack line - delay for attack state (less = faster attacking)
-
-everything is time by chance (0-100%)
-chance - during level state you can set own difficult, higher difficult means more damage, higher velocity, more hp etc...

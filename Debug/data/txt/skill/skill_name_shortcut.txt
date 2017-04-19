@@ -1,6 +1,0 @@
-shot
-sword
-stunt
-critic.
-explos.
-sanat.

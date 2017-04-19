@@ -1,3 +1,0 @@
-6
-3
-tells how many wav files we have to play, first line is dropped money amount, second is about jumped money amount.
