@@ -1,4 +1,4 @@
-![bar](https://cloud.githubusercontent.com/assets/19840443/25200198/c6798e08-254d-11e7-99ae-ecdd2c95d7b4.png)
+![bar](https://cloud.githubusercontent.com/assets/19840443/25200350/4d0039c2-254e-11e7-906d-5fd63c3f76ee.png)
 [![linux](https://cloud.githubusercontent.com/assets/19840443/25199468/3b54c178-254b-11e7-9d29-7f582afc42d9.png)](https://drive.google.com/uc?export=download&confirm=3UzI&id=0B36D1JHNNqr-eGZzWnhNNkZxYzA)
 [![windows](https://cloud.githubusercontent.com/assets/19840443/25199497/515257ba-254b-11e7-89d8-d3ce908ba02f.png)](https://drive.google.com/uc?export=download&confirm=KQ5K&id=0B36D1JHNNqr-RTE1dTZCQ1FkNms)
 [![code](https://cloud.githubusercontent.com/assets/19840443/25199629/bf2eb86e-254b-11e7-9cf7-52199eaf50a6.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-LVhidzZnQjFEZ0U)
