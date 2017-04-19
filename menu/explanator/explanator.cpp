@@ -1,4 +1,4 @@
-#include "02_menu/explanator/explanator.h"
+#include "menu/explanator/explanator.h"
 
 Explanator::Explanator()
 {

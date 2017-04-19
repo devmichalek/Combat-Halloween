@@ -10,8 +10,8 @@
 #pragma once
 
 #include "drawable/sprite.h"
-#include "02_menu/click.h"
-#include "02_menu/explanator/explanator.h"
+#include "menu/click.h"
+#include "menu/explanator/explanator.h"
 
 class Link_button :public Click
 {

@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "02_menu/development/develop.h"
-#include "04_platform/ninja/kunai/damage.h"
+#include "menu/development/develop.h"
+#include "platform/ninja/kunai/damage.h"
 #include <vector>
 
 class Development

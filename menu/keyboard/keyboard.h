@@ -11,7 +11,7 @@
 
 #include "drawable/text.h"
 #include "drawable/sprite.h"
-#include "02_menu/click.h"
+#include "menu/click.h"
 #include <vector>
 
 class Key

@@ -1,9 +1,9 @@
 /**
-    play_button.h
-    Purpose: class Play_button - for button 'play' to start game, contain state.
+    reset_button.h
+    Purpose: class Reset_button after click reset each txt file, all settings, all money getted etc.
 
     @author Adrian Michalek
-    @version 2016.10.03
+    @version 2017.03.07
 	@email adrmic98@gmail.com
 */
 
@@ -11,37 +11,33 @@
 
 #include "drawable/sprite.h"
 #include "drawable/text.h"
-#include "02_menu/click.h"
+#include "menu/click.h"
+#include "menu/explanator/explanator.h"
 
-class Play_button :public Click
+class Reset_button :public Click
 {
-
-protected:
-
+	Explanator explanator;
 	mutable sf::Uint8 state;
 	mutable MySprite mySprite;
 	MyText myText;
 	
+	bool reset;
+	MySprite button;
+
 public:
-	
-	Play_button();
-    ~Play_button();
+
+	Reset_button();
+    ~Reset_button();
 	void free();
 
     void load( int screen_w, int bot );
     void draw( sf::RenderWindow* &window );
+	void drawButton( sf::RenderWindow* &window );
     void handle( sf::Event &event );
 	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
 	
-	// mutator
-	void setState( int state );	
-	
-	// getters
-	const int getBot() const;
-	const int getX() const;
+	bool doReset();
 	const sf::Uint8& getState() const;
-	
-	bool nextState() const;
 };
