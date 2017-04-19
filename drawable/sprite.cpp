@@ -10,10 +10,6 @@
 
 #include "sprite.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
 
 
 
@@ -495,7 +491,7 @@ bool MySprite::checkPixelCollision( int x, int y )
 }
 
 
-
+/*
 bool MySprite::operator ==( MySprite& mySprite )
 {
 	if( width == mySprite.getWidth() && height == mySprite.getHeight() )
@@ -556,12 +552,13 @@ std::ostream& MySprite::operator <<( std::ostream& str )
 {
 	std::string result = "";
 	result += name;
-	/*
-	result += " x: " + left;
-	result += " y: " + top;
-	result += " w: " + width;
-	result += " h: " + height;
-	result += " alpha: " + color.a;
-	*/
+
+	//result += " x: " + left;
+	//result += " y: " + top;
+	//result += " w: " + width;
+	//result += " h: " + height;
+	//result += " alpha: " + color.a;
+	
 	return str << result;
 }
+*/

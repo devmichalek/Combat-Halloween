@@ -66,11 +66,12 @@ public:
 	
 	bool checkPixelCollision( int x, int y );
 	
-	
+	/*
 	bool operator ==( MySprite& mySprite );
 	bool operator >( MySprite& mySprite );
 	bool operator >=( MySprite& mySprite );
 	bool operator <( MySprite& mySprite );
 	bool operator <=( MySprite& mySprite );
 	std::ostream& operator <<( std::ostream& str );
+	*/
 };
