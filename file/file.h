@@ -1,3 +1,12 @@
+/**
+    file.h
+    Purpose: class MyFile its own class protecting fstream* file.
+
+    @author Adrian Michalek
+    @version 2017.04.01
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include <fstream>
