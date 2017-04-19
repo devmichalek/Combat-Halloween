@@ -2,21 +2,21 @@
 
 #include "core.h"
 #include "timer.h"
-#include "00_loading/loading.h"
-#include "01_initialization/initialization.h"
-#include "02_menu/menu.h"
-#include "03_level/level.h"
+#include "initialization/loading.h"
+#include "initialization/initialization.h"
+#include "menu/menu.h"
+#include "level/level.h"
 
 
-#include "04_platform/00_halloween/halloween.h"
-#include "04_platform/01_forest/forest.h"
-#include "04_platform/02_winter/winter.h"
-#include "04_platform/03_desert/desert.h"
-#include "04_platform/04_future/future.h"
+#include "platform/halloween/halloween.h"
+#include "platform/forest/forest.h"
+#include "platform/winter/winter.h"
+#include "platform/desert/desert.h"
+#include "platform/future/future.h"
 
 
-#include "05_loading_world/loading_world.h"
-#include "06_panel/panel_menu.h"
+#include "panel/loading_world.h"
+#include "panel/panel_menu.h"
 
 class Engine
 {
