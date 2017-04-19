@@ -208,7 +208,7 @@ void Show_scores::setCoruption( sf::Uint8 c )
 	if( c == 33 )
 	{
 		coruption_word.setText( "low" );
-		coruption_word.setColor( 0x99, 0xff, 0x00 );
+		coruption_word.setColor( 0x58, 0x70, 0x58 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +5 );
 		coruption_dot.load( "data/03_level/0.png" );
 		coruption_dot.setPosition( coruption_word.getRight() +5, coruption_word.getY() -2 );
@@ -224,7 +224,7 @@ void Show_scores::setCoruption( sf::Uint8 c )
 	else
 	{
 		coruption_word.setText( "high" );
-		coruption_word.setColor( 0xCC, 0x00, 0x00 );
+		coruption_word.setColor( 0xE8, 0x68, 0x50 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +5 );
 		coruption_dot.load( "data/03_level/2.png" );
 		coruption_dot.setPosition( coruption_word.getRight() +5, coruption_word.getY() -1 );
