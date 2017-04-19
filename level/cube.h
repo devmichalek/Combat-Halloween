@@ -11,7 +11,7 @@
 
 #include "drawable/sprite.h"
 #include "drawable/text.h"
-#include "02_menu/click.h"
+#include "menu/click.h"
 
 class Cube :public Click
 {

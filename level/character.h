@@ -9,7 +9,7 @@
 
 #pragma once
 
-#include "02_menu/click.h"
+#include "menu/click.h"
 #include "drawable/text.h"
 #include "drawable/sprite.h"
 #include <vector>
