@@ -112,11 +112,11 @@ void Character::load( int screen_w, int screen_h )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "character-sprite nr" +con::itos( i ) );
-		sprites[ sprites.size() -1 ]->load( "data/03_level/hero" +con::itos( i ) +".png", 10 );
+		sprites[ sprites.size() -1 ]->load( "data/level/hero" +con::itos( i ) +".png", 10 );
 		
 		texts.push_back( new MyText() );
 		texts[ texts.size() -1 ]->setName( "character-texts nr" +con::itos( i ) );
-		texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	}
 	
 	texts[ 0 ]->setText( "adventure" );
@@ -128,14 +128,14 @@ void Character::load( int screen_w, int screen_h )
 	
 	
 	click.setID( "character-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 	
 	text.setName( "character-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 50, 255, 255, 255 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 50, 255, 255, 255 );
 	text.setText( "Choose character" );
 	
 	information.setName( "character-information" );
-	information.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	information.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Choose character to start game." );
 	
 	range = screen_w;
@@ -147,10 +147,10 @@ void Character::load( int screen_w, int screen_h )
 	alpha_line = 100;
 	
 	tick.setName( "choice-tick" );
-	tick.load( "data/03_level/tick.png" );
+	tick.load( "data/level/tick.png" );
 	
 	cross.setName( "choice-cross" );
-	cross.load( "data/03_level/x.png" );
+	cross.load( "data/level/x.png" );
 	
 	// load unlocked worlds
 	MyFile file;

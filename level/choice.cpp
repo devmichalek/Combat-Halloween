@@ -82,28 +82,28 @@ void Choice::free()
 void Choice::load( int screen_w, int screen_h )
 {
 	button.setName( "choice-button" );
-	button.load( "data/03_level/random.png", 4 );
+	button.load( "data/level/random.png", 4 );
 	button.setScale( 0.4, 0.4 );
 	
 	text.setName( "choice-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "Choose world or " );
 	
 	
 	information.setName( "choice-information" );
-	information.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	information.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Following worlds will be generated randomly." );
 
 	for( int i = 0; i < 5; i ++ )
 	{
 		world.push_back( new MySprite() );
 		world[ i ]->setName( "choice-world[ " + con::itos( i ) + " ]" );
-		world[ i ]->load( "data/04_platform/world/" + con::itos( i ) + "/bg.png" );
+		world[ i ]->load( "data/platform/world/" + con::itos( i ) + "/bg.png" );
 		world[ i ]->setScale( 0.1, 0.1 );
 		
 		description.push_back( new MyText() );
 		description[ i ]->setName( "choice-description" );
-		description[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+		description[ i ]->setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	}
 	
 	// set text
@@ -116,20 +116,20 @@ void Choice::load( int screen_w, int screen_h )
 
 	
 	click.setID( "choice-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 	
 	frame.setName( "choice-frame" );
-	frame.load( "data/03_level/frame.png" );
+	frame.load( "data/level/frame.png" );
 	frame.setScale( 0.2, 0.2 );
 	
 	alpha_line = 100;
 	counter_line = 150;
 	
 	tick.setName( "choice-tick" );
-	tick.load( "data/03_level/tick.png" );
+	tick.load( "data/level/tick.png" );
 	
 	cross.setName( "choice-cross" );
-	cross.load( "data/03_level/x.png" );
+	cross.load( "data/level/x.png" );
 }
 
 void Choice::handle( sf::Event &event )

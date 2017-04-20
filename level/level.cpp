@@ -47,8 +47,8 @@ void Level::load( unsigned screen_w, unsigned screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	background->load( "data/02_menu/background.png" );
-	music->load( "data/03_level/music.mp3" );
+	background->load( "data/menu/background.png" );
+	music->load( "data/level/music.mp3" );
 	backtomenu->load( screen_w );
 	choice->load( screen_w, screen_h );
 }

@@ -12,7 +12,7 @@
 void Backtomenu::load( int screen_w )
 {
 	button.setName( "backtomenu-backtomenu" );
-    button.load( "data/02_menu/backtomenu.png", 4 );
+    button.load( "data/menu/backtomenu.png", 4 );
 
 	if( locked )
 	{
@@ -23,7 +23,7 @@ void Backtomenu::load( int screen_w )
 	button.setPosition( screen_w - button.getWidth() -20, 20 );
 	
 	click.setID( "backtomenu-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 	
 	state = 0;
 }

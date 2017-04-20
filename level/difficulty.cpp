@@ -79,7 +79,7 @@ void Difficulty::load( int left, int bot )
 	free();
 	
 	corruption.setName( "difficulty-corruption" );
-	corruption.setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 255, 255, 255 );
+	corruption.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 	corruption.setText( "Corruption" );
 	
 	
@@ -87,10 +87,10 @@ void Difficulty::load( int left, int bot )
 	for( int i = 0; i < nr; i++ )
 	{
 		texts.push_back( new MyText() );
-		texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 255, 255, 255 );
+		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 		
 		sprites.push_back( new MySprite() );
-		sprites[ sprites.size() -1 ]->load( "data/03_level/" +con::itos( i ) +".png" );
+		sprites[ sprites.size() -1 ]->load( "data/level/" +con::itos( i ) +".png" );
 	}
 	
 	texts[ 0 ]->setText( "low" );
@@ -103,7 +103,7 @@ void Difficulty::load( int left, int bot )
 	
 	
 	click.setID( "difficulty-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 }
 
 void Difficulty::handle( sf::Event &event )
