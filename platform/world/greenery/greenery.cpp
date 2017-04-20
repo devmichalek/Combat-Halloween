@@ -87,7 +87,7 @@ void Greenery::load( int type, int width, int screen_w )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +con::itos( i+min ) +"]" );
-			sprites[ sprites.size() -1 ]->load( "data/04_platform/world/" +con::itos( type )
+			sprites[ sprites.size() -1 ]->load( "data/platform/world/" +con::itos( type )
 			+ "/" +con::itos( i+min ) + ".png" );
 		}
 		

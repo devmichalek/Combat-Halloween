@@ -74,7 +74,7 @@ void Hp_dots::load( int type, int screen_w )
 	}
 	
 	sprite.setName( "hp_dots-sprite" );
-	sprite.load( "data/04_platform/panel/hp_dot/0.png" );
+	sprite.load( "data/platform/panel/hp_dot/0.png" );
 }
 
 void Hp_dots::draw( sf::RenderWindow* &window )

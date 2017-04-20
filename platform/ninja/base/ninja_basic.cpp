@@ -174,7 +174,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "hero-sprite[" + con::itos( i ) + "]" );
-		sprites[ i ]->load( "data/04_platform/hero/" + con::itos( type ) + "/" + con::itos( i ) + ".png", nr -1 );
+		sprites[ i ]->load( "data/platform/hero/" + con::itos( type ) + "/" + con::itos( i ) + ".png", nr -1 );
 		sprites[ i ]->setScale( scale, scale );
 		
 		x.push_back( width /2 );
@@ -323,7 +323,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 		{
 			run_sounds.push_back( new Slab() );
 			run_sounds[ run_sounds.size() -1 ]->setName( "hero-run sound" );
-			run_sounds[ run_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/run/" +con::itos(i) +".wav" );
+			run_sounds[ run_sounds.size() -1 ]->load( "data/platform/hero/sounds/run/" +con::itos(i) +".wav" );
 		}
 	}
 	file.free();
@@ -338,7 +338,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 		{
 			sword_sounds.push_back( new Slab() );
 			sword_sounds[ sword_sounds.size() -1 ]->setName( "hero-sword sound" );
-			sword_sounds[ sword_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/sword/" +con::itos(i) +".wav" );
+			sword_sounds[ sword_sounds.size() -1 ]->load( "data/platform/hero/sounds/sword/" +con::itos(i) +".wav" );
 		}
 	}
 	file.free();
@@ -353,7 +353,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 		{
 			jump_sounds.push_back( new Slab() );
 			jump_sounds[ jump_sounds.size() -1 ]->setName( "hero-jump sound" );
-			jump_sounds[ jump_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/jump/" +con::itos(i) +".wav" );
+			jump_sounds[ jump_sounds.size() -1 ]->load( "data/platform/hero/sounds/jump/" +con::itos(i) +".wav" );
 		}
 	}
 	file.free();
@@ -368,7 +368,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 		{
 			throw_sounds.push_back( new Slab() );
 			throw_sounds[ throw_sounds.size() -1 ]->setName( "hero-throw sound" );
-			throw_sounds[ throw_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/throw/" +con::itos(i) +".wav" );
+			throw_sounds[ throw_sounds.size() -1 ]->load( "data/platform/hero/sounds/throw/" +con::itos(i) +".wav" );
 		}
 	}
 	file.free();
@@ -383,7 +383,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 		{
 			dead_sounds.push_back( new Slab() );
 			dead_sounds[ dead_sounds.size() -1 ]->setName( "hero-dead sound" );
-			dead_sounds[ dead_sounds.size() -1 ]->load( "data/04_platform/hero/sounds/dead/" +con::itos(i) +".wav" );
+			dead_sounds[ dead_sounds.size() -1 ]->load( "data/platform/hero/sounds/dead/" +con::itos(i) +".wav" );
 		}
 	}
 	file.free();

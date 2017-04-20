@@ -66,21 +66,21 @@ void Boulder::load( int type, int width, int screen_w )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "boulder-sprite nr" +con::itos( i ) );
-		sprites[ i ]->load( "data/04_platform/world/" +con::itos( type ) +"/traps/" +con::itos( i ) +".png" );
+		sprites[ i ]->load( "data/platform/world/" +con::itos( type ) +"/traps/" +con::itos( i ) +".png" );
 	}
 	
 	hit.setName( "boulder-hit" );
 	if( type == 4 )
 	{
-		hit.load( "data/04_platform/world/sounds/wall/1.wav" );
+		hit.load( "data/platform/world/sounds/wall/1.wav" );
 	}
 	else
 	{
-		hit.load( "data/04_platform/world/sounds/wall/0.wav" );
+		hit.load( "data/platform/world/sounds/wall/0.wav" );
 	}
 	
 	plush.setName( "boulder-plush" );
-	plush.load( "data/04_platform/world/sounds/wall/2.wav" );
+	plush.load( "data/platform/world/sounds/wall/2.wav" );
 	
 	MyFile file;
 	file.load( "data/txt/world/boulder.txt" );

@@ -84,12 +84,12 @@ void Kunai_effects::load( int which )
 		slabs[ slabs.size() -1 ]->setName( "kunai_effects-slab" );
 	}
 	
-	string path = "data/04_platform/hero/kunai_effects/";
+	string path = "data/platform/hero/kunai_effects/";
 	sprites[ 0 ]->load( path +"0.png", lines[ 0 ] );
 	sprites[ 1 ]->load( path +"1.png", lines[ 1 ] );
 	sprites[ 2 ]->load( path +con::itos( which ) +".png", lines[ 2 ] );
 	
-	string path2 = "data/04_platform/hero/kunai_effects/sounds/";
+	string path2 = "data/platform/hero/kunai_effects/sounds/";
 	slabs[ 0 ]->load( path2 +"0.wav" );
 	slabs[ 1 ]->load( path2 +"1.wav" );
 	slabs[ 2 ]->load( path2 +"2.wav" );

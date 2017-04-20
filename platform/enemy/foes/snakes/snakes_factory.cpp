@@ -117,7 +117,7 @@ void Snakes_factory::load( int width, int screen_w, int screen_h )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ sprites.size() -1 ]->setName( "snakes_factory-sprites nr" +to_string( i ) );
-			sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/snakes/" +to_string( i ) +".png", lines[ i ] );
+			sprites[ sprites.size() -1 ]->load( "data/platform/enemy/snakes/" +to_string( i ) +".png", lines[ i ] );
 			sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 		}
 	}
@@ -129,14 +129,14 @@ void Snakes_factory::load( int width, int screen_w, int screen_h )
 	
 	// Set sounds.
 	hit.setName( "snakes_factory-hit" );
-	hit.load( "data/04_platform/enemy/snakes/sounds/hit/0.wav" );
+	hit.load( "data/platform/enemy/snakes/sounds/hit/0.wav" );
 	
 	attack.setName( "snakes_factory-attack" );
-	attack.load( "data/04_platform/enemy/snakes/sounds/attack/0.wav" );
+	attack.load( "data/platform/enemy/snakes/sounds/attack/0.wav" );
 	
 	// Set HP.
 	hp.setName( "snakes_factory-hp" );
-	hp.setFont( "data/00_loading/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
+	hp.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
 	hp.setText( " " );
 	hp.setAlpha( 0xFF );
 	

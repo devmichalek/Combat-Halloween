@@ -35,7 +35,7 @@ void Exit::load( int width, int screen_w )
 	main_x = 0;
 	
 	rhythm.setName( "exit-rhythm" );
-	rhythm.load( "data/04_platform/world/sounds/exit/0.wav" );
+	rhythm.load( "data/platform/world/sounds/exit/0.wav" );
 }
 
 

@@ -100,8 +100,8 @@ void Kunai::load()
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "kunai-sprites" );
-		if( i == 3 )	sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/kunai/" +con::itos( explosive_level ) +".png", 6 );
-		else			sprites[ sprites.size() -1 ]->load( "data/04_platform/hero/kunai/" +con::itos( i ) +".png" );
+		if( i == 3 )	sprites[ sprites.size() -1 ]->load( "data/platform/hero/kunai/" +con::itos( explosive_level ) +".png", 6 );
+		else			sprites[ sprites.size() -1 ]->load( "data/platform/hero/kunai/" +con::itos( i ) +".png" );
 	}
 	
 	

@@ -42,16 +42,16 @@ void Sound_pad::load( int screen_w, int screen_h )
 	float scale = 0.6;
 	
 	scratch.setName( "sound_pad-scratch" );
-	scratch.load( "data/04_platform/panel/sound_pad/scratch.png" );
+	scratch.load( "data/platform/panel/sound_pad/scratch.png" );
 	scratch.setScale( scale, scale );
 	
 	music.setName( "sound_pad-music" );
-	music.load( "data/04_platform/panel/sound_pad/music.png" );
+	music.load( "data/platform/panel/sound_pad/music.png" );
 	music.setScale( scale, scale );
 	music.setPosition( 10, screen_h -music.getHeight() -10 );
 	
 	chunk.setName( "sound_pad-chunk" );
-	chunk.load( "data/04_platform/panel/sound_pad/chunk.png" );
+	chunk.load( "data/platform/panel/sound_pad/chunk.png" );
 	chunk.setScale( scale, scale );
 	chunk.setPosition( music.getRight() +20, screen_h -chunk.getHeight() -10 );
 }

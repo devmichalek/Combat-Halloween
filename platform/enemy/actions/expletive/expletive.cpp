@@ -59,14 +59,14 @@ void Expletive::load( string name )
 		{
 			hits.push_back( new Slab() );
 			hits[ hits.size() -1 ]->setName( "expletive-" +name );
-			hits[ hits.size() -1 ]->load( "data/04_platform/enemy/" +name +"/sounds/hit/" +con::itos( i ) +".wav" );
+			hits[ hits.size() -1 ]->load( "data/platform/enemy/" +name +"/sounds/hit/" +con::itos( i ) +".wav" );
 		}
 		
 		for( int i = 0; i < attack_number; i++ )
 		{
 			attacks.push_back( new Slab() );
 			attacks[ attacks.size() -1 ]->setName( "expletive-" +name );
-			attacks[ attacks.size() -1 ]->load( "data/04_platform/enemy/" +name +"/sounds/attack/" +con::itos( i ) +".wav" );
+			attacks[ attacks.size() -1 ]->load( "data/platform/enemy/" +name +"/sounds/attack/" +con::itos( i ) +".wav" );
 		}
 	}
 	file.free();

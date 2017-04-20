@@ -46,7 +46,7 @@ void Scores::load( int type, int screen_w )
 	this->screen_w = screen_w;
 	
 	text.setName( "scores-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 46, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 46, 0xFF, 0xFF, 0xFF );
 	text.setText( "0" );
 	text.setPosition( screen_w /2 -text.getWidth() /2, 5 );
 	

@@ -49,11 +49,11 @@ void Score_dots::load( int screen_w )
 	this->screen_w = screen_w;
 	
 	sprite.setName( "score_dots-sprite" );
-	sprite.load( "data/04_platform/panel/score/0.png" );
+	sprite.load( "data/platform/panel/score/0.png" );
 	
 	
 	point.setName( "score_dots-point" );
-	point.load( "data/04_platform/world/sounds/score_dot/0.wav" );
+	point.load( "data/platform/world/sounds/score_dot/0.wav" );
 }
 
 void Score_dots::draw( sf::RenderWindow* &window )

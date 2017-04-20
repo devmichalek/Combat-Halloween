@@ -136,7 +136,7 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ sprites.size() -1 ]->setName( name +"-sprites[ " +con::itos( i ) +" ]" );
-			sprites[ sprites.size() -1 ]->load( "data/04_platform/enemy/" +name +"/" +con::itos( i ) +".png", lines[ i ] );
+			sprites[ sprites.size() -1 ]->load( "data/platform/enemy/" +name +"/" +con::itos( i ) +".png", lines[ i ] );
 		}
 	}
 	file.free();
@@ -212,7 +212,7 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	file.free();
 	
 	hp.setName( "factory-hp" );
-	hp.setFont( "data/00_loading/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
+	hp.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
 	hp.setText( " " );
 	hp.setAlpha( 0xFF );
 	

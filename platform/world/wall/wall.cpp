@@ -66,13 +66,13 @@ void Wall::load( int type, int width, int screen_w )
 		sprites.push_back( new MySprite() );
 	}
 	
-	sprites[ 0 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 0 ) +".png" );
-	sprites[ 1 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 1 ) +".png" );
-	sprites[ 2 ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( 10 ) +".png" );
-	sprites[ 3 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 4 ) +".png" );
-	sprites[ 4 ]->load( "data/04_platform/world/" +con::itos( type ) +"/" +con::itos( 12 ) +".png" );
-	sprites[ 5 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 2 ) +".png" );
-	sprites[ 6 ]->load( "data/04_platform/world/" +con::itos( type ) +"/pug/" +con::itos( 3 ) +".png" );
+	sprites[ 0 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 0 ) +".png" );
+	sprites[ 1 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 1 ) +".png" );
+	sprites[ 2 ]->load( "data/platform/world/" +con::itos( type ) +"/" +con::itos( 10 ) +".png" );
+	sprites[ 3 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 4 ) +".png" );
+	sprites[ 4 ]->load( "data/platform/world/" +con::itos( type ) +"/" +con::itos( 12 ) +".png" );
+	sprites[ 5 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 2 ) +".png" );
+	sprites[ 6 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 3 ) +".png" );
 	
 	MyFile file;
 	file.load( "data/txt/world/wall.txt" );
@@ -117,10 +117,10 @@ void Wall::load( int type, int width, int screen_w )
 	{
 		n = 1;
 	}
-	hit.load( "data/04_platform/world/sounds/wall/" +con::itos( n ) +".wav" );
+	hit.load( "data/platform/world/sounds/wall/" +con::itos( n ) +".wav" );
 	
 	plush.setName( "wall-plush" );
-	plush.load( "data/04_platform/world/sounds/wall/2.wav" );
+	plush.load( "data/platform/world/sounds/wall/2.wav" );
 }
 
 void Wall::draw( sf::RenderWindow* &window )

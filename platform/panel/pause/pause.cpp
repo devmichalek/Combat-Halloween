@@ -25,7 +25,7 @@ void Pause::load( int screen_w, int screen_h )
 	free();
 	
 	text.setName( "pause-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 100, 255, 255, 255 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 100, 255, 255, 255 );
 	text.setText( "Paused" );
 	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 -text.getHeight()/2 -40 );
 	text.setAlpha( 225 );

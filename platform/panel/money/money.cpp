@@ -52,17 +52,17 @@ void Money::load( int screen_w )
 	line = 10;
 	
 	grey.setName( "money-grey" );
-	grey.load( "data/04_platform/panel/grey/grey.png" );
+	grey.load( "data/platform/panel/grey/grey.png" );
 	grey.setScale( 0.5, 0.5 );
 	grey.setPosition( screen_w -grey.getWidth() -5, 5 );
 	
 	coin.setName( "money-coin" );
-	coin.load( "data/04_platform/panel/coin/0.png", line );
+	coin.load( "data/platform/panel/coin/0.png", line );
 	coin.setScale( 0.65, 0.65 );
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
 	text.setName( "money-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 32, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 32, 0xD9, 0xD9, 0xD9 );
 }
 
 void Money::draw( sf::RenderWindow* &window )

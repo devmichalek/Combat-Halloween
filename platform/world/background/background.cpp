@@ -48,14 +48,14 @@ void Background::load( int type, int screen_w, int screen_h )
 		{
 			sprites.push_back( new MySprite() );
 			sprites[ sprites.size() -1 ]->setName( "background-sprite" );
-			sprites[ sprites.size() -1 ]->load( "data/04_platform/world/1/bg" +con::itos( i ) +".png" );
+			sprites[ sprites.size() -1 ]->load( "data/platform/world/1/bg" +con::itos( i ) +".png" );
 		}
 	}
 	else
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "background-sprite" );
-		sprites[ sprites.size() -1 ]->load( "data/04_platform/world/" +con::itos( type ) +"/bg.png" );
+		sprites[ sprites.size() -1 ]->load( "data/platform/world/" +con::itos( type ) +"/bg.png" );
 	}
 }
 

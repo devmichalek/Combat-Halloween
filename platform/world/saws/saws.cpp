@@ -54,7 +54,7 @@ void Saws::load( int type, int screen_w, int width )
 	
 	
 	sprite.setName( "saws-sprite" );
-	sprite.load( "data/04_platform/world/" +con::itos( type ) +"/traps/2.png" );
+	sprite.load( "data/platform/world/" +con::itos( type ) +"/traps/2.png" );
 	
 	// Set damage.
 	MyFile file;
@@ -95,7 +95,7 @@ void Saws::load( int type, int screen_w, int width )
 	
 	// Set hit.
 	hit.setName( "saws-hit" );
-	hit.load( "data/04_platform/world/sounds/wall/1.wav" );
+	hit.load( "data/platform/world/sounds/wall/1.wav" );
 	
 	sprite.setOrigin( sprite.getWidth() /2, sprite.getHeight() /2 );
 }

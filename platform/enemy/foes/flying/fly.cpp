@@ -91,7 +91,7 @@ void Fly::load( int screen_w, int screen_h, string path )
 	file.free();
 	
 	sprite.setName( "fly-sprite" );
-	sprite.load( "data/04_platform/enemy/flying/"+path +".png", line );
+	sprite.load( "data/platform/enemy/flying/"+path +".png", line );
 	x = -sprite.getWidth();
 	y = sprite.getHeight();
 	sprite.setPosition( x, y );

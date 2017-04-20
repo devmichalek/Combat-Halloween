@@ -54,7 +54,7 @@ void Spikes::load( int type, int screen_w, int width )
 	
 	
 	sprite.setName( "spikes-sprite" );
-	sprite.load( "data/04_platform/world/" +con::itos( type ) +"/traps/2.png" );
+	sprite.load( "data/platform/world/" +con::itos( type ) +"/traps/2.png" );
 	
 	// Set damage.
 	MyFile file;
@@ -95,7 +95,7 @@ void Spikes::load( int type, int screen_w, int width )
 	
 	// Set hit.
 	hit.setName( "spikes-hit" );
-	hit.load( "data/04_platform/world/sounds/wall/0.wav" );
+	hit.load( "data/platform/world/sounds/wall/0.wav" );
 }
 
 void Spikes::draw( sf::RenderWindow* &window )

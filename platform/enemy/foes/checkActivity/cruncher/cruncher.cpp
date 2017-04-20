@@ -50,7 +50,7 @@ void Cruncher::load( int fps, int screen_w )
 	delay = 12;
 	
 	sprite.setName( "cruncher-sprite" );
-	sprite.load( "data/04_platform/enemy/checkActivity/cruncher/0.png", line );
+	sprite.load( "data/platform/enemy/checkActivity/cruncher/0.png", line );
 	sprite.setScale( 0.5, 0.5 );
 	
 	reset();

@@ -216,7 +216,7 @@ void Desert::load( int screen_w, int screen_h, unsigned FPS )
 	
 	// Sound.
 	music->setID( "forest-music" );
-	music->load( "data/04_platform/world/" +con::itos(type) +"/music.mp3", 50 );
+	music->load( "data/platform/world/" +con::itos(type) +"/music.mp3", 50 );
 	
 	// Panel.
 	heart->load();

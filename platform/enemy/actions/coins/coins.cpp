@@ -104,14 +104,14 @@ void Coins::load( int width, int screen_w, int type )
 		{
 			dropped_coins.push_back( new Slab() );
 			dropped_coins[ dropped_coins.size() -1 ]->setName( "coins-dropped_coins" );
-			dropped_coins[ dropped_coins.size() -1 ]->load( "data/04_platform/panel/coin/sounds/dropped/" +con::itos( i ) +".wav" );
+			dropped_coins[ dropped_coins.size() -1 ]->load( "data/platform/panel/coin/sounds/dropped/" +con::itos( i ) +".wav" );
 		}
 		
 		for( int i = 0; i < jumped; i ++ )
 		{
 			jumped_coins.push_back( new Slab() );
 			jumped_coins[ jumped_coins.size() -1 ]->setName( "coins-jumped_coins" );
-			jumped_coins[ jumped_coins.size() -1 ]->load( "data/04_platform/panel/coin/sounds/jumped/" +con::itos( i ) +".wav" );
+			jumped_coins[ jumped_coins.size() -1 ]->load( "data/platform/panel/coin/sounds/jumped/" +con::itos( i ) +".wav" );
 		}
 	}
 	file.free();
@@ -119,7 +119,7 @@ void Coins::load( int width, int screen_w, int type )
 	
 	int coin_line = 10;
 	coin.setName( "factory-coin" );
-	coin.load( "data/04_platform/panel/coin/0.png", coin_line );
+	coin.load( "data/platform/panel/coin/0.png", coin_line );
 	coin.setScale( 0.4, 0.4 );
 	
 	// max amount of coins is 100
