@@ -6,8 +6,16 @@
 [![dll](https://cloud.githubusercontent.com/assets/19840443/25199506/5bf2a698-254b-11e7-95b0-1d6e6e1d33d6.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
 <br/>
 <br/>
+<br/>
 ## About
 First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via SFML multimedia and SDL_Mixer audio library completed with c++ language. Two frustrating things is no-rezising window and no-checking files before application starts. I wish I finished this project soon but now just try what I have. Btw remember that there are no bugs there are features!
 <br/>
+<br/>
+<br/>
 ## Download
-Application is available for windows users and linux-familiar people. You have two buttons under the picture, choose one of them to download. You might want to download only pictures, .mp3, .wav etc. files then just click on button with label "files". Whole code is forthcoming, click on button "code". 
+Application is available for windows users and linux-familiar people. You have two buttons under the picture, choose one of them to download. You might want to download only pictures, .mp3, .wav etc. files then just click on button with label "files". Whole code is forthcoming, click on button "code". The last button gives you .dll files. 
+<br/>
+<br/>
+<br/>
+## For involved
+I used SFML 2.4.2 for ![GCC 6.1.0 MinGW (DW2) - 32-bit](https://www.sfml-dev.org/files/SFML-2.4.2-windows-gcc-6.1.0-mingw-32-bit.zip) according to ![MinGW Builds 6.1.0 (32-bit)](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/6.1.0/threads-posix/dwarf/i686-6.1.0-release-posix-dwarf-rt_v5-rev0.7z/download)
