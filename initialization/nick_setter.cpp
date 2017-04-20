@@ -32,12 +32,12 @@ void Nick_setter::load( int screen_w, int screen_h )
 	free();
 	
 	label.setName( "nick_setter-label" );
-	label.load( "data/01_initialization/fancy_label.png" );
+	label.load( "data/initialization/fancy_label.png" );
 	label.setPosition( screen_w /2 -label.getWidth() /2, screen_h /3 +label.getHeight() /2 );
 	
 	y_state = 345;
 	text.setName( "nick_setter-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "___________"  );
 	reloadPosition();
 	
