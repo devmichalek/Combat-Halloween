@@ -33,21 +33,21 @@ void Title::free()
 void Title::load( const int& screen_w )
 {
 	belt.setName( "title-belt" );
-    belt.load( "data/02_menu/belt.png" );
+    belt.load( "data/menu/belt.png" );
 	belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
 	
 	title.setName( "title-title" );
-	title.setFont( "data/02_menu/BADABB__.TTF", 50, 0x7F, 0x99, 0x95 );
+	title.setFont( "data/menu/BADABB__.TTF", 50, 0x7F, 0x99, 0x95 );
 	title.setText( "Assassin's" );
 	title.setPosition( screen_w/2 - title.getWidth() /2 -30, 14 );
 	
 	title_sec.setName( "title-title" );
-	title_sec.setFont( "data/02_menu/BADABB__.TTF", 50, 0x7F, 0x99, 0x95 );
+	title_sec.setFont( "data/menu/BADABB__.TTF", 50, 0x7F, 0x99, 0x95 );
 	title_sec.setText( "Genesis" );
 	title_sec.setPosition( screen_w/2 -5, title.getBot() );
 	
 	version.setName( "title-version" );
-	version.setFont( "data/02_menu/BADABB__.TTF", 15, 0xFF, 0xFF, 0xFF );
+	version.setFont( "data/menu/BADABB__.TTF", 15, 0xFF, 0xFF, 0xFF );
 	version.setText( "Alpha Testing" );
 	version.setPosition( belt.getRight() -version.getWidth() -170, belt.getBot() -35 );
 }

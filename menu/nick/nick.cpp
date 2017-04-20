@@ -24,11 +24,11 @@ void Nick::load( int screen_w, int screen_h )
 	free();
 	
 	label.setName( "nick-label" );
-	label.load( "data/02_menu/fancy_label.png" );
+	label.load( "data/menu/fancy_label.png" );
 	label.setPosition( screen_w -label.getWidth() -5, screen_h -label.getHeight() );
 	
 	text.setName( "nick-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 15, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 15, 0xFF, 0xFF, 0xFF );
 	setNick();
 }
 

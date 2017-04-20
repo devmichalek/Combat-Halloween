@@ -53,31 +53,31 @@ void Volume_button::load( int left, int y, string new_name )
 	max = 128;
 	
 	name.setName( "volume_button-text" );
-	name.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
+	name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	name.setText( new_name );
 	name.setPosition( left, y );
 	
 	
 	minus.setName( "volume_button-minus" );
-	minus.load( "data/02_menu/minus.png", 4 );
+	minus.load( "data/menu/minus.png", 4 );
 	minus.setPosition( left +120, y -name.getHeight()/2 );
 	minus.setScale( 0.4, 0.4 );
 	
 	
 	plus.setName( "volume_button-plus" );
-	plus.load( "data/02_menu/plus.png", 4 );
+	plus.load( "data/menu/plus.png", 4 );
 	plus.setPosition( minus.getRight(), y -name.getHeight()/2 );
 	plus.setScale( 0.4, 0.4 );
 	
 	
 	percent.setName( "volume_button-percent" );
-	percent.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
+	percent.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
 	percent.setText( con::itos( static_cast<int>( volume*100/max ) ) + "%" );
 	percent.setPosition( plus.getRight() + 10, y );
 	
 	
 	click.setID( "volume_button-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 }
 
 void Volume_button::draw( sf::RenderWindow* &window )

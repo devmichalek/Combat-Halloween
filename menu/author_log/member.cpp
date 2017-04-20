@@ -36,7 +36,7 @@ void Member::reset()
 void Member::load( string text, bool s, string url )
 {
 	this->text.setName( "member-text" );
-	this->text.setFont( "data/00_loading/Jaapokki-Regular.otf", 28, 0xFF, 0xFF, 0xFF );
+	this->text.setFont( "data/initialization/Jaapokki-Regular.otf", 28, 0xFF, 0xFF, 0xFF );
 	this->text.setText( text );
 	
 	if( s )

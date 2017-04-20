@@ -61,7 +61,7 @@ void List::load( int screen_w, int screen_h )
 	
 	// Load button.
 	button.setName( "list-button" );
-	button.load( "data/02_menu/info.png", 4 );
+	button.load( "data/menu/info.png", 4 );
 	
 	// Setting main x.
 	int start_x = 50;
@@ -82,7 +82,7 @@ void List::load( int screen_w, int screen_h )
 		{
 			categories.push_back( new MyText() );
 			categories[ categories.size() -1 ]->setName( "list-category" );
-			categories[ categories.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+			categories[ categories.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 			categories[ categories.size() -1 ]->setText( line );
 		}
 	}

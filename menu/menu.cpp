@@ -97,9 +97,9 @@ void Menu::load( int screen_w, int screen_h )
 	title->load( screen_w );
 	
 	// sound buttons
-	music_button->load( "data/02_menu/music.png", 10, screen_w );
+	music_button->load( "data/menu/music.png", 10, screen_w );
 	music_button->setExplanator( "Turn on/off music.", screen_w );
-	chunk_button->load( "data/02_menu/chunk.png", music_button->getBot(), screen_w );
+	chunk_button->load( "data/menu/chunk.png", music_button->getBot(), screen_w );
 	chunk_button->setExplanator( "Turn on/off chunks.", screen_w );
 	
 	// volume buttons
@@ -115,19 +115,19 @@ void Menu::load( int screen_w, int screen_h )
 	sound.setMusicVolume( music_volume->getVolume() );
 	
 	// link buttons
-	git_button->load( "data/02_menu/git.png", screen_w, 10 );
+	git_button->load( "data/menu/git.png", screen_w, 10 );
 	git_button->setExplanator( "Visit github!", screen_w );
-	google_button->load( "data/02_menu/google.png", screen_w, git_button->getBot() );
+	google_button->load( "data/menu/google.png", screen_w, git_button->getBot() );
 	google_button->setExplanator( "Visit ninja2d.netne.net!", screen_w );
-	twitter_button->load( "data/02_menu/twitter.png", screen_w, google_button->getBot() );
+	twitter_button->load( "data/menu/twitter.png", screen_w, google_button->getBot() );
 	twitter_button->setExplanator( "Twitter? Not today...", screen_w );
-	facebook_button->load( "data/02_menu/facebook.png", screen_w, twitter_button->getBot() );
+	facebook_button->load( "data/menu/facebook.png", screen_w, twitter_button->getBot() );
 	facebook_button->setExplanator( "Damm, who needs facebook?", screen_w );
-	scores_button->load( "data/02_menu/scores.png", facebook_button->getWidth() +20, screen_h -facebook_button->getHeight() -10 );
+	scores_button->load( "data/menu/scores.png", facebook_button->getWidth() +20, screen_h -facebook_button->getHeight() -10 );
 	scores_button->setExplanator( "Sorry dude, it's not ready", screen_w );
 	
 	// bg
-	background->load( "data/02_menu/background.png" );
+	background->load( "data/menu/background.png" );
 	
 	// button to start game
 	play_button->load( screen_w, 400 );
@@ -146,7 +146,7 @@ void Menu::load( int screen_w, int screen_h )
 	exit->load( screen_w, screen_h );
 	
 	// music for menu
-	music->load( "data/02_menu/music.mp3", 50 );
+	music->load( "data/menu/music.mp3", 50 );
 	
 	// information (keyboard) and keyboard
 	information->load( music_volume->getRight(), screen_h/2 - 100, screen_w, screen_h );

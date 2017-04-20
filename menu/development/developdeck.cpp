@@ -111,9 +111,9 @@ void Development::load( int bot, int screen_h )
 		texts[ texts.size() -1 ]->setName( "development-texts nr" +con::itos( i ) );
 		
 		
-		if( i == WALLET )	texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
-		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 27, 0xFF, 0xD8, 0x00 );
-		else	texts[ texts.size() -1 ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+		if( i == WALLET )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
+		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 27, 0xFF, 0xD8, 0x00 );
+		else	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	}
 	
 	// set other stuff

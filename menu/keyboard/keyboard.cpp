@@ -105,7 +105,7 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 {
 	// button
 	save_button.setName( "keyboard-save_button" );
-	save_button.load( "data/02_menu/save.png", 4 );
+	save_button.load( "data/menu/save.png", 4 );
 	save_button.setScale( 0.5, 0.5 );
 	save_button.setPosition( screen_w - save_button.getWidth() -30, screen_h/2 -80 );
 	
@@ -114,7 +114,7 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	{
 		text.push_back( new MyText() );
 		text[ i ]->setName( "keyboard-text nr " + con::itos( i ) );
-		text[ i ]->setFont( "data/00_loading/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+		text[ i ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 	}
 
 	// load default keys
@@ -215,7 +215,7 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	file.free();
 	
 	click.setID( "keyboard-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 }
 
 void Keyboard::draw( sf::RenderWindow &window )

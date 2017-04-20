@@ -45,21 +45,21 @@ void Head::load( int type, int y )
 	
 	// Load click.
 	click.setID( "develop-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 	
 	// Set cost (text)
-	cost_text.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xD8, 0x00 );
+	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xD8, 0x00 );
 	cost_text.setText( " " );
 	cost_text.setPosition( 0, 0 );
 	
 	// load head
 	sprite.setName( "head-sprite" );
-	sprite.load( "data/02_menu/head/" +con::itos( type ) +".png" );
+	sprite.load( "data/menu/head/" +con::itos( type ) +".png" );
 	sprite.setScale( 0.75, 0.75 );
 	
 	// load button
 	button.setName( "head-button" );
-	button.load( "data/02_menu/upgrade.png", 4 );
+	button.load( "data/menu/upgrade.png", 4 );
 	
 	// load name
 	MyFile file;
@@ -73,7 +73,7 @@ void Head::load( int type, int y )
 		{
 			if( c == 0 )
 			{
-				name.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
+				name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
 				name.setText( line );
 				break;
 			}
@@ -93,7 +93,7 @@ void Head::load( int type, int y )
 		{
 			if( c == 0 )
 			{
-				specs.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
+				specs.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
 				specs.setText( line );
 				break;
 			}

@@ -45,7 +45,7 @@ void Develop::load( int main_x, int nr, int bot )
 	
 	// Load button.
 	button.setName( "develop-button" );
-	button.load( "data/02_menu/upgrade.png", 4 );
+	button.load( "data/menu/upgrade.png", 4 );
 	
 	MyFile file;
 	
@@ -61,7 +61,7 @@ void Develop::load( int main_x, int nr, int bot )
 			{
 				
 				name.setName( "develop-name" );
-				name.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+				name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 				name.setText( line );
 				break;
 			}
@@ -73,7 +73,7 @@ void Develop::load( int main_x, int nr, int bot )
 	
 	// Load sprite.
 	sprite.setName( "develop-sprite" );
-	sprite.load( "data/02_menu/skill/" +con::itos( nr ) +".png" );
+	sprite.load( "data/menu/skill/" +con::itos( nr ) +".png" );
 	
 	// Set name_base.
 	file.load( "data/txt/skill/skill_namebase.txt" );
@@ -87,7 +87,7 @@ void Develop::load( int main_x, int nr, int bot )
 			{
 				// set name
 				name_base.setName( "develop-name" );
-				name_base.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+				name_base.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 				name_base.setText( line );
 				break;
 			}
@@ -118,23 +118,23 @@ void Develop::load( int main_x, int nr, int bot )
 	
 	// Set actual.
 	actual.setName( "develop-actual" );
-	actual.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	actual.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	actual.setText( " " );
 	
 	// Set label.
 	label.setName( "develop-label" );
-	label.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	label.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	label.setText( " " );
 	
 	// Cost_text settings.
 	cost_text.setName( "develop-cost_text" );
-	cost_text.setFont( "data/00_loading/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
 	cost_text.setText( " " );
 	cost_text.setColor( 0xFF, 0xD8, 0x00 );
 	
 	// Load click.
 	click.setID( "develop-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 	
 	// Positions.
 	name.setPosition( main_x, bot );

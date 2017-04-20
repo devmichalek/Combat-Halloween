@@ -43,7 +43,7 @@ void Scroll::load( int screen_w, int screen_h )
 	area.setPosition( 0, screen_h -area.getHeight() );
 	
 	info.setName( "scroll-area" );
-	info.load( "data/02_menu/scroll.png" );
+	info.load( "data/menu/scroll.png" );
 	info_x = 20;
 	info.setPosition( info_x, screen_h -info.getHeight() -20 );
 	

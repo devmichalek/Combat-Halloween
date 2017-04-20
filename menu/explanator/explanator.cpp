@@ -36,7 +36,7 @@ void Explanator::load( string str, int screen_w )
 	
 	// Your text
 	text.setName( "explanator-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0, 0, 0 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0, 0, 0 );
 	text.setText( str );
 	
 	bg.setName( "explanator-bg" );

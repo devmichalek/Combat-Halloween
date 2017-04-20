@@ -34,12 +34,12 @@ void Author_info::Author_info::load( int screen_w, int screen_h )
 	int start_x = 50 +screen_w;
 	
 	text.setName( "author_info-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 255, 255, 255 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 255, 255, 255 );
 	text.setText( "Any bugs, suggestions? Contact me:" );
 	text.setPosition( start_x, screen_h /4 *3 +60 );
 	
 	email.setName( "author_info-email" );
-	email.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	email.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	email.setText( "adrmic98@gmail.com" );
 	email.setPosition( start_x, text.getBot() +5 );
 	

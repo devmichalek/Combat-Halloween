@@ -45,11 +45,11 @@ void Sound_button::load( string path, int bot, int screen_w )
 	button.setPosition( 10, bot );
 	
 	scratch.setName( "sound_button-scratch" );
-	scratch.load( "data/02_menu/scratch.png" );
+	scratch.load( "data/menu/scratch.png" );
 	scratch.setPosition( 10, bot );
 	
 	click.setID( "sound_button-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 }
 
 void Sound_button::setExplanator( string text, int screen_w )

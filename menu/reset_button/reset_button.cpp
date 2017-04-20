@@ -43,22 +43,22 @@ void Reset_button::load( int screen_w, int screen_h )
 	explanator.load( "Reset all data", screen_w );
 	
 	button.setName( "reset_button-button" );
-    button.load( "data/02_menu/reset.png", 4 );
+    button.load( "data/menu/reset.png", 4 );
 	button.setPosition( 10, screen_h -10 -button.getHeight()*2 );
 	
 	mySprite.setName( "reset_button-mySprite" );
-    mySprite.load( "data/02_menu/exit.png" );
+    mySprite.load( "data/menu/exit.png" );
 	mySprite.setAlpha( 0xFF );
 	mySprite.center( 0, 0, screen_w, screen_h );
 
 	myText.setName( "reset_button-myText" );
-	myText.setFont( "data/02_menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
+	myText.setFont( "data/menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
 	myText.setText( "r-reset all data       b-back" );
 	myText.setAlpha( 0xFF );
 	myText.center( screen_w, screen_h, 0, -6 );
 
 	click.setID( "exit_log-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 }
 
 void Reset_button::handle( sf::Event &event )
