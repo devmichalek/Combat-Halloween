@@ -65,67 +65,67 @@ void Show_scores::load( int screen_w, int screen_h, int t )
 	line.setPosition( screen_w/20, t -20 );
 	
 	summary.setName( "show_scores-summary" );
-	summary.setFont( "data/02_menu/BADABB__.TTF", 105, 0xFF, 0xFF, 0xFF );
+	summary.setFont( "data/menu/BADABB__.TTF", 105, 0xFF, 0xFF, 0xFF );
 	summary.setText( "Summary" );
 	summary.center( screen_w, 60 );
 	
 	status.setName( "show_scores-status" );
-	status.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	status.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	status.setText( "Result: " );
 	status.setPosition( screen_w/20, summary.getBot() +70 );
 	status_word.setName( "show_scores-status_word" );
-	status_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+	status_word.setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	
 	
 	coruption.setName( "show_scores-coruption" );
-	coruption.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	coruption.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	coruption.setText( "Coruption: " );
 	coruption.setPosition( screen_w/20 -5, status.getBot() +30 );
 	coruption_word.setName( "show_scores-coruption_word" );
-	coruption_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+	coruption_word.setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	coruption_dot.setName( "show_scores-coruption_dot" );
 	
 	
 	world.setName( "show_scores-world" );
-	world.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	world.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	world.setText( "World: " );
 	world.setPosition( screen_w/20 -2, coruption.getBot() +26 );
 	world_word.setName( "show_scores-world_word" );
-	world_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+	world_word.setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	world_sprite.setName( "show_scores-world_sprite" );
 	
 	
 	money.setName( "show_scores-money" );
-	money.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	money.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	money.setText( "Earned money: " );
 	money.setPosition( screen_w/20, world.getBot() +32 );
 	money_word.setName( "show_scores-money_word" );
-	money_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xD8, 0x00 );
+	money_word.setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xD8, 0x00 );
 	money_sprite.setName( "show_scores-money_sprite" );
 	
 	
 	mine.setName( "show_scores-mine" );
-	mine.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	mine.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	mine.setText( "Deactivated mines: " );
 	mine.setPosition( screen_w/20, money.getBot() +22 );
 	mine_word.setName( "show_scores-money_word" );
-	mine_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+	mine_word.setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	mine_sprite.setName( "show_scores-mine_sprite" );
 	
 	
 	time.setName( "show_scores-time" );
-	time.setFont( "data/00_loading/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	time.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	time.setText( "Time played: " );
 	time.setPosition( screen_w/20, mine.getBot() +28 );
 	time_word.setName( "show_scores-time_word" );
-	time_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+	time_word.setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	
 	scores.setName( "show_scores-scores" );
-	scores.setFont( "data/00_loading/Jaapokki-Regular.otf", 70, 0xFF, 0xFF, 0xFF );
+	scores.setFont( "data/initialization/Jaapokki-Regular.otf", 70, 0xFF, 0xFF, 0xFF );
 	scores.setText( "Scores: " );
 	scores.setPosition( screen_w/20, time.getBot() +28 );
 	scores_word.setName( "show_scores-scores" );
-	scores_word.setFont( "data/00_loading/Jaapokki-Regular.otf", 70, 0xFF, 0xFF, 0xFF );
+	scores_word.setFont( "data/initialization/Jaapokki-Regular.otf", 70, 0xFF, 0xFF, 0xFF );
 }
 
 void Show_scores::draw( sf::RenderWindow* &window )
@@ -210,7 +210,7 @@ void Show_scores::setCoruption( sf::Uint8 c )
 		coruption_word.setText( "low" );
 		coruption_word.setColor( 0x58, 0x70, 0x58 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +5 );
-		coruption_dot.load( "data/03_level/0.png" );
+		coruption_dot.load( "data/level/0.png" );
 		coruption_dot.setPosition( coruption_word.getRight() +5, coruption_word.getY() -2 );
 	}
 	else if( c == 66 )
@@ -218,7 +218,7 @@ void Show_scores::setCoruption( sf::Uint8 c )
 		coruption_word.setText( "medium" );
 		coruption_word.setColor( 0xff, 0xcc, 0x00 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +4 );
-		coruption_dot.load( "data/03_level/1.png" );
+		coruption_dot.load( "data/level/1.png" );
 		coruption_dot.setPosition( coruption_word.getRight() +5, coruption_word.getY() -1 );
 	}
 	else
@@ -226,7 +226,7 @@ void Show_scores::setCoruption( sf::Uint8 c )
 		coruption_word.setText( "high" );
 		coruption_word.setColor( 0xE8, 0x68, 0x50 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +5 );
-		coruption_dot.load( "data/03_level/2.png" );
+		coruption_dot.load( "data/level/2.png" );
 		coruption_dot.setPosition( coruption_word.getRight() +5, coruption_word.getY() -1 );
 	}
 }
@@ -255,7 +255,7 @@ void Show_scores::setWorld( sf::Uint8 w )
 	}
 	
 	world_word.setPosition( world.getRight() +15, world.getTop() +5 );
-	world_sprite.load( "data/04_platform/world/" +con::itos( w ) +"/bg.png" );
+	world_sprite.load( "data/platform/world/" +con::itos( w ) +"/bg.png" );
 	world_sprite.setScale( 0.05, 0.05 );
 	world_sprite.setPosition( world_word.getRight() +15, world.getTop() );
 }
@@ -264,7 +264,7 @@ void Show_scores::setMoney( int m )
 {
 	money_word.setText( con::itos( m ) );
 	money_word.setPosition( money.getRight() +15, money.getTop() +5 );
-	money_sprite.load( "data/04_platform/panel/coin/0.png", 10 );
+	money_sprite.load( "data/platform/panel/coin/0.png", 10 );
 	money_sprite.setScale( 0.7, 0.7 );
 	money_sprite.setPosition( money_word.getRight() +15, money.getTop() +7 );
 }
@@ -274,7 +274,7 @@ void Show_scores::setMine( int m, sf::Uint8 w )
 	mine_word.setText( con::itos( m ) );
 	mine_word.setPosition( mine.getRight() +15, mine.getTop() +5 );
 	
-	mine_sprite.load( "data/04_platform/enemy/mine/" +con::itos(w) +"/0.png", 2 );
+	mine_sprite.load( "data/platform/enemy/mine/" +con::itos(w) +"/0.png", 2 );
 	mine_sprite.setScale( 0.5, 0.5 );
 	mine_sprite.setPosition( mine_word.getRight() +15, mine.getTop() -125 );
 }

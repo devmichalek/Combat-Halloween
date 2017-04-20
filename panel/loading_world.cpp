@@ -46,13 +46,13 @@ void Loading_world::load( unsigned screen_w, unsigned screen_h )
 	max = 20;
 	
 	text.setName( "loading_world-text" );
-	text.setFont( "data/00_loading/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	text.setText( " " );
 	text.setPosition( 10, screen_h -35 );
 
 	
 	progress_bar.setName( "loading_world-progress_bar" );
-	progress_bar.load( "data/05_loading_world/gears.png", max );
+	progress_bar.load( "data/panel/gears.png", max );
 	progress_bar.setPosition( screen_w/2 -progress_bar.getWidth()/2, screen_h/2 -progress_bar.getHeight()/2 );
 	
 	

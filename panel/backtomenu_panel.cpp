@@ -12,15 +12,15 @@
 void Backtomenu_panel::load( int r, int t )
 {
 	mySprite.setName( "replay_button-mySprite" );
-	mySprite.load( "data/02_menu/blankbutton.png", 4 );
+	mySprite.load( "data/menu/blankbutton.png", 4 );
 	mySprite.setScale( 0.4, 0.4 );
 	mySprite.setPosition( r +10, t );
 	
 	myText.setName( "replay_button-myText" );
-	myText.setFont( "data/02_menu/BADABB__.TTF", 48, 0x82, 0xae, 0x20 );
+	myText.setFont( "data/menu/BADABB__.TTF", 48, 0x82, 0xae, 0x20 );
 	myText.setText( "menu" );
 	myText.setPosition( mySprite.getX() +18, t );
 	
 	click.setID( "replay_button-click" );
-	click.load( "data/02_menu/click.wav", 50 );
+	click.load( "data/menu/click.wav", 50 );
 }

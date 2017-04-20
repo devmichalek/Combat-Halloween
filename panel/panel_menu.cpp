@@ -58,14 +58,14 @@ void Panel_menu::reset()
 void Panel_menu::load( int screen_w, int screen_h )
 {
 	bg->setName( "panel_menu-background" );
-	bg->load( "data/02_menu/background.png" );
+	bg->load( "data/menu/background.png" );
 	
 	replay_button->load( screen_h );
 	
 	backtomenu_panel->load( replay_button->getRight(), replay_button->getTop() );
 	
 	music->setID( "panel_menu-music" );
-	music->load( "data/06_panel/music.mp3", 50 );
+	music->load( "data/panel/music.mp3", 50 );
 	
 	show_scores->load( screen_w, screen_h, replay_button->getTop() );
 }
