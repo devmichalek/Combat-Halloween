@@ -22,7 +22,8 @@ class Engine
 {
 	enum
 	{
-		INIT = -1,
+		LOADING = -2,
+		INIT,
 		MENU,
 		LEVEL,
 		GEARS,

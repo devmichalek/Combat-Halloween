@@ -104,6 +104,17 @@ void Engine::events()
             core->isOpen() = false;
         }
 		
+		if( core->setView() )
+		{
+			switch( core->getState() )
+			{
+				case LOADING: 	loading->setScale( core->getXScale(), core->getYScale() );
+								loading->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() ); break;
+				case INIT:		initialization->setScale( core->getXScale(), core->getYScale() );
+								initialization->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() ); break;
+			}
+		}
+		
 		switch( core->getState() )
 		{
 			case INIT:	initialization->handle( core->getEvent() );	break;
@@ -123,7 +134,7 @@ void Engine::events()
 void Engine::states()
 {
 	// loading state
-	if( core->getState() == -2 )
+	if( core->getState() == LOADING )
 	{
 		load();
 	}
