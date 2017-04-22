@@ -15,7 +15,6 @@
 class Loading
 {
 	MyText text;			// text "loading"
-	MySprite bg;			// background
 	sf::Uint8 state;		// show percents
 	
 	sf::Uint8 counter;		// to set offsets
@@ -24,12 +23,18 @@ class Loading
 	
 public:
 	
+	// Basics.
 	Loading();
 	~Loading();
 	void free();
 	
-	void load( unsigned screen_w, unsigned screen_h );	// load textures
-	void draw( sf::RenderWindow* &window );				// render textures
+	void load( unsigned w, unsigned h );	// load textures
+	void draw( sf::RenderWindow* &window );	// render textures
 	
-	const sf::Uint8& getState() const; 					// getter
+	// In addition.
+	const sf::Uint8& getState() const; 		// getter
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };

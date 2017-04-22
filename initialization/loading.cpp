@@ -25,7 +25,6 @@ Loading::~Loading()
 void Loading::free()
 {
 	text.free();
-	bg.free();
 	
 	progress_bar.free();
 	counter = 0;
@@ -33,7 +32,7 @@ void Loading::free()
 	state = 0;
 }
 	
-void Loading::load( unsigned screen_w, unsigned screen_h )
+void Loading::load( unsigned w, unsigned h )
 {
 	free();
 	max = 20;
@@ -42,25 +41,16 @@ void Loading::load( unsigned screen_w, unsigned screen_h )
 	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 255, 255, 255 );
 	text.setText( ("Loading " + con::itos( state ) + "%")  );
 	text.setAlpha( 0xFF );
-	text.center( screen_w, screen_h );
-
 	
 	progress_bar.setName( "loading-progress_bar" );
 	progress_bar.load( "data/initialization/progress_bar.png", max );
 	progress_bar.setAlpha( 0xFF );
-	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, text.getBot() +15 );
 	
-	
-	bg.setName( "loading-background" );
-	bg.create( screen_w, screen_h ); 
-	bg.setColor( sf::Color( 21, 21, 29 ) );
-	bg.setAlpha( 0xFF );
+	setView( w, h, 0, 0 );
 }
 
 void Loading::draw( sf::RenderWindow* &window )
 {
-	window->draw( bg.get() );
-	
 	window->draw( text.get() );
 	text.setText( "Loading " + con::itos( state ) + "%" );
 	text.reloadPosition();
@@ -80,4 +70,21 @@ void Loading::draw( sf::RenderWindow* &window )
 const sf::Uint8& Loading::getState() const
 {
 	return state;
+}
+
+
+
+void Loading::setScale( float s_x, float s_y )
+{
+	text.setBasicScale( s_x, s_y );
+	text.setScale();
+	
+	progress_bar.setBasicScale( s_x, s_y );
+	progress_bar.setScale();
+}
+
+void Loading::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	text.setPosition( w/2 -text.getWidth()/2 +r_x, h/2 -text.getHeight()/2 +r_y );
+	progress_bar.setPosition( w/2 - progress_bar.getWidth()/2 +r_x, h/2 +(20 *progress_bar.getYScale()) +r_y );
 }
