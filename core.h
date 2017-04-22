@@ -23,6 +23,9 @@ class Core
 
     unsigned width;
     unsigned height;
+	
+	unsigned min_width, max_width;
+	unsigned min_height, max_height;
 
     sf::Event event;
     sf::Color color;
@@ -42,16 +45,20 @@ public:
 
     void clear();
     void display();
-
+	
+	bool setView();
     void setVisible( const bool& visible );
     void setColor( const sf::Color& color );
 
 
     int& getState();    // get or set state, e.g. from intro to menu
     bool& isOpen();     // get or set open window
-	// unsigned getFPS();
 
 
     const unsigned getWidth() const;
     const unsigned getHeight() const;
+	int getX() const;
+	int getY() const;
+	float getXScale() const;
+	float getYScale() const;
 };
