@@ -1,3 +1,12 @@
+/**
+    nick_setter.h
+    Purpose: class Nick_setter - set your own nick -mechanics.
+
+    @author Adrian Michalek
+    @version 2017.04.22
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/sprite.h"
@@ -5,32 +14,38 @@
 
 class Nick_setter
 {
-	MySprite label;
 	MyText text;
-	float y_state;
+	MySprite label;
 	
 	unsigned min, max;
 	int amount;
 	
 	bool release;
 	string nick;
+	
 	bool next;
 	
 public:
 	
+	// Basics.
 	Nick_setter();
 	~Nick_setter();
 	void free();
 	
-	void load( int screen_w, int screen_h );
+	void load( unsigned w, unsigned h );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	void reloadPosition();
-	bool isPossibleKey( sf::Event &event );
-	string getName( int n );
-	bool nextState();
-	
 	void fadein( int i = 1, int max = 0xFF );
 	void fadeout( int i = 1, int min = 0 );
+	
+	// In Addition.
+	void reloadPosition(); 					// Reload text position.
+	bool isPossibleKey( sf::Event &event ); // Checks if that key is possible.
+	string getName( int n );				// Get string name of this key.
+	bool nextState();						// Are we ready?
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };

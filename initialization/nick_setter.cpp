@@ -1,3 +1,12 @@
+/**
+    nick_setter.h
+    Purpose: class Nick_setter - set your own nick -mechanics.
+
+    @author Adrian Michalek
+    @version 2017.04.22
+	@email adrmic98@gmail.com
+*/
+
 #include "nick_setter.h"
 #include "file/file.h"
 
@@ -13,37 +22,36 @@ Nick_setter::~Nick_setter()
 
 void Nick_setter::free()
 {
-	label.free();
 	text.free();
-	y_state = 0;
+	label.free();
 	
 	min = max = 0;
 	amount = 0;
 	
 	release = false;
 	nick = "";
+	
 	next = false;
 }
 
 
 
-void Nick_setter::load( int screen_w, int screen_h )
+void Nick_setter::load( unsigned w, unsigned h )
 {
 	free();
-	
-	label.setName( "nick_setter-label" );
-	label.load( "data/initialization/fancy_label.png" );
-	label.setPosition( screen_w /2 -label.getWidth() /2, screen_h /3 +label.getHeight() /2 );
-	
-	y_state = 345;
-	text.setName( "nick_setter-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
-	text.setText( "___________"  );
-	reloadPosition();
 	
 	min = 3;
 	max = 11;
 	amount = 0;
+	
+	label.setName( "nick_setter-label" );
+	label.load( "data/initialization/fancy_label.png" );
+	
+	text.setName( "nick_setter-text" );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	text.setText( "___________"  );
+	
+	setView( w, h, 0, 0 );
 }
 
 void Nick_setter::handle( sf::Event &event )
@@ -128,9 +136,24 @@ void Nick_setter::draw( sf::RenderWindow* &window )
 
 
 
+void Nick_setter::fadein( int i, int max )
+{
+	text.fadein( i, max );
+	label.fadein( i, max );
+	
+}
+
+void Nick_setter::fadeout( int i, int min )
+{
+	text.fadeout( i, min );
+	label.fadeout( i, min );
+}
+
+
+
 void Nick_setter::reloadPosition()
 {
-	text.setPosition( label.getX() +label.getWidth()/2 -text.getWidth() /2, y_state );
+	text.setPosition( label.getX() +label.getWidth()/2 -text.getWidth() /2, label.getY() +(50*label.getYScale()) );
 }
 
 bool Nick_setter::isPossibleKey( sf::Event &event )
@@ -181,14 +204,17 @@ bool Nick_setter::nextState()
 
 
 
-void Nick_setter::fadein( int i, int max )
+void Nick_setter::setScale( float s_x, float s_y )
 {
-	label.fadein( i, max );
-	text.fadein( i, max );
+	label.setBasicScale( s_x, s_y );
+	label.setScale();
+	
+	text.setBasicScale( s_x, s_y );
+	text.setScale();
 }
 
-void Nick_setter::fadeout( int i, int min )
+void Nick_setter::setView( unsigned w, unsigned h, int r_x, int r_y )
 {
-	label.fadeout( i, min );
-	text.fadeout( i, min );
+	label.setPosition( w /2 -label.getWidth() /2 +r_x, h /3 +label.getHeight() /2 +r_y );
+	reloadPosition();
 }

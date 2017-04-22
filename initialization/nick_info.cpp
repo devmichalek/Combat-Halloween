@@ -1,3 +1,13 @@
+/**
+    nick_info.h
+    Purpose: class Nick_info - responsible for drawing information about nick.
+
+    @author Adrian Michalek
+    @version 2017.04.22
+	@email adrmic98@gmail.com
+*/
+
+
 #include "nick_info.h"
 
 Nick_info::Nick_info()
@@ -12,52 +22,98 @@ Nick_info::~Nick_info()
 
 void Nick_info::free()
 {
-	text.free();
-	text2.free();
-	text3.free();
+	if( !texts.empty() )
+	{
+		for( auto it: texts )
+		{
+			it->free();
+		}
+		
+		texts.clear();
+	}
 }
 
 
 
-void Nick_info::load( int screen_w, int screen_h )
+void Nick_info::load( unsigned w, unsigned h )
 {
 	free();
 	
-	text.setName( "nick_setter-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
-	text.setText( "Before we get started, set your nick"  );
-	text.setPosition( screen_w /2 -text.getWidth() /2, screen_h /3.5 );
+	for( unsigned i = 0; i < 3; i ++ )
+	{
+		texts.push_back( new MyText() );
+		texts[ texts.size() -1 ]->setName( "nick_info.cpp -texts" );
+	}
 	
-	text2.setName( "nick_setter-text2" );
-	text2.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
-	text2.setText( "then press enter to continue"  );
-	text2.setPosition( screen_w /2 -text2.getWidth() /2, screen_h /1.7 );
+	texts[ 0 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	texts[ 0 ]->setText( "Before we get started, set your nick"  );
 	
-	text3.setName( "nick_setter-text3" );
-	text3.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
-	text3.setText( "a-z, 1-9, no space, 3-11 small characters" );
-	text3.setPosition( 5, screen_h -text3.getHeight() -8 );
+	texts[ 1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	texts[ 1 ]->setText( "then press enter to continue"  );
+	
+	texts[ 2 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	texts[ 2 ]->setText( "a-z, 1-9, no space, 3-11 small characters" );
+	
+	setView( w, h, 0, 0 );
 }
 
 void Nick_info::draw( sf::RenderWindow* &window )
 {
-	window->draw( text.get() );
-	window->draw( text2.get() );
-	window->draw( text3.get() );
+	for( auto it: texts )
+	{
+		window->draw( it->get() );
+	}
 }
 
 
 
 void Nick_info::fadein( int i, int max )
 {
-	text.fadein( i, max );
-	text2.fadein( i, max );
-	text3.fadein( i, max );
+	for( auto it: texts )
+	{
+		it->fadein( i, max );
+	}
 }
 
 void Nick_info::fadeout( int i, int min )
 {
-	text.fadeout( i, min );
-	text2.fadeout( i, min );
-	text3.fadeout( i, min );
+	for( auto it: texts )
+	{
+		it->fadeout( i, min );
+	}
+}
+
+
+
+sf::Uint8 Nick_info::getAlpha()
+{
+	if( !texts.empty() )
+	{
+		return texts[ 0 ]->getAlpha();
+	}
+	
+	return 0;
+}
+
+
+
+void Nick_info::setScale( float s_x, float s_y )
+{
+	// printf( "%f %f\n", s_x, s_y );
+	
+	for( auto it: texts )
+	{
+		it->setBasicScale( s_x, s_y );
+		it->setScale();
+	}
+}
+
+void Nick_info::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	if( !texts.empty() )
+	{
+		texts[ 0 ]->setPosition( w /2 -texts[ 0 ]->getWidth() /2 +r_x, h /3.5 +r_y );
+		texts[ 1 ]->setPosition( w /2 -texts[ 1 ]->getWidth() /2 +r_x, h /1.7 +r_y );
+		texts[ 2 ]->setPosition( 5 +r_x, h -texts[ 2 ]->getHeight() -8 +r_y );
+	}
 }
