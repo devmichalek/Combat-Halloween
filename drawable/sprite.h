@@ -29,6 +29,8 @@ class MySprite :public Rect, public Color
 	int safe_width;
 	int safe_height;
 	
+	float x_scale;
+	float y_scale;
 	
 public:
 
@@ -45,6 +47,9 @@ public:
 	
 	
 	void setScale( float x = 1, float y = 1 );
+	void setBasicScale( float x = 1, float y = 1 );
+	float getXScale();
+	float getYScale();
 	const sf::Sprite& get() const;	// Return sprite
    
     void setPosition( float x, float y );
