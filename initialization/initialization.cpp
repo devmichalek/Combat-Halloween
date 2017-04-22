@@ -1,3 +1,12 @@
+/**
+    initialazation.h
+    Purpose: class Initialization - contains nick stuff.
+
+    @author Adrian Michalek
+    @version 2017.04.22
+	@email adrmic98@gmail.com
+*/
+
 #include "initialization.h"
 #include "file/file.h"
 
@@ -14,7 +23,7 @@ Initialization::~Initialization()
 void Initialization::free()
 {
 	next = false;
-	bg.free();
+	
 	nick_setter.free();
 	nick_info.free();
 }
@@ -35,10 +44,6 @@ void Initialization::load( int screen_w, int screen_h )
 		next = con::stoi( line );
 	}
 	file.free();
-	
-	bg.setName( "initialization-bg" );
-	bg.create( screen_w, screen_h );
-	bg.setColor( sf::Color( 21, 21, 29 ) );
 	
 	nick_setter.load( screen_w, screen_h );
 	nick_info.load( screen_w, screen_h );
@@ -61,31 +66,45 @@ void Initialization::draw( sf::RenderWindow* &window )
 	if( !next )
 	{
 		int value = 3;
-		bg.fadein( value );
+		
 		nick_setter.fadein( value );
 		nick_info.fadein( value );
 	}
 	else
 	{
 		int value = 4;
-		bg.fadeout( value );
+		
 		nick_setter.fadeout( value );
 		nick_info.fadeout( value );
 	}
 	
 	// Draw.
-	window->draw( bg.get() );
 	nick_setter.draw( window );
 	nick_info.draw( window );
 }
 
 
+
 bool Initialization::nextState()
 {
-	if( next && bg.getAlpha() == 0 )
+	if( next && nick_info.getAlpha() == 0 )
 	{
 		return true;
 	}
 	
 	return false;
+}
+
+
+
+void Initialization::setScale( float s_x, float s_y )
+{
+	nick_setter.setScale( s_x, s_y );
+	nick_info.setScale( s_x, s_y );
+}
+
+void Initialization::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	nick_setter.setView( w, h, r_x, r_y );
+	nick_info.setView( w, h, r_x, r_y );
 }
