@@ -26,6 +26,9 @@ class MyText :public Rect, public Color
 	int safe_width;
 	int safe_height;
 	
+	float x_scale;
+	float y_scale;
+	
 public:
 	
 	MyText();
@@ -34,9 +37,6 @@ public:
 	
 	void setFont( string path, int size = 1, sf::Uint8 r = 0, sf::Uint8 g = 0, sf::Uint8 b = 0 );
 	void setText( string line );
-	#ifdef _WIN32
-	void setColor( int i );
-	#endif
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );
@@ -46,6 +46,9 @@ public:
 	const string& getName() const;
 	
 	void setScale( float x = 1, float y = 1 );
+	void setBasicScale( float x = 1, float y = 1 );
+	float getXScale();
+	float getYScale();
 	
 	void setPosition( float x, float y );
 	void reloadPosition();	// Set the same position as it was.

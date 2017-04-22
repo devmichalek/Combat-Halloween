@@ -31,6 +31,9 @@ MyText::MyText()
 	color.g = 0xFF;
 	color.b = 0xFF;
 	color.a = 0;
+	
+	x_scale = 1;
+	y_scale = 1;
 }
 
 MyText::~MyText()
@@ -61,6 +64,9 @@ void MyText::free()
 	color.g = 0xFF;
 	color.b = 0xFF;
 	color.a = 0x00;
+	
+	x_scale = 1;
+	y_scale = 1;
 }
 
 
@@ -121,6 +127,7 @@ void MyText::setText( string line )
 		
 		safe_width = width = text->getLocalBounds().width;
 		safe_height = height = text->getLocalBounds().height;
+		setScale();
 	}
 	catch( string msg )
 	{
@@ -128,58 +135,6 @@ void MyText::setText( string line )
 	}
 }
 
-/*
-void MyText::setColor( int i )
-{
-	HANDLE h = GetStdHandle ( STD_OUTPUT_HANDLE );
-	SetConsoleTextAttribute( h, i );
-}
-
-void MyText::setFont( string path, int size, sf::Uint8 r, sf::Uint8 g, sf::Uint8 b )
-{
-	if( font != NULL )
-    {
-        delete font;
-        font = NULL;
-    }
-	
-	try
-	{
-		font = new sf::Font;
-
-		if( !font->loadFromFile( path ) )
-		{
-			throw "ID: " + name + " ";
-			setColor( 12 );
-			throw "not loaded";
-			setColor( 7 );
-			throw " " + path;
-		}
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-	
-	try
-	{
-		this->size = size;
-		if( size < 1 )
-		{
-			throw "ID: " + name + " ";
-			setColor( 12 );
-			throw "size is less than 1!";
-			setColor( 7 );
-		}
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-	
-	this->color = sf::Color( r, g, b, 0 );
-}
-*/
 
 
 void MyText::fadein( int v, int max )
@@ -228,16 +183,35 @@ const string& MyText::getName() const
 	return name;
 }
 
+
+
 void MyText::setScale( float x, float y )
 {
-	text->setScale( x, y );
+	text->setScale( x *x_scale, y *y_scale );
 	
 	if( x < 0 ) x = -x;
 	if( y < 0 ) y = -y;
 	
-	width = safe_width * x;
-	height = safe_height * y;
+	width = safe_width *x *x_scale;
+	height = safe_height *y *y_scale;
 }
+
+void MyText::setBasicScale( float x, float y )
+{
+	x_scale = x;
+	y_scale = y;
+}
+
+float MyText::getXScale()
+{
+	return text->getScale().x *x_scale;
+}
+
+float MyText::getYScale()
+{
+	return text->getScale().y *y_scale;
+}
+
 
 
 void MyText::setPosition( float x, float y )
