@@ -103,7 +103,7 @@ void Initialization::setScale( float s_x, float s_y )
 	nick_info.setScale( s_x, s_y );
 }
 
-void Initialization::setView( unsigned w, unsigned h, int r_x, int r_y )
+void Initialization::setView( int w, int h, int r_x, int r_y )
 {
 	nick_setter.setView( w, h, r_x, r_y );
 	nick_info.setView( w, h, r_x, r_y );

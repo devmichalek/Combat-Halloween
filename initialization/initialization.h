@@ -30,10 +30,10 @@ public:
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
-	// In Addition.
+	// Extra.
 	bool nextState();
 	
 	// Window.
 	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
+	void setView( int w, int h, int r_x, int r_y );
 };
