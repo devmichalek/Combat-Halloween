@@ -35,7 +35,7 @@ void Nick_info::free()
 
 
 
-void Nick_info::load( unsigned w, unsigned h )
+void Nick_info::load( int w, int h )
 {
 	free();
 	
@@ -53,8 +53,6 @@ void Nick_info::load( unsigned w, unsigned h )
 	
 	texts[ 2 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	texts[ 2 ]->setText( "a-z, 1-9, no space, 3-11 small characters" );
-	
-	setView( w, h, 0, 0 );
 }
 
 void Nick_info::draw( sf::RenderWindow* &window )
@@ -108,7 +106,7 @@ void Nick_info::setScale( float s_x, float s_y )
 	}
 }
 
-void Nick_info::setView( unsigned w, unsigned h, int r_x, int r_y )
+void Nick_info::setView( int w, int h, int r_x, int r_y )
 {
 	if( !texts.empty() )
 	{
