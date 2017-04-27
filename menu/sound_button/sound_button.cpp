@@ -8,13 +8,12 @@
 */
 
 #include "sound_button.h"
-#include <stdlib.h>
+// #include <stdlib.h>
 
 
 Sound_button::Sound_button( bool play )
 {
-    state = 0;
-	focus = false;
+    free();
 	this->play = play;
 }
 
@@ -34,42 +33,28 @@ void Sound_button::free()
 	state = 0;
 	focus = false;
 	play = true;
+	y_state = 0;
+	scale = 0;
 }
 
 
 
-void Sound_button::load( string path, int bot, int screen_w )
+void Sound_button::load( string path, float y, unsigned w )
 {
+	scale = 0.45;
 	button.setName( "sound_button-button" );
-    button.load( path, 4 );
-	button.setPosition( 10, bot );
+	button.load( path, 4 );
 	
 	scratch.setName( "sound_button-scratch" );
 	scratch.load( "data/menu/scratch.png" );
-	scratch.setPosition( 10, bot );
+	
+	y_state = y;
 	
 	click.setID( "sound_button-click" );
 	click.load( "data/menu/click.wav", 50 );
 }
 
-void Sound_button::setExplanator( string text, int screen_w )
-{
-	explanator.load( text, screen_w );
-}
-
-void Sound_button::draw( sf::RenderWindow* &window )
-{
-    window->draw( button.get() );
-	
-	if( state == 2 )
-	{
-		window->draw( scratch.get() );
-	}
-	
-	explanator.draw( *window );
-}
-
-void Sound_button::handle( sf::Event &event )
+void Sound_button::handle( sf::Event &event, int r_x, int r_y )
 {
 	if( button.getAlpha() == 0xFF )
 	{
@@ -81,10 +66,10 @@ void Sound_button::handle( sf::Event &event )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 					
-			if( button.checkCollision( x, y ) )
+			if( button.checkCollision( x +r_x, y +r_y ) )
 			{
 				explanator.run();
-				explanator.focus( x, y );
+				explanator.focus( x +r_x, y +r_y );
 				button.setOffset( 1 );
 			}
 			else
@@ -100,7 +85,7 @@ void Sound_button::handle( sf::Event &event )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 					
-			if( button.checkCollision( x, y ) )
+			if( button.checkCollision( x +r_x, y +r_y ) )
 			{
 				focus = true;
 				
@@ -132,6 +117,35 @@ void Sound_button::handle( sf::Event &event )
 	}
 }
 
+void Sound_button::draw( sf::RenderWindow* &window )
+{
+    window->draw( button.get() );
+	
+	if( state == 2 )
+	{
+		window->draw( scratch.get() );
+	}
+	
+	explanator.draw( *window );
+}
+
+
+
+void Sound_button::fadein( int i, int max )
+{
+	button.fadein( i, max );
+	scratch.fadein( i, max );
+}
+
+void Sound_button::fadeout( int i, int min )
+{
+	explanator.fadeout( i, min );
+	button.fadeout( i, min );
+	scratch.fadeout( i, min );
+}
+
+
+
 void Sound_button::setState( sf::Uint8 s )
 {
 	state = s;
@@ -139,6 +153,7 @@ void Sound_button::setState( sf::Uint8 s )
 
 int Sound_button::getBot()
 {
+	// printf( "%f %f\n", button.getHeight(), button.getYScale() );
 	return button.getBot();
 }
 
@@ -159,16 +174,31 @@ bool Sound_button::isChanged()
 	return false;
 }
 
-
-void Sound_button::fadein( int i, int max )
+void Sound_button::setExplanator( string text )
 {
-	button.fadein( i, max );
-	scratch.fadein( i, max );
+	explanator.load( text );
 }
 
-void Sound_button::fadeout( int i, int min )
+float Sound_button::getYScale()
 {
-	explanator.fadeout( i, min );
-	button.fadeout( i, min );
-	scratch.fadeout( i, min );
+	return button.getYScale();
+}
+
+
+
+void Sound_button::setScale( float s_x, float s_y )
+{
+	button.setBasicScale( s_x, s_y );
+	button.setScale( scale, scale );
+	
+	scratch.setBasicScale( s_x, s_y );
+	scratch.setScale( scale, scale );
+	
+	explanator.setScale( s_x, s_y );
+}
+
+void Sound_button::setView( unsigned w, int r_x, int r_y )
+{
+	button.setPosition( 10 *button.getXScale() +r_x, y_state *button.getYScale() +r_y );
+	scratch.setPosition( 10 *scratch.getXScale() +r_x, y_state *button.getYScale() +r_y );
 }

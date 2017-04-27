@@ -23,21 +23,31 @@ class Sound_button :public Click
 	// music/chunk is on/off
 	sf::Uint8 state;
 	
+	float y_state;
+	float scale;
+	
 public:
-
+	
+	// Basics.
 	Sound_button( bool play = true );
     ~Sound_button();
 	void free();
 
-	void load( string path, int bot, int screen_w );
-	void setExplanator( string text, int screen_w );
-    void draw( sf::RenderWindow* &window );
-    void handle( sf::Event &event );
+	void load( string path, float y, unsigned w );
+	void handle( sf::Event &event, int r_x, int r_y );
+	void draw( sf::RenderWindow* &window );
 	
+	void fadein( int i = 1, int max = 0xFF );
+	void fadeout( int i = 1, int min = 0 );
+	
+	// In addition.
 	void setState( sf::Uint8 s );
 	int getBot();
 	bool isChanged();
-
-	void fadein( int i = 1, int max = 255 );
-	void fadeout( int i = 1, int min = 0 );
+	void setExplanator( string text );
+	float getYScale();
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( unsigned w, int r_x, int r_y );
 };
