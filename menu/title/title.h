@@ -14,6 +14,7 @@
 
 class Title
 {
+	MySprite background;
 	MySprite belt;
 	MyText title;
 	MyText title_sec;
@@ -21,15 +22,22 @@ class Title
 	
 public:
 	
+	// Basics.
 	Title();
     ~Title();
 	void free();
-
-    void load( const int& screen_w );
-    void draw( sf::RenderWindow &window );
 	
-	const int getBot()const;	// accessor
+	void load( unsigned w, unsigned h );
+	void draw( sf::RenderWindow &window );
 	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
+	
+	// In addtion.
+	const int getBot()const;	// accessor
+	sf::Uint8 getAlpha();
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };
