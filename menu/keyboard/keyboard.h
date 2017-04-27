@@ -43,8 +43,12 @@ class Keyboard :public Click
 	bool release;
 	int lastChosen;
 	
+	// Resizing.
+	int y_state;
+	
 public:
-
+	
+	// Basics.
 	Keyboard();
     ~Keyboard();
 	void free();
@@ -52,21 +56,26 @@ public:
 	template <typename object>
 	void freeObject( vector <object> o );
 	
-    void load( int left, int right, int bot, int screen_w, int screen_h );
+    void load( int bot, int screen_w, int screen_h );
     void draw( sf::RenderWindow &window );
-	void handle( sf::Event &event );
+	void handle( sf::Event &event, int r_x, int r_y );
 
 	void fadein( int j = 1, int max = 0xFF );
 	void fadeout( int j = 1, int min = 0 );
 	
-	
+	// Other.
 	string getName( int n ); 	// e. g. n == 71, return == "left"
 	
 	
 	void add( sf::Event &event );			// add
 	bool substract( sf::Event &event );		// remove
 	bool isPossibleKey( sf::Event &event ); // check whether key is possible to add
-	void handleButton( sf::Event &event );	// specially for button
+	void handleButton( sf::Event &event, int r_x, int r_y );	// specially for button
+	
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( int w, int h, int r_x, int r_y );
 };
 
 /*

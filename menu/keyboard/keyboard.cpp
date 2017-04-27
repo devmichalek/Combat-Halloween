@@ -57,6 +57,7 @@ Keyboard::Keyboard()
 	addMode = false;
 	release = false;
 	lastChosen = -1;
+	y_state = 0;
 }
 
 Keyboard::~Keyboard()
@@ -82,6 +83,7 @@ void Keyboard::free()
 	addMode = false;
 	release = false;
 	lastChosen = -1;
+	y_state = 0;
 }
 
 template <typename object>
@@ -101,13 +103,14 @@ void Keyboard::freeObject( vector <object> o )
 
 
 
-void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
+void Keyboard::load( int bot, int screen_w, int screen_h )
 {
+	// Set y_state.
+	y_state = bot;
+	
 	// button
 	save_button.setName( "keyboard-save_button" );
 	save_button.load( "data/menu/save.png", 4 );
-	save_button.setScale( 0.5, 0.5 );
-	save_button.setPosition( screen_w - save_button.getWidth() -30, screen_h/2 -80 );
 	
 	// text
 	for( int i = 0; i < 18; i++ )
@@ -184,23 +187,6 @@ void Keyboard::load( int left, int right, int bot, int screen_w, int screen_h )
 	text[ 14 ]->setText( "Throw" );
 	text[ 16 ]->setText( "Jump throw" );
 	
-	// set position
-	text[ 0 ]->setPosition( left, bot );
-	text[ 1 ]->setPosition( 250, bot );
-	for( int i = 2; i < 8; i += 2 )
-	{
-		text[ i ]->setPosition( left, text[ i -2 ]->getBot() + 10 );
-		text[ i +1 ]->setPosition( 250, text[ i -2 ]->getBot() + 10 );
-	}
-	
-	text[ 8 ]->setPosition( right +120, bot -5 );
-	text[ 9 ]->setPosition( right +350, bot -5 );
-	for( unsigned i = 10; i < text.size() -1; i += 2 )
-	{
-		text[ i ]->setPosition( right +120, text[ i -2 ]->getBot() + 10 );
-		text[ i +1 ]->setPosition( right +350, text[ i -2 ]->getBot() + 10 );
-	}
-	
 	
 	// load and set banned keys
 	file.load( "data/txt/keyboard/banned_keys.txt" );
@@ -228,7 +214,7 @@ void Keyboard::draw( sf::RenderWindow &window )
 	window.draw( save_button.get() );
 }
 
-void Keyboard::handle( sf::Event &event )
+void Keyboard::handle( sf::Event &event, int r_x, int r_y )
 {
 	// keyboard stuff
 	if( which != -1 )
@@ -341,7 +327,7 @@ void Keyboard::handle( sf::Event &event )
 		which = -1;
 		for( unsigned i = 0; i < text.size(); i += 2 )
 		{
-			if( text[ i ]->checkCollision( x, y, 0, 5 ) )
+			if( text[ i ]->checkCollision( x +r_x, y +r_y, 2, 6 ) )
 			{
 				which = i;
 				lastChosen = which/2;
@@ -361,7 +347,7 @@ void Keyboard::handle( sf::Event &event )
 		}
 	}
 	
-	handleButton( event );
+	handleButton( event, r_x, r_y );
 }
 
 
@@ -517,7 +503,7 @@ bool Keyboard::isPossibleKey( sf::Event &event )
 	return false;
 }
 
-void Keyboard::handleButton( sf::Event &event )
+void Keyboard::handleButton( sf::Event &event, int r_x, int r_y )
 {
 	save_button.setOffset( 0 );
 	
@@ -526,7 +512,7 @@ void Keyboard::handleButton( sf::Event &event )
 		int x = event.mouseButton.x;
 		int y = event.mouseButton.y;
 		
-		if( save_button.checkCollision( x, y ) )
+		if( save_button.checkCollision( x +r_x, y +r_y ) )
 		{
 			MyFile file;
 			file.load( "data/txt/keyboard/keyboard_temporary.txt", std::ios::out );
@@ -552,7 +538,7 @@ void Keyboard::handleButton( sf::Event &event )
 		int x = event.mouseMove.x;
 		int y = event.mouseMove.y;
 		
-		if( save_button.checkCollision( x, y ) )
+		if( save_button.checkCollision( x +r_x, y +r_y ) )
 		{
 			save_button.setOffset( 1 );
 		}
@@ -569,5 +555,41 @@ void Keyboard::handleButton( sf::Event &event )
 	if( focus )
 	{
 		save_button.setOffset( 2 );
+	}
+}
+
+
+
+void Keyboard::setScale( float s_x, float s_y )
+{
+	save_button.setBasicScale( s_x, s_y );
+	save_button.setScale( 0.5, 0.5 );
+	
+	for( auto &it :text )
+	{
+		it->setBasicScale( s_x, s_y );
+		it->setScale();
+	}
+}
+
+void Keyboard::setView( int w, int h, int r_x, int r_y )
+{
+	save_button.setPosition( w - save_button.getWidth() -30 *save_button.getXScale() +r_x, h/2 -80 *save_button.getYScale() /0.5 +r_y );
+	
+	// set position
+	text[ 0 ]->setPosition( w /10 +r_x, y_state *text[ 0 ]->getYScale() +r_y );
+	text[ 1 ]->setPosition( w /4 +r_x, y_state *text[ 1 ]->getYScale() +r_y );
+	for( int i = 2; i < 8; i += 2 )
+	{
+		text[ i ]->setPosition( w /10 +r_x, text[ i -2 ]->getBot() + 10*text[ i -2 ]->getYScale() );
+		text[ i +1 ]->setPosition( w /4 +r_x, text[ i -2 ]->getBot() + 10*text[ i -2 ]->getYScale() );
+	}
+	
+	text[ 8 ]->setPosition( w /1.754 +r_x, y_state *text[ 0 ]->getYScale() +r_y -5*text[ 0 ]->getYScale() );
+	text[ 9 ]->setPosition( w /1.25 +r_x, y_state *text[ 0 ]->getYScale() +r_y -5*text[ 0 ]->getYScale() );
+	for( unsigned i = 10; i < text.size() -1; i += 2 )
+	{
+		text[ i ]->setPosition( w /1.754 +r_x, text[ i -2 ]->getBot() + 10*text[ 0 ]->getYScale() );
+		text[ i +1 ]->setPosition( w /1.25 +r_x, text[ i -2 ]->getBot() + 10*text[ 0 ]->getYScale() );
 	}
 }
