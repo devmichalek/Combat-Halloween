@@ -20,6 +20,8 @@ Volume_button::Volume_button( float volume )
 	
 	plus_focus = false;
 	minus_focus = false;
+	scale = 0;
+	y_state = 0;
 }
 
 Volume_button::~Volume_button()
@@ -44,36 +46,32 @@ void Volume_button::free()
 	
 	plus_focus = false;
 	minus_focus = false;
+	scale = 0;
+	y_state = 0;
 }
 
 
 	
-void Volume_button::load( int left, int y, string new_name )
+void Volume_button::load( int y, string new_name )
 {
 	max = 128;
+	scale = 0.4;
+	y_state = y;
 	
 	name.setName( "volume_button-text" );
-	name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
+	name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
 	name.setText( new_name );
-	name.setPosition( left, y );
-	
 	
 	minus.setName( "volume_button-minus" );
 	minus.load( "data/menu/minus.png", 4 );
-	minus.setPosition( left +120, y -name.getHeight()/2 );
-	minus.setScale( 0.4, 0.4 );
-	
 	
 	plus.setName( "volume_button-plus" );
 	plus.load( "data/menu/plus.png", 4 );
-	plus.setPosition( minus.getRight(), y -name.getHeight()/2 );
-	plus.setScale( 0.4, 0.4 );
 	
 	
 	percent.setName( "volume_button-percent" );
-	percent.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF  );
+	percent.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
 	percent.setText( con::itos( static_cast<int>( volume*100/max ) ) + "%" );
-	percent.setPosition( plus.getRight() + 10, y );
 	
 	
 	click.setID( "volume_button-click" );
@@ -115,7 +113,7 @@ void Volume_button::draw( sf::RenderWindow* &window )
 	}
 }
 
-void Volume_button::handle( sf::Event &event )
+void Volume_button::handle( sf::Event &event, int r_x, int r_y )
 {
 	plus.setOffset( 0 );
 	minus.setOffset( 0 );
@@ -126,7 +124,7 @@ void Volume_button::handle( sf::Event &event )
 		x = event.mouseMove.x;
 		y = event.mouseMove.y;
 		
-		if( plus.checkCollision( x, y ) )
+		if( plus.checkCollision( x +r_x, y +r_y ) )
 		{
 			plus.setOffset( 1 );
 		}
@@ -135,7 +133,7 @@ void Volume_button::handle( sf::Event &event )
 			plus_focus = false;
 		}
 		
-		if( minus.checkCollision( x, y ) )
+		if( minus.checkCollision( x +r_x, y +r_y ) )
 		{
 			minus.setOffset( 1 );
 		}
@@ -149,7 +147,7 @@ void Volume_button::handle( sf::Event &event )
 		x = event.mouseButton.x;
 		y = event.mouseButton.y;
 			
-		if( plus.checkCollision( x, y ) )
+		if( plus.checkCollision( x +r_x, y +r_y ) )
 		{
 			if( play )
 				click.play();
@@ -164,7 +162,7 @@ void Volume_button::handle( sf::Event &event )
 			plus_focus = false;
 		}
 			
-		if( minus.checkCollision( x, y ) )
+		if( minus.checkCollision( x +r_x, y +r_y ) )
 		{
 			if( play )
 				click.play();
@@ -209,7 +207,7 @@ void Volume_button::fadeout( int i, int min )
 
 int Volume_button::getBot()
 {
-	return plus.getBot();
+	return y_state +plus.getHeight() *scale;
 }
 
 int Volume_button::getRight()
@@ -235,3 +233,27 @@ sf::Uint8 Volume_button::getVolume()
 	return volume;
 }
 
+
+
+void Volume_button::setScale( float s_x, float s_y )
+{
+	name.setBasicScale( s_x, s_y );
+	name.setScale();
+	
+	minus.setBasicScale( s_x, s_y );
+	minus.setScale( scale, scale );
+	
+	plus.setBasicScale( s_x, s_y );
+	plus.setScale( scale, scale );
+	
+	percent.setBasicScale( s_x, s_y );
+	percent.setScale();
+}
+
+void Volume_button::setView( int w, int r_x, int r_y )
+{
+	name.setPosition( w /10 +r_x, y_state *name.getYScale() +r_y );
+	minus.setPosition( name.getX() +300 *minus.getXScale(), (y_state -20) *name.getYScale() +r_y );
+	plus.setPosition( minus.getRight(), (y_state -20) *name.getYScale() +r_y );
+	percent.setPosition( plus.getRight() +10 *percent.getXScale(), y_state *name.getYScale() +r_y );
+}

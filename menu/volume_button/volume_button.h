@@ -32,23 +32,31 @@ class Volume_button :public Click
 	// hover
 	bool plus_focus;
 	bool minus_focus;
+	float scale;
+	int y_state;
 	
 public:
 	
+	// Basics.
 	Volume_button( float volume = 1 );
 	~Volume_button();
 	void free();
 	
-	void load( int left, int y, string new_name );
+	void load( int y, string new_name );
 	void draw( sf::RenderWindow* &window );
-	void handle( sf::Event &event );
+	void handle( sf::Event &event, int r_x, int r_y );
 	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
 	
+	// Extra
 	int getBot();
 	int getRight();
 	
 	bool isChanged();
 	sf::Uint8 getVolume();
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( int w, int r_x, int r_y );
 };
