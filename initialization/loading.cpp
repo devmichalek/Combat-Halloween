@@ -32,7 +32,7 @@ void Loading::free()
 	state = 0;
 }
 	
-void Loading::load( unsigned w, unsigned h )
+void Loading::load( int w, int h )
 {
 	free();
 	max = 20;
@@ -83,7 +83,7 @@ void Loading::setScale( float s_x, float s_y )
 	progress_bar.setScale();
 }
 
-void Loading::setView( unsigned w, unsigned h, int r_x, int r_y )
+void Loading::setView( int w, int h, int r_x, int r_y )
 {
 	text.setPosition( w/2 -text.getWidth()/2 +r_x, h/2 -text.getHeight()/2 +r_y );
 	progress_bar.setPosition( w/2 - progress_bar.getWidth()/2 +r_x, h/2 +(20 *progress_bar.getYScale()) +r_y );
