@@ -34,34 +34,35 @@ void Reset_button::free()
 	
 	button.free();
 	reset = false;
+	scale = 0;
 }
 
 
 
-void Reset_button::load( int screen_w, int screen_h )
+void Reset_button::load( unsigned w, unsigned h )
 {
-	explanator.load( "Reset all data", screen_w );
+	scale = 0.45;
+	explanator.load( "Reset all data" );
 	
 	button.setName( "reset_button-button" );
     button.load( "data/menu/reset.png", 4 );
-	button.setPosition( 10, screen_h -10 -button.getHeight()*2 );
 	
 	mySprite.setName( "reset_button-mySprite" );
     mySprite.load( "data/menu/exit.png" );
 	mySprite.setAlpha( 0xFF );
-	mySprite.center( 0, 0, screen_w, screen_h );
 
 	myText.setName( "reset_button-myText" );
 	myText.setFont( "data/menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
 	myText.setText( "r-reset all data       b-back" );
 	myText.setAlpha( 0xFF );
-	myText.center( screen_w, screen_h, 0, -6 );
+	
+	setView( w, h, 0, 0 );
 
 	click.setID( "exit_log-click" );
 	click.load( "data/menu/click.wav", 50 );
 }
 
-void Reset_button::handle( sf::Event &event )
+void Reset_button::handle( sf::Event &event, int r_x, int r_y )
 {
 	static bool rel = false;
 	
@@ -100,10 +101,10 @@ void Reset_button::handle( sf::Event &event )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button.checkCollision( x, y ) )
+			if( button.checkCollision( x +r_x, y +r_y ) )
 			{
 				explanator.run();
-				explanator.focus( x, y );
+				explanator.focus( x +r_x, y +r_y );
 				button.setOffset( 1 );
 			}
 			else
@@ -118,7 +119,7 @@ void Reset_button::handle( sf::Event &event )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( button.checkCollision( x, y ) )
+			if( button.checkCollision( x +r_x, y +r_y ) )
 			{
 				button.setOffset( 2 );
 					
@@ -298,4 +299,27 @@ const sf::Uint8& Reset_button::getState() const
 {
 	// printf( "%d\n", state );
 	return state;
+}
+
+
+
+void Reset_button::setScale( float s_x, float s_y )
+{
+	button.setBasicScale( s_x, s_y );
+	button.setScale( scale, scale );
+	
+	mySprite.setBasicScale( s_x, s_y );
+	mySprite.setScale();
+	
+	myText.setBasicScale( s_x, s_y );
+	myText.setScale();
+	
+	explanator.setScale( s_x, s_y );
+}
+
+void Reset_button::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	button.setPosition( 10 *(button.getXScale() /scale) +r_x, h -(5 *button.getYScale() /scale) -button.getHeight()*2 +r_y );
+	mySprite.setPosition( w/2 -mySprite.getWidth()/2 +r_x, h/2 -mySprite.getHeight()/2 +r_y );
+	myText.setPosition( w/2 -myText.getWidth()/2 +r_x, h/2 -myText.getHeight() +r_y +(5 *myText.getYScale()) );
 }
