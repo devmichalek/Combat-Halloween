@@ -28,19 +28,30 @@ void Log::free()
 	explanator.free();
 	state = false;
 	locked = false;
+	
 	button.free();
+	y_state = 0;
+	left_state = 0;
+	left_buf = 0;
 	
 	play = true;
 	click.free();
+	scale = 1;
 }
 
 
 
-void Log::load( string path, int left, int y )
+void Log::load( string path, unsigned w, unsigned h, float left, float y )
 {
+	scale = 0.45;
 	button.setName( "log-button" );
     button.load( "data/menu/" + path + ".png", 4 );
-	button.setPosition( left, y +10 );
+	
+	y_state = h/2 -(y +10);
+	left_buf = left;
+	left_state = w/2 -left;
+	
+	button.setPosition( left, y );
 	
 	// if is locked we don't have reason to load futher
 	if( locked )
@@ -54,11 +65,6 @@ void Log::load( string path, int left, int y )
 	}
 }
 
-void Log::setExplanator( string line, int screen_w )
-{
-	explanator.load( line, screen_w );
-}
-
 void Log::draw( sf::RenderWindow* &window )
 {
 	if( !state )
@@ -68,7 +74,7 @@ void Log::draw( sf::RenderWindow* &window )
 	}
 }
 
-void Log::handle( sf::Event &event )
+void Log::handle( sf::Event &event, int r_x, int r_y )
 {
 	static bool rel = false;
 	
@@ -87,10 +93,10 @@ void Log::handle( sf::Event &event )
 					x = event.mouseMove.x;
 					y = event.mouseMove.y;
 						
-					if( button.checkCollision( x, y ) && !state )
+					if( button.checkCollision( x +r_x, y +r_y ) && !state )
 					{
 						explanator.run();
-						explanator.focus( x, y );
+						explanator.focus( x +r_x, y +r_y );
 						button.setOffset( 1 );
 					}
 				}
@@ -100,7 +106,7 @@ void Log::handle( sf::Event &event )
 					x = event.mouseButton.x;
 					y = event.mouseButton.y;
 						
-					if( button.checkCollision( x, y ) )
+					if( button.checkCollision( x +r_x, y +r_y ) )
 					{
 						button.setOffset( 2 );
 						
@@ -151,12 +157,32 @@ void Log::fadeout( int i, int min )
 
 
 
-int Log::getRight()
+float Log::getRight()
 {
-	return button.getRight();
+	return left_buf +button.getWidth() *scale;
 }
 
 const bool& Log::getState()
 {
 	return state;
+}
+
+void Log::setExplanator( string line )
+{
+	explanator.load( line );
+}
+
+
+
+void Log::setScale( float s_x, float s_y )
+{
+	button.setBasicScale( s_x, s_y );
+	button.setScale( scale, scale );
+	
+	explanator.setScale( s_x, s_y );
+}
+
+void Log::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	button.setPosition( w/2 -(left_state *button.getXScale() /scale) +r_x, h/2 -(y_state *button.getYScale() /scale) +r_y );
 }
