@@ -1,3 +1,12 @@
+/**
+    explanator.h
+    Purpose: class Explanator - shows information
+
+    @author Adrian Michalek
+    @version 2017.03.02
+	@email adrmic98@gmail.com
+*/
+
 #pragma once
 
 #include "drawable/text.h"
@@ -11,7 +20,6 @@ class Explanator
 	int alpha;
 	int vel;
 	int state;
-	int screen_w;
 	
 	int counter;
 	int line;
@@ -19,15 +27,21 @@ class Explanator
 	
 public:
 	
+	// Basics.
 	Explanator();
-    ~Explanator();
+	~Explanator();
 	void free();
-
-    void load( string str, int screen_w );
-    void draw( sf::RenderWindow &window );
 	
+	void load( string str );
+	void draw( sf::RenderWindow &window );
+	
+	void fadeout( int i = 1, int min = 0 );
+	
+	// In additon.
 	void run();
 	void stop();
-	void focus( int x, int y );
-	void fadeout( int i = 1, int min = 0 );
+	void focus( int x, int y, bool r = true );
+	
+	// Window.
+	void setScale( float s_x, float s_y );
 };

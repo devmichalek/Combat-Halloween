@@ -1,3 +1,12 @@
+/**
+    explanator.h
+    Purpose: class Explanator - shows information
+
+    @author Adrian Michalek
+    @version 2017.03.02
+	@email adrmic98@gmail.com
+*/
+
 #include "menu/explanator/explanator.h"
 
 Explanator::Explanator()
@@ -18,7 +27,6 @@ void Explanator::free()
 	alpha = 0;
 	vel = 0;
 	state = 0;
-	screen_w = 0;
 	
 	counter = 0;
 	line = 0;
@@ -27,12 +35,11 @@ void Explanator::free()
 
 
 
-void Explanator::load( string str, int screen_w )
+void Explanator::load( string str )
 {
 	free();
 	
 	vel = 1;
-	this->screen_w = screen_w;
 	
 	// Your text
 	text.setName( "explanator-text" );
@@ -81,6 +88,15 @@ void Explanator::draw( sf::RenderWindow &window )
 	}
 }
 
+void Explanator::fadeout( int i, int min )
+{
+	state = 0;
+	alpha = 0;
+	bg.fadeout( i, min );
+	text.fadeout( i, min );
+}
+
+
 
 void Explanator::run()
 {
@@ -105,27 +121,34 @@ void Explanator::stop()
 	}
 }
 
-void Explanator::focus( int x, int y )
+void Explanator::focus( int x, int y, bool r )
 {
-	if( state == 1 && x > 0 && x < screen_w && y > 0 && y < screen_w )
+	if( state == 1 )
 	{
 		y -= bg.getHeight();
-		bg.setPosition( x, y );
-		text.setPosition( x, y );
-		if( x +bg.getWidth() > screen_w )
+		
+		if( !r )
 		{
 			bg.setPosition( x -bg.getWidth(), y );
 			text.setPosition( x -bg.getWidth(), y );
+		}
+		else
+		{
+			bg.setPosition( x, y );
+			text.setPosition( x, y );
 		}
 		
 		state = 2;
 	}
 }
 
-void Explanator::fadeout( int i, int min )
+
+
+void Explanator::setScale( float s_x, float s_y )
 {
-	state = 0;
-	alpha = 0;
-	bg.fadeout( i, min );
-	text.fadeout( i, min );
+	text.setBasicScale( s_x, s_y );
+	text.setScale();
+	
+	bg.setBasicScale( s_x, s_y );
+	bg.setScale();
 }
