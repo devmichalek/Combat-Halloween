@@ -1,3 +1,12 @@
+/**
+    head.h
+    Purpose: class Head - it's a part of head group (headdeck), represents 1 particular hero who can be buy
+
+    @author Adrian Michalek
+    @version 2017.04.07
+	@email adrmic98@gmail.com
+*/
+
 #include "menu/development/head.h"
 #include "file/file.h"
 #include <vector>
@@ -14,6 +23,9 @@ Head::~Head()
 
 void Head::free()
 {
+	y_state = 0;
+	scale = 0;
+	
 	cost = 0;
 	type = 0;
 	kind = 0;
@@ -34,6 +46,9 @@ void Head::load( int type, int y )
 {
 	free();
 	
+	// Set scale.
+	scale = 0.45;
+	
 	// Set type.
 	this->type = type;
 	
@@ -42,6 +57,7 @@ void Head::load( int type, int y )
 	if( type < 2 )	this->kind ++;
 	else			this->kind += 2;
 	
+	y_state = y;
 	
 	// Load click.
 	click.setID( "develop-click" );
@@ -50,7 +66,6 @@ void Head::load( int type, int y )
 	// Set cost (text)
 	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xD8, 0x00 );
 	cost_text.setText( " " );
-	cost_text.setPosition( 0, 0 );
 	
 	// load head
 	sprite.setName( "head-sprite" );
@@ -102,12 +117,6 @@ void Head::load( int type, int y )
 		}
 	}
 	file.free();
-	
-	sprite.setPosition( 20, y );
-	name.setPosition( sprite.getRight() +18, y +sprite.getHeight() /3 );
-	specs.setPosition( 360, y +sprite.getHeight() /3 );
-	button.setPosition( 780, y +button.getWidth() /2 -15 );
-	cost_text.setPosition( button.getRight() +20, y +sprite.getHeight() /3 );
 }
 
 void Head::draw( sf::RenderWindow* &window )
@@ -122,6 +131,81 @@ void Head::draw( sf::RenderWindow* &window )
 	window->draw( specs.get() );
 	window->draw( cost_text.get() );
 }
+
+void Head::handle( sf::Event &event, int r_x, int r_y )
+{
+	if( !locked && state == 0 )
+	{
+		int x, y;
+		button.setOffset( 0 );
+
+		if( event.type == sf::Event::MouseMoved )
+		{
+			x = event.mouseMove.x;
+			y = event.mouseMove.y;
+				
+			if( button.checkCollision( x +r_x, y +r_y ) )
+			{
+				button.setOffset( 1 );
+			}
+			else
+			{
+				focus = false;
+			}
+		}
+
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			x = event.mouseButton.x;
+			y = event.mouseButton.y;
+				
+			if( button.checkCollision( x +r_x, y +r_y ) )
+			{
+				button.setOffset( 2 );
+					
+				if( play )
+				{
+					click.play();
+				}
+						
+				focus = true;
+				state = 1;
+			}
+		}
+			
+		if( event.type == sf::Event::MouseButtonReleased )
+		{
+			focus = false;
+		}
+			
+		if( focus )
+		{
+			button.setOffset( 2 );
+		}
+	}
+}
+
+
+
+void Head::fadein( int i, int max )
+{
+	sprite.fadein( i, max );
+	button.fadein( i, max );
+	name.fadein( i, max );
+	specs.fadein( i, max );
+	cost_text.fadein( i, max );
+}
+
+void Head::fadeout( int i, int min )
+{
+	sprite.fadeout( i, min );
+	button.fadeout( i, min );
+	name.fadeout( i, min );
+	specs.fadeout( i, min );
+	cost_text.fadeout( i, min );
+}
+
+
 
 void Head::reloadText()
 {
@@ -177,81 +261,6 @@ void Head::reloadText()
 	}
 	file.free();
 }
-
-void Head::handle( sf::Event &event )
-{
-	if( !locked && state == 0 )
-	{
-		int x, y;
-		button.setOffset( 0 );
-
-		if( event.type == sf::Event::MouseMoved )
-		{
-			x = event.mouseMove.x;
-			y = event.mouseMove.y;
-				
-			if( button.checkCollision( x, y ) )
-			{
-				button.setOffset( 1 );
-			}
-			else
-			{
-				focus = false;
-			}
-		}
-
-		if( event.type == sf::Event::MouseButtonPressed )
-		{
-			x = event.mouseButton.x;
-			y = event.mouseButton.y;
-				
-			if( button.checkCollision( x, y ) )
-			{
-				button.setOffset( 2 );
-					
-				if( play )
-				{
-					click.play();
-				}
-						
-				focus = true;
-				state = 1;
-			}
-		}
-			
-		if( event.type == sf::Event::MouseButtonReleased )
-		{
-			focus = false;
-		}
-			
-		if( focus )
-		{
-			button.setOffset( 2 );
-		}
-	}
-}
-
-
-
-void Head::fadein( int i, int max )
-{
-	sprite.fadein( i, max );
-	button.fadein( i, max );
-	name.fadein( i, max );
-	specs.fadein( i, max );
-	cost_text.fadein( i, max );
-}
-
-void Head::fadeout( int i, int min )
-{
-	sprite.fadeout( i, min );
-	button.fadeout( i, min );
-	name.fadeout( i, min );
-	specs.fadeout( i, min );
-	cost_text.fadeout( i, min );
-}
-
-
 
 int Head::getCost()
 {
@@ -312,4 +321,35 @@ void Head::makeNought()
 	}
 	file.free();
 	a.clear();
+}
+
+
+
+void Head::setScale( float s_x, float s_y )
+{
+	sprite.setBasicScale( s_x, s_y );
+	sprite.setScale( 0.75, 0.75 );
+	
+	button.setBasicScale( s_x, s_y );
+	button.setScale( scale, scale );
+	
+	name.setBasicScale( s_x, s_y );
+	name.setScale();
+	
+	specs.setBasicScale( s_x, s_y );
+	specs.setScale();
+	
+	cost_text.setBasicScale( s_x, s_y );
+	cost_text.setScale();
+}
+
+void Head::setView( int w, int h, int r_x, int r_y )
+{
+	sprite.setPosition( 20 *sprite.getXScale() /0.75 +r_x, y_state *sprite.getYScale() /0.75 +r_y );
+	int new_y = y_state *sprite.getYScale() /0.75;
+	name.setPosition( w /6.9 +r_x, new_y +38 *name.getYScale() +r_y );
+	specs.setPosition( w /2.78 +r_x, new_y +38 *specs.getYScale() +r_y );
+	// printf( "%f\n", specs.getRight() );
+	button.setPosition( w /1.282 +r_x, new_y +20 *button.getYScale() /scale +r_y );
+	cost_text.setPosition( w /1.15 +r_x, new_y +38 *cost_text.getYScale() +r_y );
 }

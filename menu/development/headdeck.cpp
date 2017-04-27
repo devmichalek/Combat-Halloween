@@ -1,3 +1,12 @@
+/**
+    headdeck.h
+    Purpose: class Headdeck - bunch of heads
+
+    @author Adrian Michalek
+    @version 2017.04.11
+	@email adrmic98@gmail.com
+*/
+
 #include "menu/development/headdeck.h"
 #include "file/file.h"
 
@@ -13,6 +22,7 @@ Headdeck::~Headdeck()
 
 void Headdeck::free()
 {
+	y_state = 0;
 	wallet = 0;
 	change = false;
 	
@@ -41,14 +51,16 @@ void Headdeck::free()
 
 
 
-void Headdeck::load( int y, int screen_h )
+void Headdeck::load( int y, unsigned w, unsigned h )
 {
 	free();
+	
+	// Set y...
+	y_state = y;
 	
 	// Set line.
 	line.setName( "headdeck-line" );
 	line.create( 2, 420 );
-	line.setPosition( 725, y );
 	
 	// Set texts.
 	for( unsigned i = 0; i < AMOUNT; i++ )
@@ -60,15 +72,10 @@ void Headdeck::load( int y, int screen_h )
 		else				texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
 	}
 	texts[ TYPE ]->setText( "Type" );
-	texts[ TYPE ]->setPosition( 100, y -50 );
 	texts[ SPECS ]->setText( "Specs" );
-	texts[ SPECS ]->setPosition( 400, y -50 );
 	texts[ COST ]->setText( "Cost/Status" );
-	texts[ COST ]->setPosition( 760, y -50 );
 	texts[ WALLET ]->setText( "Wallet: " );
-	texts[ WALLET ]->setPosition( 10, screen_h -40 );
 	texts[ MONEY ]->setText( " " );
-	texts[ MONEY ]->setPosition( texts[ WALLET ]->getRight() +20, screen_h -37 );
 	
 	// Set heads.
 	for( int i = 0; i < 4; i++ )
@@ -76,6 +83,9 @@ void Headdeck::load( int y, int screen_h )
 		heads.push_back( new Head() );
 		heads[ i ]->load( i, 100*i +y );
 	}
+	
+	// Set view.
+	setView( w, h, 0, 0 );
 	
 	// Reload.
 	reloadText();
@@ -96,28 +106,7 @@ void Headdeck::draw( sf::RenderWindow* &window )
 	window->draw( line.get() );
 }
 
-void Headdeck::reloadText()
-{
-	MyFile file;
-	file.load( "data/txt/money/bank.txt" );
-	if( file.is_good() )
-	{
-		string line;
-		file.get() >> line;
-		wallet = con::stoi( line );
-	}
-	file.free();
-
-	texts[ MONEY ]->setText( con::itos( wallet ) );
-	texts[ MONEY ]->reloadPosition();
-	
-	for( auto &it :heads )
-	{
-		it->reloadText();
-	}
-}
-
-void Headdeck::handle( sf::Event &event )
+void Headdeck::handle( sf::Event &event, int r_x, int r_y )
 {
 	for( auto &it :heads )
 	{
@@ -133,7 +122,7 @@ void Headdeck::handle( sf::Event &event )
 	
 	for( auto &it :heads )
 	{
-		it->handle( event );
+		it->handle( event, r_x, r_y );
 		if( it->sellOut() )
 		{
 			wallet -= it->getCost();
@@ -187,6 +176,27 @@ void Headdeck::fadeout( int i, int min )
 }
 
 
+
+void Headdeck::reloadText()
+{
+	MyFile file;
+	file.load( "data/txt/money/bank.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		wallet = con::stoi( line );
+	}
+	file.free();
+
+	texts[ MONEY ]->setText( con::itos( wallet ) );
+	texts[ MONEY ]->reloadPosition();
+	
+	for( auto &it :heads )
+	{
+		it->reloadText();
+	}
+}
 
 void Headdeck::setVolume( int volume )
 {
@@ -243,4 +253,39 @@ void Headdeck::setWallet( int money )
 int Headdeck::getWallet()
 {
 	return wallet;
+}
+
+
+
+void Headdeck::setScale( float s_x, float s_y )
+{
+	line.setBasicScale( s_x, s_y );
+	line.setScale( 1, 1 );
+	
+	for( auto &it :texts )
+	{
+		it->setBasicScale( s_x, s_y );
+		it->setScale( 1, 1 );
+	}
+	
+	for( auto &it :heads )
+	{
+		it->setScale( s_x, s_y );
+	}
+}
+
+void Headdeck::setView( int w, int h, int r_x, int r_y )
+{
+	line.setPosition( w /1.38 +r_x, y_state *line.getYScale() +r_y );
+
+	texts[ TYPE ]->setPosition( static_cast <int> (w) /10 +r_x, (y_state -50)*texts[ TYPE ]->getYScale() +r_y );
+	texts[ SPECS ]->setPosition( w /10 *4 +r_x, (y_state -50)*texts[ SPECS ]->getYScale() +r_y );
+	texts[ COST ]->setPosition( w /1.315 +r_x, (y_state -50)*texts[ COST ]->getYScale() +r_y );
+	texts[ WALLET ]->setPosition( 10 *texts[ WALLET ]->getXScale() +r_x, h -45*texts[ WALLET ]->getYScale() +r_y );
+	texts[ MONEY ]->setPosition( 140 *texts[ MONEY ]->getXScale() +r_x, h -42 *texts[ MONEY ]->getYScale() +r_y );
+	
+	for( auto &it :heads )
+	{
+		it->setView( w, h, r_x, r_y );
+	}
 }

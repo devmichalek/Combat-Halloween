@@ -35,13 +35,24 @@ void Develop::free()
 	cost = 0;
 	level = 0;
 	locked = true;
+	
+	y_state = 0;
+	scale = 0;
+	scale_sprite = 0;
 }
 
 
 
-void Develop::load( int main_x, int nr, int bot )
+void Develop::load( int nr, int bot )
 {
 	free();
+	
+	// Set states.
+	y_state = bot;
+	
+	// Set scale.
+	scale = 0.36;
+	scale_sprite = 0.5;
 	
 	// Load button.
 	button.setName( "develop-button" );
@@ -136,18 +147,8 @@ void Develop::load( int main_x, int nr, int bot )
 	click.setID( "develop-click" );
 	click.load( "data/menu/click.wav", 50 );
 	
-	// Positions.
-	name.setPosition( main_x, bot );
-	sprite.setScale( 0.5, 0.5 );
-	sprite.setPosition( main_x -sprite.getWidth() -10, bot -10 );
-	label.setPosition( main_x +230, bot );
-	actual.setPosition( label.getRight() +100, bot );
-	name_base.setPosition( actual.getRight() +90, bot );
-	
+	// Other.
 	button.setOffset( 3 );
-	button.setScale( 0.8, 0.8 );
-	button.setPosition( label.getRight() +430, bot -10 );
-	cost_text.setPosition( label.getRight() +530, bot );
 }
 
 void Develop::draw( sf::RenderWindow* &window )
@@ -161,7 +162,7 @@ void Develop::draw( sf::RenderWindow* &window )
 	window->draw( cost_text.get() );
 }
 
-void Develop::handle( sf::Event &event )
+void Develop::handle( sf::Event &event, int r_x, int r_y )
 {
 	if( !locked && level < max )
 	{
@@ -173,7 +174,7 @@ void Develop::handle( sf::Event &event )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button.checkCollision( x, y ) )
+			if( button.checkCollision( x +r_x, y +r_y ) )
 			{
 				button.setOffset( 1 );
 			}
@@ -188,7 +189,7 @@ void Develop::handle( sf::Event &event )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( button.checkCollision( x, y ) )
+			if( button.checkCollision( x+r_x, y +r_y ) )
 			{
 				button.setOffset( 2 );
 					
@@ -295,8 +296,6 @@ int Develop::getLevel()
 	return level;
 }
 
-
-
 void Develop::setActual( int level, string actual )
 {
 	if( this->level != level || this->level == 0 )
@@ -321,4 +320,47 @@ void Develop::setActual( int level, string actual )
 	
 	this->actual.setText( actual );
 	this->actual.reloadPosition();
+}
+
+
+
+void Develop::setScale( float s_x, float s_y )
+{
+	button.setBasicScale( s_x, s_y );
+	button.setScale( scale, scale );
+	
+	sprite.setBasicScale( s_x, s_y );
+	sprite.setScale( scale_sprite, scale_sprite );
+	
+	label.setBasicScale( s_x, s_y );
+	label.setScale();
+	
+	actual.setBasicScale( s_x, s_y );
+	actual.setScale();
+	
+	name.setBasicScale( s_x, s_y );
+	name.setScale();
+	
+	name_base.setBasicScale( s_x, s_y );
+	name_base.setScale();
+	
+	cost_text.setBasicScale( s_x, s_y );
+	cost_text.setScale();
+}
+
+void Develop::setView( int w, int h, int r_x, int r_y )
+{
+	// Positions.
+	button.setPosition( w /1.321 +r_x, (y_state -10) *button.getYScale() /scale +r_y );
+	sprite.setPosition( w /50 +r_x, (y_state -10) *sprite.getYScale() /scale_sprite +r_y );
+	int new_y = (y_state -10) *sprite.getYScale() /scale_sprite;
+	
+	name.setPosition( w /12.5 +r_x, new_y +r_y );
+	
+	label.setPosition( w /3.225 +r_x, new_y +r_y );
+	actual.setPosition( w /2.34 +r_x, new_y +r_y );
+	name_base.setPosition( w /1.754 +r_x, new_y +r_y );
+	
+	
+	cost_text.setPosition( w /1.166 +r_x, new_y +r_y );
 }
