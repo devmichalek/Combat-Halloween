@@ -47,8 +47,6 @@ class Menu
 	Link_button* facebook_button;
 	Link_button* scores_button;
 	
-	MySprite* background;
-	
 	Play_button* play_button;
 	
 	Log* author_log;
@@ -73,17 +71,23 @@ class Menu
 	
 public:
 	
+	// Basics.
 	Menu();
     ~Menu();
     void free();
 	
     void load( int screen_w, int screen_h );
-    void handle( sf::Event &event );
+    void handle( sf::Event &event, int r_x, int r_y );
     void draw( sf::RenderWindow* &window );
 	
+	// Extra.
 	bool isQuit();
 	bool nextState();
 	void reloadMusic();
 	void checkMoney();
 	void setNick();
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( int w, int h, int r_x, int r_y );
 };

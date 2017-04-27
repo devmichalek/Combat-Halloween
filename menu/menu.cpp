@@ -28,10 +28,6 @@ Menu::Menu()
 	facebook_button = new Link_button( "", true );
 	scores_button = new Link_button( "http://ninja2d.netne.net/", true );
 	
-
-	background = new MySprite();
-	background->setName( "menu-background" );
-	
 	play_button = new Play_button;
 	
 	author_log = new Log;
@@ -72,7 +68,6 @@ void Menu::free()
 	delete twitter_button;
 	delete facebook_button;
 	delete scores_button;
-	delete background;
 	delete play_button;
 	delete author_log;
 	delete game_log;
@@ -94,17 +89,17 @@ void Menu::free()
 void Menu::load( int screen_w, int screen_h )
 {
 	// title art
-	title->load( screen_w );
+	title->load( screen_w, screen_h );
 	
 	// sound buttons
 	music_button->load( "data/menu/music.png", 10, screen_w );
-	music_button->setExplanator( "Turn on/off music.", screen_w );
-	chunk_button->load( "data/menu/chunk.png", music_button->getBot(), screen_w );
-	chunk_button->setExplanator( "Turn on/off chunks.", screen_w );
+	music_button->setExplanator( "Turn on/off music." );	
+	chunk_button->load( "data/menu/chunk.png", music_button->getBot() +10, screen_w );
+	chunk_button->setExplanator( "Turn on/off chunks." );
 	
 	// volume buttons
-	music_volume->load( 100, screen_h/2 - 100, "Music" );
-	chunk_volume->load( 100, music_volume->getBot() + 25, "Sound" );
+	music_volume->load( screen_h/2 - 100, "Music" );
+	chunk_volume->load( music_volume->getBot() + 25, "Sound" );
 	
 	// chunk volume
 	sound.setChunkPlay( true );
@@ -115,32 +110,29 @@ void Menu::load( int screen_w, int screen_h )
 	sound.setMusicVolume( music_volume->getVolume() );
 	
 	// link buttons
-	git_button->load( "data/menu/git.png", screen_w, 10 );
-	git_button->setExplanator( "Visit github!", screen_w );
-	google_button->load( "data/menu/google.png", screen_w, git_button->getBot() );
-	google_button->setExplanator( "Visit ninja2d.netne.net!", screen_w );
-	twitter_button->load( "data/menu/twitter.png", screen_w, google_button->getBot() );
-	twitter_button->setExplanator( "Twitter? Not today...", screen_w );
-	facebook_button->load( "data/menu/facebook.png", screen_w, twitter_button->getBot() );
-	facebook_button->setExplanator( "Damm, who needs facebook?", screen_w );
-	scores_button->load( "data/menu/scores.png", facebook_button->getWidth() +20, screen_h -facebook_button->getHeight() -10 );
-	scores_button->setExplanator( "Sorry dude, it's not ready", screen_w );
-	
-	// bg
-	background->load( "data/menu/background.png" );
+	git_button->load( "data/menu/git.png", screen_w, screen_h, screen_w );
+	git_button->setExplanator( "Visit github!" );
+	google_button->load( "data/menu/google.png", screen_w, screen_h, screen_w, git_button->getBot() );
+	google_button->setExplanator( "Visit ninja2d.netne.net!" );
+	twitter_button->load( "data/menu/twitter.png", screen_w, screen_h, screen_w, google_button->getBot() );
+	twitter_button->setExplanator( "Twitter? Not today..." );
+	facebook_button->load( "data/menu/facebook.png", screen_w, screen_h, screen_w, twitter_button->getBot() );
+	facebook_button->setExplanator( "Damm, who needs facebook?" );
+	scores_button->load( "data/menu/scores.png", screen_w, screen_h, git_button->getWidth() +20, screen_h -git_button->getHeight() -10 );
+	scores_button->setExplanator( "Sorry dude, it's not ready" );
 	
 	// button to start game
-	play_button->load( screen_w, 400 );
+	play_button->load( screen_w, screen_h );
 	
 	// logs
-	author_log->load( "author", play_button->getX() +9, play_button->getBot() );
-	author_log->setExplanator( "Champions", screen_w );
-	game_log->load( "game", author_log->getRight() -5, play_button->getBot() );
-	game_log->setExplanator( "More games.", screen_w );
-	settings_log->load( "settings", game_log->getRight(), play_button->getBot() );
-	settings_log->setExplanator( "Go to the settings.", screen_w );
-	skill_log->load( "skill", settings_log->getRight() -4, play_button->getBot() );
-	skill_log->setExplanator( "Manage skills.", screen_w );
+	author_log->load( "author", screen_w, screen_h, play_button->getX() +28, play_button->getBot() );
+	author_log->setExplanator( "Champions" );
+	game_log->load( "game", screen_w, screen_h, author_log->getRight() -5, play_button->getBot() );
+	game_log->setExplanator( "More games." );
+	settings_log->load( "settings", screen_w, screen_h, game_log->getRight(), play_button->getBot() );
+	settings_log->setExplanator( "Go to the settings." );
+	skill_log->load( "skill", screen_w, screen_h, settings_log->getRight() -4, play_button->getBot() );
+	skill_log->setExplanator( "Manage skills." );
 	
 	// exit log
 	exit->load( screen_w, screen_h );
@@ -149,11 +141,11 @@ void Menu::load( int screen_w, int screen_h )
 	music->load( "data/menu/music.mp3", 50 );
 	
 	// information (keyboard) and keyboard
-	information->load( music_volume->getRight(), screen_h/2 - 100, screen_w, screen_h );
-	keyboard->load( 100, music_volume->getRight(), screen_h/2 + 100, screen_w, screen_h );
+	information->load( screen_h/2 - 100, screen_w, screen_h );
+	keyboard->load( screen_h/2 + 150, screen_w, screen_h ); // 100, 450, 
 	
 	development->load( title->getBot() +140, screen_h );
-	headdeck->load( title->getBot() +110, screen_h );
+	headdeck->load( title->getBot() +110, screen_w, screen_h );
 	
 	reset_button->load( screen_w, screen_h );
 	
@@ -179,7 +171,7 @@ void Menu::load( int screen_w, int screen_h )
 	reset_button->setVolume( chunk_volume->getVolume() );
 }
 
-void Menu::handle( sf::Event &event )
+void Menu::handle( sf::Event &event, int r_x, int r_y )
 {
 	if( play_button->getState() != 2 ) // if user didn't click play
 	{
@@ -194,7 +186,7 @@ void Menu::handle( sf::Event &event )
 			!settings_log->getState() &&
 			exit->getState() == 0 )
 		{
-			reset_button->handle( event );
+			reset_button->handle( event, r_x, r_y );
 		}
 
 		if( exit->getState() == 0 && reset_button->getState() == 0 ) // if user didn't click quit
@@ -204,53 +196,53 @@ void Menu::handle( sf::Event &event )
 				!settings_log->getState() &&
 				!game_log->getState() ) // if user didn't click logs
 			{
-				git_button->handle( event );
-				google_button->handle( event );
-				twitter_button->handle( event );
-				facebook_button->handle( event );
-				scores_button->handle( event );
-				play_button->handle( event );
-				music_button->handle( event );
-				chunk_button->handle( event );
+				git_button->handle( event, r_x, r_y );
+				google_button->handle( event, r_x, r_y );
+				twitter_button->handle( event, r_x, r_y );
+				facebook_button->handle( event, r_x, r_y );
+				scores_button->handle( event, r_x, r_y, true );
+				play_button->handle( event, r_x, r_y );
+				music_button->handle( event, r_x, r_y );
+				chunk_button->handle( event, r_x, r_y );
 			}
 				
 			if( !author_log->getState() && !settings_log->getState() && !game_log->getState() )
 			{
-				skill_log->handle( event );
+				skill_log->handle( event, r_x, r_y );
 			}
 			if( !skill_log->getState() && !settings_log->getState() && !game_log->getState() )
 			{
-				author_log->handle( event );
+				author_log->handle( event, r_x, r_y );
 			}
 			if( !skill_log->getState() && !author_log->getState() && !game_log->getState() )
 			{
-				settings_log->handle( event );
+				settings_log->handle( event, r_x, r_y );
 			}
 			if( !skill_log->getState() && !author_log->getState() && !settings_log->getState() )
 			{
-				game_log->handle( event );
+				game_log->handle( event, r_x, r_y );
 			}
 				
 			if( skill_log->getState() )
 			{
-				development->handle( event );
+				development->handle( event, r_x, r_y );
 			}
 			
 			if( author_log->getState() )
 			{
-				headdeck->handle( event );
+				headdeck->handle( event, r_x, r_y );
 			}
 				
 			if( settings_log->getState() )
 			{
-				music_volume->handle( event );
-				chunk_volume->handle( event );
-				keyboard->handle( event );
+				music_volume->handle( event, r_x, r_y );
+				chunk_volume->handle( event, r_x, r_y );
+				keyboard->handle( event, r_x, r_y );
 			}
 			
 			if( game_log->getState() )
 			{
-				author->handle( event );
+				author->handle( event, r_x, r_y );
 			}
 		}
 	}
@@ -330,7 +322,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		music->fadein( 1, music_volume->getVolume() );
 		sf::Uint8 value = 2;
-		background->fadein( value );
 		git_button->fadein( value );
 		google_button->fadein( value );
 		twitter_button->fadein( value );
@@ -360,7 +351,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		music->fadeout( 1 );
 		sf::Uint8 value = 3;
-		background->fadeout( value );
 		git_button->fadeout( value );
 		google_button->fadeout( value );
 		twitter_button->fadeout( value );
@@ -388,7 +378,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		music->fadeout( 3, 20 );
 		int value = 2, alpha = 170;
-		background->fadeout( value, alpha );
 		git_button->fadeout( value, alpha );
 		google_button->fadeout( value, alpha );
 		twitter_button->fadeout( value, alpha );
@@ -416,7 +405,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	{
 		int value = 3;
 		music->fadeout( value );
-		background->fadeout( value );
 		git_button->fadeout( value );
 		google_button->fadeout( value );
 		twitter_button->fadeout( value );
@@ -440,7 +428,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		nick->fadeout( value );
 		author->fadeout( value );
 		
-		if( background->getAlpha() == 0 )
+		if( title->getAlpha() == 0 )
 		{
 			state = 1;
 		}
@@ -463,7 +451,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	
 	
 	// Draw
-	window->draw( background->get() );
 	title->draw( *window );
 	
 	if( !author_log->getState() &&
@@ -645,4 +632,80 @@ void Menu::checkMoney()
 void Menu::setNick()
 {
 	nick->setNick();
+}
+
+
+
+void Menu::setScale( float s_x, float s_y )
+{
+	title->setScale( s_x, s_y );
+	
+	music_button->setScale( s_x, s_y );
+	chunk_button->setScale( s_x, s_y );
+	
+	music_volume->setScale( s_x, s_y );
+	chunk_volume->setScale( s_x, s_y );
+	
+	git_button->setScale( s_x, s_y );
+	google_button->setScale( s_x, s_y );
+	twitter_button->setScale( s_x, s_y );
+	facebook_button->setScale( s_x, s_y );
+	scores_button->setScale( s_x, s_y );
+	
+	play_button->setScale( s_x, s_y );
+	
+	author_log->setScale( s_x, s_y );
+	game_log->setScale( s_x, s_y );
+	settings_log->setScale( s_x, s_y );
+	skill_log->setScale( s_x, s_y );
+	
+	exit->setScale( s_x, s_y );
+	
+	information->setScale( s_x, s_y );
+	keyboard->setScale( s_x, s_y );
+	
+	development->setScale( s_x, s_y );
+	headdeck->setScale( s_x, s_y );
+	
+	reset_button->setScale( s_x, s_y );
+	
+	nick->setScale( s_x, s_y );
+	author->setScale( s_x, s_y );
+}
+
+void Menu::setView( int w, int h, int r_x, int r_y )
+{
+	title->setView( w, h, r_x, r_y );
+	
+	music_button->setView( w, r_x, r_y );
+	chunk_button->setView( w, r_x, r_y );
+	
+	music_volume->setView( w, r_x, r_y );
+	chunk_volume->setView( w, r_x, r_y );
+	
+	git_button->setViewH( w, r_x, r_y );
+	google_button->setViewH( w, r_x, r_y );
+	twitter_button->setViewH( w, r_x, r_y );
+	facebook_button->setViewH( w, r_x, r_y );
+	scores_button->setViewW( h, r_x, r_y );
+	
+	play_button->setView( w, h, r_x, r_y );
+	
+	author_log->setView( w, h, r_x, r_y );
+	game_log->setView( w, h, r_x, r_y );
+	settings_log->setView( w, h, r_x, r_y );
+	skill_log->setView( w, h, r_x, r_y );
+	
+	exit->setView( w, h, r_x, r_y );
+	
+	information->setView( w, h, r_x, r_y );
+	keyboard->setView( w, h, r_x, r_y );
+	
+	development->setView( w, h, r_x, r_y );
+	headdeck->setView( w, h, r_x, r_y );
+	
+	reset_button->setView( w, h, r_x, r_y );
+	
+	nick->setView( w, h, r_x, r_y );
+	author->setView( w, h, r_x, r_y );
 }
