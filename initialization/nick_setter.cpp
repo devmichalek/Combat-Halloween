@@ -36,7 +36,7 @@ void Nick_setter::free()
 
 
 
-void Nick_setter::load( unsigned w, unsigned h )
+void Nick_setter::load( int w, int h )
 {
 	free();
 	
@@ -50,8 +50,6 @@ void Nick_setter::load( unsigned w, unsigned h )
 	text.setName( "nick_setter-text" );
 	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
 	text.setText( "___________"  );
-	
-	setView( w, h, 0, 0 );
 }
 
 void Nick_setter::handle( sf::Event &event )
@@ -213,7 +211,7 @@ void Nick_setter::setScale( float s_x, float s_y )
 	text.setScale();
 }
 
-void Nick_setter::setView( unsigned w, unsigned h, int r_x, int r_y )
+void Nick_setter::setView( int w, int h, int r_x, int r_y )
 {
 	label.setPosition( w /2 -label.getWidth() /2 +r_x, h /3 +label.getHeight() /2 +r_y );
 	reloadPosition();

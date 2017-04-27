@@ -32,7 +32,7 @@ public:
 	~Nick_setter();
 	void free();
 	
-	void load( unsigned w, unsigned h );
+	void load( int w, int h );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
@@ -47,5 +47,5 @@ public:
 	
 	// Window.
 	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
+	void setView( int w, int h, int r_x, int r_y );
 };
