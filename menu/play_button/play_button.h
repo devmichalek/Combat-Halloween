@@ -20,28 +20,35 @@ protected:
 
 	mutable sf::Uint8 state;
 	mutable MySprite mySprite;
-	MyText myText;
+	
+	float scale;
 	
 public:
 	
+	// Basics.
 	Play_button();
     ~Play_button();
 	void free();
 
-    void load( int screen_w, int bot );
+    void load( unsigned w, unsigned h );
     void draw( sf::RenderWindow* &window );
-    void handle( sf::Event &event );
+    void handle( sf::Event &event, int r_x, int r_y );
 	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
 	
-	// mutator
+	// Mutator.
 	void setState( int state );	
 	
-	// getters
+	// Getters.
 	const int getBot() const;
 	const int getX() const;
 	const sf::Uint8& getState() const;
 	
+	// Extra.
 	bool nextState() const;
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };

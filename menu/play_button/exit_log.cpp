@@ -9,18 +9,41 @@
 
 #include "exit_log.h"
 
-void Exit_log::load( int screen_w, int screen_h )
+Exit_log::Exit_log()
+{
+	free();
+}
+
+Exit_log::~Exit_log()
+{
+	free();
+}
+
+void Exit_log::free()
+{
+	state = 0;
+	
+	mySprite.free();
+	myText.free();
+	
+	play = true;
+	click.free();
+	scale = 0;
+}
+
+
+void Exit_log::load( unsigned w, unsigned h )
 {
 	mySprite.setName( "exit_log-mySprite" );
     mySprite.load( "data/menu/exit.png" );
 	mySprite.setAlpha( 0xFF );
-	mySprite.center( 0, 0, screen_w, screen_h );
-
+	
 	myText.setName( "exit_log-myText" );
 	myText.setFont( "data/menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
 	myText.setText( "q-quit  b-back" );
 	myText.setAlpha( 0xFF );
-	myText.center( screen_w, screen_h, 0, -6 );
+	
+	setView( w, h, 0, 0 );
 
 	click.setID( "exit_log-click" );
 	click.load( "data/menu/click.wav", 50 );
@@ -83,7 +106,34 @@ void Exit_log::draw( sf::RenderWindow* &window )
 
 
 
+void Exit_log::fadein( int i, int max )
+{
+	mySprite.fadein( i, max );
+	myText.fadein( i, max );
+}
+
+void Exit_log::fadeout( int i, int min )
+{
+	mySprite.fadeout( i, min );
+	myText.fadeout( i, min );
+}
+
+
+
 int Exit_log::getState()
 {
 	return state;
+}
+
+
+void Exit_log::setScale( float s_x, float s_y )
+{
+	mySprite.setBasicScale( s_x, s_y );
+	mySprite.setScale();
+}
+
+void Exit_log::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	mySprite.setPosition( w /2 -mySprite.getWidth() /2 +r_x, h /2 -mySprite.getHeight() /2 +r_y );
+	myText.setPosition( w /2 -myText.getWidth() /2 +r_x, h /2 -myText.getHeight() /2 -(6 *myText.getYScale()) +r_y );
 }

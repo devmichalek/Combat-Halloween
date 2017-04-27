@@ -25,24 +25,22 @@ void Play_button::free()
 	state = 0;
 	
 	mySprite.free();
-	myText.free();
 	
 	play = true;
 	click.free();
+	scale = 0;
 }
 
 
 
-void Play_button::load( int screen_w, int bot )
+void Play_button::load( unsigned w, unsigned h )
 {
-	mySprite.setName( "play_button-mySprite" );
-	mySprite.load( "data/menu/blankbutton.png", 4 );
-	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, bot );
+	scale = 0.9;
 	
-	myText.setName( "play_button-myText" );
-	myText.setFont( "data/menu/BADABB__.TTF", 130, 0x82, 0xae, 0x20 );
-	myText.setText( "play" );
-	myText.setPosition( screen_w/2 - myText.getWidth()/2 +10, bot -5 );
+	mySprite.setName( "play_button-mySprite" );
+	mySprite.load( "data/menu/play.png", 4 );
+	
+	setView( w, h, 0, 0 );
 	
 	click.setID( "play_button-click" );
 	click.load( "data/menu/sfx.wav", 50 );
@@ -51,10 +49,9 @@ void Play_button::load( int screen_w, int bot )
 void Play_button::draw( sf::RenderWindow* &window )
 {
     window->draw( mySprite.get() );
-	window->draw( myText.get() );
 }
 
-void Play_button::handle( sf::Event &event )
+void Play_button::handle( sf::Event &event, int r_x, int r_y )
 {
 	if( state != 2 )
 	{
@@ -68,7 +65,7 @@ void Play_button::handle( sf::Event &event )
 				x = event.mouseMove.x;
 				y = event.mouseMove.y;
 					
-				if( mySprite.checkCollision( x, y ) )
+				if( mySprite.checkCollision( x +r_x, y +r_y ) )
 				{
 					if( state != 2 )
 					{
@@ -83,7 +80,7 @@ void Play_button::handle( sf::Event &event )
 				x = event.mouseButton.x;
 				y = event.mouseButton.y;
 					
-				if( mySprite.checkCollision( x, y ) )
+				if( mySprite.checkCollision( x +r_x, y +r_y ) )
 				{
 					state = 2;
 					mySprite.setOffset( 2 );
@@ -103,13 +100,11 @@ void Play_button::handle( sf::Event &event )
 void Play_button::fadein( int i, int max )
 {
 	mySprite.fadein( i, max );
-	myText.fadein( i, max );
 }
 
 void Play_button::fadeout( int i, int min )
 {
 	mySprite.fadeout( i, min );
-	myText.fadeout( i, min );
 }
 
 
@@ -119,6 +114,8 @@ void Play_button::setState( int state )
 	mySprite.setOffset( 0 );
 	this->state = state;
 }
+
+
 
 const int Play_button::getBot() const
 {
@@ -135,6 +132,8 @@ const sf::Uint8& Play_button::getState() const
 	return state;
 }
 
+
+
 bool Play_button::nextState() const
 {
 	if( state == 2 && mySprite.getAlpha() == 0 )
@@ -143,4 +142,17 @@ bool Play_button::nextState() const
 	}
 	
 	return false;
+}
+
+
+
+void Play_button::setScale( float s_x, float s_y )
+{
+	mySprite.setBasicScale( s_x, s_y );
+	mySprite.setScale( scale, scale );
+}
+
+void Play_button::setView( unsigned w, unsigned h, int r_x, int r_y )
+{
+	mySprite.setPosition( w/2 - mySprite.getWidth()/2 +r_x, h /1.875 +r_y );
 }

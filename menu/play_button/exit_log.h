@@ -13,14 +13,26 @@
 
 class Exit_log :public Play_button
 {
+	MyText myText;
 
 public:
-
-	using::Play_button::Play_button;
 	
-	void load( int screen_w, int screen_h );
+	// Basics.
+	Exit_log();
+	~Exit_log();
+	void free();
+	
+	void load( unsigned w, unsigned h );
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	
+	void fadein( int i, int max );
+	void fadeout( int i, int min );
+	
+	// Getter.
 	int getState();
+	
+	// Window.
+	void setScale( float s_x, float s_y );
+	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };
