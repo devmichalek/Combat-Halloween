@@ -192,6 +192,14 @@ int Core::getY() const
 
 float Core::getXScale() const
 {
+	// printf( "%f %f\n", static_cast <float> (window->getSize().y) /max_height, static_cast <float> (window->getSize().x) /max_width );
+	
+	if( static_cast <float> (window->getSize().y) /max_height <
+		static_cast <float> (window->getSize().x) /max_width )
+	{
+		return static_cast <float> (window->getSize().y) /max_height;
+	}
+	
 	if( window->getSize().x > max_width )
 	{
 		return 1;
@@ -203,6 +211,12 @@ float Core::getXScale() const
 
 float Core::getYScale() const
 {
+	if( static_cast <float> (window->getSize().x) /max_width <
+		static_cast <float> (window->getSize().y) /max_height )
+	{
+		return static_cast <float> (window->getSize().x) /max_width;
+	}
+	
 	if( window->getSize().y > max_height )
 	{
 		return 1;
