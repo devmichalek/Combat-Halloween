@@ -44,21 +44,19 @@ public:
 	Choice();
 	~Choice();
 	void free();
-	void reset( int screen_w, int screen_h );
-
-
-	void load( int screen_w, int screen_h );
+	void reset( unsigned screen_w, unsigned screen_h );
+	
+	void load( unsigned screen_w, unsigned screen_h );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
-	
 	
 	void fadein( int j = 1, int max = 255 );
 	void fadeout( int j = 1, int min = 0 );
 	
-	
+	// Getters.
 	int getResult();
-	int getBot();
-	int getLeft();
+	float getBot();
+	float getLeft();
 	sf::Uint8 getAlpha();
 	bool isChosen();
 	

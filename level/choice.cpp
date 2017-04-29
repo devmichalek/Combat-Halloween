@@ -79,19 +79,19 @@ void Choice::free()
 
 
 
-void Choice::load( int screen_w, int screen_h )
+void Choice::load( unsigned screen_w, unsigned screen_h )
 {
 	button.setName( "choice-button" );
 	button.load( "data/level/random.png", 4 );
-	button.setScale( 0.4, 0.4 );
+	button.setScale( 0.35, 0.35 );
 	
 	text.setName( "choice-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 34, 0xFF, 0xFF, 0xFF );
 	text.setText( "Choose world or " );
 	
 	
 	information.setName( "choice-information" );
-	information.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	information.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0xFF, 0xFF );
 	information.setText( "Tip: Following worlds will be generated randomly." );
 
 	for( int i = 0; i < 5; i ++ )
@@ -103,7 +103,7 @@ void Choice::load( int screen_w, int screen_h )
 		
 		description.push_back( new MyText() );
 		description[ i ]->setName( "choice-description" );
-		description[ i ]->setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+		description[ i ]->setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0xFF, 0xFF );
 	}
 	
 	// set text
@@ -337,12 +337,12 @@ int Choice::getResult()
 	return result;
 }
 
-int Choice::getLeft()
+float Choice::getLeft()
 {
 	return world[ 0 ]->getX();
 }
 
-int Choice::getBot()
+float Choice::getBot()
 {
 	return world[ world.size() -1 ]->getBot();
 }
@@ -364,7 +364,7 @@ bool Choice::isChosen()
 
 
 
-void Choice::reset( int screen_w, int screen_h )
+void Choice::reset( unsigned screen_w, unsigned screen_h )
 {
 	if( !unlocked.empty() )
 	{
