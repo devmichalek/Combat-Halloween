@@ -14,7 +14,15 @@
 class Backtomenu_panel :public Play_button
 {
 	
+protected:
+	
+	MyText myText;
+	
 public:
 	
-	void load( int r, int t );
+	void load( float x, float y );
+	void draw( sf::RenderWindow* &window );
+	
+	void fadein( int i = 1, int max = 255 );
+	void fadeout( int i = 1, int min = 0 );
 };

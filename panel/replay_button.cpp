@@ -9,17 +9,17 @@
 
 #include "replay_button.h"
 
-void Replay_button::load( int bot )
+void Replay_button::load( float x )
 {
 	mySprite.setName( "replay_button-mySprite" );
 	mySprite.load( "data/menu/blankbutton.png", 4 );
 	mySprite.setScale( 0.4, 0.4 );
-	mySprite.setPosition( 10, bot -10 -mySprite.getHeight() );
+	mySprite.setPosition( 10, x -10 -mySprite.getHeight() );
 	
 	myText.setName( "replay_button-myText" );
 	myText.setFont( "data/menu/BADABB__.TTF", 40, 0x82, 0xae, 0x20 );
 	myText.setText( "replay" );
-	myText.setPosition( mySprite.getX() +17, mySprite.getY() +5 );
+	myText.setPosition( mySprite.getX() +27, mySprite.getY() +7 );
 	
 	click.setID( "replay_button-click" );
 	click.load( "data/menu/click.wav", 50 );

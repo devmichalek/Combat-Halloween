@@ -9,14 +9,14 @@
 
 #pragma once
 
-#include "menu/play_button/play_button.h"
+#include "backtomenu_panel.h"
 
-class Replay_button :public Play_button
+class Replay_button :public Backtomenu_panel
 {
 	
 public:
 	
-	void load( int bot );
+	void load( float x );
 	
 	int getRight();
 	int getTop();
