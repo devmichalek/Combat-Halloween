@@ -26,8 +26,6 @@ class Development
 		AMOUNT
 	};
 	
-	int y_state;
-	int bot;
 	int wallet;
 	bool change;
 	
@@ -45,10 +43,10 @@ public:
     ~Development();
 	void free();
 
-    void load( int bot, int screen_h );
+    void load( unsigned screen_w, unsigned screen_h, float y );
     void draw( sf::RenderWindow* &window );
 	void reloadTxt();
-    void handle( sf::Event &event, int r_x, int r_y );
+    void handle( sf::Event &event );
 	
 	void fadein( int i = 1, int max = 0xFF );
 	void fadeout( int i = 1, int min = 0 );
@@ -65,8 +63,4 @@ public:
 	bool isChange();
 	void setWallet( int money );
 	int getWallet();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };

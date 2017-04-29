@@ -22,8 +22,6 @@ Development::~Development()
 
 void Development::free()
 {
-	y_state = 0;
-	bot = 0;
 	wallet = 0;
 	change = false;
 	
@@ -67,7 +65,7 @@ void Development::free()
 
 
 
-void Development::load( int bot, int screen_h )
+void Development::load( unsigned screen_w, unsigned screen_h, float y )
 {
 	free();
 	
@@ -96,13 +94,13 @@ void Development::load( int bot, int screen_h )
 	}
 	file.free();
 	
-	int space = 70;
+	int space = 60;
 	int max = 6;
 	
 	for( int i = 0; i < max; i++ )
 	{
 		develops.push_back( new Develop() );
-		develops[ develops.size() -1 ]->load( i, bot +( i*space ) );
+		develops[ develops.size() -1 ]->load( i, screen_w, y +65 +( i*space ) );
 	}
 	
 	for( unsigned i = 0; i < AMOUNT; i++ )
@@ -111,13 +109,10 @@ void Development::load( int bot, int screen_h )
 		texts[ texts.size() -1 ]->setName( "development-texts nr" +con::itos( i ) );
 		
 		
-		if( i == WALLET )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
-		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 27, 0xFF, 0xD8, 0x00 );
-		else	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+		if( i == WALLET )		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 22, 0xFF, 0xD8, 0x00 );
+		else					texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 31, 0xFF, 0xFF, 0xFF );
 	}
-	
-	// set other stuff
-	y_state = bot -80;
 	
 	texts[ SKILL ]->setText( "Skill" );
 	texts[ LEVEL ]->setText( "Level" );
@@ -126,12 +121,18 @@ void Development::load( int bot, int screen_h )
 	texts[ WALLET ]->setText( "Wallet: " );
 	texts[ MONEY ]->setText( " " );
 	
+	// Positions.
+	texts[ SKILL ]->setPosition( screen_w /12.6, y );
+	texts[ UPGRADE ]->setPosition( screen_w /1.37, y );
+	texts[ LEVEL ]->setPosition( screen_w /3.5, y );
+	texts[ VALUE ]->setPosition( screen_w /2.178, y );
+	texts[ WALLET ]->setPosition( 10, screen_h -35 );
+	texts[ MONEY ]->setPosition( 110, screen_h -32 );
+	
 	// Set line.
 	line.setName( "development-line" );
 	line.create( 2, screen_h *2 /3 -65 );
-	
-	// Set bot.
-	this->bot = bot;
+	line.setPosition( screen_w /1.436 , y +50 );
 	
 	// Reload.
 	reloadTxt();
@@ -201,13 +202,13 @@ void Development::draw( sf::RenderWindow* &window )
 	}
 }
 
-void Development::handle( sf::Event &event, int r_x, int r_y )
+void Development::handle( sf::Event &event )
 {
 	for( unsigned i = 0; i < develops.size(); i++ )
 	{
 		if( develops[ i ]->ableToUpgrade( wallet ) )
 		{
-			develops[ i ]->handle( event, r_x, r_y );
+			develops[ i ]->handle( event );
 			if( develops[ i ]->getLevel() != levels[ i ] )
 			{
 				levels[ i ] = develops[ i ]->getLevel();
@@ -349,42 +350,4 @@ void Development::setWallet( int money )
 int Development::getWallet()
 {
 	return wallet;
-}
-
-
-
-void Development::setScale( float s_x, float s_y )
-{
-	line.setBasicScale( s_x, s_y );
-	line.setScale();
-	
-	for( auto &it :texts )
-	{
-		it->setBasicScale( s_x, s_y );
-		it->setScale();
-	}
-	
-	for( auto &it :develops )
-	{
-		it->setScale( s_x, s_y );
-	}
-}
-
-void Development::setView( int w, int h, int r_x, int r_y )
-{
-	line.setPosition( w /1.436 +r_x, (y_state +50) *line.getYScale() +r_y );
-	
-	texts[ SKILL ]->setPosition( w /12.5 +r_x, y_state *texts[ SKILL ]->getYScale() +r_y );
-	texts[ UPGRADE ]->setPosition( w /1.37 +r_x, y_state *texts[ UPGRADE ]->getYScale() +r_y );
-	texts[ LEVEL ]->setPosition( w /3.355 +r_x, y_state *texts[ LEVEL ]->getYScale() +r_y );
-	texts[ VALUE ]->setPosition( w /2.178 +r_x, y_state *texts[ VALUE ]->getYScale() +r_y );
-	
-	
-	texts[ WALLET ]->setPosition( 10 *texts[ WALLET ]->getXScale() +r_x, h -45*texts[ WALLET ]->getYScale() +r_y );
-	texts[ MONEY ]->setPosition( 140 *texts[ MONEY ]->getXScale() +r_x, h -42 *texts[ MONEY ]->getYScale() +r_y );
-
-	for( auto &it :develops )
-	{
-		it->setView( w, h, r_x, r_y );
-	}
 }

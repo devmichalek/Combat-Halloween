@@ -22,7 +22,6 @@ Headdeck::~Headdeck()
 
 void Headdeck::free()
 {
-	y_state = 0;
 	wallet = 0;
 	change = false;
 	
@@ -51,41 +50,45 @@ void Headdeck::free()
 
 
 
-void Headdeck::load( int y, unsigned w, unsigned h )
+void Headdeck::load( unsigned screen_w, unsigned screen_h, float y )
 {
 	free();
 	
-	// Set y...
-	y_state = y;
-	
 	// Set line.
 	line.setName( "headdeck-line" );
-	line.create( 2, 420 );
+	line.create( 2, 360 );
+	line.setPosition( screen_w /1.5, y -25 );
 	
 	// Set texts.
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
 		texts.push_back( new MyText() );
 		texts[ texts.size() -1 ]->setName( "headdeck-text nr" +con::itos( i ) );
-		if( i == WALLET )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
-		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 27, 0xFF, 0xD8, 0x00 );
-		else				texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 35, 0xFF, 0xFF, 0xFF );
+		
+		if( i == WALLET )		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
+		else if( i == MONEY )	texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 22, 0xFF, 0xD8, 0x00 );
+		else					texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 31, 0xFF, 0xFF, 0xFF );
 	}
+	
 	texts[ TYPE ]->setText( "Type" );
 	texts[ SPECS ]->setText( "Specs" );
 	texts[ COST ]->setText( "Cost/Status" );
 	texts[ WALLET ]->setText( "Wallet: " );
 	texts[ MONEY ]->setText( " " );
 	
+	// Positions.
+	texts[ TYPE ]->setPosition( screen_w /10, y -50 );
+	texts[ SPECS ]->setPosition( screen_w /10 *4, y -50 );
+	texts[ COST ]->setPosition( screen_w /1.315, y -50 );
+	texts[ WALLET ]->setPosition( 10, screen_h -35 );
+	texts[ MONEY ]->setPosition( 110, screen_h -32 );
+	
 	// Set heads.
 	for( int i = 0; i < 4; i++ )
 	{
 		heads.push_back( new Head() );
-		heads[ i ]->load( i, 100*i +y );
+		heads[ i ]->load( i, screen_w, 80*i +y );
 	}
-	
-	// Set view.
-	setView( w, h, 0, 0 );
 	
 	// Reload.
 	reloadText();
@@ -106,7 +109,7 @@ void Headdeck::draw( sf::RenderWindow* &window )
 	window->draw( line.get() );
 }
 
-void Headdeck::handle( sf::Event &event, int r_x, int r_y )
+void Headdeck::handle( sf::Event &event )
 {
 	for( auto &it :heads )
 	{
@@ -122,7 +125,7 @@ void Headdeck::handle( sf::Event &event, int r_x, int r_y )
 	
 	for( auto &it :heads )
 	{
-		it->handle( event, r_x, r_y );
+		it->handle( event );
 		if( it->sellOut() )
 		{
 			wallet -= it->getCost();
@@ -253,39 +256,4 @@ void Headdeck::setWallet( int money )
 int Headdeck::getWallet()
 {
 	return wallet;
-}
-
-
-
-void Headdeck::setScale( float s_x, float s_y )
-{
-	line.setBasicScale( s_x, s_y );
-	line.setScale( 1, 1 );
-	
-	for( auto &it :texts )
-	{
-		it->setBasicScale( s_x, s_y );
-		it->setScale( 1, 1 );
-	}
-	
-	for( auto &it :heads )
-	{
-		it->setScale( s_x, s_y );
-	}
-}
-
-void Headdeck::setView( int w, int h, int r_x, int r_y )
-{
-	line.setPosition( w /1.38 +r_x, y_state *line.getYScale() +r_y );
-
-	texts[ TYPE ]->setPosition( static_cast <int> (w) /10 +r_x, (y_state -50)*texts[ TYPE ]->getYScale() +r_y );
-	texts[ SPECS ]->setPosition( w /10 *4 +r_x, (y_state -50)*texts[ SPECS ]->getYScale() +r_y );
-	texts[ COST ]->setPosition( w /1.315 +r_x, (y_state -50)*texts[ COST ]->getYScale() +r_y );
-	texts[ WALLET ]->setPosition( 10 *texts[ WALLET ]->getXScale() +r_x, h -45*texts[ WALLET ]->getYScale() +r_y );
-	texts[ MONEY ]->setPosition( 140 *texts[ MONEY ]->getXScale() +r_x, h -42 *texts[ MONEY ]->getYScale() +r_y );
-	
-	for( auto &it :heads )
-	{
-		it->setView( w, h, r_x, r_y );
-	}
 }

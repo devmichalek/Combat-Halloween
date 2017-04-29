@@ -35,28 +35,18 @@ void Develop::free()
 	cost = 0;
 	level = 0;
 	locked = true;
-	
-	y_state = 0;
-	scale = 0;
-	scale_sprite = 0;
 }
 
 
 
-void Develop::load( int nr, int bot )
+void Develop::load( int nr, unsigned screen_w, float y )
 {
 	free();
-	
-	// Set states.
-	y_state = bot;
-	
-	// Set scale.
-	scale = 0.36;
-	scale_sprite = 0.5;
-	
 	// Load button.
 	button.setName( "develop-button" );
 	button.load( "data/menu/upgrade.png", 4 );
+	button.setScale( 0.3, 0.3 );
+	button.setPosition( screen_w /1.321, y -10 );
 	
 	MyFile file;
 	
@@ -72,8 +62,9 @@ void Develop::load( int nr, int bot )
 			{
 				
 				name.setName( "develop-name" );
-				name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+				name.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 				name.setText( line );
+				name.setPosition( screen_w /12.5, y );
 				break;
 			}
 			
@@ -85,6 +76,8 @@ void Develop::load( int nr, int bot )
 	// Load sprite.
 	sprite.setName( "develop-sprite" );
 	sprite.load( "data/menu/skill/" +con::itos( nr ) +".png" );
+	sprite.setScale( 0.4, 0.4 );
+	sprite.setPosition( screen_w /50, y -10 );
 	
 	// Set name_base.
 	file.load( "data/txt/skill/skill_namebase.txt" );
@@ -98,8 +91,9 @@ void Develop::load( int nr, int bot )
 			{
 				// set name
 				name_base.setName( "develop-name" );
-				name_base.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+				name_base.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 				name_base.setText( line );
+				name_base.setPosition( screen_w /1.754, y );
 				break;
 			}
 			
@@ -127,21 +121,25 @@ void Develop::load( int nr, int bot )
 	}
 	file.free();
 	
+	
 	// Set actual.
 	actual.setName( "develop-actual" );
-	actual.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	actual.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 	actual.setText( " " );
+	actual.setPosition( screen_w /2.34, y );
 	
 	// Set label.
 	label.setName( "develop-label" );
-	label.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	label.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 	label.setText( " " );
+	label.setPosition( screen_w /3.225, y );
 	
 	// Cost_text settings.
 	cost_text.setName( "develop-cost_text" );
-	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 	cost_text.setText( " " );
 	cost_text.setColor( 0xFF, 0xD8, 0x00 );
+	cost_text.setPosition( screen_w /1.166, y );
 	
 	// Load click.
 	click.setID( "develop-click" );
@@ -162,7 +160,7 @@ void Develop::draw( sf::RenderWindow* &window )
 	window->draw( cost_text.get() );
 }
 
-void Develop::handle( sf::Event &event, int r_x, int r_y )
+void Develop::handle( sf::Event &event )
 {
 	if( !locked && level < max )
 	{
@@ -174,7 +172,7 @@ void Develop::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				button.setOffset( 1 );
 			}
@@ -189,7 +187,7 @@ void Develop::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( button.checkCollision( x+r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				button.setOffset( 2 );
 					
@@ -320,47 +318,4 @@ void Develop::setActual( int level, string actual )
 	
 	this->actual.setText( actual );
 	this->actual.reloadPosition();
-}
-
-
-
-void Develop::setScale( float s_x, float s_y )
-{
-	button.setBasicScale( s_x, s_y );
-	button.setScale( scale, scale );
-	
-	sprite.setBasicScale( s_x, s_y );
-	sprite.setScale( scale_sprite, scale_sprite );
-	
-	label.setBasicScale( s_x, s_y );
-	label.setScale();
-	
-	actual.setBasicScale( s_x, s_y );
-	actual.setScale();
-	
-	name.setBasicScale( s_x, s_y );
-	name.setScale();
-	
-	name_base.setBasicScale( s_x, s_y );
-	name_base.setScale();
-	
-	cost_text.setBasicScale( s_x, s_y );
-	cost_text.setScale();
-}
-
-void Develop::setView( int w, int h, int r_x, int r_y )
-{
-	// Positions.
-	button.setPosition( w /1.321 +r_x, (y_state -10) *button.getYScale() /scale +r_y );
-	sprite.setPosition( w /50 +r_x, (y_state -10) *sprite.getYScale() /scale_sprite +r_y );
-	int new_y = (y_state -10) *sprite.getYScale() /scale_sprite;
-	
-	name.setPosition( w /12.5 +r_x, new_y +r_y );
-	
-	label.setPosition( w /3.225 +r_x, new_y +r_y );
-	actual.setPosition( w /2.34 +r_x, new_y +r_y );
-	name_base.setPosition( w /1.754 +r_x, new_y +r_y );
-	
-	
-	cost_text.setPosition( w /1.166 +r_x, new_y +r_y );
 }

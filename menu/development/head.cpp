@@ -23,9 +23,6 @@ Head::~Head()
 
 void Head::free()
 {
-	y_state = 0;
-	scale = 0;
-	
 	cost = 0;
 	type = 0;
 	kind = 0;
@@ -42,12 +39,9 @@ void Head::free()
 
 
 
-void Head::load( int type, int y )
+void Head::load( int type, unsigned screen_w, float y )
 {
 	free();
-	
-	// Set scale.
-	scale = 0.45;
 	
 	// Set type.
 	this->type = type;
@@ -56,25 +50,28 @@ void Head::load( int type, int y )
 	this->kind = type;
 	if( type < 2 )	this->kind ++;
 	else			this->kind += 2;
-	
-	y_state = y;
+
 	
 	// Load click.
 	click.setID( "develop-click" );
 	click.load( "data/menu/click.wav", 50 );
 	
 	// Set cost (text)
-	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xD8, 0x00 );
+	cost_text.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xFF, 0xD8, 0x00 );
 	cost_text.setText( " " );
+	cost_text.setPosition( screen_w /1.15, y +38 );
 	
 	// load head
 	sprite.setName( "head-sprite" );
 	sprite.load( "data/menu/head/" +con::itos( type ) +".png" );
-	sprite.setScale( 0.75, 0.75 );
+	sprite.setScale( 0.65, 0.65 );
+	sprite.setPosition( 20, y );
 	
 	// load button
 	button.setName( "head-button" );
 	button.load( "data/menu/upgrade.png", 4 );
+	button.setScale( 0.35, 0.35 );
+	button.setPosition( screen_w /1.282, y +20 );
 	
 	// load name
 	MyFile file;
@@ -88,8 +85,9 @@ void Head::load( int type, int y )
 		{
 			if( c == 0 )
 			{
-				name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
+				name.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 				name.setText( line );
+				name.setPosition( screen_w /6.9, y +38 );
 				break;
 			}
 			
@@ -108,8 +106,9 @@ void Head::load( int type, int y )
 		{
 			if( c == 0 )
 			{
-				specs.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );
+				specs.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xFF, 0xFF, 0xFF );
 				specs.setText( line );
+				specs.setPosition( screen_w /2.78, y +38 );
 				break;
 			}
 			
@@ -132,7 +131,7 @@ void Head::draw( sf::RenderWindow* &window )
 	window->draw( cost_text.get() );
 }
 
-void Head::handle( sf::Event &event, int r_x, int r_y )
+void Head::handle( sf::Event &event )
 {
 	if( !locked && state == 0 )
 	{
@@ -144,7 +143,7 @@ void Head::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				button.setOffset( 1 );
 			}
@@ -159,7 +158,7 @@ void Head::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				button.setOffset( 2 );
 					
@@ -321,35 +320,4 @@ void Head::makeNought()
 	}
 	file.free();
 	a.clear();
-}
-
-
-
-void Head::setScale( float s_x, float s_y )
-{
-	sprite.setBasicScale( s_x, s_y );
-	sprite.setScale( 0.75, 0.75 );
-	
-	button.setBasicScale( s_x, s_y );
-	button.setScale( scale, scale );
-	
-	name.setBasicScale( s_x, s_y );
-	name.setScale();
-	
-	specs.setBasicScale( s_x, s_y );
-	specs.setScale();
-	
-	cost_text.setBasicScale( s_x, s_y );
-	cost_text.setScale();
-}
-
-void Head::setView( int w, int h, int r_x, int r_y )
-{
-	sprite.setPosition( 20 *sprite.getXScale() /0.75 +r_x, y_state *sprite.getYScale() /0.75 +r_y );
-	int new_y = y_state *sprite.getYScale() /0.75;
-	name.setPosition( w /6.9 +r_x, new_y +38 *name.getYScale() +r_y );
-	specs.setPosition( w /2.78 +r_x, new_y +38 *specs.getYScale() +r_y );
-	// printf( "%f\n", specs.getRight() );
-	button.setPosition( w /1.282 +r_x, new_y +20 *button.getYScale() /scale +r_y );
-	cost_text.setPosition( w /1.15 +r_x, new_y +38 *cost_text.getYScale() +r_y );
 }

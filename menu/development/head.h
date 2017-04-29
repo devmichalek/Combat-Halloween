@@ -15,9 +15,6 @@
 
 class Head :public Click
 {
-	int y_state;
-	float scale;
-	
 	int cost;
 	int type;
 	int kind;
@@ -37,9 +34,9 @@ public:
     ~Head();
 	void free();
 	
-	void load( int type, int y );
+	void load( int type, unsigned screen_w, float y );
 	void draw( sf::RenderWindow* &window );
-	void handle( sf::Event &event, int r_x, int r_y );
+	void handle( sf::Event &event );
 	
 	void fadein( int i = 1, int max = 0xFF );
 	void fadeout( int i = 1, int min = 0 );
@@ -51,8 +48,4 @@ public:
 	void unlock();
 	bool sellOut();
 	void makeNought();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };
