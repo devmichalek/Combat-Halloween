@@ -16,9 +16,9 @@ class Title
 {
 	MySprite background;
 	MySprite belt;
-	MyText title;
-	MyText title_sec;
-	MyText version;
+	// MyText title;
+	// MyText title_sec;
+	// MyText version;
 	
 public:
 	
@@ -27,7 +27,7 @@ public:
     ~Title();
 	void free();
 	
-	void load( unsigned w, unsigned h );
+	void load( unsigned screen_w, unsigned screen_h );
 	void draw( sf::RenderWindow &window );
 	
 	void fadein( int i = 1, int max = 255 );
@@ -36,8 +36,4 @@ public:
 	// In addtion.
 	const int getBot()const;	// accessor
 	sf::Uint8 getAlpha();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };
