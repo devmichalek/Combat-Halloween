@@ -36,31 +36,16 @@ void Link_button::free()
 	play = true;
 	
 	explanator.free();
-	
-	x_state = 0;
-	y_state = 0;
-	y_buf = 0;
-	
-	screen_w = 0;
-	screen_h = 0;
 }
 
 
 
-void Link_button::load( string path, unsigned w, unsigned h, float l, float y )
+void Link_button::load( string path, float x, float y )
 {
-	scale = 0.45;
-	screen_w = w;
-	screen_h = h;
-	
 	button.setName( "link_button-" + path );
     button.load( path, 4 );
-	
-	x_state = w -(l -button.getWidth() -10);
-	y_state = h -y;
-	y_buf = y;
-	
-	button.setPosition( w -x_state, h -y_state );
+	button.setScale( 0.4, 0.4 );
+	button.setPosition( x -button.getWidth() -5, y );
 	
 	if( locked )
 	{
@@ -73,7 +58,7 @@ void Link_button::load( string path, unsigned w, unsigned h, float l, float y )
 	}
 }
 
-void Link_button::handle( sf::Event &event, int r_x, int r_y, bool r )
+void Link_button::handle( sf::Event &event, bool side )
 {
 	if( event.type == sf::Event::MouseMoved )
 	{
@@ -81,10 +66,10 @@ void Link_button::handle( sf::Event &event, int r_x, int r_y, bool r )
 		x = event.mouseMove.x;
 		y = event.mouseMove.y;
 			
-		if( button.checkCollision( x +r_x, y +r_y ) )
+		if( button.checkCollision( x, y ) )
 		{
 			explanator.run();
-			explanator.focus( x +r_x, y +r_y, r );
+			explanator.focus( x, y, side );
 		}
 		else
 		{
@@ -102,7 +87,7 @@ void Link_button::handle( sf::Event &event, int r_x, int r_y, bool r )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				button.setOffset( 1 );
 			}
@@ -169,7 +154,7 @@ void Link_button::fadeout( int i, int min )
 
 float Link_button::getBot()
 {
-	return y_buf +button.getHeight() *scale;
+	return button.getBot();
 }
 
 float Link_button::getWidth()
@@ -188,39 +173,3 @@ void Link_button::setExplanator( string line )
 {
 	explanator.load( line );
 }
-
-
-
-void Link_button::setScale( float s_x, float s_y )
-{
-	button.setBasicScale( s_x, s_y );
-	button.setScale( scale, scale );
-	
-	explanator.setScale( s_x, s_y );
-}
-
-void Link_button::setViewH( int w, int r_x, int r_y )
-{
-	// printf( "r_x %d\n", r_x );
-	button.setPosition( w -(x_state *button.getXScale()) +r_x, ((screen_h -y_state) *button.getYScale() /scale) +r_y );
-}
-
-void Link_button::setViewW( int h, int r_x, int r_y )
-{
-	button.setPosition( ((screen_w -x_state) *button.getXScale() /scale ) +r_x, h -(y_state *button.getYScale()) +r_y );
-}
-
-/*
-void Link_button::setViewH( int w, int h, int r_x, int r_y )
-{
-	button.setPosition( (w -(w -(x_state *(button.getXScale() /scale)))) +r_x, (h -(h -(y_state *button.getYScale() /scale))) +r_y );
-}
-
-void Link_button::setViewW( int w, int h, int r_x, int r_y )
-{
-	printf( "%d %d\n", h, r_y );
-	printf( "----%d %d\n", h +r_y, 1 );
-	
-	button.setPosition( (w -(w -(x_state *(button.getXScale() /scale)))) +r_x, (h -(h -(y_state *button.getYScale() /scale))) +r_y );
-}
-*/
