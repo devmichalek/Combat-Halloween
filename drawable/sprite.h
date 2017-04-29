@@ -45,11 +45,7 @@ public:
 	void fadeout( int v = 1, int min = 0 );
 	
 	
-	
 	void setScale( float x = 1, float y = 1 );
-	void setBasicScale( float x = 1, float y = 1 );
-	float getXScale();
-	float getYScale();
 	const sf::Sprite& get() const;	// Return sprite
    
     void setPosition( float x, float y );

@@ -31,9 +31,6 @@ MySprite::MySprite()
 	
     safe_width = width = left = 0;
 	safe_height = height = top = 0;
-	
-	x_scale = 1;
-	y_scale = 1;
 }
 
 MySprite::~MySprite()
@@ -78,9 +75,6 @@ void MySprite::free()
 	
     safe_width = width = left = 0;
 	safe_height = height = top = 0;
-	
-	x_scale = 1;
-	y_scale = 1;
 }
 
 
@@ -305,37 +299,21 @@ void MySprite::setScale( float x, float y )
 {
     if( nr == 0 || nr == 1 )
     {
-        sprite->setScale( x *x_scale, y *y_scale );
+        sprite->setScale( x, y );
     }
     else if( nr > 1 )
     {
         for( int i = 0; i < nr; i++ )
         {
-            sprite[ i ].setScale( x *x_scale, y *y_scale );
+            sprite[ i ].setScale( x, y );
         }
     }
 	
 	if( x < 0 ) x = -x;
 	if( y < 0 ) y = -y;
 	
-	width = safe_width *x *x_scale;
-	height = safe_height *y *y_scale;
-}
-
-void MySprite::setBasicScale( float x, float y )
-{
-	x_scale = x;
-	y_scale = y;
-}
-
-float MySprite::getXScale()
-{
-	return sprite->getScale().x;
-}
-
-float MySprite::getYScale()
-{
-	return sprite->getScale().y;
+	width = safe_width *x;
+	height = safe_height *y;
 }
 
 const sf::Sprite& MySprite::get() const

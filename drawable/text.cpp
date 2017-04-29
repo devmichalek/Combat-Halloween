@@ -31,9 +31,6 @@ MyText::MyText()
 	color.g = 0xFF;
 	color.b = 0xFF;
 	color.a = 0;
-	
-	x_scale = 1;
-	y_scale = 1;
 }
 
 MyText::~MyText()
@@ -64,9 +61,6 @@ void MyText::free()
 	color.g = 0xFF;
 	color.b = 0xFF;
 	color.a = 0x00;
-	
-	x_scale = 1;
-	y_scale = 1;
 }
 
 
@@ -187,29 +181,13 @@ const string& MyText::getName() const
 
 void MyText::setScale( float x, float y )
 {
-	text->setScale( x *x_scale, y *y_scale );
+	text->setScale( x, y );
 	
 	if( x < 0 ) x = -x;
 	if( y < 0 ) y = -y;
 	
-	width = safe_width *x *x_scale;
-	height = safe_height *y *y_scale;
-}
-
-void MyText::setBasicScale( float x, float y )
-{
-	x_scale = x;
-	y_scale = y;
-}
-
-float MyText::getXScale()
-{
-	return text->getScale().x *x_scale;
-}
-
-float MyText::getYScale()
-{
-	return text->getScale().y *y_scale;
+	width = safe_width *x;
+	height = safe_height *y;
 }
 
 

@@ -26,9 +26,6 @@ class MyText :public Rect, public Color
 	int safe_width;
 	int safe_height;
 	
-	float x_scale;
-	float y_scale;
-	
 public:
 	
 	MyText();
@@ -46,9 +43,6 @@ public:
 	const string& getName() const;
 	
 	void setScale( float x = 1, float y = 1 );
-	void setBasicScale( float x = 1, float y = 1 );
-	float getXScale();
-	float getYScale();
 	
 	void setPosition( float x, float y );
 	void reloadPosition();	// Set the same position as it was.
