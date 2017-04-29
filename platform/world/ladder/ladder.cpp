@@ -56,6 +56,7 @@ void Ladder::load( int type, int width, int screen_w )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "ladder-sprites[" +con::itos( i ) +"]" );
 		sprites[ i ]->load( "data/platform/world/" +con::itos( type ) +"/ladder/" +con::itos( i ) +".png" );
+		sprites[ i ]->setScale( 0.9, 0.9 );
 	}
 	
 	this->width = width;

@@ -79,7 +79,7 @@ void Showdamage::load()
 {
 	free();
 	
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0x33, 0x33 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
 	text.setText( " " );
 }
 

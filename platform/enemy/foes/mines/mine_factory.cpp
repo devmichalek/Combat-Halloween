@@ -170,7 +170,7 @@ void Mine_factory::positioning( vector <Block*> blocks, int chance )
 	{
 		if( i->nr >= 0 && i->nr <= 7 )
 		{
-			if( rand()%100 < chance *0.60 )
+			if( rand()%100 < chance *0.5 )
 			{
 				int x1 = i->x +width/2 -sprites[ 0 ]->getWidth()/2;
 				int x2 = i->x +width/2 -sprites[ 1 ]->getWidth()/2;
@@ -180,6 +180,25 @@ void Mine_factory::positioning( vector <Block*> blocks, int chance )
 		}
 	}
 }
+
+void Mine_factory::positioningIslands( vector <Block*> blocks, int chance )
+{
+	damage +=  damage*(static_cast <float> (chance) /100);
+	for( auto &i :blocks )
+	{
+		if( i->nr >= 0 && i->nr <= 5 )
+		{
+			if( rand()%100 < chance *0.5 )
+			{
+				int x1 = i->x +width/2 -sprites[ 0 ]->getWidth()/2;
+				int x2 = i->x +width/2 -sprites[ 1 ]->getWidth()/2;
+				int y = i->y -sprites[ 0 ]->getHeight();
+				addMine( x1, x2, y +3 );
+			}
+		}
+	}
+}
+
 
 
 

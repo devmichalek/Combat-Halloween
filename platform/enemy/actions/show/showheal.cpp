@@ -5,7 +5,7 @@ void Showheal::load()
 {
 	free();
 	
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0x32, 0xCD, 0x32 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0x32, 0xCD, 0x32 );
 	text.setText( " " );
 }
 

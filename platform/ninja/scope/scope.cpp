@@ -12,10 +12,7 @@
 
 Scope::Scope()
 {
-	vel = 0;
-	
-	a = 0;
-	b = 0;
+	free();
 }
 
 Scope::~Scope()

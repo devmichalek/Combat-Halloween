@@ -50,6 +50,7 @@ void Score_dots::load( int screen_w )
 	
 	sprite.setName( "score_dots-sprite" );
 	sprite.load( "data/platform/panel/score/0.png" );
+	sprite.setScale( 0.9, 0.9 );
 	
 	
 	point.setName( "score_dots-point" );
@@ -82,6 +83,29 @@ void Score_dots::positioning( int chance, vector <Block*> blocks, int width )
 	for( auto &it: blocks )
 	{
 		if( it->nr >= 0 && it->nr <= 7 )
+		{
+			if( rand()%100 < 50 +chance/2 )
+			{
+				dots.push_back( new Hp_dot() );
+				dots[ dots.size() -1 ]->active = true;
+				dots[ dots.size() -1 ]->scale = static_cast <float> (rand()%25 +50) /100;
+				dots[ dots.size() -1 ]->angle = static_cast <double> (rand()%360);
+				
+				// Set x, y.
+				// printf( "%f %f\n", it->x, it->y );
+				sprite.setScale( dots[ dots.size() -1 ]->scale, dots[ dots.size() -1 ]->scale );
+				dots[ dots.size() -1 ]->x = it->x +(width/2) -(sprite.getWidth()/2);
+				dots[ dots.size() -1 ]->y = static_cast <float> (it->y) -static_cast <float>(sprite.getHeight()/2) -(width/4);
+			}
+		}
+	}
+}
+
+void Score_dots::positioningIslands( int chance, vector <Block*> blocks, int width )
+{
+	for( auto &it: blocks )
+	{
+		if( it->nr >= 0 && it->nr <= 5 )
 		{
 			if( rand()%100 < 50 +chance/2 )
 			{

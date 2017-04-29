@@ -117,6 +117,7 @@ void Brick::load( int type, int width, int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "brick-sprites[" +con::itos( i ) +"]" );
 		sprites[ i ]->load( "data/platform/world/" +con::itos( type ) +"/" +con::itos( i ) +".png" );
+		sprites[ i ]->setScale( 0.9, 0.9 );
 	}
 	
 	this->width = width;

@@ -167,7 +167,7 @@ void Hero::load( int type, int screen_w, int screen_h, int width )
 	free();
 	
 	// 	Set scale.
-	scale = 0.75;
+	scale = 0.675;
 	
 	int nr = DEAD +1;
 	for( int i = 0; i < nr; i++ )

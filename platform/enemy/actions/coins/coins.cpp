@@ -120,10 +120,10 @@ void Coins::load( int width, int screen_w, int type )
 	int coin_line = 10;
 	coin.setName( "factory-coin" );
 	coin.load( "data/platform/panel/coin/0.png", coin_line );
-	coin.setScale( 0.4, 0.4 );
+	coin.setScale( 0.36, 0.36 );
 	
 	// max amount of coins is 100
-	for( unsigned i = 0; i < 100; i++ )
+	for( unsigned i = 0; i < 50; i++ )
 	{
 		coins.push_back( new Coin() );
 		coins[ coins.size() -1 ]->setVelocity( static_cast <float> (rand()%4 +5) /10 );

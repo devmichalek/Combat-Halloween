@@ -1,6 +1,6 @@
 /**
     scope.h
-    Purpose: class Scope responsible for changing view - It means that sometimes hero moves and sometimes other stuff moves.
+    Purpose: class Scope responsible for changing view - It means that sometimes hero moves and sometimes other stuff moves. [x]
 
     @author Adrian Michalek
     @version 2017.01.28

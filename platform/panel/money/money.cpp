@@ -53,16 +53,16 @@ void Money::load( int screen_w )
 	
 	grey.setName( "money-grey" );
 	grey.load( "data/platform/panel/grey/grey.png" );
-	grey.setScale( 0.5, 0.5 );
+	grey.setScale( 0.4, 0.4 );
 	grey.setPosition( screen_w -grey.getWidth() -5, 5 );
 	
 	coin.setName( "money-coin" );
 	coin.load( "data/platform/panel/coin/0.png", line );
-	coin.setScale( 0.65, 0.65 );
+	coin.setScale( 0.585, 0.585 );
 	coin.setPosition( screen_w -coin.getWidth() -15, grey.getY() +grey.getHeight()/2 -coin.getHeight()/2 );
 	
 	text.setName( "money-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 32, 0xD9, 0xD9, 0xD9 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 28, 0xD9, 0xD9, 0xD9 );
 }
 
 void Money::draw( sf::RenderWindow* &window )
@@ -120,7 +120,7 @@ void Money::setText()
 		text.setText( additional +con::itos( bank ) );
 	}
 	
-	text.setPosition( coin.getX() -text.getWidth() -27, grey.getY() +5 );
+	text.setPosition( coin.getX() -text.getWidth() -20, grey.getY() +4 );
 }
 
 void Money::saveMoney()

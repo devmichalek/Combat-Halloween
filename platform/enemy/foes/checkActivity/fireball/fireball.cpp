@@ -60,6 +60,8 @@ void Fireball::load( int fps, int screen_w )
 	
 	sprite[ 0 ]->load( "data/platform/enemy/checkActivity/fireball/0.png", line );
 	sprite[ 1 ]->load( "data/platform/enemy/checkActivity/fireball/1.png", line +1 );
+	sprite[ 0 ]->setScale( 0.9, 0.9 );
+	sprite[ 1 ]->setScale( 0.9, 0.9 );
 	
 	
 	delay = 10;

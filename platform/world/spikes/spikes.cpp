@@ -55,6 +55,7 @@ void Spikes::load( int type, int screen_w, int width )
 	
 	sprite.setName( "spikes-sprite" );
 	sprite.load( "data/platform/world/" +con::itos( type ) +"/traps/2.png" );
+	sprite.setScale( 0.9, 0.9 );
 	
 	// Set damage.
 	MyFile file;
@@ -146,18 +147,18 @@ void Spikes::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 	
 	if( type == 0 )
 	{
-		w = 8;
-		h = 42;
+		w = 7;
+		h = 32;
 	}
 	else if( type == 1 )
 	{
-		w = 22;
-		h = 50;
+		w = 19;
+		h = 40;
 	}
 	else if( type == 2 )
 	{
-		w = 22;
-		h = 50;
+		w = 19;
+		h = 40;
 	}
 	
 	// First brick blocks.
@@ -204,11 +205,11 @@ void Spikes::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 	// Second islands blocks.
 	for( auto &it :b2 )
 	{
-		if( it->nr == 5 )
+		if( it->nr == 3 )
 		{
 			for( auto &jt :b1 )
 			{
-				if( jt->nr >= 0 && jt->nr <= 7 )
+				if( jt->nr >= 0 && jt->nr <= 5 )
 				{
 					if( jt->x <= it->x +w &&
 						jt->x +width >= it->x +w +sprite.getWidth() &&
@@ -222,11 +223,11 @@ void Spikes::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 				}
 			}
 		}
-		else if( it->nr == 7 )
+		else if( it->nr == 5 )
 		{
 			for( auto &jt :b1 )
 			{
-				if( jt->nr >= 0 && jt->nr <= 7 )
+				if( jt->nr >= 0 && jt->nr <= 5 )
 				{
 					if( jt->x <= it->x -w +width -sprite.getWidth() &&
 						jt->x +width >= it->x -w +width &&

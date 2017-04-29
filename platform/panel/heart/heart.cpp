@@ -98,12 +98,15 @@ void Heart::load()
 		
 		fill.setName( "heart-fill" );
 		fill.load( "data/platform/panel/heart/fill.png");
+		fill.setScale( 0.9, 0.9 );
 		
 		frame.setName( "heart-frame" );
 		frame.load( "data/platform/panel/heart/frame.png");
+		frame.setScale( 0.9, 0.9 );
 		
 		grey.setName( "heart-grey_square" );
 		grey.load( "data/platform/panel/grey/grey_square.png");
+		grey.setScale( 0.9, 0.9 );
 		
 		for( int i = 0; i < nr; i++ )
 		{
@@ -149,19 +152,6 @@ void Heart::draw( sf::RenderWindow* &window )
 		frame.setPosition( it->x, it->y );
 		window->draw( frame.get() );
 	}
-	
-	// Delete later.
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 0 ) ) )
-	{
-		harm( -4 );
-	}
-	
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( 1 ) ) )
-	{
-		harm( 4 );
-	}
-	
-	// printf( "%d\n", life );
 }
 
 

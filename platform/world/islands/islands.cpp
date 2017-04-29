@@ -81,11 +81,25 @@ void Islands::load( int type, int width, int screen_w, int screen_h )
 	free();
 	
 	// Load data.
-	for( int i = 0; i < 16; i++ )
+	for( int i = 0; i < 9; i++ )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "islands-sprites[" +con::itos( i ) +"]" );
-		sprites[ i ]->load( "data/platform/world/" +con::itos( type ) +"/" +con::itos( i ) +".png" );
+	}
+	
+	sprites[ 0 ]->load( "data/platform/world/" +con::itos( type ) +"/0.png" );
+	sprites[ 1 ]->load( "data/platform/world/" +con::itos( type ) +"/1.png" );
+	sprites[ 2 ]->load( "data/platform/world/" +con::itos( type ) +"/2.png" );
+	sprites[ 3 ]->load( "data/platform/world/" +con::itos( type ) +"/5.png" );
+	sprites[ 4 ]->load( "data/platform/world/" +con::itos( type ) +"/6.png" );
+	sprites[ 5 ]->load( "data/platform/world/" +con::itos( type ) +"/7.png" );
+	sprites[ 6 ]->load( "data/platform/world/" +con::itos( type ) +"/10.png" );
+	sprites[ 7 ]->load( "data/platform/world/" +con::itos( type ) +"/11.png" );
+	sprites[ 8 ]->load( "data/platform/world/" +con::itos( type ) +"/12.png" );
+	
+	for( auto &it :sprites )
+	{
+		it->setScale( 0.9, 0.9 );
 	}
 	
 	this->width = width;
@@ -356,16 +370,16 @@ void Islands::createBotIslands( vector <Block*> blocks, int w, int h )
 				myY = screen_h -width;
 				int saveX = myX;
 				
-				addBlock( 10, myX, myY );
+				addBlock( 6, myX, myY );
 				myX += width;
 				
 				for( int j = 0; j < counters[ i ]-2; j++ )
 				{
-					addBlock( 11, myX, myY );
+					addBlock( 7, myX, myY );
 					myX += width;
 				}
 				
-				addBlock( 12, myX, myY );
+				addBlock( 8, myX, myY );
 				
 				myY = screen_h -width*2;
 				myX = saveX;
@@ -530,7 +544,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 	
 	for( unsigned i = 0; i < x.size(); i++ )
 	{
-		int lastNr = 5;
+		int lastNr = 3;
 		unsigned actual_size = this->blocks.size();
 		
 		if( this->blocks.size() > 0 )
@@ -540,7 +554,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 			{
 				if( c[ i ] >= 4 )
 				{
-					lastNr = 5;
+					lastNr = 3;
 					addBlock( lastNr, x[ i ] +width*2, y[ i ] );
 					c[ i ] -= 2;
 				}
@@ -554,7 +568,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 			{
 				if( c[ i ] >= 3 )
 				{
-					lastNr = 5;
+					lastNr = 3;
 					addBlock( lastNr, x[ i ] +width, y[ i ] );
 					c[ i ] --;
 				}
@@ -565,14 +579,14 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 			}
 			else
 			{
-				lastNr = 5;
+				lastNr = 3;
 				addBlock( lastNr, x[ i ], y[ i ] );
 				c[ i ] --;
 			}
 		}
 		else
 		{
-			lastNr = 5;
+			lastNr = 3;
 			addBlock( lastNr, x[ i ], y[ i ] );
 			c[ i ] --;
 		}
@@ -581,36 +595,36 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 		while( c[ i ] > 0 )
 		{
 			c[ i ] --;
-			if( lastNr == 5 || lastNr == 6 )
+			if( lastNr == 3 || lastNr == 4 )
 			{
 				if( c[ i ] == 0 )
 				{
-					lastNr = 7;
+					lastNr = 5;
 					addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
 				}
 				else if( c[ i ] > 1 )
 				{
 					if( rand()%6 < 2 )
 					{
-						lastNr = 7;
+						lastNr = 5;
 						addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
 					}
 					else
 					{
-						lastNr = 6;
+						lastNr = 4;
 						addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
 					}
 				}
 			}
 			
-			else if( lastNr == 7 )
+			else if( lastNr == 5 )
 			{
 				lastNr = -1;
 				addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
 			}
 			else if( lastNr == -1 && c[ i ] > 0 )
 			{
-				lastNr = 5;
+				lastNr = 3;
 				addBlock( lastNr, this->blocks[ this->blocks.size() -1 ]->x +width, y[ i ] );
 			}
 		}
@@ -630,7 +644,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 				{
 					for( unsigned k = actual_size; k < this->blocks.size(); k++ )
 					{
-						if( this->blocks[ k ]->nr == 7 )
+						if( this->blocks[ k ]->nr == 5 )
 						{
 							if( this->blocks[ k ]->x == blocks[ j ]->x -width && this->blocks[ k ]->y == blocks[ j ]->y -width*2 )
 							{
@@ -643,7 +657,7 @@ void Islands::createTopIslands( vector <Block*> blocks, int w, int h, int h2 )
 								}
 							}
 						}
-						else if( this->blocks[ k ]->nr == 5 )
+						else if( this->blocks[ k ]->nr == 3 )
 						{
 							if( this->blocks[ k ]->x == blocks[ j ]->x +width && this->blocks[ k ]->y == blocks[ j ]->y -width*2 )
 							{

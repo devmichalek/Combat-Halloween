@@ -36,7 +36,7 @@ void Sun::load( int screen_w, int screen_h )
 {
 	free();
 
-	sun = new sf::CircleShape( 150 );
+	sun = new sf::CircleShape( 135 );
 	sun->setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0 ) );
 	sun->setPosition( screen_w /2, screen_h );
 	sun->setOrigin( 650, 650 );

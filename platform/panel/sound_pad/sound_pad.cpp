@@ -39,7 +39,7 @@ void Sound_pad::load( int screen_w, int screen_h )
 {
 	free();
 	
-	float scale = 0.6;
+	float scale = 0.48;
 	
 	scratch.setName( "sound_pad-scratch" );
 	scratch.load( "data/platform/panel/sound_pad/scratch.png" );

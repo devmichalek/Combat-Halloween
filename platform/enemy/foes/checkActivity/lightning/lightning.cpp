@@ -44,6 +44,7 @@ void Lightning::load( int fps )
 	line = 8;
 	sprite.setName( "lightning-sprite" );
 	sprite.load( "data/platform/enemy/checkActivity/lightning/0.png", line );
+	sprite.setScale( 0.9, 0.9 );
 	
 	delay = 10;
 	this->fps = fps;

@@ -60,6 +60,7 @@ public:
 	// Creating.
 	void add( int x, int y, int chance );
 	void positioning( vector <Block*> blocks, int chance );
+	void positioningIslands( vector <Block*> blocks, int chance );
 	
 	// Collision stuff.
 	void appear( Rect* rect );

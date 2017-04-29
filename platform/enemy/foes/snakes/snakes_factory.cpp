@@ -330,6 +330,16 @@ void Snakes_factory::addSnake( int x, int y, int chance )
 
 void Snakes_factory::positioning( vector <Block*> blocks, int chance )
 {
+	int my_chance = chance;
+	if( chance <= 33 )
+	{
+		my_chance = 50;
+	}
+	else if( chance <= 66 )
+	{
+		my_chance = 75;
+	}
+	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0 || blocks[ i ]->nr == 4 )
@@ -355,7 +365,56 @@ void Snakes_factory::positioning( vector <Block*> blocks, int chance )
 			
 			if( counter > 2 )
 			{
-				if( rand()%100 < 90 )
+				if( rand()%100 < my_chance )
+				{
+					int additional_nr = rand()%counter;
+					addSnake( startX +width*additional_nr, startY +10, chance );
+					snakes[ snakes.size() -1 ]->setLeft( startX );
+				}
+			}
+		}
+	}
+}
+
+void Snakes_factory::positioningIslands( vector <Block*> blocks, int chance )
+{
+	int my_chance = chance;
+	if( chance <= 33 )
+	{
+		my_chance = 50;
+	}
+	else if( chance <= 66 )
+	{
+		my_chance = 75;
+	}
+	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->nr == 3 || blocks[ i ]->nr == 0 )
+		if( blocks[ i ]->nr == 3 || blocks[ i ]->nr == 0 )
+		{
+			int counter = 1;
+			float startX = blocks[ i ]->x;
+			float startY = blocks[ i ]->y;
+			
+			for( unsigned j = i +1; j < blocks.size(); j++ )
+			{
+				if( blocks[ j ]->nr >= 0 && blocks[ j ]->nr <= 7 &&
+					blocks[ j -1 ]->y == blocks[ j ]->y &&
+					blocks[ j -1 ]->x == blocks[ j ]->x -width )
+				{
+					counter ++;
+				}
+				else
+				{
+					i = j;
+					break;
+				}
+			}
+			
+			if( counter > 2 )
+			{
+				if( rand()%100 < my_chance )
 				{
 					int additional_nr = rand()%counter;
 					addSnake( startX +width*additional_nr, startY +10, chance );

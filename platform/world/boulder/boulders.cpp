@@ -67,6 +67,7 @@ void Boulder::load( int type, int width, int screen_w )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setName( "boulder-sprite nr" +con::itos( i ) );
 		sprites[ i ]->load( "data/platform/world/" +con::itos( type ) +"/traps/" +con::itos( i ) +".png" );
+		sprites[ i ]->setScale( 0.9, 0.9 );
 	}
 	
 	hit.setName( "boulder-hit" );
@@ -204,6 +205,50 @@ void Boulder::positioning( vector <Block*> blocks, vector <int> xs, int chance )
 		{
 			if( blocks[ i ]->nr == 0 || blocks[ i ]->nr == 1 || blocks[ i ]->nr == 4
 			 || blocks[ i ]->nr == 5 || blocks[ i ]->nr == 6 )
+			{
+				bool success = true;
+				for( auto &it :xs )
+				{
+					if( it >= blocks[ i ]->x && it <= blocks[ i ]->x +width*3 )
+					{
+						success = false;
+						break;
+					}
+				}
+				
+				if( success )
+				{
+					this->blocks.push_back( new Boulder_part() );
+					this->blocks[ this->blocks.size()-1 ]->positioning( width );
+					
+					float vel = main_vel +(static_cast <float> (rand()%50) /100);
+					
+					int m = 1;
+					if( rand()%2 == 1 )	m = -m;
+					
+					this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y +width, vel, main_angle *m );
+					if( i +6 < blocks.size() )
+					{
+						i += 6;
+					}
+					else
+					{
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
+void Boulder::positioningIslands( vector <Block*> blocks, vector <int> xs, int chance )
+{
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
+		{
+			if( blocks[ i ]->nr == 0 || blocks[ i ]->nr == 1 || blocks[ i ]->nr == 3
+			 || blocks[ i ]->nr == 4 )
 			{
 				bool success = true;
 				for( auto &it :xs )

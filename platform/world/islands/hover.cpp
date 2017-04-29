@@ -37,18 +37,18 @@ void Hover::free()
 void Hover::positioning( int width, int type )
 {
 	blocks.push_back( new Block() );
-	blocks[ blocks.size() -1 ]->nr = 5;
+	blocks[ blocks.size() -1 ]->nr = 3;
 	blocks[ blocks.size() -1 ]->x = 0;
 	
 	if( type == 0 )
 	{
 		blocks.push_back( new Block() );
-		blocks[ blocks.size() -1 ]->nr = 6;
+		blocks[ blocks.size() -1 ]->nr = 4;
 		blocks[ blocks.size() -1 ]->x = width;
 	}
 	
 	blocks.push_back( new Block() );
-	blocks[ blocks.size() -1 ]->nr = 7;
+	blocks[ blocks.size() -1 ]->nr = 5;
 	blocks[ blocks.size() -1 ]->x = blocks[ blocks.size() -2 ]->x +width;
 }
 

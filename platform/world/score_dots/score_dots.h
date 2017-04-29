@@ -27,6 +27,7 @@ public:
 	void load( int screen_w );
 	void draw( sf::RenderWindow* &window );
 	void positioning( int chance, vector <Block*> blocks, int width );
+	void positioningIslands( int chance, vector <Block*> blocks, int width );
 	
 	void fadein( int v = 1, int max = 0xFF );
 	void fadeout( int v = 1, int min = 0 );

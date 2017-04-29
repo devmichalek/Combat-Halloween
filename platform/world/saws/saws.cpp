@@ -55,6 +55,7 @@ void Saws::load( int type, int screen_w, int width )
 	
 	sprite.setName( "saws-sprite" );
 	sprite.load( "data/platform/world/" +con::itos( type ) +"/traps/2.png" );
+	sprite.setScale( 0.9, 0.9 );
 	
 	// Set damage.
 	MyFile file;
@@ -149,8 +150,8 @@ void Saws::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 	
 	if( type == 4 )
 	{
-		w = 11;
-		h = 32;
+		w = 9;
+		h = 22;
 	}
 	
 	// First brick blocks.
@@ -201,7 +202,7 @@ void Saws::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 		{
 			for( auto &jt :b1 )
 			{
-				if( jt->nr >= 0 && jt->nr <= 7 )
+				if( jt->nr >= 0 && jt->nr <= 5 )
 				{
 					if( jt->x <= it->x +w &&
 						jt->x +width >= it->x +w +sprite.getWidth() &&
@@ -219,7 +220,7 @@ void Saws::positioning( vector <Block*> b1, vector <Block*> b2, int chance )
 		{
 			for( auto &jt :b1 )
 			{
-				if( jt->nr >= 0 && jt->nr <= 7 )
+				if( jt->nr >= 0 && jt->nr <= 5 )
 				{
 					if( jt->x <= it->x -w +width -sprite.getWidth() &&
 						jt->x +width >= it->x -w +width &&

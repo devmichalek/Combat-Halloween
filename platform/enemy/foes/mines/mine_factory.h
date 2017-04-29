@@ -37,6 +37,7 @@ public:
 	// Creating.
 	void addMine( int x1, int x2, int y );
 	void positioning( vector <Block*> blocks, int chance );
+	void positioningIslands( vector <Block*> blocks, int chance );
 	
 	// Collision.
 	void checkCollision( Rect* rect );

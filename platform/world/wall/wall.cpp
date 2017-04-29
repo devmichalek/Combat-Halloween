@@ -74,6 +74,11 @@ void Wall::load( int type, int width, int screen_w )
 	sprites[ 5 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 2 ) +".png" );
 	sprites[ 6 ]->load( "data/platform/world/" +con::itos( type ) +"/pug/" +con::itos( 3 ) +".png" );
 	
+	for( auto &it :sprites )
+	{
+		it->setScale( 0.9, 0.9 );
+	}
+	
 	MyFile file;
 	file.load( "data/txt/world/wall.txt" );
 	if( file.is_good() )
@@ -157,7 +162,6 @@ void Wall::fadeout( int v, int min )
 
 
 
-
 void Wall::positioning( vector <Block*> blocks, int chance )
 {
 	for( unsigned i = 0; i < blocks.size() -2; i++ )
@@ -190,6 +194,57 @@ void Wall::positioning( vector <Block*> blocks, int chance )
 			}
 				
 			else if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 6 )
+			{
+				int nr = 1;
+				
+				if( rand()%100 < chance )
+				{
+					this->blocks.push_back( new Pug() );
+					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
+					
+					float vel = main_vel*4 +(static_cast <float> (rand()%180) /100);
+					
+					this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x, blocks[ i ]->y -width, vel, width );
+					
+					i += 3;
+				}
+			}
+		}
+	}
+}
+
+void Wall::positioningIslands( vector <Block*> blocks, int chance )
+{
+	for( unsigned i = 0; i < blocks.size() -2; i++ )
+	{
+		if( blocks[ i ]->y <= 3*width && blocks[ i ]->x > screen_w )
+		{
+			if( (blocks[ i ]->nr == 3 || blocks[ i ]->nr == 0 || blocks[ i ]->nr == 1 || blocks[ i ]->nr == 4) &&
+				(blocks[ i +2 ]->nr == 2 || blocks[ i +2 ]->nr == 5))
+			{
+				int nr = 0;
+				
+				if( rand()%100 < chance )
+				{
+					this->blocks.push_back( new Pug() );
+					this->blocks[ this->blocks.size()-1 ]->positioning( width, nr );
+					
+					float vel = main_vel +(static_cast <float> (rand()%135) /100);
+					
+					if( vel > 1 )
+					{
+						this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x +width/2, blocks[ i ]->y -width, vel, width );
+					}
+					else
+					{
+						this->blocks[ this->blocks.size()-1 ]->setPosition( blocks[ i ]->x +width/2, blocks[ i ]->y -width, vel );
+					}
+					
+					i += 3;
+				}
+			}
+				
+			else if( blocks[ i ]->nr == 1 || blocks[ i ]->nr == 4 )
 			{
 				int nr = 1;
 				

@@ -212,7 +212,7 @@ void Factory<F>::load( int width, int screen_w, int screen_h, string name )
 	file.free();
 	
 	hp.setName( "factory-hp" );
-	hp.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0x33, 0x33 );
+	hp.setFont( "data/initialization/Jaapokki-Regular.otf", 16, 0xFF, 0x33, 0x33 );
 	hp.setText( " " );
 	hp.setAlpha( 0xFF );
 	
@@ -369,6 +369,18 @@ void Factory<F>::add( int x, int y, int chance )
 template <typename F>
 void Factory<F>::positioning( vector <Block*> blocks, int chance )
 {
+	int my_chance = chance;
+	if( chance <= 33 )
+	{
+		my_chance = 50;
+	}
+	else if( chance <= 66 )
+	{
+		my_chance = 75;
+	}
+	
+	// printf( "%d\n", my_chance );
+	
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		if( blocks[ i ]->nr == 5 || blocks[ i ]->nr == 0 || blocks[ i ]->nr == 4 )
@@ -394,7 +406,7 @@ void Factory<F>::positioning( vector <Block*> blocks, int chance )
 			
 			if( counter > 2 )
 			{
-				if( rand()%100 < 90 )
+				if( rand()%100 < my_chance )
 				{
 					int additional_nr = rand()%counter;
 					add( startX +width*additional_nr, startY +2, chance );
@@ -404,6 +416,56 @@ void Factory<F>::positioning( vector <Block*> blocks, int chance )
 		}
 	}
 }
+
+template <typename F>
+void Factory<F>::positioningIslands( vector <Block*> blocks, int chance )
+{
+	int my_chance = chance;
+	if( chance <= 33 )
+	{
+		my_chance = 50;
+	}
+	else if( chance <= 66 )
+	{
+		my_chance = 75;
+	}
+	
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ]->nr == 3 || blocks[ i ]->nr == 0 )
+		{
+			int counter = 1;
+			float startX = blocks[ i ]->x;
+			float startY = blocks[ i ]->y;
+			
+			for( unsigned j = i +1; j < blocks.size(); j++ )
+			{
+				if( blocks[ j ]->nr >= 0 && blocks[ j ]->nr <= 5 &&
+					blocks[ j -1 ]->y == blocks[ j ]->y &&
+					blocks[ j -1 ]->x == blocks[ j ]->x -width )
+				{
+					counter ++;
+				}
+				else
+				{
+					i = j;
+					break;
+				}
+			}
+			
+			if( counter > 2 )
+			{
+				if( rand()%100 < my_chance )
+				{
+					int additional_nr = rand()%counter;
+					add( startX +width*additional_nr, startY +2, chance );
+					foes[ foes.size() -1 ]->setBorders( startX, startX +width*counter );
+				}
+			}
+		}
+	}
+}
+
 
 
 

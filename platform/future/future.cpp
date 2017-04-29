@@ -177,7 +177,7 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	
 	type = 4;
 	this->FPS = FPS;
-	this->width = 128;
+	this->width = 113;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
@@ -186,7 +186,6 @@ void Future::load( int screen_w, int screen_h, unsigned FPS )
 	music->load( "data/platform/world/" +con::itos(type) +"/music.mp3", 50 );
 	
 	// Panel.
-	heart->load();
 	scores->load( type, screen_w );
 	money->load( screen_w );
 	pause->load( screen_w, screen_h );
@@ -421,6 +420,7 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 	{
 		case 0:	hero->load( type, screen_w, screen_h, width ); hero->setKeys();
 		kunai->load();	skills->load( FPS, screen_w, screen_h );
+		heart->load();
 		info = "setting position x, y of background";	break;
 		
 		case 1:	background->mechanics( hero->getX(), hero->getY() );
@@ -488,31 +488,35 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		info = "setting greenery";	break;
 		
 		case 17:	greenery->positioning( brick->getBlocks() );
-					greenery->positioning( islands->getBlocks() );
+					greenery->positioningIslands( islands->getBlocks() );
 		info = "setting wall";	break;
 		
 		case 18:	wall->positioning( brick->getBlocks(), difficulty );
-					wall->positioning( islands->getBlocks(), difficulty );
+					wall->positioningIslands( islands->getBlocks(), difficulty );
 		info = "creating mine factory";	break;
 		
 		
 		case 19: mine_factory->positioning( brick->getBlocks(), difficulty );
-				 mine_factory->positioning( islands->getBlocks(), difficulty );
+				 mine_factory->positioningIslands( islands->getBlocks(), difficulty );
 		info = "creating skeleton factory";	break;
 		
 		case 20: robot_factory.positioning( brick->getBlocks(), difficulty );
-				 robot_factory.positioning( islands->getBlocks(), difficulty );
+				 robot_factory.positioningIslands( islands->getBlocks(), difficulty );
 				 robot_factory.positioning( brick->getBlocks(), difficulty );
-				 robot_factory.positioning( islands->getBlocks(), difficulty );
-				 robot_factory.positioning( brick->getBlocks(), difficulty );
-				 robot_factory.positioning( islands->getBlocks(), difficulty );
+				 robot_factory.positioningIslands( islands->getBlocks(), difficulty );
+				 if( difficulty > 66 )
+				 {
+					robot_factory.positioning( brick->getBlocks(), difficulty );
+					robot_factory.positioningIslands( islands->getBlocks(), difficulty );
+				 }
+				 
 		info = "setting money multiplier";	break;
 		
 		case 21: coins->setChance( difficulty );
 		info = "positioning boulders";	break;
 		
 		case 22: boulder->positioning( brick->getBlocks(), wall->getXs(), difficulty );
-				 boulder->positioning( islands->getBlocks(), wall->getXs(), difficulty );
+				 boulder->positioningIslands( islands->getBlocks(), wall->getXs(), difficulty );
 		info = "setting exit";	break;
 		
 		case 23: exit->positioning( brick->getRight() );
@@ -528,7 +532,7 @@ bool Future::positioning( int type, int size, int flatness, int difficulty )
 		info = "positioning score dots";	break;
 		
 		case 27: score_dots->positioning( difficulty, brick->getBlocks(), brick->getWidth() );
-				 score_dots->positioning( difficulty, islands->getBlocks(), brick->getWidth() );
+				 score_dots->positioningIslands( difficulty, islands->getBlocks(), brick->getWidth() );
 		info = "positioning saws";	break;
 		
 		case 28: saws->positioning( brick->getBlocks(), islands->getBlocks(), difficulty );

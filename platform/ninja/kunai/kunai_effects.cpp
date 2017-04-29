@@ -89,6 +89,12 @@ void Kunai_effects::load( int which )
 	sprites[ 1 ]->load( path +"1.png", lines[ 1 ] );
 	sprites[ 2 ]->load( path +con::itos( which ) +".png", lines[ 2 ] );
 	
+	// set scale.
+	for( auto &it :sprites )
+	{
+		it->setScale( 0.9, 0.9 );
+	}
+	
 	string path2 = "data/platform/hero/kunai_effects/sounds/";
 	slabs[ 0 ]->load( path2 +"0.wav" );
 	slabs[ 1 ]->load( path2 +"1.wav" );

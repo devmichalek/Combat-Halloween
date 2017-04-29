@@ -33,6 +33,7 @@ public:
 	// Creating
 	unsigned getDistance( int v1, int v2 );
 	void positioning( vector <Block*> blocks );
+	void positioningIslands( vector <Block*> blocks );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );

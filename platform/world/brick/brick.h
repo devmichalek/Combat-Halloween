@@ -73,4 +73,3 @@ public:
 	bool checkCollision( Rect* rect );
 	bool checkPixelCollision( Rect* rect );
 };
-

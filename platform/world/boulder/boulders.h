@@ -33,6 +33,7 @@ public:
 	
 	// Creating.
 	void positioning( vector <Block*> blocks, vector <int> xs, int chance );
+	void positioningIslands( vector <Block*> blocks, vector <int> xs, int chance );
 	
 	// In action
 	void moveX( sf::Uint8 direction, float vel );

@@ -119,6 +119,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 	
 	grey.setName( "skills-grey" );
 	grey.load( "data/platform/panel/grey/grey_square.png" );
+	grey.setScale( 0.9, 0.9 );
 	
 	curtain.setName( "skills-curtain" );
 	curtain.create( grey.getWidth(), 1 );
@@ -133,6 +134,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 		pictures.push_back( new MySprite() );
 		pictures[ pictures.size() -1 ]->setName( "skills-shuriken" );
 		pictures[ pictures.size() -1 ]->load( "data/platform/panel/skill/" +con::itos( i ) +".png" );
+		pictures[ pictures.size() -1 ]->setScale( 0.9, 0.9 );
 		pictures[ pictures.size() -1 ]->center( x, startY +(grey.getHeight() *i) +2*i, grey.getWidth(), grey.getHeight() );
 	}
 	
@@ -164,7 +166,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 		{
 			names.push_back( new MyText() );
 			names[ names.size() -1 ]->setName( "skills-names" );
-			names[ names.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 14, 0x00, 0x00, 0x00 );
+			names[ names.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 12, 0x00, 0x00, 0x00 );
 			names[ names.size() -1 ]->setText( line );
 			names[ names.size() -1 ]->setPosition( x +1, skills[ names.size() -1 ]->getY() -1 );
 		}
@@ -177,7 +179,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 	{
 		nr.push_back( new MyText() );
 		nr[ nr.size() -1 ]->setName( "skills-nr" );
-		nr[ nr.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 10, 0x00, 0x00, 0x00 );
+		nr[ nr.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 9, 0x00, 0x00, 0x00 );
 		if( i > 1 )
 			nr[ nr.size() -1 ]->setText( con::itos( i -1 ) );
 		else
@@ -187,7 +189,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 	
 	// Load label_one.
 	label_one.setName( "skills-label_one" );
-	label_one.setFont( "data/initialization/Jaapokki-Regular.otf", 14, 0x38, 0x2E, 0x1C );
+	label_one.setFont( "data/initialization/Jaapokki-Regular.otf", 12, 0x38, 0x2E, 0x1C );
 	label_one.setText( "lv" );
 	
 	// Load max levels temporary
@@ -214,7 +216,7 @@ void Skills::load( unsigned FPS, int screen_w, int screen_h )
 			levels.push_back( con::stof( line.c_str() ) );
 			label_two.push_back( new MyText() );
 			label_two[ label_two.size() -1 ]->setName( "skills-label_two" );
-			label_two[ label_two.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 14, 0x45, 0x38, 0x23 );
+			label_two[ label_two.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 12, 0x45, 0x38, 0x23 );
 			if( line == max_levels[ counter ] )
 			{
 				gold.push_back( true );

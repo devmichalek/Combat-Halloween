@@ -89,6 +89,7 @@ void Greenery::load( int type, int width, int screen_w )
 			sprites[ sprites.size() -1 ]->setName( "greenery-sprites[ " +con::itos( i+min ) +"]" );
 			sprites[ sprites.size() -1 ]->load( "data/platform/world/" +con::itos( type )
 			+ "/" +con::itos( i+min ) + ".png" );
+			sprites[ sprites.size() -1 ]->setScale( 0.9, 0.9 );
 		}
 		
 		// load rules
@@ -222,6 +223,64 @@ void Greenery::positioning( vector <Block*> blocks )
 		for( unsigned i = 0; i < plants.size(); i++ )
 		{
 			if( plants[ i ]->available( it->nr ) )
+			{
+				available.push_back( i );
+			}
+		}
+		
+		if( available.size() > 0 )
+		{
+			int t = 4;
+			while( t-- )
+			{
+				int random = rand()%available.size();
+				int chosen = available[ random ];
+				// printf( "chosen %d\n", chosen );
+				
+				if( rand()%100 < plants[ chosen ]->chance )
+				{
+					this->blocks.push_back( new Green() );
+				
+					this->blocks[ this->blocks.size() -1 ]->nr = plants[ chosen ]->nr;
+					
+					int distance = rand()%getDistance( plants[ chosen ]->startX, plants[ chosen ]->endX );
+					this->blocks[ this->blocks.size() -1 ]->x = plants[ chosen ]->startX +distance +it->x;
+					
+					distance = rand()%getDistance( plants[ chosen ]->startY, plants[ chosen ]->endY );
+					this->blocks[ this->blocks.size() -1 ]->y = plants[ chosen ]->startY +distance +it->y;
+					this->blocks[ this->blocks.size() -1 ]->y -= sprites[ this->blocks[ this->blocks.size() -1 ]->nr -min ]->getHeight();
+					this->blocks[ this->blocks.size() -1 ]->bg = plants[ chosen ]->bg;
+				}
+			}
+		}
+		
+		if( !available.empty() )
+		{
+			available.clear();
+		}
+	}
+}
+
+void Greenery::positioningIslands( vector <Block*> blocks )
+{
+	vector <sf::Uint8> available;
+	
+	for( auto &it :blocks )
+	{
+		int r = it->nr;
+		switch( it->nr )
+		{
+			case 3:	r = 5;	break;
+			case 4:	r = 6;	break;
+			case 5:	r = 7;	break;
+			case 6:	r = 10;	break;
+			case 7:	r = 11;	break;
+			case 8:	r = 12;	break;
+		}
+		
+		for( unsigned i = 0; i < plants.size(); i++ )
+		{
+			if( plants[ i ]->available( r ) )
 			{
 				available.push_back( i );
 			}
