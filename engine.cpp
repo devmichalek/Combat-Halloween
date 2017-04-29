@@ -9,7 +9,7 @@ Engine::Engine()
 	srand( static_cast <int> ( time( NULL ) ) );
 	
 	// Create and load core.
-    core = new Core( 1000, 750, -2/*, 180*/ );
+    core = new Core( 1000, 650, -2 );
     core->load( "Ninja" );
 	
 	timer = new Timer( 220 );
@@ -88,8 +88,6 @@ void Engine::load()
 		case 100:
 		delete loading;
 		loading = NULL;
-		initialization->setScale( core->getXScale(), core->getYScale() );
-		initialization->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() );
 		core->getState() = INIT;
 		break;
 	}
@@ -106,23 +104,10 @@ void Engine::events()
             core->isOpen() = false;
         }
 		
-		if( core->setView() )
-		{
-			switch( core->getState() )
-			{
-				case LOADING: 	loading->setScale( core->getXScale(), core->getYScale() );
-								loading->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() ); break;
-				case INIT:		initialization->setScale( core->getXScale(), core->getYScale() );
-								initialization->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() ); break;
-				case MENU:		menu->setScale( core->getXScale(), core->getYScale() );
-								menu->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() ); break;
-			}
-		}
-		
 		switch( core->getState() )
 		{
 			case INIT:	initialization->handle( core->getEvent() );	break;
-			case MENU: 	menu->handle( core->getEvent(), core->getX(), core->getY() ); 	break;
+			case MENU: 	menu->handle( core->getEvent() ); 			break;
 			case LEVEL:	level->handle( core->getEvent() );			break;
 			case HALLOWEEN: halloween->handle( core->getEvent() );	break;
 			case FOREST: forest->handle( core->getEvent() );		break;
@@ -154,8 +139,6 @@ void Engine::states()
 			
 			core->getState() = MENU;
 			menu->setNick();
-			menu->setScale( core->getXScale(), core->getYScale() );
-			menu->setView( core->getWidth(), core->getHeight(), core->getX(), core->getY() );
 		}
 	}
 	
