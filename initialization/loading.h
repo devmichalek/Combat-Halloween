@@ -28,13 +28,9 @@ public:
 	~Loading();
 	void free();
 	
-	void load( int w, int h );	// load textures
+	void load( unsigned screen_w, unsigned screen_h );	// load textures
 	void draw( sf::RenderWindow* &window );	// render textures
 	
 	// In addition.
 	const sf::Uint8& getState() const; 		// getter
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };

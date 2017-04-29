@@ -32,7 +32,7 @@ void Loading::free()
 	state = 0;
 }
 	
-void Loading::load( int w, int h )
+void Loading::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	max = 20;
@@ -46,7 +46,8 @@ void Loading::load( int w, int h )
 	progress_bar.load( "data/initialization/progress_bar.png", max );
 	progress_bar.setAlpha( 0xFF );
 	
-	setView( w, h, 0, 0 );
+	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 -text.getHeight()/2 -10 );
+	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, screen_h/2 +20 );
 }
 
 void Loading::draw( sf::RenderWindow* &window )
@@ -70,21 +71,4 @@ void Loading::draw( sf::RenderWindow* &window )
 const sf::Uint8& Loading::getState() const
 {
 	return state;
-}
-
-
-
-void Loading::setScale( float s_x, float s_y )
-{
-	text.setBasicScale( s_x, s_y );
-	text.setScale();
-	
-	progress_bar.setBasicScale( s_x, s_y );
-	progress_bar.setScale();
-}
-
-void Loading::setView( int w, int h, int r_x, int r_y )
-{
-	text.setPosition( w/2 -text.getWidth()/2 +r_x, h/2 -text.getHeight()/2 +r_y );
-	progress_bar.setPosition( w/2 - progress_bar.getWidth()/2 +r_x, h/2 +(20 *progress_bar.getYScale()) +r_y );
 }
