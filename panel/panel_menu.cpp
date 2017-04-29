@@ -55,7 +55,7 @@ void Panel_menu::reset()
 
 
 
-void Panel_menu::load( int screen_w, int screen_h )
+void Panel_menu::load( unsigned screen_w, unsigned screen_h )
 {
 	bg->setName( "panel_menu-background" );
 	bg->load( "data/menu/background.png" );
@@ -228,6 +228,7 @@ void Panel_menu::set( int scores, int type, bool status, int coruption, string t
 			}
 		}
 		file.free();
+		// printf( "%d\n", look );
 
 		if( look > actual )
 		{

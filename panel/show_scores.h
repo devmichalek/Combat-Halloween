@@ -5,8 +5,8 @@
 
 class Show_scores
 {
-	int screen_w;
-	int screen_h;
+	unsigned screen_w;
+	unsigned screen_h;
 	int max, number, vel;
 	int state;
 	
@@ -18,19 +18,15 @@ class Show_scores
 	
 	MyText coruption;
 	MyText coruption_word;
-	MySprite coruption_dot;
 	
 	MyText world;
 	MyText world_word;
-	MySprite world_sprite;
 	
 	MyText money;
 	MyText money_word;
-	MySprite money_sprite;
 	
 	MyText mine;
 	MyText mine_word;
-	MySprite mine_sprite;
 	
 	MyText time;
 	MyText time_word;
@@ -44,7 +40,7 @@ public:
 	~Show_scores();
 	void free();
 	
-	void load( int screen_w, int screen_h, int t );
+	void load( unsigned screen_w, unsigned screen_h, float y );
 	void draw( sf::RenderWindow* &window );
 	
 	void setScores( int s );
