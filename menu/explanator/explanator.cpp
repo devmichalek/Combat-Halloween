@@ -43,7 +43,7 @@ void Explanator::load( string str )
 	
 	// Your text
 	text.setName( "explanator-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0, 0, 0 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 14, 0, 0, 0 );
 	text.setText( str );
 	
 	bg.setName( "explanator-bg" );
@@ -121,34 +121,23 @@ void Explanator::stop()
 	}
 }
 
-void Explanator::focus( int x, int y, bool r )
+void Explanator::focus( float x, float y, bool side )
 {
 	if( state == 1 )
 	{
 		y -= bg.getHeight();
 		
-		if( !r )
-		{
-			bg.setPosition( x -bg.getWidth(), y );
-			text.setPosition( x -bg.getWidth(), y );
-		}
-		else
+		if( side )
 		{
 			bg.setPosition( x, y );
 			text.setPosition( x, y );
 		}
+		else
+		{
+			bg.setPosition( x -bg.getWidth(), y );
+			text.setPosition( x -bg.getWidth(), y );
+		}
 		
 		state = 2;
 	}
-}
-
-
-
-void Explanator::setScale( float s_x, float s_y )
-{
-	text.setBasicScale( s_x, s_y );
-	text.setScale();
-	
-	bg.setBasicScale( s_x, s_y );
-	bg.setScale();
 }

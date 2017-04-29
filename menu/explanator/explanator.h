@@ -40,8 +40,5 @@ public:
 	// In additon.
 	void run();
 	void stop();
-	void focus( int x, int y, bool r = true );
-	
-	// Window.
-	void setScale( float s_x, float s_y );
+	void focus( float x, float y, bool side = true );
 };
