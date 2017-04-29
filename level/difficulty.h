@@ -34,9 +34,9 @@ public:
 	Difficulty();
 	~Difficulty();
 	void free();
-	void reset( int left, int bot );
+	void reset( float x, float y );
 	
-	void load( int left, int bot );
+	void load( float x, float y );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
 	

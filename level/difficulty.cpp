@@ -57,29 +57,29 @@ void Difficulty::free()
 	keep = false;
 }
 
-void Difficulty::reset( int left, int bot )
+void Difficulty::reset( float x, float y )
 {
-	corruption.setPosition( left +350, bot +50 );
+	corruption.setPosition( x +350, y +50 );
 	
-	texts[ 0 ]->setPosition( corruption.getX() -texts[ 0 ]->getWidth() -54, corruption.getBot() +texts[ 0 ]->getHeight() );
+	texts[ 0 ]->setPosition( corruption.getX() -texts[ 0 ]->getWidth() -48, corruption.getBot() +texts[ 0 ]->getHeight() );
 	texts[ 1 ]->setPosition( texts[ 0 ]->getRight() +texts[ 1 ]->getWidth(), texts[ 0 ]->getY() );
 	texts[ 2 ]->setPosition( texts[ 1 ]->getRight() +texts[ 1 ]->getWidth(), texts[ 0 ]->getY() );
 	
-	int y = texts[ 0 ]->getY() -sprites[ 0 ]->getHeight()/7;
+	int new_y = texts[ 0 ]->getY() -sprites[ 0 ]->getHeight()/7;
 	for( unsigned i = 0; i < sprites.size(); i++ )
 	{
-		sprites[ i ]->setPosition( texts[ i ]->getX() -sprites[ i ]->getWidth(), y );
+		sprites[ i ]->setPosition( texts[ i ]->getX() -sprites[ i ]->getWidth(), new_y );
 	}
 }
 
 
 
-void Difficulty::load( int left, int bot )
+void Difficulty::load( float x, float y )
 {
 	free();
 	
 	corruption.setName( "difficulty-corruption" );
-	corruption.setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
+	corruption.setFont( "data/initialization/Jaapokki-Regular.otf", 23, 255, 255, 255 );
 	corruption.setText( "Corruption" );
 	
 	
@@ -87,17 +87,18 @@ void Difficulty::load( int left, int bot )
 	for( int i = 0; i < nr; i++ )
 	{
 		texts.push_back( new MyText() );
-		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
+		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 20, 255, 255, 255 );
 		
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->load( "data/level/" +con::itos( i ) +".png" );
+		sprites[ sprites.size() -1 ]->setScale( 0.85, 0.85 );
 	}
 	
 	texts[ 0 ]->setText( "low" );
 	texts[ 1 ]->setText( "medium" );
 	texts[ 2 ]->setText( "high" );
 	
-	reset( left, bot );
+	reset( x, y );
 	alpha_line = 100;
 	result = 33;
 	
