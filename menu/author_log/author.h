@@ -14,12 +14,13 @@ class Author
 	
 public:
 	
+	// Basics.
 	Author();
     ~Author();
 	void free();
 	void reset();
 
-    void load( int screen_w, int screen_h );
+    void load( unsigned screen_w, unsigned screen_h );
     void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	

@@ -27,7 +27,7 @@ void Author_info::reset()
 
 
 
-void Author_info::Author_info::load( int screen_w, int screen_h )
+void Author_info::Author_info::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	

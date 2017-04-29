@@ -16,6 +16,7 @@ class Member
 	
 public:
 	
+	// Basic information.
 	Member();
 	~Member();
 	void free();
@@ -28,6 +29,7 @@ public:
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
 	
+	// Extra.
 	void move( float distance );
 	
 	bool isButton();

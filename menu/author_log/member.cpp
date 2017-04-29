@@ -36,7 +36,7 @@ void Member::reset()
 void Member::load( string text, bool s, string url )
 {
 	this->text.setName( "member-text" );
-	this->text.setFont( "data/initialization/Jaapokki-Regular.otf", 28, 0xFF, 0xFF, 0xFF );
+	this->text.setFont( "data/initialization/Jaapokki-Regular.otf", 22, 0xFF, 0xFF, 0xFF );
 	this->text.setText( text );
 	
 	if( s )
@@ -51,9 +51,9 @@ void Member::setPosition( float x, float y )
 	x_c = x;
 	text.setPosition( x_c, y );
 	
-	button_x_c = x +250;
+	button_x_c = text.getRight() +7;
 	button_x = button_x_c;
-	button_y = y -8;
+	button_y = y -4;
 }
 
 void Member::draw( sf::RenderWindow* &window )

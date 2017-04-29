@@ -1,3 +1,12 @@
+/**
+    scroll.h
+    Purpose: class Scroll - scroll mechanics.
+
+    @author Adrian Michalek
+    @version 2017.03.30
+	@email adrmic98@gmail.com
+*/
+
 #include "scroll.h"
 
 Scroll::Scroll()
@@ -27,13 +36,14 @@ void Scroll::reset()
 {
 	handled = false;
 	moved = false;
-	button.setPosition( 0, area.getY() );
+	info_x = area.getX() +10;
+	button.setPosition( area.getX(), area.getY() );
 	info.setPosition( info_x -button.getX(), info.getY() );
 }
 
 
 
-void Scroll::load( int screen_w, int screen_h )
+void Scroll::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
@@ -44,12 +54,14 @@ void Scroll::load( int screen_w, int screen_h )
 	
 	info.setName( "scroll-area" );
 	info.load( "data/menu/scroll.png" );
-	info_x = 20;
-	info.setPosition( info_x, screen_h -info.getHeight() -20 );
+	info.setScale( 0.9, 0.9 );
+	info.setPosition( area.getX() +10, area.getY() -10 -info.getHeight() );
+	info_x = 30;
 	
 	button.setName( "scroll-button" );
 	button.create( screen_w /2, 10 );
 	button.setColor( sf::Color( 0x0E, 0x2A, 0x44 ) );
+	button.setPosition( area.getX(), area.getY() );
 	
 	reset();
 	
@@ -64,7 +76,7 @@ void Scroll::Scroll::draw( sf::RenderWindow* &window )
 	
 	if( moved )
 	{
-		info.setPosition( info_x -button.getX(), info.getY() );
+		info.setPosition( info_x, info.getY() );
 		// printf( "%f\n", info.getX() );
 	}
 }
@@ -82,17 +94,21 @@ void Scroll::handle( sf::Event &event )
 			if( event.mouseWheelScroll.delta > 0 )
 			{
 				button.setPosition( button.getX() -vel, button.getY() );
+				info_x += vel;
 				if( button.getX() < area.getX() )
 				{
 					button.setPosition( area.getX(), button.getY() );
+					info_x = area.getX() +10;
 				}
 			}
 			else if( event.mouseWheelScroll.delta < 0 )
 			{
 				button.setPosition( button.getX() +vel, button.getY() );
+				info_x -= vel;
 				if( button.getRight() > area.getRight() )
 				{
 					button.setPosition( area.getRight() -button.getWidth(), button.getY() );
+					info_x = area.getX() -button.getWidth();
 				}
 			}
 			
@@ -151,17 +167,6 @@ void Scroll::handle( sf::Event &event )
 
 
 
-bool Scroll::isMoved()
-{
-	return moved;
-}
-
-float Scroll::getDistance()
-{
-	return -button.getX();
-}
-
-
 void Scroll::fadein( int i, int max )
 {
 	area.fadein( i, max );
@@ -174,4 +179,16 @@ void Scroll::fadeout( int i, int min )
 	area.fadeout( i, min );
 	button.fadeout( i, min );
 	info.fadeout( i, min );
+}
+
+
+
+bool Scroll::isMoved()
+{
+	return moved;
+}
+
+float Scroll::getDistance()
+{
+	return -button.getX();
 }

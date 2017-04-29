@@ -55,13 +55,14 @@ void List::reset()
 
 
 
-void List::load( int screen_w, int screen_h )
+void List::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
 	// Load button.
 	button.setName( "list-button" );
 	button.load( "data/menu/info.png", 4 );
+	button.setScale( 0.85, 0.85 );
 	
 	// Setting main x.
 	int start_x = 50;
@@ -82,17 +83,17 @@ void List::load( int screen_w, int screen_h )
 		{
 			categories.push_back( new MyText() );
 			categories[ categories.size() -1 ]->setName( "list-category" );
-			categories[ categories.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 40, 0xFF, 0xFF, 0xFF );
+			categories[ categories.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 32, 0xFF, 0xFF, 0xFF );
 			categories[ categories.size() -1 ]->setText( line );
 		}
 	}
 	file.free();
-	categories[ 0 ]->setPosition( categories_x[ 0 ], 180 );
-	categories[ 1 ]->setPosition( categories_x[ 1 ], 320 );
-	categories[ 2 ]->setPosition( categories_x[ 2 ], 440 );
-	categories[ 3 ]->setPosition( categories_x[ 3 ], 180 );
-	categories[ 4 ]->setPosition( categories_x[ 4 ], 180 );
-	categories[ 5 ]->setPosition( categories_x[ 5 ], 360 );
+	categories[ 0 ]->setPosition( categories_x[ 0 ], 150 );
+	categories[ 1 ]->setPosition( categories_x[ 1 ], 290 );
+	categories[ 2 ]->setPosition( categories_x[ 2 ], 410 );
+	categories[ 3 ]->setPosition( categories_x[ 3 ], 150 );
+	categories[ 4 ]->setPosition( categories_x[ 4 ], 150 );
+	categories[ 5 ]->setPosition( categories_x[ 5 ], 330 );
 	
 	// Load developers txt file.
 	fillMembers( develop_members, "data/txt/menu/developers.txt", 0 );
@@ -257,7 +258,7 @@ void List::fillMembers( vector <Member*> &m, string path, int which )
 			
 			int start_y = 0;
 			if( m.size() > 1 )
-				start_y = m[ m.size() -2 ]->getY() +45;
+				start_y = m[ m.size() -2 ]->getY() +35;
 			else
 				start_y = categories[ which ]->getBot() +20;
 			m[ m.size() -1 ]->setPosition( categories_x[ which ] +5, start_y );
@@ -369,4 +370,16 @@ void List::fadeoutMembers( vector <Member*> &m, int i, int min )
 	{
 		it->fadeout( i, min );
 	}
+}
+
+
+
+void setScale( float s_x, float s_y )
+{
+	
+}
+
+void setView( int w, int h, int r_x, int r_y )
+{
+	
 }
