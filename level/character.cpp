@@ -77,7 +77,7 @@ void Character::free()
 	click.free();
 }
 
-void Character::reset( int screen_w, int screen_h )
+void Character::reset( unsigned screen_w, unsigned screen_h )
 {
 	int w = 110;
 	int distance = ((sprites[ 0 ]->getWidth()*3) +(w*2)) /2;
@@ -94,8 +94,8 @@ void Character::reset( int screen_w, int screen_h )
 	texts[ 0 ]->setPosition( sprites[ 0 ]->getX() -5, sprites[ 0 ]->getBot() +5 );
 	texts[ 1 ]->setPosition( sprites[ 1 ]->getX() +13, sprites[ 1 ]->getBot() +5 );
 	texts[ 2 ]->setPosition( sprites[ 2 ]->getX() +4, sprites[ 2 ]->getBot() +5 );
-	texts[ 3 ]->setPosition( sprites[ 3 ]->getX() +55, sprites[ 3 ]->getBot() +5 );
-	texts[ 4 ]->setPosition( sprites[ 4 ]->getX() +35, sprites[ 4 ]->getBot() +5 );
+	texts[ 3 ]->setPosition( sprites[ 3 ]->getX() +47, sprites[ 3 ]->getBot() +5 );
+	texts[ 4 ]->setPosition( sprites[ 4 ]->getX() +22, sprites[ 4 ]->getBot() +5 );
 	texts[ 5 ]->setPosition( sprites[ 5 ]->getX() +20, sprites[ 5 ]->getBot() +5 );
 	
 	text.center( screen_w, 90, screen_w );
@@ -104,7 +104,7 @@ void Character::reset( int screen_w, int screen_h )
 
 
 
-void Character::load( int screen_w, int screen_h )
+void Character::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
@@ -113,10 +113,11 @@ void Character::load( int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "character-sprite nr" +con::itos( i ) );
 		sprites[ sprites.size() -1 ]->load( "data/level/hero" +con::itos( i ) +".png", 10 );
+		sprites[ sprites.size() -1 ]->setScale( 0.85, 0.85 );
 		
 		texts.push_back( new MyText() );
 		texts[ texts.size() -1 ]->setName( "character-texts nr" +con::itos( i ) );
-		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 30, 255, 255, 255 );
+		texts[ texts.size() -1 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 255, 255, 255 );
 	}
 	
 	texts[ 0 ]->setText( "adventure" );
@@ -131,7 +132,7 @@ void Character::load( int screen_w, int screen_h )
 	click.load( "data/menu/click.wav", 50 );
 	
 	text.setName( "character-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 50, 255, 255, 255 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 255, 255, 255 );
 	text.setText( "Choose character" );
 	
 	information.setName( "character-information" );

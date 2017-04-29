@@ -41,20 +41,20 @@ class Character :public Click
 	
 public:
 	
+	// Basics.
 	Character();
     ~Character();
 	void free();
-	void reset( int screen_w, int screen_h );
-
-
-    void load( int screen_w, int screen_h );
-    void draw( sf::RenderWindow* &window );
-    void handle( sf::Event &event );
+	void reset( unsigned screen_w, unsigned screen_h );
 	
+	void load( unsigned screen_w, unsigned screen_h );
+	void draw( sf::RenderWindow* &window );
+	void handle( sf::Event &event );
 	
 	void fadein( int j = 1, int max = 0xFF );
 	void fadeout( int j = 1, int min = 0 );
 	
+	// Getters.
 	int getAlpha();
 	bool move( int vel, int scope );	// move horizontal
 	
