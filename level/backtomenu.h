@@ -19,7 +19,7 @@ public:
 
 	using Link_button::Link_button;
 	
-	void load( int screen_w );
+	void load( unsigned screen_w );
 	void handle( sf::Event &event );
 	
 	void setState( int state );

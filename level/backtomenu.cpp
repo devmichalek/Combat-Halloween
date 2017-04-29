@@ -9,7 +9,7 @@
 
 #include "backtomenu.h"
 
-void Backtomenu::load( int screen_w )
+void Backtomenu::load( unsigned screen_w )
 {
 	button.setName( "backtomenu-backtomenu" );
     button.load( "data/menu/backtomenu.png", 4 );
@@ -19,8 +19,8 @@ void Backtomenu::load( int screen_w )
 		button.setOffset( 3 );    // locked offset = 3
 	}
 		
-	button.setScale( 0.5, 0.5 );
-	button.setPosition( screen_w - button.getWidth() -20, 20 );
+	button.setScale( 0.4, 0.4 );
+	button.setPosition( screen_w - button.getWidth() -10, 10 );
 	
 	click.setID( "backtomenu-click" );
 	click.load( "data/menu/click.wav", 50 );
