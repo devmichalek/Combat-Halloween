@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=Adrian Michalek
-Date                   :=20/04/17
+Date                   :=30/04/17
 CodeLitePath           :=/home/adr/.codelite
 LinkerName             :=/usr/bin/g++
 SharedObjectLinkerName :=/usr/bin/g++ -shared -fPIC
@@ -70,7 +70,7 @@ Objects0=$(IntermediateDirectory)/core.cpp$(ObjectSuffix) $(IntermediateDirector
 Objects1=$(IntermediateDirectory)/platform_desert_desert.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_forest_forest_mechanics.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_forest_forest.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_winter_winter_mechanics.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_winter_winter.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_halloween_halloween_mechanics.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_halloween_halloween.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_future_future_mechanics.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_future_future.cpp$(ObjectSuffix) \
 	$(IntermediateDirectory)/platform_ninja_kunai_kunai_effects.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_kunai_kunai_bit.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_kunai_kunai.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_kunai_damage.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_base_ninja_basic.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_base_ninja.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_base_activity.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_ninja_scope_scope.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_heart_heart_bit.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_heart_heart.cpp$(ObjectSuffix) \
 	$(IntermediateDirectory)/platform_panel_money_money.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_pause_pause.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_scores_scores.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_skill_skills.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_skill_skill_effect.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_skill_skill.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_sound_pad_sound_pad.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_panel_time_box_time_box.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_background_day.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_background_background.cpp$(ObjectSuffix) \
-	$(IntermediateDirectory)/platform_world_wall_wall.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_wall_pug.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_boulder_boulders.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_boulder_boulder.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_islands_hover.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_brick_rules.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_brick_brick.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_brick_block.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_score_dots_score_dots.cpp$(ObjectSuffix) \
+	$(IntermediateDirectory)/platform_world_wall_wall.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_wall_pug.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_boulder_boulders.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_boulder_boulder.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_islands_hover.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_brick_rules.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_brick_brick.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_brick_block.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_score_dots_score_dots.cpp$(ObjectSuffix) \
 	$(IntermediateDirectory)/platform_world_water_water.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_spikes_spikes.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_spikes_spike.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_saws_saws.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_saws_saw.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_exit_exit.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_greenery_plant.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_greenery_greenery.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_greenery_green.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_world_ladder_ladder.cpp$(ObjectSuffix) \
 	$(IntermediateDirectory)/platform_enemy_actions_coins_coins.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_enemy_actions_coins_coin.cpp$(ObjectSuffix) $(IntermediateDirectory)/platform_enemy_actions_effect_effect.cpp$(ObjectSuffix) 
 
@@ -781,14 +781,6 @@ $(IntermediateDirectory)/platform_world_boulder_boulder.cpp$(DependSuffix): plat
 $(IntermediateDirectory)/platform_world_boulder_boulder.cpp$(PreprocessSuffix): platform/world/boulder/boulder.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/platform_world_boulder_boulder.cpp$(PreprocessSuffix) platform/world/boulder/boulder.cpp
 
-$(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix): platform/world/islands/islands.cpp $(IntermediateDirectory)/platform_world_islands_islands.cpp$(DependSuffix)
-	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adr/Dokumenty/C++ workspace/Ninja/platform/world/islands/islands.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix) $(IncludePath)
-$(IntermediateDirectory)/platform_world_islands_islands.cpp$(DependSuffix): platform/world/islands/islands.cpp
-	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/platform_world_islands_islands.cpp$(DependSuffix) -MM platform/world/islands/islands.cpp
-
-$(IntermediateDirectory)/platform_world_islands_islands.cpp$(PreprocessSuffix): platform/world/islands/islands.cpp
-	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/platform_world_islands_islands.cpp$(PreprocessSuffix) platform/world/islands/islands.cpp
-
 $(IntermediateDirectory)/platform_world_islands_hover.cpp$(ObjectSuffix): platform/world/islands/hover.cpp $(IntermediateDirectory)/platform_world_islands_hover.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adr/Dokumenty/C++ workspace/Ninja/platform/world/islands/hover.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/platform_world_islands_hover.cpp$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/platform_world_islands_hover.cpp$(DependSuffix): platform/world/islands/hover.cpp
@@ -796,6 +788,14 @@ $(IntermediateDirectory)/platform_world_islands_hover.cpp$(DependSuffix): platfo
 
 $(IntermediateDirectory)/platform_world_islands_hover.cpp$(PreprocessSuffix): platform/world/islands/hover.cpp
 	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/platform_world_islands_hover.cpp$(PreprocessSuffix) platform/world/islands/hover.cpp
+
+$(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix): platform/world/islands/islands.cpp $(IntermediateDirectory)/platform_world_islands_islands.cpp$(DependSuffix)
+	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adr/Dokumenty/C++ workspace/Ninja/platform/world/islands/islands.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/platform_world_islands_islands.cpp$(DependSuffix): platform/world/islands/islands.cpp
+	@$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/platform_world_islands_islands.cpp$(ObjectSuffix) -MF$(IntermediateDirectory)/platform_world_islands_islands.cpp$(DependSuffix) -MM platform/world/islands/islands.cpp
+
+$(IntermediateDirectory)/platform_world_islands_islands.cpp$(PreprocessSuffix): platform/world/islands/islands.cpp
+	$(CXX) $(CXXFLAGS) $(IncludePCH) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/platform_world_islands_islands.cpp$(PreprocessSuffix) platform/world/islands/islands.cpp
 
 $(IntermediateDirectory)/platform_world_brick_rules.cpp$(ObjectSuffix): platform/world/brick/rules.cpp $(IntermediateDirectory)/platform_world_brick_rules.cpp$(DependSuffix)
 	$(CXX) $(IncludePCH) $(SourceSwitch) "/home/adr/Dokumenty/C++ workspace/Ninja/platform/world/brick/rules.cpp" $(CXXFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/platform_world_brick_rules.cpp$(ObjectSuffix) $(IncludePath)
