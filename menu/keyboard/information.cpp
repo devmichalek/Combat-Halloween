@@ -43,16 +43,12 @@ void Information::free()
 	}
 	
 	arrow.free();
-	
-	y_state = 0;
 }
 
 
 
-void Information::load( int top, int screen_w, int screen_h )
+void Information::load( unsigned screen_w, unsigned screen_h, float y )
 {
-	y_state = top;
-	
 	for( int i = 0; i < 8; i++ )
 	{
 		text.push_back( new MyText() );
@@ -100,6 +96,26 @@ void Information::load( int top, int screen_w, int screen_h )
 	
 	arrow.setName( "information-arrow" );
 	arrow.load( "data/menu/arrow.png" );
+	arrow.setScale( 0.8, 0.8 );
+	arrow.setPosition( screen_w -arrow.getWidth() -50, 145 );
+	
+	text[ 0 ]->setPosition( screen_w /1.754, y );
+	text[ 1 ]->setPosition( screen_w /1.25, y );
+	for( unsigned i = 2; i < text.size() -1; i += 2 )
+	{
+		text[ i ]->setPosition( screen_w /1.754, text[ i -2 ]->getBot() + 10 );
+		text[ i +1 ]->setPosition( screen_w /1.25, text[ i -2 ]->getBot() + 10 );
+	}
+	
+	text[ 6 ]->setPosition( text[ 6 ]->getX() , text[ 6 ]->getY() -7 );
+	text[ 7 ]->setPosition( text[ 7 ]->getX() , text[ 7 ]->getY() -8 );
+	
+	
+	info_text[ 0 ]->setPosition( 10, screen_h - info_text[ 0 ]->getHeight() - 20 );
+	for( unsigned i = 1; i < info_text.size(); i ++ )
+	{
+		info_text[ i ]->setPosition( info_text[ i -1 ]->getRight() + 10, info_text[ 0 ]->getY() );
+	}
 }
 
 void Information::draw( sf::RenderWindow &window )
@@ -145,48 +161,4 @@ void Information::fadeout( int j, int min )
 	}
 	
 	arrow.fadeout( j, min );
-}
-
-
-
-void Information::setScale( float s_x, float s_y )
-{
-	for( auto &it :text )
-	{
-		it->setBasicScale( s_x, s_y );
-		it->setScale();
-	}
-	
-	for( auto &it :info_text )
-	{
-		it->setBasicScale( s_x, s_y );
-		it->setScale();
-	}
-	
-	arrow.setBasicScale( s_x, s_y );
-	arrow.setScale();
-}
-
-void Information::setView( int w, int h, int r_x, int r_y )
-{
-	text[ 0 ]->setPosition( w /1.754 +r_x, y_state *text[ 0 ]->getYScale() +r_y );
-	text[ 1 ]->setPosition( w /1.25 +r_x, y_state *text[ 1 ]->getYScale() +r_y );
-	for( unsigned i = 2; i < text.size() -1; i += 2 )
-	{
-		text[ i ]->setPosition( w /1.754 +r_x, text[ i -2 ]->getBot() + 10 *text[ i ]->getYScale() );
-		text[ i +1 ]->setPosition( w /1.25 +r_x, text[ i -2 ]->getBot() + 10 *text[ i ]->getYScale() );
-	}
-	
-	text[ 6 ]->setPosition( text[ 6 ]->getX() , text[ 6 ]->getY() -7 *text[ 6 ]->getYScale() );
-	text[ 7 ]->setPosition( text[ 7 ]->getX() , text[ 7 ]->getY() -8 *text[ 7 ]->getYScale() );
-	
-	
-	info_text[ 0 ]->setPosition( 10 *info_text[ 0 ]->getXScale() +r_x, h - info_text[ 0 ]->getHeight() - 20 *info_text[ 0 ]->getYScale() +r_y );
-	
-	for( unsigned i = 1; i < info_text.size(); i ++ )
-	{
-		info_text[ i ]->setPosition( info_text[ i -1 ]->getRight() + 10 *info_text[ 0 ]->getXScale(), info_text[ 0 ]->getY() );
-	}
-	
-	arrow.setPosition( w -arrow.getWidth() -40 *arrow.getXScale() +r_x, 190 *arrow.getYScale() +r_y );
 }

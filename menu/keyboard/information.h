@@ -19,9 +19,6 @@ class Information
 	vector <MyText*> info_text;
 	MySprite arrow;
 	
-	// Resizing.
-	int y_state;
-	
 public:
 	
 	// Basics.
@@ -29,13 +26,9 @@ public:
     ~Information();
 	void free();
 
-    void load( int top, int screen_w, int screen_h );
+    void load( unsigned screen_w, unsigned screen_h, float y );
     void draw( sf::RenderWindow &window );
 
 	void fadein( int j = 1, int max = 255 );
 	void fadeout( int j = 1, int min = 0 );
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };
