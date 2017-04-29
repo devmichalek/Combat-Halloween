@@ -21,8 +21,6 @@ protected:
 	mutable sf::Uint8 state;
 	mutable MySprite mySprite;
 	
-	float scale;
-	
 public:
 	
 	// Basics.
@@ -30,9 +28,9 @@ public:
     ~Play_button();
 	void free();
 
-    void load( unsigned w, unsigned h );
+    void load( unsigned screen_w, unsigned screen_h );
     void draw( sf::RenderWindow* &window );
-    void handle( sf::Event &event, int r_x, int r_y );
+    void handle( sf::Event &event );
 	
 	void fadein( int i = 1, int max = 255 );
 	void fadeout( int i = 1, int min = 0 );
@@ -41,14 +39,10 @@ public:
 	void setState( int state );	
 	
 	// Getters.
-	const int getBot() const;
-	const int getX() const;
+	const float getBot() const;
+	const float getX() const;
 	const sf::Uint8& getState() const;
 	
 	// Extra.
 	bool nextState() const;
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };

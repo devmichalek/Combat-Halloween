@@ -28,19 +28,16 @@ void Play_button::free()
 	
 	play = true;
 	click.free();
-	scale = 0;
 }
 
 
 
-void Play_button::load( unsigned w, unsigned h )
+void Play_button::load( unsigned screen_w, unsigned screen_h )
 {
-	scale = 0.9;
-	
 	mySprite.setName( "play_button-mySprite" );
 	mySprite.load( "data/menu/play.png", 4 );
-	
-	setView( w, h, 0, 0 );
+	mySprite.setScale( 0.8, 0.8 );
+	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, screen_h /1.875 );
 	
 	click.setID( "play_button-click" );
 	click.load( "data/menu/sfx.wav", 50 );
@@ -51,7 +48,7 @@ void Play_button::draw( sf::RenderWindow* &window )
     window->draw( mySprite.get() );
 }
 
-void Play_button::handle( sf::Event &event, int r_x, int r_y )
+void Play_button::handle( sf::Event &event )
 {
 	if( state != 2 )
 	{
@@ -65,7 +62,7 @@ void Play_button::handle( sf::Event &event, int r_x, int r_y )
 				x = event.mouseMove.x;
 				y = event.mouseMove.y;
 					
-				if( mySprite.checkCollision( x +r_x, y +r_y ) )
+				if( mySprite.checkCollision( x, y ) )
 				{
 					if( state != 2 )
 					{
@@ -80,7 +77,7 @@ void Play_button::handle( sf::Event &event, int r_x, int r_y )
 				x = event.mouseButton.x;
 				y = event.mouseButton.y;
 					
-				if( mySprite.checkCollision( x +r_x, y +r_y ) )
+				if( mySprite.checkCollision( x, y ) )
 				{
 					state = 2;
 					mySprite.setOffset( 2 );
@@ -117,12 +114,12 @@ void Play_button::setState( int state )
 
 
 
-const int Play_button::getBot() const
+const float Play_button::getBot() const
 {
 	return mySprite.getBot();
 }
 
-const int Play_button::getX() const
+const float Play_button::getX() const
 {
 	return mySprite.getX();
 }
@@ -142,17 +139,4 @@ bool Play_button::nextState() const
 	}
 	
 	return false;
-}
-
-
-
-void Play_button::setScale( float s_x, float s_y )
-{
-	mySprite.setBasicScale( s_x, s_y );
-	mySprite.setScale( scale, scale );
-}
-
-void Play_button::setView( unsigned w, unsigned h, int r_x, int r_y )
-{
-	mySprite.setPosition( w/2 - mySprite.getWidth()/2 +r_x, h /1.875 +r_y );
 }
