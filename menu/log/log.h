@@ -21,9 +21,6 @@ class Log :public Click
 	bool locked;
 	
 	MySprite button;
-	float y_state, left_state;
-	float left_buf;
-	float scale;
 	
 public:
 	
@@ -32,8 +29,8 @@ public:
 	~Log();
 	void free();
 	
-	void load( string path, unsigned w, unsigned h, float left, float y );
-	void handle( sf::Event &event, int r_x, int r_y );
+	void load( string path, float x, float y );
+	void handle( sf::Event &event );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int i = 1, int max = 0xFF );
@@ -43,8 +40,4 @@ public:
 	float getRight();
 	const bool& getState();
 	void setExplanator( string line );
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };
