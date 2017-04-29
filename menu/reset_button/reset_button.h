@@ -23,7 +23,6 @@ class Reset_button :public Click
 	
 	bool reset;
 	MySprite button;
-	float scale;
 
 public:
 	
@@ -32,20 +31,15 @@ public:
     ~Reset_button();
 	void free();
 	
-	void load( unsigned w, unsigned h );
-	void handle( sf::Event &event, int r_x, int r_y );
+	void load( unsigned screen_w, unsigned screen_h );
+	void handle( sf::Event &event );
 	void draw( sf::RenderWindow* &window );
 	void drawButton( sf::RenderWindow* &window );
    
-	
 	void fadein( int i = 1, int max = 0xFF );
 	void fadeout( int i = 1, int min = 0 );
 	
 	// Extra.
 	bool doReset();
 	const sf::Uint8& getState() const;
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };

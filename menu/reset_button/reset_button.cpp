@@ -34,35 +34,36 @@ void Reset_button::free()
 	
 	button.free();
 	reset = false;
-	scale = 0;
 }
 
 
 
-void Reset_button::load( unsigned w, unsigned h )
+void Reset_button::load( unsigned screen_w, unsigned screen_h )
 {
-	scale = 0.45;
 	explanator.load( "Reset all data" );
 	
 	button.setName( "reset_button-button" );
     button.load( "data/menu/reset.png", 4 );
+	button.setScale( 0.4, 0.4 );
+	button.setPosition( 5, screen_h -5 -button.getHeight()*2 );
 	
 	mySprite.setName( "reset_button-mySprite" );
     mySprite.load( "data/menu/exit.png" );
 	mySprite.setAlpha( 0xFF );
+	mySprite.setScale( 0.4, 0.4 );
+	mySprite.setPosition( screen_w/2 -mySprite.getWidth()/2, screen_h/2 -mySprite.getHeight()/2 );
 
 	myText.setName( "reset_button-myText" );
 	myText.setFont( "data/menu/BADABB__.TTF", 33, 0xFF, 0xFF, 0xFF );
-	myText.setText( "r-reset all data       b-back" );
+	myText.setText( "r-reset data     b-back" );
 	myText.setAlpha( 0xFF );
+	myText.setPosition( screen_w/2 -myText.getWidth()/2, screen_h/2 -myText.getHeight() +5 );
 	
-	setView( w, h, 0, 0 );
-
 	click.setID( "exit_log-click" );
 	click.load( "data/menu/click.wav", 50 );
 }
 
-void Reset_button::handle( sf::Event &event, int r_x, int r_y )
+void Reset_button::handle( sf::Event &event )
 {
 	static bool rel = false;
 	
@@ -82,6 +83,11 @@ void Reset_button::handle( sf::Event &event, int r_x, int r_y )
 			}
 			else if( event.key.code == sf::Keyboard::B )
 			{
+				if( play )
+				{
+					click.play();
+				}
+				
 				state = 0;
 			}
 		}
@@ -101,10 +107,10 @@ void Reset_button::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 				
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				explanator.run();
-				explanator.focus( x +r_x, y +r_y );
+				explanator.focus( x, y );
 				button.setOffset( 1 );
 			}
 			else
@@ -119,7 +125,7 @@ void Reset_button::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 				
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				button.setOffset( 2 );
 					
@@ -299,27 +305,4 @@ const sf::Uint8& Reset_button::getState() const
 {
 	// printf( "%d\n", state );
 	return state;
-}
-
-
-
-void Reset_button::setScale( float s_x, float s_y )
-{
-	button.setBasicScale( s_x, s_y );
-	button.setScale( scale, scale );
-	
-	mySprite.setBasicScale( s_x, s_y );
-	mySprite.setScale();
-	
-	myText.setBasicScale( s_x, s_y );
-	myText.setScale();
-	
-	explanator.setScale( s_x, s_y );
-}
-
-void Reset_button::setView( unsigned w, unsigned h, int r_x, int r_y )
-{
-	button.setPosition( 10 *(button.getXScale() /scale) +r_x, h -(5 *button.getYScale() /scale) -button.getHeight()*2 +r_y );
-	mySprite.setPosition( w/2 -mySprite.getWidth()/2 +r_x, h/2 -mySprite.getHeight()/2 +r_y );
-	myText.setPosition( w/2 -myText.getWidth()/2 +r_x, h/2 -myText.getHeight() +r_y +(5 *myText.getYScale()) );
 }
