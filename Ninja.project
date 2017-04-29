@@ -432,9 +432,9 @@
       </VirtualDirectory>
       <VirtualDirectory Name="islands">
         <File Name="platform/world/islands/islands.h"/>
-        <File Name="platform/world/islands/islands.cpp"/>
         <File Name="platform/world/islands/hover.h"/>
         <File Name="platform/world/islands/hover.cpp"/>
+        <File Name="platform/world/islands/islands.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="brick">
         <File Name="platform/world/brick/rules.h"/>
