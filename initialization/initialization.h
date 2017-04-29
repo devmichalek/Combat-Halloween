@@ -26,14 +26,10 @@ public:
     ~Initialization();
     void free();
 	
-    void load( int screen_w, int screen_h );
+    void load( unsigned screen_w, unsigned screen_h );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
 	// Extra.
 	bool nextState();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };

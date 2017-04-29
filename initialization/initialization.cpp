@@ -30,7 +30,7 @@ void Initialization::free()
 
 
 
-void Initialization::load( int screen_w, int screen_h )
+void Initialization::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
@@ -93,18 +93,4 @@ bool Initialization::nextState()
 	}
 	
 	return false;
-}
-
-
-
-void Initialization::setScale( float s_x, float s_y )
-{
-	nick_setter.setScale( s_x, s_y );
-	nick_info.setScale( s_x, s_y );
-}
-
-void Initialization::setView( int w, int h, int r_x, int r_y )
-{
-	nick_setter.setView( w, h, r_x, r_y );
-	nick_info.setView( w, h, r_x, r_y );
 }
