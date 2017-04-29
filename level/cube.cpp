@@ -48,9 +48,9 @@ void Cube::free()
 	click.free();
 }
 
-void Cube::reset( int left, int bot )
+void Cube::reset( float x, float y )
 {
-	paper.setPosition( left +40, bot +120 );
+	paper.setPosition( x +40, y +120 );
 	cube.center( paper.getX() -5, paper.getY() -5, paper.getWidth(), paper.getHeight() );
 	
 	flatness_value = 50;
@@ -61,7 +61,9 @@ void Cube::reset( int left, int bot )
 	worldSize.setPosition( paper.getX() +50, paper.getBot() +5 );
 }
 
-void Cube::load( int left, int bot )
+
+
+void Cube::load( float x, float y )
 {
 	free();
 	
@@ -76,14 +78,16 @@ void Cube::load( int left, int bot )
 	
 	paper.setName( "cube-paper" );
 	paper.load( "data/level/paper.png" );
+	paper.setScale( 0.85, 0.85 );
 	
 	cube.setName( "cube-right" );
 	cube.load( "data/level/cube.png", line );
+	cube.setScale( 0.8, 0.8 );
 	
-	flatness.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
-	worldSize.setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
+	flatness.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0xFF, 0xFF );
+	worldSize.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0xFF, 0xFF );
 	
-	reset( left, bot );
+	reset( x, y );
 	
 	click.setID( "cube-click" );
 	click.load( "data/menu/click.wav", 50 );
@@ -234,12 +238,14 @@ int Cube::getWorldSize()
 	return worldSize_value;
 }
 
-int Cube::getTop()
+
+
+float Cube::getTop()
 {
 	return paper.getTop();
 }
 
-int Cube::getRight()
+float Cube::getRight()
 {
 	return paper.getRight();
 }

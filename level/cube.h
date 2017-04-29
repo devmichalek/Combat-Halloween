@@ -39,10 +39,12 @@ public:
 	Cube();
 	~Cube();
 	void free();
-	void reset( int left, int bot );
-	void load( int left, int bot );
+	void reset( float x, float y );
+	
+	void load( float x, float y );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow &window );
+	
 	void fadein( int j = 1, int max = 255 );
 	void fadeout( int j = 1, int min = 0 );
 	
@@ -54,6 +56,6 @@ public:
 	int getFlatness();
 	int getWorldSize();
 	
-	int getTop();
-	int getRight();
+	float getTop();
+	float getRight();
 };
