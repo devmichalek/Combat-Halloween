@@ -23,9 +23,6 @@ class Sound_button :public Click
 	// music/chunk is on/off
 	sf::Uint8 state;
 	
-	float y_state;
-	float scale;
-	
 public:
 	
 	// Basics.
@@ -33,8 +30,8 @@ public:
     ~Sound_button();
 	void free();
 
-	void load( string path, float y, unsigned w );
-	void handle( sf::Event &event, int r_x, int r_y );
+	void load( string path, float y = 0 );
+	void handle( sf::Event &event );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int i = 1, int max = 0xFF );
@@ -42,12 +39,7 @@ public:
 	
 	// In addition.
 	void setState( sf::Uint8 s );
-	int getBot();
+	float getBot();
 	bool isChanged();
 	void setExplanator( string text );
-	float getYScale();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( unsigned w, int r_x, int r_y );
 };

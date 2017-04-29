@@ -33,28 +33,29 @@ void Sound_button::free()
 	state = 0;
 	focus = false;
 	play = true;
-	y_state = 0;
-	scale = 0;
 }
 
 
 
-void Sound_button::load( string path, float y, unsigned w )
+void Sound_button::load( string path, float y )
 {
-	scale = 0.45;
+	float scale = 0.4;
+	
 	button.setName( "sound_button-button" );
 	button.load( path, 4 );
+	button.setScale( scale, scale );
+	button.setPosition( 5 , y );
 	
 	scratch.setName( "sound_button-scratch" );
 	scratch.load( "data/menu/scratch.png" );
-	
-	y_state = y;
+	scratch.setScale( scale, scale );
+	scratch.setPosition( 5 , y );
 	
 	click.setID( "sound_button-click" );
 	click.load( "data/menu/click.wav", 50 );
 }
 
-void Sound_button::handle( sf::Event &event, int r_x, int r_y )
+void Sound_button::handle( sf::Event &event )
 {
 	if( button.getAlpha() == 0xFF )
 	{
@@ -66,10 +67,10 @@ void Sound_button::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseMove.x;
 			y = event.mouseMove.y;
 					
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				explanator.run();
-				explanator.focus( x +r_x, y +r_y );
+				explanator.focus( x, y );
 				button.setOffset( 1 );
 			}
 			else
@@ -85,7 +86,7 @@ void Sound_button::handle( sf::Event &event, int r_x, int r_y )
 			x = event.mouseButton.x;
 			y = event.mouseButton.y;
 					
-			if( button.checkCollision( x +r_x, y +r_y ) )
+			if( button.checkCollision( x, y ) )
 			{
 				focus = true;
 				
@@ -151,9 +152,8 @@ void Sound_button::setState( sf::Uint8 s )
 	state = s;
 }
 
-int Sound_button::getBot()
+float Sound_button::getBot()
 {
-	// printf( "%f %f\n", button.getHeight(), button.getYScale() );
 	return button.getBot();
 }
 
@@ -177,28 +177,4 @@ bool Sound_button::isChanged()
 void Sound_button::setExplanator( string text )
 {
 	explanator.load( text );
-}
-
-float Sound_button::getYScale()
-{
-	return button.getYScale();
-}
-
-
-
-void Sound_button::setScale( float s_x, float s_y )
-{
-	button.setBasicScale( s_x, s_y );
-	button.setScale( scale, scale );
-	
-	scratch.setBasicScale( s_x, s_y );
-	scratch.setScale( scale, scale );
-	
-	explanator.setScale( s_x, s_y );
-}
-
-void Sound_button::setView( unsigned w, int r_x, int r_y )
-{
-	button.setPosition( 10 *button.getXScale() +r_x, y_state *button.getYScale() +r_y );
-	scratch.setPosition( 10 *scratch.getXScale() +r_x, y_state *button.getYScale() +r_y );
 }
