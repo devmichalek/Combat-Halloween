@@ -19,13 +19,9 @@ class Core
 {
     int state;  // state of game
     bool open;
-    // unsigned FPS;
 
     unsigned width;
     unsigned height;
-	
-	unsigned min_width, max_width;
-	unsigned min_height, max_height;
 
     sf::Event event;
     sf::Color color;
@@ -33,7 +29,7 @@ class Core
 
 public:
 
-    Core( unsigned w, unsigned h, int state/*, int FPS = 60*/ );
+    Core( unsigned w, unsigned h, int state );
     ~Core();
 
     void free();
@@ -46,7 +42,6 @@ public:
     void clear();
     void display();
 	
-	bool setView();
     void setVisible( const bool& visible );
     void setColor( const sf::Color& color );
 
@@ -57,8 +52,4 @@ public:
 
     const unsigned getWidth() const;
     const unsigned getHeight() const;
-	int getX() const;
-	int getY() const;
-	float getXScale() const;
-	float getYScale() const;
 };

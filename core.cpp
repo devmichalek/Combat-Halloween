@@ -11,16 +11,13 @@
 #include <stdio.h>
 #include <SDL2/SDL_mixer.h>
 
-Core::Core( unsigned w, unsigned h, int state/*, int FPS*/ )
+Core::Core( unsigned w, unsigned h, int state )
 {
 	this->state = state;
 	open = true;
 	
-	// this->FPS = FPS;
-    max_width = width = w;
-	max_height = height = h;
-	min_width = w /5 *4;
-	min_height = h /5 *4;
+    width = w;
+	height = h;
 	
 	// printf( /*"\x1B[1mFPS\x1B[0m=%d  */"\x1B[33mscreen_width\x1B[0m=%d  \x1B[33mscreen_height\x1B[0m=%d\n"/*, FPS*/, width, height );
 
@@ -52,8 +49,6 @@ void Core::free()
 
         width = 0;
         height = 0;
-		min_width = max_width = 0;
-		min_height = max_height = 0;
 
         color.r = 0;
         color.g = 0;
@@ -64,14 +59,13 @@ void Core::free()
     }
 }
 
-
 bool Core::load( string title )
 {
     bool success = true;
 
     free();
 
-    window = new sf::RenderWindow( sf::VideoMode( width, height ), title, sf::Style::Titlebar | sf::Style::Close | sf::Style::Resize );
+    window = new sf::RenderWindow( sf::VideoMode( width, height ), title, sf::Style::Titlebar | sf::Style::Close );
     if( window == NULL )
     {
         printf( "Not created window!\n" );
@@ -89,14 +83,13 @@ bool Core::load( string title )
 		}
 		else
 		{
-			Mix_AllocateChannels(0xFF);
+			Mix_AllocateChannels( 0xFF );
 		}
 	}
 
 
     return success;
 }
-
 
 
 
@@ -122,25 +115,7 @@ void Core::display()
     window->display();
 }
 
-bool Core::setView()
-{
-	if( event.type == sf::Event::Resized )
-	{
-		if( window->getSize().x < min_width || window->getSize().y < min_height )
-		{
-			window->setSize( sf::Vector2u( min_width, min_height ) );
-		}
-		
-		width = window->getSize().x;
-		height = window->getSize().y;
-		
-		window->setView(sf::View(window->getView().getCenter(), sf::Vector2f((float)event.size.width, (float)event.size.height)));
-		
-		return true;
-	}
-	
-	return false;
-}
+
 
 void Core::setVisible( const bool& visible )
 {
@@ -177,50 +152,4 @@ const unsigned Core::getWidth() const
 const unsigned Core::getHeight() const
 {
     return height;
-}
-
-int Core::getX() const
-{
-	return max_width/2 -window->getSize().x/2;
-}
-
-int Core::getY() const
-{
-	// printf( "%d\n", -(height/2 -window->getSize().y/2) );
-	return max_height/2 -window->getSize().y/2;
-}
-
-float Core::getXScale() const
-{
-	// printf( "%f %f\n", static_cast <float> (window->getSize().y) /max_height, static_cast <float> (window->getSize().x) /max_width );
-	
-	if( static_cast <float> (window->getSize().y) /max_height <
-		static_cast <float> (window->getSize().x) /max_width )
-	{
-		return static_cast <float> (window->getSize().y) /max_height;
-	}
-	
-	if( window->getSize().x > max_width )
-	{
-		return 1;
-	}
-	
-	// printf( "%f\n", static_cast <float> (window->getSize().x) /max_width );
-	return static_cast <float> (window->getSize().x) /max_width;
-}
-
-float Core::getYScale() const
-{
-	if( static_cast <float> (window->getSize().x) /max_width <
-		static_cast <float> (window->getSize().y) /max_height )
-	{
-		return static_cast <float> (window->getSize().x) /max_width;
-	}
-	
-	if( window->getSize().y > max_height )
-	{
-		return 1;
-	}
-	
-	return static_cast <float> (window->getSize().y) /max_height;
 }
