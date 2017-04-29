@@ -35,7 +35,7 @@ void Nick_info::free()
 
 
 
-void Nick_info::load( int w, int h )
+void Nick_info::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
@@ -53,6 +53,10 @@ void Nick_info::load( int w, int h )
 	
 	texts[ 2 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 20, 0xFF, 0xFF, 0xFF );
 	texts[ 2 ]->setText( "a-z, 1-9, no space, 3-11 small characters" );
+	
+	texts[ 0 ]->setPosition( screen_w /2 -texts[ 0 ]->getWidth() /2, screen_h /3.5 );
+	texts[ 1 ]->setPosition( screen_w /2 -texts[ 1 ]->getWidth() /2, screen_h /1.6 );
+	texts[ 2 ]->setPosition( 5, screen_h -texts[ 2 ]->getHeight() -8 );
 }
 
 void Nick_info::draw( sf::RenderWindow* &window )
@@ -91,27 +95,4 @@ sf::Uint8 Nick_info::getAlpha()
 	}
 	
 	return 0;
-}
-
-
-
-void Nick_info::setScale( float s_x, float s_y )
-{
-	// printf( "%f %f\n", s_x, s_y );
-	
-	for( auto it: texts )
-	{
-		it->setBasicScale( s_x, s_y );
-		it->setScale();
-	}
-}
-
-void Nick_info::setView( int w, int h, int r_x, int r_y )
-{
-	if( !texts.empty() )
-	{
-		texts[ 0 ]->setPosition( w /2 -texts[ 0 ]->getWidth() /2 +r_x, h /3.5 +r_y );
-		texts[ 1 ]->setPosition( w /2 -texts[ 1 ]->getWidth() /2 +r_x, h /1.7 +r_y );
-		texts[ 2 ]->setPosition( 5 +r_x, h -texts[ 2 ]->getHeight() -8 +r_y );
-	}
 }

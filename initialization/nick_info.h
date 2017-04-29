@@ -22,7 +22,7 @@ public:
 	~Nick_info();
 	void free();
 	
-	void load( int w, int h );
+	void load( unsigned screen_w, unsigned screen_h );
     void draw( sf::RenderWindow* &window );
 	
 	void fadein( int i = 1, int max = 0xFF );
@@ -30,8 +30,4 @@ public:
 	
 	// Additional.
 	sf::Uint8 getAlpha();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };

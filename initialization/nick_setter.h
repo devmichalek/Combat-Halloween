@@ -32,7 +32,7 @@ public:
 	~Nick_setter();
 	void free();
 	
-	void load( int w, int h );
+	void load( unsigned screen_w, unsigned screen_h );
     void handle( sf::Event &event );
     void draw( sf::RenderWindow* &window );
 	
@@ -44,8 +44,4 @@ public:
 	bool isPossibleKey( sf::Event &event ); // Checks if that key is possible.
 	string getName( int n );				// Get string name of this key.
 	bool nextState();						// Are we ready?
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };
