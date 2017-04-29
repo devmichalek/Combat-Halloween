@@ -28,15 +28,18 @@ void Nick::free()
 
 
 
-void Nick::load( unsigned w, unsigned h )
+void Nick::load( unsigned screen_w, unsigned screen_h )
 {
 	free();
 	
 	label.setName( "nick-label" );
 	label.load( "data/initialization/fancy_label.png" );
+	label.setScale( 0.35, 0.35 );
+	label.setPosition( screen_w -label.getWidth() -5, screen_h -label.getHeight() );
 	
 	text.setName( "nick-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 15, 0xFF, 0xFF, 0xFF );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 13, 0xFF, 0xFF, 0xFF );
+	
 	setNick();
 }
 
@@ -74,22 +77,5 @@ void Nick::setNick()
 		text.setText( line );
 	}
 	file.free();
-	text.center( label.getWidth(), label.getHeight(), label.getX(), label.getY() );
-}
-
-
-
-void Nick::setScale( float s_x, float s_y )
-{
-	label.setBasicScale( s_x, s_y );
-	label.setScale( 0.4, 0.4 );
-	
-	text.setBasicScale( s_x, s_y );
-	text.setScale();
-}
-
-void Nick::setView( unsigned w, unsigned h, int r_x, int r_y )
-{
-	label.setPosition( w -label.getWidth() -(5 *label.getXScale() /0.4) +r_x, h -label.getHeight() +r_y );
 	text.center( label.getWidth(), label.getHeight(), label.getX(), label.getY() );
 }

@@ -24,7 +24,7 @@ public:
 	~Nick();
 	void free();
 	
-	void load( unsigned w, unsigned h );
+	void load( unsigned screen_w, unsigned screen_h );
 	void draw( sf::RenderWindow &window );
 	
 	void fadein( int i = 1, int max = 255 );
@@ -32,8 +32,4 @@ public:
 	
 	// In addition.
 	void setNick();
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( unsigned w, unsigned h, int r_x, int r_y );
 };
