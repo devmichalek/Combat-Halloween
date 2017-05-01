@@ -6,7 +6,7 @@
 `
 apt-get install libmysqlcppconn-dev
 `<br/><br/>
-2. Error while writing c++ program [here](http://stackoverflow.com/questions/14604228/mysql-h-file-cant-be-found), it was about header instead of mysql.h this header mysql/mysql.h.<br/><br/>
+2. Error while writing c++ program [here](http://stackoverflow.com/questions/14604228/mysql-h-file-cant-be-found), it was about header instead of ~~mysql.h~~ -> mysql/mysql.h.<br/><br/>
 3. I forgot about [linker](http://stackoverflow.com/questions/9645844/mysql-with-c-error-undefined-reference-to-mysql-init), I 
 added -lmysqlclient.<br/><br/>
 4. Then I realized that if I want to do database stuff I need to do it local, sending ready-made php file for your online 
