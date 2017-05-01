@@ -8,8 +8,8 @@ apt-get install libmysqlcppconn-dev
 `<br/><br/>
 II. Error while writing c++ program [here](http://stackoverflow.com/questions/14604228/mysql-h-file-cant-be-found), it was about header instead of ~~mysql.h~~ -> mysql/mysql.h.<br/><br/>
 III. I forgot about [linker](http://stackoverflow.com/questions/9645844/mysql-with-c-error-undefined-reference-to-mysql-init), I added -lmysqlclient.<br/><br/>
-IV. Then I realized that if I want to do database stuff I need to do it local, sending ready-made php file for your online 
-website is time-consuming. I installed xampp from [here](https://www.apachefriends.org/pl/index.html). Then hey, why mysql doesn't want to start here is the [reason](http://stackoverflow.com/questions/22971248/xampp-phpmyadmin-access-denied-error2002). Afterward [how to change file with sudo](http://www.linuxforums.org/forum/ubuntu-linux/108324-how-do-i-open-edit-text-file-sudo.html).
+IV. Then I realized that if I want to do database stuff I need to do it local, sending ready-made php file into your online 
+website is time-consuming. I installed [xampp](https://www.apachefriends.org/pl/index.html). Then mysql didn't wanter to start. Here is the [reason](http://stackoverflow.com/questions/22971248/xampp-phpmyadmin-access-denied-error2002). Afterward how to change .txt file with sudo [here](http://www.linuxforums.org/forum/ubuntu-linux/108324-how-do-i-open-edit-text-file-sudo.html).
 `
 sudo nano /path-to-file/file-name
 `<br/><br/>
