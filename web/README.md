@@ -1,5 +1,5 @@
 ## Tools
-[Bootstrap Button Generator](http://bootsnipp.com/buttons)
+1. [Bootstrap Button Generator](http://bootsnipp.com/buttons)
 <br/>
 ## How I started xampp [linux]
 1. I started by installing [MySQL Connector/C++](https://askubuntu.com/questions/165868/installing-mysql-connector-c), I used 
