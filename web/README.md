@@ -5,8 +5,9 @@
 1. I started by installing [MySQL Connector/C++](https://askubuntu.com/questions/165868/installing-mysql-connector-c), I used 
 `
 apt-get install libmysqlcppconn-dev
-` <br/>
-2. Error while writing c++ program [here](http://stackoverflow.com/questions/14604228/mysql-h-file-cant-be-found), it was about header 'mysql.h' -> 'mysql/mysql.h'.
+`
+<br/>
+2. Error while writing c++ program [here](http://stackoverflow.com/questions/14604228/mysql-h-file-cant-be-found), it was about header instead of mysql.h this header mysql/mysql.h.
 <br/>
 3. I forgot about [linker](http://stackoverflow.com/questions/9645844/mysql-with-c-error-undefined-reference-to-mysql-init), I 
 added -lmysqlclient.
