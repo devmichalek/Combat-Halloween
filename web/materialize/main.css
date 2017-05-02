@@ -1,0 +1,100 @@
+body {
+
+    background: url(images/bg.png);
+    background-repeat: repeat;
+}
+
+.navbar-fixed {
+	margin-bottom: 0;
+}
+
+@font-face {
+	font-family: badabb;
+	src: url( "fonts/BADABB__.TTF" );
+}
+
+@font-face {
+	font-family: japokki;
+	src: url( "fonts/Jaapokki-Regular.otf" );
+}
+
+nav {
+  background-color: #253234;
+}
+
+.page-footer {
+	font-family: japokki;
+	font-size: 100%;
+	color: #FCFEFD;
+	background-color: #253234;
+}
+
+.parallax-container {
+      height: 350px;
+    }
+
+a.nav {
+	font-family: japokki;
+	font-size: 150%;
+	color: #FCFEFD;
+}
+
+a.cardy {
+	font-family: japokki;
+	font-size: 100%;
+	color: #FCFEFD;
+}
+
+a.nav-main {
+	font-family: japokki;
+	font-size: 250%;
+	color: #FCFEFD;
+	padding-left: 50px;
+}
+
+a.nav-button {
+	font-family: japokki;
+	font-size: 100%;
+	color: #FCFEFD;
+}
+
+
+p.info {
+	font-family: japokki;
+	font-size: 125%;
+	color: #424242;
+}
+
+
+h2 {
+	font-family: japokki;
+	font-size: 240%;
+	color: #424242;
+}
+
+h4 {
+	font-family: japokki;
+	color: #FCFEFD;
+}
+
+h4.modcon {
+	font-family: japokki;
+	font-size: 150%;
+	color: black;
+}
+
+#sidenav-overlay {
+   left: 300px;
+}
+
+
+
+.thin-text {
+	font-family: japokki;
+	font-size: 175%;
+	font-weight: 300;
+	background-color: rgba( 20, 20, 20, 0.2 );
+	padding: 25px;
+	border-radius: 10px
+};
+
