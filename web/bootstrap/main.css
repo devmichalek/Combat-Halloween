@@ -1,0 +1,91 @@
+body {
+    background: url(images/bg.png);
+    background-repeat: repeat;
+}
+
+@font-face {
+	font-family: badabb;
+	src: url( "fonts/BADABB__.TTF" );
+}
+
+@font-face {
+	font-family: japokki;
+	src: url( "fonts/Jaapokki-Regular.otf" );
+}
+
+a.nav {
+	font-family: japokki;
+	font-size: 150%;
+	color: white;
+}
+
+
+.list {
+	font-size: 120%;
+}
+
+.navbar-inverse {
+	border-radius: 0 0 0 0;
+}
+
+.navbar-inverse .navbar-brand {
+    font-family: badabb;
+	font-size: 270%;
+	color: white;
+}
+
+.navbar-inverse .navbar-nav > .active {
+	color: #000;
+	background: rgba(255,0,0,0);
+ }
+ .navbar-inverse .navbar-nav > .active > a, 
+ .navbar-inverse .navbar-nav > .active > a:hover, 
+ .navbar-inverse .navbar-nav > .active > a:focus {
+	color: #000;
+	background: #ddf8ff;
+ }
+
+ .navbar.navbar-inverse {
+  margin-bottom: 0;
+}
+
+ .carousel img {
+	min-width: 100%;
+	min-height: 100%;
+}
+
+h3.slider {
+	font-family: japokki;
+	font-size: 300%;
+	font-size: 3vw;
+	color: white;
+}
+
+p.slider {
+	font-family: japokki;
+	font-size: 150%;
+	font-size: 1.5vw;
+	color: white;
+}
+
+/*
+h3.panel {
+	font-family: japokki;
+	background-color: rgba(0,0,0,0);
+	margin-bottom: 0;
+	margin-top: 0.5vw;
+}
+
+
+.panel {
+	margin-top: 2vw;
+}
+*/
+
+p.jmp {
+	margin-left: 2px;
+}
+
+#jumbo {
+	margin-top: 2vw;
+}
