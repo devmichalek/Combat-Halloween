@@ -213,16 +213,26 @@
   <VirtualDirectory Name="level">
     <File Name="level/level.h"/>
     <File Name="level/level.cpp"/>
-    <File Name="level/difficulty.h"/>
-    <File Name="level/difficulty.cpp"/>
-    <File Name="level/cube.h"/>
-    <File Name="level/cube.cpp"/>
-    <File Name="level/choice.h"/>
-    <File Name="level/choice.cpp"/>
-    <File Name="level/character.h"/>
-    <File Name="level/character.cpp"/>
-    <File Name="level/backtomenu.h"/>
-    <File Name="level/backtomenu.cpp"/>
+    <VirtualDirectory Name="cube">
+      <File Name="level/cube/difficulty.h"/>
+      <File Name="level/cube/difficulty.cpp"/>
+      <File Name="level/cube/cube.h"/>
+      <File Name="level/cube/cube.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="character">
+      <File Name="level/character/character.h"/>
+      <File Name="level/character/character.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="choice">
+      <File Name="level/choice/choice.h"/>
+      <File Name="level/choice/choice.cpp"/>
+      <File Name="level/choice/backtomenu.h"/>
+      <File Name="level/choice/backtomenu.cpp"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="bonus_choice">
+      <File Name="level/bonus_choice/bonus_choice.h"/>
+      <File Name="level/bonus_choice/bonus_choice.cpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="panel">
     <File Name="panel/show_scores.h"/>
