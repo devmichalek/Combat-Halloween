@@ -21,6 +21,7 @@ Level::Level()
 	character = new Character;
 	cube = new Cube;
 	difficulty = new Difficulty;
+	bonus_choice = new Bonus_choice;
 }
 
 Level::~Level()
@@ -38,6 +39,7 @@ void Level::free()
 	delete character;
 	delete cube;
 	delete difficulty;
+	delete bonus_choice;
 }
 
 
@@ -50,7 +52,8 @@ void Level::load( unsigned screen_w, unsigned screen_h )
 	background->load( "data/menu/background.png" );
 	music->load( "data/level/music.mp3" );
 	backtomenu->load( screen_w );
-	choice->load( screen_w, screen_h );
+	choice->load();
+	bonus_choice->load();
 }
 
 void Level::loadCharacter()
@@ -61,6 +64,7 @@ void Level::loadCharacter()
 void Level::loadWorlds()
 {
 	choice->reset( screen_w, screen_h );
+	bonus_choice->reset( choice->getLeft(), choice->getBot(), choice->getWidth() );
 	
 	cube->load( choice->getLeft(), choice->getBot() );
 	difficulty->load( cube->getRight(), cube->getTop() );
@@ -74,6 +78,7 @@ void Level::handle( sf::Event &event )
 		cube->handle( event );
 		difficulty->handle( event );
 		backtomenu->handle( event );
+		bonus_choice->handle( event );
 	}
 	else if( !character->nextState() )
 	{
@@ -100,6 +105,7 @@ void Level::draw( sf::RenderWindow* &window )
 			character->move( -10, 0 );
 			cube->move( -10, -screen_w );
 			difficulty->move( -10, -screen_w );
+			bonus_choice->move( -10, -screen_w );
 			if( choice->move( -10, -screen_w ) )
 			{
 				backtomenu->setState( 1 );
@@ -114,6 +120,7 @@ void Level::draw( sf::RenderWindow* &window )
 	difficulty->draw( *window );
 	character->draw( window );
 	backtomenu->draw( *window );
+	bonus_choice->draw( *window );
 	
 	if( backtomenu->getState() == 0 )
 	{
@@ -127,6 +134,7 @@ void Level::draw( sf::RenderWindow* &window )
 		character->fadein( v );
 		cube->fadein( v );
 		difficulty->fadein( v );
+		bonus_choice->fadein( v );
 	}
 	else if( backtomenu->getState() == -1 )
 	{
@@ -139,6 +147,7 @@ void Level::draw( sf::RenderWindow* &window )
 		character->fadeout( v );
 		cube->fadeout( v );
 		difficulty->fadeout( v );
+		bonus_choice->fadeout( v );
 		
 		if( choice->getAlpha() == 0 )
 		{
@@ -162,6 +171,7 @@ void Level::draw( sf::RenderWindow* &window )
 			character->fadeout( v );
 			cube->fadeout( v );
 			difficulty->fadeout( v );
+			bonus_choice->fadeout( v );
 			
 			if( choice->getAlpha() == 0 )
 			{
@@ -178,6 +188,7 @@ void Level::draw( sf::RenderWindow* &window )
 		character->move( v, screen_w );
 		cube->move( v, 0 );
 		difficulty->move( v, 0 );
+		bonus_choice->move( v, 0 );
 		if( choice->move( v, 0 ) )
 		{
 			choice->reset( screen_w, screen_h );
@@ -198,6 +209,7 @@ void Level::setSound()
 		character->turnOff();
 		cube->turnOff();
 		difficulty->turnOff();
+		bonus_choice->turnOff();
 	}
 	else
 	{
@@ -206,6 +218,7 @@ void Level::setSound()
 		character->turnOn();
 		cube->turnOn();
 		difficulty->turnOn();
+		bonus_choice->turnOn();
 		
 		// Set chunk volume
 		backtomenu->setVolume( sound.getChunkVolume() );
@@ -213,6 +226,7 @@ void Level::setSound()
 		character->setVolume( sound.getChunkVolume() );
 		cube->setVolume( sound.getChunkVolume() );
 		difficulty->setVolume( sound.getChunkVolume() );
+		bonus_choice->setVolume( sound.getChunkVolume() );
 	}
 	
 	// Set music volume
@@ -257,6 +271,7 @@ void Level::reset()
 	character->reset( screen_w, screen_h );
 	cube->reset( choice->getLeft(), choice->getBot() );
 	difficulty->load( cube->getRight(), cube->getTop() );
+	bonus_choice->reset( choice->getLeft(), choice->getBot(), choice->getWidth() );
 }
 
 void Level::reloadMusic()
@@ -270,6 +285,11 @@ void Level::reloadMusic()
 int Level::getWorld()
 {
 	return choice->getResult() +3;
+}
+
+int Level::getBonus_world()
+{
+	return bonus_choice->getResult();
 }
 
 int Level::getCharacter()

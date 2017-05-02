@@ -11,11 +11,12 @@
 
 #include "sound/sound.h"
 #include "sound/music.h"
-#include "backtomenu.h"
-#include "choice.h"
-#include "character.h"
-#include "cube.h"
-#include "difficulty.h"
+#include "choice/backtomenu.h"
+#include "choice/choice.h"
+#include "character/character.h"
+#include "cube/cube.h"
+#include "cube/difficulty.h"
+#include "bonus_choice/bonus_choice.h"
 
 class Level
 {
@@ -31,6 +32,7 @@ class Level
 	Character* character;
 	Cube* cube;
 	Difficulty* difficulty;
+	Bonus_choice* bonus_choice;
 	
 public:
 
@@ -53,6 +55,7 @@ public:
 	
 	
 	int getWorld();
+	int getBonus_world();
 	int getCharacter();
 	int getWorldsize();
 	int getFlatness();
