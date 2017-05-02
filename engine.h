@@ -32,7 +32,8 @@ class Engine
 		WINTER,
 		DESERT,
 		FUTURE,
-		PANEL
+		PANEL,
+		DRAGON
 	};
 	
     Core* core;
