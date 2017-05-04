@@ -1,7 +1,4 @@
 # Own tips
-## Tools
-I. [Bootstrap Button Generator](http://bootsnipp.com/buttons)
-<br/>
 ## How I started xampp [linux]
 I. I started by installing [MySQL Connector/C++](https://askubuntu.com/questions/165868/installing-mysql-connector-c), I used 
 `
@@ -15,3 +12,7 @@ website is time-consuming. I installed [xampp](https://www.apachefriends.org/pl/
 sudo nano /path-to-file/file-name
 `<br/><br/>
 V. Now I move on with [this](https://www.youtube.com/watch?v=siQCWPxDtMo&t=1179s)
+
+## C++, MySQL
+I. So i tried connect via c++ with online mySQL database, I ended by "error 2013" - 02.05.2017. <br/>
+Linker:`-lmysqlclient`
