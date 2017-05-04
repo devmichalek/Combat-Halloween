@@ -14,5 +14,9 @@ sudo nano /path-to-file/file-name
 V. Now I move on with [this](https://www.youtube.com/watch?v=siQCWPxDtMo&t=1179s)
 
 ## C++, MySQL
-I. So i tried connect via c++ with online mySQL database, I ended by "error 2013" - 02.05.2017. <br/>
-Linker:`-lmysqlclient`
+I. So i tried connect via c++ with online mySQL database. I ended by "error 2013" - 02.05.2017. <br/>
+Linker:`-lmysqlclient` <br/>
+
+## MySQL C++ connector
+I. I tried with C++ connector but this also doent's seem to work. I laid back by "error " -03.05.2017. <br/>
+Linker: `-lmysqlcppconn` <br/>
