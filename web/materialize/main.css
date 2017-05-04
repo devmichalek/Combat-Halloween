@@ -4,10 +4,6 @@ body {
     background-repeat: repeat;
 }
 
-.navbar-fixed {
-	margin-bottom: 0;
-}
-
 @font-face {
 	font-family: badabb;
 	src: url( "fonts/BADABB__.TTF" );
@@ -19,7 +15,17 @@ body {
 }
 
 nav {
-  background-color: #253234;
+  background-color: #253234 !important;
+}
+
+tbody.member {
+	font-family: japokki;
+	font-size: 120%;
+}
+
+thead.tableheader {
+	font-family: japokki;
+	font-size: 150%;
 }
 
 .page-footer {
@@ -47,9 +53,9 @@ a.cardy {
 
 a.nav-main {
 	font-family: japokki;
-	font-size: 250%;
+	font-size: 225%;
 	color: #FCFEFD;
-	padding-left: 50px;
+	padding-left: 10px;
 }
 
 a.nav-button {
@@ -96,5 +102,4 @@ h4.modcon {
 	background-color: rgba( 20, 20, 20, 0.2 );
 	padding: 25px;
 	border-radius: 10px
-};
-
+}
