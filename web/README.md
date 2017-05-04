@@ -14,9 +14,16 @@ sudo nano /path-to-file/file-name
 V. Now I move on with [this](https://www.youtube.com/watch?v=siQCWPxDtMo&t=1179s)
 
 ## C++, MySQL
-I. So i tried connect via c++ with online mySQL database. I ended by "error 2013" - 02.05.2017. <br/>
+I. So i tried connect via c++ with online mySQL database. I ended by "Error: 2003, Can't connect to MySQL server" - 02.05.2017. <br/>
 Linker:`-lmysqlclient` <br/>
 
 ## MySQL C++ connector
-I. I tried with C++ connector but this also doent's seem to work. I laid back by "error " -03.05.2017. <br/>
+I. I tried with C++ connector but this also doent's seem to work. I laid back by "ERR: Can't connect to MySQL server on (110)" -03.05.2017. <br/>
 Linker: `-lmysqlcppconn` <br/>
+
+## SFML Network
+I. Still without any experience I started sfml network. I quickly got sneaky and agan laid back with this -04.05.2017. <br/>
+Linker: `;-lsfml-network` <br/>
+
+## Curl - Final Solution
+I. 
