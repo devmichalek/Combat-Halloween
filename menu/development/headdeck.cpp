@@ -56,8 +56,8 @@ void Headdeck::load( unsigned screen_w, unsigned screen_h, float y )
 	
 	// Set line.
 	line.setName( "headdeck-line" );
-	line.create( 2, 360 );
-	line.setPosition( screen_w /1.5, y -25 );
+	line.create( 2, screen_h /1.9 );
+	line.setPosition( screen_w /1.5, y -18 );
 	
 	// Set texts.
 	for( unsigned i = 0; i < AMOUNT; i++ )
@@ -87,7 +87,7 @@ void Headdeck::load( unsigned screen_w, unsigned screen_h, float y )
 	for( int i = 0; i < 4; i++ )
 	{
 		heads.push_back( new Head() );
-		heads[ i ]->load( i, screen_w, 80*i +y );
+		heads[ i ]->load( i, screen_w, (screen_h /8)*i +y );
 	}
 	
 	// Reload.

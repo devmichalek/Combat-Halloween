@@ -25,7 +25,7 @@ public:
 	void free();
 	void reset();
 	
-	void load( unsigned screen_w, unsigned screen_h );
+	void load( unsigned screen_w, unsigned screen_h, float title_y );
 	void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	
@@ -43,8 +43,4 @@ public:
 	void moveMembers( vector <Member*> &m, float distance );
 	void fadeinMembers( vector <Member*> &m, int i = 1, int max = 255 );
 	void fadeoutMembers( vector <Member*> &m, int i = 1, int min = 0 );
-	
-	// Window.
-	void setScale( float s_x, float s_y );
-	void setView( int w, int h, int r_x, int r_y );
 };

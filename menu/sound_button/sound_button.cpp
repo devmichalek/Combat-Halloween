@@ -39,17 +39,17 @@ void Sound_button::free()
 
 void Sound_button::load( string path, float y )
 {
-	float scale = 0.4;
+	float scale = 0.5;
 	
 	button.setName( "sound_button-button" );
 	button.load( path, 4 );
 	button.setScale( scale, scale );
-	button.setPosition( 5 , y );
+	button.setPosition( 10 , y );
 	
 	scratch.setName( "sound_button-scratch" );
 	scratch.load( "data/menu/scratch.png" );
 	scratch.setScale( scale, scale );
-	scratch.setPosition( 5 , y );
+	scratch.setPosition( 10 , y );
 	
 	click.setID( "sound_button-click" );
 	click.load( "data/menu/click.wav", 50 );

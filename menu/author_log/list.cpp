@@ -55,7 +55,7 @@ void List::reset()
 
 
 
-void List::load( unsigned screen_w, unsigned screen_h )
+void List::load( unsigned screen_w, unsigned screen_h, float title_y )
 {
 	free();
 	
@@ -65,7 +65,7 @@ void List::load( unsigned screen_w, unsigned screen_h )
 	button.setScale( 0.85, 0.85 );
 	
 	// Setting main x.
-	int start_x = 50;
+	int start_x = screen_w /20;
 	categories_x.push_back( start_x );
 	categories_x.push_back( start_x );
 	categories_x.push_back( start_x );
@@ -88,11 +88,11 @@ void List::load( unsigned screen_w, unsigned screen_h )
 		}
 	}
 	file.free();
-	categories[ 0 ]->setPosition( categories_x[ 0 ], 150 );
+	categories[ 0 ]->setPosition( categories_x[ 0 ], title_y +20 );
 	categories[ 1 ]->setPosition( categories_x[ 1 ], 290 );
 	categories[ 2 ]->setPosition( categories_x[ 2 ], 410 );
-	categories[ 3 ]->setPosition( categories_x[ 3 ], 150 );
-	categories[ 4 ]->setPosition( categories_x[ 4 ], 150 );
+	categories[ 3 ]->setPosition( categories_x[ 3 ], title_y +20 );
+	categories[ 4 ]->setPosition( categories_x[ 4 ], title_y +20 );
 	categories[ 5 ]->setPosition( categories_x[ 5 ], 330 );
 	
 	// Load developers txt file.
@@ -258,9 +258,9 @@ void List::fillMembers( vector <Member*> &m, string path, int which )
 			
 			int start_y = 0;
 			if( m.size() > 1 )
-				start_y = m[ m.size() -2 ]->getY() +35;
+				start_y = m[ m.size() -2 ]->getY() +40;
 			else
-				start_y = categories[ which ]->getBot() +20;
+				start_y = categories[ which ]->getBot() +25;
 			m[ m.size() -1 ]->setPosition( categories_x[ which ] +5, start_y );
 		}
 	}
@@ -370,16 +370,4 @@ void List::fadeoutMembers( vector <Member*> &m, int i, int min )
 	{
 		it->fadeout( i, min );
 	}
-}
-
-
-
-void setScale( float s_x, float s_y )
-{
-	
-}
-
-void setView( int w, int h, int r_x, int r_y )
-{
-	
 }

@@ -31,12 +31,12 @@ void Author::reset()
 
 
 
-void Author::load( unsigned screen_w, unsigned screen_h )
+void Author::load( unsigned screen_w, unsigned screen_h, float title_y )
 {
 	free();
 	
 	scroll.load( screen_w, screen_h );
-	list.load( screen_w, screen_h );
+	list.load( screen_w, screen_h, title_y );
 	author_info.load( screen_w, screen_h );
 }
 

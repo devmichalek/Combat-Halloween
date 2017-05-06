@@ -42,15 +42,17 @@ void Reset_button::load( unsigned screen_w, unsigned screen_h )
 {
 	explanator.load( "Reset all data" );
 	
+	float scale = 0.5;
+	
 	button.setName( "reset_button-button" );
     button.load( "data/menu/reset.png", 4 );
-	button.setScale( 0.4, 0.4 );
-	button.setPosition( 5, screen_h -5 -button.getHeight()*2 );
+	button.setScale( scale, scale );
+	button.setPosition( 10, screen_h -10 -button.getHeight()*2 );
 	
 	mySprite.setName( "reset_button-mySprite" );
     mySprite.load( "data/menu/exit.png" );
 	mySprite.setAlpha( 0xFF );
-	mySprite.setScale( 0.4, 0.4 );
+	mySprite.setScale( 0.55, 0.55 );
 	mySprite.setPosition( screen_w/2 -mySprite.getWidth()/2, screen_h/2 -mySprite.getHeight()/2 );
 
 	myText.setName( "reset_button-myText" );

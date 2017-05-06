@@ -94,13 +94,13 @@ void Development::load( unsigned screen_w, unsigned screen_h, float y )
 	}
 	file.free();
 	
-	int space = 60;
+	int space = screen_h /11;
 	int max = 6;
 	
 	for( int i = 0; i < max; i++ )
 	{
 		develops.push_back( new Develop() );
-		develops[ develops.size() -1 ]->load( i, screen_w, y +65 +( i*space ) );
+		develops[ develops.size() -1 ]->load( i, screen_w, y +(screen_h/9) +( i*space ) );
 	}
 	
 	for( unsigned i = 0; i < AMOUNT; i++ )

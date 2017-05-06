@@ -26,7 +26,7 @@ public:
     ~Information();
 	void free();
 
-    void load( unsigned screen_w, unsigned screen_h, float y );
+    void load( unsigned screen_w, unsigned screen_h, float y, float save_y );
     void draw( sf::RenderWindow &window );
 
 	void fadein( int j = 1, int max = 255 );

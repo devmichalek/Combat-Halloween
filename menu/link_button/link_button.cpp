@@ -44,8 +44,8 @@ void Link_button::load( string path, float x, float y )
 {
 	button.setName( "link_button-" + path );
     button.load( path, 4 );
-	button.setScale( 0.4, 0.4 );
-	button.setPosition( x -button.getWidth() -5, y );
+	button.setScale( 0.5, 0.5 );
+	button.setPosition( x -button.getWidth() -10, y );
 	
 	if( locked )
 	{

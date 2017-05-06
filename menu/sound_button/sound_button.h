@@ -30,7 +30,7 @@ public:
     ~Sound_button();
 	void free();
 
-	void load( string path, float y = 0 );
+	void load( string path, float y = 10 );
 	void handle( sf::Event &event );
 	void draw( sf::RenderWindow* &window );
 	

@@ -41,7 +41,7 @@ void Log::load( string path, float x, float y )
 {
 	button.setName( "log-button" );
     button.load( "data/menu/" + path + ".png", 4 );
-	button.setScale( 0.4, 0.4 );
+	button.setScale( 0.5, 0.5 );
 	button.setPosition( x, y );
 	
 	// if is locked we don't have reason to load futher
@@ -65,8 +65,9 @@ void Log::draw( sf::RenderWindow* &window )
 	}
 }
 
-void Log::handle( sf::Event &event )
+bool Log::handle( sf::Event &event )
 {
+	bool pressed = false;
 	static bool rel = false;
 	
 	if( !locked )
@@ -100,7 +101,7 @@ void Log::handle( sf::Event &event )
 					if( button.checkCollision( x, y ) )
 					{
 						button.setOffset( 2 );
-						
+						pressed = true;
 						if( play )
 						{
 							click.play();
@@ -132,6 +133,8 @@ void Log::handle( sf::Event &event )
 			}
 		}
 	}
+	
+	return pressed;
 }
 
 
@@ -161,4 +164,14 @@ const bool& Log::getState()
 void Log::setExplanator( string line )
 {
 	explanator.load( line );
+}
+
+float Log::getXCenter()
+{
+	return button.getX() +button.getWidth() /2;
+}
+
+float Log::getBot()
+{
+	return button.getBot();
 }

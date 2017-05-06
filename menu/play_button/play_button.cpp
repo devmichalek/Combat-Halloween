@@ -36,7 +36,6 @@ void Play_button::load( unsigned screen_w, unsigned screen_h )
 {
 	mySprite.setName( "play_button-mySprite" );
 	mySprite.load( "data/menu/play.png", 4 );
-	mySprite.setScale( 0.8, 0.8 );
 	mySprite.setPosition( screen_w/2 - mySprite.getWidth()/2, screen_h /1.875 );
 	
 	click.setID( "play_button-click" );

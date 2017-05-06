@@ -45,7 +45,7 @@ void Develop::load( int nr, unsigned screen_w, float y )
 	// Load button.
 	button.setName( "develop-button" );
 	button.load( "data/menu/upgrade.png", 4 );
-	button.setScale( 0.3, 0.3 );
+	button.setScale( 0.38, 0.38 );
 	button.setPosition( screen_w /1.321, y -10 );
 	
 	MyFile file;
@@ -76,8 +76,8 @@ void Develop::load( int nr, unsigned screen_w, float y )
 	// Load sprite.
 	sprite.setName( "develop-sprite" );
 	sprite.load( "data/menu/skill/" +con::itos( nr ) +".png" );
-	sprite.setScale( 0.4, 0.4 );
-	sprite.setPosition( screen_w /50, y -10 );
+	sprite.setScale( 0.5, 0.5 );
+	sprite.setPosition( 20, y -10 );
 	
 	// Set name_base.
 	file.load( "data/txt/skill/skill_namebase.txt" );

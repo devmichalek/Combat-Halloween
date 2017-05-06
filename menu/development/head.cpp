@@ -64,13 +64,13 @@ void Head::load( int type, unsigned screen_w, float y )
 	// load head
 	sprite.setName( "head-sprite" );
 	sprite.load( "data/menu/head/" +con::itos( type ) +".png" );
-	sprite.setScale( 0.65, 0.65 );
+	sprite.setScale( 0.7, 0.7 );
 	sprite.setPosition( 20, y );
 	
 	// load button
 	button.setName( "head-button" );
 	button.load( "data/menu/upgrade.png", 4 );
-	button.setScale( 0.35, 0.35 );
+	button.setScale( 0.42, 0.42 );
 	button.setPosition( screen_w /1.282, y +20 );
 	
 	// load name

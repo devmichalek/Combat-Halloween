@@ -36,7 +36,7 @@ void Exit_log::load( unsigned screen_w, unsigned screen_h )
 	mySprite.setName( "exit_log-mySprite" );
     mySprite.load( "data/menu/exit.png" );
 	mySprite.setAlpha( 0xFF );
-	mySprite.setScale( 0.4, 0.4 );
+	mySprite.setScale( 0.55, 0.55 );
 	mySprite.setPosition( screen_w /2 -mySprite.getWidth() /2, screen_h /2 -mySprite.getHeight() /2 );
 	
 	myText.setName( "exit_log-myText" );

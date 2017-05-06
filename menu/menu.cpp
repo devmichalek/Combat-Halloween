@@ -22,11 +22,11 @@ Menu::Menu()
 	music_volume = new Volume_button( 64 );	// 50% of 128, 128 is max value.
 	chunk_volume = new Volume_button( 52 );	// 40% of 128
 	
-	git_button = new Link_button( "https://github.com/Adriqun/Ninja" );
-	google_button = new Link_button( "http://ninja2d.netne.net/" );
+	git_button = new Link_button( "https://github.com/Adriqun/Assassin-s-Genesis" );
+	google_button = new Link_button( "http://ag2d.netne.net/" );
 	twitter_button = new Link_button( "", true );
 	facebook_button = new Link_button( "", true );
-	scores_button = new Link_button( "http://ninja2d.netne.net/", true );
+	scores_button = new Link_button( "http://ag2d.netne.net/#section4" );
 	
 	play_button = new Play_button;
 	
@@ -98,7 +98,7 @@ void Menu::load( unsigned screen_w, unsigned screen_h )
 	chunk_button->setExplanator( "Turn on/off chunks." );
 	
 	// volume buttons
-	music_volume->load( screen_w, screen_h/2 - 100, "Music" );
+	music_volume->load( screen_w, screen_h/2 -screen_h /7, "Music" );
 	chunk_volume->load( screen_w, music_volume->getBot() + 25, "Sound" );
 	
 	// chunk volume
@@ -110,15 +110,15 @@ void Menu::load( unsigned screen_w, unsigned screen_h )
 	sound.setMusicVolume( music_volume->getVolume() );
 	
 	// link buttons
-	git_button->load( "data/menu/git.png", screen_w, 5 );
+	git_button->load( "data/menu/git.png", screen_w, 10 );
 	git_button->setExplanator( "Visit github!" );
 	google_button->load( "data/menu/google.png", screen_w, git_button->getBot() );
-	google_button->setExplanator( "Visit ninja2d.netne.net!" );
+	google_button->setExplanator( "Visit ag2d.netne.net!" );
 	twitter_button->load( "data/menu/twitter.png", screen_w, google_button->getBot() );
 	twitter_button->setExplanator( "Twitter? Not today..." );
 	facebook_button->load( "data/menu/facebook.png", screen_w, twitter_button->getBot() );
 	facebook_button->setExplanator( "Damm, who needs facebook?" );
-	scores_button->load( "data/menu/scores.png", git_button->getWidth() +10, screen_h -git_button->getHeight() -5 );
+	scores_button->load( "data/menu/scores.png", git_button->getWidth() +20, screen_h -git_button->getHeight() -10 );
 	scores_button->setExplanator( "Sorry dude, it's not ready" );
 	
 	// button to start game
@@ -141,16 +141,16 @@ void Menu::load( unsigned screen_w, unsigned screen_h )
 	music->load( "data/menu/music.mp3", 50 );
 	
 	// information (keyboard) and keyboard
-	information->load( screen_w, screen_h, screen_h/2 - 100 );
-	keyboard->load( screen_w, screen_h, screen_h/2 + 80 ); // 100, 450, 
+	keyboard->load( screen_w, screen_h, screen_h/2 + screen_h /6 );
+	information->load( screen_w, screen_h, screen_h/2 - screen_h /7, keyboard->getSaveY() );
 	
 	development->load( screen_w, screen_h, title->getBot() +28 );
-	headdeck->load( screen_w, screen_h, title->getBot() +100 );
+	headdeck->load( screen_w, screen_h, title->getBot() +(screen_h /8) );
 	
 	reset_button->load( screen_w, screen_h );
 	
-	nick->load( screen_w, screen_h );
-	author->load( screen_w, screen_h );
+	nick->load( screen_w, screen_h, game_log->getXCenter(), settings_log->getBot() );
+	author->load( screen_w, screen_h, title->getBot() );
 	
 	//Set start volume
 	music_button->setVolume( chunk_volume->getVolume() );
@@ -216,7 +216,10 @@ void Menu::handle( sf::Event &event )
 			}
 			if( !skill_log->getState() && !author_log->getState() && !game_log->getState() )
 			{
-				settings_log->handle( event );
+				if( settings_log->handle( event ) )
+				{
+					nick->setShow();
+				}
 			}
 			if( !skill_log->getState() && !author_log->getState() && !settings_log->getState() )
 			{
@@ -468,6 +471,7 @@ void Menu::draw( sf::RenderWindow* &window )
 		reset_button->drawButton( window );
 		scores_button->draw( *window );
 		nick->draw( *window );
+		nick->drawInfo( *window );
 	}
 	
 	if( !author_log->getState() && !settings_log->getState() && !game_log->getState() )

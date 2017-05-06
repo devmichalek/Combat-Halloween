@@ -51,7 +51,7 @@ void Volume_button::free()
 void Volume_button::load( unsigned screen_w, float y, string new_name )
 {
 	max = 128;
-	float scale = 0.35;
+	float scale = 0.45;
 	
 	name.setName( "volume_button-text" );
 	name.setFont( "data/initialization/Jaapokki-Regular.otf", 30, 0xFF, 0xFF, 0xFF );

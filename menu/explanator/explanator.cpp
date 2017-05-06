@@ -43,7 +43,7 @@ void Explanator::load( string str )
 	
 	// Your text
 	text.setName( "explanator-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 14, 0, 0, 0 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 16, 0, 0, 0 );
 	text.setText( str );
 	
 	bg.setName( "explanator-bg" );

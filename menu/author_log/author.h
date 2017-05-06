@@ -20,7 +20,7 @@ public:
 	void free();
 	void reset();
 
-    void load( unsigned screen_w, unsigned screen_h );
+    void load( unsigned screen_w, unsigned screen_h, float title_y );
     void draw( sf::RenderWindow* &window );
 	void handle( sf::Event &event );
 	

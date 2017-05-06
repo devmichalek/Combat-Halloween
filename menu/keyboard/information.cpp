@@ -47,7 +47,7 @@ void Information::free()
 
 
 
-void Information::load( unsigned screen_w, unsigned screen_h, float y )
+void Information::load( unsigned screen_w, unsigned screen_h, float y, float save_y )
 {
 	for( int i = 0; i < 8; i++ )
 	{
@@ -55,6 +55,9 @@ void Information::load( unsigned screen_w, unsigned screen_h, float y )
 		text[ i ]->setName( "information-text nr " + con::itos( i ) );
 		text[ i ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0x98, 0x98, 0x98 );
 	}
+	
+	text[ 6 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xE8, 0x68, 0x50 );
+	text[ 7 ]->setFont( "data/initialization/Jaapokki-Regular.otf", 25, 0xE8, 0x68, 0x50 );
 	
 	
 	text[ 0 ]->setText( "Back" );
@@ -96,8 +99,7 @@ void Information::load( unsigned screen_w, unsigned screen_h, float y )
 	
 	arrow.setName( "information-arrow" );
 	arrow.load( "data/menu/arrow.png" );
-	arrow.setScale( 0.8, 0.8 );
-	arrow.setPosition( screen_w -arrow.getWidth() -50, 145 );
+	arrow.setPosition( screen_w -arrow.getWidth() -50, save_y -arrow.getHeight() );
 	
 	text[ 0 ]->setPosition( screen_w /1.754, y );
 	text[ 1 ]->setPosition( screen_w /1.25, y );

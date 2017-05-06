@@ -41,7 +41,7 @@ void Title::load( unsigned screen_w, unsigned screen_h )
 	
 	belt.setName( "title-belt" );
     belt.load( "data/menu/belt.png" );
-	belt.setScale( 0.45, 0.45 );
+	belt.setScale( 0.55, 0.55 );
 	belt.setPosition( screen_w/2 - belt.getWidth()/2, 10 );
 	
 	/*

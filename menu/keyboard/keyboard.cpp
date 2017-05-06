@@ -106,8 +106,8 @@ void Keyboard::load( unsigned screen_w, unsigned screen_h, float y )
 	// Button.
 	save_button.setName( "keyboard-save_button" );
 	save_button.load( "data/menu/save.png", 4 );
-	save_button.setScale( 0.4, 0.4 );
-	save_button.setPosition( screen_w -save_button.getWidth() -30, screen_h /2 -80 );
+	save_button.setScale( 0.5, 0.5 );
+	save_button.setPosition( screen_w -save_button.getWidth() -30, screen_h /2 -(screen_h/9) );
 	
 	// text
 	for( int i = 0; i < 18; i++ )
@@ -423,6 +423,11 @@ string Keyboard::getName( int n )
 	}
 	
 	return name;
+}
+
+float Keyboard::getSaveY()
+{
+	return save_button.getY();
 }
 
 

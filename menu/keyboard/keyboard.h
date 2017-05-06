@@ -62,6 +62,7 @@ public:
 	
 	// Other.
 	string getName( int n ); 	// e. g. n == 71, return == "left"
+	float getSaveY();
 	
 	
 	void add( sf::Event &event );			// add

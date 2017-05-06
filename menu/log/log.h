@@ -30,7 +30,7 @@ public:
 	void free();
 	
 	void load( string path, float x, float y );
-	void handle( sf::Event &event );
+	bool handle( sf::Event &event );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( int i = 1, int max = 0xFF );
@@ -40,4 +40,7 @@ public:
 	float getRight();
 	const bool& getState();
 	void setExplanator( string line );
+	
+	float getXCenter();
+	float getBot();
 };
