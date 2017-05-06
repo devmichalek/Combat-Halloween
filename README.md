@@ -1,21 +1,23 @@
 [![bar](https://cloud.githubusercontent.com/assets/19840443/25200350/4d0039c2-254e-11e7-906d-5fd63c3f76ee.png)](https://youtu.be/F4lgM118sAE)
-[![linux](https://cloud.githubusercontent.com/assets/19840443/25199468/3b54c178-254b-11e7-9d29-7f582afc42d9.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-cWNhOFhqQ0RjSk0)
-[![windows](https://cloud.githubusercontent.com/assets/19840443/25199497/515257ba-254b-11e7-89d8-d3ce908ba02f.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-MGJmamFyRzlja28)
-[![code](https://cloud.githubusercontent.com/assets/19840443/25199629/bf2eb86e-254b-11e7-9cf7-52199eaf50a6.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-LVhidzZnQjFEZ0U)
-[![data](https://cloud.githubusercontent.com/assets/19840443/25199526/682e43b8-254b-11e7-889f-d61a7ce0aa80.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-Rks3TmFMaWt5bTQ)
-[![dll](https://cloud.githubusercontent.com/assets/19840443/25199506/5bf2a698-254b-11e7-95b0-1d6e6e1d33d6.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
+[![linux](https://cloud.githubusercontent.com/assets/19840443/25199468/3b54c178-254b-11e7-9d29-7f582afc42d9.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-VVQ2ZnJ0VXZGTUk)
+[![windows](https://cloud.githubusercontent.com/assets/19840443/25199497/515257ba-254b-11e7-89d8-d3ce908ba02f.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-ZWNENnQ5ZWJ4RVU)
+[![code](https://cloud.githubusercontent.com/assets/19840443/25199629/bf2eb86e-254b-11e7-9cf7-52199eaf50a6.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-dmkzR0NoNWJ0UWM)
+[![data](https://cloud.githubusercontent.com/assets/19840443/25199526/682e43b8-254b-11e7-889f-d61a7ce0aa80.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-eG90Y3JFTzByakk)
+[![dll B](https://cloud.githubusercontent.com/assets/19840443/25772203/2ea02e68-3266-11e7-8b53-f1ac30d85d30.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
+[![dll IA](https://cloud.githubusercontent.com/assets/19840443/25772204/2ea6b094-3266-11e7-8946-83649b0210d0.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
 <br/>
 <br/>
 <br/>
 ## About
-First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via SFML multimedia and SDL_Mixer audio library completed with c++ language. Two frustrating things is no-rezising window and no-checking files before application starts. I wish I finished this project soon but now just try what I have. Btw remember that there are no bugs there are features!
+First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via SFML multimedia and SDL_Mixer audio library completed with c++ language. Two frustrating things is no-rezising window and no-checking files before application starts. PUT SOME TEXT LATER.
 <br/>
 <br/>
 <br/>
 ## Download
-Application is available for windows users and linux-familiar people. You have two buttons under the picture, choose one of them to download. You might want to download only pictures, .mp3, .wav etc. files then just click on button with label "files". Whole code is forthcoming, click on button "code". The last button gives you .dll files. 
+Application is available for windows users and linux-familiar people. You have two buttons under the picture, choose one of them to download. You might want to download only pictures, .mp3, .wav etc. files then just click on button with label "files". Whole code is forthcoming, click on button "code". The last two buttons give you dll's. First means BASIC .dll's, second IN CASE OF ERROR .dll's. Basic contains the same .dll's like in windows folder. Good luck! Contact me in case of problems.
 <br/>
 <br/>
 <br/>
 ## For involved
+EDIT EDIT EDIT
 I used [this](https://www.sfml-dev.org/files/SFML-2.4.2-windows-gcc-6.1.0-mingw-32-bit.zip) SFML 2.4.2 (GCC 6.1.0 MinGW (DW2) - 32-bit) according to [this](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/6.1.0/threads-posix/dwarf/i686-6.1.0-release-posix-dwarf-rt_v5-rev0.7z/download) compiler (MinGW Builds 6.1.0 (32-bit)).
