@@ -102,13 +102,17 @@ void Level::draw( sf::RenderWindow* &window )
 	{
 		if( choice->isChosen() )
 		{
-			character->move( -10, 0 );
-			cube->move( -10, -screen_w );
-			difficulty->move( -10, -screen_w );
-			bonus_choice->move( -10, -screen_w );
-			if( choice->move( -10, -screen_w ) )
+			int v = -1;
+			for( int g = 0; g < 10; g++ )
 			{
-				backtomenu->setState( 1 );
+				character->move( v, 0 );
+				cube->move( v, -screen_w );
+				difficulty->move( v, -screen_w );
+				bonus_choice->move( v, -screen_w );
+				if( choice->move( v, -screen_w ) )
+				{
+					backtomenu->setState( 1 );
+				}
 			}
 		}
 	}
@@ -184,15 +188,18 @@ void Level::draw( sf::RenderWindow* &window )
 	
 	else if( backtomenu->getState() == 2 )
 	{
-		sf::Uint8 v = 10;
-		character->move( v, screen_w );
-		cube->move( v, 0 );
-		difficulty->move( v, 0 );
-		bonus_choice->move( v, 0 );
-		if( choice->move( v, 0 ) )
+		sf::Uint8 v = 1;
+		for( int g = 0; g < 10; g++ )
 		{
-			choice->reset( screen_w, screen_h );
-			backtomenu->setState( 0 );
+			character->move( v, screen_w );
+			cube->move( v, 0 );
+			difficulty->move( v, 0 );
+			bonus_choice->move( v, 0 );
+			if( choice->move( v, 0 ) )
+			{
+				choice->reset( screen_w, screen_h );
+				backtomenu->setState( 0 );
+			}
 		}
 	}
 }
