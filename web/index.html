@@ -77,8 +77,15 @@
 		    	</div>
 		    	<div class="row">
 		    		<div class="col 14">
-		    			<a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5">Linux<a/>
-		    			<a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5">Windows<a/>
+		    			<a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5" target="_blank" href="https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-VVQ2ZnJ0VXZGTUk">Linux<a/>
+		    			<a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5" target="_blank" href="https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-ZWNENnQ5ZWJ4RVU">Windows<a/>
+		    		</div>
+		    	</div>
+		    	<div class="row">
+		    		<div class="col 14">
+		    			<a class="btn waves-effect waves-light hoverable nav-button blue-grey" target="_blank" href="https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-dmkzR0NoNWJ0UWM">Code<a/>
+		    			<a class="btn waves-effect waves-light hoverable nav-button blue-grey" target="_blank" href="https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-eG90Y3JFTzByakk">Game assets<a/>
+		    			<a class="btn waves-effect waves-light hoverable nav-button blue-grey" target="_blank" href="https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-LV9qZ3EtcUF4blE">Missing dll's<a/>
 		    		</div>
 		    	</div>
 		    </div>
@@ -88,7 +95,7 @@
 	<div class="section white">
 	    <div class="row container">
 	      <h2 class="header">About</h2>
-	      <p class="grey-text text-darken-3 lighten-3 info">First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via SFML multimedia and SDL_Mixer audio library completed with c++ language. Two frustrating things is no-resizable window and lack of system which checks files before application starts. I wish I finished this project soon but now just try what I have. Have fun!</p>
+	      <p class="grey-text text-darken-3 lighten-3 info">First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via SFML multimedia and SDL_Mixer audio library completed with c++ language. Two frustrating things is no-resizable window and lack of system which checks files before application starts. Website based on materialize framework which looks awesome. I used sfml-network which is designed to enable communications between clients and servers. By HTTP POST application submits data to be processed to a specified resource. Ok, that's all, have fun with game and see your scores below!</p>
 	    </div>
 	</div>
 	</div>
@@ -239,7 +246,9 @@
 	<div id="section4" class="header scrollspy">
 		<div class="container">
 			<div class="row">
-				<h2>High Scores #Top10</h2>
+				<?php
+					echo "<h2>High Scores - 10 of ".$rows."</h2>";
+				?>
 				<div class="col s12 m12">
 					<table class="striped centered responsive-table bordered">
 				        <thead class="tableheader">
