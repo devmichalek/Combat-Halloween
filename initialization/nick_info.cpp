@@ -55,7 +55,7 @@ void Nick_info::load( unsigned screen_w, unsigned screen_h )
 	texts[ 2 ]->setText( "a-z, 1-9, no space, 3-11 small characters" );
 	
 	texts[ 0 ]->setPosition( screen_w /2 -texts[ 0 ]->getWidth() /2, screen_h /3.5 );
-	texts[ 1 ]->setPosition( screen_w /2 -texts[ 1 ]->getWidth() /2, screen_h /1.6 );
+	texts[ 1 ]->setPosition( screen_w /2 -texts[ 1 ]->getWidth() /2, screen_h /1.7 );
 	texts[ 2 ]->setPosition( 5, screen_h -texts[ 2 ]->getHeight() -8 );
 }
 

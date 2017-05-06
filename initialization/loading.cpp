@@ -38,7 +38,7 @@ void Loading::load( unsigned screen_w, unsigned screen_h )
 	max = 20;
 	
 	text.setName( "loading-text" );
-	text.setFont( "data/initialization/Jaapokki-Regular.otf", 40, 255, 255, 255 );
+	text.setFont( "data/initialization/Jaapokki-Regular.otf", 45, 255, 255, 255 );
 	text.setText( ("Loading " + con::itos( state ) + "%")  );
 	text.setAlpha( 0xFF );
 	
@@ -46,7 +46,7 @@ void Loading::load( unsigned screen_w, unsigned screen_h )
 	progress_bar.load( "data/initialization/progress_bar.png", max );
 	progress_bar.setAlpha( 0xFF );
 	
-	text.setPosition( screen_w/2 -text.getWidth()/2, screen_h/2 -text.getHeight()/2 -10 );
+	text.setPosition( screen_w/2 -text.getWidth()/2 +8, screen_h/2 -text.getHeight()/2 -10 );
 	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, screen_h/2 +20 );
 }
 
