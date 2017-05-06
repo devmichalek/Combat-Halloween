@@ -5,8 +5,7 @@
 [![game assets](https://cloud.githubusercontent.com/assets/19840443/25199526/682e43b8-254b-11e7-889f-d61a7ce0aa80.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-eG90Y3JFTzByakk)
 [![dll B](https://cloud.githubusercontent.com/assets/19840443/25772203/2ea02e68-3266-11e7-8b53-f1ac30d85d30.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
 [![dll IA](https://cloud.githubusercontent.com/assets/19840443/25772204/2ea6b094-3266-11e7-8946-83649b0210d0.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
-[![website](https://cloud.githubusercontent.com/assets/19840443/25772684/b4721088-3270-11e7-9859-830046452533.png)]
-(https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-V3p1R2tIdHB4Sm8)
+[![website](https://cloud.githubusercontent.com/assets/19840443/25772684/b4721088-3270-11e7-9859-830046452533.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-V3p1R2tIdHB4Sm8)
 <br/>
 <br/>
 <br/>
