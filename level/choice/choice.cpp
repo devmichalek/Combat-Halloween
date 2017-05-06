@@ -85,7 +85,7 @@ void Choice::load()
 	
 	button.setName( "choice-button" );
 	button.load( "data/level/random.png", 4 );
-	button.setScale( 0.35, 0.35 );
+	button.setScale( 0.45, 0.45 );
 	
 	text.setName( "choice-text" );
 	text.setFont( "data/initialization/Jaapokki-Regular.otf", 34, 0xFF, 0xFF, 0xFF );
@@ -101,7 +101,7 @@ void Choice::load()
 		world.push_back( new MySprite() );
 		world[ i ]->setName( "choice-world[ " + con::itos( i ) + " ]" );
 		world[ i ]->load( "data/platform/world/" + con::itos( i ) + "/bg.png" );
-		world[ i ]->setScale( 0.1, 0.1 );
+		world[ i ]->setScale( 0.12, 0.12 );
 		
 		description.push_back( new MyText() );
 		description[ i ]->setName( "choice-description" );
@@ -122,7 +122,7 @@ void Choice::load()
 	
 	frame.setName( "choice-frame" );
 	frame.load( "data/level/frame.png" );
-	frame.setScale( 0.2, 0.2 );
+	frame.setScale( 0.24, 0.24 );
 	
 	alpha_line = 100;
 	counter_line = 150;

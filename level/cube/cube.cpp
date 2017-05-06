@@ -78,11 +78,9 @@ void Cube::load( float x, float y )
 	
 	paper.setName( "cube-paper" );
 	paper.load( "data/level/paper.png" );
-	paper.setScale( 0.85, 0.85 );
 	
 	cube.setName( "cube-right" );
 	cube.load( "data/level/cube.png", line );
-	cube.setScale( 0.8, 0.8 );
 	
 	flatness.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0xFF, 0xFF );
 	worldSize.setFont( "data/initialization/Jaapokki-Regular.otf", 18, 0xFF, 0xFF, 0xFF );

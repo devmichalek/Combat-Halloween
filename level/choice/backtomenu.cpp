@@ -19,7 +19,7 @@ void Backtomenu::load( unsigned screen_w )
 		button.setOffset( 3 );    // locked offset = 3
 	}
 		
-	button.setScale( 0.4, 0.4 );
+	button.setScale( 0.5, 0.5 );
 	button.setPosition( screen_w - button.getWidth() -10, 10 );
 	
 	click.setID( "backtomenu-click" );

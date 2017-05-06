@@ -113,7 +113,6 @@ void Character::load( unsigned screen_w, unsigned screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "character-sprite nr" +con::itos( i ) );
 		sprites[ sprites.size() -1 ]->load( "data/level/hero" +con::itos( i ) +".png", 10 );
-		sprites[ sprites.size() -1 ]->setScale( 0.85, 0.85 );
 		
 		texts.push_back( new MyText() );
 		texts[ texts.size() -1 ]->setName( "character-texts nr" +con::itos( i ) );

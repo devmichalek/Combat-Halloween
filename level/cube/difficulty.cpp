@@ -91,7 +91,6 @@ void Difficulty::load( float x, float y )
 		
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->load( "data/level/" +con::itos( i ) +".png" );
-		sprites[ sprites.size() -1 ]->setScale( 0.85, 0.85 );
 	}
 	
 	texts[ 0 ]->setText( "low" );
