@@ -63,20 +63,20 @@ string Time_box::getTimePlayed()
 {
 	string result = "";
 	
-	if( sec != 0 )
+	if( hour != 0 )
 	{
-		result += " " +con::itos( sec ) +"s";
+		result += con::itos( hour ) +"h ";
 	}
 	
 	if( min != 0 )
 	{
-		result += " " +con::itos( min ) +"m";
+		result += con::itos( min ) +"m ";
 	}
 	
-	if( hour != 0 )
+	if( sec != 0 )
 	{
-		result += con::itos( hour ) +"h";
+		result += con::itos( sec ) +"s";
 	}
-	
+
 	return result;
 }

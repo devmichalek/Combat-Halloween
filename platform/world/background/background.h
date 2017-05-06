@@ -5,9 +5,6 @@
 
 class Background
 {
-	int screen_w;
-	int screen_h;
-	
 	vector <MySprite*> sprites;
 	
 public:
@@ -15,9 +12,8 @@ public:
 	Background();
 	~Background();
 	void free();
-	void reset( int x, int y );
 	
-	void load( int type, int screen_w, int screen_h );
+	void load( int type, unsigned screen_w, unsigned screen_h );
 	void draw( sf::RenderWindow* &window );
 	void drawFront( sf::RenderWindow* &window ); // if its necessary
 	
@@ -27,7 +23,4 @@ public:
 	void mechanics( int x, int y );
 	sf::Uint8 getAlpha();
 	void setColor( sf::Color color );
-	
-	int getX();
-	int getY();
 };

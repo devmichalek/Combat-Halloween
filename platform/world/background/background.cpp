@@ -3,8 +3,7 @@
 
 Background::Background()
 {
-	screen_w = 0;
-	screen_h = 0;
+	free();
 }
 
 Background::~Background()
@@ -14,9 +13,6 @@ Background::~Background()
 
 void Background::free()
 {
-	screen_w = 0;
-	screen_h = 0;
-	
 	if( !sprites.empty() )
 	{
 		for( auto &it :sprites )
@@ -28,19 +24,12 @@ void Background::free()
 	}
 }
 
-void Background::reset( int x, int y )
-{
-	mechanics( x, y );
-}
 
 
 
-void Background::load( int type, int screen_w, int screen_h )
+void Background::load( int type, unsigned screen_w, unsigned screen_h )
 {
 	free();
-	
-	this->screen_w = screen_w;
-	this->screen_h = screen_h;
 	
 	if( type == 1 )
 	{
@@ -49,6 +38,23 @@ void Background::load( int type, int screen_w, int screen_h )
 			sprites.push_back( new MySprite() );
 			sprites[ sprites.size() -1 ]->setName( "background-sprite" );
 			sprites[ sprites.size() -1 ]->load( "data/platform/world/1/bg" +con::itos( i ) +".png" );
+			
+			float scale_x = 1, scale_y = 1;
+			
+			if( screen_w > sprites[ sprites.size() -1 ]->getWidth() )
+			{
+				scale_x = static_cast <float> (screen_w) /sprites[ sprites.size() -1 ]->getWidth();
+			}
+			
+			if( screen_h > sprites[ sprites.size() -1 ]->getHeight() )
+			{
+				scale_y = static_cast <float> (screen_h) /sprites[ sprites.size() -1 ]->getHeight();
+			}
+			
+			sprites[ sprites.size() -1 ]->setScale( scale_x, scale_y );
+			
+			sprites[ sprites.size() -1 ]->setPosition( screen_w /2 -sprites[ sprites.size() -1 ]->getWidth() /2,
+													   screen_h /2 -sprites[ sprites.size() -1 ]->getHeight() /2 );
 		}
 	}
 	else
@@ -56,6 +62,23 @@ void Background::load( int type, int screen_w, int screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setName( "background-sprite" );
 		sprites[ sprites.size() -1 ]->load( "data/platform/world/" +con::itos( type ) +"/bg.png" );
+		
+		float scale_x = 1, scale_y = 1;
+			
+		if( screen_w > sprites[ sprites.size() -1 ]->getWidth() )
+		{
+			scale_x = static_cast <float> (screen_w) /sprites[ sprites.size() -1 ]->getWidth();
+		}
+		
+		if( screen_h > sprites[ sprites.size() -1 ]->getHeight() )
+		{
+			scale_y = static_cast <float> (screen_h) /sprites[ sprites.size() -1 ]->getHeight();
+		}
+		
+		sprites[ sprites.size() -1 ]->setScale( scale_x, scale_y );
+			
+		sprites[ sprites.size() -1 ]->setPosition( screen_w /2 -sprites[ sprites.size() -1 ]->getWidth() /2,
+													   screen_h /2 -sprites[ sprites.size() -1 ]->getHeight() /2 );
 	}
 }
 
@@ -93,20 +116,6 @@ void Background::fadeout( int v, int min )
 
 
 
-void Background::mechanics( int x, int y )
-{
-	float new_x = -( screen_w/2 ) *x /screen_w;
-	float new_y = -150 *( y +300 ) /screen_h;
-	
-	for( auto &it :sprites )
-	{
-		if( new_y > -( it->getHeight() -screen_h ) && new_y < 0 )
-		{
-			it->setPosition( new_x, new_y );
-		}
-	}
-}
-
 sf::Uint8 Background::getAlpha()
 {
 	return sprites[ 0 ]->getAlpha();
@@ -118,16 +127,4 @@ void Background::setColor( sf::Color color )
 	{
 		it->setColor( color );
 	}
-}
-
-
-
-int Background::getX()
-{
-	return sprites[ 0 ]->getX() +sprites[ 0 ]->getWidth() /2;
-}
-
-int Background::getY()
-{
-	return sprites[ 0 ]->getY() +sprites[ 0 ]->getHeight();
 }

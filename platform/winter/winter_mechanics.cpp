@@ -368,7 +368,6 @@ void Winter::mechanics()
 		showheal->mechanics();
 		effect->mechanics();
 		
-		background->mechanics( hero->getX(), hero->getY() );
 		wall->mechanics();
 		boulder->mechanics( hero->getRect() );
 		score_dots->mechanics();

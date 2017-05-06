@@ -146,6 +146,7 @@ void Forest::reset()
 	scores->reset();
 	money->reset();
 	time_box->reset();
+	pause->reset();
 	
 	// Actions.
 	hp_dots->reset();
@@ -155,7 +156,6 @@ void Forest::reset()
 	effect->reset();
 	
 	// World,
-	background->reset( hero->getX(), hero->getY() );
 	int distance = brick->reset();
 	islands->reset( distance );
 	greenery->reset( distance );
@@ -227,7 +227,7 @@ void Forest::load( int screen_w, int screen_h, unsigned FPS )
 	// Panel.
 	scores->load( type, screen_w );
 	money->load( screen_w );
-	pause->load( screen_w, screen_h );
+	pause->load( screen_w, screen_h, FPS );
 	sound_pad->load( screen_w, screen_h );
 	time_box->load( FPS );
 	
@@ -288,10 +288,13 @@ void Forest::draw( sf::RenderWindow* &window )
 	
 	
 	// Fade out, fade in.
-	if( (hero->isDead() || exit->nextState()) && fade == 1 )
+	if( (hero->isDead() || exit->nextState() || pause->isDead()) && fade == 1 )
 	{
 		// Value.
 		sf::Uint8 value = 1;
+		
+		// Conscious death.
+		pause->fadeout( value );
 		
 		// Sound.
 		music->fadeout( value );
@@ -471,8 +474,7 @@ bool Forest::positioning( int type, int size, int flatness, int difficulty )
 		heart->load();
 		info = "setting position x, y of background";	break;
 		
-		case 1:	background->mechanics( hero->getX(), hero->getY() );
-		coruption = difficulty;
+		case 1: coruption = difficulty;
 		info = "reserving memory (it can take a while)";	break;
 		
 		case 2:	brick->reserve( size );
@@ -604,7 +606,7 @@ string Forest::getInfo()
 
 bool Forest::defeatState()
 {
-	if( hero->isDead() && background->getAlpha() == 0 )
+	if( (hero->isDead() || pause->isDead()) && background->getAlpha() == 0 )
 	{
 		money->saveMoney();
 		return true;

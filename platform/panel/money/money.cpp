@@ -120,7 +120,7 @@ void Money::setText()
 		text.setText( additional +con::itos( bank ) );
 	}
 	
-	text.setPosition( coin.getX() -text.getWidth() -20, grey.getY() +4 );
+	text.setPosition( coin.getX() -text.getWidth() -15, grey.getY() +4 );
 }
 
 void Money::saveMoney()
