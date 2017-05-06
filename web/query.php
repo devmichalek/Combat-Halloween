@@ -1,9 +1,9 @@
 <?php
 
-	$server   = '';
-	$username = '';
-	$password = '';
-	$db       = '';
+	$server   = 'localhost';
+	$username = 'user';
+	$password = 'password';
+	$db       = 'database';
 	$conn     = mysqli_connect($server, $username, $password, $db);
 	 
 	$nick  = mysqli_real_escape_string($conn, strip_tags($_POST['nick']));
