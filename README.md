@@ -2,14 +2,16 @@
 [![linux](https://cloud.githubusercontent.com/assets/19840443/25199468/3b54c178-254b-11e7-9d29-7f582afc42d9.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-VVQ2ZnJ0VXZGTUk)
 [![windows](https://cloud.githubusercontent.com/assets/19840443/25199497/515257ba-254b-11e7-89d8-d3ce908ba02f.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-ZWNENnQ5ZWJ4RVU)
 [![code](https://cloud.githubusercontent.com/assets/19840443/25199629/bf2eb86e-254b-11e7-9cf7-52199eaf50a6.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-dmkzR0NoNWJ0UWM)
-[![data](https://cloud.githubusercontent.com/assets/19840443/25199526/682e43b8-254b-11e7-889f-d61a7ce0aa80.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-eG90Y3JFTzByakk)
+[![game assets](https://cloud.githubusercontent.com/assets/19840443/25199526/682e43b8-254b-11e7-889f-d61a7ce0aa80.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-eG90Y3JFTzByakk)
 [![dll B](https://cloud.githubusercontent.com/assets/19840443/25772203/2ea02e68-3266-11e7-8b53-f1ac30d85d30.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
 [![dll IA](https://cloud.githubusercontent.com/assets/19840443/25772204/2ea6b094-3266-11e7-8946-83649b0210d0.png)](https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-YmJhaWxXWUdDM3c)
+[![website](https://cloud.githubusercontent.com/assets/19840443/25772684/b4721088-3270-11e7-9859-830046452533.png)]
+(https://drive.google.com/uc?export=download&id=0B36D1JHNNqr-V3p1R2tIdHB4Sm8)
 <br/>
 <br/>
 <br/>
 ## About
-First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via SFML multimedia and SDL_Mixer audio library completed with c++ language. Two frustrating things is no-rezising window and no-checking files before application starts. PUT SOME TEXT LATER.
+First of all Assassin's Genesis is not the next version of Assassin's Creed. Unfortunately Ubisoft didn't pay me any money, so basically I don't care about them. All you need to know that this project is made with my own fair hands and I'm proud of it. It's created via **SFML** multimedia and **SDL_Mixer** audio library completed with **c++** language. Two frustrating things is no-resizable window and lack of system which checks files before application starts. Website based on materialize framework which looks awesome. I used **sfml-network** which is designed to enable communications between clients and servers. By **HTTP POST** application submits data to be processed to a specified resource. Ok, that's all, have fun with game and see your scores [here](http://ag2d.netne.net/#section4)!
 <br/>
 <br/>
 <br/>
