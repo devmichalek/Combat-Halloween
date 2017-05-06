@@ -15,9 +15,9 @@ First of all Assassin's Genesis is not the next version of Assassin's Creed. Unf
 <br/>
 <br/>
 ## Download
-Application is available for windows users and linux-familiar people. You have two buttons under the picture, choose one of them to download. You might want to download only pictures, .mp3, .wav etc. files then just click on button with label "files". Whole code is forthcoming, click on button "code". The next two buttons give you dll's. First means **B**-**b**asic .dll's, second means **E**-in case of **e**rror .dll's. Basic contains the same .dll's like in windows folder. Good luck! Contact me in case of questions **adrmic98@gmail.com**.
+Application is available for windows users and linux-familiar people. You have two buttons under the picture, choose one of them to download. You might want to download only pictures, .mp3, .wav files then just click on button with label "files". Whole code is forthcoming, click on button "code". The next two buttons give you dll's. First means **B**-**b**asic .dll's, second means **E**-in case of **e**rror .dll's. Basic contains the same .dll's like in windows folder. Good luck! Contact me in case of questions **adrmic98@gmail.com**.
 <br/>
 <br/>
 <br/>
-## Archive
+# Archive
 I used [this](https://www.sfml-dev.org/files/SFML-2.4.2-windows-gcc-6.1.0-mingw-32-bit.zip) SFML 2.4.2 (GCC 6.1.0 MinGW (DW2) - 32-bit) according to [this](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/6.1.0/threads-posix/dwarf/i686-6.1.0-release-posix-dwarf-rt_v5-rev0.7z/download) compiler (MinGW Builds 6.1.0 (32-bit)).
