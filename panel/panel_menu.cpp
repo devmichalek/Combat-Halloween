@@ -9,6 +9,9 @@
 
 #include "panel_menu.h"
 #include "file/file.h"
+// #include <curl/curl.h>
+#include <SFML/Network.hpp>
+#include <time.h>
 
 
 Panel_menu::Panel_menu()
@@ -141,15 +144,96 @@ bool Panel_menu::backToPlatform()
 }
 
 
+
+const string Panel_menu::currentDateTime()
+{
+    time_t     now = time(0);
+    struct tm  tstruct;
+    char       buf[80];
+    tstruct = *localtime(&now);
+	
+    strftime(buf, sizeof(buf), "%Y-%m-%d", &tstruct);
+
+    return buf;
+}
+
 void Panel_menu::set( int scores, int type, bool status, int coruption, string timePlayed, int mines, int money )
 {
 	show_scores->setScores( scores );
 	show_scores->setResult( status );
-	show_scores->setCoruption( coruption );
-	show_scores->setWorld( type );
 	show_scores->setMoney( money );
 	show_scores->setMine( mines, type );
 	show_scores->setTimePlayed( timePlayed );
+	
+	// Query
+	string nick = "";
+	string world = "world=" +show_scores->setWorld( type ) +"&";
+	string difficulty = "difficulty=" +show_scores->setCoruption( coruption ) +"&";
+	string points = "points=" +con::itos( scores ) +"&";
+	string time_playing = "time_playing=" +timePlayed +"&";
+	string date = "date=" +currentDateTime();
+	
+	MyFile f;
+	f.load( "data/txt/nick/nick_current.txt" );
+	if( f.is_good() )
+	{
+		string line;
+		f.get() >> line;
+		nick = "nick=" +line +"&";
+	}
+	f.free();
+	
+	/*
+	printf( "%s\n", nick.c_str() );
+	printf( "%s\n", world.c_str() );
+	printf( "%s\n", difficulty.c_str() );
+	printf( "%s\n", points.c_str() );
+	printf( "%s\n", time_playing.c_str() );
+	printf( "%s\n", date.c_str() );
+	*/
+	string general_result = nick +world +difficulty +points +time_playing +date;
+	// printf( "%s\n", general_result.c_str() );
+	
+	// prepare the request
+     sf::Http::Request request( "/file.php", sf::Http::Request::Post );
+
+    // encode the parameters in the request body
+    request.setBody( general_result );
+
+    // send the request
+    sf::Http http("path");
+    sf::Http::Response response = http.sendRequest(request);
+
+    // check the status
+    if( response.getStatus() != sf::Http::Response::Ok )
+    {
+        // printf( "request failed\n" );
+    }
+	
+	/*
+	CURL* curl;
+    CURLcode res;
+ 
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+ 
+    if( curl )
+	{
+        curl_easy_setopt( curl, CURLOPT_URL, "https://catchbumblebee.000webhostapp.com//query.php" );
+        curl_easy_setopt( curl, CURLOPT_POSTFIELDS, general_result.c_str() ) ;
+ 
+        res = curl_easy_perform(curl);
+ 
+        if( res != CURLE_OK )
+		{
+            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        }
+ 
+        curl_easy_cleanup(curl);
+    }
+ 
+    curl_global_cleanup();
+	*/
 	
 	if( status && type < 4 )
 	{

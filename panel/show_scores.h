@@ -45,8 +45,8 @@ public:
 	
 	void setScores( int s );
 	void setResult( bool r );
-	void setCoruption( sf::Uint8 c );
-	void setWorld( sf::Uint8 w );
+	string setCoruption( sf::Uint8 c );
+	string setWorld( sf::Uint8 w );
 	void setMoney( int m );
 	void setMine( int m, sf::Uint8 w );
 	void setTimePlayed( string t );

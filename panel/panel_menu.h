@@ -43,6 +43,7 @@ public:
 	bool backToMenu();
 	bool backToPlatform();
 	
+	const string currentDateTime();
 	void set( int scores, int type, bool status, int coruption, string timePlayed, int mines, int money );
 	void setSound();
 	void reloadMusic();

@@ -58,7 +58,6 @@ void Show_scores::load( unsigned screen_w, unsigned screen_h, float y )
 	line.setName( "show_scores-line" );
 	line.create( screen_w -(screen_w/10), 3 );
 	line.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	line.setPosition( screen_w/20, y -20 );
 	
 	summary.setName( "show_scores-summary" );
 	summary.setFont( "data/menu/BADABB__.TTF", 85, 0xFF, 0xFF, 0xFF );
@@ -118,6 +117,7 @@ void Show_scores::load( unsigned screen_w, unsigned screen_h, float y )
 	scores.setPosition( screen_w/20, time.getBot() +28 );
 	scores_word.setName( "show_scores-scores" );
 	scores_word.setFont( "data/initialization/Jaapokki-Regular.otf", 60, 0xFF, 0xFF, 0xFF );
+	line.setPosition( screen_w/20, scores.getBot() +25 );
 }
 
 void Show_scores::draw( sf::RenderWindow* &window )
@@ -191,52 +191,64 @@ void Show_scores::setResult( bool r )
 	}
 }
 
-void Show_scores::setCoruption( sf::Uint8 c )
+string Show_scores::setCoruption( sf::Uint8 c )
 {
+	string result = "";
+	
 	if( c == 33 )
 	{
-		coruption_word.setText( "low" );
+		result = "low";
+		coruption_word.setText( result );
 		coruption_word.setColor( 0x58, 0x70, 0x58 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +5 );
 	}
 	else if( c == 66 )
 	{
-		coruption_word.setText( "medium" );
+		result = "medium";
+		coruption_word.setText( result );
 		coruption_word.setColor( 0xff, 0xcc, 0x00 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +4 );
 	}
 	else
 	{
-		coruption_word.setText( "high" );
+		result = "high";
+		coruption_word.setText( result );
 		coruption_word.setColor( 0xE8, 0x68, 0x50 );
 		coruption_word.setPosition( coruption.getRight() +15, coruption.getTop() +5 );
 	}
+	
+	return result;
 }
 
-void Show_scores::setWorld( sf::Uint8 w )
+string Show_scores::setWorld( sf::Uint8 w )
 {
+	string result ="";
+	
 	if( w == 0 )
 	{
-		world_word.setText( "'The last stand'" );
+		result = "The last stand";
 	}
 	else if( w == 1 )
 	{
-		world_word.setText( "'As nature goes'" );
+		result = "As nature goes";
 	}
 	else if( w == 2 )
 	{
-		world_word.setText( "'Winter's Embrace'" );
+		result = "Winter's Embrace";
 	}
 	else if( w == 3 )
 	{
-		world_word.setText( "'Zany Gorge Race'" );
+		result = "Zany Gorge Race";
 	}
 	else
 	{
-		world_word.setText( "'Lost in Cyberspace'" );
+		result = "Lost in Cyberspace";
 	}
 	
+	world_word.setText( "'" +result +"'" );
 	world_word.setPosition( world.getRight() +15, world.getTop() +5 );
+	
+	return result;
 }
 
 void Show_scores::setMoney( int m )
