@@ -65,7 +65,7 @@ bool Core::load( string title )
 
     free();
 
-    window = new sf::RenderWindow( sf::VideoMode( width, height ), title, sf::Style::Titlebar | sf::Style::Close );
+    window = new sf::RenderWindow( sf::VideoMode( width, height ), title, sf::Style::Fullscreen );
     if( window == NULL )
     {
         printf( "Not created window!\n" );
@@ -86,8 +86,12 @@ bool Core::load( string title )
 			Mix_AllocateChannels( 0xFF );
 		}
 	}
-
-
+	
+	// printf( "%d %d\n", window->getSize().x, window->getSize().y );
+	
+	width = window->getSize().x;
+	height = window->getSize().y;
+	
     return success;
 }
 
