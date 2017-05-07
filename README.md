@@ -19,10 +19,13 @@ Application is available for windows users and linux-familiar people. You have t
 <br/>
 <br/>
 <br/>
-# Archive -will be updated constantly
+## Archive
 
 ### SFML
 I used [this](https://www.sfml-dev.org/files/SFML-2.4.2-windows-gcc-6.1.0-mingw-32-bit.zip) SFML 2.4.2 (GCC 6.1.0 MinGW (DW2) - 32-bit) according to [this](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win32/Personal%20Builds/mingw-builds/6.1.0/threads-posix/dwarf/i686-6.1.0-release-posix-dwarf-rt_v5-rev0.7z/download) compiler (MinGW Builds 6.1.0 (32-bit)).
 <br/>
 ### SDL_Mixer
-I used SDL_Mixer from this [site](https://www.libsdl.org/projects/SDL_mixer/). Before I get started with SFML I've been learing SDL basics with [this](http://lazyfoo.net/tutorials/SDL/index.php). Lazy foo helped me a lot. 
+I used SDL_Mixer from this [site](https://www.libsdl.org/projects/SDL_mixer/). Before I get started with SFML I've been learing SDL basics with [this](http://lazyfoo.net/tutorials/SDL/index.php). Lazy foo helped me a lot.
+<br/>
+### Code
+I tried to make this code cross-platform. You work on linux and you have some functions that you don't have on windows. I can give an example, a simply converting string to int, you can run into difficulties by it. Game loads some txt files, we load strings, many classes load txt files, so i found the way. I made own namespace with following functions: sting to int, int to string, string to float. Another different thing is function which runs website. By this i mean link-buttons. On windows `start +url`, on linux `sensible-browser +url`.
