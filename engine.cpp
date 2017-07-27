@@ -44,6 +44,7 @@ void Engine::load()
 		case 3:
 		menu = new Menu;
 		menu->load( core->getWidth(), core->getHeight() );
+		break;
 		
 		case 101:
 		loading->beReady();
@@ -106,6 +107,11 @@ void Engine::states()
 		if( menu->isReady() )
 		{
 			core->getState() = PLAY;
+		}
+		
+		if( menu->isClose() )
+		{
+			core->isOpen() = false;
 		}
 	}
 	
