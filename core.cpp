@@ -55,7 +55,12 @@ bool Core::set( std::string title, int style )
 	// height / width = 0.5625
 	int screen_width = sf::VideoMode::getDesktopMode().width /1.25;
 	this->width = screen_width;
-	this->height = screen_width *0.5625;
+	// Security.
+	if( this->width > 2560 )
+	{
+		this->width = 2560;
+	}
+	this->height = this->width *0.5625;
 
     window = new sf::RenderWindow( sf::VideoMode( width, height ), title.c_str(), style );
     if( window == NULL )
