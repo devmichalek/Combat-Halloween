@@ -184,6 +184,7 @@ void Login::handle( sf::Event& event )
 					{
 						username += getName( event.key.code );
 						username_written.setText( username );
+						username_written.setSize( username_form.getSize() );
 						organizeWritten();
 					}
 				}
@@ -193,6 +194,7 @@ void Login::handle( sf::Event& event )
 					{
 						password += getName( event.key.code );
 						password_written.setText( getPassword() );
+						password_written.setSize( password_form.getSize() );
 						organizeWritten();
 					}
 				}
@@ -217,6 +219,7 @@ void Login::handle( sf::Event& event )
 						else
 						{
 							username_written.setText( username );
+							username_written.setSize( username_form.getSize() );
 						}
 						
 						organizeWritten();
@@ -240,6 +243,7 @@ void Login::handle( sf::Event& event )
 						else
 						{
 							password_written.setText( getPassword() );
+							password_written.setSize( password_form.getSize() );
 						}
 						
 						organizeWritten();
