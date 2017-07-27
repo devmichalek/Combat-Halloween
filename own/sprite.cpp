@@ -1,4 +1,5 @@
 #include "sprite.h"
+#include <math.h>
 
 MySprite::MySprite()
 {
@@ -363,6 +364,24 @@ bool MySprite::checkCollision( float x, float y, float w, float h )
         return false;
 
     return true;
+}
+
+bool MySprite::checkCollisionCircle( float x, float y )
+{
+	float r = getWidth() > getHeight() ? getWidth() : getHeight();
+	r /= 2;
+	float myX = getX() +getWidth() /2;
+	float myY = getY() +getHeight() /2;
+	
+	float a = x -myX;
+	float b = y -myY;
+	
+	if( sqrt((a*a) + (b*b)) <= r )
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 /*

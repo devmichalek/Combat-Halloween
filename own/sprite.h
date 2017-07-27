@@ -62,4 +62,5 @@ public:
     const float getBot() const;
 	
 	bool checkCollision( float x, float y, float w = 0, float h = 0 );
+	bool checkCollisionCircle( float x, float y );
 };
