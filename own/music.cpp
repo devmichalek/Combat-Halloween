@@ -50,7 +50,10 @@ void Music::load( string path )
 		{
 			throw identity + " not found music " + path;
 		}
-			
+		else
+		{
+			music->setLoop( true );
+		}
 	}
 	catch( string msg )
 	{
@@ -60,11 +63,11 @@ void Music::load( string path )
 
 
 
-void Music::fadein( int v, int max )
+void Music::fadein( float v, int max )
 {
 	if( music->getVolume() < max )
 	{
-		int newVolume = music->getVolume() +v;
+		float newVolume = music->getVolume() +v;
 		
 		if( newVolume > max )
 		{
@@ -75,11 +78,11 @@ void Music::fadein( int v, int max )
 	}
 }
 
-void Music::fadeout( int v, int min )
+void Music::fadeout( float v, int min )
 {
 	if( music->getVolume() > min )
 	{
-		int newVolume = music->getVolume() -v;
+		float newVolume = music->getVolume() -v;
 		
 		if( newVolume < min )
 		{

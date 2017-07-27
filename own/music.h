@@ -24,8 +24,8 @@ public:
 	
     void load( string path );
 	
-	void fadein( int v = 1, int max = 100 );
-	void fadeout( int v = 1, int min = 0 );
+	void fadein( float v = 1, int max = 100 );
+	void fadeout( float v = 1, int min = 0 );
 	
 	void stop();
     void play();
