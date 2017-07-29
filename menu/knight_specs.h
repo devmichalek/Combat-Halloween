@@ -1,4 +1,5 @@
 #include "own/sprite.h"
+#include "own/chunk.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <vector>
@@ -15,16 +16,27 @@ class Knight_specs
 		AMOUNT
 	};
 	
-	MySprite animation;
+	// Table stuff.
+	MySprite table;
+	MySprite gear_top, gear_bot;
+	float moving_state;
+	float x1, x2;
+	float x, y;
+	
+	// Rest.
+	MySprite knight;
 	vector <MySprite*> parts;
-	vector <MySprite*> blocks;
+	vector <sf::Vector2f*> rects;
 	
 	int chosen;
 	int lastChosen;
-	float x, y;
 	
 	float offset;
 	float line;
+	
+	// Sound.
+	Chunk click;
+	bool playable;
 	
 public:
 	
@@ -39,4 +51,8 @@ public:
 	
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
+	
+	// Sound.
+	void setPlayable( bool playable = true );
+	void setVolume( float volume = 50 );
 };
