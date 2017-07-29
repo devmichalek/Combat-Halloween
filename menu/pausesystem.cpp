@@ -34,7 +34,7 @@ void Pausesystem::load( float screen_w, float screen_h )
 	blackout.setColor( sf::Color( 0, 0, 0, 0 ) );
 	
 	text.setIdentity( "pausesystem-text" );
-	text.setFont( "fonts/Jaapokki-Regular.otf" );
+	text.setFont( "fonts/jcandlestickextracond.ttf" );
 	text.setText( "PAUSED" );
 	text.setSize( screen_h /10 );
 	text.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
@@ -67,7 +67,7 @@ void Pausesystem::handle( sf::Event& event )
 	}
 }
 
-void Pausesystem::draw( sf::RenderWindow* &window, double elapsedTime )
+void Pausesystem::draw( sf::RenderWindow* &window )
 {
 	window->draw( blackout.get() );
 	window->draw( text.get() );
