@@ -69,7 +69,7 @@ void Button::handle( sf::Event& event )
 	}
 }
 
-void Button::draw( sf::RenderWindow* &window, double elapsedTime )
+void Button::draw( sf::RenderWindow* &window )
 {
 	window->draw( button.get() );
 }
