@@ -26,6 +26,7 @@ void Menu::free()
 	chunkbutton.free();
 	musicbutton.free();
 	settingsbutton.free();
+	settings.free();
 	pausesystem.free();
 	music.free();
 }
@@ -56,11 +57,11 @@ void Menu::load( float screen_w, float screen_h )
 	website.setUrl( "website" );
 	
 	// Main buttons.
-	singleplayer.load( screen_w /1.8, screen_h /2.35, "images/menu/singleplayer.png" );
+	singleplayer.load( screen_w /1.9, screen_h /2.35, "images/menu/singleplayer.png" );
 	singleplayer.setScale( screen_w /2560, screen_h /1440 );
-	multiplayer.load( screen_w /1.8, singleplayer.getBot() +screen_h /72, "images/menu/multiplayer.png", true );
+	multiplayer.load( screen_w /1.9, singleplayer.getBot() +screen_h /72, "images/menu/multiplayer.png", true );
 	multiplayer.setScale( screen_w /2560, screen_h /1440 );
-	exit.load( screen_w /1.8, multiplayer.getBot() +screen_h /72, "images/menu/exit.png" );
+	exit.load( screen_w /1.9, multiplayer.getBot() +screen_h /72, "images/menu/exit.png" );
 	exit.setScale( screen_w /2560, screen_h /1440 );
 	
 	// Circle buttons.
@@ -72,6 +73,9 @@ void Menu::load( float screen_w, float screen_h )
 	musicbutton.setChanged( true );
 	settingsbutton.load( "images/menu/settings.png" );
 	settingsbutton.set( musicbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
+	
+	// Settings.
+	settings.load( screen_w, screen_h );
 	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
@@ -98,6 +102,7 @@ void Menu::handle( sf::Event& event )
 			chunkbutton.handle( event );
 			musicbutton.handle( event );
 			settingsbutton.handle( event );
+			settings.handle( event );
 		}
 		
 		pausesystem.handle( event );
@@ -123,6 +128,7 @@ void Menu::draw( sf::RenderWindow* &window, double elapsedTime )
 		chunkbutton.fadeout( value, min );
 		musicbutton.fadeout( value, min );
 		settingsbutton.fadeout( value, min );
+		settings.fadeout( value, min );
 		pausesystem.fadein( value *3, min );
 	}
 	// fade out -close
@@ -141,6 +147,7 @@ void Menu::draw( sf::RenderWindow* &window, double elapsedTime )
 		chunkbutton.fadeout( value );
 		musicbutton.fadeout( value );
 		settingsbutton.fadeout( value );
+		settings.fadeout( value );
 	}
 	else // fade in
 	{
@@ -158,27 +165,39 @@ void Menu::draw( sf::RenderWindow* &window, double elapsedTime )
 		chunkbutton.fadein( value );
 		musicbutton.fadein( value );
 		settingsbutton.fadein( value );
+		settings.fadein( value );
+		settings.mechanics( elapsedTime );
 		pausesystem.fadeout( value );
 	}
 	
 	// render
 	window->draw( background.get() );
 	knight_specs.draw( window );
-	github.draw( window, elapsedTime );
-	scores.draw( window, elapsedTime );
-	website.draw( window, elapsedTime );
-	singleplayer.draw( window, elapsedTime );
-	multiplayer.draw( window, elapsedTime );
-	exit.draw( window, elapsedTime );
-	chunkbutton.draw( window, elapsedTime );
-	musicbutton.draw( window, elapsedTime );
-	settingsbutton.draw( window, elapsedTime );
-	pausesystem.draw( window, elapsedTime );
+	github.draw( window );
+	scores.draw( window );
+	website.draw( window );
+	singleplayer.draw( window );
+	multiplayer.draw( window );
+	exit.draw( window );
+	chunkbutton.draw( window );
+	musicbutton.draw( window );
+	settingsbutton.draw( window );
+	settings.draw( window );
+	pausesystem.draw( window );
 	
 	// mechanics, rest events
 	if( exit.isPressed() ) // close app
 	{
 		close = true;
+	}
+	
+	if( settingsbutton.isActive() )
+	{
+		settings.exsertTable( elapsedTime );
+	}
+	else
+	{
+		settings.shovelTable( elapsedTime );
 	}
 	
 	if( chunkbutton.isChanged() ) // turn on/off all sounds
@@ -192,6 +211,7 @@ void Menu::draw( sf::RenderWindow* &window, double elapsedTime )
 		chunkbutton.setPlayable( !chunkbutton.isActive() );
 		musicbutton.setPlayable( chunkbutton.isActive() );
 		settingsbutton.setPlayable( chunkbutton.isActive() );
+		settings.setPlayable( chunkbutton.isActive() );
 		pausesystem.setPlayable( chunkbutton.isActive() );
 	}
 	

@@ -2,6 +2,7 @@
 #include "link_button.h"
 #include "button.h"
 #include "circlebutton.h"
+#include "settings.h"
 #include "pausesystem.h"
 #include "own/music.h"
 
@@ -20,6 +21,7 @@ class Menu
 	Circlebutton chunkbutton;
 	Circlebutton musicbutton;
 	Circlebutton settingsbutton;
+	Settings settings;
 	Pausesystem pausesystem;
 	Music music;
 	
