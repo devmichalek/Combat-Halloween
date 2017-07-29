@@ -60,7 +60,7 @@ void Circlebutton::handle( sf::Event& event )
 	}
 }
 
-void Circlebutton::draw( sf::RenderWindow* &window, double elapsedTime )
+void Circlebutton::draw( sf::RenderWindow* &window )
 {
 	window->draw( button.get() );
 }

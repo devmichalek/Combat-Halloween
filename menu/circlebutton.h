@@ -23,7 +23,7 @@ public:
 	void load( string path, bool active = false );
 	void set( float x, float y, float x_scale, float y_scale );
 	void handle( sf::Event& event );
-	void draw( sf::RenderWindow* &window, double elapsedTime );
+	void draw( sf::RenderWindow* &window );
 	
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
