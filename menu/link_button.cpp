@@ -69,7 +69,7 @@ void Link_button::handle( sf::Event& event )
 	}
 }
 
-void Link_button::draw( sf::RenderWindow* &window, double elapsedTime )
+void Link_button::draw( sf::RenderWindow* &window )
 {
 	window->draw( button.get() );
 }
