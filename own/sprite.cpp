@@ -290,9 +290,19 @@ void MySprite::setScale( float x, float y )
 	sprite->setScale( x, y );
 }
 
-void MySprite::setRotation( double angle )
+void MySprite::setOrigin( float x, float y )
+{
+	sprite->setOrigin( x, y );
+}
+
+void MySprite::setRotation( float angle )
 {
 	sprite->setRotation( angle );
+}
+
+float MySprite::getRotation()
+{
+	return sprite->getRotation();
 }
 
 void MySprite::setOffset( int n )

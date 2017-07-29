@@ -46,7 +46,9 @@ public:
 	void move( float x, float y );
 	void center( float x, float y, int w, int h );
 	
-	void setRotation( double angle );
+	void setOrigin( float x, float y );
+	void setRotation( float angle );
+	float getRotation();
 	void setScale( float x = 1, float y = 1 );
 	void setOffset( int n );
 	
