@@ -133,6 +133,16 @@ float Circlebutton::getLeft()
 	return button.getLeft();
 }
 
+float Circlebutton::getRight()
+{
+	return button.getRight();
+}
+
+float Circlebutton::getBot()
+{
+	return button.getBot();
+}
+
 
 
 void Circlebutton::setPlayable( bool playable )

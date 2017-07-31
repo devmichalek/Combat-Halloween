@@ -33,6 +33,8 @@ public:
 	void setActive( bool active );
 	void changeActive();
 	float getLeft();
+	float getRight();
+	float getBot();
 	bool isChanged();
 	void setChanged( bool changed );
 	
