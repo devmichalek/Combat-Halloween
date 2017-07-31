@@ -103,14 +103,18 @@ void Engine::states()
 	
 	if( core->getState() == MENU )
 	{
-		menu->draw( core->getWindow(), core->getElapsedTime() );
+		menu->loadSound();
+		menu->head( core->getWindow(), core->getElapsedTime() );
+		
 		if( menu->isReady() )
 		{
+			menu->saveSound();
 			core->getState() = PLAY;
 		}
 		
 		if( menu->isClose() )
 		{
+			menu->saveSound();
 			core->isOpen() = false;
 		}
 	}
