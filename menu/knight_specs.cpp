@@ -104,6 +104,9 @@ void Knight_specs::load( float screen_w, float screen_h )
 		rects[ i ]->x = parts[ i ]->getX();
 		rects[ i ]->y = parts[ i ]->getY();
 	}
+	
+	view.setSize( screen_w, screen_h );
+	view.setCenter( screen_w /2.5, screen_h /2 );
 }
 
 void Knight_specs::handle( sf::Event& event )
@@ -204,13 +207,13 @@ void Knight_specs::mechanics( double elapsedTime )
 	float rotation = elapsedTime *0xFF;
 	if( (lastChosen == -1 && chosen == -1) && table.getX() > x1 )
 	{
-		gear_top.setRotation( gear_top.getRotation() -rotation );
+		gear_top.setRotation( gear_top.getRotation() +rotation );
 		gear_bot.setRotation( gear_bot.getRotation() -rotation );
 		moving_state = -elapsedTime *0xFF;
 	}
 	else if( (lastChosen != -1 || chosen != -1) && table.getX() < x2 )
 	{
-		gear_top.setRotation( gear_top.getRotation() +rotation );
+		gear_top.setRotation( gear_top.getRotation() -rotation );
 		gear_bot.setRotation( gear_bot.getRotation() +rotation );
 		moving_state = elapsedTime *0xFF;
 	}

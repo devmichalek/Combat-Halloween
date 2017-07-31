@@ -2,6 +2,7 @@
 #include "own/chunk.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/View.hpp>
 #include <vector>
 
 class Knight_specs
@@ -33,6 +34,9 @@ class Knight_specs
 	
 	float offset;
 	float line;
+	
+	// View, specs
+	sf::View view;
 	
 	// Sound.
 	Chunk click;
