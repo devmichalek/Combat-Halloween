@@ -40,6 +40,9 @@ class Settings
 	MySprite gear_right;
 	float moving_second;
 	float y1, y2;
+	int target;
+	MyText pressbutton;
+	MyText pressenter;
 	
 	// Sound.
 	Chunk click;
@@ -64,7 +67,9 @@ public:
 	void exsertTable( double elapsedTime );
 	void shovelTable( double elapsedTime );
 	void reset();
+	void save();
 	void position();
+	void positionSecond();
 	bool isPossibleKey( sf::Event &event );
 	string getName( int n );
 	

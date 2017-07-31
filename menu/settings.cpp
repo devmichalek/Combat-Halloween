@@ -58,6 +58,9 @@ void Settings::free()
 	gear_right.free();
 	moving_second = 0;
 	y1 = y2 = 0;
+	target = -1;
+	pressbutton.free();
+	pressenter.free();
 	
 	click.free();
 	playable = true;
@@ -100,7 +103,7 @@ void Settings::load( float screen_w, float screen_h )
 		{
 			string line = "";
 			file.get() >> line;
-			keys_current.push_back( stoi( line ) );
+			keys_current.push_back( con::stoi( line ) );
 			active_texts[ i ]->setText( getName( keys_current[ i ] ) );
 		}
 	}
@@ -118,6 +121,9 @@ void Settings::load( float screen_w, float screen_h )
 		state_texts[ i ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 		active_texts[ i ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 	}
+	active_texts[ JUMP_ATTACK ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	active_texts[ PAUSE ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	active_texts[ CHAT ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 	
 	
 	
@@ -177,7 +183,21 @@ void Settings::load( float screen_w, float screen_h )
 	gear_right.setScale( screen_w /2560, screen_h /1440 );
 	gear_right.setPosition( table_second.getRight(), screen_h );
 	
+	// Set pressbutton.
+	pressbutton.setIdentity( "settings-pressbutton" );
+	pressbutton.setFont( "fonts/jcandlestickextracond.ttf" );
+	pressbutton.setText( "Press button to change" );
+	pressbutton.setSize( size );
+	pressbutton.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 	
+	// Set pressenter.
+	pressenter.setIdentity( "settings-pressenter" );
+	pressenter.setFont( "fonts/jcandlestickextracond.ttf" );
+	pressenter.setText( "Click anywhere to save" );
+	pressenter.setSize( size );
+	pressenter.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	
+	positionSecond();
 	
 	// Load sound.
 	click.setIdentity( "link_button-chunk" );
@@ -186,7 +206,74 @@ void Settings::load( float screen_w, float screen_h )
 
 void Settings::handle( sf::Event& event )
 {
+	if( moving == 0 && table.getX() == x2 )
+	{
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			if( event.mouseButton.button == sf::Mouse::Left )
+			{
+				if( target != -1 )
+				{
+					active_texts[ target ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+				}
+				
+				bool success = false;
+				for( unsigned i = 0; i < JUMP_ATTACK; i++ )
+				{
+					if( active_texts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) || 
+						state_texts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+					{
+						target = i;
+						active_texts[ i ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+						success = true;
+						break;
+					}
+				}
+				
+				if( !success )
+				{
+					target = -1;
+				}
+			}
+		}
+	}
 	
+	if( moving_second == 0 && target != -1 )
+	{
+		// keyboard stuff
+		if( event.type == sf::Event::KeyPressed )
+		{
+			bool success = true;
+			for( auto &it :keys_current )
+			{
+				if( it == event.key.code )
+				{
+					success = false;
+					break;
+				}
+			}
+			
+			// add key
+			if( isPossibleKey( event ) && success )
+			{
+				keys_current[ target ] = event.key.code;
+				
+				active_texts[ target ]->setText( getName( event.key.code ) );
+				active_texts[ target ]->setSize( screen_h /28 );
+				active_texts[ target ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+				
+				if( target == ATTACK || target == JUMP )
+				{
+					active_texts[ JUMP_ATTACK ]->setText( getName( keys_current[ JUMP ] ) +" + " +getName( keys_current[ ATTACK ] ) );
+					active_texts[ JUMP_ATTACK ]->setSize( screen_h /28 );
+					active_texts[ JUMP_ATTACK ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+				}
+				
+				position();
+				save();
+			}
+		}
+	}
 }
 
 void Settings::draw( sf::RenderWindow* &window )
@@ -208,6 +295,8 @@ void Settings::draw( sf::RenderWindow* &window )
 	
 	// Second table.
 	window->draw( table_second.get() );
+	window->draw( pressbutton.get() );
+	window->draw( pressenter.get() );
 	window->draw( gear_left.get() );
 	window->draw( gear_right.get() );
 }
@@ -223,12 +312,63 @@ void Settings::mechanics( double elapsedTime )
 		if( moving < 0 )
 		{
 			gear_top.setRotation( gear_top.getRotation() +rotation );
-			gear_bot.setRotation( gear_bot.getRotation() +rotation );
+			gear_bot.setRotation( gear_bot.getRotation() -rotation );
 		}
 		else
 		{
 			gear_top.setRotation( gear_top.getRotation() -rotation );
-			gear_bot.setRotation( gear_bot.getRotation() -rotation );
+			gear_bot.setRotation( gear_bot.getRotation() +rotation );
+		}
+	}
+	
+	if( target != -1 )
+	{
+		if( table_second.getY() > y2 )
+		{
+			moving_second = -elapsedTime *0xFF;
+		}
+		else
+		{
+			moving_second = 0;
+		}
+		
+		if( table_second.getY() < y2 )
+		{
+			table_second.setPosition( table_second.getX(), y2 );
+		}
+	}
+	else
+	{
+		if( table_second.getY() < y1 )
+		{
+			moving_second = elapsedTime *0xFF;
+		}
+		else
+		{
+			moving_second = 0;
+		}
+		
+		if( table_second.getY() > y1 )
+		{
+			table_second.setPosition( table_second.getX(), y1 );
+		}
+	}
+	
+	if( moving_second != 0 )
+	{
+		positionSecond();
+		table_second.move( 0, moving_second );
+		
+		float rotation = elapsedTime *0xFF;
+		if( moving_second < 0 )
+		{
+			gear_left.setRotation( gear_left.getRotation() -rotation );
+			gear_right.setRotation( gear_right.getRotation() +rotation );
+		}
+		else
+		{
+			gear_left.setRotation( gear_left.getRotation() +rotation );
+			gear_right.setRotation( gear_right.getRotation() -rotation );
 		}
 	}
 }
@@ -251,6 +391,12 @@ void Settings::fadein( float v, int max )
 	table.fadein( v, max );
 	gear_top.fadein( v, max );
 	gear_bot.fadein( v, max );
+	
+	table_second.fadein( v, max );
+	gear_left.fadein( v, max );
+	gear_right.fadein( v, max );
+	pressbutton.fadein( v, max );
+	pressenter.fadein( v, max );
 }
 
 void Settings::fadeout( float v, int min )
@@ -269,6 +415,12 @@ void Settings::fadeout( float v, int min )
 	table.fadeout( v, min );
 	gear_top.fadeout( v, min );
 	gear_bot.fadeout( v, min );
+	
+	table_second.fadeout( v, min );
+	gear_left.fadeout( v, min );
+	gear_right.fadeout( v, min );
+	pressbutton.fadeout( v, min );
+	pressenter.fadeout( v, min );
 }
 
 
@@ -325,6 +477,21 @@ void Settings::reset()
 	file.free();
 }
 
+void Settings::save()
+{
+	MyFile file;
+	file.load( "txt/keys_current.txt" );
+	if( file.is_good() )
+	{
+		for( unsigned i = 0; i < JUMP_ATTACK; i++ )
+		{
+			string line = con::itos( keys_current[ i ] );
+			file.get() << line << endl;
+		}
+	}
+	file.free();
+}
+
 void Settings::position()
 {
 	// Position state_texts.
@@ -341,6 +508,12 @@ void Settings::position()
 	
 	// Contactme.
 	contactme.setPosition( table.getX() +screen_w /80, table.getBot() -contactme.getHeight() -screen_h /54 );
+}
+
+void Settings::positionSecond()
+{
+	pressbutton.setPosition( table_second.getX() +screen_w /80, table_second.getY() +screen_h /54 );
+	pressenter.setPosition( table_second.getX() +screen_w /80, pressbutton.getBot() +screen_h /32 );
 }
 
 bool Settings::isPossibleKey( sf::Event &event )
