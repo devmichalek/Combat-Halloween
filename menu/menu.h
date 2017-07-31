@@ -3,13 +3,18 @@
 #include "button.h"
 #include "circlebutton.h"
 #include "settings.h"
+#include "volume_button.h"
 #include "pausesystem.h"
 #include "own/music.h"
 
 class Menu
 {
+	// Basics.
 	bool ready;
 	bool close;
+	bool run;
+	
+	// Objects.
 	MySprite background;
 	Knight_specs knight_specs;
 	Link_button github;
@@ -22,19 +27,31 @@ class Menu
 	Circlebutton musicbutton;
 	Circlebutton settingsbutton;
 	Settings settings;
+	Volume_button chunk_volume;
+	Volume_button music_volume;
 	Pausesystem pausesystem;
 	Music music;
 	
 public:
 	
+	// Basics.
 	Menu();
 	~Menu();
 	void free();
-	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
-	void draw( sf::RenderWindow* &window, double elapsedTime );
+	void head( sf::RenderWindow* &window, double elapsedTime );
 	
+	// Support.
+	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
+	void fades( double elapsedTime );
+	
+	// Sound.
+	void loadSound();
+	void saveSound();
+	
+	// Getters.
 	bool isReady();
 	bool isClose();
 };
