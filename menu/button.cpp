@@ -17,7 +17,6 @@ void Button::free()
 	pressed = false;
 	
 	click.free();
-	playable = true;
 }
 
 
@@ -37,7 +36,7 @@ void Button::load( float x, float y, string path, bool locked )
 		button.setOffset( 2 );
 	}
 	
-	click.setIdentity( "link_button-chunk" );
+	click.setIdentity( "button-chunk" );
 	click.load( "sounds/click.wav" );
 }
 
@@ -56,11 +55,7 @@ void Button::handle( sf::Event& event )
 			{
 				if( button.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
-					if( playable )
-					{
-						click.play();
-					}
-					
+					click.play();
 					button.setOffset( 1 );
 					pressed = true;
 				}
@@ -100,7 +95,7 @@ float Button::getBot()
 
 void Button::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Button::setVolume( float volume )

@@ -1,7 +1,7 @@
 #include "own/sprite.h"
+#include "own/chunk.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-#include "own/chunk.h"
 
 class Button
 {
@@ -11,7 +11,6 @@ class Button
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 	
@@ -33,6 +32,6 @@ public:
 	float getBot();
 	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };
