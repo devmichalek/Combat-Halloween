@@ -16,11 +16,9 @@ void Pausesystem::free()
 	text.free();
 	
 	active = false;
-	changed = false;
 	release = false;
 	
 	click.free();
-	playable = true;
 }
 
 
@@ -49,15 +47,11 @@ void Pausesystem::handle( sf::Event& event )
 	// keyboard stuff
 	if( event.type == sf::Event::KeyPressed && !release )
 	{
-		if( event.key.code == 15 )
+		if( event.key.code == 15 )	// 'p'
 		{
 			release = true;
 			active = !active;
-			
-			if( playable )
-			{
-				click.play();
-			}
+			click.play();
 		}
 	}
 	
@@ -97,22 +91,6 @@ void Pausesystem::setActive( bool active )
 	this->active = active;
 }
 
-bool Pausesystem::isChanged()
-{
-	if( changed )
-	{
-		changed = false;
-		return true;
-	}
-	
-	return false;
-}
-
-void Pausesystem::setChanged( bool changed )
-{
-	this->changed = changed;
-}
-
 int Pausesystem::getAlpha()
 {
 	return blackout.getAlpha();
@@ -122,7 +100,7 @@ int Pausesystem::getAlpha()
 
 void Pausesystem::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Pausesystem::setVolume( float volume )

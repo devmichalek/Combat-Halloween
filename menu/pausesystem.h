@@ -10,12 +10,10 @@ class Pausesystem
 	MyText text;
 	
 	bool active;
-	bool changed;
 	bool release;
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 	
@@ -31,14 +29,12 @@ public:
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
-	// Rest.
+	// The rest.
 	bool isActive();
 	void setActive( bool active );
-	bool isChanged();
-	void setChanged( bool changed );
 	int getAlpha();
 	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };
