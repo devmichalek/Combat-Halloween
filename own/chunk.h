@@ -8,10 +8,10 @@ using namespace std;
 class Chunk
 {
 protected:
-
 	string identity;
     sf::Sound* chunk;
 	sf::SoundBuffer* buffer;
+	bool playable; // able to play
 
 public:
 
@@ -29,4 +29,5 @@ public:
     void play();
 	void pause();
     void setVolume( float volume = 50 );
+	void setPlayable( bool playable = true );
 };

@@ -5,6 +5,7 @@ Chunk::Chunk()
 	identity = "";
 	chunk = NULL;
 	buffer = NULL;
+	playable = false;
 }
 
 Chunk::~Chunk()
@@ -25,6 +26,8 @@ void Chunk::free()
         delete buffer;
         buffer = NULL;
     }
+	
+	playable = false;
 }
 
 const sf::Sound* Chunk::get() const
@@ -80,7 +83,10 @@ void Chunk::stop()
 
 void Chunk::play()
 {
-	chunk->play();
+	if( playable )
+	{
+		chunk->play();
+	}
 }
 
 void Chunk::pause()
@@ -91,4 +97,9 @@ void Chunk::pause()
 void Chunk::setVolume( float volume )
 {
 	chunk->setVolume( volume );
+}
+
+void Chunk::setPlayable( bool playable )
+{
+	this->playable = playable;
 }
