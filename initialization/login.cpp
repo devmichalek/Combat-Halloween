@@ -4,6 +4,7 @@
 
 Login::Login()
 {
+	myThread = NULL;
 	free();
 }
 
@@ -47,6 +48,12 @@ void Login::free()
 	max_length_password = 0;
 	min_length_password = 0;
 	error_status = false;
+	
+	if( myThread != NULL )
+	{
+		delete myThread;
+		myThread = NULL;
+	}
 }
 
 
@@ -152,7 +159,11 @@ void Login::handle( sf::Event& event )
 		login.handle( event );
 		signup.handle( event );
 		back.handle( event );
-		go.handle( event );
+		
+		if( !ready )
+		{
+			go.handle( event );
+		}
 		
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) && status < 2 )
 		{
@@ -257,36 +268,18 @@ void Login::handle( sf::Event& event )
 					status = 1;
 					setArrow();
 				}
-				else if( status == 1 )
+				else if( status == 1 && !ready )
 				{
 					go.getFocus() = true;
-					sendRequest();
-				}
-				
-				/*
-				if( nick.size() >= min )
-				{
-					next = true;
 					
-					// Set "next".
-					MyFile file;
-					file.load( "data/txt/nick/nick_status.txt", std::ios::out );
-					if( file.is_good() )
-					{
-						string line = "1";
-						file.get() << line;
-					}
-					file.free();
+					error.setText( "Loading data..." );
+					error.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
+					error.setPosition( screen_w /2 -error.getWidth() /2, password_form.getBot() +screen_h/36 );
+					error.setAlpha( 0xFF );
 					
-					// Set "next".
-					file.load( "data/txt/nick/nick_current.txt", std::ios::out );
-					if( file.is_good() )
-					{
-						file.get() << nick;
-					}
-					file.free();
+					myThread = new std::thread( Login::sendRequest, this );
+					myThread->detach();
 				}
-				*/
 			}
 		}
 	}
@@ -489,7 +482,7 @@ void Login::organizeWritten()
 string Login::getPassword()
 {
 	string new_password = "";
-	for( auto &it :password )
+	for( unsigned i = 0; i < password.size(); i++ )
 	{
 		new_password += '*';
 	}

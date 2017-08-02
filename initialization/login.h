@@ -3,6 +3,7 @@
 #include "own/text.h"
 #include "own/sprite.h"
 #include "rectbutton.h"
+#include <thread>
 
 class Login
 {
@@ -42,6 +43,8 @@ class Login
 	unsigned max_length_password;
 	unsigned min_length_password;
 	bool error_status;
+	
+	std::thread* myThread;
 	
 public:
 
