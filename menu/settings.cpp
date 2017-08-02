@@ -61,9 +61,9 @@ void Settings::free()
 	target = -1;
 	pressbutton.free();
 	pressenter.free();
+	resetbutton.free();
 	
 	click.free();
-	playable = true;
 }
 
 
@@ -197,50 +197,37 @@ void Settings::load( float screen_w, float screen_h )
 	pressenter.setSize( size );
 	pressenter.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 	
+	// Set reset button.
+	resetbutton.setIdentity( "settings-resetbutton" );
+	resetbutton.setFont( "fonts/jcandlestickextracond.ttf" );
+	resetbutton.setText( "RESET" );
+	resetbutton.setSize( size );
+	resetbutton.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	
 	positionSecond();
 	
 	// Load sound.
-	click.setIdentity( "link_button-chunk" );
+	click.setIdentity( "settings-chunk" );
 	click.load( "sounds/click.wav" );
 }
 
 void Settings::handle( sf::Event& event )
 {
-	if( moving == 0 && table.getX() == x2 )
+	if( moving_second == 0 && target != -1 )
 	{
+		// Reset.
 		if( event.type == sf::Event::MouseButtonPressed )
 		{
 			if( event.mouseButton.button == sf::Mouse::Left )
 			{
-				if( target != -1 )
+				if( resetbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
-					active_texts[ target ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-				}
-				
-				bool success = false;
-				for( unsigned i = 0; i < JUMP_ATTACK; i++ )
-				{
-					if( active_texts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) || 
-						state_texts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) )
-					{
-						target = i;
-						active_texts[ i ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-						success = true;
-						break;
-					}
-				}
-				
-				if( !success )
-				{
-					target = -1;
+					reset();
 				}
 			}
 		}
-	}
-	
-	if( moving_second == 0 && target != -1 )
-	{
-		// keyboard stuff
+		
+		// Keyboard stuff.
 		if( event.type == sf::Event::KeyPressed )
 		{
 			bool success = true;
@@ -253,24 +240,58 @@ void Settings::handle( sf::Event& event )
 				}
 			}
 			
-			// add key
-			if( isPossibleKey( event ) && success )
+			// Set key.
+			if( success )
 			{
-				keys_current[ target ] = event.key.code;
-				
-				active_texts[ target ]->setText( getName( event.key.code ) );
-				active_texts[ target ]->setSize( screen_h /28 );
-				active_texts[ target ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-				
-				if( target == ATTACK || target == JUMP )
+				if( isPossibleKey( event ) )
 				{
-					active_texts[ JUMP_ATTACK ]->setText( getName( keys_current[ JUMP ] ) +" + " +getName( keys_current[ ATTACK ] ) );
-					active_texts[ JUMP_ATTACK ]->setSize( screen_h /28 );
-					active_texts[ JUMP_ATTACK ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+					click.play();
+					
+					keys_current[ target ] = event.key.code;
+					
+					active_texts[ target ]->setText( getName( event.key.code ) );
+					active_texts[ target ]->setSize( screen_h /28 );
+					active_texts[ target ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+					
+					if( target == ATTACK || target == JUMP )
+					{
+						active_texts[ JUMP_ATTACK ]->setText( getName( keys_current[ JUMP ] ) +" + " +getName( keys_current[ ATTACK ] ) );
+						active_texts[ JUMP_ATTACK ]->setSize( screen_h /28 );
+						active_texts[ JUMP_ATTACK ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+					}
+					
+					position();
+					save();
+				}
+			}
+		}
+	}
+	
+	if( moving == 0 && table.getX() == x2 )
+	{
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			if( event.mouseButton.button == sf::Mouse::Left )
+			{
+				// Set default color if this one was a target.
+				if( target != -1 )
+				{
+					active_texts[ target ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 				}
 				
-				position();
-				save();
+				// Check whenever is the collision.
+				target = -1;
+				for( unsigned i = 0; i < JUMP_ATTACK; i++ )
+				{
+					if( active_texts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) || 
+						state_texts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+					{
+						target = i;
+						click.play();
+						active_texts[ i ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -284,7 +305,6 @@ void Settings::draw( sf::RenderWindow* &window )
 	{
 		window->draw( it->get() );
 	}
-	
 	for( auto &it :active_texts )
 	{
 		window->draw( it->get() );
@@ -297,6 +317,7 @@ void Settings::draw( sf::RenderWindow* &window )
 	window->draw( table_second.get() );
 	window->draw( pressbutton.get() );
 	window->draw( pressenter.get() );
+	window->draw( resetbutton.get() );
 	window->draw( gear_left.get() );
 	window->draw( gear_right.get() );
 }
@@ -397,6 +418,7 @@ void Settings::fadein( float v, int max )
 	gear_right.fadein( v, max );
 	pressbutton.fadein( v, max );
 	pressenter.fadein( v, max );
+	resetbutton.fadein( v, max );
 }
 
 void Settings::fadeout( float v, int min )
@@ -421,6 +443,7 @@ void Settings::fadeout( float v, int min )
 	gear_right.fadeout( v, min );
 	pressbutton.fadeout( v, min );
 	pressenter.fadeout( v, min );
+	resetbutton.fadeout( v, min );
 }
 
 
@@ -463,6 +486,7 @@ void Settings::shovelTable( double elapsedTime )
 
 void Settings::reset()
 {
+	// First, open state file.
 	MyFile file;
 	file.load( "txt/keys.txt" );
 	if( file.is_good() )
@@ -471,10 +495,27 @@ void Settings::reset()
 		{
 			string line = "";
 			file.get() >> line;
+			keys_current[ i ] = stoi( line );
 			active_texts[ i ]->setText( getName( stoi( line ) ) );
+			active_texts[ i ]->setSize( screen_h /28 );
+			active_texts[ i ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 		}
 	}
 	file.free();
+	
+	// Then overwrite.
+	file.load( "txt/keys_current.txt" );
+	if( file.is_good() )
+	{
+		for( unsigned i = 0; i < JUMP_ATTACK; i++ )
+		{
+			string line = con::itos( keys_current[ i ] );
+			file.get() << line << endl;
+		}
+	}
+	file.free();
+	
+	position();
 }
 
 void Settings::save()
@@ -513,7 +554,8 @@ void Settings::position()
 void Settings::positionSecond()
 {
 	pressbutton.setPosition( table_second.getX() +screen_w /80, table_second.getY() +screen_h /54 );
-	pressenter.setPosition( table_second.getX() +screen_w /80, pressbutton.getBot() +screen_h /32 );
+	pressenter.setPosition( table_second.getX() +screen_w /80, pressbutton.getBot() +screen_h /80 );
+	resetbutton.setPosition( table_second.getRight() -screen_w /16, table_second.getBot() -screen_h /16 );
 }
 
 bool Settings::isPossibleKey( sf::Event &event )
@@ -597,7 +639,7 @@ string Settings::getName( int n )
 
 void Settings::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Settings::setVolume( float volume )

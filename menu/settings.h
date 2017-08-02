@@ -10,7 +10,7 @@ class Settings
 	float screen_w;
 	float screen_h;
 	
-	enum
+	enum Activities
 	{
 		MOVE_LEFT = 0,
 		MOVE_RIGHT,
@@ -43,10 +43,10 @@ class Settings
 	int target;
 	MyText pressbutton;
 	MyText pressenter;
+	MyText resetbutton;
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 
@@ -74,8 +74,8 @@ public:
 	string getName( int n );
 	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };
 
 /*
