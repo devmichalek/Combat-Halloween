@@ -15,7 +15,6 @@ void Link_button::free()
 {
 	button.free();
 	click.free();
-	playable = true;
 }
 
 
@@ -51,11 +50,7 @@ void Link_button::handle( sf::Event& event )
 			// printf( "%d %d\n", event.mouseButton.x, event.mouseButton.y );
 			if( button.checkCollisionCircle( event.mouseButton.x, event.mouseButton.y ) )
 			{
-				if( playable )
-				{
-					click.play();
-				}
-				
+				click.play();
 				button.setOffset( 1 );
 				string command = "start " +url;
 				system( command.c_str() );
@@ -93,7 +88,7 @@ float Link_button::getRight()
 
 void Link_button::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Link_button::setVolume( float volume )

@@ -10,7 +10,6 @@ class Link_button
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 
@@ -32,6 +31,6 @@ public:
 	float getRight();
 	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };
