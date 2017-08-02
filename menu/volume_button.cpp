@@ -15,14 +15,16 @@ void Volume_button::free()
 {
 	plus.free();
 	minus.free();
+	
 	volume = 0;
-	min = max = 0;
+	min = 0;
+	max = 100;
+	
 	active = true;
 	plus_pressed = false;
 	minus_pressed = false;
 	
 	click.free();
-	playable = true;
 }
 
 
@@ -50,12 +52,15 @@ void Volume_button::load( float left, float right, float bot, float screen_w, fl
 
 bool Volume_button::handle( sf::Event& event )
 {
-	if( event.type == sf::Event::MouseButtonReleased && active )
+	if( event.type == sf::Event::MouseButtonReleased )
 	{
-		plus.setOffset( 0 );
-		minus.setOffset( 0 );
-		plus_pressed = false;
-		minus_pressed = false;
+		if( active )
+		{
+			plus.setOffset( 0 );
+			minus.setOffset( 0 );
+			plus_pressed = false;
+			minus_pressed = false;
+		}
 	}
 	
 	if( event.type == sf::Event::MouseButtonPressed )
@@ -69,7 +74,7 @@ bool Volume_button::handle( sf::Event& event )
 			{
 				if( active )
 				{
-					if( playable && volume < max )
+					if( volume < max )
 					{
 						click.play();
 					}
@@ -83,7 +88,7 @@ bool Volume_button::handle( sf::Event& event )
 			{
 				if( active )
 				{
-					if( playable && volume > min )
+					if( volume > min )
 					{
 						click.play();
 					}
@@ -103,7 +108,10 @@ void Volume_button::draw( sf::RenderWindow* &window )
 {
 	window->draw( plus.get() );
 	window->draw( minus.get() );
-	
+}
+
+void Volume_button::mechanics( double elapsedTime )
+{
 	if( !active )
 	{
 		plus.setOffset( 2 );
@@ -112,7 +120,7 @@ void Volume_button::draw( sf::RenderWindow* &window )
 	
 	if( plus_pressed && volume < max )
 	{
-		volume += 0.1;
+		volume += elapsedTime *0xFF /4;
 		if( volume > max )
 		{
 			volume = max;
@@ -122,7 +130,7 @@ void Volume_button::draw( sf::RenderWindow* &window )
 	}
 	else if( minus_pressed && volume > min )
 	{
-		volume -= 0.1;
+		volume -= elapsedTime *0xFF /4;
 		if( volume < min )
 		{
 			volume = min;
@@ -151,8 +159,6 @@ void Volume_button::fadeout( float v, int min )
 void Volume_button::setMainVolume( float volume )
 {
 	this->volume = volume;
-	min = 0;
-	max = 100;
 }
 
 float Volume_button::getMainVolume()
@@ -185,7 +191,7 @@ bool Volume_button::isChanged()
 
 void Volume_button::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Volume_button::setVolume( float volume )

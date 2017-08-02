@@ -8,15 +8,16 @@ class Volume_button
 {
 	MySprite plus;
 	MySprite minus;
+	
 	float volume;
 	float min, max;
+	
 	bool active;
 	bool plus_pressed;
 	bool minus_pressed;
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 	
@@ -28,19 +29,18 @@ public:
 	void load( float left, float right, float bot, float screen_w, float screen_h );
 	bool handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
-	
-	// Support.
+	// Getters and setters.
 	void setMainVolume( float volume );
 	float getMainVolume();
 	void setActive( bool active );
-	bool isChanged();
-	
+	bool isChanged();	// whenever is minus button pressed or plus button pressed.
 	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };
