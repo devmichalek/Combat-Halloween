@@ -70,13 +70,13 @@ void Menu::load( float screen_w, float screen_h )
 	
 	// Circle buttons.
 	chunkbutton.load( "images/menu/chunk.png", true );
-	chunkbutton.set( screen_w -screen_w /256 , screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
+	chunkbutton.setPosition( screen_w -screen_w /256 , screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
 	chunkbutton.setPlayable( false );
 	musicbutton.load( "images/menu/music.png", true );
-	musicbutton.set( chunkbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
+	musicbutton.setPosition( chunkbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
 	musicbutton.setChanged( true );
 	settingsbutton.load( "images/menu/settings.png" );
-	settingsbutton.set( musicbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
+	settingsbutton.setPosition( musicbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
 	
 	// Settings.
 	settings.load( screen_w, screen_h );
@@ -176,6 +176,8 @@ void Menu::mechanics( double elapsedTime )
 		}
 		
 		settings.mechanics( elapsedTime );
+		chunk_volume.mechanics( elapsedTime );
+		music_volume.mechanics( elapsedTime );
 		
 		// Turn on/off all sounds.
 		if( chunkbutton.isChanged() )
