@@ -147,7 +147,9 @@ void Knight_specs::handle( sf::Event& event )
 void Knight_specs::draw( sf::RenderWindow* &window )
 {
 	window->draw( knight.get() );
+	window->setView( view );
 	window->draw( table.get() );
+	window->setView( window->getDefaultView() );
 	window->draw( gear_top.get() );
 	window->draw( gear_bot.get() );
 	

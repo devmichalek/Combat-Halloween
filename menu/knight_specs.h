@@ -1,4 +1,5 @@
 #include "own/sprite.h"
+#include "own/text.h"
 #include "own/chunk.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
@@ -24,7 +25,7 @@ class Knight_specs
 	float x1, x2;
 	float x, y;
 	
-	// Rest.
+	// The rest.
 	MySprite knight;
 	vector <MySprite*> parts;
 	vector <sf::Vector2f*> rects;
@@ -37,6 +38,8 @@ class Knight_specs
 	
 	// View, specs
 	sf::View view;
+	vector <MyText*> categories;
+	vector <MyText*> values;
 	
 	// Sound.
 	Chunk click;
