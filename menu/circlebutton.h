@@ -11,7 +11,6 @@ class Circlebutton
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 	
@@ -21,24 +20,26 @@ public:
 	void free();
 	
 	void load( string path, bool active = false );
-	void set( float x, float y, float x_scale, float y_scale );
+	void setPosition( float x, float y, float x_scale, float y_scale );
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
-	// Getters.
+	// Getters and setters.
 	bool isActive();
 	void setActive( bool active );
 	void changeActive();
-	float getLeft();
-	float getRight();
-	float getBot();
+
 	bool isChanged();
 	void setChanged( bool changed );
 	
+	float getLeft();
+	float getRight();
+	float getBot();
+	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };

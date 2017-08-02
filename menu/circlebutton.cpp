@@ -17,7 +17,6 @@ void Circlebutton::free()
 	changed = false;
 	
 	click.free();
-	playable = true;
 }
 
 
@@ -30,11 +29,11 @@ void Circlebutton::load( string path, bool active )
 	button.load( path, 3 );
 	setActive( active );
 	
-	click.setIdentity( "link_button-chunk" );
+	click.setIdentity( "circlebutton-chunk" );
 	click.load( "sounds/click.wav" );
 }
 
-void Circlebutton::set( float x, float y, float x_scale, float y_scale )
+void Circlebutton::setPosition( float x, float y, float x_scale, float y_scale )
 {
 	button.setScale( x_scale, y_scale );
 	button.setPosition( x -button.getWidth(), y -button.getHeight() );
@@ -48,11 +47,7 @@ void Circlebutton::handle( sf::Event& event )
 		{
 			if( button.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 			{
-				if( playable )
-				{
-					click.play();
-				}
-				
+				click.play();
 				changeActive();
 				changed = true;
 			}
@@ -147,7 +142,7 @@ float Circlebutton::getBot()
 
 void Circlebutton::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Circlebutton::setVolume( float volume )
