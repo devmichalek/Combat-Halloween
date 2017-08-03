@@ -83,31 +83,32 @@ void Initialization::draw( sf::RenderWindow* &window, double elapsedTime )
 {
 	if( !ready )
 	{
+		float velocity = elapsedTime *0xFF /2;
 		if( state == 0 )
 		{
-			texts[ adrmic ]->fadein( elapsedTime *128 );
+			texts[ adrmic ]->fadein( velocity );
 		}
 		else if( state == 1 )
 		{
-			texts[ pres ]->fadein( elapsedTime *192 );
+			texts[ pres ]->fadein( velocity *1.5 );
 		}
 		else if( state == 2 )
 		{
-			texts[ adrmic ]->fadeout( elapsedTime *128 );
-			texts[ pres ]->fadeout( elapsedTime *128 );
+			texts[ adrmic ]->fadeout( velocity );
+			texts[ pres ]->fadeout( velocity );
 		}
 		else if( state == 3 )
 		{
-			texts[ title ]->fadein( elapsedTime *128 );
+			texts[ title ]->fadein( velocity );
 		}
 		else if( state == 4 )
 		{
-			texts[ part ]->fadein( elapsedTime *128 );
+			texts[ part ]->fadein( velocity );
 		}
 		else if( state == 5 )
 		{
-			texts[ title ]->fadeout( elapsedTime *128 );
-			texts[ part ]->fadeout( elapsedTime *128 );
+			texts[ title ]->fadeout( velocity *1.5 );
+			texts[ part ]->fadeout( velocity *1.5 );
 		}
 		
 		window->draw( texts[ adrmic ]->get() );
