@@ -154,16 +154,13 @@ void Login::load( int screen_w, int screen_h )
 
 void Login::handle( sf::Event& event )
 {
-	if( counter == 0 )
+	if( counter == 0 && !ready )
 	{
 		login.handle( event );
 		signup.handle( event );
 		back.handle( event );
 		
-		if( !ready )
-		{
-			go.handle( event );
-		}
+		go.handle( event );
 		
 		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) && status < 2 )
 		{
@@ -338,6 +335,13 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 	arrow.fadein( elapsedTime *0xFF );
 	go.fadeinGlobal( elapsedTime *0xFF );
 	error.fadeout( elapsedTime*64 );
+	
+	if( signup.getClicked() )
+	{
+		string command = "start http://www.adrianmichalek.pl/combathalloween/registration_form.php";
+		system( command.c_str() );
+		signup.getClicked() = false;
+	}
 	
 	if( login.getClicked() )
 	{
@@ -534,19 +538,19 @@ void Login::sendRequest()
 	string message = "username=" +username +"&password=" +password +"&secret=gabrysia2017";
 	
 	// prepare the request
-	sf::Http::Request request( "/request.php", sf::Http::Request::Post );
+	sf::Http::Request request( "/combathalloween/request.php", sf::Http::Request::Post );
 	
 	// encode the parameters in the request body
     request.setBody( message );
 	
 	// send the request
-    sf::Http http( "http://englishseries.netne.net/" );
+    sf::Http http( "http://adrianmichalek.pl/" );
     sf::Http::Response response = http.sendRequest( request );
 	
 	// check the status
     if( response.getStatus() != sf::Http::Response::Ok )
     {
-        // printf( "request failed\n" );
+        // printf( "request failed \n" );
 		error.setText( "No internet connection." );
 		error.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 		error.setPosition( screen_w /2 -error.getWidth() /2, password_form.getBot() +screen_h/36 );
@@ -555,9 +559,9 @@ void Login::sendRequest()
 	else // Error
 	{
 		error_status = true;
-		int error_code = con::stoi( response.getBody() );
+		string error_code = response.getBody();
 		
-		if( error_code == 0 )
+		if( error_code == "success" )
 		{
 			ready = true;
 			error.setText( "You are logged!" );
@@ -565,18 +569,8 @@ void Login::sendRequest()
 		}
 		else
 		{
-			if( error_code == 1 || error_code == 2 )
-			{
-				error.setText( "Username or password seems to be wrong." );
-			}
-			else if( error_code == 3 )
-			{
-				error.setText( "Cannot find connection." );
-			}
-			else
-			{
-				error.setText( "Different unexpected error." );
-			}
+			error.setText( error_code );
+			// printf( "%s\n", error_code.c_str() );
 			error.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 		}
 		
