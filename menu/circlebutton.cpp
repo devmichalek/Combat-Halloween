@@ -45,7 +45,7 @@ void Circlebutton::handle( sf::Event& event )
 	{
 		if( event.mouseButton.button == sf::Mouse::Left )
 		{
-			if( button.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			if( button.checkCollisionCircle( event.mouseButton.x, event.mouseButton.y ) )
 			{
 				click.play();
 				changeActive();
