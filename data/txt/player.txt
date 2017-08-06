@@ -1,0 +1,5 @@
+1
+adriqun
+
+0 - logged out / 1 - logged
+username
