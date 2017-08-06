@@ -5,9 +5,13 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <vector>
+#include <thread>
 
 class Knight_specs
 {
+	float screen_w;
+	float screen_h;
+	
 	enum PARTS
 	{
 		HELMET = 0,
@@ -29,6 +33,8 @@ class Knight_specs
 	MySprite knight;
 	vector <MySprite*> parts;
 	vector <sf::Vector2f*> rects;
+	std::thread* myThread;
+	bool thread_ready;
 	
 	int chosen;
 	int lastChosen;
@@ -36,17 +42,28 @@ class Knight_specs
 	float offset;
 	float line;
 	
+	enum VARIABLES
+	{
+		LEVEL = 0,
+		ARMOUR,
+		HEALTH,
+		DAMAGE,
+		SPEED,
+		VARIABLES_AMOUNT
+	};
+	
 	// View, specs
 	sf::View view;
 	vector <MyText*> categories;
 	vector <MyText*> values;
+	float text_x;
 	
 	// Sound.
 	Chunk click;
-	bool playable;
 	
 public:
 	
+	// Basics.
 	Knight_specs();
 	~Knight_specs();
 	void free();
@@ -59,7 +76,15 @@ public:
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
+	// The rest.
+	void setThread();
+	void setValues();
+	
+	// Values.
+	void moveValues( float x = 0 );
+	void setPositionValues( float x = 0 );
+	
 	// Sound.
-	void setPlayable( bool playable = true );
-	void setVolume( float volume = 50 );
+	void setPlayable( bool playable );
+	void setVolume( float volume );
 };

@@ -1,8 +1,10 @@
 #include "knight_specs.h"
+#include <SFML/Network.hpp>
 #include "own/file.h"
 
 Knight_specs::Knight_specs()
 {
+	myThread = NULL;
 	free();
 }
 
@@ -13,6 +15,9 @@ Knight_specs::~Knight_specs()
 
 void Knight_specs::free()
 {
+	screen_w = 0;
+	screen_h = 0;
+	
 	table.free();
 	gear_top.free();
 	gear_bot.free();
@@ -43,6 +48,39 @@ void Knight_specs::free()
 	line = 0;
 	
 	click.free();
+	
+	// The Rest
+	if( !categories.empty() )
+	{
+		for( auto &it :categories )
+		{
+			it->free();
+			delete it;
+			it = NULL;
+		}
+		
+		categories.clear();
+	}
+	
+	if( !values.empty() )
+	{
+		for( auto &it :values )
+		{
+			it->free();
+			delete it;
+			it = NULL;
+		}
+		
+		values.clear();
+	}
+	
+	if( myThread != NULL )
+	{
+		delete myThread;
+		myThread = NULL;
+	}
+	thread_ready = false;
+	text_x = 0;
 }
 
 
@@ -51,7 +89,10 @@ void Knight_specs::load( float screen_w, float screen_h )
 {
 	free();
 	
-	click.setIdentity( "link_button-chunk" );
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
+	
+	click.setIdentity( "knight_specs-chunk" );
 	click.load( "sounds/click.wav" );
 	
 	line = 10;
@@ -106,12 +147,45 @@ void Knight_specs::load( float screen_w, float screen_h )
 	}
 	
 	view.setSize( screen_w, screen_h );
-	view.setCenter( screen_w /2.5, screen_h /2 );
+	view.setCenter( screen_w /2, screen_h /2 );
+	view.setViewport(sf::FloatRect(-0.735, 0, 1, 1));
+	text_x = screen_w -(table.getWidth() -parts[ HELMET ]->getWidth() -screen_h /18);
+	
+	
+	for( unsigned i = 0; i < VARIABLES_AMOUNT; i++ )
+	{
+		categories.push_back( new MyText );
+		categories[ i ]->setIdentity( "knight_specs-categories" );
+		categories[ i ]->setFont( "fonts/jcandlestickextracond.ttf" );
+	}
+	
+	categories[ LEVEL ]->setText( "Level: " );
+	categories[ ARMOUR ]->setText( "Armour: " );
+	categories[ HEALTH ]->setText( "Health: " );
+	categories[ DAMAGE ]->setText( "Damage: " );
+	categories[ SPEED ]->setText( "Speed: " );
+	for( auto &it :categories )
+	{
+		it->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+		it->setSize( screen_h /28 );
+	}
+	
+	for( unsigned i = 0; i < VARIABLES_AMOUNT *VARIABLES_AMOUNT; i++ )
+	{
+		values.push_back( new MyText );
+		values[ values.size() -1 ]->setIdentity( "knight_specs-values" );
+		values[ values.size() -1 ]->setFont( "fonts/jcandlestickextracond.ttf" );
+		values[ values.size() -1 ]->setText( "..." );
+		values[ values.size() -1 ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+		values[ values.size() -1 ]->setSize( screen_h /28 );
+	}
+	
+	setPositionValues( screen_w );
 }
 
 void Knight_specs::handle( sf::Event& event )
 {
-	if( event.type == sf::Event::MouseButtonPressed )
+	if( event.type == sf::Event::MouseButtonPressed && thread_ready )
 	{
 		if( event.mouseButton.button == sf::Mouse::Left )
 		{
@@ -122,10 +196,7 @@ void Knight_specs::handle( sf::Event& event )
 				{
 					if( parts[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) && chosen != static_cast <int> (i) )
 					{
-						if( playable )
-						{
-							click.play();
-						}
+						click.play();
 						
 						clear = false;
 						lastChosen = chosen;
@@ -147,11 +218,33 @@ void Knight_specs::handle( sf::Event& event )
 void Knight_specs::draw( sf::RenderWindow* &window )
 {
 	window->draw( knight.get() );
-	window->setView( view );
 	window->draw( table.get() );
-	window->setView( window->getDefaultView() );
 	window->draw( gear_top.get() );
 	window->draw( gear_bot.get() );
+	
+	// VALUES AND CATEGORIES
+	window->setView( view );
+	for( auto &it :categories )
+	{
+		window->draw( it->get() );
+	}
+	
+	if( chosen != -1 )
+	{
+		for( unsigned i = chosen *VARIABLES_AMOUNT; i < (chosen+1) *VARIABLES_AMOUNT; i++ )
+		{
+			window->draw( values[ i ]->get() );
+		}
+	}
+	else if( lastChosen != -1 )
+	{
+		for( unsigned i = lastChosen *VARIABLES_AMOUNT; i < (lastChosen+1) *VARIABLES_AMOUNT; i++ )
+		{
+			window->draw( values[ i ]->get() );
+		}
+	}
+	
+	window->setView( window->getDefaultView() );
 	
 	if( chosen != -1 && moving_state == 0 )
 	{
@@ -176,6 +269,35 @@ void Knight_specs::draw( sf::RenderWindow* &window )
 
 void Knight_specs::mechanics( double elapsedTime )
 {
+	// printf( "%d %d\n", chosen, lastChosen );
+	
+	// move texts
+	if( thread_ready )
+	{
+		if( chosen == -1 )
+		{
+			if( categories[ 0 ]->getX() < screen_w )
+			{
+				moveValues( elapsedTime *0xFF );
+			}
+			else if( categories[ 0 ]->getX() > screen_w )
+			{
+				setPositionValues( screen_w );
+			}
+		}
+		else if( table.getX() == x2 && moving_state == 0 )
+		{
+			if( categories[ 0 ]->getX() > text_x )
+			{
+				moveValues( -elapsedTime *0xFF );
+			}
+			else if( categories[ 0 ]->getX() < text_x )
+			{
+				setPositionValues( text_x );
+			}
+		}
+	}
+	
 	offset += elapsedTime *25;
 	if( offset > line )
 	{
@@ -194,7 +316,7 @@ void Knight_specs::mechanics( double elapsedTime )
 		}
 	}
 	
-	if( lastChosen != -1 && (chosen == -1 || lastChosen != chosen) )
+	if( lastChosen != -1 && (chosen == -1 || lastChosen != chosen) && ( categories[ 0 ]->getX() == screen_w || categories[ 0 ]->getX() == text_x ) )
 	{
 		if( parts[ lastChosen ]->getY() < rects[ lastChosen ]->y || parts[ lastChosen ]->getX() < rects[ lastChosen ]->x )
 		{
@@ -206,36 +328,42 @@ void Knight_specs::mechanics( double elapsedTime )
 		}
 	}
 	
-	float rotation = elapsedTime *0xFF;
-	if( (lastChosen == -1 && chosen == -1) && table.getX() > x1 )
+	if( thread_ready )
 	{
-		gear_top.setRotation( gear_top.getRotation() +rotation );
-		gear_bot.setRotation( gear_bot.getRotation() -rotation );
-		moving_state = -elapsedTime *0xFF;
-	}
-	else if( (lastChosen != -1 || chosen != -1) && table.getX() < x2 )
-	{
-		gear_top.setRotation( gear_top.getRotation() -rotation );
-		gear_bot.setRotation( gear_bot.getRotation() +rotation );
-		moving_state = elapsedTime *0xFF;
-	}
-	else
-	{
-		moving_state = 0;
-	}
-	
-	if( moving_state != 0 )
-	{
-		table.move( moving_state, 0 );
-	}
-	
-	if( table.getX() < x1 )
-	{
-		table.setPosition( x1, table.getY() );
-	}
-	else if( table.getX() > x2 )
-	{
-		table.setPosition( x2, table.getY() );
+		if( categories[ 0 ]->getX() == screen_w )
+		{
+			float rotation = elapsedTime *0xFF;
+			if( (lastChosen == -1 && chosen == -1) && table.getX() > x1 )
+			{
+				gear_top.setRotation( gear_top.getRotation() +rotation );
+				gear_bot.setRotation( gear_bot.getRotation() -rotation );
+				moving_state = -elapsedTime *0xFF;
+			}
+			else if( (lastChosen != -1 || chosen != -1) && table.getX() < x2 )
+			{
+				gear_top.setRotation( gear_top.getRotation() -rotation );
+				gear_bot.setRotation( gear_bot.getRotation() +rotation );
+				moving_state = elapsedTime *0xFF;
+			}
+			else
+			{
+				moving_state = 0;
+			}
+			
+			if( moving_state != 0 )
+			{
+				table.move( moving_state, 0 );
+			}
+			
+			if( table.getX() < x1 )
+			{
+				table.setPosition( x1, table.getY() );
+			}
+			else if( table.getX() > x2 )
+			{
+				table.setPosition( x2, table.getY() );
+			}
+		}
 	}
 }
 
@@ -252,6 +380,16 @@ void Knight_specs::fadein( float v, int max )
 	{
 		it->fadein( v, max );
 	}
+	
+	for( auto &it :categories )
+	{
+		it->fadein( v, max );
+	}
+	
+	for( auto &it :values )
+	{
+		it->fadein( v, max );
+	}
 }
 
 void Knight_specs::fadeout( float v, int min )
@@ -265,11 +403,196 @@ void Knight_specs::fadeout( float v, int min )
 	{
 		it->fadeout( v, min );
 	}
+	
+	for( auto &it :categories )
+	{
+		it->fadeout( v, min );
+	}
+	
+	for( auto &it :values )
+	{
+		it->fadeout( v, min );
+	}
 }
+
+
+
+void Knight_specs::setThread()
+{
+	if( !thread_ready )
+	{
+		myThread = new std::thread( Knight_specs::setValues, this );
+		myThread->detach();
+	}
+}
+
+void Knight_specs::setValues()
+{
+	// We need to know the username if it exists.
+	MyFile file;
+	file.load( "txt/player.txt" );
+	string line;
+	file.get() >> line;
+	int success = con::stoi( line );
+	
+	// if exists
+	if( success != 0 )
+	{
+		file.get() >> line;
+		
+		// prepare message
+		string message = "username=" +line;
+		
+		// prepare the request
+		sf::Http::Request request( "/combathalloween/values.php", sf::Http::Request::Post );
+		
+		// encode the parameters in the request body
+		request.setBody( message );
+		
+		// send the request
+		sf::Http http( "http://adrianmichalek.pl/" );
+		sf::Http::Response response = http.sendRequest( request );
+		
+		// check the status
+		if( response.getStatus() != sf::Http::Response::Ok )
+		{
+			success = 0;
+		}
+		else
+		{
+			string echostring = response.getBody();
+			
+			if( echostring == "0" )	// error
+			{
+				success = 0;
+			}
+			else
+			{
+				int counter = 0;
+				for( unsigned i = 0; i < echostring.size(); i++ )
+				{
+					if( echostring[ i ] == 'c' )
+					{
+						for( unsigned j = i +1; j < echostring.size(); j++ )
+						{
+							if( echostring[ j ] == 'a' )
+							{
+								i = j -1;
+								break;
+							}
+						}
+					}
+					else if( echostring[ i ] == 'l' || 
+						echostring[ i ] == 'a' || 
+						echostring[ i ] == 'h' || 
+						echostring[ i ] == 'd' || 
+						echostring[ i ] == 's' )
+					{
+						string value = "";
+						for( unsigned j = i +1; j < echostring.size(); j++ )
+						{
+							if( isalpha( echostring[ j ] ) )
+							{
+								i = j -1;
+								break;
+							}
+							else
+							{
+								value += echostring[ j ];
+							}
+						}
+						
+						values[ counter ]->setText( value );
+
+						// cout << values.size() -1 << "    " << std::stoi( value ) << endl;
+						
+						if( std::stoi( value ) > 0 )
+						{
+							values[ counter ]->setColor( sf::Color( 0x78, 0xA5, 0xA3 ) );
+						}
+						else if( std::stoi( value ) == 0 )
+						{
+							values[ counter ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+						}
+						else
+						{
+							values[ counter ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+							
+						}
+						
+						values[ counter ]->setSize( screen_h /28 );
+						counter++;
+					}
+				}
+			}
+		}
+	}
+	
+	// error
+	if( success != 1 )
+	{
+		for( auto &it :values )
+		{
+			it->setText( "error" );
+			it->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+			it->setSize( screen_h /28 );
+		}
+	}
+	
+	setPositionValues( screen_w );
+	
+	thread_ready = true;
+}
+
+
+
+void Knight_specs::moveValues( float x )
+{
+	for( auto &it: categories )
+	{
+		it->move( x, 0 );
+	}
+	
+	for( auto &it: values )
+	{
+		it->move( x, 0 );
+	}
+}
+
+void Knight_specs::setPositionValues( float x )
+{
+	float gap = screen_h /15;
+	for( unsigned i = 0; i < categories.size(); i++ )
+	{
+		categories[ i ]->setPosition( x, table.getY() +screen_h/72 +(gap *i) );
+	}
+	
+	float biggest = 0;
+	for( auto &it :categories )
+	{
+		if( it->getWidth() > biggest )
+		{
+			biggest = it->getWidth() +screen_w /128;
+		}
+	}
+	
+	unsigned counter = 0;
+	for( unsigned i = 0; i < values.size(); i++ )
+	{
+		values[ i ]->setPosition( x +biggest, categories[ counter ]->getY() );
+		counter ++;
+		if( counter == VARIABLES_AMOUNT )
+		{
+			counter = 0;
+		}
+	}
+}
+
+
 
 void Knight_specs::setPlayable( bool playable )
 {
-	this->playable = playable;
+	click.setPlayable( playable );
 }
 
 void Knight_specs::setVolume( float volume )
