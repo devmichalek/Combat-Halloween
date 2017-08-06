@@ -83,7 +83,7 @@ void Initialization::draw( sf::RenderWindow* &window, double elapsedTime )
 {
 	if( !ready )
 	{
-		float velocity = elapsedTime *0xFF /2;
+		float velocity = elapsedTime *0xFF;
 		if( state == 0 )
 		{
 			texts[ adrmic ]->fadein( velocity );
