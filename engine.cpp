@@ -55,7 +55,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->getState() = MENU;
+		core->getState() = INIT;
 	}
 }
 
@@ -70,8 +70,8 @@ void Engine::events()
 		
 		switch( core->getState() )
 		{
-			case LOGIN: login->handle( core->getEvent() );
-			case MENU: menu->handle( core->getEvent() );
+			case LOGIN: login->handle( core->getEvent() ); break;
+			case MENU: menu->handle( core->getEvent() ); break;
 		}
     }
 }
@@ -109,7 +109,7 @@ void Engine::states()
 		if( menu->isReady() )
 		{
 			menu->saveSound();
-			core->getState() = PLAY;
+			core->getState() = LEVEL;
 		}
 		
 		if( menu->isClose() )
@@ -117,6 +117,11 @@ void Engine::states()
 			menu->saveSound();
 			core->isOpen() = false;
 		}
+	}
+	
+	if( core->getState() == LEVEL )
+	{
+		
 	}
 	
 	if( core->getState() == PLAY )

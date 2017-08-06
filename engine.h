@@ -13,6 +13,7 @@ class Engine {
 		INIT,
 		LOGIN,
 		MENU,
+		LEVEL,
 		PLAY
 	};
 	
