@@ -16,6 +16,7 @@ void Menu::free()
 	ready = false;
 	close = false;
 	run = false;
+	username = "";
 	
 	background.free();
 	knight_specs.free();
@@ -31,6 +32,7 @@ void Menu::free()
 	settings.free();
 	chunk_volume.free();
 	music_volume.free();
+	information.free();
 	pausesystem.free();
 	music.free();
 }
@@ -58,7 +60,7 @@ void Menu::load( float screen_w, float screen_h )
 	scores.setUrl( "scores" );
 	website.load( scores.getRight() +screen_w /256, screen_h /144, "images/menu/website.png" );
 	website.setScale( screen_w /2560, screen_h /1440 );
-	website.setUrl( "website" );
+	website.setUrl( "http://adrianmichalek.pl/combathalloween/" );
 	
 	// Main buttons.
 	singleplayer.load( screen_w /1.9, screen_h /2.35, "images/menu/singleplayer.png" );
@@ -85,6 +87,9 @@ void Menu::load( float screen_w, float screen_h )
 	chunk_volume.load( chunkbutton.getLeft(), chunkbutton.getRight(), chunkbutton.getBot(), screen_w, screen_h );
 	music_volume.load( musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot(), screen_w, screen_h );
 	
+	// Load information.
+	information.load( screen_w, screen_h );
+	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
 	
@@ -95,7 +100,7 @@ void Menu::load( float screen_w, float screen_h )
 
 void Menu::handle( sf::Event& event )
 {
-	if( !close )
+	if( !close && !ready )
 	{
 		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 		{
@@ -108,6 +113,7 @@ void Menu::handle( sf::Event& event )
 			exit.handle( event );
 			settingsbutton.handle( event );
 			settings.handle( event );
+			information.handle( event );
 			
 			if( !chunk_volume.handle( event ) )
 			{
@@ -149,20 +155,27 @@ void Menu::draw( sf::RenderWindow* &window )
 	settings.draw( window );
 	chunk_volume.draw( window );
 	music_volume.draw( window );
+	information.draw( window );
 	pausesystem.draw( window );
 }
 
 void Menu::mechanics( double elapsedTime )
 {
 	// Mechanics.
-	if( !pausesystem.isActive() )
+	if( !pausesystem.isActive() && !close && !ready )
 	{
 		knight_specs.mechanics( elapsedTime );
 		
 		// Close application.
-		if( exit.isPressed() )
+		if( exit.isPressed() || information.close() )
 		{
 			close = true;
+		}
+		
+		// Someone clicked singleplayer.
+		if( singleplayer.isPressed() )
+		{
+			ready = true;
 		}
 		
 		// Exsert / shovel settings.
@@ -195,6 +208,7 @@ void Menu::mechanics( double elapsedTime )
 			chunk_volume.setPlayable( chunkbutton.isActive() );
 			music_volume.setPlayable( chunkbutton.isActive() );
 			chunk_volume.setActive( chunkbutton.isActive() );
+			information.setPlayable( chunkbutton.isActive() );
 			pausesystem.setPlayable( chunkbutton.isActive() );
 		}
 		
@@ -214,6 +228,7 @@ void Menu::mechanics( double elapsedTime )
 			settingsbutton.setVolume( value );
 			chunk_volume.setVolume( value );
 			music_volume.setVolume( value );
+			information.setVolume( value );
 			pausesystem.setVolume( value );
 		}
 		
@@ -254,13 +269,14 @@ void Menu::fades( double elapsedTime )
 		settings.fadeout( value, min );
 		chunk_volume.fadeout( value, min );
 		music_volume.fadeout( value, min );
+		information.fadeout( value, min );
 		pausesystem.fadein( value *3, min );
 		
 		music.fadeout( elapsedTime *100, music_volume.getMainVolume() *0.2 );
 	}
 	
 	// Fade out - closed.
-	else if( close )
+	else if( close || ready )
 	{
 		float value = elapsedTime *0xFF /2;
 		
@@ -278,6 +294,7 @@ void Menu::fades( double elapsedTime )
 		settings.fadeout( value );
 		chunk_volume.fadeout( value );
 		music_volume.fadeout( value );
+		information.fadeout( value );
 		
 		music.fadeout( elapsedTime *100 );
 	}
@@ -301,6 +318,7 @@ void Menu::fades( double elapsedTime )
 		settings.fadein( value );
 		chunk_volume.fadein( value );
 		music_volume.fadein( value );
+		information.fadein( value );
 		pausesystem.fadeout( value );
 		
 		music.fadein( elapsedTime *100, music_volume.getMainVolume() );
@@ -314,6 +332,10 @@ void Menu::loadSound()
 	if( !run )
 	{
 		run = true;
+		
+		// Set thread.
+		knight_specs.setThread();
+		information.setThread();
 		
 		float chunkVolume = 0;
 		float musicVolume = 0;
@@ -391,11 +413,21 @@ void Menu::saveSound()
 	file.free();
 }
 
+void Menu::setUsername( string username )
+{
+	this->username = username;
+}
+
 
 
 bool Menu::isReady()
 {
-	return ready;
+	if( ready && background.getAlpha() == 0 )
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 bool Menu::isClose()

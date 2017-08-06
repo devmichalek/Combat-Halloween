@@ -4,6 +4,7 @@
 #include "circlebutton.h"
 #include "settings.h"
 #include "volume_button.h"
+#include "information.h"
 #include "pausesystem.h"
 #include "own/music.h"
 
@@ -12,7 +13,9 @@ class Menu
 	// Basics.
 	bool ready;
 	bool close;
+	bool next;
 	bool run;
+	string username;
 	
 	// Objects.
 	MySprite background;
@@ -29,6 +32,7 @@ class Menu
 	Settings settings;
 	Volume_button chunk_volume;
 	Volume_button music_volume;
+	Information information;
 	Pausesystem pausesystem;
 	Music music;
 	
@@ -47,9 +51,10 @@ public:
 	void mechanics( double elapsedTime );
 	void fades( double elapsedTime );
 	
-	// Sound.
+	// Sound and username.
 	void loadSound();
 	void saveSound();
+	void setUsername( string username );
 	
 	// Getters.
 	bool isReady();
