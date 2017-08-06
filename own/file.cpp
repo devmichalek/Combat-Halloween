@@ -63,6 +63,7 @@ fstream& MyFile::get()
 // other
 int con::stoi( string str )
 {
+	/*
 	bool m = false;
 	int tmp = 0;
 	unsigned i = 0;
@@ -79,8 +80,9 @@ int con::stoi( string str )
 		tmp = 10 *tmp +str[ i ] -48;
 		i++;
     }
+	*/
 	
-    return m ? -tmp : tmp;   
+    return std::stoi( str );   
 }
 
 float con::stof( string str )
