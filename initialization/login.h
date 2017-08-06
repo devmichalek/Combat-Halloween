@@ -8,6 +8,7 @@
 class Login
 {
 	bool ready;
+	bool logged;
 	int screen_w;
 	int screen_h;
 	

@@ -16,6 +16,7 @@ Login::~Login()
 void Login::free()
 {
 	ready = false;
+	logged = false;
 	screen_w = 0;
 	screen_h = 0;
 	
@@ -61,6 +62,20 @@ void Login::free()
 void Login::load( int screen_w, int screen_h )
 {
 	free();
+	
+	// check if it is logged
+	MyFile file;
+	file.load( "txt/player.txt" );
+	if( file.is_good() )
+	{
+		string line;
+		file.get() >> line;
+		if( con::stoi( line ) == 1 )
+		{
+			logged = true;
+		}
+	}
+	file.free();
 	
 	max_length_username = 13;
 	min_length_username = 4;
@@ -359,7 +374,9 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 	{
 		go.getClicked() = false;
 		go.getFocus() = false;
-		sendRequest();
+		
+		myThread = new std::thread( Login::sendRequest, this );
+		myThread->detach();
 	}
 	
 	if( error_status )
@@ -425,8 +442,21 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 
 bool Login::isReady()
 {
-	if( ready && error.getAlpha() == 0 )
+	if( logged )
 	{
+		return true;
+	}
+	else if( ready && error.getAlpha() == 0 )
+	{
+		MyFile file;
+		file.load( "txt/player.txt" );
+		if( file.is_good() )
+		{
+			file.get() << 1 << endl;
+			file.get() << username;
+		}
+		file.free();
+		
 		return true;
 	}
 	
@@ -535,7 +565,7 @@ void Login::position( float x_add, float y_add )
 
 void Login::sendRequest()
 {
-	string message = "username=" +username +"&password=" +password +"&secret=gabrysia2017";
+	string message = "username=" +username +"&password=" +password;
 	
 	// prepare the request
 	sf::Http::Request request( "/combathalloween/request.php", sf::Http::Request::Post );
