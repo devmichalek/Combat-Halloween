@@ -1,3 +1,5 @@
+#pragma once
+
 #include "own/chunk.h"
 #include "own/sprite.h"
 #include "own/text.h"
