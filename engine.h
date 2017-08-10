@@ -5,6 +5,8 @@
 #include "initialization/initialization.h"
 #include "initialization/login.h"
 #include "menu/menu.h"
+#include "level/level.h"
+#include "play/play.h"
 
 class Engine {
 	
@@ -14,7 +16,8 @@ class Engine {
 		LOGIN,
 		MENU,
 		LEVEL,
-		PLAY
+		PLAY,
+		TABLE
 	};
 	
 	Core* core;
@@ -22,6 +25,8 @@ class Engine {
 	Initialization* initialization;
 	Login* login;
 	Menu* menu;
+	Level* level;
+	Play* play;
 	
 public:
 	Engine();

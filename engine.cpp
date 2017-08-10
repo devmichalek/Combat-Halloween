@@ -23,6 +23,8 @@ void Engine::free()
 	delete initialization;
 	delete login;
 	delete menu;
+	delete level;
+	delete play;
 }
 
 void Engine::load()
@@ -46,6 +48,16 @@ void Engine::load()
 		menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
+		case 4:
+		level = new Level;
+		level->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 5:
+		play = new Play;
+		play->load( core->getWidth(), core->getHeight() );
+		break;
+		
 		case 101:
 		loading->beReady();
 		break;
@@ -55,7 +67,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->getState() = INIT;
+		core->getState() = LEVEL;
 	}
 }
 
@@ -72,6 +84,8 @@ void Engine::events()
 		{
 			case LOGIN: login->handle( core->getEvent() ); break;
 			case MENU: menu->handle( core->getEvent() ); break;
+			case LEVEL: level->handle( core->getEvent() ); break;
+			case PLAY: play->handle( core->getEvent() ); break;
 		}
     }
 }
@@ -111,8 +125,7 @@ void Engine::states()
 			menu->saveSound();
 			core->getState() = LEVEL;
 		}
-		
-		if( menu->isClose() )
+		else if( menu->isClose() )
 		{
 			menu->saveSound();
 			core->isOpen() = false;
@@ -121,12 +134,41 @@ void Engine::states()
 	
 	if( core->getState() == LEVEL )
 	{
+		level->loadSound();
+		level->head( core->getWindow(), core->getElapsedTime() );
 		
+		if( level->isNext() )
+		{
+			level->saveSound();
+			core->getState() = PLAY;
+		}
+		else if( level->isBack() )
+		{
+			level->saveSound();
+			core->getState() = MENU;
+		}
 	}
 	
 	if( core->getState() == PLAY )
 	{
+		play->loadSound();
+		play->head( core->getWindow(), core->getElapsedTime() );
 		
+		if( play->isMenu() )
+		{
+			play->saveSound();
+			core->getState() = MENU;
+		}
+		else if( play->isLevel() )
+		{
+			play->saveSound();
+			core->getState() = LEVEL;
+		}
+		else if( play->isTable() )
+		{
+			play->saveSound();
+			core->getState() = TABLE;
+		}
 	}
 }
 
