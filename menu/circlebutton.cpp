@@ -39,7 +39,7 @@ void Circlebutton::setPosition( float x, float y, float x_scale, float y_scale )
 	button.setPosition( x -button.getWidth(), y -button.getHeight() );
 }
 
-void Circlebutton::handle( sf::Event& event )
+bool Circlebutton::handle( sf::Event& event )
 {
 	if( event.type == sf::Event::MouseButtonPressed )
 	{
@@ -50,9 +50,12 @@ void Circlebutton::handle( sf::Event& event )
 				click.play();
 				changeActive();
 				changed = true;
+				return true;
 			}
 		}
 	}
+	
+	return false;
 }
 
 void Circlebutton::draw( sf::RenderWindow* &window )
@@ -136,6 +139,16 @@ float Circlebutton::getRight()
 float Circlebutton::getBot()
 {
 	return button.getBot();
+}
+
+float Circlebutton::getWidth()
+{
+	return button.getWidth();
+}
+
+float Circlebutton::getHeight()
+{
+	return button.getHeight();
 }
 
 

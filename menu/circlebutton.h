@@ -1,3 +1,5 @@
+#pragma once
+
 #include "own/sprite.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
@@ -21,7 +23,7 @@ public:
 	
 	void load( string path, bool active = false );
 	void setPosition( float x, float y, float x_scale, float y_scale );
-	void handle( sf::Event& event );
+	bool handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
 	
 	void fadein( float v = 1, int max = 0xFF );
@@ -38,6 +40,8 @@ public:
 	float getLeft();
 	float getRight();
 	float getBot();
+	float getWidth();
+	float getHeight();
 	
 	// Sound.
 	void setPlayable( bool playable );

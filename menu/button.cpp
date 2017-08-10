@@ -91,6 +91,46 @@ float Button::getBot()
 	return button.getBot();
 }
 
+float Button::getLeft()
+{
+	return button.getLeft();
+}
+
+float Button::getTop()
+{
+	return button.getTop();
+}
+
+
+
+void Button::lock()
+{
+	if( !locked )
+	{
+		locked = true;
+		button.setOffset( 2 );
+	}
+}
+
+void Button::unlock()
+{
+	if( locked )
+	{
+		locked = false;
+		button.setOffset( 0 );
+	}
+}
+
+void Button::reload()
+{
+	pressed = false;
+	
+	if( !locked )
+	{
+		button.setOffset( 0 );
+	}
+}
+
 
 
 void Button::setPlayable( bool playable )

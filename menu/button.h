@@ -30,6 +30,13 @@ public:
 	// Getters.
 	bool isPressed();
 	float getBot();
+	float getLeft();
+	float getTop();
+	
+	// Setters.
+	void lock();
+	void unlock();
+	void reload();
 	
 	// Sound.
 	void setPlayable( bool playable );
