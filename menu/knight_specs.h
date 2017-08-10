@@ -35,6 +35,7 @@ class Knight_specs
 	vector <sf::Vector2f*> rects;
 	std::thread* myThread;
 	bool thread_ready;
+	bool ready;
 	
 	int chosen;
 	int lastChosen;
@@ -79,6 +80,8 @@ public:
 	// The rest.
 	void setThread();
 	void setValues();
+	bool isReady();
+	void reload();
 	
 	// Values.
 	void moveValues( float x = 0 );

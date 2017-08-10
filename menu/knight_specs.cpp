@@ -80,6 +80,7 @@ void Knight_specs::free()
 		myThread = NULL;
 	}
 	thread_ready = false;
+	ready = false;
 	text_x = 0;
 }
 
@@ -185,7 +186,7 @@ void Knight_specs::load( float screen_w, float screen_h )
 
 void Knight_specs::handle( sf::Event& event )
 {
-	if( event.type == sf::Event::MouseButtonPressed && thread_ready )
+	if( event.type == sf::Event::MouseButtonPressed )
 	{
 		if( event.mouseButton.button == sf::Mouse::Left )
 		{
@@ -221,6 +222,14 @@ void Knight_specs::draw( sf::RenderWindow* &window )
 	window->draw( table.get() );
 	window->draw( gear_top.get() );
 	window->draw( gear_bot.get() );
+	
+	// Delete thread if is ready
+	if( thread_ready )
+	{
+		delete myThread;
+		myThread = NULL;
+		thread_ready = false;
+	}
 	
 	// VALUES AND CATEGORIES
 	window->setView( view );
@@ -272,29 +281,26 @@ void Knight_specs::mechanics( double elapsedTime )
 	// printf( "%d %d\n", chosen, lastChosen );
 	
 	// move texts
-	if( thread_ready )
+	if( chosen == -1 )
 	{
-		if( chosen == -1 )
+		if( categories[ 0 ]->getX() < screen_w )
 		{
-			if( categories[ 0 ]->getX() < screen_w )
-			{
-				moveValues( elapsedTime *0xFF );
-			}
-			else if( categories[ 0 ]->getX() > screen_w )
-			{
-				setPositionValues( screen_w );
-			}
+			moveValues( elapsedTime *0xFF );
 		}
-		else if( table.getX() == x2 && moving_state == 0 )
+		else if( categories[ 0 ]->getX() > screen_w )
 		{
-			if( categories[ 0 ]->getX() > text_x )
-			{
-				moveValues( -elapsedTime *0xFF );
-			}
-			else if( categories[ 0 ]->getX() < text_x )
-			{
-				setPositionValues( text_x );
-			}
+			setPositionValues( screen_w );
+		}
+	}
+	else if( table.getX() == x2 && moving_state == 0 )
+	{
+		if( categories[ 0 ]->getX() > text_x )
+		{
+			moveValues( -elapsedTime *0xFF );
+		}
+		else if( categories[ 0 ]->getX() < text_x )
+		{
+			setPositionValues( text_x );
 		}
 	}
 	
@@ -328,41 +334,38 @@ void Knight_specs::mechanics( double elapsedTime )
 		}
 	}
 	
-	if( thread_ready )
+	if( categories[ 0 ]->getX() == screen_w )
 	{
-		if( categories[ 0 ]->getX() == screen_w )
+		float rotation = elapsedTime *0xFF;
+		if( (lastChosen == -1 && chosen == -1) && table.getX() > x1 )
 		{
-			float rotation = elapsedTime *0xFF;
-			if( (lastChosen == -1 && chosen == -1) && table.getX() > x1 )
-			{
-				gear_top.setRotation( gear_top.getRotation() +rotation );
-				gear_bot.setRotation( gear_bot.getRotation() -rotation );
-				moving_state = -elapsedTime *0xFF;
-			}
-			else if( (lastChosen != -1 || chosen != -1) && table.getX() < x2 )
-			{
-				gear_top.setRotation( gear_top.getRotation() -rotation );
-				gear_bot.setRotation( gear_bot.getRotation() +rotation );
-				moving_state = elapsedTime *0xFF;
-			}
-			else
-			{
-				moving_state = 0;
-			}
-			
-			if( moving_state != 0 )
-			{
-				table.move( moving_state, 0 );
-			}
-			
-			if( table.getX() < x1 )
-			{
-				table.setPosition( x1, table.getY() );
-			}
-			else if( table.getX() > x2 )
-			{
-				table.setPosition( x2, table.getY() );
-			}
+			gear_top.setRotation( gear_top.getRotation() +rotation );
+			gear_bot.setRotation( gear_bot.getRotation() -rotation );
+			moving_state = -elapsedTime *0xFF;
+		}
+		else if( (lastChosen != -1 || chosen != -1) && table.getX() < x2 )
+		{
+			gear_top.setRotation( gear_top.getRotation() -rotation );
+			gear_bot.setRotation( gear_bot.getRotation() +rotation );
+			moving_state = elapsedTime *0xFF;
+		}
+		else
+		{
+			moving_state = 0;
+		}
+		
+		if( moving_state != 0 )
+		{
+			table.move( moving_state, 0 );
+		}
+		
+		if( table.getX() < x1 )
+		{
+			table.setPosition( x1, table.getY() );
+		}
+		else if( table.getX() > x2 )
+		{
+			table.setPosition( x2, table.getY() );
 		}
 	}
 }
@@ -419,10 +422,22 @@ void Knight_specs::fadeout( float v, int min )
 
 void Knight_specs::setThread()
 {
-	if( !thread_ready )
+	if( !ready )
 	{
-		myThread = new std::thread( Knight_specs::setValues, this );
-		myThread->detach();
+		if( !thread_ready )
+		{
+			// Values.
+			for( unsigned i = 0; i < values.size(); i++ )
+			{
+				values[ values.size() -1 ]->setText( "..." );
+				values[ values.size() -1 ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+				values[ values.size() -1 ]->setSize( screen_h /28 );
+			}
+			setPositionValues( screen_w );
+			
+			myThread = new std::thread( Knight_specs::setValues, this );
+			myThread->detach();
+		}
 	}
 }
 
@@ -524,6 +539,8 @@ void Knight_specs::setValues()
 						counter++;
 					}
 				}
+				
+				ready = true;
 			}
 		}
 	}
@@ -540,8 +557,26 @@ void Knight_specs::setValues()
 	}
 	
 	setPositionValues( screen_w );
-	
 	thread_ready = true;
+}
+
+bool Knight_specs::isReady()
+{
+	return ready;
+}
+
+void Knight_specs::reload()
+{
+	moving_state = 0;
+	chosen = -1;
+	lastChosen = -1;
+	table.setPosition( x1, table.getY() );
+	setPositionValues( screen_w );
+	
+	for( unsigned i = 0; i < parts.size(); i++ )
+	{
+		parts[ i ]->setPosition( rects[ i ]->x, rects[ i ]->y );
+	}
 }
 
 
