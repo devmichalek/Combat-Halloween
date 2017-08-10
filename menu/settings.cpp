@@ -211,7 +211,7 @@ void Settings::load( float screen_w, float screen_h )
 	click.load( "sounds/click.wav" );
 }
 
-void Settings::handle( sf::Event& event )
+bool Settings::handle( sf::Event& event )
 {
 	if( moving_second == 0 && target != -1 )
 	{
@@ -223,6 +223,7 @@ void Settings::handle( sf::Event& event )
 				if( resetbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
 					reset();
+					return true;
 				}
 			}
 		}
@@ -292,9 +293,16 @@ void Settings::handle( sf::Event& event )
 						break;
 					}
 				}
+				
+				if( target != -1 )
+				{
+					return true;
+				}
 			}
 		}
 	}
+	
+	return false;
 }
 
 void Settings::draw( sf::RenderWindow* &window )
@@ -633,6 +641,17 @@ string Settings::getName( int n )
 	}
 	
 	return name;
+}
+
+void Settings::reload()
+{
+	moving = 0;
+	table.setPosition( x1, table.getY() );
+	position();
+	
+	moving_second = 0;
+	table_second.setPosition( table_second.getX(), y1 );
+	positionSecond();
 }
 
 

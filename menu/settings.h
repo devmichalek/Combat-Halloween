@@ -56,7 +56,7 @@ public:
 	void free();
 	
 	void load( float screen_w, float screen_h );
-	void handle( sf::Event& event );
+	bool handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
 	void mechanics( double elapsedTime );
 	
@@ -72,6 +72,7 @@ public:
 	void positionSecond();
 	bool isPossibleKey( sf::Event &event );
 	string getName( int n );
+	void reload();
 	
 	// Sound.
 	void setPlayable( bool playable );
