@@ -18,6 +18,7 @@ class Information
 	
 	std::thread* myThread;
 	bool thread_ready;
+	bool ready;
 	bool open;
 	
 	// Sound.
@@ -42,6 +43,7 @@ public:
 	void saveUsername();
 	bool close();
 	void setMoney();
+	bool isReady();
 	
 	// Sound.
 	void setPlayable( bool playable );

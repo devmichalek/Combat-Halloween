@@ -32,6 +32,7 @@ void Information::free()
 		myThread = NULL;
 	}
 	thread_ready = false;
+	ready = false;
 	open = true;
 	
 	click.free();
@@ -150,10 +151,6 @@ void Information::load( float screen_w, float screen_h )
 	// Money.
 	money.setIdentity( "information-money" );
 	money.setFont( "fonts/jcandlestickextracond.ttf" );
-	money.setText( "loading..." );
-	money.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	money.setSize( screen_h /32 );
-	money.setPosition( earned.getX(), money_form.getY() );
 }
 
 void Information::handle( sf::Event& event )
@@ -166,9 +163,9 @@ void Information::handle( sf::Event& event )
 			{
 				if( logout.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
+					click.play();
 					saveUsername();
 					open = false;
-					click.play();
 				}
 			}
 		}
@@ -183,6 +180,14 @@ void Information::draw( sf::RenderWindow* &window )
 	window->draw( earned_form.get() );
 	window->draw( earned.get() );
 	window->draw( logout.get() );
+	
+	// Delete thread if is ready
+	if( thread_ready )
+	{
+		delete myThread;
+		myThread = NULL;
+		thread_ready = false;
+	}
 }
 
 
@@ -211,8 +216,21 @@ void Information::fadeout( float v, int min )
 
 void Information::setThread()
 {
-	myThread = new std::thread( Information::setMoney, this );
-	myThread->detach();
+	if( !ready )
+	{
+		if( !thread_ready )
+		{
+			// Money.
+			money.setText( "loading..." );
+			money.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+			money.setSize( screen_h /32 );
+			money.setPosition( earned.getX(), money_form.getY() );
+			
+			
+			myThread = new std::thread( Information::setMoney, this );
+			myThread->detach();
+		}
+	}
 }
 
 void Information::saveUsername()
@@ -275,6 +293,7 @@ void Information::setMoney()
 			{
 				money.setText( echostring );
 				money.setColor( sf::Color( 0xFF, 0xDE, 0x00 ) );
+				ready = true;
 			}
 		}
 	}
@@ -288,7 +307,13 @@ void Information::setMoney()
 	
 	money.setSize( screen_h /32 );
 	money.setPosition( earned.getX(), money_form.getY() );
+	
 	thread_ready = true;
+}
+
+bool Information::isReady()
+{
+	return ready;
 }
 
 
