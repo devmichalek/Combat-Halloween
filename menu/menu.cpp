@@ -16,7 +16,6 @@ void Menu::free()
 	ready = false;
 	close = false;
 	run = false;
-	username = "";
 	
 	background.free();
 	knight_specs.free();
@@ -28,6 +27,7 @@ void Menu::free()
 	exit.free();
 	chunkbutton.free();
 	musicbutton.free();
+	reloadbutton.free();
 	settingsbutton.free();
 	settings.free();
 	chunk_volume.free();
@@ -43,42 +43,45 @@ void Menu::load( float screen_w, float screen_h )
 {
 	free();
 	
+	float scale_x = screen_w /2560;
+	float scale_y = screen_h /1440;
+	
 	// Load background.
 	background.setIdentity( "menu-background" );
 	background.load( "images/menu/background.png" );
-	background.setScale( screen_w /2560, screen_h /1440 );
+	background.setScale( scale_x, scale_y );
 	
 	// Load "knight specs".
 	knight_specs.load( screen_w, screen_h );
 	
 	// Load link buttons.
 	github.load( screen_w /256, screen_h /144, "images/menu/github.png" );
-	github.setScale( screen_w /2560, screen_h /1440 );
+	github.setScale( scale_x, scale_y );
 	github.setUrl( "https://github.com/Adriqun/Combat-Halloween" );
 	scores.load( github.getRight() +screen_w /256, screen_h /144, "images/menu/scores.png" );
-	scores.setScale( screen_w /2560, screen_h /1440 );
+	scores.setScale( scale_x, scale_y );
 	scores.setUrl( "scores" );
 	website.load( scores.getRight() +screen_w /256, screen_h /144, "images/menu/website.png" );
-	website.setScale( screen_w /2560, screen_h /1440 );
+	website.setScale( scale_x, scale_y );
 	website.setUrl( "http://adrianmichalek.pl/combathalloween/" );
 	
 	// Main buttons.
 	singleplayer.load( screen_w /1.9, screen_h /2.35, "images/menu/singleplayer.png" );
-	singleplayer.setScale( screen_w /2560, screen_h /1440 );
+	singleplayer.setScale( scale_x, scale_y );
 	multiplayer.load( screen_w /1.9, singleplayer.getBot() +screen_h /72, "images/menu/multiplayer.png", true );
-	multiplayer.setScale( screen_w /2560, screen_h /1440 );
+	multiplayer.setScale( scale_x, scale_y );
 	exit.load( screen_w /1.9, multiplayer.getBot() +screen_h /72, "images/menu/exit.png" );
-	exit.setScale( screen_w /2560, screen_h /1440 );
+	exit.setScale( scale_x, scale_y );
 	
 	// Circle buttons.
 	chunkbutton.load( "images/menu/chunk.png", true );
-	chunkbutton.setPosition( screen_w -screen_w /256 , screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
-	chunkbutton.setPlayable( false );
+	chunkbutton.setPosition( screen_w -screen_w /256 , screen_h -screen_h /144, scale_x, scale_y );
 	musicbutton.load( "images/menu/music.png", true );
-	musicbutton.setPosition( chunkbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
-	musicbutton.setChanged( true );
+	musicbutton.setPosition( chunkbutton.getLeft() -screen_w /256, screen_h -screen_h /144, scale_x, scale_y );
+	reloadbutton.load( "images/menu/reload.png" );
+	reloadbutton.setPosition( singleplayer.getLeft() -screen_w /256, singleplayer.getTop() +musicbutton.getHeight() +screen_h /72, scale_x, scale_y );
 	settingsbutton.load( "images/menu/settings.png" );
-	settingsbutton.setPosition( musicbutton.getLeft() -screen_w /256, screen_h -screen_h /144, screen_w /2560, screen_h /1440 );
+	settingsbutton.setPosition( musicbutton.getLeft() -screen_w /256, screen_h -screen_h /144, scale_x, scale_y );
 	
 	// Settings.
 	settings.load( screen_w, screen_h );
@@ -104,15 +107,18 @@ void Menu::handle( sf::Event& event )
 	{
 		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 		{
-			knight_specs.handle( event );
 			github.handle( event );
 			scores.handle( event );
 			website.handle( event );
 			singleplayer.handle( event );
 			multiplayer.handle( event );
 			exit.handle( event );
-			settingsbutton.handle( event );
-			settings.handle( event );
+			
+			if( !settingsbutton.handle( event ) && !settings.handle( event ) )
+			{
+				knight_specs.handle( event );
+			}
+						
 			information.handle( event );
 			
 			if( !chunk_volume.handle( event ) )
@@ -123,6 +129,11 @@ void Menu::handle( sf::Event& event )
 			if( !music_volume.handle( event ) )
 			{
 				musicbutton.handle( event );
+			}
+			
+			if( !knight_specs.isReady() || !information.isReady() )
+			{
+				reloadbutton.handle( event );
 			}
 		}
 		
@@ -151,6 +162,12 @@ void Menu::draw( sf::RenderWindow* &window )
 	exit.draw( window );
 	chunkbutton.draw( window );
 	musicbutton.draw( window );
+	
+	if( !knight_specs.isReady() || !information.isReady() )
+	{
+		reloadbutton.draw( window );
+	}
+	
 	settingsbutton.draw( window );
 	settings.draw( window );
 	chunk_volume.draw( window );
@@ -186,6 +203,31 @@ void Menu::mechanics( double elapsedTime )
 		else
 		{
 			settings.shovelTable( elapsedTime );
+		}
+		
+		// if we dont have answer from database
+		if( !knight_specs.isReady() || !information.isReady() )
+		{
+			singleplayer.lock();
+		}
+		else
+		{
+			singleplayer.unlock();
+		}
+		
+		// reload data
+		if( reloadbutton.isChanged() )
+		{
+			reloadbutton.setActive( false );
+			if( !knight_specs.isReady() )
+			{
+				knight_specs.setThread();
+			}
+			
+			if( !information.isReady() )
+			{
+				information.setThread();
+			}
 		}
 		
 		settings.mechanics( elapsedTime );
@@ -265,6 +307,7 @@ void Menu::fades( double elapsedTime )
 		exit.fadeout( value, min );
 		chunkbutton.fadeout( value, min );
 		musicbutton.fadeout( value, min );
+		reloadbutton.fadeout( value, min );
 		settingsbutton.fadeout( value, min );
 		settings.fadeout( value, min );
 		chunk_volume.fadeout( value, min );
@@ -290,6 +333,7 @@ void Menu::fades( double elapsedTime )
 		exit.fadeout( value );
 		chunkbutton.fadeout( value );
 		musicbutton.fadeout( value );
+		reloadbutton.fadeout( value );
 		settingsbutton.fadeout( value );
 		settings.fadeout( value );
 		chunk_volume.fadeout( value );
@@ -314,6 +358,7 @@ void Menu::fades( double elapsedTime )
 		exit.fadein( value );
 		chunkbutton.fadein( value );
 		musicbutton.fadein( value );
+		reloadbutton.fadein( value );
 		settingsbutton.fadein( value );
 		settings.fadein( value );
 		chunk_volume.fadein( value );
@@ -365,11 +410,14 @@ void Menu::loadSound()
 			exit.setVolume( chunkVolume );
 			chunkbutton.setVolume( chunkVolume );
 			musicbutton.setVolume( chunkVolume );
+			reloadbutton.setVolume( chunkVolume );
 			settingsbutton.setVolume( chunkVolume );
 			settings.setVolume( chunkVolume );
 			chunk_volume.setVolume( chunkVolume );
 			chunk_volume.setMainVolume( chunkVolume );
 			music_volume.setVolume( chunkVolume );
+			information.setVolume( chunkVolume );
+			pausesystem.setVolume( chunkVolume );
 			
 			// Music.
 			music.setVolume( musicVolume );
@@ -383,14 +431,17 @@ void Menu::loadSound()
 			singleplayer.setPlayable( chunkPlay );
 			multiplayer.setPlayable( chunkPlay );
 			exit.setPlayable( chunkPlay );
-			chunkbutton.setPlayable( chunkPlay );
+			chunkbutton.setPlayable( !chunkPlay );
 			chunkbutton.setActive( chunkPlay );
 			musicbutton.setPlayable( chunkPlay );
 			musicbutton.setActive( musicPlay );
+			reloadbutton.setPlayable( chunkPlay );
 			settingsbutton.setPlayable( chunkPlay );
 			settings.setPlayable( chunkPlay );
 			chunk_volume.setPlayable( chunkPlay );
 			music_volume.setPlayable( chunkPlay );
+			information.setPlayable( chunkPlay );
+			pausesystem.setPlayable( chunkPlay );
 			musicPlay ? music.play() : music.pause();
 		}
 		
@@ -411,11 +462,16 @@ void Menu::saveSound()
 	}
 	
 	file.free();
-}
-
-void Menu::setUsername( string username )
-{
-	this->username = username;
+	
+	// plus
+	ready = false;
+	run = false;
+	
+	// reset buttons
+	knight_specs.reload();
+	singleplayer.reload();
+	settingsbutton.setActive( false );
+	settings.reload();
 }
 
 

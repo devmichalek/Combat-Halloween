@@ -13,9 +13,7 @@ class Menu
 	// Basics.
 	bool ready;
 	bool close;
-	bool next;
 	bool run;
-	string username;
 	
 	// Objects.
 	MySprite background;
@@ -28,6 +26,7 @@ class Menu
 	Button exit;
 	Circlebutton chunkbutton;
 	Circlebutton musicbutton;
+	Circlebutton reloadbutton;
 	Circlebutton settingsbutton;
 	Settings settings;
 	Volume_button chunk_volume;
@@ -51,10 +50,9 @@ public:
 	void mechanics( double elapsedTime );
 	void fades( double elapsedTime );
 	
-	// Sound and username.
+	// Sound.
 	void loadSound();
 	void saveSound();
-	void setUsername( string username );
 	
 	// Getters.
 	bool isReady();
