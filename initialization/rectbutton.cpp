@@ -3,12 +3,7 @@
 
 Rectbutton::Rectbutton()
 {
-	identity = "";
-	alpha = 0;
-	alphaBorders = 0;
-	focus = false;
-	state = 0;
-	clicked = false;
+	free();
 }
 
 Rectbutton::~Rectbutton()
@@ -18,6 +13,13 @@ Rectbutton::~Rectbutton()
 
 void Rectbutton::free()
 {
+	alpha = 0;
+	alphaBorders = 0;
+	
+	focus = false;
+	clicked = false;
+	state = 0;
+	
 	text_one.free();
 	text_two.free();
 	
@@ -31,22 +33,114 @@ void Rectbutton::free()
 		
 		rects.clear();
 	}
+}
+
+void Rectbutton::setIdentity( string identity )
+{
+	text_one.setIdentity( identity );
+	text_two.setIdentity( identity );
+}
+
+const string& Rectbutton::getIdentity() const
+{
+	return text_one.getIdentity();
+}
+
+
+
+
+void Rectbutton::create( string line, string path, int size, int ply )
+{
+	// 1. Create text.
+	text_one.setFont( path );
+	text_two.setFontByFont( text_one.getFont() );
+	text_one.setText( line );
+	text_two.setText( line );
+	text_one.setSize( size );
+	text_two.setSize( size );
 	
-	alpha = 0;
-	alphaBorders = 0;
-	focus = false;
-	state = 0;
-	clicked = false;
+	// 2. Set lines.
+	float w = text_one.getWidth() +text_one.getWidth()/5;
+	float h = text_one.getHeight() *2 +text_one.getHeight()/5;
+	
+	try
+	{
+		if( w < 1 || h < 1 || ply < 1 )
+		{
+			throw "Dimension is less than 1";
+		}
+	}
+	catch( string msg )
+	{
+		cerr << msg << endl;
+	}
+	
+	for( unsigned i = 0; i < 5; i++ )
+	{
+		rects.push_back( new sf::RectangleShape );
+	}
+	
+	rects[ 0 ]->setSize( sf::Vector2f( w +ply*2, ply ) );
+	rects[ 1 ]->setSize( sf::Vector2f( ply, h ) );
+	rects[ 2 ]->setSize( sf::Vector2f( w +ply*2, ply ) );
+	rects[ 3 ]->setSize( sf::Vector2f( ply, h ) );
+	rects[ 4 ]->setSize( sf::Vector2f( w, h ) );
+	
+	setPosition( 0, 0 );
+	sf::Color newColor( rects[ rects.size() -1 ]->getFillColor() );
+	newColor.a = 0;
+	for( auto &it :rects )
+	{
+		it->setFillColor( newColor );
+	}
+}
+
+void Rectbutton::handle( sf::Event& event )
+{
+	if( state == 1 )
+	{
+		if( event.type == sf::Event::MouseMoved )
+		{
+			if( checkCollision( event.mouseMove.x, event.mouseMove.y ) )
+			{	
+				focus = true;
+			}
+			else
+			{
+				focus = false;
+			}
+		}
+
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			if( checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			{	
+				focus = true;
+				clicked = true;
+			}
+		}
+			
+		if( event.type == sf::Event::MouseButtonReleased )
+		{
+			focus = false;
+		}
+	}
 }
 
 void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
 {
+	// Background.
 	window->draw( text_two.get() );
+	
+	// Frame.
 	for( auto &it :rects )
 	{
 		window->draw( *it );
 	}
+	
+	// Front.
 	window->draw( text_one.get() );
+	
 	
 	if( state == 1 )
 	{
@@ -65,133 +159,7 @@ void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
 	}
 }
 
-void Rectbutton::handle( sf::Event& event )
-{
-	if( state == 1 )
-	{
-		int x, y;
-		
-		if( event.type == sf::Event::MouseMoved )
-		{
-			x = event.mouseMove.x;
-			y = event.mouseMove.y;
-				
-			if( checkCollision( x, y ) )
-			{	
-				focus = true;
-			}
-			else
-			{
-				focus = false;
-			}
-		}
 
-		if( event.type == sf::Event::MouseButtonPressed )
-		{
-			x = event.mouseButton.x;
-			y = event.mouseButton.y;
-				
-			if( checkCollision( x, y ) )
-			{	
-				focus = true;
-				clicked = true;
-			}
-		}
-			
-		if( event.type == sf::Event::MouseButtonReleased )
-		{
-			focus = false;
-		}
-	}
-}
-
-sf::Uint8& Rectbutton::getState()
-{
-	return state;
-}
-
-bool& Rectbutton::getFocus()
-{
-	return focus;
-}
-
-bool& Rectbutton::getClicked()
-{
-	return clicked;
-}
-
-
-
-void Rectbutton::setIdentity( string identity )
-{
-	this->identity = identity;
-}
-
-const string& Rectbutton::getIdentity() const
-{
-	return identity;
-}
-
-
-
-void Rectbutton::setColor( sf::Color color )
-{
-	sf::Color newColor( rects[ 0 ]->getFillColor() );
-	newColor.r = color.r;
-	newColor.g = color.g;
-	newColor.b = color.b;
-	for( unsigned i = 0; i < rects.size() -1; i++ )
-	{
-		rects[ i ]->setFillColor( newColor );
-	}
-	text_two.setColor( newColor );
-	
-	newColor.a = rects[ rects.size() -1 ]->getFillColor().a;
-	newColor.r = color.r;
-	newColor.g = color.g;
-	newColor.b = color.b;
-	rects[ rects.size() -1 ]->setFillColor( newColor );
-}
-
-void Rectbutton::setColorText( sf::Color color )
-{
-	text_one.setColor( color );
-}
-
-void Rectbutton::setAlpha( float alpha )
-{
-	if( this->alpha != alpha )
-	{
-		this->alpha = alpha;
-		sf::Color newColor( rects[ rects.size() -1 ]->getFillColor() );
-		newColor.a = alpha;
-		rects[ rects.size() -1 ]->setFillColor( newColor );
-	}
-}
-
-void Rectbutton::setAlphaBorders( float alpha )
-{
-	if( this->alphaBorders != alpha )
-	{
-		this->alphaBorders = alpha;
-		sf::Color newColor( rects[ 0 ]->getFillColor() );
-		newColor.a = this->alphaBorders;
-		for( unsigned i = 0; i < rects.size() -1; i++ )
-		{
-			rects[ i ]->setFillColor( newColor );
-		}
-	}
-}
-
-float Rectbutton::getAlpha()
-{
-	return alpha;
-}
-
-float Rectbutton::getAlphaBorders()
-{
-	return alphaBorders;
-}
 
 
 void Rectbutton::fadein( float v, int max )
@@ -298,53 +266,16 @@ void Rectbutton::fadeoutGlobal( float v, int min )
 
 
 
-void Rectbutton::create( string line, string path, int size, int ply )
+
+void Rectbutton::move( float x, float y )
 {
-	// 1. Create text.
-	text_one.setFont( path );
-	text_one.setText( line );
-	text_one.setSize( size );
-	text_two.setFont( path );
-	text_two.setText( line );
-	text_two.setSize( size );
-	
-	// 2. Set lines.
-	int w = text_one.getWidth() +text_one.getWidth()/5;
-	int h = text_one.getHeight() *2 +text_one.getHeight()/5;
-	
-	try
-	{
-		if( w < 1 || h < 1 || ply < 1 )
-		{
-			throw "Dimension is less than 1";
-		}
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-	
-	for( unsigned i = 0; i < 5; i++ )
-	{
-		rects.push_back( new sf::RectangleShape );
-	}
-	
-	rects[ 0 ]->setSize( sf::Vector2f( w +ply*2, ply ) );
-	rects[ 1 ]->setSize( sf::Vector2f( ply, h ) );
-	rects[ 2 ]->setSize( sf::Vector2f( w +ply*2, ply ) );
-	rects[ 3 ]->setSize( sf::Vector2f( ply, h ) );
-	rects[ 4 ]->setSize( sf::Vector2f( w, h ) );
-	
-	setPosition( 0, 0 );
-	sf::Color newColor( rects[ rects.size() -1 ]->getFillColor() );
-	newColor.a = 0;
+	text_one.move( x, y );
+	text_two.move( x, y );
 	for( auto &it :rects )
 	{
-		it->setFillColor( newColor );
+		it->move( x, y );
 	}
 }
-
-
 
 void Rectbutton::setPosition( float x, float y )
 {
@@ -357,20 +288,87 @@ void Rectbutton::setPosition( float x, float y )
 	text_two.center( rects[ 4 ]->getPosition().x, rects[ 4 ]->getPosition().y, rects[ 4 ]->getSize().x, rects[ 4 ]->getSize().y /1.5 );
 }
 
-void Rectbutton::move( float x, float y )
-{
-	text_one.move( x, y );
-	text_two.move( x, y );
-	for( auto &it :rects )
-	{
-		it->move( x, y );
-	}
-}
-
 void Rectbutton::center( float x, float y, int w, int h )
 {
 	// Two times x.
 	setPosition( x +w/2 -rects[ 0 ]->getSize().x/2, y +h/2 -rects[ 0 ]->getSize().x/2 );
+}
+
+void Rectbutton::setColor( sf::Color color )
+{
+	sf::Color newColor( rects[ 0 ]->getFillColor() );
+	newColor.r = color.r;
+	newColor.g = color.g;
+	newColor.b = color.b;
+	for( unsigned i = 0; i < rects.size() -1; i++ )
+	{
+		rects[ i ]->setFillColor( newColor );
+	}
+	text_two.setColor( newColor );
+	
+	newColor.a = rects[ rects.size() -1 ]->getFillColor().a;
+	newColor.r = color.r;
+	newColor.g = color.g;
+	newColor.b = color.b;
+	rects[ rects.size() -1 ]->setFillColor( newColor );
+}
+
+void Rectbutton::setColorText( sf::Color color )
+{
+	text_one.setColor( color );
+}
+
+void Rectbutton::setAlpha( float alpha )
+{
+	if( this->alpha != alpha )
+	{
+		this->alpha = alpha;
+		sf::Color newColor( rects[ rects.size() -1 ]->getFillColor() );
+		newColor.a = alpha;
+		rects[ rects.size() -1 ]->setFillColor( newColor );
+	}
+}
+
+void Rectbutton::setAlphaBorders( float alpha )
+{
+	if( this->alphaBorders != alpha )
+	{
+		this->alphaBorders = alpha;
+		sf::Color newColor( rects[ 0 ]->getFillColor() );
+		newColor.a = this->alphaBorders;
+		for( unsigned i = 0; i < rects.size() -1; i++ )
+		{
+			rects[ i ]->setFillColor( newColor );
+		}
+	}
+}
+
+
+
+
+float Rectbutton::getAlpha()
+{
+	return alpha;
+}
+
+float Rectbutton::getAlphaBorders()
+{
+	return alphaBorders;
+}
+
+sf::Uint8& Rectbutton::getState()
+{
+	return state;
+}
+
+bool& Rectbutton::getFocus()
+{
+	return focus;
+}
+
+bool& Rectbutton::getClicked()
+{
+	return clicked;
 }
 
 
@@ -415,6 +413,9 @@ const float Rectbutton::getBot() const
 {
 	return rects[ 0 ]->getPosition().y +rects[ rects.size() -1 ]->getSize().y +(rects[ 0 ]->getSize().y *2);
 }
+
+
+
 
 bool Rectbutton::checkCollision( float x, float y, float w, float h )
 {

@@ -4,42 +4,35 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <vector>
-#include <iostream>
-using namespace std;
 
 class Rectbutton
 {
-	string identity;
+	float alpha;
+	float alphaBorders;
+	
+	bool focus;
+	bool clicked;
+	sf::Uint8 state;
+	
 	MyText text_one;
 	MyText text_two;
 	vector <sf::RectangleShape*> rects;
-	float alpha;
-	float alphaBorders;
-	bool focus;
-	sf::Uint8 state;
-	bool clicked;
 	
 public:
-
+	
+	// Basics.
     Rectbutton();
     ~Rectbutton();
     void free();
-	void draw( sf::RenderWindow* &window, double elapsedTime );
-	void handle( sf::Event& event );
-	sf::Uint8& getState();
-	bool& getFocus();
-	bool& getClicked();
-	
 	void setIdentity( string identity );
 	const string& getIdentity() const;
 	
-	void setColor( sf::Color color );
-	void setColorText( sf::Color color );
-	void setAlpha( float alpha = 0 );
-	void setAlphaBorders( float alpha = 0 );
-	float getAlpha();
-	float getAlphaBorders();
+	void create( string line, string path, int size, int ply );
+	void handle( sf::Event& event );
+	void draw( sf::RenderWindow* &window, double elapsedTime );
 	
+	
+	// Fades.
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeinBorders( float v = 1, int max = 0xFF );
 	void fadeinGlobal( float v = 1, int max = 0xFF );
@@ -47,17 +40,26 @@ public:
 	void fadeoutBorders( float v = 1, int min = 0 );
 	void fadeoutGlobal( float v = 1, int min = 0xFF );
 	
-	void create( string line, string path, int size, int ply );
 	
-	
-    void setPosition( float x, float y );
+	// Setters.
 	void move( float x, float y );
+	void setPosition( float x, float y );
 	void center( float x, float y, int w, int h );
+	void setColor( sf::Color color );
+	void setColorText( sf::Color color );
+	void setAlpha( float alpha = 0 );
+	void setAlphaBorders( float alpha = 0 );
 	
-	bool click( sf::Event& event );
+	
+	// Getters.
+	float getAlpha();
+	float getAlphaBorders();
+	sf::Uint8& getState();
+	bool& getFocus();
+	bool& getClicked();
 	
 	
-	// rest accessors
+	// Other accessors.
 	const float& getX() const;
 	const float& getY() const;
     const float getWidth() const;
@@ -68,5 +70,6 @@ public:
     const float& getTop() const;
     const float getBot() const;
 	
+	// Collision detection.
 	bool checkCollision( float x, float y, float w = 0, float h = 0 );
 };
