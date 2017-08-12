@@ -67,7 +67,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->getState() = LEVEL;
+		core->getState() = MENU;
 	}
 }
 
@@ -111,6 +111,8 @@ void Engine::states()
 		login->draw( core->getWindow(), core->getElapsedTime() );
 		if( login->isReady() )
 		{
+			menu->setUsername( login->getUsername() );
+			level->setUsername( login->getUsername() );
 			core->getState() = MENU;
 		}
 	}
