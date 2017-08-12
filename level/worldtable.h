@@ -6,12 +6,28 @@
 #include <vector>
 #include <thread>
 
+class Star
+{
+public:
+	
+	int silver;
+	int gold;
+	bool coin_medal;
+	bool star_medal;
+	bool x_medal;
+	
+	Star();
+	~Star();
+	void free();
+};
+
 class Worldtable
 {
 	float screen_w;
 	float screen_h;
+	string username;
 	
-	bool ready;
+	int ready;
 	int chosen;
 	MySprite button;
 	vector <bool> locks;
@@ -25,6 +41,18 @@ class Worldtable
 	// In case of error.
 	MySprite reloadButton;
 	MyText information;
+	
+	// Reward.
+	MySprite gold_star;
+	MySprite silver_star;
+	MySprite coin_medal;
+	MySprite star_medal;
+	MySprite x_medal;
+	vector <Star*> stars;
+	
+	// Direction.
+	MySprite left;
+	MySprite right;
 	
 	// Sound.
 	Chunk click;
@@ -44,13 +72,13 @@ public:
 	void fadeout( float v = 1, int min = 0 );
 	
 	// Getters.
-	bool isChosen();
-	string getName();
+	int isChosen();
 	
 	// Setters.
 	void setThread();
 	void setValues();
 	void reload();
+	void setUsername( string line );
 	
 	// Sound.
 	void setPlayable( bool playable );
