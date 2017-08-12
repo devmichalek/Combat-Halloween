@@ -76,9 +76,14 @@ void Level::handle( sf::Event& event )
 	{
 		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 		{
-			worldtable.handle( event );
 			homebutton.handle( event );
-			playbutton.handle( event );
+			
+			if( worldtable.isChosen() )
+			{
+				playbutton.handle( event );
+			}
+			
+			worldtable.handle( event );
 			updatebutton.handle( event );
 			
 			if( !chunk_volume.handle( event ) )
@@ -110,7 +115,12 @@ void Level::draw( sf::RenderWindow* &window )
 	window->draw( background.get() );
 	worldtable.draw( window );
 	homebutton.draw( window );
-	playbutton.draw( window );
+	
+	if( worldtable.isChosen() || next )
+	{
+		playbutton.draw( window );
+	}
+	
 	updatebutton.draw( window );
 	chunkbutton.draw( window );
 	musicbutton.draw( window );
@@ -249,7 +259,12 @@ void Level::fades( double elapsedTime )
 }
 
 
-	
+
+void Level::setUsername( string line )
+{
+	worldtable.setUsername( line );
+}
+
 void Level::loadSound()
 {
 	if( !run )
@@ -335,6 +350,7 @@ void Level::saveSound()
 	homebutton.setActive( false );
 	playbutton.setActive( false );
 	updatebutton.setActive( false );
+	worldtable.reload();
 }
 
 
