@@ -1,5 +1,4 @@
 #include "link_button.h"
-#include <windows.h>
 
 Link_button::Link_button()
 {

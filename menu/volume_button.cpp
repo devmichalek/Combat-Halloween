@@ -70,7 +70,7 @@ bool Volume_button::handle( sf::Event& event )
 			float x = event.mouseButton.x;
 			float y = event.mouseButton.y;
 			
-			if( plus.checkCollision( x, y ) )
+			if( plus.checkCollisionCircle( x, y ) )
 			{
 				if( active )
 				{
@@ -84,7 +84,7 @@ bool Volume_button::handle( sf::Event& event )
 				
 				return true;
 			}
-			else if( minus.checkCollision( x, y ) )
+			else if( minus.checkCollisionCircle( x, y ) )
 			{
 				if( active )
 				{

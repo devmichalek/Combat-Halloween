@@ -1,5 +1,4 @@
 #pragma once
-
 #include "own/sprite.h"
 #include "own/text.h"
 #include "own/chunk.h"

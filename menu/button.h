@@ -1,3 +1,4 @@
+#pragma once
 #include "own/sprite.h"
 #include "own/chunk.h"
 #include <SFML/Graphics/RenderWindow.hpp>

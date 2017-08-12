@@ -36,7 +36,7 @@ void Button::load( float x, float y, string path, bool locked )
 		button.setOffset( 2 );
 	}
 	
-	click.setIdentity( "button-chunk" );
+	click.setIdentity( "button-click" );
 	click.load( "sounds/click.wav" );
 }
 
