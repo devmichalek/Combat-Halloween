@@ -1,51 +1,55 @@
 #pragma once
-
-#include "own/text.h"
 #include "own/sprite.h"
 #include "rectbutton.h"
 #include <thread>
 
 class Login
 {
+	// Basics.
 	bool ready;
-	bool logged;
-	int screen_w;
-	int screen_h;
-	
+	float screen_w;
+	float screen_h;
 	float counter;
 	float velocity;
-	
 	float arrow_counter;
 	float arrow_line;
 	
 	// First scene.
-	Rectbutton login;
-	Rectbutton signup;
-	MySprite login_bg;
-	MySprite signup_bg;
+	MySprite loginbg;
+	MySprite signupbg;
+	Rectbutton loginbutton;
+	Rectbutton signupbutton;
 	
 	// Second scene.
-	Rectbutton back;
-	MyText label;
+	Rectbutton gobutton;
+	Rectbutton backbutton;
+	MyText title;
+	MyText arrow;
 	MyText username_form;
 	MyText password_form;
 	MyText username_written;
 	MyText password_written;
-	MyText arrow;
-	Rectbutton go;
-	MyText error;
+	
+	// Information
+	MyText info;
+	bool info_status;
 	
 	// Support.
-	int status;
+	int state;
 	string username;
 	string password;
 	unsigned max_length_username;
 	unsigned min_length_username;
 	unsigned max_length_password;
 	unsigned min_length_password;
-	bool error_status;
 	
+	// Thread.
 	std::thread* myThread;
+	bool thread_ready;
+	
+	// I forgot password.
+	int forget_counter;
+	Rectbutton forgetbutton;
 	
 public:
 
@@ -64,6 +68,7 @@ public:
 	string getName( int n );
 	void organizeWritten();
 	string getPassword();
+	string getUsername();
 	void setArrow();
 	void position( float x_add = 0, float y_add = 0 );
 	void sendRequest();

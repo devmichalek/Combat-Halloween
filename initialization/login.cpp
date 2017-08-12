@@ -16,45 +16,47 @@ Login::~Login()
 void Login::free()
 {
 	ready = false;
-	logged = false;
 	screen_w = 0;
 	screen_h = 0;
-	
 	counter = 0;
 	velocity = 0;
-	
 	arrow_counter = 0;
 	arrow_line = 0;
 	
-	login.free();
-	signup.free();
-	login_bg.free();
-	signup_bg.free();
+	loginbg.free();
+	signupbg.free();
+	loginbutton.free();
+	signupbutton.free();
 	
-	back.free();
-	label.free();
+	gobutton.free();
+	backbutton.free();
+	title.free();
+	arrow.free();
 	username_form.free();
 	password_form.free();
 	username_written.free();
 	password_written.free();
-	arrow.free();
-	go.free();
-	error.free();
 	
-	status = 0;
+	info.free();
+	info_status = false;
+	
+	state = 0;
 	username = "";
 	password = "";
 	max_length_username = 0;
 	min_length_username = 0;
 	max_length_password = 0;
 	min_length_password = 0;
-	error_status = false;
 	
 	if( myThread != NULL )
 	{
 		delete myThread;
 		myThread = NULL;
 	}
+	thread_ready = false;
+	
+	forget_counter = 0;
+	forgetbutton.free();
 }
 
 
@@ -63,145 +65,138 @@ void Login::load( int screen_w, int screen_h )
 {
 	free();
 	
-	// check if it is logged
-	MyFile file;
-	file.load( "txt/player.txt" );
-	if( file.is_good() )
-	{
-		string line;
-		file.get() >> line;
-		if( con::stoi( line ) == 1 )
-		{
-			logged = true;
-		}
-	}
-	file.free();
-	
-	max_length_username = 13;
-	min_length_username = 4;
-	max_length_password = 20;
-	min_length_password = 8;
-	
+	// Set basics.
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	
 	velocity = screen_h /2;
 	arrow_line = 0.5;
 	
 	
+	// Background.
+	loginbg.setIdentity( "login-loginbg" );
+	loginbg.create( screen_w/2, screen_h );
+	signupbg.setIdentity( "login-signupbg" );
+	signupbg.create( screen_w/2, screen_h );
+	signupbg.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	signupbg.move( screen_w/2, 0 );
+	
+	
+	// Rectbuttons.
+	loginbutton.setIdentity( "login-loginbutton" );
+	signupbutton.setIdentity( "login-signupbutton" );
+	gobutton.setIdentity( "login-gobutton" );
+	backbutton.setIdentity( "login-backbutton" );
+	forgetbutton.setIdentity( "login-forgetbutton" );
+	
 	int size = screen_h /18;
-	login.setIdentity( "login-login" );
-	login.create( "LOG IN", "fonts/Jaapokki-Regular.otf", size, size /30 +2 );
-	login.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	login.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	loginbutton.create( "LOG IN", "fonts/Jaapokki-Regular.otf", size, size /30 +2 );
+	signupbutton.create( "SIGN UP", "fonts/Jaapokki-Regular.otf", size, size /30 +2 );
+	gobutton.create( "LOG IN", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
+	backbutton.create( "BACK", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
+	forgetbutton.create( "FORGOT PASSWORD", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
 	
-	signup.setIdentity( "login-signup" );
-	signup.create( "SIGN UP", "fonts/Jaapokki-Regular.otf", size, size /30 +2 );
-	signup.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-	signup.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	loginbutton.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	signupbutton.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	gobutton.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
+	backbutton.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
+	forgetbutton.setColor( sf::Color( 0xFF, 0xD8, 0x00 ) );
 	
-	login_bg.setIdentity( "login-login_bg" );
-	login_bg.create( screen_w/2, screen_h );
-	login_bg.setAlpha( 0 );
+	signupbutton.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	loginbutton.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	gobutton.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	backbutton.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	forgetbutton.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
 	
-	signup_bg.setIdentity( "login-signup_bg" );
-	signup_bg.create( screen_w/2, screen_h );
-	signup_bg.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-	signup_bg.move( screen_w/2, 0 );
-	
-	
-	
-	back.setIdentity( "login-back" );
-	back.create( "BACK", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
-	back.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	back.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
-	
-	label.setIdentity( "login-label" );
-	label.setFont( "fonts/Jaapokki-Regular.otf" );
-	label.setText( "LOGGING" );
-	label.setSize( screen_h /12 );
-	label.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
-	
-	username_form.setIdentity( "login-username_form" );
-	username_form.setFont( "fonts/Jaapokki-Regular.otf" );
-	username_form.setText( "Username: " );
-	username_form.setSize( screen_h /20 );
-	username_form.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	
-	password_form.setIdentity( "login-password_form" );
-	password_form.setFont( "fonts/Jaapokki-Regular.otf" );
-	password_form.setText( "Password: " );
-	password_form.setSize( screen_h /20 );
-	password_form.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	
+	// Set identity.
+	title.setIdentity( "login-title" );
 	arrow.setIdentity( "login-arrow" );
-	arrow.setFont( "fonts/Jaapokki-Regular.otf" );
+	username_form.setIdentity( "login-username_form" );
+	password_form.setIdentity( "login-password_form" );
+	username_written.setIdentity( "login-username_written" );
+	password_written.setIdentity( "login-password_written" );
+	info.setIdentity( "login-info" );
+	
+	// Set font.
+	title.setFont( "fonts/Jaapokki-Regular.otf" );
+	arrow.setFontByFont( title.getFont() );
+	username_form.setFontByFont( title.getFont() );
+	password_form.setFontByFont( title.getFont() );
+	username_written.setFontByFont( title.getFont() );
+	password_written.setFontByFont( title.getFont() );
+	info.setFontByFont( title.getFont() );
+	
+	// Set text.
+	title.setText( "LOGGING" );
 	arrow.setText( "|" );
-	arrow.setSize( screen_h /20 );
-	arrow.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	
-	// WRITTEN
-	username_written.setIdentity( "login-username_write" );
-	username_written.setFont( "fonts/Jaapokki-Regular.otf" );
+	username_form.setText( "Username: " );
+	password_form.setText( "Password: " );
 	username_written.setText( " " );
-	username_written.setSize( screen_h /20 );
-	username_written.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	
-	password_written.setIdentity( "login-password_write" );
-	password_written.setFont( "fonts/Jaapokki-Regular.otf" );
 	password_written.setText( " " );
-	password_written.setSize( screen_h /20 );
+	info.setText( " " );
+	
+	// Set size.
+	size = screen_h /20;
+	title.setSize( screen_h /12 );
+	arrow.setSize( size );
+	username_form.setSize( size );
+	password_form.setSize( size );
+	username_written.setSize( size );
+	password_written.setSize( size );
+	info.setSize( size );
+	
+	// Set color.
+	title.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
+	arrow.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	username_form.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
+	password_form.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
+	username_written.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
 	password_written.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	
-	go.setIdentity( "login-go" );
-	go.create( "LOG IN", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
-	go.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	go.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
-	
-	error.setIdentity( "login-password_write" );
-	error.setFont( "fonts/Jaapokki-Regular.otf" );
-	error.setText( " " );
-	error.setSize( screen_h /20 );
-	error.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	info.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 	
 	position();
+	
+	max_length_username = 20;
+	min_length_username = 4;
+	max_length_password = 20;
+	min_length_password = 8;
 }
 
 void Login::handle( sf::Event& event )
 {
-	if( counter == 0 && !ready )
+	// If there is no moving and next state.
+	if( counter == 0 && !ready && state < 2 )
 	{
-		login.handle( event );
-		signup.handle( event );
-		back.handle( event );
+		loginbutton.handle( event );
+		signupbutton.handle( event );
+		gobutton.handle( event );
+		backbutton.handle( event );
+		forgetbutton.handle( event );
 		
-		go.handle( event );
-		
-		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) && status < 2 )
+		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 		{
 			int x = event.mouseButton.x;
 			int y = event.mouseButton.y;
 			
 			if( username_form.checkCollision( x, y ) )
 			{
-				status = 0;
+				state = 0;
 				setArrow();
 			}
 			else if( password_form.checkCollision( x, y ) )
 			{
-				status = 1;
+				state = 1;
 				setArrow();
 			}
 		}
 		
 		
-		// keyboard stuff
+		// Keyboard stuff.
 		if( event.type == sf::Event::KeyPressed )
 		{
 			// add key
 			if( isPossibleKey( event ) )
 			{
-				if( status == 0 )
+				if( state == 0 )
 				{
 					if( username.size() < max_length_username )
 					{
@@ -211,7 +206,7 @@ void Login::handle( sf::Event& event )
 						organizeWritten();
 					}
 				}
-				else if( status == 1 )
+				else if( state == 1 )
 				{
 					if( password.size() < max_length_password )
 					{
@@ -222,9 +217,11 @@ void Login::handle( sf::Event& event )
 					}
 				}
 			}
-			else if( event.key.code == 59 )	// backspace
+			
+			// backspace
+			else if( event.key.code == 59 )
 			{
-				if( status == 0 )
+				if( state == 0 )
 				{
 					if( username.size() >= 1 )
 					{
@@ -248,7 +245,7 @@ void Login::handle( sf::Event& event )
 						organizeWritten();
 					}
 				}
-				else if( status == 1 )
+				else if( state == 1 )
 				{
 					if( password.size() >= 1 )
 					{
@@ -273,24 +270,30 @@ void Login::handle( sf::Event& event )
 					}
 				}
 			}
-			else if( event.key.code == 58 )	// enter, return
+			
+			// enter, return
+			else if( event.key.code == 58 )
 			{
-				if( status == 0 )
+				if( state == 0 )
 				{
-					status = 1;
+					state = 1;
 					setArrow();
 				}
-				else if( status == 1 && !ready )
+				else if( state == 1 )
 				{
-					go.getFocus() = true;
+					if( !thread_ready )
+					{
+						state = 2;
+						gobutton.getFocus() = true;
 					
-					error.setText( "Loading data..." );
-					error.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
-					error.setPosition( screen_w /2 -error.getWidth() /2, password_form.getBot() +screen_h/36 );
-					error.setAlpha( 0xFF );
-					
-					myThread = new std::thread( Login::sendRequest, this );
-					myThread->detach();
+						info.setText( "Loading data..." );
+						info.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
+						info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/36 );
+						info.setAlpha( 0xFF );
+						
+						myThread = new std::thread( Login::sendRequest, this );
+						myThread->detach();
+					}
 				}
 			}
 		}
@@ -299,41 +302,76 @@ void Login::handle( sf::Event& event )
 
 void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 {
+	// Delete thread.
+	if( thread_ready )
+	{
+		thread_ready = false;
+		
+		if( myThread != NULL )
+		{
+			delete myThread;
+			myThread = NULL;
+		}
+	}
+	
 	// First scene.
-	window->draw( login_bg.get() );
-	login.draw( window, elapsedTime );
-	window->draw( signup_bg.get() );
-	signup.draw( window, elapsedTime );
+	window->draw( loginbg.get() );
+	loginbutton.draw( window, elapsedTime );
+	window->draw( signupbg.get() );
+	signupbutton.draw( window, elapsedTime );
+	
 	
 	// Second scene.
-	back.draw( window, elapsedTime );
-	window->draw( label.get() );
+	backbutton.draw( window, elapsedTime );
+	window->draw( title.get() );
 	window->draw( username_form.get() );
 	window->draw( password_form.get() );
 	window->draw( username_written.get() );
 	window->draw( password_written.get() );
-	window->draw( error.get() );
+	window->draw( info.get() );
 	
-	// Draw button "go"
-	if( username.size() >= 4 && password.size() >= 8 )
+	if( forget_counter > 2 )
 	{
-		go.draw( window, elapsedTime );
+		forgetbutton.draw( window, elapsedTime );
 	}
 	
+	
+	// Draw button "go".
+	if( username.size() >= min_length_username && password.size() >= min_length_password )
+	{
+		gobutton.draw( window, elapsedTime );
+	}
+	
+	
 	// Draw arrow.
-	if( arrow_counter < arrow_line )
+	if( arrow_counter < arrow_line && state < 2 )
 	{
 		window->draw( arrow.get() );
 	}
 	
-	// Background
-	if( login.getFocus() && login.getState() == 1 && counter == 0 )		login_bg.fadein( elapsedTime *0xFF *3, 0xFF );
-	else																login_bg.fadeout( elapsedTime *0xFF *3, 0 );
-	if( signup.getFocus() && signup.getState() == 1 && counter == 0 )	signup_bg.fadein( elapsedTime *0xFF *3, 0xFF );
-	else																signup_bg.fadeout( elapsedTime *0xFF *3, 0 );
 	
-	login.fadeinGlobal( elapsedTime *0xFF );
-	signup.fadeinGlobal( elapsedTime *0xFF );
+	// Background
+	if( loginbutton.getFocus() && loginbutton.getState() == 1 && counter == 0 )
+	{
+		loginbg.fadein( elapsedTime *0xFF *3, 0xFF );
+	}
+	else
+	{
+		loginbg.fadeout( elapsedTime *0xFF *3, 0 );
+	}
+	
+	if( signupbutton.getFocus() && signupbutton.getState() == 1 && counter == 0 )
+	{
+		signupbg.fadein( elapsedTime *0xFF *3, 0xFF );
+	}
+	else
+	{
+		signupbg.fadeout( elapsedTime *0xFF *3, 0 );
+	}
+		
+	
+	loginbutton.fadeinGlobal( elapsedTime *0xFF );
+	signupbutton.fadeinGlobal( elapsedTime *0xFF );
 	
 	arrow_counter += elapsedTime;
 	if( arrow_counter > arrow_line *2 )
@@ -341,48 +379,59 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 		arrow_counter = 0;
 	}
 	
-	back.fadeinGlobal( elapsedTime *0xFF );
-	label.fadein( elapsedTime *0xFF );
+	backbutton.fadeinGlobal( elapsedTime *0xFF );
+	title.fadein( elapsedTime *0xFF );
 	username_form.fadein( elapsedTime *0xFF );
 	password_form.fadein( elapsedTime *0xFF );
 	username_written.fadein( elapsedTime *0xFF );
 	password_written.fadein( elapsedTime *0xFF );
 	arrow.fadein( elapsedTime *0xFF );
-	go.fadeinGlobal( elapsedTime *0xFF );
-	error.fadeout( elapsedTime*64 );
+	gobutton.fadeinGlobal( elapsedTime *0xFF );
+	info.fadeout( elapsedTime*64 );
+	forgetbutton.fadeinGlobal( elapsedTime *0xFF );
 	
-	if( signup.getClicked() )
+	if( signupbutton.getClicked() )
 	{
 		string command = "start http://www.adrianmichalek.pl/combathalloween/registration_form.php";
 		system( command.c_str() );
-		signup.getClicked() = false;
+		signupbutton.getClicked() = false;
 	}
 	
-	if( login.getClicked() )
+	if( forgetbutton.getClicked() )
 	{
-		login.getClicked() = false;
-		login.getFocus() = false;
+		string command = "start http://www.adrianmichalek.pl/combathalloween/registration_form.php";
+		system( command.c_str() );
+		forgetbutton.getClicked() = false;
+	}
+	
+	if( loginbutton.getClicked() )
+	{
+		loginbutton.getClicked() = false;
+		loginbutton.getFocus() = false;
 		counter = -1;
 	}
-	else if( back.getClicked() )
+	else if( backbutton.getClicked() )
 	{
-		back.getClicked() = false;
-		back.getFocus() = false;
+		backbutton.getClicked() = false;
+		backbutton.getFocus() = false;
 		counter = 1;
 	}
-	else if( go.getClicked() && username.size() >= 4 && password.size() >= 8 )
+	else if( gobutton.getClicked() && username.size() >= min_length_username && password.size() >= min_length_password )
 	{
-		go.getClicked() = false;
-		go.getFocus() = false;
-		
-		myThread = new std::thread( Login::sendRequest, this );
-		myThread->detach();
+		if( !thread_ready )
+		{
+			gobutton.getClicked() = false;
+			gobutton.getFocus() = false;
+			
+			myThread = new std::thread( Login::sendRequest, this );
+			myThread->detach();
+		}
 	}
 	
-	if( error_status )
+	if( info_status )
 	{
-		error_status = false;
-		go.getFocus() = false;
+		info_status = false;
+		gobutton.getFocus() = false;
 	}
 	
 	if( counter != 0 )
@@ -390,37 +439,41 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 		if( counter < 0 )
 		{
 			float add = elapsedTime *velocity *2;
-			back.move( 0, add );
-			login.move( 0, add );
-			signup.move( 0, add );
-			login_bg.move( 0, add );
-			signup_bg.move( 0, add );
-			label.move( 0, add );
+			loginbg.move( 0, add );
+			signupbg.move( 0, add );
+			loginbutton.move( 0, add );
+			signupbutton.move( 0, add );
+			
+			gobutton.move( 0, add );
+			backbutton.move( 0, add );
+			title.move( 0, add );
+			arrow.move( 0, add );
 			username_form.move( 0, add );
 			password_form.move( 0, add );
 			username_written.move( 0, add );
 			password_written.move( 0, add );
-			arrow.move( 0, add );
-			go.move( 0, add );
-			error.move( 0, add );
+			info.move( 0, add );
+			forgetbutton.move( 0, add );
 			counter -= add;
 		}
 		else
 		{
 			float add = -elapsedTime *velocity *3;
-			back.move( 0, add );
-			login.move( 0, add );
-			signup.move( 0, add );
-			login_bg.move( 0, add );
-			signup_bg.move( 0, add );
-			label.move( 0, add );
+			loginbg.move( 0, add );
+			signupbg.move( 0, add );
+			loginbutton.move( 0, add );
+			signupbutton.move( 0, add );
+			
+			gobutton.move( 0, add );
+			backbutton.move( 0, add );
+			title.move( 0, add );
+			arrow.move( 0, add );
 			username_form.move( 0, add );
 			password_form.move( 0, add );
 			username_written.move( 0, add );
 			password_written.move( 0, add );
-			arrow.move( 0, add );
-			go.move( 0, add );
-			error.move( 0, add );
+			info.move( 0, add );
+			forgetbutton.move( 0, add );
 			counter += -add;
 		}
 	}
@@ -442,21 +495,8 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 
 bool Login::isReady()
 {
-	if( logged )
+	if( ready && info.getAlpha() == 0 )
 	{
-		return true;
-	}
-	else if( ready && error.getAlpha() == 0 )
-	{
-		MyFile file;
-		file.load( "txt/player.txt" );
-		if( file.is_good() )
-		{
-			file.get() << 1 << endl;
-			file.get() << username;
-		}
-		file.free();
-		
 		return true;
 	}
 	
@@ -524,9 +564,14 @@ string Login::getPassword()
 	return new_password;
 }
 
+string Login::getUsername()
+{
+	return username;
+}
+
 void Login::setArrow()
 {
-	if( status == 0 )
+	if( state == 0 )
 	{
 		if( username.size() == 0 )
 		{
@@ -537,7 +582,7 @@ void Login::setArrow()
 			arrow.setPosition( username_written.getRight(), username_form.getY() );
 		}
 	}
-	else if( status == 1 )
+	else if( state == 1 )
 	{
 		if( password.size() == 0 )
 		{
@@ -552,14 +597,15 @@ void Login::setArrow()
 
 void Login::position( float x_add, float y_add )
 {
-	login.setPosition( screen_w /4 -login.getWidth() /2 +x_add, screen_h /2 -login.getHeight() /2 +y_add );
-	signup.setPosition( screen_w /4 *3 -signup.getWidth() /2 +x_add, screen_h /2 -signup.getHeight() /2 +y_add );
-	back.setPosition( screen_w /128 +x_add, screen_h /72 -screen_h/4*3 +y_add );
-	label.setPosition( screen_w /2 -label.getWidth() /2 +x_add, screen_h /4 -screen_h/4*3 +y_add );
+	loginbutton.setPosition( screen_w /4 -loginbutton.getWidth() /2 +x_add, screen_h /2 -loginbutton.getHeight() /2 +y_add );
+	signupbutton.setPosition( screen_w /4 *3 -signupbutton.getWidth() /2 +x_add, screen_h /2 -signupbutton.getHeight() /2 +y_add );
+	backbutton.setPosition( screen_w /128 +x_add, screen_h /72 -screen_h/4*3 +y_add );
+	title.setPosition( screen_w /2 -title.getWidth() /2 +x_add, screen_h /4 -screen_h/4*3 +y_add );
 	username_form.setPosition( screen_w /3 -username_form.getWidth() /2 +x_add, screen_h /2 -screen_h/4*3 +y_add );
 	password_form.setPosition( screen_w /3 -password_form.getWidth() /2 +x_add, username_form.getBot() +password_form.getHeight()*2 );
-	go.setPosition( password_form.getRight() +password_form.getWidth()*2.5, username_form.getBot() +screen_h/72 );
-	error.setPosition( screen_w /4 -error.getWidth() /2 +x_add, password_form.getBot() +screen_h/36 );
+	info.setPosition( screen_w /4 -info.getWidth() /2 +x_add, password_form.getBot() +screen_h/36 );
+	gobutton.setPosition( screen_w/2 -gobutton.getWidth()/2, info.getBot() +screen_h /9 +y_add -screen_h/4*3 );
+	forgetbutton.setPosition( screen_w -forgetbutton.getWidth() -screen_w /128 +x_add, screen_h /72 +y_add -screen_h/4*3 );
 	organizeWritten();
 }
 
@@ -581,30 +627,33 @@ void Login::sendRequest()
     if( response.getStatus() != sf::Http::Response::Ok )
     {
         // printf( "request failed \n" );
-		error.setText( "No internet connection." );
-		error.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-		error.setPosition( screen_w /2 -error.getWidth() /2, password_form.getBot() +screen_h/36 );
-		error.setAlpha( 0xFF );
+		info.setText( "No internet connection." );
+		info.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+		info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/36 );
+		info.setAlpha( 0xFF );
     }
 	else // Error
 	{
-		error_status = true;
+		info_status = true;
 		string error_code = response.getBody();
 		
 		if( error_code == "success" )
 		{
 			ready = true;
-			error.setText( "You are logged!" );
-			error.setColor( sf::Color( 0x58, 0x70, 0x58 ) );
+			info.setText( "You are logged!" );
+			info.setColor( sf::Color( 0x58, 0x70, 0x58 ) );
 		}
 		else
 		{
-			error.setText( error_code );
-			// printf( "%s\n", error_code.c_str() );
-			error.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+			state = 1;
+			forget_counter ++;
+			info.setText( error_code );
+			info.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 		}
 		
-		error.setPosition( screen_w /2 -error.getWidth() /2, password_form.getBot() +screen_h/36 );
-		error.setAlpha( 0xFF );
+		info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/36 );
+		info.setAlpha( 0xFF );
 	}
+	
+	thread_ready = true;
 }
