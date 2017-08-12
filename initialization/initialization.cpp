@@ -1,7 +1,4 @@
 #include "initialization.h"
-#include <iostream>
-#include <windows.h>
-using namespace std;
 
 Initialization::Initialization()
 {
@@ -39,44 +36,47 @@ void Initialization::load( int screen_width, int screen_height )
 {
 	free();
 	
-	for( unsigned i = 0; i < 4; i++ )
+	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
 		texts.push_back( new MyText );
 	}
 	
+	// Set identity.
+	texts[ AUTHOR ]->setIdentity( "initialization-adrmic" );
+	texts[ PRESENTS ]->setIdentity( "initialization-pres" );
+	texts[ HALLOWEEN ]->setIdentity( "initialization-part" );
+	texts[ COMBAT ]->setIdentity( "initialization-title" );
+	
+	// Set font.
+	texts[ AUTHOR ]->setFont( "fonts/Jaapokki-Regular.otf" );
+	texts[ PRESENTS ]->setFontByFont( texts[ AUTHOR ]->getFont() );
+	texts[ HALLOWEEN ]->setFontByFont( texts[ AUTHOR ]->getFont() );
+	texts[ COMBAT ]->setFontByFont( texts[ AUTHOR ]->getFont() );
+	
+	// Set text.
+	texts[ AUTHOR ]->setTextW( L"Adrian Michałek" );
+	texts[ PRESENTS ]->setText( "presents" );
+	texts[ HALLOWEEN ]->setText( "Halloween" );
+	texts[ COMBAT ]->setText( "Combat" );
+	
+	// Set size.
 	int size = screen_height /24;
-
-	texts[ adrmic ]->setIdentity( "initialization-adrmic" );
-	texts[ adrmic ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ adrmic ]->setTextW( L"Adrian Michałek" );
-	texts[ adrmic ]->setSize( size );
-	texts[ adrmic ]->center( 0, 0, screen_width, screen_height -screen_height /10 );
-	texts[ adrmic ]->setAlpha( 0 );
+	texts[ AUTHOR ]->setSize( size );
+	texts[ PRESENTS ]->setSize( size );
+	texts[ HALLOWEEN ]->setSize( size );
+	texts[ COMBAT ]->setSize( size );
 	
-	texts[ pres ]->setIdentity( "initialization-pres" );
-	texts[ pres ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ pres ]->setText( "presents" );
-	texts[ pres ]->setSize( size );
-	texts[ pres ]->setColor( sf::Color( 0xB0, 0xC4, 0xDE ) );
-	texts[ pres ]->setPosition( screen_width /2 -texts[ pres ]->getWidth() /2, texts[ adrmic ]->getBot() );
-	texts[ pres ]->setAlpha( 0 );
+	// Set color.
+	texts[ AUTHOR ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	texts[ PRESENTS ]->setColor( sf::Color( 0xB0, 0xC4, 0xDE ) );
+	texts[ HALLOWEEN ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	texts[ COMBAT ]->setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
 	
-	texts[ part ]->setIdentity( "initialization-part" );
-	texts[ part ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ part ]->setText( "Halloween" );
-	texts[ part ]->setSize( size );
-	texts[ part ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-	
-	texts[ title ]->setIdentity( "initialization-title" );
-	texts[ title ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ title ]->setText( "Combat" );
-	texts[ title ]->setSize( size );
-	texts[ title ]->setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	texts[ title ]->center( 0, 0, screen_width -texts[ part ]->getWidth() -screen_height /72, screen_height  -screen_height /10 );
-	texts[ title ]->setAlpha( 0 );
-	
-	texts[ part ]->setPosition( texts[ title ]->getRight() +screen_height /72, texts[ title ]->getBot() -texts[ part ]->getHeight() );
-	texts[ part ]->setAlpha( 0 );
+	// Set position.
+	texts[ AUTHOR ]->center( 0, 0, screen_width, screen_height -screen_height /10 );
+	texts[ PRESENTS ]->setPosition( screen_width /2 -texts[ PRESENTS ]->getWidth() /2, texts[ AUTHOR ]->getBot() );
+	texts[ COMBAT ]->center( 0, 0, screen_width -texts[ HALLOWEEN ]->getWidth() -screen_height /72, screen_height  -screen_height /10 );
+	texts[ HALLOWEEN ]->setPosition( texts[ COMBAT ]->getRight() +screen_height /72, texts[ COMBAT ]->getBot() -texts[ HALLOWEEN ]->getHeight() );
 }
 
 void Initialization::draw( sf::RenderWindow* &window, double elapsedTime )
@@ -86,49 +86,60 @@ void Initialization::draw( sf::RenderWindow* &window, double elapsedTime )
 		float velocity = elapsedTime *0xFF;
 		if( state == 0 )
 		{
-			texts[ adrmic ]->fadein( velocity );
+			texts[ AUTHOR ]->fadein( velocity );
 		}
 		else if( state == 1 )
 		{
-			texts[ pres ]->fadein( velocity *1.5 );
+			texts[ PRESENTS ]->fadein( velocity *1.5 );
 		}
 		else if( state == 2 )
 		{
-			texts[ adrmic ]->fadeout( velocity );
-			texts[ pres ]->fadeout( velocity );
+			texts[ AUTHOR ]->fadeout( velocity );
+			texts[ PRESENTS ]->fadeout( velocity );
 		}
 		else if( state == 3 )
 		{
-			texts[ title ]->fadein( velocity );
+			texts[ COMBAT ]->fadein( velocity );
 		}
 		else if( state == 4 )
 		{
-			texts[ part ]->fadein( velocity );
+			texts[ HALLOWEEN ]->fadein( velocity );
 		}
 		else if( state == 5 )
 		{
-			texts[ title ]->fadeout( velocity *1.5 );
-			texts[ part ]->fadeout( velocity *1.5 );
+			texts[ COMBAT ]->fadeout( velocity *1.5 );
+			texts[ HALLOWEEN ]->fadeout( velocity *1.5 );
 		}
 		
-		window->draw( texts[ adrmic ]->get() );
-		window->draw( texts[ pres ]->get() );
-		window->draw( texts[ title ]->get() );
-		window->draw( texts[ part ]->get() );
+		window->draw( texts[ AUTHOR ]->get() );
+		window->draw( texts[ PRESENTS ]->get() );
+		window->draw( texts[ COMBAT ]->get() );
+		window->draw( texts[ HALLOWEEN ]->get() );
 		
 		// 1
-		if( texts[ adrmic ]->getAlpha() == 0xFF && state == 0 )
+		if( texts[ AUTHOR ]->getAlpha() == 0xFF && state == 0 )
+		{
 			state = 1;
-		else if( texts[ pres ]->getAlpha() == 0xFF && state == 1 )
+		}
+		else if( texts[ PRESENTS ]->getAlpha() == 0xFF && state == 1 )
+		{
 			state = 2;
-		else if( texts[ pres ]->getAlpha() == 0 && state == 2 )
+		}
+		else if( texts[ PRESENTS ]->getAlpha() == 0 && state == 2 )
+		{
 			state = 3;
+		}
+		
 		// 2
-		else if( texts[ title ]->getAlpha() == 0xFF && state == 3 )
+		else if( texts[ COMBAT ]->getAlpha() == 0xFF && state == 3 )
+		{
 			state = 4;
-		else if( texts[ part ]->getAlpha() == 0xFF && state == 4 )
+		}
+		else if( texts[ HALLOWEEN ]->getAlpha() == 0xFF && state == 4 )
+		{
 			state = 5;
-		else if( texts[ part ]->getAlpha() == 0 && state == 5 )
+		}
+		else if( texts[ HALLOWEEN ]->getAlpha() == 0 && state == 5 )
 		{
 			ready = true;
 		}

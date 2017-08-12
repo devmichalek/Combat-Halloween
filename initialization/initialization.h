@@ -1,17 +1,18 @@
 #pragma once
-
 #include "own/text.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
 
 class Initialization
 {
+	// Enum with states of texts.
 	enum
 	{
-		adrmic = 0,
-		pres,
-		part,
-		title
+		AUTHOR = 0,
+		PRESENTS,
+		HALLOWEEN,
+		COMBAT,
+		AMOUNT
 	};
 	
 	bool ready;
@@ -27,5 +28,6 @@ public:
 	void load( int screen_width, int screen_height );
 	void draw( sf::RenderWindow* &window, double elapsedTime );
 	
+	// Next state.
 	bool isReady();
 };
