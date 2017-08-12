@@ -50,7 +50,8 @@ public:
 	void mechanics( double elapsedTime );
 	void fades( double elapsedTime );
 	
-	// Sound.
+	// Sound and username.
+	void setUsername( string line );
 	void loadSound();
 	void saveSound();
 	

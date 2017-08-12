@@ -118,8 +118,6 @@ void Menu::handle( sf::Event& event )
 			{
 				knight_specs.handle( event );
 			}
-						
-			information.handle( event );
 			
 			if( !chunk_volume.handle( event ) )
 			{
@@ -184,7 +182,7 @@ void Menu::mechanics( double elapsedTime )
 		knight_specs.mechanics( elapsedTime );
 		
 		// Close application.
-		if( exit.isPressed() || information.close() )
+		if( exit.isPressed() )
 		{
 			close = true;
 		}
@@ -250,7 +248,6 @@ void Menu::mechanics( double elapsedTime )
 			chunk_volume.setPlayable( chunkbutton.isActive() );
 			music_volume.setPlayable( chunkbutton.isActive() );
 			chunk_volume.setActive( chunkbutton.isActive() );
-			information.setPlayable( chunkbutton.isActive() );
 			pausesystem.setPlayable( chunkbutton.isActive() );
 		}
 		
@@ -270,7 +267,6 @@ void Menu::mechanics( double elapsedTime )
 			settingsbutton.setVolume( value );
 			chunk_volume.setVolume( value );
 			music_volume.setVolume( value );
-			information.setVolume( value );
 			pausesystem.setVolume( value );
 		}
 		
@@ -372,6 +368,12 @@ void Menu::fades( double elapsedTime )
 
 
 
+void Menu::setUsername( string line )
+{
+	knight_specs.setUsername( line );
+	information.setUsername( line );
+}
+
 void Menu::loadSound()
 {
 	if( !run )
@@ -416,7 +418,6 @@ void Menu::loadSound()
 			chunk_volume.setVolume( chunkVolume );
 			chunk_volume.setMainVolume( chunkVolume );
 			music_volume.setVolume( chunkVolume );
-			information.setVolume( chunkVolume );
 			pausesystem.setVolume( chunkVolume );
 			
 			// Music.
@@ -440,7 +441,6 @@ void Menu::loadSound()
 			settings.setPlayable( chunkPlay );
 			chunk_volume.setPlayable( chunkPlay );
 			music_volume.setPlayable( chunkPlay );
-			information.setPlayable( chunkPlay );
 			pausesystem.setPlayable( chunkPlay );
 			musicPlay ? music.play() : music.pause();
 		}

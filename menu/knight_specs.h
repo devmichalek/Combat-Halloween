@@ -11,6 +11,7 @@ class Knight_specs
 {
 	float screen_w;
 	float screen_h;
+	string username;
 	
 	enum PARTS
 	{
@@ -82,6 +83,7 @@ public:
 	void setValues();
 	bool isReady();
 	void reload();
+	void setUsername( string line );
 	
 	// Values.
 	void moveValues( float x = 0 );

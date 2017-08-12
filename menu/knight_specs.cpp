@@ -17,6 +17,7 @@ void Knight_specs::free()
 {
 	screen_w = 0;
 	screen_h = 0;
+	username = "";
 	
 	table.free();
 	gear_top.free();
@@ -443,110 +444,99 @@ void Knight_specs::setThread()
 
 void Knight_specs::setValues()
 {
-	// We need to know the username if it exists.
-	MyFile file;
-	file.load( "txt/player.txt" );
-	string line;
-	file.get() >> line;
-	int success = con::stoi( line );
+	bool success = true;
 	
-	// if exists
-	if( success != 0 )
+	// prepare message
+	string message = "username=" +username;
+	
+	// prepare the request
+	sf::Http::Request request( "/combathalloween/values.php", sf::Http::Request::Post );
+	
+	// encode the parameters in the request body
+	request.setBody( message );
+	
+	// send the request
+	sf::Http http( "http://adrianmichalek.pl/" );
+	sf::Http::Response response = http.sendRequest( request );
+	
+	// check the status
+	if( response.getStatus() != sf::Http::Response::Ok )
 	{
-		file.get() >> line;
+		success = false;
+	}
+	else
+	{
+		string echostring = response.getBody();
 		
-		// prepare message
-		string message = "username=" +line;
-		
-		// prepare the request
-		sf::Http::Request request( "/combathalloween/values.php", sf::Http::Request::Post );
-		
-		// encode the parameters in the request body
-		request.setBody( message );
-		
-		// send the request
-		sf::Http http( "http://adrianmichalek.pl/" );
-		sf::Http::Response response = http.sendRequest( request );
-		
-		// check the status
-		if( response.getStatus() != sf::Http::Response::Ok )
+		if( echostring == "0" )	// error
 		{
-			success = 0;
+			success = false;
 		}
 		else
 		{
-			string echostring = response.getBody();
-			
-			if( echostring == "0" )	// error
+			int counter = 0;
+			for( unsigned i = 0; i < echostring.size(); i++ )
 			{
-				success = 0;
-			}
-			else
-			{
-				int counter = 0;
-				for( unsigned i = 0; i < echostring.size(); i++ )
+				if( echostring[ i ] == 'c' )
 				{
-					if( echostring[ i ] == 'c' )
+					for( unsigned j = i +1; j < echostring.size(); j++ )
 					{
-						for( unsigned j = i +1; j < echostring.size(); j++ )
+						if( echostring[ j ] == 'a' )
 						{
-							if( echostring[ j ] == 'a' )
-							{
-								i = j -1;
-								break;
-							}
+							i = j -1;
+							break;
 						}
 					}
-					else if( echostring[ i ] == 'l' || 
-						echostring[ i ] == 'a' || 
-						echostring[ i ] == 'h' || 
-						echostring[ i ] == 'd' || 
-						echostring[ i ] == 's' )
+				}
+				else if( echostring[ i ] == 'l' || 
+					echostring[ i ] == 'a' || 
+					echostring[ i ] == 'h' || 
+					echostring[ i ] == 'd' || 
+					echostring[ i ] == 's' )
+				{
+					string value = "";
+					for( unsigned j = i +1; j < echostring.size(); j++ )
 					{
-						string value = "";
-						for( unsigned j = i +1; j < echostring.size(); j++ )
+						if( isalpha( echostring[ j ] ) )
 						{
-							if( isalpha( echostring[ j ] ) )
-							{
-								i = j -1;
-								break;
-							}
-							else
-							{
-								value += echostring[ j ];
-							}
-						}
-						
-						values[ counter ]->setText( value );
-
-						// cout << values.size() -1 << "    " << std::stoi( value ) << endl;
-						
-						if( std::stoi( value ) > 0 )
-						{
-							values[ counter ]->setColor( sf::Color( 0x78, 0xA5, 0xA3 ) );
-						}
-						else if( std::stoi( value ) == 0 )
-						{
-							values[ counter ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+							i = j -1;
+							break;
 						}
 						else
 						{
-							values[ counter ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-							
+							value += echostring[ j ];
 						}
-						
-						values[ counter ]->setSize( screen_h /28 );
-						counter++;
 					}
+					
+					values[ counter ]->setText( value );
+
+					// cout << values.size() -1 << "    " << std::stoi( value ) << endl;
+					
+					if( std::stoi( value ) > 0 )
+					{
+						values[ counter ]->setColor( sf::Color( 0x78, 0xA5, 0xA3 ) );
+					}
+					else if( std::stoi( value ) == 0 )
+					{
+						values[ counter ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+					}
+					else
+					{
+						values[ counter ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+						
+					}
+					
+					values[ counter ]->setSize( screen_h /28 );
+					counter++;
 				}
-				
-				ready = true;
 			}
+			
+			ready = true;
 		}
 	}
 	
 	// error
-	if( success != 1 )
+	if( !success )
 	{
 		for( auto &it :values )
 		{
@@ -577,6 +567,11 @@ void Knight_specs::reload()
 	{
 		parts[ i ]->setPosition( rects[ i ]->x, rects[ i ]->y );
 	}
+}
+
+void Knight_specs::setUsername( string line )
+{
+	username = line;
 }
 
 
