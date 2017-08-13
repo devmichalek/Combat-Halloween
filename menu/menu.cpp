@@ -33,6 +33,7 @@ void Menu::free()
 	chunk_volume.free();
 	music_volume.free();
 	information.free();
+	chat.free();
 	pausesystem.free();
 	music.free();
 }
@@ -93,6 +94,9 @@ void Menu::load( float screen_w, float screen_h )
 	// Load information.
 	information.load( screen_w, screen_h );
 	
+	// Set chat.
+	chat.load( screen_w, screen_h );
+	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
 	
@@ -107,35 +111,44 @@ void Menu::handle( sf::Event& event )
 	{
 		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 		{
-			github.handle( event );
-			scores.handle( event );
-			website.handle( event );
-			singleplayer.handle( event );
-			multiplayer.handle( event );
-			exit.handle( event );
+			chat.handle( event );
 			
-			if( !settingsbutton.handle( event ) && !settings.handle( event ) )
+			if( !chat.isOpen() )
 			{
-				knight_specs.handle( event );
-			}
-			
-			if( !chunk_volume.handle( event ) )
-			{
-				chunkbutton.handle( event );
-			}
-			
-			if( !music_volume.handle( event ) )
-			{
-				musicbutton.handle( event );
-			}
-			
-			if( !knight_specs.isReady() || !information.isReady() )
-			{
-				reloadbutton.handle( event );
+				github.handle( event );
+				scores.handle( event );
+				website.handle( event );
+				singleplayer.handle( event );
+				multiplayer.handle( event );
+				exit.handle( event );
+				
+				
+				if( !settingsbutton.handle( event ) && !settings.handle( event ) )
+				{
+					knight_specs.handle( event );
+				}
+				
+				if( !chunk_volume.handle( event ) )
+				{
+					chunkbutton.handle( event );
+				}
+				
+				if( !music_volume.handle( event ) )
+				{
+					musicbutton.handle( event );
+				}
+				
+				if( !knight_specs.isReady() || !information.isReady() )
+				{
+					reloadbutton.handle( event );
+				}
 			}
 		}
 		
-		pausesystem.handle( event );
+		if( !chat.isOpen() )
+		{
+			pausesystem.handle( event );
+		}
 	}
 }
 
@@ -160,6 +173,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	exit.draw( window );
 	chunkbutton.draw( window );
 	musicbutton.draw( window );
+	chat.draw( window );
 	
 	if( !knight_specs.isReady() || !information.isReady() )
 	{
@@ -246,8 +260,8 @@ void Menu::mechanics( double elapsedTime )
 			settingsbutton.setPlayable( chunkbutton.isActive() );
 			settings.setPlayable( chunkbutton.isActive() );
 			chunk_volume.setPlayable( chunkbutton.isActive() );
-			music_volume.setPlayable( chunkbutton.isActive() );
 			chunk_volume.setActive( chunkbutton.isActive() );
+			music_volume.setPlayable( chunkbutton.isActive() );
 			pausesystem.setPlayable( chunkbutton.isActive() );
 		}
 		

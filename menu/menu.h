@@ -5,6 +5,7 @@
 #include "settings.h"
 #include "volume_button.h"
 #include "information.h"
+#include "level/chat.h"
 #include "pausesystem.h"
 #include "own/music.h"
 
@@ -32,6 +33,7 @@ class Menu
 	Volume_button chunk_volume;
 	Volume_button music_volume;
 	Information information;
+	Chat chat;
 	Pausesystem pausesystem;
 	Music music;
 	
