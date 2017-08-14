@@ -157,7 +157,7 @@ void Knight_specs::load( float screen_w, float screen_h )
 	for( unsigned i = 0; i < VARIABLES_AMOUNT; i++ )
 	{
 		categories.push_back( new MyText );
-		categories[ i ]->setIdentity( "knight_specs-categories" );
+		categories[ i ]->setIdentity( categories[ 0 ]->getIdentity() );
 		categories[ i ]->setFont( "fonts/jcandlestickextracond.ttf" );
 	}
 	
@@ -432,7 +432,6 @@ void Knight_specs::setThread()
 			{
 				values[ values.size() -1 ]->setText( "..." );
 				values[ values.size() -1 ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-				values[ values.size() -1 ]->setSize( screen_h /28 );
 			}
 			setPositionValues( screen_w );
 			
@@ -450,7 +449,7 @@ void Knight_specs::setValues()
 	string message = "username=" +username;
 	
 	// prepare the request
-	sf::Http::Request request( "/combathalloween/values.php", sf::Http::Request::Post );
+	sf::Http::Request request( "/combathalloween/getparts.php", sf::Http::Request::Post );
 	
 	// encode the parameters in the request body
 	request.setBody( message );
@@ -526,7 +525,6 @@ void Knight_specs::setValues()
 						
 					}
 					
-					values[ counter ]->setSize( screen_h /28 );
 					counter++;
 				}
 			}
@@ -542,7 +540,6 @@ void Knight_specs::setValues()
 		{
 			it->setText( "error" );
 			it->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-			it->setSize( screen_h /28 );
 		}
 	}
 	
@@ -572,6 +569,12 @@ void Knight_specs::reload()
 void Knight_specs::setUsername( string line )
 {
 	username = line;
+}
+
+void Knight_specs::setChosen( int n )
+{
+	lastChosen = chosen;
+	chosen = n;
 }
 
 

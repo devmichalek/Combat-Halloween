@@ -84,6 +84,7 @@ public:
 	bool isReady();
 	void reload();
 	void setUsername( string line );
+	void setChosen( int n );
 	
 	// Values.
 	void moveValues( float x = 0 );
