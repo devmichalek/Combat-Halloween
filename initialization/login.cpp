@@ -27,9 +27,9 @@ void Login::free()
 	signupbg.free();
 	loginbutton.free();
 	signupbutton.free();
-	
 	gobutton.free();
 	backbutton.free();
+	
 	title.free();
 	arrow.free();
 	username_form.free();
@@ -88,12 +88,18 @@ void Login::load( int screen_w, int screen_h )
 	backbutton.setIdentity( "login-backbutton" );
 	forgetbutton.setIdentity( "login-forgetbutton" );
 	
+	loginbutton.setFont( "fonts/Jaapokki-Regular.otf" );
+	signupbutton.setFont( "fonts/Jaapokki-Regular.otf" );
+	gobutton.setFont( "fonts/Jaapokki-Regular.otf" );
+	backbutton.setFont( "fonts/Jaapokki-Regular.otf" );
+	forgetbutton.setFont( "fonts/Jaapokki-Regular.otf" );
+	
 	int size = screen_h /18;
-	loginbutton.create( "LOG IN", "fonts/Jaapokki-Regular.otf", size, size /30 +2 );
-	signupbutton.create( "SIGN UP", "fonts/Jaapokki-Regular.otf", size, size /30 +2 );
-	gobutton.create( "LOG IN", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
-	backbutton.create( "BACK", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
-	forgetbutton.create( "FORGOT PASSWORD", "fonts/Jaapokki-Regular.otf", size /1.5, size /30 +2 );
+	loginbutton.create( "LOG IN", size, size /30 +2 );
+	signupbutton.create( "SIGN UP", size, size /30 +2 );
+	gobutton.create( "LOG IN", size /1.5, size /30 +2 );
+	backbutton.create( "BACK", size /1.5, size /30 +2 );
+	forgetbutton.create( "FORGOT PASSWORD", size /1.5, size /30 +2 );
 	
 	loginbutton.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 	signupbutton.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
@@ -118,12 +124,12 @@ void Login::load( int screen_w, int screen_h )
 	
 	// Set font.
 	title.setFont( "fonts/Jaapokki-Regular.otf" );
-	arrow.setFontByFont( title.getFont() );
-	username_form.setFontByFont( title.getFont() );
-	password_form.setFontByFont( title.getFont() );
-	username_written.setFontByFont( title.getFont() );
-	password_written.setFontByFont( title.getFont() );
-	info.setFontByFont( title.getFont() );
+	arrow.setFont( "fonts/Jaapokki-Regular.otf" );
+	username_form.setFont( "fonts/Jaapokki-Regular.otf" );
+	password_form.setFont( "fonts/Jaapokki-Regular.otf" );
+	username_written.setFont( "fonts/Jaapokki-Regular.otf" );
+	password_written.setFont( "fonts/Jaapokki-Regular.otf" );
+	info.setFont( "fonts/Jaapokki-Regular.otf" );
 	
 	// Set text.
 	title.setText( "LOGGING" );
@@ -149,8 +155,6 @@ void Login::load( int screen_w, int screen_h )
 	arrow.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 	username_form.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
 	password_form.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	username_written.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	password_written.setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
 	info.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 	
 	position();
@@ -202,7 +206,6 @@ void Login::handle( sf::Event& event )
 					{
 						username += getName( event.key.code );
 						username_written.setText( username );
-						username_written.setSize( username_form.getSize() );
 						organizeWritten();
 					}
 				}
@@ -212,7 +215,6 @@ void Login::handle( sf::Event& event )
 					{
 						password += getName( event.key.code );
 						password_written.setText( getPassword() );
-						password_written.setSize( password_form.getSize() );
 						organizeWritten();
 					}
 				}
@@ -239,7 +241,6 @@ void Login::handle( sf::Event& event )
 						else
 						{
 							username_written.setText( username );
-							username_written.setSize( username_form.getSize() );
 						}
 						
 						organizeWritten();
@@ -263,7 +264,6 @@ void Login::handle( sf::Event& event )
 						else
 						{
 							password_written.setText( getPassword() );
-							password_written.setSize( password_form.getSize() );
 						}
 						
 						organizeWritten();
