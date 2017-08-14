@@ -35,6 +35,8 @@ void Loading::load( unsigned screen_w, unsigned screen_h )
 	// Set text.
 	text.setIdentity( "loading-text" );
 	text.setFont( "fonts/Jaapokki-Regular.otf" );
+	text.setSize( screen_h /24 );
+	text.setAlpha( 0xFF );
 	
 	// Set progress bar.
 	max = 20;
@@ -69,8 +71,8 @@ void Loading::draw( sf::RenderWindow* &window, double elapsedTime )
 	
 	if( ready )
 	{
-		text.fadeout( elapsedTime *128 );
-		progress_bar.fadeout( elapsedTime *128 );
+		text.fadeout( elapsedTime *0xFF *2 );
+		progress_bar.fadeout( elapsedTime *0xFF *2 );
 	}
 }
 
@@ -101,7 +103,5 @@ void Loading::beReady()
 void Loading::setText()
 {
 	text.setText( ( "Loading " + con::itos( state ) + "%" )  );
-	text.setSize( screen_h /24 );
-	text.setAlpha( 0xFF );
 	text.setPosition( screen_w/2 -text.getWidth()/2 +screen_w/160, screen_h/2 -text.getHeight()/2 -screen_h/72 );
 }
