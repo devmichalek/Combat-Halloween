@@ -8,14 +8,29 @@
 
 class Chat
 {
+	// Basics.
 	float screen_w;
 	float screen_h;
+	bool open;
+	int capslock;
+	int shift;
+	bool used;
 	
 	// Background.
 	MySprite background;
+	MySprite second_background;
+	MyText text_background;
 	
-	// Sound.
-	Chunk click;
+	// Text written.
+	vector <float> text_ys;
+	vector <string> writtenStrs;
+	MyText username;
+	vector <MyText*> writtens;
+	
+	// Arrow.
+	float line;
+	float counter;
+	MyText arrow;
 	
 public:
 	
@@ -27,8 +42,15 @@ public:
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
-	// Sound.
-	void setPlayable( bool playable );
-	void setVolume( float volume );
+	// Getters.
+	bool& isOpen();
+	bool isUsed();
+	char* getChar( int n );
+	bool getCommand( string command );
+	
+	// The rest.
+	void setUsername( string line );
+	void setWritten();
 };
