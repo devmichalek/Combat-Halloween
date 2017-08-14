@@ -173,7 +173,6 @@ void Menu::draw( sf::RenderWindow* &window )
 	exit.draw( window );
 	chunkbutton.draw( window );
 	musicbutton.draw( window );
-	chat.draw( window );
 	
 	if( !knight_specs.isReady() || !information.isReady() )
 	{
@@ -185,6 +184,7 @@ void Menu::draw( sf::RenderWindow* &window )
 	chunk_volume.draw( window );
 	music_volume.draw( window );
 	information.draw( window );
+	chat.draw( window );
 	pausesystem.draw( window );
 }
 
@@ -193,19 +193,130 @@ void Menu::mechanics( double elapsedTime )
 	// Mechanics.
 	if( !pausesystem.isActive() && !close && !ready )
 	{
+		chat.mechanics( elapsedTime );
+		if( chat.isUsed() )
+		{
+			// Knight specs
+			if( chat.getCommand( "@clear" ) )		knight_specs.setChosen( -1 );
+			else if( chat.getCommand( "@helmet" ) )	knight_specs.setChosen( 0 );
+			else if( chat.getCommand( "@body" ) )	knight_specs.setChosen( 1 );
+			else if( chat.getCommand( "@shield" ) )	knight_specs.setChosen( 2 );
+			else if( chat.getCommand( "@sword" ) )	knight_specs.setChosen( 3 );
+			else if( chat.getCommand( "@boots" ) )	knight_specs.setChosen( 4 );
+			
+			// Close application.
+			else if( chat.getCommand( "@close" ) || chat.getCommand( "@exit" ) ||
+			chat.getCommand( "@finish" ) || chat.getCommand( "@end" ) )
+			{
+				exit.setPressed();
+			}
+			
+			// Someone clicked singleplayer.
+			else if( chat.getCommand( "@singleplayer" ) || chat.getCommand( "@play" ) ||
+			chat.getCommand( "@start" ) || chat.getCommand( "@go" ) )
+			{
+				singleplayer.setPressed();
+			}
+			
+			// Exsert / shovel settings.
+			else if( chat.getCommand( "@settings" ) || chat.getCommand( "@keyboard" ) ||
+			chat.getCommand( "@keys" ) || chat.getCommand( "@sets" ) )
+			{
+				settingsbutton.setActive( !settingsbutton.isActive() );
+			}
+			
+			// reload data
+			if( reloadbutton.isActive() )
+			{
+				if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
+				chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
+				{
+					reloadbutton.setActive( true );
+				}
+			}
+			
+			// Turn on/off all chunks.
+			else if( chat.getCommand( "@chunk turn" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( !chunkbutton.isActive() );
+			}
+			else if( chat.getCommand( "@chunk off" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@chunk on" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( true );
+			}
+			
+			// Turn on/off music.
+			else if( chat.getCommand( "@music turn" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( !musicbutton.isActive() );
+			}
+			else if( chat.getCommand( "@music off" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@music on" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( true );
+			}
+			
+			// Turn on/off all sounds.
+			else if( chat.getCommand( "@sound turn" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( !chunkbutton.isActive() );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( !musicbutton.isActive() );
+			}
+			else if( chat.getCommand( "@sound off" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( false );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@sound on" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( true );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( true );
+			}
+			
+			// Link buttons in addition.
+			else if( chat.getCommand( "@github" ) )		github.openWebsite();
+			else if( chat.getCommand( "@scores" ) )		scores.openWebsite();
+			else if( chat.getCommand( "@website" ) )	website.openWebsite();
+		}
+		
+		// Knight specs
 		knight_specs.mechanics( elapsedTime );
+		
 		
 		// Close application.
 		if( exit.isPressed() )
 		{
+			chat.isOpen() = false;
 			close = true;
 		}
+		
 		
 		// Someone clicked singleplayer.
 		if( singleplayer.isPressed() )
 		{
+			chat.isOpen() = false;
 			ready = true;
 		}
+		
 		
 		// Exsert / shovel settings.
 		if( settingsbutton.isActive() )
@@ -228,7 +339,7 @@ void Menu::mechanics( double elapsedTime )
 		}
 		
 		// reload data
-		if( reloadbutton.isChanged() )
+		if( reloadbutton.isActive() )
 		{
 			reloadbutton.setActive( false );
 			if( !knight_specs.isReady() )
@@ -246,7 +357,7 @@ void Menu::mechanics( double elapsedTime )
 		chunk_volume.mechanics( elapsedTime );
 		music_volume.mechanics( elapsedTime );
 		
-		// Turn on/off all sounds.
+		// Turn on/off all chunks.
 		if( chunkbutton.isChanged() )
 		{
 			github.setPlayable( chunkbutton.isActive() );
@@ -386,6 +497,7 @@ void Menu::setUsername( string line )
 {
 	knight_specs.setUsername( line );
 	information.setUsername( line );
+	chat.setUsername( line );
 }
 
 void Menu::loadSound()
