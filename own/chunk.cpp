@@ -83,7 +83,7 @@ void Chunk::stop()
 
 void Chunk::play()
 {
-	if( playable )
+	if( playable && !isPlaying() )
 	{
 		chunk->play();
 	}
@@ -102,4 +102,14 @@ void Chunk::setVolume( float volume )
 void Chunk::setPlayable( bool playable )
 {
 	this->playable = playable;
+}
+
+bool Chunk::isPlaying()
+{
+	if( chunk->getStatus() == sf::SoundSource::Status::Playing )
+	{
+		return true;
+	}
+	
+	return false;
 }

@@ -12,6 +12,7 @@ protected:
     sf::Sound* chunk;
 	sf::SoundBuffer* buffer;
 	bool playable; // able to play
+	
 
 public:
 
@@ -30,4 +31,5 @@ public:
 	void pause();
     void setVolume( float volume = 50 );
 	void setPlayable( bool playable = true );
+	bool isPlaying();
 };
