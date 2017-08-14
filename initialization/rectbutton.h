@@ -14,8 +14,8 @@ class Rectbutton
 	bool clicked;
 	sf::Uint8 state;
 	
-	MyText text_one;
-	MyText text_two;
+	MyText* text_one;
+	MyText* text_two;
 	vector <sf::RectangleShape*> rects;
 	
 public:
@@ -27,7 +27,11 @@ public:
 	void setIdentity( string identity );
 	const string& getIdentity() const;
 	
-	void create( string line, string path, int size, int ply );
+	void setFont( string path );
+	// void setFontByFont( sf::Font* &font );
+	// sf::Font* &getFont();
+	
+	void create( string line, int size, int ply );
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window, double elapsedTime );
 	
