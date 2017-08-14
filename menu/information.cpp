@@ -41,27 +41,34 @@ void Information::load( float screen_w, float screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
+	// Set identity.
 	username.setIdentity( "information-username" );
-	username.setFont( "fonts/jcandlestickextracond.ttf" );
-	username.setText( "Logged as error" );
-	username.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-	username.setSize( screen_h /32 );
-	username.setPosition( screen_w /1.22, screen_h /144 );
-	
-	// Money form.
 	money_form.setIdentity( "information-money_form" );
-	money_form.setFont( "fonts/jcandlestickextracond.ttf" );
-	money_form.setText( "Money: " );
-	money_form.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
-	money_form.setSize( screen_h /32 );
-	money_form.setPosition( screen_w /1.22, username.getBot() +screen_h /144 );
-	
-	// Money.
 	money.setIdentity( "information-money" );
+	
+	// Set font.
+	username.setFont( "fonts/jcandlestickextracond.ttf" );
+	money_form.setFont( "fonts/jcandlestickextracond.ttf" );
 	money.setFont( "fonts/jcandlestickextracond.ttf" );
+	
+	// Set text.
+	username.setText( "Logged as error" );
+	money_form.setText( "Money: " );
 	money.setText( "error" );
+	
+	// Set color.
+	username.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	money_form.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 	money.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	
+	// Set size.
+	username.setSize( screen_h /32 );
+	money_form.setSize( screen_h /32 );
 	money.setSize( screen_h /32 );
+	
+	// Set position.
+	username.setPosition( screen_w /1.22, screen_h /144 );
+	money_form.setPosition( screen_w /1.22, username.getBot() +screen_h /144 );
 	money.setPosition( money_form.getRight() +screen_w /128, money_form.getY() );
 }
 
@@ -105,7 +112,6 @@ void Information::setUsername( string line )
 	// load username
 	username.setText( "Logged as  " +username_str );
 	username.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	username.setSize( screen_h /32 );
 	username.setPosition( screen_w /1.22, screen_h /144 );
 }
 
@@ -118,7 +124,6 @@ void Information::setThread()
 			// Money.
 			money.setText( "loading..." );
 			money.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-			money.setSize( screen_h /32 );
 			money.setPosition( money_form.getRight() +screen_w /128, money_form.getY() );
 			
 			
@@ -134,7 +139,7 @@ void Information::setMoney()
 	string message = "username=" +username_str;
 	
 	// prepare the request
-	sf::Http::Request request( "/combathalloween/money.php", sf::Http::Request::Post );
+	sf::Http::Request request( "/combathalloween/getmoney.php", sf::Http::Request::Post );
 	
 	// encode the parameters in the request body
 	request.setBody( message );
@@ -172,7 +177,6 @@ void Information::setMoney()
 		money.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 	}
 	
-	money.setSize( screen_h /32 );
 	money.setPosition( money_form.getRight() +screen_w /128, money_form.getY() );
 	
 	thread_ready = true;
