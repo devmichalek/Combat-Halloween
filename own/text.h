@@ -18,13 +18,13 @@ public:
 	~MyText();
 	void free();
 	const sf::Text& get() const;
-	sf::Font* getFont() const;
+	sf::Font* &getFont();
 	
 	void setIdentity( string identity );	// To find errors.
 	const string& getIdentity() const;
 	
 	void setFont( string path );
-	void setFontByFont( sf::Font* newFont );
+	// void setFontByFont( sf::Font* &newFont );
 	void setText( string line );
 	void setTextW( wstring line );
 	

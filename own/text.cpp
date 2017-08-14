@@ -35,7 +35,7 @@ const sf::Text& MyText::get() const
 	return *text;
 }
 
-sf::Font* MyText::getFont() const
+sf::Font* &MyText::getFont()
 {
 	return font;
 }
@@ -56,16 +56,13 @@ const string& MyText::getIdentity() const
 
 void MyText::setFont( string path )
 {
-	if( font != NULL )
+	if( font == NULL )
     {
-        delete font;
-        font = NULL;
+        font = new sf::Font;
     }
 	
 	try
 	{
-		font = new sf::Font;
-
 		if( !font->loadFromFile( path ) )
 		{
 			throw identity + " not loaded " + path;
@@ -75,39 +72,41 @@ void MyText::setFont( string path )
 	{
 		cerr << msg << endl;
 	}
+	
+	if( text == NULL )
+	{
+		text = new sf::Text;
+		text->setFont( *font );
+	}
 }
 
-void MyText::setFontByFont( sf::Font* newFont )
+/*
+void MyText::setFontByFont( sf::Font* &newFont )
 {
+	if( font != NULL )
+	{
+		delete font;
+		font = NULL;
+	}
+	
 	this->font = newFont;
+	
+	if( text == NULL )
+	{
+		text = new sf::Text;
+		text->setFont( *font );
+	}
 }
-
+*/
 void MyText::setText( string line )
 {
 	if( text != NULL )
     {
-        delete text;
-        text = NULL;
-    }
-	
-	try
-	{
-		text = new sf::Text;
-		
-		if( text == NULL )
-		{
-			throw identity + " not created text object";
-		}
-			
 		text->setString( line );
-		text->setFont( *font );
+		
 		sf::Color newColor( text->getColor() );
 		newColor.a = alpha;
 		text->setColor( newColor );
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
 	}
 }
 
@@ -115,28 +114,11 @@ void MyText::setTextW( wstring line )
 {
 	if( text != NULL )
     {
-        delete text;
-        text = NULL;
-    }
-	
-	try
-	{
-		text = new sf::Text;
-		
-		if( text == NULL )
-		{
-			throw identity + " not created text object";
-		}
-			
 		text->setString( line );
-		text->setFont( *font );
+		
 		sf::Color newColor( text->getColor() );
 		newColor.a = alpha;
 		text->setColor( newColor );
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
 	}
 }
 
