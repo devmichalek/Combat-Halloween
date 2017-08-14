@@ -125,7 +125,8 @@ void Worldtable::load( float screen_w, float screen_h )
 	
 	information.setIdentity( "worldtable-information" );
 	information.setFont( "fonts/jcandlestickextracond.ttf" );
-	
+	information.setText( "loading..." );
+	information.setSize( screen_h /28 );
 	
 	
 	gold_star.setIdentity( "worldtable-gold_star" );
@@ -477,7 +478,6 @@ void Worldtable::setThread()
 		{
 			// Setting loading text.
 			information.setText( "loading..." );
-			information.setSize( screen_h /28 );
 			information.setPosition( screen_w/2 -information.getWidth()/2 -reloadButton.getWidth()/2 -screen_w/256, screen_h /2.2 );
 			reloadButton.setPosition( information.getRight() +screen_w/256, information.getY() -reloadButton.getHeight() /3 );
 			
@@ -538,7 +538,7 @@ void Worldtable::setValues()
 						{
 							texts.push_back( new MyText );
 							texts[ texts.size() -1 ]->setIdentity( "worldtable-texts" );
-							texts[ texts.size() -1 ]->setFontByFont( information.getFont() );
+							texts[ texts.size() -1 ]->setFont( "fonts/jcandlestickextracond.ttf" );
 							texts[ texts.size() -1 ]->setText( con::itos(amount_buf -amount) );
 							texts[ texts.size() -1 ]->setSize( screen_h /28 );
 							texts[ texts.size() -1 ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
@@ -676,7 +676,6 @@ void Worldtable::setValues()
 	{
 		information.setText( "error" );
 		information.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-		information.setSize( screen_h /28 );
 		information.setPosition( screen_w/2 -information.getWidth()/2 -reloadButton.getWidth()/2 -screen_w/256, screen_h /2.2 );
 		reloadButton.setPosition( information.getRight() +screen_w/256, information.getY() -reloadButton.getHeight() /3 );
 	}
