@@ -251,14 +251,11 @@ bool Settings::handle( sf::Event& event )
 					keys_current[ target ] = event.key.code;
 					
 					active_texts[ target ]->setText( getName( event.key.code ) );
-					active_texts[ target ]->setSize( screen_h /28 );
 					active_texts[ target ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 					
 					if( target == ATTACK || target == JUMP )
 					{
 						active_texts[ JUMP_ATTACK ]->setText( getName( keys_current[ JUMP ] ) +" + " +getName( keys_current[ ATTACK ] ) );
-						active_texts[ JUMP_ATTACK ]->setSize( screen_h /28 );
-						active_texts[ JUMP_ATTACK ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 					}
 					
 					position();
@@ -505,7 +502,6 @@ void Settings::reset()
 			file.get() >> line;
 			keys_current[ i ] = stoi( line );
 			active_texts[ i ]->setText( getName( stoi( line ) ) );
-			active_texts[ i ]->setSize( screen_h /28 );
 			active_texts[ i ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 		}
 	}
