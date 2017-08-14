@@ -50,14 +50,13 @@ void Link_button::handle( sf::Event& event )
 			if( button.checkCollisionCircle( event.mouseButton.x, event.mouseButton.y ) )
 			{
 				click.play();
+				openWebsite();
 				button.setOffset( 1 );
-				string command = "start " +url;
-				system( command.c_str() );
 			}
 		}
 	}
 	
-	if( event.type == sf::Event::MouseMoved )
+	if( event.type == sf::Event::MouseButtonReleased )
 	{
 		button.setOffset( 0 );
 	}
@@ -83,6 +82,12 @@ void Link_button::fadeout( float v, int min )
 float Link_button::getRight()
 {
 	return button.getRight();
+}
+
+void Link_button::openWebsite()
+{
+	string command = "start " +url;
+	system( command.c_str() );
 }
 
 void Link_button::setPlayable( bool playable )

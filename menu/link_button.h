@@ -30,6 +30,7 @@ public:
 	
 	// Getters.
 	float getRight();
+	void openWebsite();
 	
 	// Sound.
 	void setPlayable( bool playable );
