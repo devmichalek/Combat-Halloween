@@ -3,6 +3,8 @@
 
 Rectbutton::Rectbutton()
 {
+	text_one = NULL;
+	text_two = NULL;
 	free();
 }
 
@@ -20,15 +22,25 @@ void Rectbutton::free()
 	clicked = false;
 	state = 0;
 	
-	text_one.free();
-	text_two.free();
+	if( text_one != NULL )
+	{
+		text_one->free();
+		delete text_one;
+		text_one = NULL;
+	}
+	
+	if( text_two != NULL )
+	{
+		text_two->free();
+		delete text_two;
+		text_two = NULL;
+	}
 	
 	if( !rects.empty() )
 	{
 		for( auto &it :rects )
 		{
 			delete it;
-			it = NULL;
 		}
 		
 		rects.clear();
@@ -37,31 +49,49 @@ void Rectbutton::free()
 
 void Rectbutton::setIdentity( string identity )
 {
-	text_one.setIdentity( identity );
-	text_two.setIdentity( identity );
+	text_one = new MyText();
+	text_two = new MyText();
+	text_one->setIdentity( identity );
+	text_two->setIdentity( identity );
 }
 
 const string& Rectbutton::getIdentity() const
 {
-	return text_one.getIdentity();
+	return text_one->getIdentity();
 }
 
 
 
+void Rectbutton::setFont( string path )
+{
+	text_one->setFont( path );
+	text_two->setFont( path );
+}
+/*
+void Rectbutton::setFontByFont( sf::Font* &font )
+{
+	text_one->setFontByFont( font );
+	text_two->setFontByFont( font );
+}
 
-void Rectbutton::create( string line, string path, int size, int ply )
+sf::Font* &Rectbutton::getFont()
+{
+	return text_one->getFont();
+}
+*/
+
+
+void Rectbutton::create( string line, int size, int ply )
 {
 	// 1. Create text.
-	text_one.setFont( path );
-	text_two.setFontByFont( text_one.getFont() );
-	text_one.setText( line );
-	text_two.setText( line );
-	text_one.setSize( size );
-	text_two.setSize( size );
+	text_one->setText( line );
+	text_two->setText( line );
+	text_one->setSize( size );
+	text_two->setSize( size );
 	
 	// 2. Set lines.
-	float w = text_one.getWidth() +text_one.getWidth()/5;
-	float h = text_one.getHeight() *2 +text_one.getHeight()/5;
+	float w = text_one->getWidth() +text_one->getWidth()/5;
+	float h = text_one->getHeight() *2 +text_one->getHeight()/5;
 	
 	try
 	{
@@ -130,7 +160,7 @@ void Rectbutton::handle( sf::Event& event )
 void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
 {
 	// Background.
-	window->draw( text_two.get() );
+	window->draw( text_two->get() );
 	
 	// Frame.
 	for( auto &it :rects )
@@ -139,7 +169,7 @@ void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
 	}
 	
 	// Front.
-	window->draw( text_one.get() );
+	window->draw( text_one->get() );
 	
 	
 	if( state == 1 )
@@ -147,14 +177,14 @@ void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
 		if( focus )
 		{
 			fadein( elapsedTime *0xFF *6 );
-			text_one.fadein( elapsedTime *0xFF *6 );
-			text_two.fadeout( elapsedTime *0xFF *6 );
+			text_one->fadein( elapsedTime *0xFF *6 );
+			text_two->fadeout( elapsedTime *0xFF *6 );
 		}
 		else
 		{
 			fadeout( elapsedTime *0xFF *6 );
-			text_one.fadeout( elapsedTime *0xFF *6 );
-			text_two.fadein( elapsedTime *0xFF *6 );
+			text_one->fadeout( elapsedTime *0xFF *6 );
+			text_two->fadein( elapsedTime *0xFF *6 );
 		}
 	}
 }
@@ -204,7 +234,7 @@ void Rectbutton::fadeinGlobal( float v, int max )
 	if( state == 0 )
 	{
 		fadeinBorders( v );
-		text_two.fadein( v );
+		text_two->fadein( v );
 		if( alphaBorders == max )
 		{
 			state = 1;
@@ -255,8 +285,8 @@ void Rectbutton::fadeoutGlobal( float v, int min )
 	{
 		fadeout( v );
 		fadeoutBorders( v );
-		text_one.fadeout( v );
-		text_two.fadeout( v );
+		text_one->fadeout( v );
+		text_two->fadeout( v );
 		if( alphaBorders == min )
 		{
 			state = 2;
@@ -269,8 +299,8 @@ void Rectbutton::fadeoutGlobal( float v, int min )
 
 void Rectbutton::move( float x, float y )
 {
-	text_one.move( x, y );
-	text_two.move( x, y );
+	text_one->move( x, y );
+	text_two->move( x, y );
 	for( auto &it :rects )
 	{
 		it->move( x, y );
@@ -284,8 +314,8 @@ void Rectbutton::setPosition( float x, float y )
 	rects[ 2 ]->setPosition( x, y +rects[ 0 ]->getSize().y +rects[ 3 ]->getSize().y );
 	rects[ 3 ]->setPosition( x, y +rects[ 0 ]->getSize().y );
 	rects[ 4 ]->setPosition( x +rects[ 0 ]->getSize().y, y +rects[ 0 ]->getSize().y );
-	text_one.center( rects[ 4 ]->getPosition().x, rects[ 4 ]->getPosition().y, rects[ 4 ]->getSize().x, rects[ 4 ]->getSize().y /1.5 );
-	text_two.center( rects[ 4 ]->getPosition().x, rects[ 4 ]->getPosition().y, rects[ 4 ]->getSize().x, rects[ 4 ]->getSize().y /1.5 );
+	text_one->center( rects[ 4 ]->getPosition().x, rects[ 4 ]->getPosition().y, rects[ 4 ]->getSize().x, rects[ 4 ]->getSize().y /1.5 );
+	text_two->center( rects[ 4 ]->getPosition().x, rects[ 4 ]->getPosition().y, rects[ 4 ]->getSize().x, rects[ 4 ]->getSize().y /1.5 );
 }
 
 void Rectbutton::center( float x, float y, int w, int h )
@@ -304,7 +334,7 @@ void Rectbutton::setColor( sf::Color color )
 	{
 		rects[ i ]->setFillColor( newColor );
 	}
-	text_two.setColor( newColor );
+	text_two->setColor( newColor );
 	
 	newColor.a = rects[ rects.size() -1 ]->getFillColor().a;
 	newColor.r = color.r;
@@ -315,7 +345,7 @@ void Rectbutton::setColor( sf::Color color )
 
 void Rectbutton::setColorText( sf::Color color )
 {
-	text_one.setColor( color );
+	text_one->setColor( color );
 }
 
 void Rectbutton::setAlpha( float alpha )
