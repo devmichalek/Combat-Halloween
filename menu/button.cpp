@@ -86,6 +86,11 @@ bool Button::isPressed()
 	return pressed;
 }
 
+void Button::setPressed()
+{
+	pressed = true;
+}
+
 float Button::getBot()
 {
 	return button.getBot();

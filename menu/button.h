@@ -30,6 +30,7 @@ public:
 	
 	// Getters.
 	bool isPressed();
+	void setPressed();
 	float getBot();
 	float getLeft();
 	float getTop();
