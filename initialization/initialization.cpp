@@ -49,9 +49,9 @@ void Initialization::load( int screen_width, int screen_height )
 	
 	// Set font.
 	texts[ AUTHOR ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ PRESENTS ]->setFontByFont( texts[ AUTHOR ]->getFont() );
-	texts[ HALLOWEEN ]->setFontByFont( texts[ AUTHOR ]->getFont() );
-	texts[ COMBAT ]->setFontByFont( texts[ AUTHOR ]->getFont() );
+	texts[ PRESENTS ]->setFont( "fonts/Jaapokki-Regular.otf" );
+	texts[ HALLOWEEN ]->setFont( "fonts/Jaapokki-Regular.otf" );
+	texts[ COMBAT ]->setFont( "fonts/Jaapokki-Regular.otf" );
 	
 	// Set text.
 	texts[ AUTHOR ]->setTextW( L"Adrian Michałek" );
