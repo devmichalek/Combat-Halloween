@@ -25,6 +25,7 @@ void Engine::free()
 	delete menu;
 	delete level;
 	delete play;
+	delete editor;
 }
 
 void Engine::load()
@@ -58,6 +59,11 @@ void Engine::load()
 		play->load( core->getWidth(), core->getHeight() );
 		break;
 		
+		case 6:
+		editor = new Editor;
+		editor->load( core->getWidth(), core->getHeight() );
+		break;
+		
 		case 101:
 		loading->beReady();
 		break;
@@ -67,7 +73,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->getState() = MENU;
+		core->getState() = LEVEL;
 	}
 }
 
@@ -86,6 +92,7 @@ void Engine::events()
 			case MENU: menu->handle( core->getEvent() ); break;
 			case LEVEL: level->handle( core->getEvent() ); break;
 			case PLAY: play->handle( core->getEvent() ); break;
+			case EDITOR: editor->handle( core->getEvent() ); break;
 		}
     }
 }
@@ -113,6 +120,7 @@ void Engine::states()
 		{
 			menu->setUsername( login->getUsername() );
 			level->setUsername( login->getUsername() );
+			editor->setUsername( login->getUsername() );
 			core->getState() = MENU;
 		}
 	}
@@ -131,6 +139,11 @@ void Engine::states()
 		{
 			menu->saveSound();
 			core->isOpen() = false;
+		}
+		else if( menu->isEditor() )
+		{
+			menu->saveSound();
+			core->getState() = EDITOR;
 		}
 	}
 	
@@ -170,6 +183,16 @@ void Engine::states()
 		{
 			play->saveSound();
 			core->getState() = TABLE;
+		}
+	}
+	
+	if( core->getState() == EDITOR )
+	{
+		editor->head( core->getWindow(), core->getElapsedTime() );
+		
+		if( editor->isBack() )
+		{
+			core->getState() = MENU;
 		}
 	}
 }

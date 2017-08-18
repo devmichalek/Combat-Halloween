@@ -1,5 +1,4 @@
 #pragma once
-
 #include "core.h"
 #include "initialization/loading.h"
 #include "initialization/initialization.h"
@@ -7,6 +6,7 @@
 #include "menu/menu.h"
 #include "level/level.h"
 #include "play/play.h"
+#include "editor/editor.h"
 
 class Engine {
 	
@@ -17,7 +17,8 @@ class Engine {
 		MENU,
 		LEVEL,
 		PLAY,
-		TABLE
+		TABLE,
+		EDITOR
 	};
 	
 	Core* core;
@@ -27,6 +28,7 @@ class Engine {
 	Menu* menu;
 	Level* level;
 	Play* play;
+	Editor* editor;
 	
 public:
 	Engine();
