@@ -94,12 +94,12 @@ void Knight_specs::load( float screen_w, float screen_h )
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	click.setIdentity( "knight_specs-chunk" );
+	click.setIdentity( "knight_specs-click" );
 	click.load( "sounds/click.wav" );
 	
 	line = 10;
-	knight.setIdentity( "knight_specs-animation" );
-	knight.load( "images/knight/0.png", line );
+	knight.setIdentity( "knight_specs-knight" );
+	knight.load( "images/menu/knight.png", line );
 	knight.setScale( screen_w /2560, screen_h /1440 );
 	knight.setPosition( screen_w /7, screen_h -screen_h/72 -knight.getHeight() );
 	
@@ -130,7 +130,7 @@ void Knight_specs::load( float screen_w, float screen_h )
 	{
 		parts.push_back( new MySprite );
 		parts[ i ]->setIdentity( "knight_specs-parts" );
-		parts[ i ]->load( "images/knight/parts/" +con::itos(i) +".png" );
+		parts[ i ]->load( "images/menu/parts/" +con::itos(i) +".png" );
 		parts[ i ]->setScale( screen_w /2560, screen_h /1440 );
 		
 		rects.push_back( new sf::Vector2f );
