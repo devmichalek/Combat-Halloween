@@ -25,7 +25,7 @@ void Loading::free()
 	progress_bar.free();
 }
 	
-void Loading::load( unsigned screen_w, unsigned screen_h )
+void Loading::load( float screen_w, float screen_h )
 {
 	free();
 	
@@ -41,8 +41,8 @@ void Loading::load( unsigned screen_w, unsigned screen_h )
 	// Set progress bar.
 	max = 20;
 	progress_bar.setIdentity( "loading-progress_bar" );
-	progress_bar.load( "images/initialization/progress_bar.png", max );
-	progress_bar.setScale( static_cast <float> (screen_h) /960, static_cast <float> (screen_h) /960 );
+	progress_bar.load( "images/initialization/progress_bar.png", static_cast <int> (max) );
+	progress_bar.setScale( screen_w /1707, screen_h /960 );
 	progress_bar.setAlpha( 0xFF );
 	
 	// The rest.
@@ -58,13 +58,13 @@ void Loading::draw( sf::RenderWindow* &window, double elapsedTime )
 	{
 		setText();
 		state ++;
-		progress_bar.setOffset( counter/3 );
+		progress_bar.setOffset( static_cast <int> (counter) );
 	}
 	
 	window->draw( progress_bar.get() );
 	
-	counter++;
-	if( counter == max *3 )
+	counter += elapsedTime *0xFF /8;
+	if( counter >= max )
 	{
 		counter = 0;
 	}

@@ -15,8 +15,8 @@ class Loading
 	sf::Uint8 state;		// Show percents.
 	
 	// Animation
-	sf::Uint8 counter;		// To set offsets.
-	sf::Uint8 max;			// How many offset's.
+	float counter;		// To set offsets.
+	float max;			// How many offset's.
 	MySprite progress_bar;
 	
 public:
@@ -26,7 +26,7 @@ public:
 	~Loading();
 	void free();
 	
-	void load( unsigned screen_w, unsigned screen_h );
+	void load( float screen_w, float screen_h );
 	void draw( sf::RenderWindow* &window, double elapsedTime );
 	
 	// In addition, getters.
