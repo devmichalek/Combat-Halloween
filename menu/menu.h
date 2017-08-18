@@ -14,6 +14,7 @@ class Menu
 	// Basics.
 	bool ready;
 	bool close;
+	bool editor;
 	bool run;
 	
 	// Objects.
@@ -60,4 +61,5 @@ public:
 	// Getters.
 	bool isReady();
 	bool isClose();
+	bool isEditor();
 };

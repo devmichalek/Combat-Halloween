@@ -15,6 +15,7 @@ void Menu::free()
 {
 	ready = false;
 	close = false;
+	editor = false;
 	run = false;
 	
 	background.free();
@@ -107,7 +108,7 @@ void Menu::load( float screen_w, float screen_h )
 
 void Menu::handle( sf::Event& event )
 {
-	if( !close && !ready )
+	if( !close && !ready && !editor )
 	{
 		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 		{
@@ -191,12 +192,12 @@ void Menu::draw( sf::RenderWindow* &window )
 void Menu::mechanics( double elapsedTime )
 {
 	// Mechanics.
-	if( !pausesystem.isActive() && !close && !ready )
+	if( !pausesystem.isActive() && !close && !ready && !editor )
 	{
 		chat.mechanics( elapsedTime );
 		if( chat.isUsed() )
 		{
-			// Knight specs
+			// Knight specs.
 			if( chat.getCommand( "@clear" ) )		knight_specs.setChosen( -1 );
 			else if( chat.getCommand( "@helmet" ) )	knight_specs.setChosen( 0 );
 			else if( chat.getCommand( "@body" ) )	knight_specs.setChosen( 1 );
@@ -215,7 +216,10 @@ void Menu::mechanics( double elapsedTime )
 			else if( chat.getCommand( "@singleplayer" ) || chat.getCommand( "@play" ) ||
 			chat.getCommand( "@start" ) || chat.getCommand( "@go" ) )
 			{
-				singleplayer.setPressed();
+				if( knight_specs.isReady() && information.isReady() )
+				{
+					singleplayer.setPressed();
+				}
 			}
 			
 			// Exsert / shovel settings.
@@ -225,18 +229,15 @@ void Menu::mechanics( double elapsedTime )
 				settingsbutton.setActive( !settingsbutton.isActive() );
 			}
 			
-			// reload data
-			if( reloadbutton.isActive() )
+			// Reload data.
+			if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
+			chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
 			{
-				if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
-				chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
-				{
-					reloadbutton.setActive( true );
-				}
+				reloadbutton.setActive( true );
 			}
 			
 			// Turn on/off all chunks.
-			else if( chat.getCommand( "@chunk turn" ) )
+			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
@@ -253,7 +254,7 @@ void Menu::mechanics( double elapsedTime )
 			}
 			
 			// Turn on/off music.
-			else if( chat.getCommand( "@music turn" ) )
+			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
 			{
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
@@ -270,7 +271,7 @@ void Menu::mechanics( double elapsedTime )
 			}
 			
 			// Turn on/off all sounds.
-			else if( chat.getCommand( "@sound turn" ) )
+			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
@@ -290,6 +291,14 @@ void Menu::mechanics( double elapsedTime )
 				chunkbutton.setActive( true );
 				musicbutton.setChanged( true );
 				musicbutton.setActive( true );
+			}
+			
+			// Map editor.
+			else if( chat.getCommand( "@editor" ) || chat.getCommand( "@map_editor" ) ||
+			chat.getCommand( "@edit" ) )
+			{
+				editor = true;
+				chat.isOpen() = false;
 			}
 			
 			// Link buttons in addition.
@@ -415,7 +424,7 @@ void Menu::fades( double elapsedTime )
 	// Fade out - paused.
 	if( pausesystem.isActive() )
 	{
-		float value = elapsedTime *0xFF;
+		float value = elapsedTime *0xFF *2;
 		float min = 0xFF *3 /4;
 		
 		background.fadeout( value, min );
@@ -440,9 +449,9 @@ void Menu::fades( double elapsedTime )
 	}
 	
 	// Fade out - closed.
-	else if( close || ready )
+	else if( close || ready || editor )
 	{
-		float value = elapsedTime *0xFF /2;
+		float value = elapsedTime *0xFF;
 		
 		background.fadeout( value );
 		knight_specs.fadeout( value );
@@ -467,7 +476,7 @@ void Menu::fades( double elapsedTime )
 	// Fade in.
 	else
 	{
-		float value = elapsedTime *0xFF;
+		float value = elapsedTime *0xFF *2;
 		
 		background.fadein( value );
 		knight_specs.fadein( value );
@@ -591,13 +600,17 @@ void Menu::saveSound()
 	
 	// plus
 	ready = false;
+	close = false;
+	editor = false;
 	run = false;
 	
-	// reset buttons
+	// Reset.
 	knight_specs.reload();
 	singleplayer.reload();
 	settingsbutton.setActive( false );
 	settings.reload();
+	chat.reset();
+	music.stop();
 }
 
 
@@ -615,6 +628,16 @@ bool Menu::isReady()
 bool Menu::isClose()
 {
 	if( close && background.getAlpha() == 0 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Menu::isEditor()
+{
+	if( editor && background.getAlpha() == 0 )
 	{
 		return true;
 	}
