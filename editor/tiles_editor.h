@@ -17,6 +17,14 @@ class Tiles_editor
 		AMOUNT
 	};
 	
+	struct Block
+	{
+		int w;
+		int n;
+		float x;
+		float y;
+	};
+	
 	// Support.
 	float screen_w;
 	float screen_h;
@@ -38,11 +46,8 @@ class Tiles_editor
 	vector <MySprite*> foes;
 	sf::RectangleShape line;
 	
-	// Vectors.
-	vector <int> ws;	// which
-	vector <int> ns;	// chosen
-	vector <float> xs;	// x position
-	vector <float> ys;	// y position
+	// Vector.
+	vector <Block> blocks;
 	
 public:
 	

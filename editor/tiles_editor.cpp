@@ -61,23 +61,9 @@ void Tiles_editor::free()
 		foes.clear();
 	}
 	
-	
-	
-	if( !ws.empty() )
+	if( !blocks.empty() )
 	{
-		ws.clear();
-	}
-	if( !ns.empty() )
-	{
-		ns.clear();
-	}
-	if( !xs.empty() )
-	{
-		xs.clear();
-	}
-	if( !ys.empty() )
-	{
-		ys.clear();
+		blocks.clear();
 	}
 }
 
@@ -89,21 +75,9 @@ void Tiles_editor::reset()
 
 void Tiles_editor::clear()
 {
-	if( !ws.empty() )
+	if( !blocks.empty() )
 	{
-		ws.clear();
-	}
-	if( !ns.empty() )
-	{
-		ns.clear();
-	}
-	if( !xs.empty() )
-	{
-		xs.clear();
-	}
-	if( !ys.empty() )
-	{
-		ys.clear();
+		blocks.clear();
 	}
 }
 
@@ -176,9 +150,9 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 	// Check if FOE is active.
 	bool able = true;
 	int mycounter = 0;
-	for( unsigned i = 0; i < ws.size(); i++ )
+	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( ws[ i ] == FOE )
+		if( blocks[ i ].w == FOE )
 		{
 			mycounter ++;
 		}
@@ -196,22 +170,16 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 			
 			if( code == sf::Keyboard::BackSpace )
 			{
-				if( ws.size() > 0 )
+				if( blocks.size() > 0 )
 				{
-					ws.pop_back();
-					ns.pop_back();
-					xs.pop_back();
-					ys.pop_back();
+					blocks.pop_back();
 					
 					// Repeat.
-					if( ws.size() > 0 )
+					if( blocks.size() > 0 )
 					{
-						if( ws[ ws.size() -1 ] == FOE )
+						if( blocks[ blocks.size() -1 ].w == FOE )
 						{
-							ws.pop_back();
-							ns.pop_back();
-							xs.pop_back();
-							ys.pop_back();
+							blocks.pop_back();
 						}
 					}
 				}
@@ -266,10 +234,7 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 	}
 	else if( !able )
 	{
-		ws.pop_back();
-		ns.pop_back();
-		xs.pop_back();
-		ys.pop_back();
+		blocks.pop_back();
 	}
 	
 	if( event.type == sf::Event::MouseMoved )
@@ -281,16 +246,16 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 		{
 			// Check if we need the same y position as before.
 			int counter = 0;
-			for( unsigned i = 0; i < ws.size(); i++ )
+			for( unsigned i = 0; i < blocks.size(); i++ )
 			{
-				if( ws[ i ] == FOE )
+				if( blocks[ i ].w == FOE )
 				{
 					counter ++;
 				}
 			}
 			if( counter > 0 && counter %2 != 0 )
 			{
-				mouse_y = ys[ ys.size() -1 ];
+				mouse_y = blocks[ blocks.size() -1 ].y;
 			}
 			
 			// Grid works.
@@ -323,45 +288,47 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 		{
 			if( chosen > -1 && which > -1 && !isRubbish )
 			{
-				ws.push_back( which );
-				ns.push_back( chosen );
-				xs.push_back( mouse_x );
-				ys.push_back( mouse_y );
+				Block block;
+				block.w = which;
+				block.n = chosen;
+				block.x = mouse_x;
+				block.y = mouse_y;
+				blocks.push_back( block );
 			}
 			
 			if( isRubbish )
 			{
 				int collision = -1;
-				for( unsigned i = 0; i < xs.size(); i++ )
+				for( unsigned i = 0; i < blocks.size(); i++ )
 				{
-					if( ws[ i ] == COIN )
+					if( blocks[ i ].w == COIN )
 					{
-						coin.setPosition( xs[ i ], ys[ i ] );
+						coin.setPosition( blocks[ i ].x, blocks[ i ].y );
 						if( coin.checkCollision( mouse_x, mouse_y ) )
 						{
 							collision = i;
 						}
 					}
-					else if( ws[ i ] == TILE )
+					else if( blocks[ i ].w == TILE )
 					{
-						tiles[ ns[ i ] ]->setPosition( xs[ i ], ys[ i ] );
-						if( tiles[ ns[ i ] ]->checkCollision( mouse_x, mouse_y ) )
+						tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+						if( tiles[ blocks[ i ].n ]->checkCollision( mouse_x, mouse_y ) )
 						{
 							collision = i;
 						}
 					}
-					else if( ws[ i ] == OBJECT )
+					else if( blocks[ i ].w == OBJECT )
 					{
-						objects[ ns[ i ] ]->setPosition( xs[ i ], ys[ i ] );
-						if( objects[ ns[ i ] ]->checkCollision( mouse_x, mouse_y ) )
+						objects[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+						if( objects[ blocks[ i ].n ]->checkCollision( mouse_x, mouse_y ) )
 						{
 							collision = i;
 						}
 					}
-					else if( ws[ i ] == FOE )
+					else if( blocks[ i ].w == FOE )
 					{
-						foes[ ns[ i ] ]->setPosition( xs[ i ], ys[ i ] );
-						if( foes[ ns[ i ] ]->checkCollision( mouse_x, mouse_y ) )
+						foes[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+						if( foes[ blocks[ i ].n ]->checkCollision( mouse_x, mouse_y ) )
 						{
 							collision = i;
 						}
@@ -379,7 +346,7 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 					{
 						for( unsigned i = 0; i < collision; i++ )
 						{
-							if( ws[ i ] == FOE )
+							if( blocks[ i ].w == FOE )
 							{
 								myseccounter ++;
 							}
@@ -388,11 +355,11 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 						if( myseccounter %2 == 0 )	status = 0;
 						else						status = -1;
 					}
-					else if( collision < ws.size() -1 )
+					else if( collision < blocks.size() -1 )
 					{
-						for( unsigned i = collision; i < ws.size(); i++ )
+						for( unsigned i = collision; i < blocks.size(); i++ )
 						{
-							if( ws[ i ] == FOE )
+							if( blocks[ i ].w == FOE )
 							{
 								myseccounter ++;
 							}
@@ -405,25 +372,19 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 					{
 						status = -1;
 					}
-					else if( collision == ws.size() )
+					else if( collision == blocks.size() )
 					{
 						status = 0;
 					}
 					
 					
-					if( ws[ collision ] == FOE )
+					if( blocks[ collision ].w == FOE )
 					{
-						ws.erase( ws.begin() +collision );
-						ns.erase( ns.begin() +collision );
-						xs.erase( xs.begin() +collision );
-						ys.erase( ys.begin() +collision );
+						blocks.erase( blocks.begin() +collision );
 						collision += status;
 					}
 					
-					ws.erase( ws.begin() +collision );
-					ns.erase( ns.begin() +collision );
-					xs.erase( xs.begin() +collision );
-					ys.erase( ys.begin() +collision );
+					blocks.erase( blocks.begin() +collision );
 				}
 			}
 		}
@@ -433,27 +394,32 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 void Tiles_editor::draw( sf::RenderWindow* &window )
 {
 	// Draw added drawable stuff.
-	for( unsigned i = 0; i < xs.size(); i++ )
+	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( ws[ i ] == COIN )
+		int w = blocks[ i ].w;
+		int n = blocks[ i ].n;
+		float x = blocks[ i ].x;
+		float y = blocks[ i ].y;
+		
+		if( w == COIN )
 		{
-			coin.setPosition( xs[ i ], ys[ i ] );
+			coin.setPosition( x, y );
 			window->draw( coin.get() );
 		}
-		else if( ws[ i ] == TILE )
+		else if( w == TILE )
 		{
-			tiles[ ns[ i ] ]->setPosition( xs[ i ], ys[ i ] );
-			window->draw( tiles[ ns[ i ] ]->get() );
+			tiles[ n ]->setPosition( x, y );
+			window->draw( tiles[ n ]->get() );
 		}
-		else if( ws[ i ] == OBJECT )
+		else if( w == OBJECT )
 		{
-			objects[ ns[ i ] ]->setPosition( xs[ i ], ys[ i ] );
-			window->draw( objects[ ns[ i ] ]->get() );
+			objects[ n ]->setPosition( x, y );
+			window->draw( objects[ n ]->get() );
 		}
-		else if( ws[ i ] == FOE )
+		else if( w == FOE )
 		{
-			foes[ ns[ i ] ]->setPosition( xs[ i ], ys[ i ] );
-			window->draw( foes[ ns[ i ] ]->get() );
+			foes[ n ]->setPosition( x, y );
+			window->draw( foes[ n ]->get() );
 		}
 	}
 	
@@ -497,31 +463,31 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	unsigned counter = 0;
 	while( true )
 	{
-		if( ws.size() < 1 )
+		if( blocks.size() < 1 )
 		{
 			break;
 		}
 		
-		if( ws[ counter ] == FOE )
+		if( blocks[ counter ].w == FOE )
 		{
 			float w;
-			if( counter == xs.size() -1 )
+			if( counter == blocks.size() -1 )
 			{
-				w = mouse_x -xs[ counter ];
+				w = mouse_x -blocks[ counter ].x;
 			}
 			else
 			{
-				w = xs[ counter +1 ] -xs[ counter ];
+				w = blocks[ counter +1 ].x -blocks[ counter ].x;
 			}
 			
 			line.setSize( sf::Vector2f( w, 2 ) );
-			line.setPosition( sf::Vector2f( xs[ counter ], ys[ counter ] +foes[ ns[ counter ] ]->getHeight()/2 ) );
+			line.setPosition( sf::Vector2f( blocks[ counter ].x, blocks[ counter ].y +foes[ blocks[ counter ].n ]->getHeight()/2 ) );
 			window->draw( line );
 			
 			counter ++;
 		}
 		
-		if( static_cast <int> (counter) >= static_cast <int> (ws.size()) -1 )
+		if( static_cast <int> (counter) >= static_cast <int> (blocks.size()) -1 )
 		{
 			break;
 		}
@@ -567,10 +533,48 @@ void Tiles_editor::save( string path )
 	file.load( "txt/worlds/" +path +".txt", std::ios::out );
 	if( file.is_good() )
 	{
-		for( unsigned i = 0; i < ws.size(); i++ )
+		// Sort by w.
+		sort( blocks.begin(), blocks.end(), []( const Block& a, const Block& b ) { return a.w < b.w; } );
+		
+		// Take foes and rest.
+		vector <Block> myblocks;
+		vector <Block> finalblocks;
+		int counter = 0;
+		for( unsigned i = 0; i < blocks.size(); i++ )
 		{
-			file.get() << ws[ i ] << "." << ns[ i ] << "." << xs[ i ] << "." << ys[ i ] << endl;
+			if( counter != blocks[ i ].w || i == blocks.size() -1 )
+			{
+				if( i == blocks.size() -1 )
+				{
+					myblocks.push_back( blocks[ i ] );
+				}
+				
+				// Sort by x.
+				if( counter != FOE )
+				{
+					sort( myblocks.begin(), myblocks.end(), []( const Block& a, const Block& b ) { return a.x < b.x; } );
+				}
+				
+				finalblocks.insert( finalblocks.end(), myblocks.begin(), myblocks.end() );
+				myblocks.clear();
+				counter ++;
+			}
+			
+			myblocks.push_back( blocks[ i ] );
 		}
+		myblocks.clear();
+		
+		
+		// Write to file.
+		for( unsigned i = 0; i < finalblocks.size(); i++ )
+		{
+			file.get() << finalblocks[ i ].w << "." << finalblocks[ i ].n << "." << finalblocks[ i ].x << "." << finalblocks[ i ].y;
+			if( i < finalblocks.size() -1 )
+			{
+				file.get() << endl;
+			}
+		}
+		finalblocks.clear();
 	}
 	file.free();
 }
@@ -602,10 +606,12 @@ void Tiles_editor::load( string path )
 			}
 			mydata.push_back( mynumber );
 			
-			ws.push_back( con::stof( mydata[ 0 ] ) );
-			ns.push_back( con::stof( mydata[ 1 ] ) );
-			xs.push_back( con::stof( mydata[ 2 ] ) );
-			ys.push_back( con::stof( mydata[ 3 ] ) );
+			Block block;
+			block.w = con::stof( mydata[ 0 ] );
+			block.n = con::stof( mydata[ 1 ] );
+			block.x = con::stof( mydata[ 2 ] );
+			block.y = con::stof( mydata[ 3 ] );
+			blocks.push_back( block );
 		}
 	}
 	file.free();
