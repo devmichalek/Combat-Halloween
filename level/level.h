@@ -1,6 +1,8 @@
+#pragma once
 #include "worldtable.h"
 #include "menu/circlebutton.h"
 #include "menu/volume_button.h"
+#include "level/chat.h"
 #include "menu/pausesystem.h"
 #include "own/music.h"
 
@@ -21,6 +23,7 @@ class Level
 	Circlebutton musicbutton;
 	Volume_button chunk_volume;
 	Volume_button music_volume;
+	Chat chat;
 	Pausesystem pausesystem;
 	Music music;
 	

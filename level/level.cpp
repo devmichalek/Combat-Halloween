@@ -26,6 +26,7 @@ void Level::free()
 	musicbutton.free();
 	chunk_volume.free();
 	music_volume.free();
+	chat.free();
 	pausesystem.free();
 	music.free();
 }
@@ -62,6 +63,9 @@ void Level::load( float screen_w, float screen_h )
 	chunk_volume.load( chunkbutton.getLeft(), chunkbutton.getRight(), chunkbutton.getBot(), screen_w, screen_h );
 	music_volume.load( musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot(), screen_w, screen_h );
 	
+	// Set chat.
+	chat.load( screen_w, screen_h );
+	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
 	
@@ -76,28 +80,36 @@ void Level::handle( sf::Event& event )
 	{
 		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 		{
-			homebutton.handle( event );
+			chat.handle( event );
 			
-			if( worldtable.isChosen() )
+			if( !chat.isOpen() )
 			{
-				playbutton.handle( event );
-			}
+				homebutton.handle( event );
 			
-			worldtable.handle( event );
-			updatebutton.handle( event );
-			
-			if( !chunk_volume.handle( event ) )
-			{
-				chunkbutton.handle( event );
-			}
-			
-			if( !music_volume.handle( event ) )
-			{
-				musicbutton.handle( event );
+				if( worldtable.isChosen() )
+				{
+					playbutton.handle( event );
+				}
+				
+				worldtable.handle( event );
+				updatebutton.handle( event );
+				
+				if( !chunk_volume.handle( event ) )
+				{
+					chunkbutton.handle( event );
+				}
+				
+				if( !music_volume.handle( event ) )
+				{
+					musicbutton.handle( event );
+				}
 			}
 		}
 		
-		pausesystem.handle( event );
+		if( !chat.isOpen() )
+		{
+			pausesystem.handle( event );
+		}
 	}
 }
 
@@ -126,6 +138,7 @@ void Level::draw( sf::RenderWindow* &window )
 	musicbutton.draw( window );
 	chunk_volume.draw( window );
 	music_volume.draw( window );
+	chat.draw( window );
 	pausesystem.draw( window );
 }
 
@@ -134,22 +147,119 @@ void Level::mechanics( double elapsedTime )
 	// Mechanics.
 	if( !pausesystem.isActive() && !next && !back )
 	{
+		chat.mechanics( elapsedTime );
+		if( chat.isUsed() )
+		{
+			// Someone clicked backtomenu button.
+			if( chat.getCommand( "@menu" ) || chat.getCommand( "@back" ) ||
+			chat.getCommand( "@aback" ) || chat.getCommand( "@return" ) )
+			{
+				homebutton.setChanged( true );
+			}
+			
+			// Someone clicked singleplayer.
+			else if( chat.getCommand( "@play" ) || chat.getCommand( "@start" ) || chat.getCommand( "@go" ) )
+			{
+				if( worldtable.isChosen() )
+				{
+					playbutton.setChanged( true );
+				}
+			}
+			
+			// Reload data.
+			if( worldtable.abletoreload() )
+			{
+				if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
+				chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
+				{
+					worldtable.setThread();
+				}
+			}
+			
+			// Update data.
+			else if( chat.getCommand( "@update" ) )
+			{
+				updatebutton.setChanged( true );
+			}
+			
+			// Turn on/off all chunks.
+			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( !chunkbutton.isActive() );
+			}
+			else if( chat.getCommand( "@chunk off" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@chunk on" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( true );
+			}
+			
+			// Turn on/off music.
+			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( !musicbutton.isActive() );
+			}
+			else if( chat.getCommand( "@music off" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@music on" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( true );
+			}
+			
+			// Turn on/off all sounds.
+			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( !chunkbutton.isActive() );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( !musicbutton.isActive() );
+			}
+			else if( chat.getCommand( "@sound off" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( false );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@sound on" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( true );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( true );
+			}
+		}
+		
 		// Someone clicked home button.
 		if( homebutton.isChanged() )
 		{
+			chat.isOpen() = false;
 			back = true;
 		}
 		
 		// Someone clicked play button.
 		else if( playbutton.isChanged() )
 		{
+			chat.isOpen() = false;
 			next = true;
 		}
 		
 		// update data
 		if( updatebutton.isChanged() )
 		{
-			
+			updatebutton.setActive( false );
+			worldtable.reload();
+			worldtable.setThread();
 		}
 		
 		chunk_volume.mechanics( elapsedTime );
@@ -203,7 +313,7 @@ void Level::fades( double elapsedTime )
 	// Fade out - paused.
 	if( pausesystem.isActive() )
 	{
-		float value = elapsedTime *0xFF;
+		float value = elapsedTime *0xFF *2;
 		float min = 0xFF *3 /4;
 		
 		background.fadeout( value, min );
@@ -223,7 +333,7 @@ void Level::fades( double elapsedTime )
 	// Fade out - closed.
 	else if( next || back )
 	{
-		float value = elapsedTime *0xFF /2;
+		float value = elapsedTime *0xFF *2;
 		
 		background.fadeout( value );
 		worldtable.fadeout( value );
@@ -241,7 +351,7 @@ void Level::fades( double elapsedTime )
 	// Fade in.
 	else
 	{
-		float value = elapsedTime *0xFF;
+		float value = elapsedTime *0xFF *2;
 		
 		background.fadein( value );
 		worldtable.fadein( value );
@@ -263,6 +373,7 @@ void Level::fades( double elapsedTime )
 void Level::setUsername( string line )
 {
 	worldtable.setUsername( line );
+	chat.setUsername( line );
 }
 
 void Level::loadSound()
@@ -313,7 +424,7 @@ void Level::loadSound()
 			homebutton.setPlayable( chunkPlay );
 			playbutton.setPlayable( chunkPlay );
 			updatebutton.setPlayable( chunkPlay );
-			chunkbutton.setPlayable( chunkPlay );
+			chunkbutton.setPlayable( !chunkPlay );
 			chunkbutton.setActive( chunkPlay );
 			musicbutton.setPlayable( chunkPlay );
 			musicbutton.setActive( musicPlay );
@@ -346,11 +457,13 @@ void Level::saveSound()
 	next = false;
 	run = false;
 	
-	// reset buttons
+	// Reset.
 	homebutton.setActive( false );
 	playbutton.setActive( false );
 	updatebutton.setActive( false );
-	worldtable.reload();
+	worldtable.reset();
+	chat.reset();
+	music.stop();
 }
 
 
