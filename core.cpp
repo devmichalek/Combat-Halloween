@@ -71,7 +71,7 @@ bool Core::set( std::string title, int style )
     else
     {
 		sf::Image icon;
-		std::string path = "images/icon/icon.png";
+		std::string path = "images/initialization/icon.png";
 		icon.loadFromFile( path.c_str() );
 		window->setIcon( icon.getSize().x, icon.getSize().y, icon.getPixelsPtr() );
 	}
