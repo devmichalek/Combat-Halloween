@@ -148,7 +148,7 @@ void Login::load( int screen_w, int screen_h )
 	password_form.setSize( size );
 	username_written.setSize( size );
 	password_written.setSize( size );
-	info.setSize( size );
+	info.setSize( screen_h /28 );
 	
 	// Set color.
 	title.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
