@@ -19,6 +19,7 @@ void Chat::free()
 	capslock = 0;
 	shift = 0;
 	used = false;
+	black = true;
 	
 	background.free();
 	second_background.free();
@@ -51,6 +52,18 @@ void Chat::free()
 	counter = 0;
 	arrow.free();
 }
+
+void Chat::reset()
+{
+	for( auto &it :writtenStrs )
+	{
+		it = "";
+	}
+	
+	setWritten();
+}
+
+
 
 void Chat::load( float screen_w, float screen_h )
 {
@@ -398,7 +411,8 @@ void Chat::setWritten()
 		
 		if( writtenStrs[ i ][ 0 ] == '@' )
 		{
-			writtens[ i ]->setColor( sf::Color( 0x00, 0x00, 0x00 ) );
+			if( black )	writtens[ i ]->setColor( sf::Color( 0x00, 0x00, 0x00 ) );
+			else		writtens[ i ]->setColor( sf::Color( 0xB0, 0xC4, 0xDE ) );
 		}
 		else
 		{
@@ -425,4 +439,9 @@ void Chat::setWritten()
 	{
 		arrow.setPosition( writtens[ 0 ]->getRight(), text_ys[ 0 ] );
 	}
+}
+
+void Chat::setBlack( bool black )
+{
+	this->black = black;
 }

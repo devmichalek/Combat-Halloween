@@ -15,6 +15,7 @@ class Chat
 	int capslock;
 	int shift;
 	bool used;
+	bool black;
 	
 	// Background.
 	MySprite background;
@@ -38,6 +39,7 @@ public:
 	Chat();
 	~Chat();
 	void free();
+	void reset();
 	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
@@ -53,4 +55,5 @@ public:
 	// The rest.
 	void setUsername( string line );
 	void setWritten();
+	void setBlack( bool black = false );
 };
