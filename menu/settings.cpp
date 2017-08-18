@@ -496,6 +496,7 @@ void Settings::reset()
 	file.load( "txt/keys.txt" );
 	if( file.is_good() )
 	{
+		
 		for( unsigned i = 0; i < JUMP_ATTACK; i++ )
 		{
 			string line = "";
