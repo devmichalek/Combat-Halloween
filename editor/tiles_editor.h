@@ -8,25 +8,37 @@
 
 class Tiles_editor
 {
+	enum
+	{
+		COIN = 0,
+		TILE,
+		OBJECT,
+		FOE,
+		AMOUNT
+	};
+	
+	// Support.
 	float screen_w;
 	float screen_h;
 	
-	MyText info;
-	MySprite bg;
-	MySprite coin;
-	MySprite savebutton;
-	MySprite loadbutton;
-	sf::RectangleShape line;
-	
+	// Temporary.
+	int width;
+	bool grid;
 	int which;
 	int chosen;
-	float mouse_x, mouse_y;
-	bool grid;
-	int width;
+	float mouse_x;
+	float mouse_y;
+	MyText info;
+	MyText key_info;
+	
+	// Drawable stuff.
+	MySprite coin;
 	vector <MySprite*> tiles;
 	vector <MySprite*> objects;
 	vector <MySprite*> foes;
+	sf::RectangleShape line;
 	
+	// Vectors.
 	vector <int> ws;	// which
 	vector <int> ns;	// chosen
 	vector <float> xs;	// x position
@@ -34,14 +46,18 @@ class Tiles_editor
 	
 public:
 	
+	// Basics.
 	Tiles_editor();
 	~Tiles_editor();
 	void free();
+	void reset();
+	void clear();
 	
 	void load( float screen_w, float screen_h );
-	void handle( sf::Event& event );
+	void handle( sf::Event& event, bool isRubbish );
 	void draw( sf::RenderWindow* &window );
 	
-	void save();
-	void load();
+	// In addition.
+	void save( string path );
+	void load( string path );
 };
