@@ -15,16 +15,17 @@ void Play::free()
 {
 	level = false;
 	menu = false;
-	table = false;
 	run = false;
 	
-	background.free();
+	game.free();
 	homebutton.free();
 	levelbutton.free();
 	chunkbutton.free();
 	musicbutton.free();
 	chunk_volume.free();
 	music_volume.free();
+	loading_world.free();
+	chat.free();
 	pausesystem.free();
 	music.free();
 }
@@ -36,10 +37,8 @@ void Play::load( float screen_w, float screen_h )
 	float scale_x = screen_w /2560;
 	float scale_y = screen_h /1440;
 	
-	// Load background.
-	background.setIdentity( "play-background" );
-	background.load( "images/play/background.png" );
-	background.setScale( scale_x, scale_y );
+	// Load game.
+	game.load( screen_w, screen_h );
 	
 	// Circle buttons.
 	homebutton.load( "images/level/home.png" );
@@ -48,13 +47,20 @@ void Play::load( float screen_w, float screen_h )
 	levelbutton.load( "images/play/level.png" );
 	levelbutton.setPosition( homebutton.getRight() +screen_w /256 +homebutton.getWidth(), screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
 	chunkbutton.load( "images/menu/chunk.png", true );
-	chunkbutton.setPosition( screen_w -screen_w /256 , screen_h -screen_h /144, scale_x, scale_y );
+	chunkbutton.setPosition( screen_w -screen_w /256 , screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
 	musicbutton.load( "images/menu/music.png", true );
-	musicbutton.setPosition( chunkbutton.getLeft() -screen_w /256, screen_h -screen_h /144, scale_x, scale_y );
+	musicbutton.setPosition( chunkbutton.getLeft() -screen_w /256, screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
 	
 	// Set volume buttons.
 	chunk_volume.load( chunkbutton.getLeft(), chunkbutton.getRight(), chunkbutton.getBot(), screen_w, screen_h );
 	music_volume.load( musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot(), screen_w, screen_h );
+	
+	// Set loader.
+	loading_world.load( screen_w, screen_h );
+	
+	// Set chat.
+	chat.load( screen_w, screen_h );
+	chat.setBlack();
 	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
@@ -66,63 +72,175 @@ void Play::load( float screen_w, float screen_h )
 
 void Play::handle( sf::Event& event )
 {
-	if( !menu && !level && !table )
+	if( loading_world.isReady() )
 	{
-		if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
+		if( !menu && !level && !game.isTable() )
 		{
-			homebutton.handle( event );
-			levelbutton.handle( event );
-			
-			if( !chunk_volume.handle( event ) )
+			if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 			{
-				chunkbutton.handle( event );
+				chat.handle( event );
+			
+				if( !chat.isOpen() )
+				{
+					homebutton.handle( event );
+					levelbutton.handle( event );
+					
+					if( !chunk_volume.handle( event ) )
+					{
+						chunkbutton.handle( event );
+					}
+					
+					if( !music_volume.handle( event ) )
+					{
+						musicbutton.handle( event );
+					}
+				}
 			}
 			
-			if( !music_volume.handle( event ) )
+			if( !chat.isOpen() )
 			{
-				musicbutton.handle( event );
+				pausesystem.handle( event );
 			}
 		}
-		
-		pausesystem.handle( event );
 	}
 }
 
 void Play::head( sf::RenderWindow* &window, double elapsedTime )
 {
-	mechanics( elapsedTime );
-	fades( elapsedTime );
-	draw( window );
+	if( loading_world.isReady() )
+	{
+		mechanics( elapsedTime );
+		fades( elapsedTime );
+		draw( window );
+	}
+	
+	// Loading tiles etc. - show status.
+	else
+	{
+		loading_world.draw( window, elapsedTime );
+		if( !loading_world.getStop() )
+		{
+			game.loading( loading_world.getState() );
+			if( game.isSuccess() )
+			{
+				loading_world.setSuccess();
+			}
+			else if( game.isError() )
+			{
+				loading_world.setError();
+			}
+		}
+	}
 }
 
 
 
 void Play::draw( sf::RenderWindow* &window )
 {
-	window->draw( background.get() );
+	game.draw( window );
 	homebutton.draw( window );
 	levelbutton.draw( window );
 	chunkbutton.draw( window );
 	musicbutton.draw( window );
 	chunk_volume.draw( window );
 	music_volume.draw( window );
+	chat.draw( window );
 	pausesystem.draw( window );
 }
 
 void Play::mechanics( double elapsedTime )
 {
 	// Mechanics.
-	if( !pausesystem.isActive() && !menu && !level && !table )
+	if( !pausesystem.isActive() && !menu && !level && !game.isTable() )
 	{
+		game.mechanics( elapsedTime );
+		
+		chat.mechanics( elapsedTime );
+		
+		if( chat.isUsed() )
+		{
+			// Someone clicked backtomenu button.
+			if( chat.getCommand( "@menu" ) )
+			{
+				homebutton.setChanged( true );
+			}
+			
+			// Someone clicked level button.
+			else if( chat.getCommand( "@menu" ) || chat.getCommand( "@back" ) ||
+			chat.getCommand( "@aback" ) || chat.getCommand( "@return" ) )
+			{
+				levelbutton.setChanged( true );
+			}
+			
+			// Turn on/off all chunks.
+			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( !chunkbutton.isActive() );
+			}
+			else if( chat.getCommand( "@chunk off" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@chunk on" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( true );
+			}
+			
+			// Turn on/off music.
+			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( !musicbutton.isActive() );
+			}
+			else if( chat.getCommand( "@music off" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@music on" ) )
+			{
+				musicbutton.setChanged( true );
+				musicbutton.setActive( true );
+			}
+			
+			// Turn on/off all sounds.
+			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( !chunkbutton.isActive() );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( !musicbutton.isActive() );
+			}
+			else if( chat.getCommand( "@sound off" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( false );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( false );
+			}
+			else if( chat.getCommand( "@sound on" ) )
+			{
+				chunkbutton.setChanged( true );
+				chunkbutton.setActive( true );
+				musicbutton.setChanged( true );
+				musicbutton.setActive( true );
+			}
+		}
+			
 		// Someone clicked home button.
 		if( homebutton.isChanged() )
 		{
+			chat.isOpen() = false;
 			menu = true;
 		}
 		
 		// Someone clicked play button.
 		else if( levelbutton.isChanged() )
 		{
+			chat.isOpen() = false;
 			level = true;
 		}
 		
@@ -132,6 +250,7 @@ void Play::mechanics( double elapsedTime )
 		// Turn on/off all sounds.
 		if( chunkbutton.isChanged() )
 		{
+			game.setPlayable( chunkbutton.isActive() );
 			homebutton.setPlayable( chunkbutton.isActive() );
 			levelbutton.setPlayable( chunkbutton.isActive() );
 			chunkbutton.setPlayable( !chunkbutton.isActive() );
@@ -146,6 +265,7 @@ void Play::mechanics( double elapsedTime )
 		if( chunk_volume.isChanged() )
 		{
 			float value = chunk_volume.getMainVolume();
+			game.setVolume( value );
 			homebutton.setVolume( value );
 			levelbutton.setVolume( value );
 			chunkbutton.setVolume( value );
@@ -175,10 +295,10 @@ void Play::fades( double elapsedTime )
 	// Fade out - paused.
 	if( pausesystem.isActive() )
 	{
-		float value = elapsedTime *0xFF;
+		float value = elapsedTime *0xFF *2;
 		float min = 0xFF *3 /4;
 		
-		background.fadeout( value, min );
+		game.fadeout( value, min );
 		homebutton.fadeout( value, min );
 		levelbutton.fadeout( value, min );
 		chunkbutton.fadeout( value, min );
@@ -191,11 +311,11 @@ void Play::fades( double elapsedTime )
 	}
 	
 	// Fade out - closed.
-	else if( menu || level || table )
+	else if( menu || level || game.isTable() )
 	{
-		float value = elapsedTime *0xFF /2;
+		float value = elapsedTime *0xFF *2;
 		
-		background.fadeout( value );
+		game.fadeout( value );
 		homebutton.fadeout( value );
 		levelbutton.fadeout( value );
 		chunkbutton.fadeout( value );
@@ -209,9 +329,9 @@ void Play::fades( double elapsedTime )
 	// Fade in.
 	else
 	{
-		float value = elapsedTime *0xFF;
+		float value = elapsedTime *0xFF *2;
 		
-		background.fadein( value );
+		game.fadein( value );
 		homebutton.fadein( value );
 		levelbutton.fadein( value );
 		chunkbutton.fadein( value );
@@ -228,7 +348,7 @@ void Play::fades( double elapsedTime )
 	
 void Play::loadSound()
 {
-	if( !run )
+	if( !run && loading_world.isReady() )
 	{
 		run = true;
 		
@@ -255,6 +375,7 @@ void Play::loadSound()
 			// printf( "%f %f %d %d\n", chunkVolume, musicVolume, chunkPlay, musicPlay );
 			
 			// Chunk.
+			game.setVolume( chunkVolume );
 			homebutton.setVolume( chunkVolume );
 			levelbutton.setVolume( chunkVolume );
 			chunkbutton.setVolume( chunkVolume );
@@ -269,9 +390,10 @@ void Play::loadSound()
 			music_volume.setMainVolume( musicVolume );
 			
 			// Set playable.
+			game.setPlayable( chunkPlay );
 			homebutton.setPlayable( chunkPlay );
 			levelbutton.setPlayable( chunkPlay );
-			chunkbutton.setPlayable( chunkPlay );
+			chunkbutton.setPlayable( !chunkPlay );
 			chunkbutton.setActive( chunkPlay );
 			musicbutton.setPlayable( chunkPlay );
 			musicbutton.setActive( musicPlay );
@@ -302,19 +424,20 @@ void Play::saveSound()
 	// plus
 	menu = false;
 	level = false;
-	table = false;
 	run = false;
 	
-	// reset buttons
+	// Reset.
 	homebutton.setActive( false );
 	levelbutton.setActive( false );
+	music.stop();
+	chat.reset();
 }
 
 
 
 bool Play::isMenu()
 {
-	if( menu && background.getAlpha() == 0 )
+	if( menu && game.getAlpha() == 0 )
 	{
 		return true;
 	}
@@ -324,7 +447,7 @@ bool Play::isMenu()
 
 bool Play::isLevel()
 {
-	if( level && background.getAlpha() == 0 )
+	if( level && game.getAlpha() == 0 )
 	{
 		return true;
 	}
@@ -334,7 +457,7 @@ bool Play::isLevel()
 
 bool Play::isTable()
 {
-	if( table && background.getAlpha() == 0 )
+	if( game.isTable() && game.getAlpha() == 0 )
 	{
 		return true;
 	}

@@ -1,5 +1,9 @@
+#pragma once
+#include "game.h"
 #include "menu/circlebutton.h"
 #include "menu/volume_button.h"
+#include "loading_world.h"
+#include "level/chat.h"
 #include "menu/pausesystem.h"
 #include "own/music.h"
 
@@ -8,17 +12,18 @@ class Play
 	// Basics.
 	bool menu;
 	bool level;
-	bool table;
 	bool run;
 	
 	// Objects.
-	MySprite background;
+	Game game;
 	Circlebutton homebutton;
 	Circlebutton levelbutton;
 	Circlebutton chunkbutton;
 	Circlebutton musicbutton;
 	Volume_button chunk_volume;
 	Volume_button music_volume;
+	Loading_world loading_world;
+	Chat chat;
 	Pausesystem pausesystem;
 	Music music;
 	
@@ -28,6 +33,7 @@ public:
 	Play();
 	~Play();
 	void free();
+	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
 	void head( sf::RenderWindow* &window, double elapsedTime );
