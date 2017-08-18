@@ -63,6 +63,7 @@ public:
 	Worldtable();
 	~Worldtable();
 	void free();
+	void reset();
 	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
@@ -73,6 +74,7 @@ public:
 	
 	// Getters.
 	int isChosen();
+	bool abletoreload();
 	
 	// Setters.
 	void setThread();

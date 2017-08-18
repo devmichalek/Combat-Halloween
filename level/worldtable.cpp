@@ -39,7 +39,7 @@ void Worldtable::free()
 {
 	screen_w = 0;
 	screen_h = 0;
-	username = "";
+	username = "adriqun";
 	
 	ready = 0;
 	chosen = -1;
@@ -104,6 +104,11 @@ void Worldtable::free()
 	right.free();
 	
 	click.free();
+}
+
+void Worldtable::reset()
+{
+	chosen = -1;
 }
 
 
@@ -174,7 +179,7 @@ void Worldtable::handle( sf::Event& event )
 			float x = event.mouseButton.x;
 			float y = event.mouseButton.y;
 			
-			if( ready < 2 ) // we can click reload button
+			if( ready < 2 && thread_ready ) // we can click reload button
 			{
 				if( reloadButton.checkCollisionCircle( x, y ) )
 				{
@@ -468,6 +473,16 @@ int Worldtable::isChosen()
 	return false;
 }
 
+bool Worldtable::abletoreload()
+{
+	if( ready < 2 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 
 
 void Worldtable::setThread()
@@ -478,6 +493,7 @@ void Worldtable::setThread()
 		{
 			// Setting loading text.
 			information.setText( "loading..." );
+			information.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 			information.setPosition( screen_w/2 -information.getWidth()/2 -reloadButton.getWidth()/2 -screen_w/256, screen_h /2.2 );
 			reloadButton.setPosition( information.getRight() +screen_w/256, information.getY() -reloadButton.getHeight() /3 );
 			
@@ -733,8 +749,6 @@ void Worldtable::reload()
 		
 		stars.clear();
 	}
-	
-	information.setFont( "fonts/jcandlestickextracond.ttf" );
 }
 
 void Worldtable::setUsername( string line )
