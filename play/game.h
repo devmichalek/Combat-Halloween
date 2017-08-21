@@ -1,5 +1,8 @@
 #pragma once
 #include "tiles.h"
+#include "objects.h"
+#include "coins.h"
+#include "knight.h"
 
 class Game
 {
@@ -9,6 +12,10 @@ class Game
 	
 	// Objects.
 	MySprite background;
+	Knight knight;
+	Tiles tiles;
+	Objects objects;
+	Coins coins;
 	
 public:
 	
@@ -16,6 +23,7 @@ public:
 	Game();
 	~Game();
 	void free();
+	void reset();
 	
 	void load( float screen_w, float screen_h );
 	void draw( sf::RenderWindow* &window );
@@ -24,7 +32,8 @@ public:
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
-	// Sound.
+	// Sound and username.
+	void setUsername( string line );
 	void setPlayable( bool playable );
 	void setVolume( float volume );
 	
@@ -34,6 +43,6 @@ public:
 	
 	// Loading.
 	void loading( int which );
-	bool isError();
-	bool isSuccess();
+	int getStatus();
+	void resetStatus();
 };
