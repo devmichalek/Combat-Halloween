@@ -281,14 +281,14 @@ void Login::handle( sf::Event& event )
 				}
 				else if( state == 1 )
 				{
-					if( !thread_ready )
+					if( !thread_ready && myThread == NULL )
 					{
 						state = 2;
 						gobutton.getFocus() = true;
 					
 						info.setText( "Loading data..." );
 						info.setColor( sf::Color( 0xF7, 0xF3, 0xE8 ) );
-						info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/36 );
+						info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/20 );
 						info.setAlpha( 0xFF );
 						
 						myThread = new std::thread( Login::sendRequest, this );
@@ -387,7 +387,7 @@ void Login::draw( sf::RenderWindow* &window, double elapsedTime )
 	password_written.fadein( elapsedTime *0xFF );
 	arrow.fadein( elapsedTime *0xFF );
 	gobutton.fadeinGlobal( elapsedTime *0xFF );
-	info.fadeout( elapsedTime*64 );
+	info.fadeout( elapsedTime*0xFF /2 );
 	forgetbutton.fadeinGlobal( elapsedTime *0xFF );
 	
 	if( signupbutton.getClicked() )
@@ -603,7 +603,7 @@ void Login::position( float x_add, float y_add )
 	title.setPosition( screen_w /2 -title.getWidth() /2 +x_add, screen_h /4 -screen_h/4*3 +y_add );
 	username_form.setPosition( screen_w /3 -username_form.getWidth() /2 +x_add, screen_h /2 -screen_h/4*3 +y_add );
 	password_form.setPosition( screen_w /3 -password_form.getWidth() /2 +x_add, username_form.getBot() +password_form.getHeight()*2 );
-	info.setPosition( screen_w /4 -info.getWidth() /2 +x_add, password_form.getBot() +screen_h/36 );
+	info.setPosition( screen_w /4 -info.getWidth() /2 +x_add, password_form.getBot() +screen_h/20 );
 	gobutton.setPosition( screen_w/2 -gobutton.getWidth()/2, info.getBot() +screen_h /9 +y_add -screen_h/4*3 );
 	forgetbutton.setPosition( screen_w -forgetbutton.getWidth() -screen_w /128 +x_add, screen_h /72 +y_add -screen_h/4*3 );
 	organizeWritten();
@@ -629,7 +629,7 @@ void Login::sendRequest()
         // printf( "request failed \n" );
 		info.setText( "No internet connection." );
 		info.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-		info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/36 );
+		info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/20 );
 		info.setAlpha( 0xFF );
     }
 	else // Error
@@ -651,7 +651,7 @@ void Login::sendRequest()
 			info.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 		}
 		
-		info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/36 );
+		info.setPosition( screen_w /2 -info.getWidth() /2, password_form.getBot() +screen_h/20 );
 		info.setAlpha( 0xFF );
 	}
 	
