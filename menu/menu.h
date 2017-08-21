@@ -28,6 +28,7 @@ class Menu
 	Button exit;
 	Circlebutton chunkbutton;
 	Circlebutton musicbutton;
+	Circlebutton updatebutton;
 	Circlebutton reloadbutton;
 	Circlebutton settingsbutton;
 	Settings settings;

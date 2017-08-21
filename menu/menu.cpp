@@ -28,6 +28,7 @@ void Menu::free()
 	exit.free();
 	chunkbutton.free();
 	musicbutton.free();
+	updatebutton.free();
 	reloadbutton.free();
 	settingsbutton.free();
 	settings.free();
@@ -76,10 +77,12 @@ void Menu::load( float screen_w, float screen_h )
 	exit.setScale( scale_x, scale_y );
 	
 	// Circle buttons.
-	chunkbutton.load( "images/menu/chunk.png", true );
-	chunkbutton.setPosition( screen_w -screen_w /256 , screen_h -screen_h /144, scale_x, scale_y );
-	musicbutton.load( "images/menu/music.png", true );
+	chunkbutton.load( "images/menu/chunk.png" );
+	chunkbutton.setPosition( screen_w -screen_w /256, screen_h -screen_h /144, scale_x, scale_y );
+	musicbutton.load( "images/menu/music.png" );
 	musicbutton.setPosition( chunkbutton.getLeft() -screen_w /256, screen_h -screen_h /144, scale_x, scale_y );
+	updatebutton.load( "images/level/update.png" );
+	updatebutton.setPosition( website.getRight() +chunkbutton.getWidth() +screen_w /256, screen_h /144 +chunkbutton.getHeight(), scale_x, scale_y );
 	reloadbutton.load( "images/menu/reload.png" );
 	reloadbutton.setPosition( singleplayer.getLeft() -screen_w /256, singleplayer.getTop() +musicbutton.getHeight() +screen_h /72, scale_x, scale_y );
 	settingsbutton.load( "images/menu/settings.png" );
@@ -116,18 +119,13 @@ void Menu::handle( sf::Event& event )
 			
 			if( !chat.isOpen() )
 			{
+				knight_specs.handle( event );
 				github.handle( event );
 				scores.handle( event );
 				website.handle( event );
 				singleplayer.handle( event );
 				multiplayer.handle( event );
 				exit.handle( event );
-				
-				
-				if( !settingsbutton.handle( event ) && !settings.handle( event ) )
-				{
-					knight_specs.handle( event );
-				}
 				
 				if( !chunk_volume.handle( event ) )
 				{
@@ -143,6 +141,13 @@ void Menu::handle( sf::Event& event )
 				{
 					reloadbutton.handle( event );
 				}
+				else
+				{
+					updatebutton.handle( event );
+				}
+				
+				settingsbutton.handle( event );
+				settings.handle( event );
 			}
 		}
 		
@@ -178,6 +183,10 @@ void Menu::draw( sf::RenderWindow* &window )
 	if( !knight_specs.isReady() || !information.isReady() )
 	{
 		reloadbutton.draw( window );
+	}
+	else
+	{
+		updatebutton.draw( window );
 	}
 	
 	settingsbutton.draw( window );
@@ -230,10 +239,16 @@ void Menu::mechanics( double elapsedTime )
 			}
 			
 			// Reload data.
-			if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
+			else if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
 			chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
 			{
 				reloadbutton.setActive( true );
+			}
+			
+			// Update data.
+			else if( chat.getCommand( "@update" ) )
+			{
+				updatebutton.setActive( true );
 			}
 			
 			// Turn on/off all chunks.
@@ -347,6 +362,20 @@ void Menu::mechanics( double elapsedTime )
 			singleplayer.unlock();
 		}
 		
+		// update data
+		if( updatebutton.isActive() )
+		{
+			updatebutton.setActive( false );
+			
+			if( knight_specs.isReady() && information.isReady() )
+			{
+				knight_specs.reloadValues();
+				knight_specs.setThread();
+				information.reloadMoney();
+				information.setThread();
+			}
+		}
+		
 		// reload data
 		if( reloadbutton.isActive() )
 		{
@@ -437,6 +466,7 @@ void Menu::fades( double elapsedTime )
 		exit.fadeout( value, min );
 		chunkbutton.fadeout( value, min );
 		musicbutton.fadeout( value, min );
+		updatebutton.fadeout( value, min );
 		reloadbutton.fadeout( value, min );
 		settingsbutton.fadeout( value, min );
 		settings.fadeout( value, min );
@@ -463,6 +493,7 @@ void Menu::fades( double elapsedTime )
 		exit.fadeout( value );
 		chunkbutton.fadeout( value );
 		musicbutton.fadeout( value );
+		updatebutton.fadeout( value );
 		reloadbutton.fadeout( value );
 		settingsbutton.fadeout( value );
 		settings.fadeout( value );
@@ -488,6 +519,7 @@ void Menu::fades( double elapsedTime )
 		exit.fadein( value );
 		chunkbutton.fadein( value );
 		musicbutton.fadein( value );
+		updatebutton.fadein( value );
 		reloadbutton.fadein( value );
 		settingsbutton.fadein( value );
 		settings.fadein( value );
@@ -547,6 +579,7 @@ void Menu::loadSound()
 			exit.setVolume( chunkVolume );
 			chunkbutton.setVolume( chunkVolume );
 			musicbutton.setVolume( chunkVolume );
+			updatebutton.setVolume( chunkVolume );
 			reloadbutton.setVolume( chunkVolume );
 			settingsbutton.setVolume( chunkVolume );
 			settings.setVolume( chunkVolume );
@@ -571,6 +604,7 @@ void Menu::loadSound()
 			chunkbutton.setActive( chunkPlay );
 			musicbutton.setPlayable( chunkPlay );
 			musicbutton.setActive( musicPlay );
+			updatebutton.setPlayable( chunkPlay );
 			reloadbutton.setPlayable( chunkPlay );
 			settingsbutton.setPlayable( chunkPlay );
 			settings.setPlayable( chunkPlay );
