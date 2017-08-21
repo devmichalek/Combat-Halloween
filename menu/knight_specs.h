@@ -23,7 +23,9 @@ class Knight_specs
 		AMOUNT
 	};
 	
+	
 	// Table stuff.
+	MySprite left_arrow;
 	MySprite table;
 	MySprite gear_top, gear_bot;
 	float moving_state;
@@ -85,10 +87,12 @@ public:
 	void reload();
 	void setUsername( string line );
 	void setChosen( int n );
+	bool isChosen();
 	
 	// Values.
 	void moveValues( float x = 0 );
 	void setPositionValues( float x = 0 );
+	void reloadValues();
 	
 	// Sound.
 	void setPlayable( bool playable );
