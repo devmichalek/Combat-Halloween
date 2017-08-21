@@ -119,7 +119,7 @@ void Information::setThread()
 {
 	if( !ready )
 	{
-		if( !thread_ready )
+		if( !thread_ready && myThread == NULL )
 		{
 			// Money.
 			money.setText( "loading..." );
@@ -185,4 +185,9 @@ void Information::setMoney()
 bool Information::isReady()
 {
 	return ready;
+}
+
+void Information::reloadMoney()
+{
+	ready = false;
 }

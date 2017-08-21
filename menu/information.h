@@ -37,4 +37,5 @@ public:
 	void setThread();
 	void setMoney();
 	bool isReady();
+	void reloadMoney();
 };
