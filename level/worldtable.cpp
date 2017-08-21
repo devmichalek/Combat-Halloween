@@ -179,7 +179,7 @@ void Worldtable::handle( sf::Event& event )
 			float x = event.mouseButton.x;
 			float y = event.mouseButton.y;
 			
-			if( ready < 2 && thread_ready ) // we can click reload button
+			if( ready < 2 && myThread == NULL ) // we can click reload button
 			{
 				if( reloadButton.checkCollisionCircle( x, y ) )
 				{
@@ -489,7 +489,7 @@ void Worldtable::setThread()
 {
 	if( ready < 2 )
 	{
-		if( !thread_ready )
+		if( !thread_ready && myThread == NULL )
 		{
 			// Setting loading text.
 			information.setText( "loading..." );
@@ -510,7 +510,7 @@ void Worldtable::setValues()
 	if( ready == 0 )
 	{
 		// prepare the request
-		sf::Http::Request request( "/combathalloween/nrworlds.php", sf::Http::Request::Post );
+		sf::Http::Request request( "/combathalloween/getnrworlds.php", sf::Http::Request::Post );
 		
 		request.setBody( "" );
 		
@@ -601,7 +601,7 @@ void Worldtable::setValues()
 		string message = "username=" +username;
 		
 		// prepare the request
-		sf::Http::Request request( "/combathalloween/cup.php", sf::Http::Request::Post );
+		sf::Http::Request request( "/combathalloween/getcup.php", sf::Http::Request::Post );
 		
 		request.setBody( message );
 		
@@ -749,6 +749,15 @@ void Worldtable::reload()
 		
 		stars.clear();
 	}
+	
+	button.setAlpha( 0 );
+	gold_star.setAlpha( 0 );
+	silver_star.setAlpha( 0 );
+	coin_medal.setAlpha( 0 );
+	star_medal.setAlpha( 0 );
+	x_medal.setAlpha( 0 );
+	left.setAlpha( 0 );
+	right.setAlpha( 0 );
 }
 
 void Worldtable::setUsername( string line )
