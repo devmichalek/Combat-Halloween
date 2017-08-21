@@ -20,6 +20,7 @@ void Loading_world::free()
 	
 	state = 0;
 	info.free();
+	resetbutton.free();
 	
 	counter = 0;
 	max = 0;
@@ -38,8 +39,7 @@ void Loading_world::load( float screen_w, float screen_h )
 	info.setFont( "fonts/Jaapokki-Regular.otf" );
 	info.setSize( screen_h /24 );
 	info.setAlpha( 0xFF );
-	info.setText( "Downloading data..." );
-	info.setPosition( screen_w/2 -info.getWidth()/2 +screen_w/160, screen_h/2 -info.getHeight()/2 -screen_h/72 );
+	unStop();
 	
 	// Set progress bar.
 	max = 20;
@@ -48,7 +48,23 @@ void Loading_world::load( float screen_w, float screen_h )
 	progress_bar.setScale( screen_w /1707, screen_h /960 );
 	progress_bar.setAlpha( 0xFF );
 	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, screen_h/2 +screen_h/36 );
-	setSuccess();
+	
+	resetbutton.setIdentity( "login-loginbutton" );
+	resetbutton.setFont( "fonts/Jaapokki-Regular.otf" );
+	int size = screen_h /28;
+	resetbutton.create( "RELOAD", size, size /30 +2 );
+	resetbutton.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	resetbutton.setColorText( sf::Color( 0x21, 0x21, 0x29 ) );
+	resetbutton.setPosition( screen_w/2 -resetbutton.getWidth()/2, progress_bar.getBot() +screen_h/72 );
+	resetbutton.fadeinGlobal( 0xFF );
+}
+
+void Loading_world::handle( sf::Event& event )
+{
+	if( stop && !ready )
+	{
+		resetbutton.handle( event );
+	}
 }
 
 void Loading_world::draw( sf::RenderWindow* &window, double elapsedTime )
@@ -61,9 +77,20 @@ void Loading_world::draw( sf::RenderWindow* &window, double elapsedTime )
 		{
 			progress_bar.setOffset( static_cast <int> (counter) );
 		}
+		else if( resetbutton.getClicked() )
+		{
+			resetbutton.getClicked() = false;
+			resetbutton.getFocus() = false;
+			unStop();
+		}
 	}
 	
 	window->draw( progress_bar.get() );
+	
+	if( stop && !ready )
+	{
+		resetbutton.draw( window, elapsedTime );
+	}
 	
 	counter += elapsedTime *0xFF /8;
 	if( counter >= max )
@@ -82,7 +109,11 @@ void Loading_world::draw( sf::RenderWindow* &window, double elapsedTime )
 
 const sf::Uint8& Loading_world::getState()
 {
-	state ++;
+	if( state < 0xFF )
+	{
+		state ++;
+	}
+	
 	return state;
 }
 
@@ -100,6 +131,10 @@ void Loading_world::unStop()
 {
 	state = 0;
 	stop = false;
+	
+	info.setText( "Downloading data..." );
+	info.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	info.setPosition( screen_w/2 -info.getWidth()/2, screen_h/2 -info.getHeight()/2 -screen_h/72 );
 }
 
 bool Loading_world::getStop()
