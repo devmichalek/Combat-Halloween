@@ -1,5 +1,6 @@
 #include "core.h"
-#include <stdio.h>
+// #include <SFML/OpenGL.hpp>
+// #include <stdio.h>
 
 Core::Core( int state )
 {
@@ -62,7 +63,16 @@ bool Core::set( std::string title, int style )
 	}
 	this->height = this->width *0.5625;
 	// printf( "%d %d\n", width, height );
-    window = new sf::RenderWindow( sf::VideoMode( width, height ), title.c_str(), style );
+	
+	/*
+	sf::ContextSettings settings;
+	settings.depthBits = 24;
+	settings.stencilBits = 8;
+	settings.antialiasingLevel = 8;
+	settings.majorVersion = 3;
+	settings.minorVersion = 0;
+	*/
+    window = new sf::RenderWindow( sf::VideoMode( width, height ), title.c_str(), style/*, settings*/ );
     if( window == NULL )
     {
         printf( "Not created window!\n" );
@@ -70,6 +80,7 @@ bool Core::set( std::string title, int style )
     }
     else
     {
+		// glEnable(GL_TEXTURE_2D);
 		sf::Image icon;
 		std::string path = "images/initialization/icon.png";
 		icon.loadFromFile( path.c_str() );
@@ -95,11 +106,14 @@ sf::RenderWindow*& Core::getWindow()
 
 void Core::clear()
 {
-    window->clear( color );
+    // glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	//window->pushGLStates();
+	window->clear( color );
 }
 
 void Core::display()
 {
+	// window->popGLStates();
     window->display();
 }
 
