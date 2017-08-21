@@ -121,6 +121,7 @@ void Engine::states()
 			menu->setUsername( login->getUsername() );
 			level->setUsername( login->getUsername() );
 			editor->setUsername( login->getUsername() );
+			play->setUsername( login->getUsername() );
 			core->getState() = MENU;
 		}
 	}
