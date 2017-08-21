@@ -44,6 +44,7 @@ public:
 	void fades( double elapsedTime );
 	
 	// Sound.
+	void setUsername( string line );
 	void loadSound();
 	void saveSound();
 	

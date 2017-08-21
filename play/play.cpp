@@ -103,6 +103,10 @@ void Play::handle( sf::Event& event )
 			}
 		}
 	}
+	else
+	{
+		loading_world.handle( event );
+	}
 }
 
 void Play::head( sf::RenderWindow* &window, double elapsedTime )
@@ -121,14 +125,16 @@ void Play::head( sf::RenderWindow* &window, double elapsedTime )
 		if( !loading_world.getStop() )
 		{
 			game.loading( loading_world.getState() );
-			if( game.isSuccess() )
-			{
-				loading_world.setSuccess();
-			}
-			else if( game.isError() )
+			if( game.getStatus() == 1 )
 			{
 				loading_world.setError();
 			}
+			else if( game.getStatus() == 2 )
+			{
+				loading_world.setSuccess();
+			}
+			
+			game.resetStatus();
 		}
 	}
 }
@@ -345,6 +351,11 @@ void Play::fades( double elapsedTime )
 }
 
 
+
+void Play::setUsername( string line )
+{
+	game.setUsername( line );
+}
 	
 void Play::loadSound()
 {
