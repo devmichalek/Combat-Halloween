@@ -566,6 +566,8 @@ void Tiles_editor::save( string path )
 		
 		
 		// Write to file.
+		file.get() << screen_w << endl;
+		file.get() << screen_h << endl;
 		for( unsigned i = 0; i < finalblocks.size(); i++ )
 		{
 			file.get() << finalblocks[ i ].w << "." << finalblocks[ i ].n << "." << finalblocks[ i ].x << "." << finalblocks[ i ].y;
@@ -588,6 +590,13 @@ void Tiles_editor::load( string path )
 		clear();
 		
 		string myline = "";
+		
+		// Set multipliers.
+		getline( file.get(), myline );
+		float x_multiplier = screen_w /con::stof( myline );
+		getline( file.get(), myline );
+		float y_multiplier = screen_h /con::stof( myline );
+		
 		while( getline( file.get(), myline ) )
 		{
 			vector <string> mydata;
@@ -607,10 +616,10 @@ void Tiles_editor::load( string path )
 			mydata.push_back( mynumber );
 			
 			Block block;
-			block.w = con::stof( mydata[ 0 ] );
-			block.n = con::stof( mydata[ 1 ] );
-			block.x = con::stof( mydata[ 2 ] );
-			block.y = con::stof( mydata[ 3 ] );
+			block.w = con::stoi( mydata[ 0 ] );
+			block.n = con::stoi( mydata[ 1 ] );
+			block.x = con::stof( mydata[ 2 ] ) *x_multiplier;
+			block.y = con::stof( mydata[ 3 ] ) *y_multiplier;
 			blocks.push_back( block );
 		}
 	}
