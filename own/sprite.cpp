@@ -376,6 +376,23 @@ bool MySprite::checkCollision( float x, float y, float w, float h )
     return true;
 }
 
+bool MySprite::checkCollisionRect( sf::Rect <float> rect )
+{
+	if( rect.top + rect.height <= getTop() )
+        return false;
+
+    if( rect.top >= getBot() )
+        return false;
+
+    if( rect.left + rect.width <= getLeft() )
+        return false;
+
+    if( rect.left >= getRight() )
+        return false;
+
+    return true;
+}
+
 bool MySprite::checkCollisionCircle( float x, float y )
 {
 	float r = getWidth() > getHeight() ? getWidth() : getHeight();
