@@ -14,6 +14,7 @@ class Tiles_editor
 		TILE,
 		OBJECT,
 		FOE,
+		UNVISIBLE_TILE,
 		AMOUNT
 	};
 	
@@ -40,6 +41,10 @@ class Tiles_editor
 	MyText key_info;
 	
 	// Drawable stuff.
+	MySprite leftbutton;
+	MySprite rightbutton;
+	float additional_x;
+	
 	MySprite coin;
 	vector <MySprite*> tiles;
 	vector <MySprite*> objects;

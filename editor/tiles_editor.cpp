@@ -25,6 +25,10 @@ void Tiles_editor::free()
 	info.free();
 	key_info.free();
 	
+	leftbutton.free();
+	rightbutton.free();
+	additional_x = 0;
+	
 	
 	coin.free();
 	if( !tiles.empty() )
@@ -71,6 +75,7 @@ void Tiles_editor::reset()
 {
 	which = -1;
 	chosen = 0;
+	additional_x = 0;
 }
 
 void Tiles_editor::clear()
@@ -107,6 +112,18 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	
 	float scale_x = screen_w /2560;
 	float scale_y = screen_h /1440;
+	
+	
+	leftbutton.setIdentity( "tiles_editor-leftbutton" );
+	leftbutton.load( "images/level/left.png", 3 );
+	leftbutton.setScale( scale_x /2, scale_y /2 );
+	leftbutton.setPosition( screen_w /256, screen_h /2 -leftbutton.getHeight() /2 );
+	
+	rightbutton.setIdentity( "tiles_editor-rightbutton" );
+	rightbutton.load( "images/level/right.png", 3 );
+	rightbutton.setScale( scale_x /2, scale_y /2 );
+	rightbutton.setPosition( screen_w -screen_w/256 -rightbutton.getWidth(), screen_h /2 -rightbutton.getHeight() /2 );
+	
 	
 	coin.setIdentity( "tiles_editor-coin" );
 	coin.load( "images/play/coin.png", 7 );
@@ -191,9 +208,10 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 			}
 			
 			int size = 0;
-			if( which == TILE )			size = tiles.size();
-			else if( which == OBJECT )	size = objects.size();
-			else if( which == FOE )		size = foes.size();
+			if( which == TILE )				size = tiles.size();
+			if( which == UNVISIBLE_TILE )	size = tiles.size();
+			else if( which == OBJECT )		size = objects.size();
+			else if( which == FOE )			size = foes.size();
 			
 			// CHANGING CHOSEN ----------------------------------------
 			if( code == sf::Keyboard::X )
@@ -286,12 +304,30 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 	{
 		if( event.mouseButton.button == sf::Mouse::Left )
 		{
-			if( chosen > -1 && which > -1 && !isRubbish )
+			if( leftbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			{
+				additional_x += screen_w /2;
+				
+				for( auto &it :blocks )
+				{
+					it.x += screen_w /2;
+				}
+			}
+			else if( rightbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			{
+				additional_x -= screen_w /2;
+				
+				for( auto &it :blocks )
+				{
+					it.x -= screen_w /2;
+				}
+			}
+			else if( chosen > -1 && which > -1 && !isRubbish )
 			{
 				Block block;
 				block.w = which;
 				block.n = chosen;
-				block.x = mouse_x;
+				block.x = mouse_x -additional_x;
 				block.y = mouse_y;
 				blocks.push_back( block );
 			}
@@ -304,7 +340,7 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 					if( blocks[ i ].w == COIN )
 					{
 						coin.setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( coin.checkCollision( mouse_x, mouse_y ) )
+						if( coin.checkCollision( mouse_x +additional_x, mouse_y ) )
 						{
 							collision = i;
 						}
@@ -312,7 +348,15 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 					else if( blocks[ i ].w == TILE )
 					{
 						tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( tiles[ blocks[ i ].n ]->checkCollision( mouse_x, mouse_y ) )
+						if( tiles[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
+						{
+							collision = i;
+						}
+					}
+					else if( blocks[ i ].w == UNVISIBLE_TILE )
+					{
+						tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+						if( tiles[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
 						{
 							collision = i;
 						}
@@ -320,7 +364,7 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 					else if( blocks[ i ].w == OBJECT )
 					{
 						objects[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( objects[ blocks[ i ].n ]->checkCollision( mouse_x, mouse_y ) )
+						if( objects[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
 						{
 							collision = i;
 						}
@@ -328,7 +372,7 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 					else if( blocks[ i ].w == FOE )
 					{
 						foes[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( foes[ blocks[ i ].n ]->checkCollision( mouse_x, mouse_y ) )
+						if( foes[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
 						{
 							collision = i;
 						}
@@ -409,6 +453,13 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		else if( w == TILE )
 		{
 			tiles[ n ]->setPosition( x, y );
+			tiles[ n ]->setAlpha( 0xFF );
+			window->draw( tiles[ n ]->get() );
+		}
+		else if( w == UNVISIBLE_TILE )
+		{
+			tiles[ n ]->setPosition( x, y );
+			tiles[ n ]->setAlpha( 0xFF /2 );
 			window->draw( tiles[ n ]->get() );
 		}
 		else if( w == OBJECT )
@@ -437,6 +488,16 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 			if( chosen < static_cast <int> (tiles.size()) )
 			{
 				tiles[ chosen ]->setPosition( mouse_x, mouse_y );
+				tiles[ chosen ]->setAlpha( 0xFF );
+				window->draw( tiles[ chosen ]->get() );
+			}
+		}
+		else if( which == UNVISIBLE_TILE )
+		{
+			if( chosen < static_cast <int> (tiles.size()) )
+			{
+				tiles[ chosen ]->setPosition( mouse_x, mouse_y );
+				tiles[ chosen ]->setAlpha( 0xFF /2 );
 				window->draw( tiles[ chosen ]->get() );
 			}
 		}
@@ -504,6 +565,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	string which_str = "none";
 	if( which == COIN )			which_str = "coin";
 	else if( which == TILE )	which_str = "tile";
+	else if( which == UNVISIBLE_TILE )	which_str = "unvisible tile";
 	else if( which == OBJECT )	which_str = "object";
 	else if( which == FOE )	which_str = "foe";
 	
@@ -516,12 +578,16 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	info.setText( "Grid: " +grid_str 
 	+"  type: " +which_str 
 	+chosen_str 
-	+"  X: " +con::itos( static_cast <int> (mouse_x) ) 
+	+"  X: " +con::itos( static_cast <int> (mouse_x -additional_x) ) 
 	+"  Y: " +con::itos( static_cast <int> (mouse_y) ) );
 	
 	info.setPosition( screen_w/2 -info.getWidth() /2, screen_h /18 );
 	window->draw( info.get() );
 	window->draw( key_info.get() );
+	
+	// Draw buttons.
+	window->draw( leftbutton.get() );
+	window->draw( rightbutton.get() );
 }
 
 
@@ -622,6 +688,8 @@ void Tiles_editor::load( string path )
 			block.y = con::stof( mydata[ 3 ] ) *y_multiplier;
 			blocks.push_back( block );
 		}
+		
+		additional_x = 0;
 	}
 	file.free();
 }
