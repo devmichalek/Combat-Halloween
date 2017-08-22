@@ -82,6 +82,7 @@ void Play::handle( sf::Event& event )
 			
 				if( !chat.isOpen() )
 				{
+					game.handle( event );
 					homebutton.handle( event );
 					levelbutton.handle( event );
 					
@@ -172,7 +173,7 @@ void Play::mechanics( double elapsedTime )
 			}
 			
 			// Someone clicked level button.
-			else if( chat.getCommand( "@menu" ) || chat.getCommand( "@back" ) ||
+			else if( chat.getCommand( "@level" ) || chat.getCommand( "@back" ) ||
 			chat.getCommand( "@aback" ) || chat.getCommand( "@return" ) )
 			{
 				levelbutton.setChanged( true );
@@ -319,7 +320,7 @@ void Play::fades( double elapsedTime )
 	// Fade out - closed.
 	else if( menu || level || game.isTable() )
 	{
-		float value = elapsedTime *0xFF *2;
+		float value = elapsedTime *0xFF;
 		
 		game.fadeout( value );
 		homebutton.fadeout( value );
@@ -438,10 +439,12 @@ void Play::saveSound()
 	run = false;
 	
 	// Reset.
+	game.reset();
 	homebutton.setActive( false );
 	levelbutton.setActive( false );
-	music.stop();
+	loading_world.reset();
 	chat.reset();
+	music.stop();
 }
 
 

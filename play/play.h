@@ -1,8 +1,8 @@
 #pragma once
-#include "game.h"
+#include "play/game/game.h"
 #include "menu/circlebutton.h"
 #include "menu/volume_button.h"
-#include "loading_world.h"
+#include "play/game/loading_world/loading_world.h"
 #include "level/chat.h"
 #include "menu/pausesystem.h"
 #include "own/music.h"
