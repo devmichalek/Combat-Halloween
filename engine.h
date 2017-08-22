@@ -6,6 +6,7 @@
 #include "menu/menu.h"
 #include "level/level.h"
 #include "play/play.h"
+#include "table/table.h"
 #include "editor/editor.h"
 
 class Engine {
@@ -28,6 +29,7 @@ class Engine {
 	Menu* menu;
 	Level* level;
 	Play* play;
+	Table* table;
 	Editor* editor;
 	
 public:

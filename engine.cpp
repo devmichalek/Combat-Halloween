@@ -25,6 +25,7 @@ void Engine::free()
 	delete menu;
 	delete level;
 	delete play;
+	delete table;
 	delete editor;
 }
 
@@ -39,27 +40,32 @@ void Engine::load()
 		initialization->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 2:
+		case 20:
 		login = new Login;
 		login->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 3:
+		case 25:
 		menu = new Menu;
 		menu->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 4:
+		case 70:
 		level = new Level;
 		level->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 5:
+		case 71:
 		play = new Play;
 		play->load( core->getWidth(), core->getHeight() );
 		break;
 		
-		case 6:
+		case 95:
+		table = new Table;
+		table->load( core->getWidth(), core->getHeight() );
+		break;
+		
+		case 96:
 		editor = new Editor;
 		editor->load( core->getWidth(), core->getHeight() );
 		break;
@@ -88,11 +94,12 @@ void Engine::events()
 		
 		switch( core->getState() )
 		{
-			case LOGIN: login->handle( core->getEvent() ); break;
-			case MENU: menu->handle( core->getEvent() ); break;
-			case LEVEL: level->handle( core->getEvent() ); break;
-			case PLAY: play->handle( core->getEvent() ); break;
-			case EDITOR: editor->handle( core->getEvent() ); break;
+			case LOGIN: 	login->handle( core->getEvent() ); 	break;
+			case MENU: 		menu->handle( core->getEvent() ); 	break;
+			case LEVEL: 	level->handle( core->getEvent() );	break;
+			case PLAY: 		play->handle( core->getEvent() ); 	break;
+			case TABLE: 	table->handle( core->getEvent() ); 	break;
+			case EDITOR: 	editor->handle( core->getEvent() ); break;
 		}
     }
 }
@@ -120,8 +127,9 @@ void Engine::states()
 		{
 			menu->setUsername( login->getUsername() );
 			level->setUsername( login->getUsername() );
-			editor->setUsername( login->getUsername() );
 			play->setUsername( login->getUsername() );
+			editor->setUsername( login->getUsername() );
+			table->setUsername( login->getUsername() );
 			core->getState() = MENU;
 		}
 	}
@@ -184,6 +192,23 @@ void Engine::states()
 		{
 			play->saveSound();
 			core->getState() = TABLE;
+		}
+	}
+	
+	if( core->getState() == TABLE )
+	{
+		table->loadSound();
+		table->head( core->getWindow(), core->getElapsedTime() );
+		
+		if( table->isMenu() )
+		{
+			table->saveSound();
+			core->getState() = MENU;
+		}
+		else if( table->isLevel() )
+		{
+			table->saveSound();
+			core->getState() = LEVEL;
 		}
 	}
 	
