@@ -143,7 +143,7 @@ void Editor::mechanics( double elapsedTime )
 			// Tiles editor.
 			else if( chat.getCommand( "@clear" ) )
 			{
-				tiles_editor.clear();
+				tiles_editor.clearVector();
 			}
 		}
 		
@@ -157,7 +157,7 @@ void Editor::mechanics( double elapsedTime )
 		
 		if( rubbishbutton.isChanged() )
 		{
-			tiles_editor.reset();
+			tiles_editor.resetChosen();
 		}
 		
 		// Save / Load.
@@ -187,7 +187,7 @@ bool Editor::isBack()
 	{
 		menubutton.setActive( false );
 		editor_buttons.reset();
-		tiles_editor.reset();
+		tiles_editor.resetChosen();
 		chat.reset();
 		back = false;
 		return true;
