@@ -16,6 +16,8 @@ void Objects::free()
 {
 	screen_w = 0;
 	screen_h = 0;
+	border_x = 0;
+	border_y = 0;
 	
 	if( !sprites.empty() )
 	{
@@ -49,16 +51,12 @@ void Objects::free()
 	ready = false;
 }
 
-
-
 void Objects::load( float screen_w, float screen_h )
 {
 	free();
 	
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	float scale_x = screen_w /2560;
-	float scale_y = screen_h /1440;
 	
 	// Load sprites.
 	for( unsigned i = 0; i < 14; i++ )
@@ -66,43 +64,59 @@ void Objects::load( float screen_w, float screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setIdentity( "objects-sprites" );
 		sprites[ sprites.size() -1 ]->load( "images/play/objects/" +con::itos(i) +".png" );
-		sprites[ sprites.size() -1 ]->setScale( scale_x, scale_y );
+		sprites[ sprites.size() -1 ]->setScale( screen_w /2560, screen_h /1440 );
 	}
 }
 
 void Objects::draw( sf::RenderWindow* &window )
 {
-	if( ready )
+	for( unsigned i = 0; i < fs.size(); i++ )
 	{
-		for( unsigned i = 0; i < types.size(); i++ )
+		if( types[ i ] > 3 )
 		{
-			sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-			window->draw( sprites[ types[ i ] ]->get() );
+			if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
+			{
+				if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border_x && fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border_y )
+				{
+					sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
+					window->draw( sprites[ types[ i ] ]->get() );
+				}
+			}
 		}
 	}
 }
 
-
+void Objects::drawFront( sf::RenderWindow* &window )
+{
+	for( unsigned i = 0; i < fs.size(); i++ )
+	{
+		if( types[ i ] <= 3 )
+		{
+			if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
+			{
+				if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border_x && fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border_y )
+				{
+					sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
+					window->draw( sprites[ types[ i ] ]->get() );
+				}
+			}
+		}
+	}
+}
 
 void Objects::fadein( float v, int max )
 {
-	if( ready )
+	for( auto &it :sprites )
 	{
-		for( auto &it :sprites )
-		{
-			it->fadein( v, max );
-		}
+		it->fadein( v, max );
 	}
 }
 
 void Objects::fadeout( float v, int min )
 {
-	if( ready )
+	for( auto &it :sprites )
 	{
-		for( auto &it :sprites )
-		{
-			it->fadeout( v, min );
-		}
+		it->fadeout( v, min );
 	}
 }
 
@@ -137,54 +151,136 @@ void Objects::setThread()
 	{
 		if( !thread_ready && myThread == NULL )
 		{
-			myThread = new std::thread( [=] { setObjects(); } );	// interesting.
+			myThread = new std::thread( [=] { prepare(); } );
 			myThread->detach();
 		}
 	}
 }
 
-void Objects::setObjects()
+void Objects::prepare()
 {
 	MyFile file;
 	file.load( "txt/worlds/world_.txt" );
 	if( file.is_good() )
 	{
-		string myline = "";
+		// Line and bufor.
+		string line = "";
+		string bufor = "";
+		unsigned start = 0;
 		
-		// Set multipliers.
-		getline( file.get(), myline );
-		float x_multiplier = screen_w /con::stof( myline );
-		getline( file.get(), myline );
-		float y_multiplier = screen_h /con::stof( myline );
+		// Getline.
+		getline( file.get(), line );
 		
-		while( getline( file.get(), myline ) )
+		
+		// AUTHOR --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
 		{
-			vector <string> mydata;
-			string mynumber = "";
-			
-			for( unsigned i = 0; i < myline.size(); i++ )
+			if( line[ i ] == '|' )
 			{
-				if( myline[ i ] == '.' )
+				start = i +1;
+				// printf( "%s\n", bufor.c_str() );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		
+		
+		// MULTIPLIERS --------------------------------------------------------------------------
+		float x_multiplier = 1;
+		float y_multiplier = 1;
+		
+		// Set x_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				x_multiplier = screen_w /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", x_multiplier );
+		
+		// Set y_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				y_multiplier = screen_h /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", y_multiplier );
+		
+		
+		// FS --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				bufor += ".";
+				string nrstr = "";
+				vector <string> data;
+				
+				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
-					mydata.push_back( mynumber );
-					mynumber = "";
-					i++;
+					if( bufor[ j ] == '.' )
+					{
+						data.push_back( nrstr );
+						nrstr = "";
+					}
+					else
+					{
+						nrstr += bufor[ j ];
+					}
 				}
 				
-				mynumber += myline[ i ];
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *x_multiplier;
+				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				
+				if( w == 2 )
+				{
+					types.push_back( t );
+					fs.push_back( sf::Vector2f( x, y ) );
+				}
+				
+				// Clear.
+				bufor = "";
 			}
-			mydata.push_back( mynumber );
-			
-			if( con::stoi( mydata[ 0 ] ) == 2 )
+			else
 			{
-				types.push_back( con::stoi( mydata[ 1 ] ) );
-				fs.push_back( sf::Vector2f( con::stof( mydata[ 2 ] ) *x_multiplier, con::stof( mydata[ 3 ] ) *y_multiplier ) );
+				bufor += line[ i ];
 			}
 		}
 		
+		// Inform that everything is ok.
 		ready = true;
 	}
 	file.free();
 	
+	// Inform that thread is ready for next action.
 	thread_ready = true;
+}
+
+
+
+void Objects::setBorderX( float x )
+{
+	border_x = x;
+}
+
+void Objects::setBorderY( float y )
+{
+	border_y = y;
 }
