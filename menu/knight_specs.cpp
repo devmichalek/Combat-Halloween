@@ -112,7 +112,7 @@ void Knight_specs::load( float screen_w, float screen_h )
 	table.setPosition( x1, screen_h /5.5 );
 	
 	left_arrow.setIdentity( "knight_specs-left_arrow" );
-	left_arrow.load( "images/menu/left_arrow.png" );
+	left_arrow.load( "images/menu/arrow_button.png", 3 );
 	left_arrow.setScale( screen_w /2560, screen_h /1440 );
 	left_arrow.setPosition( table.getRight() -left_arrow.getWidth(), table.getBot() -left_arrow.getHeight()/2 );
 	
@@ -213,11 +213,17 @@ void Knight_specs::handle( sf::Event& event )
 				
 				if( left_arrow.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
+					left_arrow.setOffset( 1 );
 					lastChosen = chosen;
 					chosen = -1;
 				}
 			}
 		}
+	}
+	
+	if( event.type == sf::Event::MouseButtonReleased )
+	{
+		left_arrow.setOffset( 0 );
 	}
 }
 
