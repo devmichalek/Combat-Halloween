@@ -7,9 +7,6 @@
 
 class Knight
 {
-	float screen_w;
-	float screen_h;
-	
 	sf::View view;
 	int viewState;
 	
@@ -54,12 +51,10 @@ class Knight
 	// Activity variables.
 	float running;
 	float running_line;
-	
 	bool jump_released;
 	bool jump_key_released;
 	int jumping_counter;
 	int jumping_line;
-	
 	int dead;
 	
 	
@@ -113,8 +108,8 @@ public:
 	bool isRemains();
 	
 	sf::View& getView();
-	void setViewState( float left, float right );
-	
+	float getViewX();
+	float getViewY();
 	sf::Rect <float> getRect();
 	float getX();
 	float getY();

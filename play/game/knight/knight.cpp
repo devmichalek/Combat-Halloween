@@ -16,8 +16,6 @@ Knight::~Knight()
 
 void Knight::free()
 {
-	screen_w = 0;
-	screen_h = 0;
 	viewState = 0;
 	
 	if( !keys.empty() )
@@ -51,12 +49,10 @@ void Knight::free()
 	
 	running = 0;
 	running_line = 0;
-	
 	jump_released = true;
 	jump_key_released = true;
 	jumping_counter = 0;
 	jumping_line = 0;
-	
 	dead = 0;
 	
 	
@@ -71,6 +67,8 @@ void Knight::free()
 
 void Knight::reset()
 {
+	viewState = 0;
+	
 	if( !keys.empty() )
 	{
 		keys.clear();
@@ -86,13 +84,13 @@ void Knight::reset()
 	velocity = 0;
 	heartpoints = 0;
 	
-	running = 0;
 	
+	running = 0;
 	jump_released = true;
 	jump_key_released = true;
 	jumping_counter = 0;
-	
 	dead = 0;
+	
 	
 	if( myThread != NULL )
 	{
@@ -106,9 +104,6 @@ void Knight::reset()
 void Knight::load( float screen_w, float screen_h )
 {
 	free();
-	
-	this->screen_w = screen_w;
-	this->screen_h = screen_h;
 	
 	view.setSize( screen_w, screen_h );
 	view.setCenter( screen_w /2, screen_h /2 );
@@ -136,14 +131,11 @@ void Knight::load( float screen_w, float screen_h )
 
 void Knight::handle( sf::Event& event )
 {
-	if( dead == 0 )
+	if( event.type == sf::Event::KeyReleased )
 	{
-		if( event.type == sf::Event::KeyReleased )
+		if( event.key.code == keys[ JUMP_K ] )
 		{
-			if( event.key.code == keys[ JUMP_K ] )
-			{
-				jump_key_released = true;
-			}
+			jump_key_released = true;
 		}
 	}
 }
@@ -189,10 +181,7 @@ void Knight::animation( double elapsedTime )
 				offset = 0;
 			}
 			
-			if( which == JUMP || which == ATTACK || which == JUMP_ATTACK )
-			{
-				which = IDLE;
-			}
+			which = IDLE;
 		}
 	}
 	
@@ -201,6 +190,15 @@ void Knight::animation( double elapsedTime )
 	if( offset > line /2 )
 	{
 		jump_released = true;
+	}
+	
+	// If y.
+	if( getY() > view.getSize().y )
+	{
+		if( flip != 0 )
+		{
+			flip = 2;
+		}
 	}
 	
 	// If flip.
@@ -232,16 +230,30 @@ void Knight::animation( double elapsedTime )
 		
 		flip = 1;
 	}
+
 	
-	// If y.
-	if( getY() > screen_h )
+	// If y cd.
+	if( getY() > view.getSize().y )
 	{
-		view.setCenter( screen_w /2, screen_h /2 );
 		for( auto &it :sprites )
 		{
-			it->setPosition( screen_w /128, screen_h -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
+			it->setPosition( view.getSize().x /128, view.getSize().y -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
 		}
 	}
+	
+	// Set view.
+	float view_x = view.getSize().x /2;
+	float view_y = view.getSize().y /2;
+	if( getX() > view.getSize().x /2 )
+	{
+		view_x = getX();
+		
+	}
+	if( getY() < view.getSize().y /2 )
+	{
+		view_y = getY();
+	}
+	view.setCenter( sf::Vector2f( view_x, view_y ) );
 }
 
 void Knight::idle( double elapsedTime )
@@ -412,11 +424,6 @@ void Knight::move( float x, float y )
 	{
 		sprites[ i ]->setPosition( sprites[ i ]->getX() +x, sprites[ i ]->getY() +y );
 	}
-	
-	if( (viewState == 1 && x > 0) || (viewState == 2 && x < 0) || viewState == 0 )
-	{
-		view.move( sf::Vector2f( x, y ) );
-	}
 }
 
 void Knight::back( double elapsedTime )
@@ -432,7 +439,11 @@ void Knight::back( double elapsedTime )
 void Knight::weightlessness( double elapsedTime )
 {
 	gravity( -elapsedTime );
-	jumping_counter = 0;
+	
+	if( which != JUMP )
+	{
+		jumping_counter = 0;
+	}
 }
 
 
@@ -623,23 +634,15 @@ sf::View& Knight::getView()
 	return view;
 }
 
-void Knight::setViewState( float left, float right )
+float Knight::getViewX()
 {
-	if( left >= view.getCenter().x -screen_w/2 )
-	{
-		viewState = 1;
-	}
-	else if( right <= view.getCenter().x +screen_w/2 )
-	{
-		viewState = 2;
-	}
-	else
-	{
-		viewState = 0;
-	}
+	return view.getCenter().x -view.getSize().x/2;
 }
 
-
+float Knight::getViewY()
+{
+	return view.getCenter().y -view.getSize().y/2;
+}
 
 sf::Rect <float> Knight::getRect()
 {
