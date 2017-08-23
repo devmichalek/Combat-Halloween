@@ -16,6 +16,8 @@ void Coins::free()
 {
 	screen_w = 0;
 	screen_h = 0;
+	border_x = 0;
+	border_y = 0;
 	
 	sprite.free();
 	
@@ -28,6 +30,7 @@ void Coins::free()
 	{
 		offsets.clear();
 	}
+	
 	line = 0;
 	
 	if( myThread != NULL )
@@ -40,33 +43,32 @@ void Coins::free()
 	ready = false;
 }
 
-
-
 void Coins::load( float screen_w, float screen_h )
 {
 	free();
 	
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	float scale_x = screen_w /2560;
-	float scale_y = screen_h /1440;
 	
 	// Load sprite.
 	line = 7;
 	sprite.setIdentity( "coins-sprite" );
 	sprite.load( "images/play/coin.png", line );
-	sprite.setScale( scale_x, scale_y );
+	sprite.setScale( screen_w /2560, screen_h /1440 );
 }
 
 void Coins::draw( sf::RenderWindow* &window )
 {
-	if( ready )
+	for( unsigned i = 0; i < fs.size(); i++ )
 	{
-		for( unsigned i = 0; i < fs.size(); i++ )
+		if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
 		{
-			sprite.setPosition( fs[ i ].x, fs[ i ].y );
-			sprite.setOffset( static_cast <int> (offsets[ i ]) );
-			window->draw( sprite.get() );
+			if( fs[ i ].x +sprite.getWidth() > border_x && fs[ i ].y +sprite.getHeight() > border_y )
+			{
+				sprite.setPosition( fs[ i ].x, fs[ i ].y );
+				sprite.setOffset( static_cast <int> ( offsets[ i ] ) );
+				window->draw( sprite.get() );
+			}
 		}
 	}
 }
@@ -87,22 +89,14 @@ void Coins::mechanics( double elapsedTime )
 	}
 }
 
-
-
 void Coins::fadein( float v, int max )
 {
-	if( ready )
-	{
-		sprite.fadein( v, max );
-	}
+	sprite.fadein( v, max );
 }
 
 void Coins::fadeout( float v, int min )
 {
-	if( ready )
-	{
-		sprite.fadeout( v, min );
-	}
+	sprite.fadeout( v, min );
 }
 
 
@@ -136,57 +130,139 @@ void Coins::setThread()
 	{
 		if( !thread_ready && myThread == NULL )
 		{
-			myThread = new std::thread( [=] { setCoins(); } );	// interesting.
+			myThread = new std::thread( [=] { prepare(); } );
 			myThread->detach();
 		}
 	}
 }
 
-void Coins::setCoins()
+void Coins::prepare()
 {
+	// Inform that we end.
+	thread_ready = true;
+	
 	MyFile file;
 	file.load( "txt/worlds/world_.txt" );
 	if( file.is_good() )
 	{
-		string myline = "";
+		// Line and bufor.
+		string line = "";
+		string bufor = "";
+		unsigned start = 0;
 		
-		// Set multipliers.
-		getline( file.get(), myline );
-		float x_multiplier = screen_w /con::stof( myline );
-		getline( file.get(), myline );
-		float y_multiplier = screen_h /con::stof( myline );
+		// Getline.
+		getline( file.get(), line );
 		
-		// Set seed.
-		srand( static_cast <int> (time( NULL )) );
 		
-		while( getline( file.get(), myline ) )
+		// AUTHOR --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
 		{
-			vector <string> mydata;
-			string mynumber = "";
-			
-			for( unsigned i = 0; i < myline.size(); i++ )
+			if( line[ i ] == '|' )
 			{
-				if( myline[ i ] == '.' )
+				start = i +1;
+				// printf( "%s\n", bufor.c_str() );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		
+		
+		// MULTIPLIERS --------------------------------------------------------------------------
+		float x_multiplier = 1;
+		float y_multiplier = 1;
+		
+		// Set x_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				x_multiplier = screen_w /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", x_multiplier );
+		
+		// Set y_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				y_multiplier = screen_h /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", y_multiplier );
+		
+		
+		// FS --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				bufor += ".";
+				string nrstr = "";
+				vector <string> data;
+				
+				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
-					mydata.push_back( mynumber );
-					mynumber = "";
-					i++;
+					if( bufor[ j ] == '.' )
+					{
+						data.push_back( nrstr );
+						nrstr = "";
+					}
+					else
+					{
+						nrstr += bufor[ j ];
+					}
 				}
 				
-				mynumber += myline[ i ];
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *x_multiplier;
+				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				
+				if( w == 3 )
+				{
+					fs.push_back( sf::Vector2f( x, y ) );
+					offsets.push_back( rand() %this->line );
+				}
+				
+				// Clear.
+				bufor = "";
 			}
-			mydata.push_back( mynumber );
-			
-			if( con::stoi( mydata[ 0 ] ) == 0 )
+			else
 			{
-				fs.push_back( sf::Vector2f( con::stof( mydata[ 2 ] ) *x_multiplier, con::stof( mydata[ 3 ] ) *y_multiplier ) );
-				offsets.push_back( rand() %line );
+				bufor += line[ i ];
 			}
 		}
 		
+		// Inform that everything is ok.
 		ready = true;
 	}
 	file.free();
 	
+	// Inform that thread is ready for next action.
 	thread_ready = true;
+}
+
+
+
+void Coins::setBorderX( float x )
+{
+	border_x = x;
+}
+
+void Coins::setBorderY( float y )
+{
+	border_y = y;
 }
