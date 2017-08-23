@@ -6,7 +6,7 @@
 
 class Editor_buttons
 {
-	// In addition.
+	// Basics.
 	float screen_w;
 	float screen_h;
 	
@@ -20,12 +20,15 @@ class Editor_buttons
 	MySprite loadbutton;
 	MyText saveText;
 	MyText loadText;
+	MyText rubbishTextdelete;
+	MyText rubbishTextmode;
 	
 	MyText form;
 	MyText info;
 	
 public:
 	
+	// Basics.
 	Editor_buttons();
 	~Editor_buttons();
 	void free();

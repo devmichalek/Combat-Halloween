@@ -68,14 +68,28 @@ void Editor_buttons::load( float screen_w, float screen_h )
 	saveText.setText( "save" );
 	saveText.setSize( screen_h /48 );
 	saveText.setAlpha( 0xFF );
-	saveText.setPosition( savebutton.getX() +savebutton.getWidth()/2 -saveText.getWidth()/2, savebutton.getBot() +screen_h /144 );
+	saveText.setPosition( savebutton.getX() +savebutton.getWidth()/2 -saveText.getWidth()/2, savebutton.getBot() );
 	
 	loadText.setIdentity( "editor_buttons-loadText" );
 	loadText.setFont( "fonts/Jaapokki-Regular.otf" );
 	loadText.setText( "load" );
 	loadText.setSize( screen_h /48 );
 	loadText.setAlpha( 0xFF );
-	loadText.setPosition( loadbutton.getX() +loadbutton.getWidth()/2 -loadText.getWidth()/2, loadbutton.getBot() +screen_h /144 );
+	loadText.setPosition( loadbutton.getX() +loadbutton.getWidth()/2 -loadText.getWidth()/2, loadbutton.getBot() );
+	
+	rubbishTextdelete.setIdentity( "editor-rubbishTextdelete" );
+	rubbishTextdelete.setFont( "fonts/Jaapokki-Regular.otf" );
+	rubbishTextdelete.setText( "delete" );
+	rubbishTextdelete.setSize( screen_h /48 );
+	rubbishTextdelete.setAlpha( 0xFF );
+	rubbishTextdelete.setPosition( loadbutton.getLeft() -loadbutton.getWidth()/2 -rubbishTextdelete.getWidth()/2 -screen_w /256, loadbutton.getBot() );
+	
+	rubbishTextmode.setIdentity( "editor-rubbishTextmode" );
+	rubbishTextmode.setFont( "fonts/Jaapokki-Regular.otf" );
+	rubbishTextmode.setText( "mode" );
+	rubbishTextmode.setSize( screen_h /48 );
+	rubbishTextmode.setAlpha( 0xFF );
+	rubbishTextmode.setPosition( loadbutton.getLeft() -loadbutton.getWidth()/2 -rubbishTextmode.getWidth()/2 -screen_w /256, rubbishTextdelete.getBot() );
 	
 	form.setIdentity( "editor_buttons-form" );
 	form.setFont( "fonts/Jaapokki-Regular.otf" );
@@ -161,6 +175,8 @@ void Editor_buttons::draw( sf::RenderWindow* &window )
 	window->draw( loadbutton.get() );
 	window->draw( saveText.get() );
 	window->draw( loadText.get() );
+	window->draw( rubbishTextdelete.get() );
+	window->draw( rubbishTextmode.get() );
 	window->draw( form.get() );
 	window->draw( info.get() );
 }
