@@ -1,6 +1,24 @@
 #include "tiles_editor.h"
 #include "own/file.h"
 
+Block::Block( sf::Uint8 w, sf::Uint8 n, float x, float y )
+{
+	this->w = w;
+	this->n = n;
+	this->x = x;
+	this->y = y;
+}
+
+Block::~Block()
+{
+	w = 0;
+	n = 0;
+	x = 0;
+	y = 0;
+}
+
+
+
 Tiles_editor::Tiles_editor()
 {
 	free();
@@ -16,19 +34,24 @@ void Tiles_editor::free()
 	screen_w = 0;
 	screen_h = 0;
 	
-	width = 0;
-	grid = true;
 	which = -1;
 	chosen = 0;
 	mouse_x = -1;
 	mouse_y = -1;
 	info.free();
+	arrow.free();
+	
+	width = 0;
+	grid = true;
+	
 	key_info.free();
 	
 	leftbutton.free();
 	rightbutton.free();
+	topbutton.free();
+	botbutton.free();
 	additional_x = 0;
-	
+	additional_y = 0;
 	
 	coin.free();
 	if( !tiles.empty() )
@@ -71,22 +94,6 @@ void Tiles_editor::free()
 	}
 }
 
-void Tiles_editor::reset()
-{
-	which = -1;
-	chosen = 0;
-	additional_x = 0;
-}
-
-void Tiles_editor::clear()
-{
-	if( !blocks.empty() )
-	{
-		blocks.clear();
-	}
-}
-
-
 
 
 void Tiles_editor::load( float screen_w, float screen_h )
@@ -104,32 +111,48 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	
 	key_info.setIdentity( "tiles_editor-key_info" );
 	key_info.setFont( "fonts/Jaapokki-Regular.otf" );
-	key_info.setText( "KEYBOARD: grid turn('g')    type --('a') ++('d') 0('s')    chosen --('z') ++('c') 0('x')    delete last('BackSpace')" );
+	key_info.setText( "Keyboard action('key'): grid turn('g')      type --('a') ++('d') 0('s')      chosen --('z') ++('c') 0('x')      delete last('BackSpace')" );
 	key_info.setSize( screen_h /36 );
 	key_info.setAlpha( 0xFF );
-	key_info.setPosition( screen_w/2 -key_info.getWidth() /2, screen_h /9 );
+	key_info.setPosition( screen_w /256, screen_h -key_info.getHeight() -screen_h /144 );
 	
-	
+	// Rest sprites.
 	float scale_x = screen_w /2560;
 	float scale_y = screen_h /1440;
 	
+	arrow.setIdentity( "tiles_editor-arrow" );
+	arrow.load( "images/editor/left_arrow.png" );
+	arrow.setScale( scale_x /2, scale_y /2 );
 	
 	leftbutton.setIdentity( "tiles_editor-leftbutton" );
 	leftbutton.load( "images/level/left.png", 3 );
 	leftbutton.setScale( scale_x /2, scale_y /2 );
-	leftbutton.setPosition( screen_w /256, screen_h /2 -leftbutton.getHeight() /2 );
+	leftbutton.setPosition( screen_w -(screen_w /256 *3) -(leftbutton.getWidth() *3),
+	screen_h -(screen_h /144 *2) -leftbutton.getHeight() *2 );
 	
 	rightbutton.setIdentity( "tiles_editor-rightbutton" );
 	rightbutton.load( "images/level/right.png", 3 );
 	rightbutton.setScale( scale_x /2, scale_y /2 );
-	rightbutton.setPosition( screen_w -screen_w/256 -rightbutton.getWidth(), screen_h /2 -rightbutton.getHeight() /2 );
+	rightbutton.setPosition( screen_w -screen_w/256 -rightbutton.getWidth(),
+	screen_h -(screen_h /144 *2) -rightbutton.getHeight() *2 );
 	
+	topbutton.setIdentity( "tiles_editor-topbutton" );
+	topbutton.load( "images/editor/top.png", 3 );
+	topbutton.setScale( scale_x /2, scale_y /2 );
+	topbutton.setPosition( screen_w -screen_w/128 -topbutton.getWidth() *2,
+	screen_h -(screen_h /144 *3) -topbutton.getHeight() *3 );
+	
+	botbutton.setIdentity( "tiles_editor-botbutton" );
+	botbutton.load( "images/editor/bot.png", 3 );
+	botbutton.setScale( scale_x /2, scale_y /2 );
+	botbutton.setPosition( screen_w -screen_w/128 -(botbutton.getWidth() *2),
+	screen_h -screen_h /144 -botbutton.getHeight() );
 	
 	coin.setIdentity( "tiles_editor-coin" );
 	coin.load( "images/play/coin.png", 7 );
 	coin.setScale( scale_x, scale_y );
 	
-	for( unsigned i = 0; i < 16; i++ )
+	for( unsigned i = 0; i < 17; i++ )
 	{
 		tiles.push_back( new MySprite() );
 		tiles[ tiles.size() -1 ]->setIdentity( "tiles_editor-tiles" );
@@ -155,302 +178,147 @@ void Tiles_editor::load( float screen_w, float screen_h )
 		foes[ foes.size() -1 ]->setScale( scale_x, scale_y );
 	}
 	
-	line.setSize( sf::Vector2f( 1, 1 ) );
-	line.setPosition( 0, 0 );
-	
 	// Set width.
 	width = tiles[ 0 ]->getWidth() /2;
 }
 
 void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 {
-	// Check if FOE is active.
-	bool able = true;
-	int mycounter = 0;
-	for( unsigned i = 0; i < blocks.size(); i++ )
+	if( event.type == sf::Event::KeyPressed && !isRubbish )
 	{
-		if( blocks[ i ].w == FOE )
+		int code = event.key.code;
+		
+		if( code == sf::Keyboard::BackSpace )
 		{
-			mycounter ++;
+			if( blocks.size() > 0 )
+			{
+				blocks.pop_back();
+			}
+		}
+		else if( code == sf::Keyboard::G )
+		{
+			grid = !grid;
+		}
+		
+		
+		int size = 0;
+		if( which == TILE )				size = tiles.size();
+		if( which == UNVISIBLE_TILE )	size = tiles.size();
+		else if( which == OBJECT )		size = objects.size();
+		else if( which == FOE )			size = foes.size();
+		
+		
+		// CHANGING CHOSEN ----------------------------------------
+		if( code == sf::Keyboard::X )							chosen = 0;
+		else if( code == sf::Keyboard::C && chosen < size -1 )	chosen ++;
+		else if( code == sf::Keyboard::Z && chosen > 0 )		chosen --;
+		
+		
+		// CHANGING WHICH ----------------------------------------
+		if( code == sf::Keyboard::S )
+		{
+			which = 0;
+			chosen = 0;
+		}
+		else if( code == sf::Keyboard::D && which < AMOUNT -1 )
+		{
+			which ++;
+			chosen = 0;
+		}
+		else if( code == sf::Keyboard::A && which > -1 )
+		{
+			which --;
+			chosen = 0;
 		}
 	}
-	if( mycounter %2 != 0 )
-	{
-		able = false;
-	}
 	
-	if( !isRubbish )
-	{
-		if( event.type == sf::Event::KeyPressed && able )
-		{
-			int code = event.key.code;
-			
-			if( code == sf::Keyboard::BackSpace )
-			{
-				if( blocks.size() > 0 )
-				{
-					blocks.pop_back();
-					
-					// Repeat.
-					if( blocks.size() > 0 )
-					{
-						if( blocks[ blocks.size() -1 ].w == FOE )
-						{
-							blocks.pop_back();
-						}
-					}
-				}
-			}
-			
-			else if( code == sf::Keyboard::G )
-			{
-				grid = !grid;
-			}
-			
-			int size = 0;
-			if( which == TILE )				size = tiles.size();
-			if( which == UNVISIBLE_TILE )	size = tiles.size();
-			else if( which == OBJECT )		size = objects.size();
-			else if( which == FOE )			size = foes.size();
-			
-			// CHANGING CHOSEN ----------------------------------------
-			if( code == sf::Keyboard::X )
-			{
-				chosen = 0;
-			}
-			else if( code == sf::Keyboard::C && chosen < size -1 )
-			{
-				chosen ++;
-			}
-			else if( code == sf::Keyboard::Z && chosen > 0 )
-			{
-				chosen --;
-			}
-			
-			// CHANGING WHICH ----------------------------------------
-			if( code == sf::Keyboard::S )
-			{
-				which = 0;
-				chosen = 0;
-			}
-			else if( code == sf::Keyboard::D && which < AMOUNT -1 )
-			{
-				which ++;
-				chosen = 0;
-			}
-			else if( code == sf::Keyboard::A && which > -1 )
-			{
-				which --;
-				chosen = 0;
-			}
-			
-			if( which == COIN )
-			{
-				chosen = 0;
-			}	
-		}
-	}
-	else if( !able )
-	{
-		blocks.pop_back();
-	}
 	
-	if( event.type == sf::Event::MouseMoved )
+	if( event.type == sf::Event::MouseMoved && !isRubbish )
 	{
 		mouse_x = event.mouseMove.x;
 		mouse_y = event.mouseMove.y;
 		
-		if( !isRubbish )
+		// Grid works.
+		if( grid )
 		{
-			// Check if we need the same y position as before.
-			int counter = 0;
-			for( unsigned i = 0; i < blocks.size(); i++ )
+			int count = 0;
+			while( mouse_x >= width )
 			{
-				if( blocks[ i ].w == FOE )
-				{
-					counter ++;
-				}
+				mouse_x -= width;
+				count ++;
 			}
-			if( counter > 0 && counter %2 != 0 )
-			{
-				mouse_y = blocks[ blocks.size() -1 ].y;
-			}
+			mouse_x = count *width;
 			
-			// Grid works.
-			if( grid )
+			count = 0;
+			int diff = static_cast <int> (screen_h) %static_cast <int> (width);
+			while( mouse_y -diff >= width )
 			{
-				int count = 0;
-				while( mouse_x >= width )
-				{
-					mouse_x -= width;
-					count ++;
-				}
-				mouse_x = count *width;
-				
-				count = 0;
-				int diff = static_cast <int> (screen_h) %static_cast <int> (width);
-				while( mouse_y -diff >= width )
-				{
-					mouse_y -= width;
-					count ++;
-				}
-				mouse_y = count *width +diff;
+				mouse_y -= width;
+				count ++;
 			}
+			mouse_y = count *width +diff;
 		}
 	}
 	
-	
-	else if( event.type == sf::Event::MouseButtonPressed )
+	if( event.type == sf::Event::MouseButtonPressed )
 	{
+		mouse_x = event.mouseButton.x;
+		mouse_y = event.mouseButton.y;
+		
 		if( event.mouseButton.button == sf::Mouse::Left )
 		{
-			if( leftbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			if( leftbutton.checkCollision( mouse_x, mouse_y ) && additional_x < 0 )
 			{
-				additional_x += screen_w /2;
-				
-				for( auto &it :blocks )
-				{
-					it.x += screen_w /2;
-				}
+				additional_x += screen_w /4;
+				leftbutton.setOffset( 1 );
 			}
-			else if( rightbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			else if( rightbutton.checkCollision( mouse_x, mouse_y ) )
 			{
-				additional_x -= screen_w /2;
-				
-				for( auto &it :blocks )
-				{
-					it.x -= screen_w /2;
-				}
+				additional_x -= screen_w /4;
+				rightbutton.setOffset( 1 );
+			}
+			else if( topbutton.checkCollision( mouse_x, mouse_y ) )
+			{
+				additional_y += screen_h /4;
+				topbutton.setOffset( 1 );
+			}
+			else if( botbutton.checkCollision( mouse_x, mouse_y ) && additional_y > 0 )
+			{
+				additional_y -= screen_h /4;
+				botbutton.setOffset( 1 );
 			}
 			else if( chosen > -1 && which > -1 && !isRubbish )
 			{
-				Block block;
-				block.w = which;
-				block.n = chosen;
-				block.x = mouse_x -additional_x;
-				block.y = mouse_y;
-				blocks.push_back( block );
+				blocks.push_back( Block( which, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
 			}
 			
 			if( isRubbish )
 			{
-				int collision = -1;
-				for( unsigned i = 0; i < blocks.size(); i++ )
-				{
-					if( blocks[ i ].w == COIN )
-					{
-						coin.setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( coin.checkCollision( mouse_x +additional_x, mouse_y ) )
-						{
-							collision = i;
-						}
-					}
-					else if( blocks[ i ].w == TILE )
-					{
-						tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( tiles[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
-						{
-							collision = i;
-						}
-					}
-					else if( blocks[ i ].w == UNVISIBLE_TILE )
-					{
-						tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( tiles[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
-						{
-							collision = i;
-						}
-					}
-					else if( blocks[ i ].w == OBJECT )
-					{
-						objects[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( objects[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
-						{
-							collision = i;
-						}
-					}
-					else if( blocks[ i ].w == FOE )
-					{
-						foes[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-						if( foes[ blocks[ i ].n ]->checkCollision( mouse_x +additional_x, mouse_y ) )
-						{
-							collision = i;
-						}
-					}
-					
-				}
-				
-				if( collision != -1 )
-				{
-					// check more
-					int myseccounter = 0;
-					int status = 0;
-					
-					if( collision > 0 )
-					{
-						for( unsigned i = 0; i < collision; i++ )
-						{
-							if( blocks[ i ].w == FOE )
-							{
-								myseccounter ++;
-							}
-						}
-						
-						if( myseccounter %2 == 0 )	status = 0;
-						else						status = -1;
-					}
-					else if( collision < blocks.size() -1 )
-					{
-						for( unsigned i = collision; i < blocks.size(); i++ )
-						{
-							if( blocks[ i ].w == FOE )
-							{
-								myseccounter ++;
-							}
-						}
-						
-						if( myseccounter %2 != 0 )	status = 0;
-						else						status = -1;
-					}
-					else if( collision == 1 )
-					{
-						status = -1;
-					}
-					else if( collision == blocks.size() )
-					{
-						status = 0;
-					}
-					
-					
-					if( blocks[ collision ].w == FOE )
-					{
-						blocks.erase( blocks.begin() +collision );
-						collision += status;
-					}
-					
-					blocks.erase( blocks.begin() +collision );
-				}
+				deleteOne();
 			}
 		}
+	}
+	
+	if( event.type == sf::Event::MouseButtonReleased )
+	{
+		leftbutton.setOffset( 0 );
+		rightbutton.setOffset( 0 );
+		topbutton.setOffset( 0 );
+		botbutton.setOffset( 0 );
 	}
 }
 
 void Tiles_editor::draw( sf::RenderWindow* &window )
 {
-	// Draw added drawable stuff.
+	// Draw vector.
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		int w = blocks[ i ].w;
 		int n = blocks[ i ].n;
-		float x = blocks[ i ].x;
-		float y = blocks[ i ].y;
+		float x = blocks[ i ].x +additional_x;
+		float y = blocks[ i ].y +additional_y;
 		
-		if( w == COIN )
-		{
-			coin.setPosition( x, y );
-			window->draw( coin.get() );
-		}
-		else if( w == TILE )
+		if( w == TILE )
 		{
 			tiles[ n ]->setPosition( x, y );
 			tiles[ n ]->setAlpha( 0xFF );
@@ -467,6 +335,11 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 			objects[ n ]->setPosition( x, y );
 			window->draw( objects[ n ]->get() );
 		}
+		else if( w == COIN )
+		{
+			coin.setPosition( x, y );
+			window->draw( coin.get() );
+		}
 		else if( w == FOE )
 		{
 			foes[ n ]->setPosition( x, y );
@@ -478,12 +351,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	// Draw current drawable thing.
 	if( chosen > -1 )
 	{
-		if( which == COIN )
-		{
-			coin.setPosition( mouse_x, mouse_y );
-			window->draw( coin.get() );
-		}
-		else if( which == TILE )
+		if( which == TILE )
 		{
 			if( chosen < static_cast <int> (tiles.size()) )
 			{
@@ -509,6 +377,11 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 				window->draw( objects[ chosen ]->get() );
 			}
 		}
+		else if( which == COIN )
+		{
+			coin.setPosition( mouse_x, mouse_y );
+			window->draw( coin.get() );
+		}
 		else if( which == FOE )
 		{
 			if( chosen < static_cast <int> (foes.size()) )
@@ -520,77 +393,152 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	}
 	
 	
-	// Draw lines.
-	unsigned counter = 0;
-	while( true )
+	// Draw information.
+	string grid_str = "On";
+	if( !grid )
 	{
-		if( blocks.size() < 1 )
-		{
-			break;
-		}
-		
-		if( blocks[ counter ].w == FOE )
-		{
-			float w;
-			if( counter == blocks.size() -1 )
-			{
-				w = mouse_x -blocks[ counter ].x;
-			}
-			else
-			{
-				w = blocks[ counter +1 ].x -blocks[ counter ].x;
-			}
-			
-			line.setSize( sf::Vector2f( w, 2 ) );
-			line.setPosition( sf::Vector2f( blocks[ counter ].x, blocks[ counter ].y +foes[ blocks[ counter ].n ]->getHeight()/2 ) );
-			window->draw( line );
-			
-			counter ++;
-		}
-		
-		if( static_cast <int> (counter) >= static_cast <int> (blocks.size()) -1 )
-		{
-			break;
-		}
-		
-		counter ++;
+		grid_str = "Off";
 	}
-	
-	
-	
-	// Draw info.
-	string grid_str = "ON";
-	if( !grid )	grid_str = "OFF";
-	
-	string which_str = "none";
-	if( which == COIN )			which_str = "coin";
-	else if( which == TILE )	which_str = "tile";
+	string which_str = "None";
+	if( which == TILE )					which_str = "tile";
 	else if( which == UNVISIBLE_TILE )	which_str = "unvisible tile";
-	else if( which == OBJECT )	which_str = "object";
-	else if( which == FOE )	which_str = "foe";
-	
+	else if( which == COIN )			which_str = "coin";
+	else if( which == OBJECT )			which_str = "object";
+	else if( which == FOE )				which_str = "foe";
 	string chosen_str = "";
 	if( which != COIN )
 	{
-		chosen_str = "  chosen: " +con::itos( chosen );
+		chosen_str = "  Chosen: " +con::itos( chosen );
 	}
-	
 	info.setText( "Grid: " +grid_str 
-	+"  type: " +which_str 
+	+"  Type: " +which_str 
 	+chosen_str 
 	+"  X: " +con::itos( static_cast <int> (mouse_x -additional_x) ) 
-	+"  Y: " +con::itos( static_cast <int> (mouse_y) ) );
+	+"  Y: " +con::itos( static_cast <int> (mouse_y -additional_y) ) );
 	
 	info.setPosition( screen_w/2 -info.getWidth() /2, screen_h /18 );
 	window->draw( info.get() );
 	window->draw( key_info.get() );
 	
-	// Draw buttons.
+	
+	
+	// Draw direction buttons.
+	if( additional_x >= 0 )
+	{
+		leftbutton.setOffset( 2 );
+	}
+	if( additional_y <= 0 )
+	{
+		botbutton.setOffset( 2 );
+	}
+	
+	drawTumbnails( window );
 	window->draw( leftbutton.get() );
 	window->draw( rightbutton.get() );
+	window->draw( botbutton.get() );
+	window->draw( topbutton.get() );
 }
 
-
+void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
+{
+	// Draw thumbnails.
+	if( chosen > -1 && which > -1 && which != COIN )
+	{
+		float start_x = screen_w /256 +leftbutton.getWidth();
+		float start_y = screen_h /144 +(leftbutton.getHeight() *2);
+		
+		float scale_x = screen_w /2560 /2;
+		float scale_y = screen_h /1440 /2;
+		float old_scale_x = screen_w /2560;
+		float old_scale_y = screen_h /1440;
+		float gap = screen_h /144;
+		
+		if( which == TILE || which == UNVISIBLE_TILE )
+		{
+			tiles[ 0 ]->setScale( scale_x, scale_y );
+			tiles[ 0 ]->setPosition( start_x -tiles[ 0 ]->getWidth() /2, start_y );
+			for( unsigned i = 1; i < tiles.size(); i++ )
+			{
+				tiles[ i ]->setScale( scale_x, scale_y );
+				tiles[ i ]->setPosition( start_x -tiles[ i ]->getWidth() /2, tiles[ i -1 ]->getBot() +gap );
+			}
+			
+			arrow.setPosition( tiles[ chosen ]->getRight(), tiles[ chosen ]->getY() +tiles[ chosen ]->getHeight()/2 -arrow.getHeight()/2 );
+			
+			for( unsigned i = 0; i < tiles.size(); i++ )
+			{
+				if( chosen != i )	tiles[ i ]->setAlpha( 0xFF /3 );
+				window->draw( tiles[ i ]->get() );
+				tiles[ i ]->setScale( old_scale_x, old_scale_y );
+			}
+		}
+		else if( which == OBJECT )
+		{
+			objects[ 0 ]->setScale( scale_x, scale_y );
+			objects[ 0 ]->setPosition( start_x -objects[ 0 ]->getWidth() /2, start_y );
+			for( unsigned i = 1; i < objects.size(); i++ )
+			{
+				objects[ i ]->setScale( scale_x, scale_y );
+				objects[ i ]->setPosition( start_x -objects[ i ]->getWidth() /2, objects[ i -1 ]->getBot() +gap );
+			}
+			
+			arrow.setPosition( objects[ chosen ]->getRight(), objects[ chosen ]->getY() +objects[ chosen ]->getHeight()/2 -arrow.getHeight()/2 );
+			
+			for( unsigned i = 0; i < objects.size(); i++ )
+			{
+				if( chosen != i )	objects[ i ]->setAlpha( 0xFF /3 );
+				window->draw( objects[ i ]->get() );
+				objects[ i ]->setScale( old_scale_x, old_scale_y );
+				objects[ i ]->setAlpha( 0xFF );
+			}
+		}
+		else if( which == FOE )
+		{
+			foes[ 0 ]->setScale( scale_x, scale_y );
+			foes[ 0 ]->setPosition( start_x -foes[ 0 ]->getWidth() /2, start_y );
+			for( unsigned i = 1; i < foes.size(); i++ )
+			{
+				foes[ i ]->setScale( scale_x, scale_y );
+				foes[ i ]->setPosition( start_x -foes[ i ]->getWidth() /2, foes[ i -1 ]->getBot() +gap );
+			}
+			
+			arrow.setPosition( foes[ chosen ]->getRight(), foes[ chosen ]->getY() +foes[ chosen ]->getHeight()/2 -arrow.getHeight()/2 );
+			
+			for( unsigned i = 0; i < foes.size(); i++ )
+			{
+				if( chosen != i )	foes[ i ]->setAlpha( 0xFF /3 );
+				window->draw( foes[ i ]->get() );
+				foes[ i ]->setScale( old_scale_x, old_scale_y );
+				foes[ i ]->setAlpha( 0xFF );
+			}
+		}
+		
+		window->draw( arrow.get() );
+	}
+	
+	
+	sf::RectangleShape line;
+	line.setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF/3 ) );
+	
+	line.setSize( sf::Vector2f( screen_w, 1 ) );
+	line.setPosition( sf::Vector2f( 0, mouse_y ) );
+	window->draw( line );
+	
+	line.setSize( sf::Vector2f( 1, screen_h ) );
+	line.setPosition( sf::Vector2f( mouse_x, 0 ) );
+	window->draw( line );
+		
+	if( grid )
+	{	
+		line.setSize( sf::Vector2f( screen_w, 1 ) );
+		line.setPosition( sf::Vector2f( 0, mouse_y +width ) );
+		window->draw( line );
+		
+		line.setSize( sf::Vector2f( 1, screen_h ) );
+		line.setPosition( sf::Vector2f( mouse_x +width, 0 ) );
+		window->draw( line );
+	}
+}
 
 
 void Tiles_editor::save( string path )
@@ -632,16 +580,21 @@ void Tiles_editor::save( string path )
 		
 		
 		// Write to file.
-		file.get() << screen_w << endl;
-		file.get() << screen_h << endl;
+		file.get() << "adriqun" << "|";	// Author.
+		file.get() << screen_w << "|";
+		file.get() << screen_h << "|";
+		
+		// printf( "%d\n", finalblocks.size() );
+		
 		for( unsigned i = 0; i < finalblocks.size(); i++ )
 		{
-			file.get() << finalblocks[ i ].w << "." << finalblocks[ i ].n << "." << finalblocks[ i ].x << "." << finalblocks[ i ].y;
-			if( i < finalblocks.size() -1 )
-			{
-				file.get() << endl;
-			}
+			file.get() << static_cast <int> ( finalblocks[ i ].w ) << ".";
+			file.get() << static_cast <int> ( finalblocks[ i ].n ) << ".";
+			file.get() << finalblocks[ i ].x << ".";
+			file.get() << finalblocks[ i ].y << "|";
 		}
+		
+		// Clear.
 		finalblocks.clear();
 	}
 	file.free();
@@ -649,47 +602,185 @@ void Tiles_editor::save( string path )
 
 void Tiles_editor::load( string path )
 {
+	// Clear.
+	clearVector();
+	
+	// Set additional x as 0.
+	additional_x = 0;
+	additional_y = 0;
+	
 	MyFile file;
-	file.load( "txt/worlds/" +path +".txt" );
+	file.load( "txt/worlds/world_.txt" );
 	if( file.is_good() )
 	{
-		clear();
+		// Line and bufor.
+		string line = "";
+		string bufor = "";
+		unsigned start = 0;
 		
-		string myline = "";
+		// Getline.
+		getline( file.get(), line );
 		
-		// Set multipliers.
-		getline( file.get(), myline );
-		float x_multiplier = screen_w /con::stof( myline );
-		getline( file.get(), myline );
-		float y_multiplier = screen_h /con::stof( myline );
 		
-		while( getline( file.get(), myline ) )
+		// AUTHOR --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
 		{
-			vector <string> mydata;
-			string mynumber = "";
-			
-			for( unsigned i = 0; i < myline.size(); i++ )
+			if( line[ i ] == '|' )
 			{
-				if( myline[ i ] == '.' )
-				{
-					mydata.push_back( mynumber );
-					mynumber = "";
-					i++;
-				}
-				
-				mynumber += myline[ i ];
+				start = i +1;
+				// printf( "%s\n", bufor.c_str() );
+				bufor = "";
+				break;
 			}
-			mydata.push_back( mynumber );
 			
-			Block block;
-			block.w = con::stoi( mydata[ 0 ] );
-			block.n = con::stoi( mydata[ 1 ] );
-			block.x = con::stof( mydata[ 2 ] ) *x_multiplier;
-			block.y = con::stof( mydata[ 3 ] ) *y_multiplier;
-			blocks.push_back( block );
+			bufor += line[ i ];
 		}
 		
-		additional_x = 0;
+		
+		// MULTIPLIERS --------------------------------------------------------------------------
+		float x_multiplier = 1;
+		float y_multiplier = 1;
+		
+		// Set x_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				x_multiplier = screen_w /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", x_multiplier );
+		
+		// Set y_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				y_multiplier = screen_h /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", y_multiplier );
+		
+		
+		// FS --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				bufor += ".";
+				string nrstr = "";
+				vector <string> data;
+				
+				for( unsigned j = 0; j < bufor.size(); j++ )
+				{
+					if( bufor[ j ] == '.' )
+					{
+						data.push_back( nrstr );
+						nrstr = "";
+					}
+					else
+					{
+						nrstr += bufor[ j ];
+					}
+				}
+				
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *x_multiplier;
+				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				
+				blocks.push_back( Block( w, t, x, y ) );
+				
+				// Clear.
+				bufor = "";
+			}
+			else
+			{
+				bufor += line[ i ];
+			}
+		}
 	}
 	file.free();
+}
+
+
+
+void Tiles_editor::resetChosen()
+{
+	which = -1;
+	chosen = 0;
+}
+
+void Tiles_editor::clearVector()
+{
+	if( !blocks.empty() )
+	{
+		blocks.clear();
+	}
+}
+
+void Tiles_editor::deleteOne()
+{
+	float newX = mouse_x -additional_x;
+	float newY = mouse_y -additional_y;
+	
+	int collision = -1;
+	for( unsigned i = 0; i < blocks.size(); i++ )
+	{
+		if( blocks[ i ].w == TILE )
+		{
+			tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+			if( tiles[ blocks[ i ].n ]->checkCollision( newX, newY ) )
+			{
+				collision = i;
+			}
+		}
+		else if( blocks[ i ].w == UNVISIBLE_TILE )
+		{
+			tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+			if( tiles[ blocks[ i ].n ]->checkCollision( newX, newY ) )
+			{
+				collision = i;
+			}
+		}
+		else if( blocks[ i ].w == OBJECT )
+		{
+			objects[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+			if( objects[ blocks[ i ].n ]->checkCollision( newX, newY ) )
+			{
+				collision = i;
+			}
+		}
+		else if( blocks[ i ].w == COIN )
+		{
+			coin.setPosition( blocks[ i ].x, blocks[ i ].y );
+			if( coin.checkCollision( newX, newY ) )
+			{
+				collision = i;
+			}
+		}
+		else if( blocks[ i ].w == FOE )
+		{
+			foes[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
+			if( foes[ blocks[ i ].n ]->checkCollision( newX, newY ) )
+			{
+				collision = i;
+			}
+		}
+	}
+	
+	if( collision != -1 )
+	{
+		blocks.erase( blocks.begin() +collision );
+	}
 }

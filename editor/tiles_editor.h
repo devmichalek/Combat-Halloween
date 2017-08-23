@@ -1,57 +1,68 @@
 #pragma once
-#include "own/sprite.h"
 #include "own/text.h"
-#include <SFML/Graphics/RenderWindow.hpp>
+#include "own/sprite.h"
 #include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
 
+struct Block
+{
+	sf::Uint8 w;
+	sf::Uint8 n;
+	float x;
+	float y;
+	
+	Block( sf::Uint8 w = 0, sf::Uint8 n = 0, float x = 0, float y = 0 );
+	~Block();
+};
+
 class Tiles_editor
 {
-	enum
-	{
-		COIN = 0,
-		TILE,
-		OBJECT,
-		FOE,
-		UNVISIBLE_TILE,
-		AMOUNT
-	};
-	
-	struct Block
-	{
-		int w;
-		int n;
-		float x;
-		float y;
-	};
-	
-	// Support.
+	// Basics.
 	float screen_w;
 	float screen_h;
 	
-	// Temporary.
-	int width;
-	bool grid;
+	enum
+	{
+		TILE = 0,
+		UNVISIBLE_TILE,
+		OBJECT,
+		COIN,
+		FOE,
+		AMOUNT
+	};
+	
+	// Current block.
 	int which;
 	int chosen;
 	float mouse_x;
 	float mouse_y;
 	MyText info;
+	MySprite arrow;
+	
+	// Support.
+	float width;
+	bool grid;
+	
+	// Additional information.
 	MyText key_info;
 	
-	// Drawable stuff.
+	// Direction buttons.
 	MySprite leftbutton;
 	MySprite rightbutton;
+	MySprite topbutton;
+	MySprite botbutton;
 	float additional_x;
+	float additional_y;
 	
+	// Drawable stuff.
 	MySprite coin;
 	vector <MySprite*> tiles;
 	vector <MySprite*> objects;
 	vector <MySprite*> foes;
-	sf::RectangleShape line;
 	
-	// Vector.
+	// Main Major Vector.
 	vector <Block> blocks;
 	
 public:
@@ -60,14 +71,18 @@ public:
 	Tiles_editor();
 	~Tiles_editor();
 	void free();
-	void reset();
-	void clear();
 	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event, bool isRubbish );
 	void draw( sf::RenderWindow* &window );
+	void drawTumbnails( sf::RenderWindow* &window );
 	
-	// In addition.
+	// Streaming.
 	void save( string path );
 	void load( string path );
+	
+	// The rest.
+	void resetChosen();
+	void clearVector();
+	void deleteOne();
 };
