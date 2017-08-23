@@ -6,17 +6,20 @@
 
 class Tiles
 {
-	float left;		// the smallest x
-	float right;	// the biggest x
-	sf::Rect <float> border;
+	// Basics.
+	float screen_w;
+	float screen_h;
+	float border_x;
+	float border_y;
 	
+	// Visible tiles.
 	vector <MySprite*> sprites;
 	vector <sf::Vector2f> fs;
-	vector <int> types;
+	vector <sf::Uint8> types;
 	
-	// Unvisible
+	// Unvisible tiles.
 	vector <sf::Vector2f> ufs;
-	vector <int> utypes;
+	vector <sf::Uint8> utypes;
 	
 	// Thread stuff.
 	std::thread* myThread;
@@ -38,13 +41,16 @@ public:
 	bool isNull();
 	bool isReady();
 	void setThread();
-	void setTiles();
+	void prepare();
 	
-	// The rest.
-	float getLeft();
-	float getRight();
-	float getBorderLeft();
-	float getBorderRight();
+	// Check collision.
 	bool checkCollisionRect( sf::Rect <float> rect );
-	bool checkGravityRect( sf::Rect <float> rect );
+	
+	// Borders.
+	void setBorderX( float x );
+	void setBorderY( float y );
+	float getBorderX();
+	float getBorderY();
+	float getScreenWidth();
+	float getScreenHeight();
 };

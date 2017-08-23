@@ -14,8 +14,10 @@ Tiles::~Tiles()
 
 void Tiles::free()
 {
-	left = 0;
-	right = 0;
+	screen_w = 0;
+	screen_h = 0;
+	border_x = 0;
+	border_y = 0;
 	
 	if( !sprites.empty() )
 	{
@@ -59,64 +61,51 @@ void Tiles::free()
 	ready = false;
 }
 
-
-
 void Tiles::load( float screen_w, float screen_h )
 {
 	free();
 	
-	// Set border.
-	border.left = 0;
-	border.width = screen_w;
-	border.top = 0;
-	border.height = screen_h;
-	
-	float scale_x = screen_w /2560;
-	float scale_y = screen_h /1440;
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
 	
 	// Load sprites.
-	for( unsigned i = 0; i < 16; i++ )
+	for( unsigned i = 0; i < 17; i++ )
 	{
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setIdentity( "tiles-sprites" );
 		sprites[ sprites.size() -1 ]->load( "images/play/tiles/" +con::itos(i) +".png" );
-		sprites[ sprites.size() -1 ]->setScale( scale_x, scale_y );
+		sprites[ sprites.size() -1 ]->setScale( screen_w /2560, screen_h /1440 );
 	}
 }
 
 void Tiles::draw( sf::RenderWindow* &window )
 {
-	if( ready )
+	for( unsigned i = 0; i < fs.size(); i++ )
 	{
-		for( unsigned i = 0; i < types.size(); i++ )
+		if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
 		{
-			sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-			window->draw( sprites[ types[ i ] ]->get() );
+			if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border_x && fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border_y )
+			{
+				sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
+				window->draw( sprites[ types[ i ] ]->get() );
+			}
 		}
 	}
 }
 
-
-
 void Tiles::fadein( float v, int max )
 {
-	if( ready )
+	for( auto &it :sprites )
 	{
-		for( auto &it :sprites )
-		{
-			it->fadein( v, max );
-		}
+		it->fadein( v, max );
 	}
 }
 
 void Tiles::fadeout( float v, int min )
 {
-	if( ready )
+	for( auto &it :sprites )
 	{
-		for( auto &it :sprites )
-		{
-			it->fadeout( v, min );
-		}
+		it->fadeout( v, min );
 	}
 }
 
@@ -151,130 +140,177 @@ void Tiles::setThread()
 	{
 		if( !thread_ready && myThread == NULL )
 		{
-			myThread = new std::thread( [=] { setTiles(); } );	// interesting.
+			myThread = new std::thread( [=] { prepare(); } );
 			myThread->detach();
 		}
 	}
 }
 
-void Tiles::setTiles()
+void Tiles::prepare()
 {
 	MyFile file;
 	file.load( "txt/worlds/world_.txt" );
 	if( file.is_good() )
 	{
-		string myline = "";
+		// Line and bufor.
+		string line = "";
+		string bufor = "";
+		unsigned start = 0;
 		
-		// Set multipliers.
-		getline( file.get(), myline );
-		float x_multiplier = border.width /con::stof( myline );
-		getline( file.get(), myline );
-		float y_multiplier = border.height /con::stof( myline );
+		// Getline.
+		getline( file.get(), line );
 		
-		while( getline( file.get(), myline ) )
+		
+		// AUTHOR --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
 		{
-			vector <string> mydata;
-			string mynumber = "";
-			
-			for( unsigned i = 0; i < myline.size(); i++ )
+			if( line[ i ] == '|' )
 			{
-				if( myline[ i ] == '.' )
+				start = i +1;
+				// printf( "%s\n", bufor.c_str() );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		
+		
+		// MULTIPLIERS --------------------------------------------------------------------------
+		float x_multiplier = 1;
+		float y_multiplier = 1;
+		
+		// Set x_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				x_multiplier = screen_w /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", x_multiplier );
+		
+		// Set y_multiplier.
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				start = i +1;
+				y_multiplier = screen_h /con::stof( bufor );
+				bufor = "";
+				break;
+			}
+			
+			bufor += line[ i ];
+		}
+		// printf( "%f\n", y_multiplier );
+		
+		
+		// FS --------------------------------------------------------------------------
+		for( unsigned i = start; i < line.size(); i++ )
+		{
+			if( line[ i ] == '|' )
+			{
+				bufor += ".";
+				string nrstr = "";
+				vector <string> data;
+				
+				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
-					mydata.push_back( mynumber );
-					mynumber = "";
-					i++;
+					if( bufor[ j ] == '.' )
+					{
+						data.push_back( nrstr );
+						nrstr = "";
+					}
+					else
+					{
+						nrstr += bufor[ j ];
+					}
 				}
 				
-				mynumber += myline[ i ];
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *x_multiplier;
+				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				
+				if( w == 0 )
+				{
+					types.push_back( t );
+					fs.push_back( sf::Vector2f( x, y ) );
+				}
+				else if( w == 1 )
+				{
+					utypes.push_back( t );
+					ufs.push_back( sf::Vector2f( x, y ) );
+				}
+				
+				// Clear.
+				bufor = "";
 			}
-			mydata.push_back( mynumber );
-			
-			if( con::stoi( mydata[ 0 ] ) == 1 )
+			else
 			{
-				types.push_back( con::stoi( mydata[ 1 ] ) );
-				fs.push_back( sf::Vector2f( con::stof( mydata[ 2 ] ) *x_multiplier, con::stof( mydata[ 3 ] ) *y_multiplier ) );
-			}
-			else if( con::stoi( mydata[ 0 ] ) == 4 )
-			{
-				utypes.push_back( con::stoi( mydata[ 1 ] ) );
-				ufs.push_back( sf::Vector2f( con::stof( mydata[ 2 ] ) *x_multiplier, con::stof( mydata[ 3 ] ) *y_multiplier ) );
+				bufor += line[ i ];
 			}
 		}
 		
-		// Set borders.
-		left = fs[ 0 ].x;
-		right = fs[ fs.size() -1 ].x;
-		
-		// Prepare.
+		// Inform that everything is ok.
 		ready = true;
 	}
 	file.free();
 	
+	// Inform that thread is ready for next action.
 	thread_ready = true;
 }
 
-float Tiles::getLeft()
-{
-	return left;
-}
 
-float Tiles::getRight()
-{
-	return right;
-}
-
-float Tiles::getBorderLeft()
-{
-	return border.left;
-}
-
-float Tiles::getBorderRight()
-{
-	return border.left +border.width;
-}
 
 bool Tiles::checkCollisionRect( sf::Rect <float> rect )
 {
-	rect.height = rect.height -1;
+	// The rest.
+	float x;
+	float y;
+	sf::Uint8 t;
 	
-	for( unsigned i = 0; i < types.size(); i++ )
+	// Visible tiles.
+	for( unsigned i = 0; i < fs.size(); i++ )
 	{
-		if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border.left )
+		x = fs[ i ].x;
+		y = fs[ i ].y;
+		t = types[ i ];
+		
+		if( x < border_x +screen_w && y < border_y +screen_h )
 		{
-			if( fs[ i ].x < border.left +border.width )
+			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
 			{
-				if( fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border.top )
+				sprites[ t ]->setPosition( x, y );
+				if( sprites[ t ]->checkCollisionRect( rect ) )
 				{
-					if( fs[ i ].y < border.top +border.height )
-					{
-						sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-						if( sprites[ types[ i ] ]->checkCollisionRect( rect ) )
-						{
-							return true;
-						}
-					}
+					return true;
 				}
 			}
 		}
 	}
 	
-	// Unvisible
-	for( unsigned i = 0; i < utypes.size(); i++ )
+	// Unvisible tiles.
+	for( unsigned i = 0; i < ufs.size(); i++ )
 	{
-		if( ufs[ i ].x +sprites[ utypes[ i ] ]->getWidth() > border.left )
+		x = ufs[ i ].x;
+		y = ufs[ i ].y;
+		t = utypes[ i ];
+		
+		if( x < border_x +screen_w && y < border_y +screen_h )
 		{
-			if( ufs[ i ].x < border.left +border.width )
+			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
 			{
-				if( ufs[ i ].y +sprites[ utypes[ i ] ]->getHeight() > border.top )
+				sprites[ t ]->setPosition( x, y );
+				if( sprites[ t ]->checkCollisionRect( rect ) )
 				{
-					if( ufs[ i ].y < border.top +border.height )
-					{
-						sprites[ utypes[ i ] ]->setPosition( ufs[ i ].x, ufs[ i ].y );
-						if( sprites[ utypes[ i ] ]->checkCollisionRect( rect ) )
-						{
-							return true;
-						}
-					}
+					return true;
 				}
 			}
 		}
@@ -283,50 +319,32 @@ bool Tiles::checkCollisionRect( sf::Rect <float> rect )
 	return false;
 }
 
-bool Tiles::checkGravityRect( sf::Rect <float> rect )
+void Tiles::setBorderX( float x )
 {
-	for( unsigned i = 0; i < types.size(); i++ )
-	{
-		if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border.left )
-		{
-			if( fs[ i ].x < border.left +border.width )
-			{
-				if( fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border.top )
-				{
-					if( fs[ i ].y < border.top +border.height )
-					{
-						sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-						if( sprites[ types[ i ] ]->checkCollisionRect( rect ) )
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	// Unvisible
-	for( unsigned i = 0; i < utypes.size(); i++ )
-	{
-		if( ufs[ i ].x +sprites[ utypes[ i ] ]->getWidth() > border.left )
-		{
-			if( ufs[ i ].x < border.left +border.width )
-			{
-				if( ufs[ i ].y +sprites[ utypes[ i ] ]->getHeight() > border.top )
-				{
-					if( ufs[ i ].y < border.top +border.height )
-					{
-						sprites[ utypes[ i ] ]->setPosition( ufs[ i ].x, ufs[ i ].y );
-						if( sprites[ utypes[ i ] ]->checkCollisionRect( rect ) )
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	return false;
+	border_x = x;
+}
+
+void Tiles::setBorderY( float y )
+{
+	border_y = y;
+}
+
+float Tiles::getBorderX()
+{
+	return border_x;
+}
+
+float Tiles::getBorderY()
+{
+	return border_y;
+}
+
+float Tiles::getScreenWidth()
+{
+	return screen_w;
+}
+
+float Tiles::getScreenHeight()
+{
+	return screen_h;
 }
