@@ -53,17 +53,21 @@ void Game::load( float screen_w, float screen_h )
 
 void Game::handle( sf::Event& event )
 {
-	knight.handle( event );
+	if( !knight.isDeath() )
+	{
+		knight.handle( event );
+	}
 }
 
 void Game::draw( sf::RenderWindow* &window )
 {
 	window->draw( background.get() );
 	window->setView( knight.getView() );
-	objects.draw( window );
 	coins.draw( window );
+	objects.draw( window );
 	knight.draw( window );
 	tiles.draw( window );
+	objects.drawFront( window );
 	window->setView( window->getDefaultView() );
 	
 	/*
@@ -83,6 +87,18 @@ void Game::mechanics( double elapsedTime )
 	
 	if( !knight.isDeath() )
 	{
+		knight.jumping( elapsedTime );
+		if( tiles.checkCollisionRect( knight.getRect() ) )
+		{
+			knight.gravity( elapsedTime );
+		}
+		
+		knight.gravity( elapsedTime );
+		if( tiles.checkCollisionRect( knight.getRect() ) )
+		{
+			knight.weightlessness( elapsedTime );
+		}
+		
 		if( knight.jump() )
 		{
 			
@@ -95,34 +111,21 @@ void Game::mechanics( double elapsedTime )
 		
 		if( knight.moveLeft( elapsedTime ) )
 		{
-			if( tiles.checkCollisionRect( knight.getRect() ) || knight.getLeft() < tiles.getBorderLeft() )
+			if( tiles.checkCollisionRect( knight.getRect() ) || knight.getLeft() < tiles.getBorderX() )
 			{
 				knight.back( elapsedTime );
 			}
 		}
 		else if( knight.moveRight( elapsedTime ) )
 		{
-			if( tiles.checkCollisionRect( knight.getRect() ) || knight.getRight() > tiles.getBorderRight() )
+			if( tiles.checkCollisionRect( knight.getRect() ) || knight.getRight() > tiles.getBorderX() +tiles.getScreenWidth() )
 			{
-				
 				knight.back( elapsedTime );
 			}
 		}
 		else
 		{
 			knight.idle( elapsedTime );
-		}
-		
-		knight.gravity( elapsedTime );
-		if( tiles.checkGravityRect( knight.getRect() ) )
-		{
-			knight.weightlessness( elapsedTime );
-		}
-		
-		knight.jumping( elapsedTime );
-		if( tiles.checkCollisionRect( knight.getRect() ) )
-		{
-			knight.gravity( elapsedTime );
 		}
 	}
 	else if( knight.isRemains() )
@@ -131,8 +134,11 @@ void Game::mechanics( double elapsedTime )
 	}
 	
 	knight.animation( elapsedTime );
-	knight.setViewState( tiles.getLeft(), tiles.getRight() );
 	coins.mechanics( elapsedTime );
+	
+	// Set borders.
+	tiles.setBorderX( knight.getViewX() );
+	tiles.setBorderY( knight.getViewY() );
 }
 
 
