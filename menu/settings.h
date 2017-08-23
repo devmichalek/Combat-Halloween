@@ -38,12 +38,12 @@ class Settings
 	MySprite table_second;
 	MySprite gear_left;
 	MySprite gear_right;
+	MySprite resetbutton;
 	float moving_second;
 	float y1, y2;
 	int target;
 	MyText pressbutton;
 	MyText pressenter;
-	MyText resetbutton;
 	
 	// Sound.
 	Chunk click;

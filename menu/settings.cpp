@@ -183,6 +183,10 @@ void Settings::load( float screen_w, float screen_h )
 	gear_right.setScale( screen_w /2560, screen_h /1440 );
 	gear_right.setPosition( table_second.getRight(), screen_h );
 	
+	resetbutton.setIdentity( "settings-resetbutton" );
+	resetbutton.load( "images/menu/resetbutton.png", 3 );
+	resetbutton.setScale( screen_w /2560, screen_h /1440 );
+	
 	// Set pressbutton.
 	pressbutton.setIdentity( "settings-pressbutton" );
 	pressbutton.setFont( "fonts/jcandlestickextracond.ttf" );
@@ -196,13 +200,6 @@ void Settings::load( float screen_w, float screen_h )
 	pressenter.setText( "Click anywhere to save" );
 	pressenter.setSize( size );
 	pressenter.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
-	
-	// Set reset button.
-	resetbutton.setIdentity( "settings-resetbutton" );
-	resetbutton.setFont( "fonts/jcandlestickextracond.ttf" );
-	resetbutton.setText( "RESET" );
-	resetbutton.setSize( size );
-	resetbutton.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 	
 	positionSecond();
 	
@@ -222,10 +219,16 @@ bool Settings::handle( sf::Event& event )
 			{
 				if( resetbutton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
+					resetbutton.setOffset( 1 );
 					reset();
 					return true;
 				}
 			}
+		}
+		
+		if( event.type == sf::Event::MouseButtonReleased )
+		{
+			resetbutton.setOffset( 0 );
 		}
 		
 		// Keyboard stuff.
@@ -559,7 +562,7 @@ void Settings::positionSecond()
 {
 	pressbutton.setPosition( table_second.getX() +screen_w /80, table_second.getY() +screen_h /54 );
 	pressenter.setPosition( table_second.getX() +screen_w /80, pressbutton.getBot() +screen_h /80 );
-	resetbutton.setPosition( table_second.getRight() -screen_w /16, table_second.getBot() -screen_h /16 );
+	resetbutton.setPosition( table_second.getRight() -resetbutton.getWidth(), table_second.getBot() -resetbutton.getHeight() );
 }
 
 bool Settings::isPossibleKey( sf::Event &event )
