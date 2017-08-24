@@ -39,6 +39,7 @@ class Tiles_editor
 	float mouse_x;
 	float mouse_y;
 	MyText info;
+	MyText mouseInfo;
 	MySprite arrow;
 	
 	// Support.
@@ -64,6 +65,9 @@ class Tiles_editor
 	
 	// Main Major Vector.
 	vector <Block> blocks;
+	vector <Block> foeblocks;
+	bool lastwasfoe;
+	bool isrubbishon;
 	
 public:
 	
@@ -76,6 +80,7 @@ public:
 	void handle( sf::Event& event, bool isRubbish );
 	void draw( sf::RenderWindow* &window );
 	void drawTumbnails( sf::RenderWindow* &window );
+	void drawLines( sf::RenderWindow* &window );
 	
 	// Streaming.
 	void save( string path );
