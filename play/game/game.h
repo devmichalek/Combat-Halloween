@@ -3,6 +3,8 @@
 #include "play/game/landscape/objects.h"
 #include "play/game/landscape/coins.h"
 #include "play/game/knight/knight.h"
+#include "play/game/foe/factory.h"
+#include "play/game/foe/skeleton.h"
 
 class Game
 {
@@ -16,6 +18,7 @@ class Game
 	Tiles tiles;
 	Objects objects;
 	Coins coins;
+	Factory <Skeleton> skeletons;
 	
 public:
 	
@@ -46,4 +49,8 @@ public:
 	void loading( int which );
 	int getStatus();
 	void resetStatus();
+	
+	// In addition for test reasons.
+	void turnCollision( bool collision );
+	bool getCollision();
 };

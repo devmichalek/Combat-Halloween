@@ -1,6 +1,6 @@
 #include "Game.h"
 #include "own/file.h"
-#include <SFML/Graphics/RectangleShape.hpp>
+
 Game::Game()
 {
 	free();
@@ -21,6 +21,7 @@ void Game::free()
 	tiles.free();
 	objects.free();
 	coins.free();
+	skeletons.free();
 }
 
 void Game::reset()
@@ -29,6 +30,10 @@ void Game::reset()
 	loaded = false;
 	
 	knight.reset();
+	tiles.reset();
+	objects.reset();
+	coins.reset();
+	skeletons.reset();
 }
 
 
@@ -49,6 +54,7 @@ void Game::load( float screen_w, float screen_h )
 	tiles.load( screen_w, screen_h );
 	objects.load( screen_w, screen_h );
 	coins.load( screen_w, screen_h );
+	skeletons.load( screen_w, screen_h, 0, "skeleton" );
 }
 
 void Game::handle( sf::Event& event )
@@ -64,18 +70,11 @@ void Game::draw( sf::RenderWindow* &window )
 	window->draw( background.get() );
 	window->setView( knight.getView() );
 	coins.draw( window );
-	objects.draw( window );
 	knight.draw( window );
 	tiles.draw( window );
-	objects.drawFront( window );
+	skeletons.draw( window );
+	objects.draw( window );
 	window->setView( window->getDefaultView() );
-	
-	/*
-	sf::RectangleShape rectshape;
-	rectshape.setSize( sf::Vector2f( knight.getRect().width, knight.getRect().height ) );
-	rectshape.setPosition( sf::Vector2f( knight.getRect().left, knight.getRect().top ) );
-	window->draw( rectshape );
-	*/
 }
 
 void Game::mechanics( double elapsedTime )
@@ -90,10 +89,11 @@ void Game::mechanics( double elapsedTime )
 		knight.jumping( elapsedTime );
 		if( tiles.checkCollisionRect( knight.getRect() ) )
 		{
-			knight.gravity( elapsedTime );
+			knight.backjumping( elapsedTime );
 		}
 		
 		knight.gravity( elapsedTime );
+		tiles.tickGravity( knight.getRect(), elapsedTime );
 		if( tiles.checkCollisionRect( knight.getRect() ) )
 		{
 			knight.weightlessness( elapsedTime );
@@ -106,7 +106,7 @@ void Game::mechanics( double elapsedTime )
 		
 		if( knight.attack() )
 		{
-			
+			skeletons.harm( knight.getAttackRect(), knight.getDamage() );
 		}
 		
 		if( knight.moveLeft( elapsedTime ) )
@@ -127,6 +127,8 @@ void Game::mechanics( double elapsedTime )
 		{
 			knight.idle( elapsedTime );
 		}
+		
+		skeletons.walk( knight.getRect(), elapsedTime );
 	}
 	else if( knight.isRemains() )
 	{
@@ -135,10 +137,17 @@ void Game::mechanics( double elapsedTime )
 	
 	knight.animation( elapsedTime );
 	coins.mechanics( elapsedTime );
+	skeletons.mechanics( elapsedTime );
 	
 	// Set borders.
 	tiles.setBorderX( knight.getViewX() );
 	tiles.setBorderY( knight.getViewY() );
+	objects.setBorderX( knight.getViewX() );
+	objects.setBorderY( knight.getViewY() );
+	coins.setBorderX( knight.getViewX() );
+	coins.setBorderY( knight.getViewY() );
+	skeletons.setBorderX( knight.getViewX() );
+	skeletons.setBorderY( knight.getViewY() );
 }
 
 
@@ -150,6 +159,7 @@ void Game::fadein( float v, int max )
 	tiles.fadein( v, max );
 	objects.fadein( v, max );
 	coins.fadein( v, max );
+	skeletons.fadein( v, max );
 }
 
 void Game::fadeout( float v, int min )
@@ -159,6 +169,7 @@ void Game::fadeout( float v, int min )
 	tiles.fadeout( v, min );
 	objects.fadeout( v, min );
 	coins.fadeout( v, min );
+	skeletons.fadeout( v, min );
 }
 
 
@@ -212,14 +223,17 @@ void Game::loading( int which )
 		coins.setThread();
 		break;
 		
-		default:
+		case 5:
+		skeletons.setThread();
+		break;
 		
+		default:
 		if( knight.isNull() && tiles.isNull() &&
-			objects.isNull() && coins.isNull() )
+			objects.isNull() && coins.isNull() &&
+			skeletons.isNull() )
 		{
 			loaded = true;
 		}
-		
 		break;
 	}
 }
@@ -229,7 +243,8 @@ int Game::getStatus()
 	if( loaded )
 	{
 		if( knight.isReady() && tiles.isReady() &&
-			objects.isReady() && coins.isReady() )
+			objects.isReady() && coins.isReady() &&
+			skeletons.isReady() )
 		{
 			return 2;
 		}
@@ -243,4 +258,17 @@ int Game::getStatus()
 void Game::resetStatus()
 {
 	loaded = false;
+}
+
+
+
+void Game::turnCollision( bool collision )
+{
+	knight.turnCollision( collision );
+	skeletons.turnCollision( collision );
+}
+
+bool Game::getCollision()
+{
+	return skeletons.getCollision();
 }
