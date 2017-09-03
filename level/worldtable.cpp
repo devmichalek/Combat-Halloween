@@ -131,6 +131,7 @@ void Worldtable::load( float screen_w, float screen_h )
 	information.setIdentity( "worldtable-information" );
 	information.setFont( "fonts/jcandlestickextracond.ttf" );
 	information.setText( "loading..." );
+	information.setColor( sf::Color( 0, 0, 0 ) );
 	information.setSize( screen_h /28 );
 	
 	
@@ -493,7 +494,7 @@ void Worldtable::setThread()
 		{
 			// Setting loading text.
 			information.setText( "loading..." );
-			information.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+			information.setColor( sf::Color( 0, 0, 0 ) );
 			information.setPosition( screen_w/2 -information.getWidth()/2 -reloadButton.getWidth()/2 -screen_w/256, screen_h /2.2 );
 			reloadButton.setPosition( information.getRight() +screen_w/256, information.getY() -reloadButton.getHeight() /3 );
 			
