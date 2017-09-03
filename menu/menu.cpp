@@ -309,8 +309,7 @@ void Menu::mechanics( double elapsedTime )
 			}
 			
 			// Map editor.
-			else if( chat.getCommand( "@editor" ) || chat.getCommand( "@map_editor" ) ||
-			chat.getCommand( "@edit" ) )
+			else if( chat.getCommand( "@editor" ) || chat.getCommand( "@edit" ) )
 			{
 				editor = true;
 				chat.isOpen() = false;
