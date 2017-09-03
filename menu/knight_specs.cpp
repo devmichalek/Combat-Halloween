@@ -1,7 +1,8 @@
 #include "knight_specs.h"
 #include <SFML/Network.hpp>
 #include "own/file.h"
-
+#include <locale>
+#include <codecvt>
 Knight_specs::Knight_specs()
 {
 	myThread = NULL;
@@ -530,7 +531,7 @@ void Knight_specs::setValues()
 					echostring[ i ] == 's' )
 				{
 					int was = i;
-					string value = "";
+					wstring value = L"";
 					for( unsigned j = i +1; j < echostring.size(); j++ )
 					{
 						if( isalpha( echostring[ j ] ) )
@@ -550,24 +551,40 @@ void Knight_specs::setValues()
 						value.erase( value.find( ' ' ) );
 					}
 					
+					if( echostring[ was ] == 'a' )		value += L"‰";
+					else if( echostring[ was ] == 'h' )	value += L"p";
+					else if( echostring[ was ] == 'd' )	value += L"p";
+					else if( echostring[ was ] == 's' )	value += L"%";
+					
+					//setup converter
+					using convert_type = std::codecvt_utf8<wchar_t>;
+					std::wstring_convert<convert_type, wchar_t> converter;
+
+					//use converter (.to_bytes: wstr->str, .from_bytes: str->wstr)
+					std::string converted_str = converter.to_bytes( value );
+					
 					if( echostring[ was ] == 'l' )
 					{
-						values[ counter ]->setText( " " +value );
+						if( con::stoi( converted_str ) == 20 )
+						{
+							value = L"MAX";
+						}
+						values[ counter ]->setTextW( L" " +value );
 						values[ counter ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 					}
 					else if( std::stoi( value ) > 0 )
 					{
-						values[ counter ]->setText( "+" +value +"%" );
+						values[ counter ]->setTextW( L"+" +value );
 						values[ counter ]->setColor( sf::Color( 0x78, 0xA5, 0xA3 ) );
 					}
 					else if( std::stoi( value ) == 0 )
 					{
-						values[ counter ]->setText( " " +value +"%" );
+						values[ counter ]->setTextW( L" " +value );
 						values[ counter ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
 					}
 					else
 					{
-						values[ counter ]->setText( value +"%" );
+						values[ counter ]->setTextW( value );
 						values[ counter ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
 					}
 					
@@ -613,6 +630,7 @@ void Knight_specs::reload()
 	lastChosen = -1;
 	table.setPosition( x1, table.getY() );
 	setPositionValues( screen_w );
+	left_arrow.setPosition( table.getRight() -left_arrow.getWidth(), table.getBot() -left_arrow.getHeight()/2 );
 	
 	for( unsigned i = 0; i < parts.size(); i++ )
 	{
