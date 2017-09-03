@@ -18,18 +18,7 @@ void Tiles::free()
 	screen_h = 0;
 	border_x = 0;
 	border_y = 0;
-	
-	if( !sprites.empty() )
-	{
-		for( auto &it :sprites )
-		{
-			it->free();
-			delete it;
-			it = NULL;
-		}
-		
-		sprites.clear();
-	}
+	fadingout = false;
 	
 	if( !fs.empty() )
 	{
@@ -49,6 +38,52 @@ void Tiles::free()
 	if( !utypes.empty() )
 	{
 		utypes.clear();
+	}
+	
+	if( !ualpha.empty() )
+	{
+		ualpha.clear();
+	}
+	
+	if( myThread != NULL )
+	{
+		delete myThread;
+		myThread = NULL;
+	}
+	
+	thread_ready = false;
+	ready = false;
+}
+
+void Tiles::reset()
+{
+	border_x = 0;
+	border_y = 0;
+	fadingout = false;
+	
+	if( !fs.empty() )
+	{
+		fs.clear();
+	}
+	
+	if( !types.empty() )
+	{
+		types.clear();
+	}
+	
+	if( !ufs.empty() )
+	{
+		ufs.clear();
+	}
+	
+	if( !utypes.empty() )
+	{
+		utypes.clear();
+	}
+	
+	if( !ualpha.empty() )
+	{
+		ualpha.clear();
 	}
 	
 	if( myThread != NULL )
@@ -91,6 +126,27 @@ void Tiles::draw( sf::RenderWindow* &window )
 			}
 		}
 	}
+	
+	if( !fadingout )
+	{
+		for( unsigned i = 0; i < ualpha.size(); i++ )
+		{
+			if( ualpha[ i ] > 0 )
+			{
+				if( ufs[ i ].x < border_x +screen_w && ufs[ i ].y < border_y +screen_h )
+				{
+					if( ufs[ i ].x +sprites[ utypes[ i ] ]->getWidth() > border_x && ufs[ i ].y +sprites[ utypes[ i ] ]->getHeight() > border_y )
+					{
+						float alpha = sprites[ utypes[ i ] ]->getAlpha();
+						sprites[ utypes[ i ] ]->setAlpha( ualpha[ i ] );
+						sprites[ utypes[ i ] ]->setPosition( ufs[ i ].x, ufs[ i ].y );
+						window->draw( sprites[ utypes[ i ] ]->get() );
+						sprites[ utypes[ i ] ]->setAlpha( alpha );
+					}
+				}
+			}
+		}
+	}
 }
 
 void Tiles::fadein( float v, int max )
@@ -99,6 +155,8 @@ void Tiles::fadein( float v, int max )
 	{
 		it->fadein( v, max );
 	}
+	
+	fadingout = false;
 }
 
 void Tiles::fadeout( float v, int min )
@@ -107,6 +165,8 @@ void Tiles::fadeout( float v, int min )
 	{
 		it->fadeout( v, min );
 	}
+	
+	fadingout = true;
 }
 
 
@@ -179,6 +239,7 @@ void Tiles::prepare()
 		// MULTIPLIERS --------------------------------------------------------------------------
 		float x_multiplier = 1;
 		float y_multiplier = 1;
+		float this_screen_h = 0;
 		
 		// Set x_multiplier.
 		for( unsigned i = start; i < line.size(); i++ )
@@ -201,6 +262,7 @@ void Tiles::prepare()
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
+				this_screen_h = con::stof( bufor );
 				y_multiplier = screen_h /con::stof( bufor );
 				bufor = "";
 				break;
@@ -210,19 +272,25 @@ void Tiles::prepare()
 		}
 		// printf( "%f\n", y_multiplier );
 		
+		// The margin of error.
+		x_multiplier -= 0.03;
+		y_multiplier -= 0.08;
+		this_screen_h *= 0.08;
+		
+		
 		
 		// FS --------------------------------------------------------------------------
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
-				bufor += ".";
+				bufor += "*";
 				string nrstr = "";
 				vector <string> data;
 				
 				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
-					if( bufor[ j ] == '.' )
+					if( bufor[ j ] == '*' )
 					{
 						data.push_back( nrstr );
 						nrstr = "";
@@ -236,7 +304,7 @@ void Tiles::prepare()
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
 				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				float y = con::stoi( data[ 3 ] ) *y_multiplier +this_screen_h;
 				
 				if( w == 0 )
 				{
@@ -247,6 +315,7 @@ void Tiles::prepare()
 				{
 					utypes.push_back( t );
 					ufs.push_back( sf::Vector2f( x, y ) );
+					ualpha.push_back( 0 );
 				}
 				
 				// Clear.
@@ -317,6 +386,42 @@ bool Tiles::checkCollisionRect( sf::Rect <float> rect )
 	}
 	
 	return false;
+}
+
+void Tiles::tickGravity( sf::Rect <float> rect, double elapsedTime )
+{
+	// The rest.
+	float x;
+	float y;
+	sf::Uint8 t;
+	
+	// Unvisible tiles but for alpha.
+	for( unsigned i = 0; i < ufs.size(); i++ )
+	{
+		x = ufs[ i ].x;
+		y = ufs[ i ].y;
+		t = utypes[ i ];
+		
+		if( ualpha[ i ] > 0 )
+		{
+			ualpha[ i ] -= elapsedTime *0xFF/2;
+		}
+		
+		if( x < border_x +screen_w && y < border_y +screen_h )
+		{
+			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
+			{
+				sprites[ t ]->setPosition( x, y );
+				if( sprites[ t ]->checkCollisionRect( rect ) )
+				{
+					if( ualpha[ i ] < 0xFF )
+					{
+						ualpha[ i ] += elapsedTime *0xFF;
+					}
+				}
+			}
+		}
+	}
 }
 
 void Tiles::setBorderX( float x )

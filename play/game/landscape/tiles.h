@@ -11,6 +11,7 @@ class Tiles
 	float screen_h;
 	float border_x;
 	float border_y;
+	bool fadingout;
 	
 	// Visible tiles.
 	vector <MySprite*> sprites;
@@ -20,6 +21,7 @@ class Tiles
 	// Unvisible tiles.
 	vector <sf::Vector2f> ufs;
 	vector <sf::Uint8> utypes;
+	vector <float> ualpha;
 	
 	// Thread stuff.
 	std::thread* myThread;
@@ -32,6 +34,7 @@ public:
 	Tiles();
 	~Tiles();
 	void free();
+	void reset();
 	void load( float screen_w, float screen_h );
 	void draw( sf::RenderWindow* &window );
 	void fadein( float v = 1, int max = 0xFF );
@@ -45,6 +48,7 @@ public:
 	
 	// Check collision.
 	bool checkCollisionRect( sf::Rect <float> rect );
+	void tickGravity( sf::Rect <float> rect, double elapsedTime );
 	
 	// Borders.
 	void setBorderX( float x );
