@@ -87,6 +87,7 @@ public:
 	void load( string path );
 	
 	// The rest.
+	void griding( bool isRubbish );
 	void resetChosen();
 	void clearVector();
 	void deleteOne();

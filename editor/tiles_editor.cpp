@@ -1,5 +1,6 @@
 #include "tiles_editor.h"
 #include "own/file.h"
+#include <iomanip>
 
 Block::Block( sf::Uint8 w, sf::Uint8 n, float x, float y )
 {
@@ -274,26 +275,7 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 		mouse_x = event.mouseMove.x;
 		mouse_y = event.mouseMove.y;
 		
-		// Grid works.
-		if( grid && !isRubbish )
-		{
-			int count = 0;
-			while( mouse_x >= width )
-			{
-				mouse_x -= width;
-				count ++;
-			}
-			mouse_x = count *width;
-			
-			count = 0;
-			int diff = static_cast <int> (screen_h) %static_cast <int> (width);
-			while( mouse_y -diff >= width )
-			{
-				mouse_y -= width;
-				count ++;
-			}
-			mouse_y = count *width +diff;
-		}
+		griding( isRubbish );
 	}
 	
 	if( event.type == sf::Event::MouseButtonPressed )
@@ -325,6 +307,8 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 			}
 			else if( chosen > -1 && which > -1 && !isRubbish )
 			{
+				griding( isRubbish );
+				
 				if( which == FOE )
 				{
 					lastwasfoe = true;
@@ -638,9 +622,13 @@ void Tiles_editor::save( string path )
 		}
 		myblocks.clear();
 		
-		// Sort by x but foeblocks.
-		sort( foeblocks.begin(), foeblocks.end(), []( const Block& a, const Block& b ) { return a.x < b.x; } );
-		finalblocks.insert( finalblocks.end(), foeblocks.begin(), foeblocks.end() );
+		if( !foeblocks.empty() )
+		{
+			// Sort by x but foeblocks.
+			sort( foeblocks.begin(), foeblocks.end(), []( const Block& a, const Block& b ) { return a.x < b.x; } );
+			finalblocks.insert( finalblocks.end(), foeblocks.begin(), foeblocks.end() );
+		}
+		
 		
 		
 		// Write to file.
@@ -652,10 +640,10 @@ void Tiles_editor::save( string path )
 		
 		for( unsigned i = 0; i < finalblocks.size(); i++ )
 		{
-			file.get() << static_cast <int> ( finalblocks[ i ].w ) << ".";
-			file.get() << static_cast <int> ( finalblocks[ i ].n ) << ".";
-			file.get() << finalblocks[ i ].x << ".";
-			file.get() << finalblocks[ i ].y << "|";
+			file.get() << static_cast <int> ( finalblocks[ i ].w ) << "*";
+			file.get() << static_cast <int> ( finalblocks[ i ].n ) << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << finalblocks[ i ].x << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << finalblocks[ i ].y << "|";
 		}
 		
 		// Clear.
@@ -741,13 +729,13 @@ void Tiles_editor::load( string path )
 		{
 			if( line[ i ] == '|' )
 			{
-				bufor += ".";
+				bufor += "*";
 				string nrstr = "";
 				vector <string> data;
 				
 				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
-					if( bufor[ j ] == '.' )
+					if( bufor[ j ] == '*' )
 					{
 						data.push_back( nrstr );
 						nrstr = "";
@@ -785,6 +773,31 @@ void Tiles_editor::load( string path )
 }
 
 
+
+
+void Tiles_editor::griding( bool isRubbish )
+{
+	// Grid works.
+	if( grid && !isRubbish )
+	{
+		int count = 0;
+		while( mouse_x >= width )
+		{
+			mouse_x -= width;
+			count ++;
+		}
+		mouse_x = count *width;
+		
+		count = 0;
+		int diff = static_cast <int> (screen_h) %static_cast <int> (width);
+		while( mouse_y -diff >= width )
+		{
+			mouse_y -= width;
+			count ++;
+		}
+		mouse_y = count *width +diff;
+	}
+}
 
 void Tiles_editor::resetChosen()
 {
