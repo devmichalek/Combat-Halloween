@@ -28,6 +28,7 @@ public:
 	Coins();
 	~Coins();
 	void free();
+	void reset();
 	void load( float screen_w, float screen_h );
 	void draw( sf::RenderWindow* &window );
 	void mechanics( double elapsedTime );

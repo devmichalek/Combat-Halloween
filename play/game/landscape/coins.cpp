@@ -43,6 +43,31 @@ void Coins::free()
 	ready = false;
 }
 
+void Coins::reset()
+{
+	border_x = 0;
+	border_y = 0;
+	
+	if( !fs.empty() )
+	{
+		fs.clear();
+	}
+	
+	if( !offsets.empty() )
+	{
+		offsets.clear();
+	}
+	
+	if( myThread != NULL )
+	{
+		delete myThread;
+		myThread = NULL;
+	}
+	
+	thread_ready = false;
+	ready = false;
+}
+
 void Coins::load( float screen_w, float screen_h )
 {
 	free();
@@ -172,6 +197,7 @@ void Coins::prepare()
 		// MULTIPLIERS --------------------------------------------------------------------------
 		float x_multiplier = 1;
 		float y_multiplier = 1;
+		float this_screen_h = 0;
 		
 		// Set x_multiplier.
 		for( unsigned i = start; i < line.size(); i++ )
@@ -194,6 +220,7 @@ void Coins::prepare()
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
+				this_screen_h = con::stof( bufor );
 				y_multiplier = screen_h /con::stof( bufor );
 				bufor = "";
 				break;
@@ -203,19 +230,24 @@ void Coins::prepare()
 		}
 		// printf( "%f\n", y_multiplier );
 		
+		// The margin of error.
+		x_multiplier -= 0.03;
+		y_multiplier -= 0.08;
+		this_screen_h *= 0.08;
+		
 		
 		// FS --------------------------------------------------------------------------
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
-				bufor += ".";
+				bufor += "*";
 				string nrstr = "";
 				vector <string> data;
 				
 				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
-					if( bufor[ j ] == '.' )
+					if( bufor[ j ] == '*' )
 					{
 						data.push_back( nrstr );
 						nrstr = "";
@@ -229,7 +261,7 @@ void Coins::prepare()
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
 				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				float y = con::stoi( data[ 3 ] ) *y_multiplier +this_screen_h;
 				
 				if( w == 3 )
 				{
