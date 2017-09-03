@@ -1,12 +1,23 @@
 #pragma once
 #include "own/sprite.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <vector>
 #include <thread>
 
 class Knight
 {
+	// HP in sprite.
+	MySprite bar;
+	MySprite table;
+	
+	// Just for test.
+	bool collision;
+	sf::RectangleShape rectcollisionwalk;
+	sf::RectangleShape rectcollisionattack;
+	
+	// View.
 	sf::View view;
 	int viewState;
 	
@@ -35,6 +46,7 @@ class Knight
 	int line;
 	int which;
 	float offset;
+	float offset_line;
 	vector <MySprite*> sprites;
 	
 	// Steer.
@@ -46,6 +58,8 @@ class Knight
 	float damage;
 	float velocity;
 	float heartpoints;
+	float heartpoints_state;
+	float gravity_value;
 	
 	
 	// Activity variables.
@@ -76,7 +90,11 @@ public:
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
+	// Keyboard - test.
+	void turnCollision( bool collision );
+	
 	// Activities.
+	void flipping();
 	void animation( double elapsedTime );
 	void idle( double elapsedTime );
 	bool jump();
@@ -89,6 +107,7 @@ public:
 	// Hero.
 	void move( float x = 0, float y = 0 );
 	void back( double elapsedTime );
+	void backjumping( double elapsedTime );
 	void weightlessness( double elapsedTime );
 	
 	
@@ -103,6 +122,9 @@ public:
 	
 	
 	// The rest.
+	void harm( float value );
+	float getDamage();
+	float getHPScale();
 	void commitSuicide();
 	bool isDeath();
 	bool isRemains();
@@ -111,6 +133,7 @@ public:
 	float getViewX();
 	float getViewY();
 	sf::Rect <float> getRect();
+	sf::Rect <float> getAttackRect();
 	float getX();
 	float getY();
 	float getLeft();

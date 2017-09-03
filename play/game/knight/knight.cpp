@@ -16,6 +16,11 @@ Knight::~Knight()
 
 void Knight::free()
 {
+	bar.free();
+	table.free();
+	
+	collision = false;
+	
 	viewState = 0;
 	
 	if( !keys.empty() )
@@ -26,6 +31,7 @@ void Knight::free()
 	line = 0;
 	which = IDLE;
 	offset = 0;
+	offset_line = 0;
 	if( !sprites.empty() )
 	{
 		for( auto &it :sprites )
@@ -45,6 +51,8 @@ void Knight::free()
 	damage = 0;
 	velocity = 0;
 	heartpoints = 0;
+	heartpoints_state = 0;
+	gravity_value = 0;
 	
 	
 	running = 0;
@@ -67,6 +75,8 @@ void Knight::free()
 
 void Knight::reset()
 {
+	collision = false;
+	
 	viewState = 0;
 	
 	if( !keys.empty() )
@@ -77,20 +87,22 @@ void Knight::reset()
 	which = IDLE;
 	offset = 0;
 	
-	flip = 0;
-	
 	armour = 0;
-	damage = 0;
-	velocity = 0;
-	heartpoints = 0;
+	damage = 10;
+	velocity = 100 *view.getSize().x /1280;
+	heartpoints = 100;
+	heartpoints_state = heartpoints;
+	gravity_value = velocity;
 	
 	
 	running = 0;
+	running_line = 0.5;
 	jump_released = true;
 	jump_key_released = true;
 	jumping_counter = 0;
-	dead = 0;
+	jumping_line = 2;
 	
+	dead = 0;
 	
 	if( myThread != NULL )
 	{
@@ -99,14 +111,36 @@ void Knight::reset()
 	}
 	thread_ready = false;
 	ready = false;
+	
+	view.setCenter( view.getSize().x /2, view.getSize().y /2 );
+	for( auto &it :sprites )
+	{
+		it->setPosition( view.getSize().x /128, view.getSize().y -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
+	}
+	
+	if( flip != 0 )
+	{
+		flip = 2;
+		flipping();
+	}
 }
 
 void Knight::load( float screen_w, float screen_h )
 {
 	free();
 	
+	bar.setIdentity( "knight-bar" );
+	bar.load( "images/play/foes/foebar.png" );
+	bar.setScale( screen_w /2560, screen_h /1440 );
+	
+	table.setIdentity( "knight-table" );
+	table.load( "images/play/foes/foetable.png" );
+	table.setScale( screen_w /2560, screen_h /1440 );
+	
+	rectcollisionwalk.setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xAA ) );
+	rectcollisionattack.setFillColor( sf::Color( 0xFF, 0xAE, 0x19, 0xAA ) );
+	
 	view.setSize( screen_w, screen_h );
-	view.setCenter( screen_w /2, screen_h /2 );
 	
 	line = 10;
 	for( unsigned i = 0; i < AMOUNT; i++ )
@@ -115,18 +149,10 @@ void Knight::load( float screen_w, float screen_h )
 		sprites[ i ]->setIdentity( "knight-sprites" );
 		sprites[ i ]->load( "images/play/knight/" +con::itos( i ) +".png", line );
 		sprites[ i ]->setScale( screen_w /2560, screen_h /1440 );
-		sprites[ i ]->setPosition( screen_w /128, screen_h -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -sprites[ i ]->getWidth()) );
 	}
 	
-	// Features.
-	armour = 85;
-	damage = 10;
-	velocity = 100;
-	heartpoints = 90;
-	
-	// Activity variables.
-	running_line = 0.5;
-	jumping_line = 2;
+	// Features and other variables.
+	reset();
 }
 
 void Knight::handle( sf::Event& event )
@@ -144,6 +170,29 @@ void Knight::draw( sf::RenderWindow* &window )
 {
 	sprites[ which ]->setOffset( offset );
 	window->draw( sprites[ which ]->get() );
+	
+	if( collision )
+	{
+		rectcollisionwalk.setSize( sf::Vector2f( getRect().width, getRect().height ) );
+		rectcollisionwalk.setPosition( sf::Vector2f( getRect().left, getRect().top ) );
+		window->draw( rectcollisionwalk );
+		
+		if( which == ATTACK || which == JUMP_ATTACK )
+		{
+			rectcollisionattack.setSize( sf::Vector2f( getAttackRect().width, getAttackRect().height ) );
+			rectcollisionattack.setPosition( sf::Vector2f( getAttackRect().left, getAttackRect().top ) );
+			window->draw( rectcollisionattack );
+		}
+	}
+	
+	// Info.
+	table.setPosition( getRect().left +getRect().width/2 -table.getWidth()/2, getRect().top -table.getHeight() *1.5 );
+	window->draw( table.get() );
+	
+	bar.setColor( sf::Color( 0xFF -(armour*1.25), 0, 0 ) );
+	bar.setScale( getHPScale() *view.getSize().x /2560, view.getSize().y /1440 );
+	bar.setPosition( table.getX(), table.getY() );
+	window->draw( bar.get() );
 }
 
 void Knight::fadein( float v, int max )
@@ -164,43 +213,15 @@ void Knight::fadeout( float v, int min )
 
 
 
-void Knight::animation( double elapsedTime )
+void Knight::turnCollision( bool collision )
 {
-	if( dead < 2 )
-	{
-		// Animation.
-		offset += elapsedTime *25;
-		if( offset >= line )
-		{
-			if( which == DEATH )
-			{
-				dead = 2;
-			}
-			else
-			{
-				offset = 0;
-			}
-			
-			which = IDLE;
-		}
-	}
-	
-	
-	// Jump mechanics.
-	if( offset > line /2 )
-	{
-		jump_released = true;
-	}
-	
-	// If y.
-	if( getY() > view.getSize().y )
-	{
-		if( flip != 0 )
-		{
-			flip = 2;
-		}
-	}
-	
+	this->collision = collision;
+}
+
+
+
+void Knight::flipping()
+{
 	// If flip.
 	if( flip == 2 )
 	{
@@ -230,30 +251,75 @@ void Knight::animation( double elapsedTime )
 		
 		flip = 1;
 	}
+}
 
-	
-	// If y cd.
-	if( getY() > view.getSize().y )
+void Knight::animation( double elapsedTime )
+{
+	if( dead < 2 )
 	{
-		for( auto &it :sprites )
+		// Animation.
+		offset += elapsedTime *offset_line;
+		if( offset >= line )
 		{
-			it->setPosition( view.getSize().x /128, view.getSize().y -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
+			if( which == DEATH )
+			{
+				dead = 2;
+			}
+			else
+			{
+				offset = 0;
+				if( which == JUMP || which == ATTACK || which == JUMP_ATTACK )
+				{
+					which = IDLE;
+				}
+			}
+		}
+		
+		// Jump mechanics.
+		if( offset > line /2 )
+		{
+			jump_released = true;
+		}
+		
+		// If y.
+		if( getY() > view.getSize().y )
+		{
+			if( flip != 0 )
+			{
+				flip = 2;
+			}
+		}
+		
+		flipping();
+
+		
+		// If y cd.
+		if( getY() > view.getSize().y )
+		{
+			for( auto &it :sprites )
+			{
+				it->setPosition( view.getSize().x /128, view.getSize().y -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
+			}
+		}
+		
+		// Set view.
+		float view_x = view.getSize().x /2;
+		float view_y = view.getSize().y /2;
+		if( getX() > view.getSize().x /2 )
+		{
+			view_x = getX();
+			
+		}
+		if( getY() < view.getSize().y /2 )
+		{
+			view_y = getY();
+		}
+		
+		if( which != DEATH )
+		{
+			view.setCenter( sf::Vector2f( view_x, view_y ) );
 		}
 	}
-	
-	// Set view.
-	float view_x = view.getSize().x /2;
-	float view_y = view.getSize().y /2;
-	if( getX() > view.getSize().x /2 )
-	{
-		view_x = getX();
-		
-	}
-	if( getY() < view.getSize().y /2 )
-	{
-		view_y = getY();
-	}
-	view.setCenter( sf::Vector2f( view_x, view_y ) );
 }
 
 void Knight::idle( double elapsedTime )
@@ -400,11 +466,11 @@ void Knight::gravity( double elapsedTime )
 {
 	if( which == JUMP )
 	{
-		move( 0, elapsedTime *velocity *2 );
+		move( 0, elapsedTime *gravity_value *2 );
 	}
 	else if( which != JUMP_ATTACK )
 	{
-		move( 0, elapsedTime *velocity *3 );
+		move( 0, elapsedTime *gravity_value *3 );
 	}
 }
 
@@ -412,7 +478,7 @@ void Knight::jumping( double elapsedTime )
 {
 	if( (which == JUMP) && offset < line /2 )
 	{
-		move( 0, -elapsedTime *velocity *4 );
+		move( 0, -elapsedTime *velocity *6 );
 	}
 }
 
@@ -434,6 +500,11 @@ void Knight::back( double elapsedTime )
 	if( flip == 0 || flip == 2 )	multiplier = -multiplier;
 	
 	move( elapsedTime *velocity *multiplier );
+}
+
+void Knight::backjumping( double elapsedTime )
+{
+	move( 0, elapsedTime *velocity *6 );
 }
 
 void Knight::weightlessness( double elapsedTime )
@@ -556,9 +627,27 @@ void Knight::setFeatures()
 			ready = true;
 			armour = armour +(armour*armour_temporary /100);
 			damage = damage +(damage*damage_temporary /100);
-			velocity = velocity +(velocity*velocity_temporary /100);
+			velocity = velocity +(velocity*velocity_temporary /100 *view.getSize().x /1280);
 			heartpoints = heartpoints +(heartpoints*heartpoints_temporary /100);
-			// printf( "a: %f  h: %f  d: %f  s: %f\n", armour, heartpoints, damage, velocity );
+			heartpoints_state = heartpoints;
+			
+			if( velocity < 0 )
+			{
+				velocity = 5;
+			}
+			
+			offset_line = velocity /4;
+			if( offset_line < 20 )
+			{
+				offset_line = 20;
+			}
+			else if( offset_line > 40 )
+			{
+				offset_line = 40;
+			}
+			
+			// printf( "1. a: %f  h: %f  d: %f  s: %f\n", armour_temporary, heartpoints_temporary, damage_temporary, velocity_temporary );
+			// printf( "2. a: %f  h: %f  d: %f  s: %f\n", armour, heartpoints, damage, velocity );
 			
 			// Set keys.
 			MyFile file;
@@ -587,6 +676,29 @@ void Knight::setUsername( string line )
 }
 
 
+void Knight::harm( float value )
+{
+	heartpoints -= (value -(value *armour /1000));
+	if( heartpoints <= 0 )
+	{
+		commitSuicide();
+	}
+}
+
+float Knight::getDamage()
+{
+	return damage;
+}
+
+float Knight::getHPScale()
+{
+	if( heartpoints /heartpoints_state < 0 )
+	{
+		return 0;
+	}
+	
+	return heartpoints /heartpoints_state;
+}
 
 void Knight::commitSuicide()
 {
@@ -652,6 +764,28 @@ sf::Rect <float> Knight::getRect()
 	rect.top = getY();
 	rect.width = getWidth();
 	rect.height = getHeight();
+	
+	return rect;
+}
+
+sf::Rect <float> Knight::getAttackRect()
+{
+	sf::Rect <float> rect;
+	
+	rect.left = getX();
+	
+	if( flip == 0 || flip == 2 )
+	{
+		rect.left += getWidth()/2;
+	}
+	else
+	{
+		rect.left -= getWidth()/10;
+	}
+	
+	rect.width = getWidth() /5 *3;
+	rect.height = getHeight() /5 *3;
+	rect.top = getY() +(getHeight() /5 *2);
 	
 	return rect;
 }
