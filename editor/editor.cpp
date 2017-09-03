@@ -109,10 +109,9 @@ void Editor::mechanics( double elapsedTime )
 			}
 			
 			// Rubbish button.
-			else if( chat.getCommand( "@rubbish" ) || chat.getCommand( "@delete" ) ||
-			chat.getCommand( "@del" ) || chat.getCommand( "@remove" ) ||
-			chat.getCommand( "@cut" ) || chat.getCommand( "@excise" ) ||
-			chat.getCommand( "@rem" ) )
+			else if( chat.getCommand( "@rubbish" ) || chat.getCommand( "@erase" ) ||
+			chat.getCommand( "@delete" ) || chat.getCommand( "@remove" ) ||
+			chat.getCommand( "@cut" ) || chat.getCommand( "@excise" ) )
 			{
 				rubbishbutton.setActive( !rubbishbutton.isActive() );
 				rubbishbutton.setChanged( !rubbishbutton.isActive() );
@@ -127,7 +126,7 @@ void Editor::mechanics( double elapsedTime )
 			{
 				editor_buttons.setSave();
 			}
-			else if( chat.getCommand( "@focus turn" ) )
+			else if( chat.getCommand( "@focus turn" ) || chat.getCommand( "@focus" ) )
 			{
 				editor_buttons.setFocus( !editor_buttons.isFocus() );
 			}
