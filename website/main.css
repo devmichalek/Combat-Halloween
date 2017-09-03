@@ -1,0 +1,27 @@
+.button-primary {
+	background-color: #444444 !important;
+	border-color: #444444 !important;	/*#F2583E*/
+}
+
+h5 {
+	font-size: 140% !important;
+}
+
+.premiumbutton {
+	background-color: gold !important;
+}
+
+.redspan {
+	color: #F2583E !important;
+	margin-right: 0em !important;
+	margin-left: 0em !important;
+	display: inline-block !important;
+}
+
+.nobotmargin {
+	margin-bottom: 0 !important;
+}
+
+.notopmargin {
+	margin-top: 0 !important;
+}
