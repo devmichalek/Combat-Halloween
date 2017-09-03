@@ -160,7 +160,10 @@ void Play::mechanics( double elapsedTime )
 	// Mechanics.
 	if( !pausesystem.isActive() && !menu && !level && !game.isTable() )
 	{
-		game.mechanics( elapsedTime );
+		if( !chat.isOpen() )
+		{
+			game.mechanics( elapsedTime );
+		}
 		
 		chat.mechanics( elapsedTime );
 		
@@ -234,6 +237,12 @@ void Play::mechanics( double elapsedTime )
 				chunkbutton.setActive( true );
 				musicbutton.setChanged( true );
 				musicbutton.setActive( true );
+			}
+			
+			// game
+			else if( chat.getCommand( "@collision" ) )
+			{
+				game.turnCollision( !game.getCollision() );
 			}
 		}
 			
@@ -363,10 +372,6 @@ void Play::loadSound()
 	if( !run && loading_world.isReady() )
 	{
 		run = true;
-		
-		// Set thread.
-		// knight_specs.setThread();
-		// information.setThread();
 		
 		float chunkVolume = 0;
 		float musicVolume = 0;
