@@ -24,14 +24,12 @@
 	if(isset($_SESSION['rem_email'])) 		unset($_SESSION['rem_email']);
 	if(isset($_SESSION['rem_password'])) 	unset($_SESSION['rem_password']);
 	if(isset($_SESSION['rem_passwordcon'])) unset($_SESSION['rem_passwordcon']);
-	if(isset($_SESSION['rem_statute'])) 	unset($_SESSION['rem_statute']);
 
 	// DELETE ERROR DATA
 	if(isset($_SESSION['e_username'])) 		unset($_SESSION['e_username']);
 	if(isset($_SESSION['e_email'])) 		unset($_SESSION['e_email']);
 	if(isset($_SESSION['e_password'])) 		unset($_SESSION['e_password']);
 	if(isset($_SESSION['e_passwordcon'])) 	unset($_SESSION['e_passwordcon']);
-	if(isset($_SESSION['e_statute'])) 		unset($_SESSION['e_statute']);
 	if(isset($_SESSION['e_bot'])) 			unset($_SESSION['e_bot']);
 
 	
@@ -45,7 +43,7 @@
 
 	$message = '<html><body><h3 style="text-align: center;">';
 	$message .= 'Dear '.$username.',</h3><p style="text-align: center;">';
-	$message .= "Combat Halloween it's something made by my human motives, because I like programming then see effects of working, like a moving and fighting skeleton or just all this mechanism interlocks in and of itself, after all demi-alive animations with own destination in game. For any advices about game like new rapid falling spikes able to kill character in one second because you are fucking sick about spikes you have to contact me through adrmic98@gmail.com or contact@adrianmichalek.pl. Thank you for support by playing!</p>";
+	$message .= "Combat Halloween is something made by my own fantasies, because I like programming then seeing effects of my work, like a moving and fighting skeleton or fairly alive animations with own goal in game. For any advice about game like new rapid falling spikes able to kill character in one second, because you are fucking insane about spikes, you have to contact me through adrmic98@gmail.com or contact@adrianmichalek.pl. Thank you for support by playing!</p>";
 	$message .= '<p style="text-align: center;">Activation link: ';
 	$message .= "</a>";
 	$message .= 'adrianmichalek.pl/combathalloween/confirmemail.php?email='.$email.'&code='.$activation_code;
