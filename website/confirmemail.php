@@ -1,4 +1,6 @@
 <?php
+	
+	session_start();
 
 	if( isset( $_GET['email'] ) && isset( $_GET['code'] ) )
 	{
@@ -30,12 +32,18 @@
 						$_SESSION['confirmedemail'] = true;
 						header('Location: confirmedemail.php');
 					}
+					else
+				  	{
+				  		header('Location: home.php');
+				  	}
 				}
 			}
 
 			$connection->close();
 		}
   	}
-
-  	header('Location: home.php');
+  	else
+  	{
+  		header('Location: home.php');
+  	}
 ?>
