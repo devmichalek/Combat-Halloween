@@ -30,7 +30,7 @@
 		return $result;
 	}
 
-	if( isset( $_GET['name'] ) && isset( $_GET['level'] ) )
+	if(isset($_GET['name']) && isset($_GET['level']))
 	{
     	// Connect.
 		require_once "connect.php";
@@ -114,21 +114,33 @@
 					}
 				}
 
-				$line = $_SESSION[ $name ];
-				$newmoney = $_SESSION['money'] -getNumber('c', $line);
-				$newdiamonds = $_SESSION['diamonds']  -getNumber('r', $line);
 
-				$mystr = 'l'.(getNumber('l', $line) +1).'c'.intval((getNumber('c', $line)*1.8)).'r'.(getNumber('r', $line) +$diamond_multiplier).'a'.(getNumber('a', $line) +$armour_add).'h'.(getNumber('h', $line) +$health_add).'d'.(getNumber('d', $line) +$damage_add).'s'.(getNumber('s', $line) +$speed_add);
+				if($result = @$connection->query( sprintf("SELECT * FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $_SESSION['username']))))
+				{
+					$row = $result->fetch_assoc();
+					$_SESSION['money'] = $row['money'];
+					$_SESSION['diamonds'] = $row['diamonds'];
+					$_SESSION[$name] =  $row[$name];
+					$result->free_result();
+				}
 
-				$username_now = $_SESSION['username'];
-				$connection->query("UPDATE users SET $name='$mystr' WHERE username='$username_now'");
-				$connection->query("UPDATE users SET money='$newmoney' WHERE username='$username_now'");
-				$connection->query("UPDATE users SET diamonds='$newdiamonds' WHERE username='$username_now'");
+				$line = $_SESSION[$name];
+				if(getNumber('c', $line) < $_SESSION['money'] && getNumber('r', $line) < $_SESSION['diamonds'])
+				{
+					$newmoney = $_SESSION['money'] -getNumber('c', $line);
+					$newdiamonds = $_SESSION['diamonds']  -getNumber('r', $line);
 
-				$_SESSION[ $name ] = $mystr;
-				$_SESSION['money'] = $newmoney;
-				$_SESSION['diamonds'] = $newdiamonds;
+					$mystr = 'l'.(getNumber('l', $line) +1).'c'.intval((getNumber('c', $line)*1.8)).'r'.(getNumber('r', $line) +$diamond_multiplier).'a'.(getNumber('a', $line) +$armour_add).'h'.(getNumber('h', $line) +$health_add).'d'.(getNumber('d', $line) +$damage_add).'s'.(getNumber('s', $line) +$speed_add);
 
+					$username_now = $_SESSION['username'];
+					$connection->query("UPDATE users SET $name='$mystr' WHERE username='$username_now'");
+					$connection->query("UPDATE users SET money='$newmoney' WHERE username='$username_now'");
+					$connection->query("UPDATE users SET diamonds='$newdiamonds' WHERE username='$username_now'");
+
+					$_SESSION[ $name ] = $mystr;
+					$_SESSION['money'] = $newmoney;
+					$_SESSION['diamonds'] = $newdiamonds;
+				}
 				$connection->close();
 
 				// echo $name.' ';
