@@ -5,10 +5,9 @@
 	unset($_SESSION['e_mail']);
 	unset($_SESSION['e_password']);
 	unset($_SESSION['e_passwordcon']);
-	unset($_SESSION['e_statute']);
 	unset($_SESSION['e_bot']);
 
-	if(isset($_SESSION['logged']) && isset($_SESSION['logged']) == true)
+	if(isset($_SESSION['logged']))
 	{
 		header('Location: home.php');
 		exit();
