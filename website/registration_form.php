@@ -64,13 +64,6 @@
 			$_SESSION['e_passwordcon'] = "Password does not match.";
 		}
 		$password_hashed = password_hash($password, PASSWORD_DEFAULT);
-		
-		// STATUTE
-		if( !isset($_POST['statute']))
-		{
-			$success = false;
-			$_SESSION['e_statute'] = "Please read and check terms of use.";
-		}
 
 		// RECAPTCHA
 		$mysecret = "6LcmdisUAAAAAEyXWdm5N19fiP69rQUw9uJP7sU7";
@@ -86,10 +79,6 @@
 		$_SESSION['rem_email'] = $email;
 		$_SESSION['rem_password'] = $password;
 		$_SESSION['rem_passwordcon'] = $passwordcon;
-		if(isset($_POST['statute']))
-		{
-			$_SESSION['rem_statute'] = true;
-		}
 
 		// OTHER
 		require_once "connect.php";
@@ -132,13 +121,6 @@
 				// SUCCESS
 				if( $success )
 				{
-					// l - level
-					// c - cost
-					// a - armour
-					// h - health
-					// d - damage
-					// s - speed
-
 					$first_time = date("d.m.Y");
 					$money = 100;
 					$diamonds = 75;
@@ -250,17 +232,6 @@
 			    </div>
 		  	</div>
 
-		  	<label class="example-send-yourself-copy" style="text-align: center; margin-top: 1em;">
-			    <input type="checkbox" name="statute" <?php
-					if(isset($_SESSION['rem_statute']))
-					{
-						echo "checked";
-						unset($_SESSION['rem_statute']);
-					}
-					?>/>
-				<span class="label-body myfont">I accept terms of use.</span>
-			</label>
-
 			<div class="g-recaptcha" style="margin: auto; margin-top: 1em; display: table;" data-sitekey="6LcmdisUAAAAAL5BuJQEYffeBS-LklUxKw8DLDwn"></div>
 
 			
@@ -292,11 +263,6 @@
 			{
 				echo $_SESSION['e_passwordcon'];
 				unset($_SESSION['e_passwordcon']);
-			}
-			else if( isset($_SESSION['e_statute']))
-			{
-				echo $_SESSION['e_statute'];
-				unset($_SESSION['e_statute']);
 			}
 			else if( isset($_SESSION['e_bot']))
 			{
