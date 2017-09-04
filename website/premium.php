@@ -41,7 +41,7 @@
 <body>
 	<div class="container">
 
-		<!-- Download button and Log Out button -->
+		<!-- Back -->
 		<div class="row myfont">
 			<div class="twelve columns" style="text-align: left; margin-top: 1em;">
 				<a class="button primary-button" href="home.php">Back</a>
