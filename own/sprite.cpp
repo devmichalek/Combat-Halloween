@@ -228,6 +228,9 @@ void MySprite::create( int w, int h )
 		}
 		else
 		{
+			image = new sf::Image;
+			image->create( w, h );
+			
 			texture->setSmooth( true );
 			sprite = new sf::Sprite;
 			if( sprite == NULL )
