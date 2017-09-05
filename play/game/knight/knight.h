@@ -18,8 +18,8 @@ class Knight
 	sf::RectangleShape rectcollisionattack;
 	
 	// View.
+	float viewX, viewY;
 	sf::View view;
-	int viewState;
 	
 	enum Keys
 	{
@@ -69,6 +69,7 @@ class Knight
 	bool jump_key_released;
 	int jumping_counter;
 	int jumping_line;
+	int attack_counter;
 	int dead;
 	
 	
@@ -122,6 +123,7 @@ public:
 	
 	
 	// The rest.
+	bool isAttacking( bool hide = false );
 	void harm( float value );
 	float getDamage();
 	float getHPScale();

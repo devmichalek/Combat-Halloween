@@ -21,7 +21,7 @@ void Knight::free()
 	
 	collision = false;
 	
-	viewState = 0;
+	viewX = viewY = 0;
 	
 	if( !keys.empty() )
 	{
@@ -61,6 +61,7 @@ void Knight::free()
 	jump_key_released = true;
 	jumping_counter = 0;
 	jumping_line = 0;
+	attack_counter = 0;
 	dead = 0;
 	
 	
@@ -76,8 +77,6 @@ void Knight::free()
 void Knight::reset()
 {
 	collision = false;
-	
-	viewState = 0;
 	
 	if( !keys.empty() )
 	{
@@ -101,7 +100,7 @@ void Knight::reset()
 	jump_key_released = true;
 	jumping_counter = 0;
 	jumping_line = 2;
-	
+	attack_counter = 0;
 	dead = 0;
 	
 	if( myThread != NULL )
@@ -113,6 +112,8 @@ void Knight::reset()
 	ready = false;
 	
 	view.setCenter( view.getSize().x /2, view.getSize().y /2 );
+	viewX = view.getSize().x /2;
+	viewY = view.getSize().y /2;
 	for( auto &it :sprites )
 	{
 		it->setPosition( view.getSize().x /128, view.getSize().y -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
@@ -177,7 +178,7 @@ void Knight::draw( sf::RenderWindow* &window )
 		rectcollisionwalk.setPosition( sf::Vector2f( getRect().left, getRect().top ) );
 		window->draw( rectcollisionwalk );
 		
-		if( which == ATTACK || which == JUMP_ATTACK )
+		if( isAttacking( true ) )
 		{
 			rectcollisionattack.setSize( sf::Vector2f( getAttackRect().width, getAttackRect().height ) );
 			rectcollisionattack.setPosition( sf::Vector2f( getAttackRect().left, getAttackRect().top ) );
@@ -197,6 +198,9 @@ void Knight::draw( sf::RenderWindow* &window )
 
 void Knight::fadein( float v, int max )
 {
+	bar.fadein( v, max );
+	table.fadein( v, max );
+	
 	for( auto &it :sprites )
 	{
 		it->fadein( v, max );
@@ -205,6 +209,9 @@ void Knight::fadein( float v, int max )
 
 void Knight::fadeout( float v, int min )
 {
+	bar.fadeout( v, min );
+	table.fadeout( v, min );
+	
 	for( auto &it :sprites )
 	{
 		it->fadeout( v, min );
@@ -303,22 +310,39 @@ void Knight::animation( double elapsedTime )
 		}
 		
 		// Set view.
-		float view_x = view.getSize().x /2;
-		float view_y = view.getSize().y /2;
-		if( getX() > view.getSize().x /2 )
+		if( getX() +getWidth()/2 > view.getSize().x/2 || viewX > view.getSize().x/2 )
 		{
-			view_x = getX();
-			
+			if( viewX < getX() +getWidth()/2 )
+			{
+				viewX += elapsedTime *(getX() +getWidth()/2 -viewX);
+			}
+			else if( viewX > getX() +getWidth()/2 )
+			{
+				viewX -= elapsedTime *(viewX -getX() +getWidth()/2);
+			}
 		}
-		if( getY() < view.getSize().y /2 )
+		else
 		{
-			view_y = getY();
+			viewX = view.getSize().x /2;
 		}
 		
-		if( which != DEATH )
+		if( getY() +getHeight()/2 < view.getSize().y /2 || viewY < view.getSize().y/2 )
 		{
-			view.setCenter( sf::Vector2f( view_x, view_y ) );
+			if( viewY < getY() +getHeight()/2 )
+			{
+				viewY += elapsedTime *(getY() +getHeight()/2 -viewY);
+			}
+			else if( viewY > getY() +getHeight()/2 )
+			{
+				viewY -= elapsedTime *(viewY -getY() +getHeight()/2);
+			}
 		}
+		else
+		{
+			viewY = view.getSize().y /2;
+		}
+		
+		view.setCenter( sf::Vector2f( viewX, viewY ) );
 	}
 }
 
@@ -363,6 +387,7 @@ bool Knight::attack()
 	{
 		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( keys[ ATTACK_K ] ) ) )
 		{
+			attack_counter = 0;
 			if( which == JUMP )
 			{
 				offset = 0;
@@ -675,6 +700,36 @@ void Knight::setUsername( string line )
 	this->username = line;
 }
 
+
+bool Knight::isAttacking( bool hide )
+{
+	if( which == ATTACK && static_cast <int> (offset) == 4 )
+	{
+		if( hide )
+		{
+			return true;
+		}
+		else if( attack_counter == 0 )
+		{
+			attack_counter = 1;
+			return true;
+		}
+	}
+	else if( which == JUMP_ATTACK && static_cast <int> (offset) == 5 )
+	{
+		if( hide )
+		{
+			return true;
+		}
+		else if( attack_counter == 0 )
+		{
+			attack_counter = 1;
+			return true;
+		}
+	}
+	
+	return false;
+}
 
 void Knight::harm( float value )
 {
