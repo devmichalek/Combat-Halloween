@@ -79,7 +79,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->getState() = LOGIN;
+		core->getState() = LEVEL;
 	}
 }
 
