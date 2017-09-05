@@ -1,6 +1,5 @@
 #pragma once
-#include "own/sprite.h"
-#include "own/text.h"
+#include "balloonchat.h"
 #include "skeleton.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "SFML/Graphics/RectangleShape.hpp"
@@ -10,9 +9,12 @@
 template <typename F>
 class Factory
 {
-	// Foe table.
-	MySprite foebar;
-	MySprite foetable;
+	// Heartpoints shown.
+	MySprite bar;
+	MySprite table;
+	
+	// Comments from foes shown.
+	Balloonchat balloonchat;
 	
 	// Just for test.
 	bool collision;
@@ -33,6 +35,7 @@ class Factory
 	bool thread_ready;
 	bool ready;
 	
+	int damaged;
 	vector <F*> foes;
 	vector <sf::Uint8> lines;
 	vector <MySprite*> sprites;
@@ -68,4 +71,5 @@ public:
 	void harm( sf::Rect <float> rect, float damage ); 	// check if foe is harmed
 	bool isHarmed( sf::Rect <float> rect );	// return true if knight is harmed
 	void walk( sf::Rect <float> rect, double elapsedTime );
+	float getDamage();
 };

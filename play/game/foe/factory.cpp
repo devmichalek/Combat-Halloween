@@ -19,8 +19,10 @@ Factory <F>::~Factory()
 template <typename F>
 void Factory <F>::free()
 {
-	foebar.free();
-	foetable.free();
+	bar.free();
+	table.free();
+	
+	balloonchat.free();
 	
 	type = -1;
 	name = "";
@@ -38,6 +40,8 @@ void Factory <F>::free()
 	}
 	thread_ready = false;
 	ready = false;
+	
+	damaged = -1;
 	
 	if( !foes.empty() )
 	{
@@ -84,6 +88,8 @@ void Factory <F>::reset()
 	thread_ready = false;
 	ready = false;
 	
+	damaged = -1;
+	
 	if( !foes.empty() )
 	{
 		for( auto &it :foes )
@@ -94,6 +100,11 @@ void Factory <F>::reset()
 		}
 		
 		foes.clear();
+	}
+	
+	if( !lines.empty() )
+	{
+		lines.clear();
 	}
 	
 	if( !sprites.empty() )
@@ -114,13 +125,15 @@ void Factory <F>::load( float screen_w, float screen_h, int type, string name )
 {
 	free();
 	
-	foebar.setIdentity( "factory-foebar" );
-	foebar.load( "images/play/foes/foebar.png" );
-	foebar.setScale( screen_w /2560, screen_h /1440 );
+	bar.setIdentity( "factory-foebar" );
+	bar.load( "images/play/foes/foebar.png" );
+	bar.setScale( screen_w /2560, screen_h /1440 );
 	
-	foetable.setIdentity( "factory-foetable" );
-	foetable.load( "images/play/foes/foetable.png" );
-	foetable.setScale( screen_w /2560, screen_h /1440 );
+	table.setIdentity( "factory-foetable" );
+	table.load( "images/play/foes/foetable.png" );
+	table.setScale( screen_w /2560, screen_h /1440 );
+	
+	balloonchat.load( screen_w, screen_h );
 	
 	rectcollisionwalk.setFillColor( sf::Color( 0xFF, 0x40, 0xFF, 0xAA ) );
 	rectcollisionattack.setFillColor( sf::Color( 0xCC, 0, 0, 0xAA ) );
@@ -165,19 +178,30 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 					rectcollisionwalk.setPosition( sf::Vector2f( foes[ i ]->getRealX(), foes[ i ]->getRealY() ) );
 					window->draw( rectcollisionwalk );
 					
-					rectcollisionattack.setSize( sf::Vector2f( foes[ i ]->getRealWidth(), foes[ i ]->getRealHeight() ) );
-					rectcollisionattack.setPosition( sf::Vector2f( foes[ i ]->getRealX(), foes[ i ]->getRealY() ) );
-					window->draw( rectcollisionattack );
+					if( foes[ i ]->isAttacking( true ) )
+					{
+						rectcollisionattack.setSize( sf::Vector2f( foes[ i ]->getAttackWidth(), foes[ i ]->getAttackHeight() ) );
+						rectcollisionattack.setPosition( sf::Vector2f( foes[ i ]->getAttackX(), foes[ i ]->getAttackY() ) );
+						window->draw( rectcollisionattack );
+					}
+				}
+				
+				// Comments from foes.
+				if( foes[ i ]->showText() )
+				{
+					balloonchat.setText( foes[ i ]->getText() );
+					balloonchat.setPosition( foes[ i ]->getRealX(), foes[ i ]->getRealY() );
+					balloonchat.draw( window );
 				}
 				
 				// Info.
-				foetable.setPosition( foes[ i ]->getRealX() +foes[ i ]->getRealWidth()/2 -foetable.getWidth()/2, y -sprites[ t ]->getHeight() -foetable.getHeight() *1.5 );
-				window->draw( foetable.get() );
+				table.setPosition( foes[ i ]->getRealX() +foes[ i ]->getRealWidth()/2 -table.getWidth()/2, y -sprites[ t ]->getHeight() -table.getHeight() *1.5 );
+				window->draw( table.get() );
 				
-				foebar.setColor( sf::Color( 0xFF -(foes[ i ]->getArmour()/5), 0, 0 ) );
-				foebar.setScale( foes[ i ]->getHPScale() *screen_w /2560, screen_h /1440 );
-				foebar.setPosition( foetable.getX(), foetable.getY() );
-				window->draw( foebar.get() );
+				bar.setColor( sf::Color( 0xFF -(foes[ i ]->getArmour()/5), 0, 0 ) );
+				bar.setScale( foes[ i ]->getHPScale() *screen_w /2560, screen_h /1440 );
+				bar.setPosition( table.getX(), table.getY() );
+				window->draw( bar.get() );
 			}
 		}
 	}
@@ -186,8 +210,9 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 template <typename F>
 void Factory <F>::fadein( float v, int max )
 {
-	foebar.fadein( v, max );
-	foetable.fadein( v, max );
+	bar.fadein( v, max );
+	table.fadein( v, max );
+	balloonchat.fadein( v, max );
 	
 	for( auto &it :sprites )
 	{
@@ -198,8 +223,9 @@ void Factory <F>::fadein( float v, int max )
 template <typename F>
 void Factory <F>::fadeout( float v, int min )
 {
-	foebar.fadeout( v, min );
-	foetable.fadeout( v, min );
+	bar.fadeout( v, min );
+	table.fadeout( v, min );
+	balloonchat.fadeout( v, min );
 	
 	for( auto &it :sprites )
 	{
@@ -412,7 +438,8 @@ void Factory <F>::prepare()
 						foes[ foes.size() -1 ]->setArmour( myarmour );
 						foes[ foes.size() -1 ]->setDamage( mydamage );
 						foes[ foes.size() -1 ]->setVelocity( myvelocity );
-						foes[ foes.size() -1 ]->setHP( myheartpoints );
+						foes[ foes.size() -1 ]->setHeartpoints( myheartpoints );
+						foes[ foes.size() -1 ]->addText( L"sraka łaka kurwiarze" );
 					}
 				}
 				else if( w == 0 )
@@ -593,8 +620,7 @@ void Factory <F>::positioning( vector <sf::Vector2f> fs, vector <sf::Uint8> type
 			}
 			
 			// printf( "%f %f\n", good_left, good_right );
-			foes[ i ]->setLeft( good_left );
-			foes[ i ]->setRight( good_right );
+			foes[ i ]->setBorders( good_left, good_right );
 			foes[ i ]->setPosition( foes[ i ]->getCenterX(), block_y );
 			
 			// delete if surface is too small
@@ -666,35 +692,26 @@ void Factory <F>::harm( sf::Rect <float> rect, float damage )
 template <typename F>
 bool Factory <F>::isHarmed( sf::Rect <float> rect )
 {
-	// float x;
-	// float y;
-	// int t;
-	
-	/*
+	float x, y, w, h;
 	for( unsigned i = 0; i < foes.size(); i++ )
 	{
-		if( !foes[ i ]->isAttack() )
+		if( foes[ i ]->isAttacking() )
 		{
-			continue;
-		}
-		
-		x = foes[ i ]->getX();
-		y = foes[ i ]->getY();
-		t = foes[ i ]->getState();
-		
-		if( x < border_x +screen_w && y < border_y +screen_h )
-		{
-			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
+			x = foes[ i ]->getAttackX();
+			y = foes[ i ]->getAttackY();
+			w = foes[ i ]->getAttackWidth();
+			h = foes[ i ]->getAttackHeight();
+			
+			if( rect.top + rect.height > y && rect.top < y +h )
 			{
-				sprites[ t ]->setPosition( x, y );
-				if( sprites[ t ]->checkCollisionRect( rect ) )
+				if( rect.left + rect.width > x && rect.left < x +w )
 				{
+					damaged = i;
 					return true;
 				}
 			}
 		}
 	}
-	*/
 	
 	return false;
 }
@@ -758,6 +775,12 @@ void Factory <F>::walk( sf::Rect <float> rect, double elapsedTime )
 			}
 		}
 	}
+}
+
+template <typename F>
+float Factory <F>::getDamage()
+{
+	return foes[ damaged ]->getDamage();
 }
 
 template class Factory <Skeleton>;
