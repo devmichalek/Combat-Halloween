@@ -106,7 +106,7 @@ void Game::mechanics( double elapsedTime )
 		
 		if( knight.attack() )
 		{
-			skeletons.harm( knight.getAttackRect(), knight.getDamage() );
+			
 		}
 		
 		if( knight.moveLeft( elapsedTime ) )
@@ -127,16 +127,28 @@ void Game::mechanics( double elapsedTime )
 		{
 			knight.idle( elapsedTime );
 		}
-		
-		skeletons.walk( knight.getRect(), elapsedTime );
 	}
 	else if( knight.isRemains() )
 	{
 		table = true;
 	}
 	
+	// Knight the rest.
+	if( knight.isAttacking() )
+	{
+		skeletons.harm( knight.getAttackRect(), knight.getDamage() );
+	}
 	knight.animation( elapsedTime );
+	
+	// Coins
 	coins.mechanics( elapsedTime );
+	
+	// Skeletons
+	skeletons.walk( knight.getRect(), elapsedTime );
+	if( skeletons.isHarmed( knight.getRect() ) )
+	{
+		knight.harm( skeletons.getDamage() );
+	}
 	skeletons.mechanics( elapsedTime );
 	
 	// Set borders.
