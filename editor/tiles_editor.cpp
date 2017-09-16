@@ -35,26 +35,23 @@ void Tiles_editor::free()
 	screen_w = 0;
 	screen_h = 0;
 	
-	which = -1;
+	type = -1;
 	chosen = 0;
 	mouse_x = -1;
 	mouse_y = -1;
-	info.free();
+	
 	mouseInfo.free();
 	arrow.free();
 	
 	width = 0;
-	grid = true;
+	grid = false;
 	
 	key_info.free();
 	
-	leftbutton.free();
-	rightbutton.free();
-	topbutton.free();
-	botbutton.free();
 	additional_x = 0;
 	additional_y = 0;
 	
+	knight.free();
 	coin.free();
 	if( !tiles.empty() )
 	{
@@ -103,6 +100,13 @@ void Tiles_editor::free()
 	isrubbishon = false;
 }
 
+void Tiles_editor::reset()
+{
+	grid = false;
+	type = -1;
+	chosen = 0;
+}
+
 
 
 void Tiles_editor::load( float screen_w, float screen_h )
@@ -111,68 +115,41 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	
-	info.setIdentity( "tiles_editor-info" );
-	info.setFont( "fonts/Jaapokki-Regular.otf" );
-	info.setText( " " );
-	info.setSize( screen_h /32 );
-	info.setAlpha( 0xFF );
+	float scale_x = screen_w /2560;
+	float scale_y = screen_h /1440;
 	
 	mouseInfo.setIdentity( "tiles_editor-mouseInfo" );
 	mouseInfo.setFont( "fonts/Jaapokki-Regular.otf" );
 	mouseInfo.setText( " " );
 	mouseInfo.setSize( screen_h /42 );
-	mouseInfo.setAlpha( 0xFF );
+	mouseInfo.setAlpha( 0xFF /2 );
 	
 	key_info.setIdentity( "tiles_editor-key_info" );
 	key_info.setFont( "fonts/Jaapokki-Regular.otf" );
-	key_info.setText( "Keyboard action('key'): grid turn('g')      type --('a') ++('d') 0('s')      chosen --('z') ++('c') 0('x')      delete last('BackSpace')" );
+	key_info.setText( "Keyboard action('key'): type --('a') ++('d') 0('s')      chosen --('z') ++('c') 0('x')      delete last('BackSpace')" );
 	key_info.setSize( screen_h /36 );
 	key_info.setAlpha( 0xFF );
 	key_info.setPosition( screen_w /256, screen_h -key_info.getHeight() -screen_h /144 );
-	
-	// Rest sprites.
-	float scale_x = screen_w /2560;
-	float scale_y = screen_h /1440;
 	
 	arrow.setIdentity( "tiles_editor-arrow" );
 	arrow.load( "images/editor/left_arrow.png" );
 	arrow.setScale( scale_x /2, scale_y /2 );
 	
-	leftbutton.setIdentity( "tiles_editor-leftbutton" );
-	leftbutton.load( "images/level/left.png", 3 );
-	leftbutton.setScale( scale_x /2, scale_y /2 );
-	leftbutton.setPosition( screen_w -(screen_w /256 *3) -(leftbutton.getWidth() *3),
-	screen_h -(screen_h /144 *2) -leftbutton.getHeight() *2 );
-	
-	rightbutton.setIdentity( "tiles_editor-rightbutton" );
-	rightbutton.load( "images/level/right.png", 3 );
-	rightbutton.setScale( scale_x /2, scale_y /2 );
-	rightbutton.setPosition( screen_w -screen_w/256 -rightbutton.getWidth(),
-	screen_h -(screen_h /144 *2) -rightbutton.getHeight() *2 );
-	
-	topbutton.setIdentity( "tiles_editor-topbutton" );
-	topbutton.load( "images/editor/top.png", 3 );
-	topbutton.setScale( scale_x /2, scale_y /2 );
-	topbutton.setPosition( screen_w -screen_w/128 -topbutton.getWidth() *2,
-	screen_h -(screen_h /144 *3) -topbutton.getHeight() *3 );
-	
-	botbutton.setIdentity( "tiles_editor-botbutton" );
-	botbutton.load( "images/editor/bot.png", 3 );
-	botbutton.setScale( scale_x /2, scale_y /2 );
-	botbutton.setPosition( screen_w -screen_w/128 -(botbutton.getWidth() *2),
-	screen_h -screen_h /144 -botbutton.getHeight() );
+	knight.setIdentity( "tiles_editor-knight" );
+	knight.load( "images/play/knight/0.png", 10 );
+	knight.setScale( 0.5, 0.5 );
+	knight.setAlpha( 0xFF /2 );
 	
 	coin.setIdentity( "tiles_editor-coin" );
 	coin.load( "images/play/coin.png", 7 );
-	coin.setScale( scale_x, scale_y );
+	coin.setScale( 0.5, 0.5 );
 	
 	for( unsigned i = 0; i < 17; i++ )
 	{
 		tiles.push_back( new MySprite() );
 		tiles[ tiles.size() -1 ]->setIdentity( "tiles_editor-tiles" );
 		tiles[ tiles.size() -1 ]->load( "images/play/tiles/" +con::itos( i ) +".png" );
-		tiles[ tiles.size() -1 ]->setScale( scale_x, scale_y );
+		tiles[ tiles.size() -1 ]->setScale( 0.5, 0.5 );
 	}
 	
 	for( unsigned i = 0; i < 14; i++ )
@@ -180,7 +157,7 @@ void Tiles_editor::load( float screen_w, float screen_h )
 		objects.push_back( new MySprite() );
 		objects[ objects.size() -1 ]->setIdentity( "tiles_editor-objects" );
 		objects[ objects.size() -1 ]->load( "images/play/objects/" +con::itos( i ) +".png" );
-		objects[ objects.size() -1 ]->setScale( scale_x, scale_y );
+		objects[ objects.size() -1 ]->setScale( 0.5, 0.5 );
 	}
 	
 	for( unsigned i = 0; i < 3; i++ )
@@ -190,7 +167,7 @@ void Tiles_editor::load( float screen_w, float screen_h )
 		int n = 6;
 		if( i == 1 )	n = 8;
 		foes[ foes.size() -1 ]->load( "images/play/foes/" +con::itos( i ) +".png", n );
-		foes[ foes.size() -1 ]->setScale( scale_x, scale_y );
+		foes[ foes.size() -1 ]->setScale( 0.5, 0.5 );
 	}
 	
 	// Set width.
@@ -232,18 +209,13 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 				}
 			}
 		}
-		else if( code == sf::Keyboard::G )
-		{
-			grid = !grid;
-		}
 		
 		
 		int size = 0;
-		if( which == TILE )				size = tiles.size();
-		if( which == UNVISIBLE_TILE )	size = tiles.size();
-		else if( which == OBJECT )		size = objects.size();
-		else if( which == FOE )			size = foes.size();
-		
+		if( type == TILE || type == UNVISIBLE_TILE )	size = tiles.size();
+		else if( type == OBJECT )						size = objects.size();
+		else if( type == FOE )							size = foes.size();
+			
 		
 		// CHANGING CHOSEN ----------------------------------------
 		if( code == sf::Keyboard::X )							chosen = 0;
@@ -251,22 +223,27 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 		else if( code == sf::Keyboard::Z && chosen > 0 )		chosen --;
 		
 		
-		// CHANGING WHICH ----------------------------------------
+		// CHANGING TYPE ----------------------------------------
 		if( code == sf::Keyboard::S )
 		{
-			which = 0;
+			type = 0;
 			chosen = 0;
 		}
-		else if( code == sf::Keyboard::D && which < AMOUNT -1 )
+		else if( code == sf::Keyboard::D && type < AMOUNT -1 )
 		{
-			which ++;
+			type ++;
 			chosen = 0;
 		}
-		else if( code == sf::Keyboard::A && which > -1 )
+		else if( code == sf::Keyboard::A && type > -1 )
 		{
-			which --;
+			type --;
 			chosen = 0;
 		}
+		
+		if( type == TILE || type == UNVISIBLE_TILE )	grid = true;
+		else if( type == OBJECT )						grid = false;
+		else if( type == COIN )							grid = true;
+		else if( type == FOE )							grid = false;
 	}
 	
 	
@@ -285,39 +262,19 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 		
 		if( event.mouseButton.button == sf::Mouse::Left )
 		{
-			if( leftbutton.checkCollision( mouse_x, mouse_y ) && additional_x < 0 )
-			{
-				additional_x += screen_w /4;
-				leftbutton.setOffset( 1 );
-			}
-			else if( rightbutton.checkCollision( mouse_x, mouse_y ) )
-			{
-				additional_x -= screen_w /4;
-				rightbutton.setOffset( 1 );
-			}
-			else if( topbutton.checkCollision( mouse_x, mouse_y ) )
-			{
-				additional_y += screen_h /4;
-				topbutton.setOffset( 1 );
-			}
-			else if( botbutton.checkCollision( mouse_x, mouse_y ) && additional_y > 0 )
-			{
-				additional_y -= screen_h /4;
-				botbutton.setOffset( 1 );
-			}
-			else if( chosen > -1 && which > -1 && !isRubbish )
+			if( chosen > -1 && type > -1 && !isRubbish )
 			{
 				griding( isRubbish );
 				
-				if( which == FOE )
+				if( type == FOE )
 				{
 					lastwasfoe = true;
-					foeblocks.push_back( Block( which, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+					foeblocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
 				}
 				else
 				{
 					lastwasfoe = false;
-					blocks.push_back( Block( which, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+					blocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
 				}
 			}
 			
@@ -327,18 +284,13 @@ void Tiles_editor::handle( sf::Event& event, bool isRubbish )
 			}
 		}
 	}
-	
-	if( event.type == sf::Event::MouseButtonReleased )
-	{
-		leftbutton.setOffset( 0 );
-		rightbutton.setOffset( 0 );
-		topbutton.setOffset( 0 );
-		botbutton.setOffset( 0 );
-	}
 }
 
 void Tiles_editor::draw( sf::RenderWindow* &window )
 {
+	knight.setPosition( screen_w /256 +additional_x, screen_h -width*2 -knight.getHeight() +additional_y );
+	window->draw( knight.get() );
+	
 	// Draw vector.
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
@@ -385,7 +337,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	// Draw current drawable thing.
 	if( chosen > -1 )
 	{
-		if( which == TILE )
+		if( type == TILE )
 		{
 			if( chosen < static_cast <int> (tiles.size()) )
 			{
@@ -394,7 +346,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 				window->draw( tiles[ chosen ]->get() );
 			}
 		}
-		else if( which == UNVISIBLE_TILE )
+		else if( type == UNVISIBLE_TILE )
 		{
 			if( chosen < static_cast <int> (tiles.size()) )
 			{
@@ -403,7 +355,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 				window->draw( tiles[ chosen ]->get() );
 			}
 		}
-		else if( which == OBJECT )
+		else if( type == OBJECT )
 		{
 			if( chosen < static_cast <int> (objects.size()) )
 			{
@@ -411,12 +363,12 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 				window->draw( objects[ chosen ]->get() );
 			}
 		}
-		else if( which == COIN )
+		else if( type == COIN )
 		{
 			coin.setPosition( mouse_x, mouse_y );
 			window->draw( coin.get() );
 		}
-		else if( which == FOE )
+		else if( type == FOE )
 		{
 			if( chosen < static_cast <int> (foes.size()) )
 			{
@@ -426,65 +378,27 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		}
 	}
 	
-	
-	// Draw information.
-	string grid_str = "On";
-	if( !grid )
-	{
-		grid_str = "Off";
-	}
-	string which_str = "None";
-	if( which == TILE )					which_str = "tile";
-	else if( which == UNVISIBLE_TILE )	which_str = "unvisible tile";
-	else if( which == COIN )			which_str = "coin";
-	else if( which == OBJECT )			which_str = "object";
-	else if( which == FOE )				which_str = "foe";
-	string chosen_str = "";
-	if( which != COIN )
-	{
-		chosen_str = "  Chosen: " +con::itos( chosen );
-	}
-	info.setText( "Grid: " +grid_str +"  Type: " +which_str +chosen_str );
-	
-	info.setPosition( screen_w/2 -info.getWidth() /2, screen_h /18 );
-	window->draw( info.get() );
 	window->draw( key_info.get() );
-	
-	
-	
-	// Draw direction buttons.
-	if( additional_x >= 0 )
-	{
-		leftbutton.setOffset( 2 );
-	}
-	if( additional_y <= 0 )
-	{
-		botbutton.setOffset( 2 );
-	}
 	
 	drawTumbnails( window );
 	drawLines( window );
-	window->draw( leftbutton.get() );
-	window->draw( rightbutton.get() );
-	window->draw( botbutton.get() );
-	window->draw( topbutton.get() );
 }
 
 void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 {
 	// Draw thumbnails.
-	if( chosen > -1 && which > -1 && which != COIN )
+	if( chosen > -1 && type > -1 && type != COIN )
 	{
-		float start_x = screen_w /256 +leftbutton.getWidth();
-		float start_y = screen_h /144 +(leftbutton.getHeight() *2);
+		float start_x = 36;
+		float start_y = 100;
 		
-		float scale_x = screen_w /2560 /2;
-		float scale_y = screen_h /1440 /2;
-		float old_scale_x = screen_w /2560;
-		float old_scale_y = screen_h /1440;
+		float old_scale_x = 0.5;
+		float old_scale_y = 0.5;
+		float scale_x = screen_w /5120;
+		float scale_y = screen_h /2880;
 		float gap = screen_h /144;
 		
-		if( which == TILE || which == UNVISIBLE_TILE )
+		if( type == TILE || type == UNVISIBLE_TILE )
 		{
 			tiles[ 0 ]->setScale( scale_x, scale_y );
 			tiles[ 0 ]->setPosition( start_x -tiles[ 0 ]->getWidth() /2, start_y );
@@ -499,11 +413,12 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 			for( unsigned i = 0; i < tiles.size(); i++ )
 			{
 				if( chosen != i )	tiles[ i ]->setAlpha( 0xFF /3 );
+				else				tiles[ i ]->setAlpha( 0xFF );
 				window->draw( tiles[ i ]->get() );
 				tiles[ i ]->setScale( old_scale_x, old_scale_y );
 			}
 		}
-		else if( which == OBJECT )
+		else if( type == OBJECT )
 		{
 			objects[ 0 ]->setScale( scale_x, scale_y );
 			objects[ 0 ]->setPosition( start_x -objects[ 0 ]->getWidth() /2, start_y );
@@ -523,7 +438,7 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 				objects[ i ]->setAlpha( 0xFF );
 			}
 		}
-		else if( which == FOE )
+		else if( type == FOE )
 		{
 			foes[ 0 ]->setScale( scale_x, scale_y );
 			foes[ 0 ]->setPosition( start_x -foes[ 0 ]->getWidth() /2, start_y );
@@ -550,38 +465,93 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 
 void Tiles_editor::drawLines( sf::RenderWindow* &window )
 {
-	if( !isrubbishon )
+	line.setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF/2 ) );
+	line.setSize( sf::Vector2f( knight.getWidth() /1.5, 1 ) );
+	line.setPosition( sf::Vector2f( knight.getX() +knight.getWidth()/10, knight.getBot() ) );
+	window->draw( line );
+	
+	if( isrubbishon )
 	{
-		// Draw lines.
-		sf::RectangleShape line;
+		line.setFillColor( sf::Color( 0xFF, 0x00, 0x00, 0xFF/3 ) );
+		mouseInfo.setColor( sf::Color::Red );
+	}
+	else
+	{
 		line.setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF/3 ) );
-		
+		mouseInfo.setColor( sf::Color::White );
+	}
+	
+	line.setSize( sf::Vector2f( screen_w, 1 ) );
+	line.setPosition( sf::Vector2f( 0, mouse_y ) );
+	window->draw( line );
+	
+	line.setSize( sf::Vector2f( 1, screen_h ) );
+	line.setPosition( sf::Vector2f( mouse_x, 0 ) );
+	window->draw( line );
+	
+	float mynewx = mouse_x +width/10;
+	if( grid && !isrubbishon )
+	{	
 		line.setSize( sf::Vector2f( screen_w, 1 ) );
-		line.setPosition( sf::Vector2f( 0, mouse_y ) );
+		line.setPosition( sf::Vector2f( 0, mouse_y +width*2 ) );
 		window->draw( line );
 		
 		line.setSize( sf::Vector2f( 1, screen_h ) );
-		line.setPosition( sf::Vector2f( mouse_x, 0 ) );
+		line.setPosition( sf::Vector2f( mouse_x +width*2, 0 ) );
 		window->draw( line );
 		
-		float mynewx = mouse_x;
-		if( grid )
-		{	
-			line.setSize( sf::Vector2f( screen_w, 1 ) );
-			line.setPosition( sf::Vector2f( 0, mouse_y +width ) );
-			window->draw( line );
-			
-			line.setSize( sf::Vector2f( 1, screen_h ) );
-			line.setPosition( sf::Vector2f( mouse_x +width, 0 ) );
-			window->draw( line );
-			
-			mynewx += width;
-		}
+		// Support.
+		line.setSize( sf::Vector2f( 1, width ) );
+		line.setPosition( sf::Vector2f( mouse_x +width, mouse_y -width/2 ) );
+		window->draw( line );
 		
-		mouseInfo.setText( "X: " +con::itos( static_cast <int> (mouse_x -additional_x) ) +"  Y: " +con::itos( static_cast <int> (mouse_y -additional_y) ) );
-		mouseInfo.setPosition( mynewx, mouse_y -mouseInfo.getHeight() *1.5 );
-		window->draw( mouseInfo.get() );
+		line.setSize( sf::Vector2f( width, 1 ) );
+		line.setPosition( sf::Vector2f( mouse_x -width/2, mouse_y +width ) );
+		window->draw( line );
+		
+		mynewx += width*2;
 	}
+	
+	mouseInfo.setText( "X: " +con::itos( static_cast <int> (mouse_x -additional_x) ) +"  Y: " +con::itos( static_cast <int> (mouse_y -additional_y) ) );
+	mouseInfo.setPosition( mynewx, mouse_y -mouseInfo.getHeight() *1.5 );
+	window->draw( mouseInfo.get() );
+}
+
+
+
+void Tiles_editor::setAdditionalX( float newX )
+{
+	this->additional_x = newX;
+}
+
+void Tiles_editor::setAdditionalY( float newY )
+{
+	this->additional_y = newY;
+}
+
+
+
+bool Tiles_editor::getGrid()
+{
+	return grid;
+}
+
+string Tiles_editor::getType()
+{
+	string line = "None";
+	
+	if( type == TILE )					line = "Tiles";
+	else if( type == UNVISIBLE_TILE )	line = "Unvisible Tiles";
+	else if( type == COIN )				line = "Treasure";
+	else if( type == OBJECT )			line = "Landscape";
+	else if( type == FOE )				line = "Foes";
+	
+	return line;
+}
+
+string Tiles_editor::getChosen()
+{
+	return con::itos( chosen );
 }
 
 
@@ -598,7 +568,7 @@ void Tiles_editor::save( string path )
 		// Take foes and rest.
 		vector <Block> finalblocks;
 		
-		// Sort by x but keep which sequence!
+		// Sort by x but keep type sequence!
 		int counter = 0;
 		vector <Block> myblocks;
 		for( unsigned i = 0; i < blocks.size(); i++ )
@@ -662,7 +632,7 @@ void Tiles_editor::load( string path )
 	additional_y = 0;
 	
 	MyFile file;
-	file.load( "txt/worlds/world_.txt" );
+	file.load( "txt/worlds/" +path +".txt" );
 	if( file.is_good() )
 	{
 		// Line and bufor.
@@ -689,39 +659,37 @@ void Tiles_editor::load( string path )
 		}
 		
 		
-		// MULTIPLIERS --------------------------------------------------------------------------
-		float x_multiplier = 1;
-		float y_multiplier = 1;
+		// NEW SIZES --------------------------------------------------------------------------
+		float my_screen_w = 0;
+		float my_screen_h = 0;
 		
-		// Set x_multiplier.
+		// Set my_screen_w.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				x_multiplier = screen_w /con::stof( bufor );
+				my_screen_w = screen_w -con::stof( bufor );
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", x_multiplier );
 		
-		// Set y_multiplier.
+		// Set my_screen_h.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				y_multiplier = screen_h /con::stof( bufor );
+				my_screen_h = screen_h -con::stof( bufor );
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", y_multiplier );
 		
 		
 		// FS --------------------------------------------------------------------------
@@ -748,8 +716,8 @@ void Tiles_editor::load( string path )
 				
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier;
+				float x = con::stoi( data[ 2 ] );
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
 				if( w == FOE )
 				{
@@ -768,6 +736,10 @@ void Tiles_editor::load( string path )
 				bufor += line[ i ];
 			}
 		}
+	}
+	else
+	{
+		save( path );
 	}
 	file.free();
 }
@@ -797,12 +769,6 @@ void Tiles_editor::griding( bool isRubbish )
 		}
 		mouse_y = count *width +diff;
 	}
-}
-
-void Tiles_editor::resetChosen()
-{
-	which = -1;
-	chosen = 0;
 }
 
 void Tiles_editor::clearVector()

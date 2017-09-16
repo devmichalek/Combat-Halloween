@@ -34,12 +34,13 @@ class Tiles_editor
 	};
 	
 	// Current block.
-	int which;
+	int type;
 	int chosen;
 	float mouse_x;
 	float mouse_y;
-	MyText info;
+	
 	MyText mouseInfo;
+	sf::RectangleShape line;
 	MySprite arrow;
 	
 	// Support.
@@ -49,15 +50,12 @@ class Tiles_editor
 	// Additional information.
 	MyText key_info;
 	
-	// Direction buttons.
-	MySprite leftbutton;
-	MySprite rightbutton;
-	MySprite topbutton;
-	MySprite botbutton;
+	// Direction.
 	float additional_x;
 	float additional_y;
 	
 	// Drawable stuff.
+	MySprite knight;
 	MySprite coin;
 	vector <MySprite*> tiles;
 	vector <MySprite*> objects;
@@ -75,6 +73,7 @@ public:
 	Tiles_editor();
 	~Tiles_editor();
 	void free();
+	void reset();
 	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event, bool isRubbish );
@@ -82,13 +81,21 @@ public:
 	void drawTumbnails( sf::RenderWindow* &window );
 	void drawLines( sf::RenderWindow* &window );
 	
+	// Set.
+	void setAdditionalX( float newX );
+	void setAdditionalY( float newY );
+	
+	// Get.
+	bool getGrid();
+	string getType();
+	string getChosen();
+	
 	// Streaming.
 	void save( string path );
 	void load( string path );
 	
 	// The rest.
 	void griding( bool isRubbish );
-	void resetChosen();
 	void clearVector();
 	void deleteOne();
 };
