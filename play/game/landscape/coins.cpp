@@ -79,7 +79,7 @@ void Coins::load( float screen_w, float screen_h )
 	line = 7;
 	sprite.setIdentity( "coins-sprite" );
 	sprite.load( "images/play/coin.png", line );
-	sprite.setScale( screen_w /2560, screen_h /1440 );
+	sprite.setScale( 0.5, 0.5 );
 }
 
 void Coins::draw( sf::RenderWindow* &window )
@@ -194,46 +194,37 @@ void Coins::prepare()
 		}
 		
 		
-		// MULTIPLIERS --------------------------------------------------------------------------
-		float x_multiplier = 1;
-		float y_multiplier = 1;
-		float this_screen_h = 0;
+		// NEW SIZES --------------------------------------------------------------------------
+		float my_screen_w = 0;
+		float my_screen_h = 0;
 		
-		// Set x_multiplier.
+		// Set my_screen_w.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				x_multiplier = screen_w /con::stof( bufor );
+				my_screen_w = screen_w -con::stof( bufor );
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", x_multiplier );
 		
-		// Set y_multiplier.
+		// Set my_screen_h.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				this_screen_h = con::stof( bufor );
-				y_multiplier = screen_h /con::stof( bufor );
+				my_screen_h = screen_h -con::stof( bufor ) +1;
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", y_multiplier );
-		
-		// The margin of error.
-		x_multiplier -= 0.03;
-		y_multiplier -= 0.08;
-		this_screen_h *= 0.08;
 		
 		
 		// FS --------------------------------------------------------------------------
@@ -260,8 +251,8 @@ void Coins::prepare()
 				
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier +this_screen_h;
+				float x = con::stoi( data[ 2 ] ) *0.999;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
 				if( w == 3 )
 				{
