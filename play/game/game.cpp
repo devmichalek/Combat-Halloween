@@ -18,6 +18,7 @@ void Game::free()
 	
 	background.free();
 	knight.free();
+	eye.free();
 	tiles.free();
 	objects.free();
 	coins.free();
@@ -30,6 +31,7 @@ void Game::reset()
 	loaded = false;
 	
 	knight.reset();
+	eye.reset();
 	tiles.reset();
 	objects.reset();
 	coins.reset();
@@ -51,6 +53,7 @@ void Game::load( float screen_w, float screen_h )
 	background.setScale( scale_x, scale_y );
 	
 	knight.load( screen_w, screen_h );
+	eye.load( screen_w, screen_h );
 	tiles.load( screen_w, screen_h );
 	objects.load( screen_w, screen_h );
 	coins.load( screen_w, screen_h );
@@ -74,16 +77,14 @@ void Game::draw( sf::RenderWindow* &window )
 	tiles.draw( window );
 	skeletons.draw( window );
 	objects.draw( window );
+	eye.draw( window );
 	window->setView( window->getDefaultView() );
+	// eye.drawShader( window );
+	objects.drawFPS( window );
 }
 
 void Game::mechanics( double elapsedTime )
 {
-	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key::A ) )
-	{
-		knight.commitSuicide();
-	}
-	
 	if( !knight.isDeath() )
 	{
 		knight.jumping( elapsedTime );
@@ -160,6 +161,10 @@ void Game::mechanics( double elapsedTime )
 	coins.setBorderY( knight.getViewY() );
 	skeletons.setBorderX( knight.getViewX() );
 	skeletons.setBorderY( knight.getViewY() );
+	
+	eye.setPosition( knight.getRect().left +knight.getRect().width/2, knight.getRect().top -knight.getRect().height );
+	eye.mechanics( elapsedTime, knight.getViewX(), knight.getViewY() );
+	objects.mechanics( elapsedTime );
 }
 
 
@@ -168,6 +173,7 @@ void Game::fadein( float v, int max )
 {
 	background.fadein( v, max );
 	knight.fadein( v, max );
+	eye.fadein( v, max );
 	tiles.fadein( v, max );
 	objects.fadein( v, max );
 	coins.fadein( v, max );
@@ -178,6 +184,7 @@ void Game::fadeout( float v, int min )
 {
 	background.fadeout( v, min );
 	knight.fadeout( v, min );
+	eye.fadeout( v, min );
 	tiles.fadeout( v, min );
 	objects.fadeout( v, min );
 	coins.fadeout( v, min );
@@ -277,10 +284,26 @@ void Game::resetStatus()
 void Game::turnCollision( bool collision )
 {
 	knight.turnCollision( collision );
+	tiles.turnCollision( collision );
 	skeletons.turnCollision( collision );
 }
 
 bool Game::getCollision()
 {
 	return skeletons.getCollision();
+}
+
+void Game::turnFPS( bool fps )
+{
+	objects.setFPS( fps );
+}
+
+bool Game::getFPS()
+{
+	return objects.getFPS();
+}
+
+void Game::commitSuicide()
+{
+	knight.commitSuicide();
 }

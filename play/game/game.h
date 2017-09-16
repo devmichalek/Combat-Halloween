@@ -3,6 +3,7 @@
 #include "play/game/landscape/objects.h"
 #include "play/game/landscape/coins.h"
 #include "play/game/knight/knight.h"
+#include "play/game/knight/eye.h"
 #include "play/game/foe/factory.h"
 #include "play/game/foe/skeleton.h"
 
@@ -15,6 +16,7 @@ class Game
 	// Objects.
 	MySprite background;
 	Knight knight;
+	Eye eye;
 	Tiles tiles;
 	Objects objects;
 	Coins coins;
@@ -53,4 +55,7 @@ public:
 	// In addition for test reasons.
 	void turnCollision( bool collision );
 	bool getCollision();
+	void turnFPS( bool fps );
+	bool getFPS();
+	void commitSuicide();
 };
