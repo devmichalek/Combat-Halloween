@@ -1,6 +1,8 @@
 #pragma once
 #include "menu/circlebutton.h"
 #include "editor_buttons.h"
+#include "editor_information.h"
+#include "editor_details.h"
 #include "tiles_editor.h"
 #include "level/chat.h"
 
@@ -8,12 +10,13 @@ class Editor
 {
 	// Basics.
 	bool back;
+	bool play;
 	
 	// Objects.
 	MySprite background;
-	Circlebutton menubutton;
-	Circlebutton rubbishbutton;
 	Editor_buttons editor_buttons;
+	Editor_information editor_information;
+	Editor_details editor_details;
 	Tiles_editor tiles_editor;
 	Chat chat;
 	
@@ -36,4 +39,5 @@ public:
 	
 	// Getters.
 	bool isBack();
+	bool isPlay();
 };
