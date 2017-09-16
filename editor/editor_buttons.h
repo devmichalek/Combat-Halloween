@@ -3,6 +3,7 @@
 #include "own/text.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include <vector>
 
 class Editor_buttons
 {
@@ -10,21 +11,22 @@ class Editor_buttons
 	float screen_w;
 	float screen_h;
 	
-	bool saveState;
-	bool loadState;
-	bool released;
-	bool focus;
-	string path;
+	enum
+	{
+		HOME = 0,
+		OPTIONS,
+		NAME,
+		DELETE,
+		LOAD,
+		SAVE,
+		UPLOAD,
+		PLAY,
+		AMOUNT
+	};
 	
-	MySprite savebutton;
-	MySprite loadbutton;
-	MyText saveText;
-	MyText loadText;
-	MyText rubbishTextdelete;
-	MyText rubbishTextmode;
-	
-	MyText form;
-	MyText info;
+	vector <bool> states;
+	vector <MyText*> texts;
+	vector <MySprite*> buttons;
 	
 public:
 	
@@ -33,25 +35,32 @@ public:
 	~Editor_buttons();
 	void free();
 	void reset();
-	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
 	
 	// Getters.
+	bool isAnything();
+	bool isHome();
+	bool isOptions();
+	bool isName();
+	bool isDelete();
 	bool isSave();
 	bool isLoad();
-	bool isFocus();
-	string getPath();
+	bool isPlay();
+	bool isUpload();
+	
+	string getInfo();
+	string getWorldname( string worldname );
 	
 	// Setters.
+	void set( int w );
+	void setHome();
+	void setOptions();
+	void setName();
+	void setDelete();
 	void setSave();
 	void setLoad();
-	void setFocus( bool f );
-	
-	// Support.
-	bool isPossibleKey( sf::Event &event );
-	string getName( int n );
-	void organizeWritten();
-	void setColorWritten();
+	void setPlay();
+	void setUpload();
 };
