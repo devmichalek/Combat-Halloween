@@ -88,7 +88,7 @@ void Knight::reset()
 	
 	armour = 0;
 	damage = 10;
-	velocity = 100 *view.getSize().x /1280;
+	velocity = 100;
 	heartpoints = 100;
 	heartpoints_state = heartpoints;
 	gravity_value = velocity;
@@ -132,11 +132,11 @@ void Knight::load( float screen_w, float screen_h )
 	
 	bar.setIdentity( "knight-bar" );
 	bar.load( "images/play/foes/foebar.png" );
-	bar.setScale( screen_w /2560, screen_h /1440 );
+	bar.setScale( 0.5, 0.5 );
 	
 	table.setIdentity( "knight-table" );
 	table.load( "images/play/foes/foetable.png" );
-	table.setScale( screen_w /2560, screen_h /1440 );
+	table.setScale( 0.5, 0.5 );
 	
 	rectcollisionwalk.setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xAA ) );
 	rectcollisionattack.setFillColor( sf::Color( 0xFF, 0xAE, 0x19, 0xAA ) );
@@ -149,7 +149,7 @@ void Knight::load( float screen_w, float screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ i ]->setIdentity( "knight-sprites" );
 		sprites[ i ]->load( "images/play/knight/" +con::itos( i ) +".png", line );
-		sprites[ i ]->setScale( screen_w /2560, screen_h /1440 );
+		sprites[ i ]->setScale( 0.5, 0.5 );
 	}
 	
 	// Features and other variables.
@@ -191,7 +191,7 @@ void Knight::draw( sf::RenderWindow* &window )
 	window->draw( table.get() );
 	
 	bar.setColor( sf::Color( 0xFF -(armour*1.25), 0, 0 ) );
-	bar.setScale( getHPScale() *view.getSize().x /2560, view.getSize().y /1440 );
+	bar.setScale( getHPScale() *0.5, 0.5 );
 	bar.setPosition( table.getX(), table.getY() );
 	window->draw( bar.get() );
 }
@@ -652,7 +652,7 @@ void Knight::setFeatures()
 			ready = true;
 			armour = armour +(armour*armour_temporary /100);
 			damage = damage +(damage*damage_temporary /100);
-			velocity = velocity +(velocity*velocity_temporary /100 *view.getSize().x /1280);
+			velocity = velocity +(velocity*velocity_temporary /100);
 			heartpoints = heartpoints +(heartpoints*heartpoints_temporary /100);
 			heartpoints_state = heartpoints;
 			
