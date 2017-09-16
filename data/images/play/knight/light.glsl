@@ -38,7 +38,7 @@ void main( void )
 	p.y = p.y - 1.0;
 	p.x*=resolution.x/resolution.y;		
 
-	float size = resolution.x /64;
+	float size = 13;
 			  	
 	float color = 3 -size*length( p );		
 	
