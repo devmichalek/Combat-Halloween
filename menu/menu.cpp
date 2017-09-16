@@ -100,6 +100,8 @@ void Menu::load( float screen_w, float screen_h )
 	
 	// Set chat.
 	chat.load( screen_w, screen_h );
+	chat.setCommandColor( sf::Color( 0, 0, 0 ) );
+	chat.setTypicalColor( sf::Color( 0x68, 0x68, 0x68 ) );
 	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
@@ -204,26 +206,24 @@ void Menu::mechanics( double elapsedTime )
 	if( !pausesystem.isActive() && !close && !ready && !editor )
 	{
 		chat.mechanics( elapsedTime );
-		if( chat.isUsed() )
+		if( chat.isCommand() )
 		{
 			// Knight specs.
-			if( chat.getCommand( "@clear" ) )		knight_specs.setChosen( -1 );
-			else if( chat.getCommand( "@helmet" ) )	knight_specs.setChosen( 0 );
-			else if( chat.getCommand( "@body" ) )	knight_specs.setChosen( 1 );
-			else if( chat.getCommand( "@shield" ) )	knight_specs.setChosen( 2 );
-			else if( chat.getCommand( "@sword" ) )	knight_specs.setChosen( 3 );
-			else if( chat.getCommand( "@boots" ) )	knight_specs.setChosen( 4 );
+			if( chat.findCommand( "@clear" ) )			knight_specs.setChosen( -1 );
+			else if( chat.findCommand( "@helmet" ) )	knight_specs.setChosen( 0 );
+			else if( chat.findCommand( "@body" ) )		knight_specs.setChosen( 1 );
+			else if( chat.findCommand( "@shield" ) )	knight_specs.setChosen( 2 );
+			else if( chat.findCommand( "@sword" ) )		knight_specs.setChosen( 3 );
+			else if( chat.findCommand( "@boots" ) )		knight_specs.setChosen( 4 );
 			
 			// Close application.
-			else if( chat.getCommand( "@close" ) || chat.getCommand( "@exit" ) ||
-			chat.getCommand( "@finish" ) || chat.getCommand( "@end" ) )
+			else if( chat.findCommand( "@close" ) || chat.findCommand( "@exit" ) )
 			{
 				exit.setPressed();
 			}
 			
 			// Someone clicked singleplayer.
-			else if( chat.getCommand( "@singleplayer" ) || chat.getCommand( "@play" ) ||
-			chat.getCommand( "@start" ) || chat.getCommand( "@go" ) )
+			else if( chat.findCommand( "@start" ) || chat.findCommand( "@play" ) )
 			{
 				if( knight_specs.isReady() && information.isReady() )
 				{
@@ -232,93 +232,65 @@ void Menu::mechanics( double elapsedTime )
 			}
 			
 			// Exsert / shovel settings.
-			else if( chat.getCommand( "@settings" ) || chat.getCommand( "@keyboard" ) ||
-			chat.getCommand( "@keys" ) || chat.getCommand( "@sets" ) )
+			else if( chat.findCommand( "@settings" ) || chat.findCommand( "@keyboard" ) ||
+			chat.findCommand( "@keys" ) || chat.findCommand( "@sets" ) )
 			{
 				settingsbutton.setActive( !settingsbutton.isActive() );
 			}
 			
 			// Reload data.
-			else if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
-			chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
+			else if( chat.findCommand( "@reload" ) || chat.findCommand( "@connect" ) ||
+			chat.findCommand( "@rel" ) || chat.findCommand( "@con" ) )
 			{
 				reloadbutton.setActive( true );
 			}
 			
 			// Update data.
-			else if( chat.getCommand( "@update" ) )
+			else if( chat.findCommand( "@update" ) )
 			{
 				updatebutton.setActive( true );
 			}
 			
 			// Turn on/off all chunks.
-			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
+			else if( chat.findCommand( "@chunk" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
-			}
-			else if( chat.getCommand( "@chunk off" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@chunk on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
 			}
 			
 			// Turn on/off music.
-			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
+			else if( chat.findCommand( "@music" ) )
 			{
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@music off" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@music on" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
-			}
 			
 			// Turn on/off all sounds.
-			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
+			else if( chat.findCommand( "@sound" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@sound off" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@sound on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
-			}
 			
 			// Map editor.
-			else if( chat.getCommand( "@editor" ) || chat.getCommand( "@edit" ) )
+			else if( chat.findCommand( "@editor" ) || chat.findCommand( "@edit" ) )
 			{
 				editor = true;
 				chat.isOpen() = false;
 			}
 			
 			// Link buttons in addition.
-			else if( chat.getCommand( "@github" ) )		github.openWebsite();
-			else if( chat.getCommand( "@scores" ) )		scores.openWebsite();
-			else if( chat.getCommand( "@website" ) )	website.openWebsite();
+			else if( chat.findCommand( "@github" ) )		github.openWebsite();
+			else if( chat.findCommand( "@scores" ) )		scores.openWebsite();
+			else if( chat.findCommand( "@website" ) )	website.openWebsite();
+			
+			// Tell that command doesn't exist.
+			else
+			{
+				chat.setError();
+			}
 		}
 		
 		// Knight specs
@@ -472,6 +444,7 @@ void Menu::fades( double elapsedTime )
 		chunk_volume.fadeout( value, min );
 		music_volume.fadeout( value, min );
 		information.fadeout( value, min );
+		chat.fadeout( value, min );
 		pausesystem.fadein( value *3, min );
 		
 		music.fadeout( elapsedTime *100, music_volume.getMainVolume() *0.2 );
@@ -499,6 +472,7 @@ void Menu::fades( double elapsedTime )
 		chunk_volume.fadeout( value );
 		music_volume.fadeout( value );
 		information.fadeout( value );
+		chat.fadeout( value );
 		
 		music.fadeout( elapsedTime *100 );
 	}
