@@ -14,6 +14,12 @@ Objects::~Objects()
 
 void Objects::free()
 {
+	currentTime = 0;
+	FPS_state = false;
+	FPS.free();
+	counter = 0;
+	line = 0;
+	
 	screen_w = 0;
 	screen_h = 0;
 	border_x = 0;
@@ -53,6 +59,10 @@ void Objects::free()
 
 void Objects::reset()
 {
+	currentTime = 0;
+	FPS_state = false;
+	counter = line;
+	
 	border_x = 0;
 	border_y = 0;
 	
@@ -80,6 +90,15 @@ void Objects::load( float screen_w, float screen_h )
 {
 	free();
 	
+	// Test.
+	FPS.setIdentity( "objects-FPS" );
+	FPS.setFont( "fonts/Jaapokki-Regular.otf" );
+	FPS.setText( "FPS: " );
+	FPS.setSize( screen_h /36 );
+	FPS.setPosition( screen_w -FPS.getWidth(), screen_h -FPS.getHeight()*1.5 );
+	line = 0.25;
+	counter = line;
+	
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
@@ -89,7 +108,7 @@ void Objects::load( float screen_w, float screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setIdentity( "objects-sprites" );
 		sprites[ sprites.size() -1 ]->load( "images/play/objects/" +con::itos(i) +".png" );
-		sprites[ sprites.size() -1 ]->setScale( screen_w /2560, screen_h /1440 );
+		sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 	}
 }
 
@@ -108,8 +127,37 @@ void Objects::draw( sf::RenderWindow* &window )
 	}
 }
 
+void Objects::drawFPS( sf::RenderWindow* &window )
+{
+	if( FPS_state )
+	{
+		window->draw( FPS.get() );
+	}
+}
+
+void Objects::mechanics( double elapsedTime )
+{
+	float fps = 1.f /currentTime;
+	currentTime = clock.restart().asSeconds();
+	
+	if( FPS_state )
+	{
+		if( counter > line )
+		{
+			FPS.setText( "FPS: " +con::itos( static_cast <int> (fps) ) );
+			FPS.setPosition( screen_w -FPS.getWidth(), screen_h -FPS.getHeight()*1.5 );
+			counter = 0;
+		}
+		else
+		{
+			counter += elapsedTime;
+		}
+	}
+}
+
 void Objects::fadein( float v, int max )
 {
+	FPS.fadein( v, max );
 	for( auto &it :sprites )
 	{
 		it->fadein( v, max );
@@ -118,10 +166,23 @@ void Objects::fadein( float v, int max )
 
 void Objects::fadeout( float v, int min )
 {
+	FPS.fadeout( v, min );
 	for( auto &it :sprites )
 	{
 		it->fadeout( v, min );
 	}
+}
+
+
+
+void Objects::setFPS( bool state )
+{
+	FPS_state = state;
+}
+
+bool Objects::getFPS()
+{
+	return FPS_state;
 }
 
 
@@ -191,47 +252,37 @@ void Objects::prepare()
 		}
 		
 		
-		// MULTIPLIERS --------------------------------------------------------------------------
-		float x_multiplier = 1;
-		float y_multiplier = 1;
-		float this_screen_h = 0;
+		// NEW SIZES --------------------------------------------------------------------------
+		float my_screen_w = 0;
+		float my_screen_h = 0;
 		
-		// Set x_multiplier.
+		// Set my_screen_w.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				x_multiplier = screen_w /con::stof( bufor );
+				my_screen_w = screen_w -con::stof( bufor );
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", x_multiplier );
 		
-		// Set y_multiplier.
+		// Set my_screen_h.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				this_screen_h = con::stof( bufor );
-				y_multiplier = screen_h /con::stof( bufor );
+				my_screen_h = screen_h -con::stof( bufor ) +1;
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", y_multiplier );
-		
-		// The margin of error.
-		x_multiplier -= 0.03;
-		y_multiplier -= 0.08;
-		this_screen_h *= 0.075;
-		
 		
 		// FS --------------------------------------------------------------------------
 		for( unsigned i = start; i < line.size(); i++ )
@@ -257,8 +308,8 @@ void Objects::prepare()
 				
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier +this_screen_h;
+				float x = con::stoi( data[ 2 ] ) *0.999;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
 				if( w == 2 )
 				{
