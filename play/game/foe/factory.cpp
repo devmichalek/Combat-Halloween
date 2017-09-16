@@ -127,11 +127,11 @@ void Factory <F>::load( float screen_w, float screen_h, int type, string name )
 	
 	bar.setIdentity( "factory-foebar" );
 	bar.load( "images/play/foes/foebar.png" );
-	bar.setScale( screen_w /2560, screen_h /1440 );
+	bar.setScale( 0.5, 0.5 );
 	
 	table.setIdentity( "factory-foetable" );
 	table.load( "images/play/foes/foetable.png" );
-	table.setScale( screen_w /2560, screen_h /1440 );
+	table.setScale( 0.5, 0.5 );
 	
 	balloonchat.load( screen_w, screen_h );
 	
@@ -186,22 +186,22 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 					}
 				}
 				
-				// Comments from foes.
-				if( foes[ i ]->showText() )
-				{
-					balloonchat.setText( foes[ i ]->getText() );
-					balloonchat.setPosition( foes[ i ]->getRealX(), foes[ i ]->getRealY() );
-					balloonchat.draw( window );
-				}
-				
 				// Info.
 				table.setPosition( foes[ i ]->getRealX() +foes[ i ]->getRealWidth()/2 -table.getWidth()/2, y -sprites[ t ]->getHeight() -table.getHeight() *1.5 );
 				window->draw( table.get() );
 				
 				bar.setColor( sf::Color( 0xFF -(foes[ i ]->getArmour()/5), 0, 0 ) );
-				bar.setScale( foes[ i ]->getHPScale() *screen_w /2560, screen_h /1440 );
+				bar.setScale( foes[ i ]->getHPScale() *0.5, 0.5 );
 				bar.setPosition( table.getX(), table.getY() );
 				window->draw( bar.get() );
+				
+				// Comments from foes.
+				if( foes[ i ]->showText() )
+				{
+					balloonchat.setText( foes[ i ]->getText() );
+					balloonchat.setPosition( foes[ i ]->getMouthX(), foes[ i ]->getMouthY(), foes[i ]->isLeftText() );
+					balloonchat.draw( window );
+				}
 			}
 		}
 	}
@@ -352,46 +352,37 @@ void Factory <F>::prepare()
 		}
 		
 		
-		// MULTIPLIERS --------------------------------------------------------------------------
-		float x_multiplier = 1;
-		float y_multiplier = 1;
-		float this_screen_h = 0;
+		// NEW SIZES --------------------------------------------------------------------------
+		// float my_screen_w = 0;
+		float my_screen_h = 0;
 		
-		// Set x_multiplier.
+		// Set my_screen_w.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				x_multiplier = screen_w /con::stof( bufor );
+				// my_screen_w = screen_w -con::stof( bufor );
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", x_multiplier );
 		
-		// Set y_multiplier.
+		// Set my_screen_h.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				this_screen_h = con::stof( bufor );
-				y_multiplier = screen_h /con::stof( bufor );
+				my_screen_h = screen_h -con::stof( bufor ) +1;
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", y_multiplier );
-		
-		// The margin of error.
-		x_multiplier -= 0.03;
-		y_multiplier -= 0.08;
-		this_screen_h *= 0.08;
 		
 		
 		srand( static_cast <int> (time( NULL )) );
@@ -419,8 +410,8 @@ void Factory <F>::prepare()
 				
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier +this_screen_h;
+				float x = con::stoi( data[ 2 ] ) *0.999;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
 				if( w == 4 )
 				{
@@ -439,7 +430,11 @@ void Factory <F>::prepare()
 						foes[ foes.size() -1 ]->setDamage( mydamage );
 						foes[ foes.size() -1 ]->setVelocity( myvelocity );
 						foes[ foes.size() -1 ]->setHeartpoints( myheartpoints );
-						foes[ foes.size() -1 ]->addText( L"sraka łaka kurwiarze" );
+						foes[ foes.size() -1 ]->addText( L"We're skeletons." );
+						foes[ foes.size() -1 ]->addText( L"Have you heard that crush?\nIt's your bones." );
+						foes[ foes.size() -1 ]->addText( L"I've never see your death.\nWe should get to know\neach other." );
+						foes[ foes.size() -1 ]->addText( L"Zombies?\nI hate them!" );
+						foes[ foes.size() -1 ]->addText( L"We should ask vampire just in case." );
 					}
 				}
 				else if( w == 0 )
@@ -508,14 +503,14 @@ void Factory <F>::prepare()
 					sprites.push_back( new MySprite() );
 					sprites[ i ]->setIdentity( "factory-sprites" );
 					sprites[ i ]->load( "images/play/foes/" +name +"/" +con::itos(i) +".png", lines[ i ] );
-					sprites[ i ]->setScale( screen_w /2560, screen_h /1440 );
+					sprites[ i ]->setScale( 0.5, 0.5 );
 					// printf( "%d\n", lines[ i ] );
 				}
 				
 				for( auto &it :foes )
 				{
 					it->setLines( lines );
-					it->setScale( screen_w /2560, screen_h /1440 );
+					it->setScale( 0.5, 0.5 );
 					it->setWidth( sprites[ 0 ]->getWidth() );
 				}
 				
@@ -539,7 +534,7 @@ void Factory <F>::positioning( vector <sf::Vector2f> fs, vector <sf::Uint8> type
 	MySprite block;
 	block.setIdentity( "foes-block" );
 	block.load( "images/play/tiles/0.png" );
-	block.setScale( screen_w /2560, screen_h /1440 );
+	block.setScale( 0.5, 0.5 );
 
 	float foe_x = 0;
 	float foe_y = 0;
