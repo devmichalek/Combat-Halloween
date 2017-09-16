@@ -58,6 +58,8 @@ void Table::load( float screen_w, float screen_h )
 	
 	// Set chat.
 	chat.load( screen_w, screen_h );
+	chat.setCommandColor( sf::Color( 0, 0, 0 ) );
+	chat.setTypicalColor( sf::Color( 0x68, 0x68, 0x68 ) );
 	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
@@ -128,76 +130,47 @@ void Table::mechanics( double elapsedTime )
 	{
 		chat.mechanics( elapsedTime );
 		
-		if( chat.isUsed() )
+		if( chat.isCommand() )
 		{
 			// Someone clicked backtomenu button.
-			if( chat.getCommand( "@menu" ) )
+			if( chat.findCommand( "@menu" ) )
 			{
 				homebutton.setChanged( true );
 			}
 			
 			// Someone clicked level button.
-			else if( chat.getCommand( "@level" ) || chat.getCommand( "@back" ) ||
-			chat.getCommand( "@aback" ) || chat.getCommand( "@return" ) )
+			else if( chat.findCommand( "@back" ) )
 			{
 				levelbutton.setChanged( true );
 			}
 			
 			// Turn on/off all chunks.
-			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
+			else if( chat.findCommand( "@chunk" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
-			}
-			else if( chat.getCommand( "@chunk off" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@chunk on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
 			}
 			
 			// Turn on/off music.
-			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
+			else if( chat.findCommand( "@music" ) )
 			{
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@music off" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@music on" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
-			}
 			
 			// Turn on/off all sounds.
-			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
+			else if( chat.findCommand( "@sound" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@sound off" ) )
+			
+			// Command doesn't exist.
+			else
 			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@sound on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
+				chat.setError();
 			}
 		}
 			
