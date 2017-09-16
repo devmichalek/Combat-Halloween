@@ -34,8 +34,9 @@ void Play::load( float screen_w, float screen_h )
 {
 	free();
 	
-	float scale_x = screen_w /2560;
-	float scale_y = screen_h /1440;
+	float scale_x = 0.5;
+	float scale_y = 0.5;
+	
 	
 	// Load game.
 	game.load( screen_w, screen_h );
@@ -59,8 +60,9 @@ void Play::load( float screen_w, float screen_h )
 	loading_world.load( screen_w, screen_h );
 	
 	// Set chat.
-	chat.load( screen_w, screen_h );
-	chat.setBlack();
+	chat.load( screen_w, screen_h, 1 );
+	chat.setCommandColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+	chat.setTypicalColor( sf::Color( 0xBA, 0xBA, 0xBA ) );
 	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
@@ -167,82 +169,64 @@ void Play::mechanics( double elapsedTime )
 		
 		chat.mechanics( elapsedTime );
 		
-		if( chat.isUsed() )
+		if( chat.isCommand() )
 		{
 			// Someone clicked backtomenu button.
-			if( chat.getCommand( "@menu" ) )
+			if( chat.findCommand( "@menu" ) )
 			{
 				homebutton.setChanged( true );
 			}
 			
 			// Someone clicked level button.
-			else if( chat.getCommand( "@level" ) || chat.getCommand( "@back" ) ||
-			chat.getCommand( "@aback" ) || chat.getCommand( "@return" ) )
+			else if( chat.findCommand( "@back" ) )
 			{
 				levelbutton.setChanged( true );
 			}
 			
+			// Someone clicked level button.
+			else if( chat.findCommand( "@commit suicide" ) )
+			{
+				game.commitSuicide();
+				chat.isOpen() = false;
+			}
+			
 			// Turn on/off all chunks.
-			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
+			else if( chat.findCommand( "@chunk" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
-			}
-			else if( chat.getCommand( "@chunk off" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@chunk on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
 			}
 			
 			// Turn on/off music.
-			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
+			else if( chat.findCommand( "@music" ) )
 			{
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@music off" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@music on" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
-			}
 			
 			// Turn on/off all sounds.
-			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
+			else if( chat.findCommand( "@sound" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@sound off" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@sound on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
-			}
 			
 			// game
-			else if( chat.getCommand( "@collision" ) )
+			else if( chat.findCommand( "@collision" ) )
 			{
 				game.turnCollision( !game.getCollision() );
+			}
+			else if( chat.findCommand( "@fps" ) )
+			{
+				game.turnFPS( !game.getFPS() );
+			}
+			
+			// Command doesn't exist.
+			else
+			{
+				chat.setError();
 			}
 		}
 			
@@ -321,6 +305,7 @@ void Play::fades( double elapsedTime )
 		musicbutton.fadeout( value, min );
 		chunk_volume.fadeout( value, min );
 		music_volume.fadeout( value, min );
+		chat.fadeout( value, min );
 		pausesystem.fadein( value *3, min );
 		
 		music.fadeout( elapsedTime *100, music_volume.getMainVolume() *0.2 );
@@ -338,6 +323,7 @@ void Play::fades( double elapsedTime )
 		musicbutton.fadeout( value );
 		chunk_volume.fadeout( value );
 		music_volume.fadeout( value );
+		chat.fadeout( value );
 		
 		music.fadeout( elapsedTime *100 );
 	}
