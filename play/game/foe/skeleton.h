@@ -90,6 +90,8 @@ public:
 	float getAttackY();
 	float getAttackWidth();
 	float getAttackHeight();
+	float getMouthX();
+	float getMouthY();
 	float getCenterX();
 	float getLeft();
 	float getRight();
@@ -124,4 +126,5 @@ public:
 	void addText( wstring line );
 	bool showText();
 	wstring getText();
+	bool isLeftText();
 };

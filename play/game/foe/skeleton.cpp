@@ -37,12 +37,12 @@ void Skeleton::free()
 	attack_counter = attack_line;
 	
 	inactivity_x = 0;
-	inactivity_line = 4;	// 4 seconds.
+	inactivity_line = rand() %5 +3;	// 4 seconds.
 	inactivity_counter = -1;
 	
 	
 	chosen_text = 0;
-	text_line = 8;			// 8 seconds.
+	text_line = text_line = rand() %8 +8;;	// 8 seconds.
 	text_counter = 0;
 	if( !texts.empty() )
 	{
@@ -243,6 +243,16 @@ float Skeleton::getAttackWidth()
 float Skeleton::getAttackHeight()
 {
 	return width *0.6;
+}
+
+float Skeleton::getMouthX()
+{
+	return getRealX() +getRealWidth()/1.5;
+}
+
+float Skeleton::getMouthY()
+{
+	return getRealY() +width *0.45;
 }
 
 float Skeleton::getCenterX()
@@ -518,8 +528,9 @@ void Skeleton::mechanics( double elapsedTime )
 		else if( texts.size() > 0 )
 		{
 			text_counter += elapsedTime;
-			if( text_counter > text_line )
+			if( text_counter > text_line *1.5 )
 			{
+				text_counter = 0;
 				text_line = rand() %8 +8;
 				chosen_text = rand() %texts.size();
 			}
@@ -533,6 +544,7 @@ void Skeleton::mechanics( double elapsedTime )
 void Skeleton::addText( wstring line )
 {
 	this->texts.push_back( line );
+	chosen_text = rand() %texts.size();
 }
 
 bool Skeleton::showText()
@@ -548,4 +560,14 @@ bool Skeleton::showText()
 wstring Skeleton::getText()
 {
 	return texts[ chosen_text ];
+}
+
+bool Skeleton::isLeftText()
+{
+	if( scale_x < 0 )
+	{
+		return false;
+	}
+	
+	return true;
 }
