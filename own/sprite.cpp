@@ -231,6 +231,16 @@ void MySprite::create( int w, int h )
 			image = new sf::Image;
 			image->create( w, h );
 			
+			int width = image->getSize().x;
+			int height = image->getSize().y;
+			
+			// Set rect and 0 offset
+			rects.push_back( new sf::IntRect() );
+			rects[ rects.size() -1 ]->width = width;
+			rects[ rects.size() -1 ]->height = height;
+			rects[ rects.size() -1 ]->left = 0;
+			rects[ rects.size() -1 ]->top = 0;
+			
 			texture->setSmooth( true );
 			sprite = new sf::Sprite;
 			if( sprite == NULL )
