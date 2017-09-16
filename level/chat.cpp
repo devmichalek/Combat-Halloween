@@ -13,27 +13,23 @@ Chat::~Chat()
 
 void Chat::free()
 {
+	commandColor = sf::Color( 0xFF, 0xFF, 0xFF );
+	typicalColor = sf::Color( 0, 0, 0 );
+	
+	globalYScale = 0;
+	globalYLine = 2;
+	
 	screen_w = 0;
 	screen_h = 0;
+	scale_x = 0;
+	scale_y = 0;
+	
 	open = false;
-	capslock = 0;
-	shift = 0;
 	used = false;
-	black = true;
 	
+	escButton.free();
 	background.free();
-	second_background.free();
-	text_background.free();
 	
-	if( !text_ys.empty() )
-	{
-		text_ys.clear();
-	}
-	
-	if( !writtenStrs.empty() )
-	{
-		writtenStrs.clear();
-	}
 	
 	username.free();
 	
@@ -48,6 +44,12 @@ void Chat::free()
 		}
 	}
 	
+	if( !writtenStrs.empty() )
+	{
+		writtenStrs.clear();
+	}
+	
+	
 	line = 1;
 	counter = 0;
 	arrow.free();
@@ -55,6 +57,8 @@ void Chat::free()
 
 void Chat::reset()
 {
+	globalYScale = 0;
+	
 	for( auto &it :writtenStrs )
 	{
 		it = "";
@@ -65,152 +69,203 @@ void Chat::reset()
 
 
 
-void Chat::load( float screen_w, float screen_h )
+void Chat::load( float screen_w, float screen_h, bool white )
 {
 	free();
-	
-	srand( static_cast <int> ( time( NULL ) ) );
 	
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 	
-	// ( "fonts/jcandlestickextracond.ttf" );
-	// ( "fonts/Jaapokki-Regular.otf" );
+	float fontSize = screen_h /36;
+	scale_x = screen_w /2560;
+	scale_y = screen_h /1440;
+	if( white )
+	{
+		fontSize = 20;
+		scale_x = 0.5;
+		scale_y = 0.5;
+	}
 	
 	// Set writtens.
-	int how_many = 10;
-	for( int i = 0; i < how_many -1; i++ )
+	for( int i = 0; i < 6; i++ )
 	{
 		writtens.push_back( new MyText() );
 		writtens[ i ]->setIdentity( "chat-writtens" );
 		writtens[ i ]->setFont( "fonts/Jaapokki-Regular.otf" );
-		writtens[ i ]->setText( "gT" );
-		writtens[ i ]->setSize( screen_h /36 );
-		writtens[ i ]->setAlpha( 0xFF );
-		text_ys.push_back( screen_h -(writtens[ i ]->getHeight() +screen_h /72) *(i +1) );
+		writtens[ i ]->setText( " " );
+		writtens[ i ]->setSize( fontSize );
+		writtens[ i ]->setAlpha( 0 );
 		writtenStrs.push_back( "" );
 	}
 	
+	// Set text bacground.
+	escButton.setIdentity( "chat-escButton" );
+	escButton.setFont( "fonts/Jaapokki-Regular.otf" );
+	escButton.setText( "X" );
+	escButton.setSize( fontSize );
+	escButton.setColor( sf::Color::White );
+	escButton.setAlpha( 0 );
 	
 	// Set background.
 	background.setIdentity( "chat-background" );
-	background.create( screen_w /3 *2, (writtens[ 0 ]->getHeight() +screen_h /72) *how_many );
-	background.setColor( sf::Color( 0, 0, 0 ) );
-	background.setPosition( 0, screen_h -((writtens[ 0 ]->getHeight() +screen_h /72) *how_many) );
-	background.setAlpha( 0xFF /10 );
-	
-	// Set second bacground.
-	second_background.setIdentity( "chat-second_background" );
-	second_background.create( screen_w /3 *2, writtens[ 0 ]->getHeight() +screen_h /72 );
-	second_background.setColor( sf::Color( 0x00, 0x00, 0x00 ) );
-	second_background.setPosition( 0, screen_h -(writtens[ 0 ]->getHeight() +screen_h /72) );
-	second_background.setAlpha( 0xFF /5 );
-	
-	// Set text bacground.
-	text_background.setIdentity( "chat-text_background" );
-	text_background.setFont( "fonts/Jaapokki-Regular.otf" );
-	text_background.setText( "Esc" );
-	text_background.setSize( screen_h /36 );
-	// text_background.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
-	text_background.setAlpha( 0xFF );
-	text_background.setPosition( background.getX(), background.getY() );
+	if( white )	background.load( "images/level/chat_white.png" );
+	else		background.load( "images/level/chat.png" );
+	background.setScale( scale_x, scale_y );
+	background.setPosition( 0, screen_h -background.getHeight() );
+	escButton.setPosition( background.getRight() -escButton.getWidth() -screen_w /192, background.getY() +screen_h /214 );
+	background.setAlpha( 0 );
 	
 	//Set arrow.
 	arrow.setIdentity( "chat-arrow" );
 	arrow.setFont( "fonts/Jaapokki-Regular.otf" );
 	arrow.setText( "|" );
-	arrow.setSize( screen_h /36 );
-	arrow.setAlpha( 0xFF );
+	arrow.setSize( fontSize );
+	arrow.setAlpha( 0 );
 	
 	// Set username and the rest.
 	username.setIdentity( "chat-username" );
 	username.setFont( "fonts/Jaapokki-Regular.otf" );
-	setUsername( "error" );
+	setUsername( "error" );	// Just in case.
+	username.setSize( fontSize );
+	username.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	username.setAlpha( 0 );
+	username.setPosition( screen_w /256, 0 );
+	
+	escButton.setScale( 1, 1 *globalYScale /globalYLine );
+	background.setScale( scale_x, scale_y *globalYScale /globalYLine );
+	username.setScale( 1, 1 *globalYScale /globalYLine );
+	
+	for( auto &it :writtens )
+	{
+		it->setScale( 1, 1 *globalYScale /globalYLine );
+	}
 }
 
 void Chat::handle( sf::Event& event )
 {
 	if( open )
 	{
-		if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
+		if( globalYScale == globalYLine )
 		{
-			if( text_background.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+			if( sf::Mouse::isButtonPressed( sf::Mouse::Left ) )
 			{
-				open = false;
-			}
-		}
-		
-		if( event.type == sf::Event::KeyPressed )
-		{
-			used = false;
-			
-			// Backspace.
-			if( event.key.code == 59 )
-			{
-				if( writtenStrs[ 0 ].size() > 0 )
+				if( escButton.checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
-					writtenStrs[ 0 ].pop_back();
+					open = false;
+				}
+			}
+			
+			if( event.type == sf::Event::TextEntered )
+			{
+				if( event.text.unicode < 128 && event.text.unicode > 31 )
+				{
+					writtenStrs[ 0 ] += event.text.unicode;
 					setWritten();
 				}
 			}
 			
-			// Enter, return.
-			else if( event.key.code == 58 && writtenStrs[ 0 ] != "" )
+			if( event.type == sf::Event::KeyPressed )
 			{
-				for( unsigned i = writtenStrs.size() -1; i >= 1 ; i-- )
-				{
-					writtenStrs[ i ] = writtenStrs[ i -1 ];
-				}
-				writtenStrs[ 0 ] = "";
-				setWritten();
+				used = false;
 				
-				if( writtenStrs[ 1 ][ 0 ] == '@' )
+				// BackSpace
+				if( event.key.code == sf::Keyboard::BackSpace )
 				{
-					used = true;
+					if( writtenStrs[ 0 ].size() > 0 )
+					{
+						writtenStrs[ 0 ].pop_back();
+						setWritten();
+					}
 				}
-			}
-			
-			// Shift
-			else if( event.key.code == 38 || event.key.code == 42 )
-			{
-				shift = -32;
-			}
-			
-			// Esc.
-			else if( event.key.code == 36 )
-			{
-				open = !open;
-			}
-			
-			// CapsLock
-			else if( event.key.code == -1 )
-			{
-				if( capslock < 0 )
+				
+				// Enter, return.
+				else if( event.key.code == sf::Keyboard::Return && writtenStrs[ 0 ].size() > 0 )
 				{
-					capslock = 0;
+					for( unsigned i = 0; i < writtenStrs[ 0 ].size(); i++ )
+					{
+						// printf( "1. ->%s<-\n", writtenStrs[ 0 ].c_str() );
+						if( writtenStrs[ 0 ][ i ] == ' ' )
+						{
+							writtenStrs[ 0 ].erase( i, 1 );
+							i --;
+						}
+						else
+						{
+							break;
+						}
+					}
+					
+					if( writtenStrs[ 0 ].size() > 0 )
+					{
+						for( int i = writtenStrs[ 0 ].size() -1; i >= 0 ; i-- )
+						{
+							// printf( "2. ->%s<-\n", writtenStrs[ 0 ].c_str() );
+							if( writtenStrs[ 0 ][ i ] == ' ' )
+							{
+								writtenStrs[ 0 ].erase( i, 1 );
+							}
+							else
+							{
+								break;
+							}
+						}
+					}
+					
+					if( writtenStrs[ 0 ].size() > 0 )
+					{
+						// Add \n if needed.
+						string teststring = "";
+						for( unsigned i = 0; i < writtenStrs[ 0 ].size(); i++ )
+						{
+							teststring += writtenStrs[ 0 ][ i ];
+							writtens[ 0 ]->setText( teststring );
+							
+							if( writtens[ 0 ]->getWidth() +username.getWidth() +screen_w /64 >= background.getRight() )
+							{
+								string nextnewstring = "";
+								for( unsigned j = 0; j < teststring.size() -1; j++ )
+								{
+									nextnewstring += teststring[ j ];
+								}
+								nextnewstring += "\n";
+								nextnewstring += teststring[ teststring.size() -1 ];
+								teststring = nextnewstring;
+							}
+						}
+						
+						writtenStrs[ 0 ] = teststring;
+						
+						for( unsigned i = writtenStrs.size() -1; i >= 1 ; i-- )
+						{
+							writtenStrs[ i ] = writtenStrs[ i -1 ];
+						}
+						
+						writtenStrs[ 0 ] = "";
+						
+						
+						if( writtens[ 0 ]->getRight() > background.getRight() )
+						{
+							
+						}
+						
+						setWritten();
+						
+						if( writtenStrs[ 1 ][ 0 ] == '@' )
+						{
+							used = true;
+						}
+					}
+					else 
+					{
+						setWritten();
+					}
 				}
-				else
+				
+				// Esc.
+				else if( event.key.code == sf::Keyboard::Escape )
 				{
-					capslock = -32;
+					open = !open;
 				}
-			}
-			
-			// The rest.
-			else if( arrow.getRight() +username.getWidth() +screen_w /128 < screen_w /3 *2 )
-			{
-				// printf( "%d\n", event.key.code );
-				if( getChar( event.key.code ) != NULL )
-				{
-					writtenStrs[ 0 ] += *getChar( event.key.code );
-					setWritten();
-				}
-			}
-		}
-		else if( event.type == sf::Event::KeyReleased )
-		{
-			if( event.key.code == 38 || event.key.code == 42 )
-			{
-				shift = 0;
 			}
 		}
 	}
@@ -222,6 +277,7 @@ void Chat::handle( sf::Event& event )
 			if( event.key.code == 14 )
 			{
 				open = !open;
+				globalYScale = 0.1;
 			}
 		}
 	}
@@ -229,13 +285,11 @@ void Chat::handle( sf::Event& event )
 
 void Chat::draw( sf::RenderWindow* &window )
 {
-	if( open )
+	window->draw( background.get() );
+	
+	for( unsigned i = 0; i < writtens.size(); i++ )
 	{
-		window->draw( background.get() );
-		window->draw( second_background.get() );
-		window->draw( text_background.get() );
-		
-		for( unsigned i = 0; i < writtens.size(); i++ )
+		if( writtens[ i ]->getY() >= background.getY() )
 		{
 			if( writtenStrs[ i ] != "" && i != 0 )
 			{
@@ -245,13 +299,15 @@ void Chat::draw( sf::RenderWindow* &window )
 			
 			window->draw( writtens[ i ]->get() );
 		}
-		
-		// draw arrow.
-		if( counter < line /2 )
-		{
-			window->draw( arrow.get() );
-		}
 	}
+	
+	// draw arrow.
+	if( counter < line /2 )
+	{
+		window->draw( arrow.get() );
+	}
+	
+	window->draw( escButton.get() );
 }
 
 void Chat::mechanics( double elapsedTime )
@@ -260,6 +316,75 @@ void Chat::mechanics( double elapsedTime )
 	if( counter > line )
 	{
 		counter = 0;
+	}
+	
+	if( open )
+	{
+		float value = elapsedTime *0xFF *2;
+		escButton.fadein( value );
+		background.fadein( value );
+		username.fadein( value );
+		arrow.fadein( value );
+		for( auto &it :writtens )
+		{
+			it->fadein( value );
+		}
+		
+		if( globalYScale < globalYLine )
+		{
+			globalYScale += elapsedTime *5;
+		}
+		else
+		{
+			globalYScale = globalYLine;
+		}
+	}
+	else
+	{
+		float value = elapsedTime *0xFF *2;
+		escButton.fadeout( value );
+		background.fadeout( value );
+		username.fadeout( value );
+		arrow.fadeout( value );
+		for( auto &it :writtens )
+		{
+			it->fadeout( value );
+		}
+		
+		if( globalYScale > 0 )
+		{
+			globalYScale -= elapsedTime *5;
+		}
+		else
+		{
+			globalYScale = 0;
+		}
+	}
+	
+	if( globalYScale != 0 && globalYScale != globalYLine )
+	{
+		background.setPosition( 0, screen_h -background.getHeight() +screen_h /288 );
+		escButton.setPosition( background.getRight() -escButton.getWidth() -screen_w /192, background.getY() +screen_h /214 );
+		
+		escButton.setScale( 1, 1 *globalYScale /globalYLine );
+		background.setScale( scale_x, scale_y *globalYScale /globalYLine );
+		username.setScale( 1, 1 *globalYScale /globalYLine );
+		
+		for( auto &it :writtens )
+		{
+			it->setScale( 1, 1 *globalYScale /globalYLine );
+		}
+	}
+}
+
+void Chat::fadeout( float v, int min )
+{
+	escButton.fadeout( v, min );
+	background.fadeout( v, min );
+	username.fadeout( v, min );
+	for( auto &it :writtens )
+	{
+		it->fadeout( v, min );
 	}
 }
 
@@ -270,117 +395,20 @@ bool& Chat::isOpen()
 	return open;
 }
 
-bool Chat::isUsed()
+bool Chat::isCommand()
 {
 	if( open && used )
 	{
+		used = false;
 		return true;
 	}
 	
 	return false;
 }
 
-char* Chat::getChar( int n )
+bool Chat::findCommand( string line )
 {
-	bool success = false;
-	char result = ' ';
-	
-	// letters
-	if( n >= 0 && n <= 25 )
-	{
-		int buf = 0;
-		if( capslock < 0 || shift < 0 )
-		{
-			buf = -32;
-		}
-		result = static_cast <char> (n +97 +buf);
-		success = true;
-	}
-	
-	// special
-	else if( shift < 0 )
-	{
-		success = true;
-		switch( n )
-		{
-			// 1 ... 9
-			case 26: result = ')'; break;
-			case 27: result = '!'; break;
-			case 28: result = '@'; break;
-			case 29: result = '#'; break;
-			case 30: result = '$'; break;
-			case 31: result = '%'; break;
-			case 32: result = '^'; break;
-			case 33: result = '&'; break;
-			case 34: result = '*'; break;
-			case 35: result = '('; break;
-			
-			// the rest
-			case 46: result = '{'; break;
-			case 47: result = '}'; break;
-			case 48: result = ':'; break;
-			case 49: result = '<'; break;
-			case 50: result = '>'; break;
-			case 51: result = '"'; break;
-			case 52: result = '?'; break;
-			case 55: result = '+'; break;
-			case 56: result = '_'; break;
-			
-			default: success = false; break;
-		}
-	}
-	
-	// numbers
-	else if( n >= 26 && n <= 35 )
-	{
-		result = static_cast <char> (n +22);
-		success = true;
-	}
-	else if( n >= 75 && n <= 84 )
-	{
-		result = static_cast <char> (n -27);
-		success = true;
-	}
-	
-	else
-	{
-		success = true;
-		switch( n )
-		{
-			case 46: result = '['; break;
-			case 47: result = ']'; break;
-			case 48: result = ';'; break;
-			case 49: result = ','; break;
-			case 50: result = '.'; break;
-			case 51: result = static_cast <char> (39); break; // '
-			case 52: result = '/'; break;
-			case 55: result = '='; break;
-			case 56: result = '-'; break;
-			case 57: result = ' '; break;
-			
-			case 67: result = '+'; break;
-			case 68: result = '-'; break;
-			case 69: result = '*'; break;
-			case 70: result = '/'; break;
-			
-			default: success = false; break;
-		}
-	}
-	
-	if( !success )
-	{
-		return NULL;
-	}
-	
-	char* r = NULL;
-	r = new char( result );
-	
-	return r;
-}
-
-bool Chat::getCommand( string command )
-{
-	if( writtenStrs[ 1 ] == command )
+	if( writtenStrs[ 1 ] == line )
 	{
 		used = false;
 		return true;
@@ -391,57 +419,94 @@ bool Chat::getCommand( string command )
 
 
 
+
+
 void Chat::setUsername( string line )
 {
 	// Set username.
 	username.setText( line +": " );
-	username.setSize( screen_h /36 );
-	username.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-	username.setAlpha( 0xFF );
-	
 	setWritten();
 }
 
 void Chat::setWritten()
 {
-	for( unsigned i = 0; i < writtens.size(); i++ )
+	float y0 = screen_h -screen_h /28;
+	
+	writtens[ 0 ]->setPosition( screen_w /256, y0 );
+	if( writtenStrs[ 0 ].size() > 0 )
+	{
+		if( writtenStrs[ 0 ][ 0 ] == '@' )	writtens[ 0 ]->setColor( commandColor );
+		else								writtens[ 0 ]->setColor( typicalColor );
+	}
+	
+	for( unsigned i = 1; i < writtens.size(); i++ )
 	{
 		writtens[ i ]->setText( writtenStrs[ i ] );
-		writtens[ i ]->setPosition( username.getRight() +screen_w /256, text_ys[ i ] );
 		
-		if( writtenStrs[ i ][ 0 ] == '@' )
+		float y_adder = screen_h /26;
+		for( unsigned j = 0; j < writtenStrs[ i ].size(); j++ )
 		{
-			if( black )	writtens[ i ]->setColor( sf::Color( 0x00, 0x00, 0x00 ) );
-			else		writtens[ i ]->setColor( sf::Color( 0xB0, 0xC4, 0xDE ) );
+			if( static_cast <int> (writtenStrs[ i ][ j ]) == 10 )
+			{
+				y_adder += screen_h /26;
+			}
 		}
-		else
+		
+		writtens[ i ]->setPosition( username.getRight() +screen_w /256, writtens[ i -1 ]->getY() -y_adder );
+		
+		if( writtenStrs[ i ].size() > 0 )
 		{
-			writtens[ i ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+			if( writtenStrs[ i ][ 0 ] == '@' )	writtens[ i ]->setColor( commandColor );
+			else								writtens[ i ]->setColor( typicalColor );
 		}
 	}
 	
-	if( writtenStrs[ 0 ].size() == 0 )
-	{
-		writtens[ 0 ]->setText( " " );
-	}
-	else
-	{
-		writtens[ 0 ]->setText( writtenStrs[ 0 ] );
-	}
+	writtens[ 0 ]->setText( writtenStrs[ 0 ] );
 	
-	writtens[ 0 ]->setPosition( screen_w /256, text_ys[ 0 ] );
+	if( writtens[ 0 ]->getRight() < background.getRight() )	writtens[ 0 ]->setPosition( screen_w /256, y0 );
+	else	writtens[ 0 ]->setPosition( (background.getRight() -writtens[ 0 ]->getWidth()) -screen_w /256, y0 );
 	
-	if( writtenStrs[ 0 ].size() == 0 )
-	{
-		arrow.setPosition( 0, text_ys[ 0 ] );
-	}
-	else
-	{
-		arrow.setPosition( writtens[ 0 ]->getRight(), text_ys[ 0 ] );
-	}
+	if( writtenStrs[ 0 ].size() == 0 )	arrow.setPosition( 0, y0 );
+	else	arrow.setPosition( writtens[ 0 ]->getRight(), y0 );
 }
 
-void Chat::setBlack( bool black )
+void Chat::setError()
 {
-	this->black = black;
+	writtenStrs[ 1 ] = writtenStrs[ 1 ] +" - command doesn't exist";
+	
+	// Add \n if needed.
+	string teststring = "";
+	for( unsigned i = 0; i < writtenStrs[ 1 ].size(); i++ )
+	{
+		teststring += writtenStrs[ 1 ][ i ];
+		writtens[ 0 ]->setText( teststring );
+		
+		if( writtens[ 0 ]->getWidth() +username.getWidth() +screen_w /64 >= background.getRight() )
+		{
+			string nextnewstring = "";
+			for( unsigned j = 0; j < teststring.size() -1; j++ )
+			{
+				nextnewstring += teststring[ j ];
+			}
+			nextnewstring += "\n";
+			nextnewstring += teststring[ teststring.size() -1 ];
+			teststring = nextnewstring;
+		}
+	}
+	
+	writtenStrs[ 1 ] = teststring;
+	
+	setWritten();
+}
+
+
+
+void Chat::setCommandColor( sf::Color newColor )
+{
+	commandColor = newColor;
+}
+
+void Chat::setTypicalColor( sf::Color newColor )
+{
+	typicalColor = newColor;
 }
