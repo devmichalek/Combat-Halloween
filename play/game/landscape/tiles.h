@@ -1,11 +1,16 @@
 #pragma once
 #include "own/sprite.h"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
 #include <thread>
 
 class Tiles
 {
+	// Just for test.
+	bool collision;
+	sf::RectangleShape rect;
+	
 	// Basics.
 	float screen_w;
 	float screen_h;
@@ -39,6 +44,9 @@ public:
 	void draw( sf::RenderWindow* &window );
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
+	
+	// Keyboard - test.
+	void turnCollision( bool collision );
 	
 	// Thread.
 	bool isNull();

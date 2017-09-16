@@ -14,6 +14,7 @@ Tiles::~Tiles()
 
 void Tiles::free()
 {
+	collision = false;
 	screen_w = 0;
 	screen_h = 0;
 	border_x = 0;
@@ -57,6 +58,7 @@ void Tiles::free()
 
 void Tiles::reset()
 {
+	collision = false;
 	border_x = 0;
 	border_y = 0;
 	fadingout = false;
@@ -109,8 +111,12 @@ void Tiles::load( float screen_w, float screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setIdentity( "tiles-sprites" );
 		sprites[ sprites.size() -1 ]->load( "images/play/tiles/" +con::itos(i) +".png" );
-		sprites[ sprites.size() -1 ]->setScale( screen_w /2560, screen_h /1440 );
+		sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
 	}
+	
+	// Collision.
+	rect.setSize( sf::Vector2f( sprites[ 0 ]->getWidth(), sprites[ 0 ]->getHeight() /4 ) );
+	rect.setFillColor( sf::Color( 0x99, 0x99, 0x00, 0x99 ) );
 }
 
 void Tiles::draw( sf::RenderWindow* &window )
@@ -147,6 +153,13 @@ void Tiles::draw( sf::RenderWindow* &window )
 			}
 		}
 	}
+	
+	// Test.
+	if( collision )
+	{
+		window->draw( rect );
+		rect.setPosition( -rect.getSize().x, -rect.getSize().y );
+	}
 }
 
 void Tiles::fadein( float v, int max )
@@ -168,6 +181,12 @@ void Tiles::fadeout( float v, int min )
 	
 	fadingout = true;
 }
+
+void Tiles::turnCollision( bool collision )
+{
+	this->collision = collision;
+}
+
 
 
 
@@ -236,46 +255,37 @@ void Tiles::prepare()
 		}
 		
 		
-		// MULTIPLIERS --------------------------------------------------------------------------
-		float x_multiplier = 1;
-		float y_multiplier = 1;
-		float this_screen_h = 0;
+		// NEW SIZES --------------------------------------------------------------------------
+		float my_screen_w = 0;
+		float my_screen_h = 0;
 		
-		// Set x_multiplier.
+		// Set my_screen_w.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				x_multiplier = screen_w /con::stof( bufor );
+				my_screen_w = screen_w -con::stof( bufor );
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", x_multiplier );
 		
-		// Set y_multiplier.
+		// Set my_screen_h.
 		for( unsigned i = start; i < line.size(); i++ )
 		{
 			if( line[ i ] == '|' )
 			{
 				start = i +1;
-				this_screen_h = con::stof( bufor );
-				y_multiplier = screen_h /con::stof( bufor );
+				my_screen_h = screen_h -con::stof( bufor ) +1;
 				bufor = "";
 				break;
 			}
 			
 			bufor += line[ i ];
 		}
-		// printf( "%f\n", y_multiplier );
-		
-		// The margin of error.
-		x_multiplier -= 0.03;
-		y_multiplier -= 0.08;
-		this_screen_h *= 0.08;
 		
 		
 		
@@ -303,8 +313,8 @@ void Tiles::prepare()
 				
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *x_multiplier;
-				float y = con::stoi( data[ 3 ] ) *y_multiplier +this_screen_h;
+				float x = con::stoi( data[ 2 ] ) *0.999;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
 				if( w == 0 )
 				{
@@ -359,6 +369,8 @@ bool Tiles::checkCollisionRect( sf::Rect <float> rect )
 				sprites[ t ]->setPosition( x, y );
 				if( sprites[ t ]->checkCollisionRect( rect ) )
 				{
+					if( rect.top > y )	this->rect.setPosition( sf::Vector2f(x, y +sprites[ t ]->getHeight() -this->rect.getSize().y) );
+					else				this->rect.setPosition( sf::Vector2f(x, y) );
 					return true;
 				}
 			}
@@ -379,6 +391,7 @@ bool Tiles::checkCollisionRect( sf::Rect <float> rect )
 				sprites[ t ]->setPosition( x, y );
 				if( sprites[ t ]->checkCollisionRect( rect ) )
 				{
+					if( rect.top < y )	this->rect.setPosition( sf::Vector2f(x, y) );
 					return true;
 				}
 			}
