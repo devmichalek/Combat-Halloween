@@ -65,6 +65,8 @@ void Level::load( float screen_w, float screen_h )
 	
 	// Set chat.
 	chat.load( screen_w, screen_h );
+	chat.setCommandColor( sf::Color( 0, 0, 0 ) );
+	chat.setTypicalColor( sf::Color( 0x68, 0x68, 0x68 ) );
 	
 	// Pause system.
 	pausesystem.load( screen_w, screen_h );
@@ -148,17 +150,16 @@ void Level::mechanics( double elapsedTime )
 	if( !pausesystem.isActive() && !next && !back )
 	{
 		chat.mechanics( elapsedTime );
-		if( chat.isUsed() )
+		if( chat.isCommand() )
 		{
 			// Someone clicked backtomenu button.
-			if( chat.getCommand( "@menu" ) || chat.getCommand( "@back" ) ||
-			chat.getCommand( "@aback" ) || chat.getCommand( "@return" ) )
+			if( chat.findCommand( "@menu" ) || chat.findCommand( "@back" ) )
 			{
 				homebutton.setChanged( true );
 			}
 			
-			// Someone clicked singleplayer.
-			else if( chat.getCommand( "@play" ) || chat.getCommand( "@start" ) || chat.getCommand( "@go" ) )
+			// Someone clicked play.
+			else if( chat.findCommand( "@play" ) || chat.findCommand( "@start" ) )
 			{
 				if( worldtable.isChosen() )
 				{
@@ -167,76 +168,49 @@ void Level::mechanics( double elapsedTime )
 			}
 			
 			// Reload data.
-			if( worldtable.abletoreload() )
+			else if( chat.findCommand( "@reload" ) || chat.findCommand( "@connect" ) ||
+			chat.findCommand( "@rel" ) || chat.findCommand( "@con" ) )
 			{
-				if( chat.getCommand( "@reload" ) || chat.getCommand( "@connect" ) ||
-				chat.getCommand( "@rel" ) || chat.getCommand( "@con" ) )
+				if( worldtable.abletoreload() )
 				{
+					
 					worldtable.setThread();
 				}
 			}
 			
 			// Update data.
-			else if( chat.getCommand( "@update" ) )
+			else if( chat.findCommand( "@update" ) )
 			{
 				updatebutton.setChanged( true );
 			}
 			
 			// Turn on/off all chunks.
-			else if( chat.getCommand( "@chunk turn" ) || chat.getCommand( "@chunk" ) )
+			else if( chat.findCommand( "@chunk" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
-			}
-			else if( chat.getCommand( "@chunk off" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@chunk on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
 			}
 			
 			// Turn on/off music.
-			else if( chat.getCommand( "@music turn" ) || chat.getCommand( "@music" ) )
+			else if( chat.findCommand( "@music" ) )
 			{
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@music off" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@music on" ) )
-			{
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
-			}
 			
 			// Turn on/off all sounds.
-			else if( chat.getCommand( "@sound turn" ) || chat.getCommand( "@sound" ) )
+			else if( chat.findCommand( "@sound" ) )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
-			else if( chat.getCommand( "@sound off" ) )
+			
+			// Command doesn't exist.
+			else
 			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( false );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( false );
-			}
-			else if( chat.getCommand( "@sound on" ) )
-			{
-				chunkbutton.setChanged( true );
-				chunkbutton.setActive( true );
-				musicbutton.setChanged( true );
-				musicbutton.setActive( true );
+				chat.setError();
 			}
 		}
 		
@@ -325,6 +299,7 @@ void Level::fades( double elapsedTime )
 		musicbutton.fadeout( value, min );
 		chunk_volume.fadeout( value, min );
 		music_volume.fadeout( value, min );
+		chat.fadeout( value, min );
 		pausesystem.fadein( value *3, min );
 		
 		music.fadeout( elapsedTime *100, music_volume.getMainVolume() *0.2 );
@@ -344,6 +319,7 @@ void Level::fades( double elapsedTime )
 		musicbutton.fadeout( value );
 		chunk_volume.fadeout( value );
 		music_volume.fadeout( value );
+		chat.fadeout( value );
 		
 		music.fadeout( elapsedTime *100 );
 	}
