@@ -5,12 +5,13 @@
 
 class Balloonchat
 {
-	float width;
-	float max_width;
+	float screen_w;
+	float screen_h;
 	
 	MyText text;
+	MySprite arrow;
 	MySprite lefttopborder;
-	MySprite leftbotborder;
+	MySprite square;
 	MySprite righttopborder;
 	MySprite rightbotborder;
 	MySprite bodyvertical;
@@ -28,6 +29,6 @@ public:
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );
 	
-	void setPosition( float x, float y );
+	void setPosition( float x, float y, bool left = false );
 	void setText( wstring newtext );
 };
