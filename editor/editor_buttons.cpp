@@ -43,6 +43,9 @@ void Editor_buttons::free()
 		
 		buttons.clear();
 	}
+	
+	shift = false;
+	deleteState = false;
 }
 
 void Editor_buttons::reset()
@@ -56,6 +59,8 @@ void Editor_buttons::reset()
 	{
 		it->setOffset( 0 );
 	}
+	
+	shift = false;
 }
 
 
@@ -73,30 +78,21 @@ void Editor_buttons::load( float screen_w, float screen_h )
 		
 		texts.push_back( new MyText() );
 		texts[ texts.size() -1 ]->setIdentity( "editor_buttons-texts" );
-		texts[ texts.size() -1 ]->setFont( "fonts/Jaapokki-Regular.otf" );
+		texts[ texts.size() -1 ]->setFont( "fonts/jcandlestickextracond.ttf" );
 		
 		buttons.push_back( new MySprite() );
 		buttons[ buttons.size() -1 ]->setIdentity( "editor_buttons-buttons" );
 	}
 	
-	
-	// "mode".
-	texts.push_back( new MyText() );
-	texts[ texts.size() -1 ]->setIdentity( "editor_buttons-texts" );
-	texts[ texts.size() -1 ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	
 	// Set.
 	texts[ HOME ]->setText( "home" );
 	texts[ OPTIONS ]->setText( "options" );
 	texts[ NAME ]->setText( "name" );
-	texts[ DELETE ]->setText( "delete" );
+	texts[ DELETE ]->setText( "delete\nmode" );
 	texts[ LOAD ]->setText( "load" );
 	texts[ SAVE ]->setText( "save" );
 	texts[ PLAY ]->setText( "play" );
 	texts[ UPLOAD ]->setText( "upload" );
-	texts[ AMOUNT ]->setText( " mode" );
-	texts[ AMOUNT ]->setSize( 17 );
-	texts[ AMOUNT ]->setAlpha( 0xFF );
 	
 	buttons[ HOME ]->load( "images/level/home.png", 3 );
 	buttons[ OPTIONS ]->load( "images/menu/settings.png", 3 );
@@ -109,7 +105,7 @@ void Editor_buttons::load( float screen_w, float screen_h )
 	
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
-		texts[ i ]->setSize( 17 );
+		texts[ i ]->setSize( 20 );
 		texts[ i ]->setAlpha( 0xFF );
 		buttons[ i ]->setScale( 0.5, 0.5 );
 	}
@@ -129,7 +125,6 @@ void Editor_buttons::load( float screen_w, float screen_h )
 	{
 		texts[ i ]->setPosition( buttons[ i ]->getX() +buttons[ i ]->getWidth()/2 -texts[ i ]->getWidth()/2, buttons[ i ]->getBot() +screen_h /360 );
 	}
-	texts[ AMOUNT ]->setPosition( texts[ DELETE ]->getX(), texts[ DELETE ]->getBot() );
 }
 
 void Editor_buttons::handle( sf::Event& event )
@@ -143,6 +138,17 @@ void Editor_buttons::handle( sf::Event& event )
 			{
 				if( buttons[ i ]->checkCollision( event.mouseButton.x, event.mouseButton.y ) )
 				{
+					if( i != DELETE )
+					{
+						states[ DELETE ] = false;
+						buttons[ DELETE ]->setOffset( 0 );
+						deleteState = false;
+					}
+					else
+					{
+						deleteState = !deleteState;
+					}
+					
 					set( i );
 					break;
 				}
@@ -162,6 +168,29 @@ void Editor_buttons::draw( sf::RenderWindow* &window )
 	{
 		window->draw( it->get() );
 	}
+	
+	
+	if( !deleteState && (!isAnything() || isDelete()) )
+	{
+		if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( sf::Keyboard::LControl ) ) )
+		{
+			shift = true;
+		}
+		
+		if( shift )
+		{
+			if( !isDelete() )
+			{
+				set( DELETE );
+			}
+		}
+		else
+		{
+			states[ DELETE ] = false;
+			buttons[ DELETE ]->setOffset( 0 );
+		}
+	}
+	shift = false;
 }
 
 

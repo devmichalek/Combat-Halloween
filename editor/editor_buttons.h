@@ -28,6 +28,9 @@ class Editor_buttons
 	vector <MyText*> texts;
 	vector <MySprite*> buttons;
 	
+	bool shift;
+	bool deleteState;
+	
 public:
 	
 	// Basics.
