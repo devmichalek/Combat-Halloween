@@ -298,10 +298,20 @@ void Tiles::prepare()
 				string nrstr = "";
 				vector <string> data;
 				
+				bool wrong = false;
 				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
 					if( bufor[ j ] == '*' )
 					{
+						if( data.size() == 0 )
+						{
+							if( con::stoi( nrstr ) != 0 && con::stoi( nrstr ) != 1 )
+							{
+								wrong = true;
+								break;
+							}
+						}
+						
 						data.push_back( nrstr );
 						nrstr = "";
 					}
@@ -311,21 +321,24 @@ void Tiles::prepare()
 					}
 				}
 				
-				sf::Uint8 w = con::stoi( data[ 0 ] );
-				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *0.999;
-				float y = con::stoi( data[ 3 ] ) +my_screen_h;
-				
-				if( w == 0 )
+				if( !wrong )
 				{
-					types.push_back( t );
-					fs.push_back( sf::Vector2f( x, y ) );
-				}
-				else if( w == 1 )
-				{
-					utypes.push_back( t );
-					ufs.push_back( sf::Vector2f( x, y ) );
-					ualpha.push_back( 0 );
+					sf::Uint8 w = con::stoi( data[ 0 ] );
+					sf::Uint8 t = con::stoi( data[ 1 ] );
+					float x = con::stoi( data[ 2 ] ) *0.999;
+					float y = con::stoi( data[ 3 ] ) +my_screen_h;
+					
+					if( w == 0 )
+					{
+						types.push_back( t );
+						fs.push_back( sf::Vector2f( x, y ) );
+					}
+					else if( w == 1 )
+					{
+						utypes.push_back( t );
+						ufs.push_back( sf::Vector2f( x, y ) );
+						ualpha.push_back( 0 );
+					}
 				}
 				
 				// Clear.

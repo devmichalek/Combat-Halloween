@@ -236,10 +236,20 @@ void Coins::prepare()
 				string nrstr = "";
 				vector <string> data;
 				
+				bool wrong = false;
 				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
 					if( bufor[ j ] == '*' )
 					{
+						if( data.size() == 0 )
+						{
+							if( con::stoi( nrstr ) != 3 )
+							{
+								wrong = true;
+								break;
+							}
+						}
+						
 						data.push_back( nrstr );
 						nrstr = "";
 					}
@@ -249,15 +259,18 @@ void Coins::prepare()
 					}
 				}
 				
-				sf::Uint8 w = con::stoi( data[ 0 ] );
-				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *0.999;
-				float y = con::stoi( data[ 3 ] ) +my_screen_h;
-				
-				if( w == 3 )
+				if( !wrong )
 				{
-					fs.push_back( sf::Vector2f( x, y ) );
-					offsets.push_back( rand() %this->line );
+					sf::Uint8 w = con::stoi( data[ 0 ] );
+					sf::Uint8 t = con::stoi( data[ 1 ] );
+					float x = con::stoi( data[ 2 ] ) *0.999;
+					float y = con::stoi( data[ 3 ] ) +my_screen_h;
+					
+					if( w == 3 )
+					{
+						fs.push_back( sf::Vector2f( x, y ) );
+						offsets.push_back( rand() %this->line );
+					}
 				}
 				
 				// Clear.

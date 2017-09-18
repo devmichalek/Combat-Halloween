@@ -395,10 +395,20 @@ void Factory <F>::prepare()
 				string nrstr = "";
 				vector <string> data;
 				
+				bool wrong = false;
 				for( unsigned j = 0; j < bufor.size(); j++ )
 				{
 					if( bufor[ j ] == '*' )
 					{
+						if( data.size() == 0 )
+						{
+							if( con::stoi( nrstr ) != 0 && con::stoi( nrstr ) != 4 )
+							{
+								wrong = true;
+								break;
+							}
+						}
+						
 						data.push_back( nrstr );
 						nrstr = "";
 					}
@@ -408,39 +418,42 @@ void Factory <F>::prepare()
 					}
 				}
 				
-				sf::Uint8 w = con::stoi( data[ 0 ] );
-				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *0.999;
-				float y = con::stoi( data[ 3 ] ) +my_screen_h;
-				
-				if( w == 4 )
+				if( !wrong )
 				{
-					if( t == type )
+					sf::Uint8 w = con::stoi( data[ 0 ] );
+					sf::Uint8 t = con::stoi( data[ 1 ] );
+					float x = con::stoi( data[ 2 ] ) *0.999;
+					float y = con::stoi( data[ 3 ] ) +my_screen_h;
+					
+					if( w == 4 )
 					{
-						// Features.
-						float myarmour = rand() %995 +1;
-						float mydamage = 1;
-						float myvelocity = 100;
-						float myheartpoints = 100;
-						
-						foes.push_back( new Skeleton );
-						foes[ foes.size() -1 ]->setPosition( x, y );
-						foes[ foes.size() -1 ]->setCenterX( x );
-						foes[ foes.size() -1 ]->setArmour( myarmour );
-						foes[ foes.size() -1 ]->setDamage( mydamage );
-						foes[ foes.size() -1 ]->setVelocity( myvelocity );
-						foes[ foes.size() -1 ]->setHeartpoints( myheartpoints );
-						foes[ foes.size() -1 ]->addText( L"We're skeletons." );
-						foes[ foes.size() -1 ]->addText( L"Have you heard that crush?\nIt's your bones." );
-						foes[ foes.size() -1 ]->addText( L"I've never see your death.\nWe should get to know\neach other." );
-						foes[ foes.size() -1 ]->addText( L"Zombies?\nI hate them!" );
-						foes[ foes.size() -1 ]->addText( L"We should ask vampire just in case." );
+						if( t == type )
+						{
+							// Features.
+							float myarmour = con::stoi( data[ 4 ] );
+							float mydamage = con::stoi( data[ 5 ] );
+							float myvelocity = con::stoi( data[ 6 ] );
+							float myheartpoints = con::stoi( data[ 7 ] );
+							
+							foes.push_back( new Skeleton );
+							foes[ foes.size() -1 ]->setPosition( x, y );
+							foes[ foes.size() -1 ]->setCenterX( x );
+							foes[ foes.size() -1 ]->setArmour( myarmour );
+							foes[ foes.size() -1 ]->setDamage( mydamage );
+							foes[ foes.size() -1 ]->setVelocity( myvelocity );
+							foes[ foes.size() -1 ]->setHeartpoints( myheartpoints );
+							
+							for( unsigned i = 8; i < data.size(); i++ )
+							{
+								foes[ foes.size() -1 ]->addText( data[ i ] );
+							}
+						}
 					}
-				}
-				else if( w == 0 )
-				{
-					fs_tiles.push_back( sf::Vector2f( x, y ) );
-					types_tiles.push_back( t );
+					else if( w == 0 )
+					{
+						fs_tiles.push_back( sf::Vector2f( x, y ) );
+						types_tiles.push_back( t );
+					}
 				}
 				
 				// Clear.
