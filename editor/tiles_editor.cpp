@@ -2,24 +2,6 @@
 #include "own/file.h"
 #include <iomanip>
 
-Block::Block( sf::Uint8 w, sf::Uint8 n, float x, float y )
-{
-	this->w = w;
-	this->n = n;
-	this->x = x;
-	this->y = y;
-}
-
-Block::~Block()
-{
-	w = 0;
-	n = 0;
-	x = 0;
-	y = 0;
-}
-
-
-
 Tiles_editor::Tiles_editor()
 {
 	free();
@@ -40,13 +22,13 @@ void Tiles_editor::free()
 	mouse_x = -1;
 	mouse_y = -1;
 	
+	hatchFoeVisible.free();
+	
 	mouseInfo.free();
 	arrow.free();
 	
 	width = 0;
 	grid = false;
-	
-	key_info.free();
 	
 	additional_x = 0;
 	additional_y = 0;
@@ -118,18 +100,13 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	float scale_x = screen_w /2560;
 	float scale_y = screen_h /1440;
 	
+	hatchFoeVisible.load( screen_w, screen_h );
+	
 	mouseInfo.setIdentity( "tiles_editor-mouseInfo" );
-	mouseInfo.setFont( "fonts/Jaapokki-Regular.otf" );
+	mouseInfo.setFont( "fonts/jcandlestickextracond.ttf" );
 	mouseInfo.setText( " " );
 	mouseInfo.setSize( screen_h /42 );
 	mouseInfo.setAlpha( 0xFF /2 );
-	
-	key_info.setIdentity( "tiles_editor-key_info" );
-	key_info.setFont( "fonts/Jaapokki-Regular.otf" );
-	key_info.setText( "Keyboard action('key'): type --('a') ++('d') 0('s')      chosen --('z') ++('c') 0('x')      delete last('BackSpace')" );
-	key_info.setSize( screen_h /36 );
-	key_info.setAlpha( 0xFF );
-	key_info.setPosition( screen_w /256, screen_h -key_info.getHeight() -screen_h /144 );
 	
 	arrow.setIdentity( "tiles_editor-arrow" );
 	arrow.load( "images/editor/left_arrow.png" );
@@ -164,123 +141,117 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	{
 		foes.push_back( new MySprite() );
 		foes[ foes.size() -1 ]->setIdentity( "tiles_editor-foes" );
-		int n = 6;
-		if( i == 1 )	n = 8;
-		foes[ foes.size() -1 ]->load( "images/play/foes/" +con::itos( i ) +".png", n );
-		foes[ foes.size() -1 ]->setScale( 0.5, 0.5 );
 	}
+	foes[ 0 ]->load( "images/play/foes/skeleton/1.png", 6 );
+	foes[ 0 ]->setScale( 0.5, 0.5 );
+	foes[ 1 ]->load( "images/play/foes/vampire/1.png", 8 );
+	foes[ 1 ]->setScale( 0.5, 0.5 );
+	foes[ 2 ]->load( "images/play/foes/zombie/1.png", 6 );
+	foes[ 2 ]->setScale( 0.5, 0.5 );
 	
 	// Set width.
 	width = tiles[ 0 ]->getWidth() /2;
 }
 
-void Tiles_editor::handle( sf::Event& event, bool isRubbish )
+void Tiles_editor::handle( sf::Event& event )
 {
-	isrubbishon = isRubbish;
-	
-	if( event.type == sf::Event::KeyPressed && !isRubbish )
-	{
-		int code = event.key.code;
-		
-		if( code == sf::Keyboard::BackSpace )
-		{
-			if( lastwasfoe )
-			{
-				if( foeblocks.size() > 0 )
-				{
-					foeblocks.pop_back();
-				}
-				
-				if( foeblocks.size() == 0 )
-				{
-					lastwasfoe = false;
-				}
-			}
-			else
-			{
-				if( blocks.size() > 0 )
-				{
-					blocks.pop_back();
-				}
-				
-				if( blocks.size() == 0 )
-				{
-					lastwasfoe = true;
-				}
-			}
-		}
-		
-		
-		int size = 0;
-		if( type == TILE || type == UNVISIBLE_TILE )	size = tiles.size();
-		else if( type == OBJECT )						size = objects.size();
-		else if( type == FOE )							size = foes.size();
-			
-		
-		// CHANGING CHOSEN ----------------------------------------
-		if( code == sf::Keyboard::X )							chosen = 0;
-		else if( code == sf::Keyboard::C && chosen < size -1 )	chosen ++;
-		else if( code == sf::Keyboard::Z && chosen > 0 )		chosen --;
-		
-		
-		// CHANGING TYPE ----------------------------------------
-		if( code == sf::Keyboard::S )
-		{
-			type = 0;
-			chosen = 0;
-		}
-		else if( code == sf::Keyboard::D && type < AMOUNT -1 )
-		{
-			type ++;
-			chosen = 0;
-		}
-		else if( code == sf::Keyboard::A && type > -1 )
-		{
-			type --;
-			chosen = 0;
-		}
-		
-		if( type == TILE || type == UNVISIBLE_TILE )	grid = true;
-		else if( type == OBJECT )						grid = false;
-		else if( type == COIN )							grid = true;
-		else if( type == FOE )							grid = false;
-	}
-	
-	
 	if( event.type == sf::Event::MouseMoved )
 	{
 		mouse_x = event.mouseMove.x;
 		mouse_y = event.mouseMove.y;
 		
-		griding( isRubbish );
+		griding();
 	}
 	
-	if( event.type == sf::Event::MouseButtonPressed )
+	hatchFoeVisible.handle( event );
+	if( !hatchFoeVisible.isVisible() )
 	{
-		mouse_x = event.mouseButton.x;
-		mouse_y = event.mouseButton.y;
-		
-		if( event.mouseButton.button == sf::Mouse::Left )
+		if( event.type == sf::Event::KeyPressed && !isrubbishon )
 		{
-			if( chosen > -1 && type > -1 && !isRubbish )
-			{
-				griding( isRubbish );
+			int code = event.key.code;
+			
+			int size = 0;
+			if( type == TILE || type == UNVISIBLE_TILE )	size = tiles.size();
+			else if( type == OBJECT )						size = objects.size();
+			else if( type == FOE )							size = foes.size();
 				
-				if( type == FOE )
-				{
-					lastwasfoe = true;
-					foeblocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
-				}
-				else
-				{
-					lastwasfoe = false;
-					blocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
-				}
+				
+			if( code == sf::Keyboard::Space )
+			{
+				put();
 			}
 			
-			if( isRubbish )
+			// CHANGING CHOSEN ----------------------------------------
+			else if( code == sf::Keyboard::X )						chosen /= 2;
+			else if( code == sf::Keyboard::C && chosen < size -1 )	chosen ++;
+			else if( code == sf::Keyboard::Z && chosen > 0 )		chosen --;
+			
+			
+			// CHANGING TYPE ----------------------------------------
+			if( code == sf::Keyboard::S )
 			{
-				deleteOne();
+				type = -1;
+				chosen = 0;
+			}
+			else if( code == sf::Keyboard::D && type < AMOUNT -1 )
+			{
+				type ++;
+				chosen = 0;
+			}
+			else if( code == sf::Keyboard::A && type > -1 )
+			{
+				type --;
+				chosen = 0;
+			}
+			
+			if( type == -1 )
+			{
+				grid = false;
+			}
+			
+			if( type == TILE || type == UNVISIBLE_TILE )	grid = true;
+			else if( type == OBJECT )						grid = false;
+			else if( type == COIN )							grid = true;
+			else if( type == FOE )							grid = false;
+		}
+		
+		
+		if( event.type == sf::Event::MouseButtonPressed )
+		{
+			mouse_x = event.mouseButton.x;
+			mouse_y = event.mouseButton.y;
+			
+			if( event.mouseButton.button == sf::Mouse::Left )
+			{
+				put();
+				
+				if( hatchFoeVisible.getType() != -1 )
+				{
+					int myType = hatchFoeVisible.getType();
+					hatchFoeVisible.setType( -1 );
+					foeblocks[ myType ].armour = hatchFoeVisible.getArmour();
+					foeblocks[ myType ].damage = hatchFoeVisible.getDamage();
+					foeblocks[ myType ].velocity = hatchFoeVisible.getVelocity();
+					foeblocks[ myType ].heartpoints = hatchFoeVisible.getHeartpoints();
+				}
+			}
+			else if( event.mouseButton.button == sf::Mouse::Right )
+			{
+				for( unsigned i = 0; i < foeblocks.size(); i++ )
+				{
+					int n = foeblocks[ i ].n;
+					float x = foeblocks[ i ].x -additional_x;
+					float y = foeblocks[ i ].y -additional_y;
+			
+					foes[ n ]->setPosition( x, y );
+					if( foes[ n ]->checkCollision( mouse_x, mouse_y ) )
+					{
+						hatchFoeVisible.setFeatures( foeblocks[ i ].armour, foeblocks[ i ].damage, foeblocks[ i ].velocity, foeblocks[ i ].heartpoints );
+						hatchFoeVisible.setPosition( x +foes[ n ]->getWidth()/2, y );
+						hatchFoeVisible.setType( i );
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -378,7 +349,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		}
 	}
 	
-	window->draw( key_info.get() );
+	hatchFoeVisible.draw( window );
 	
 	drawTumbnails( window );
 	drawLines( window );
@@ -412,8 +383,8 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 			
 			for( unsigned i = 0; i < tiles.size(); i++ )
 			{
-				if( chosen != i )	tiles[ i ]->setAlpha( 0xFF /3 );
-				else				tiles[ i ]->setAlpha( 0xFF );
+				if( chosen != static_cast <int> (i) )	tiles[ i ]->setAlpha( 0xFF /3 );
+				else									tiles[ i ]->setAlpha( 0xFF );
 				window->draw( tiles[ i ]->get() );
 				tiles[ i ]->setScale( old_scale_x, old_scale_y );
 			}
@@ -432,7 +403,7 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 			
 			for( unsigned i = 0; i < objects.size(); i++ )
 			{
-				if( chosen != i )	objects[ i ]->setAlpha( 0xFF /3 );
+				if( chosen != static_cast <int> (i) )	objects[ i ]->setAlpha( 0xFF /3 );
 				window->draw( objects[ i ]->get() );
 				objects[ i ]->setScale( old_scale_x, old_scale_y );
 				objects[ i ]->setAlpha( 0xFF );
@@ -452,7 +423,7 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 			
 			for( unsigned i = 0; i < foes.size(); i++ )
 			{
-				if( chosen != i )	foes[ i ]->setAlpha( 0xFF /3 );
+				if( chosen != static_cast <int> (i) )	foes[ i ]->setAlpha( 0xFF /3 );
 				window->draw( foes[ i ]->get() );
 				foes[ i ]->setScale( old_scale_x, old_scale_y );
 				foes[ i ]->setAlpha( 0xFF );
@@ -512,9 +483,40 @@ void Tiles_editor::drawLines( sf::RenderWindow* &window )
 		mynewx += width*2;
 	}
 	
-	mouseInfo.setText( "X: " +con::itos( static_cast <int> (mouse_x -additional_x) ) +"  Y: " +con::itos( static_cast <int> (mouse_y -additional_y) ) );
+	mouseInfo.setText( "X: " +con::itos( static_cast <int> (mouse_x -additional_x) ) +"  Y: " +con::itos( (static_cast <int> (mouse_y -additional_y -screen_h))*-1 ) );
 	mouseInfo.setPosition( mynewx, mouse_y -mouseInfo.getHeight() *1.5 );
 	window->draw( mouseInfo.get() );
+}
+
+
+
+void Tiles_editor::setRubbish( bool rubbish )
+{
+	this->isrubbishon = rubbish;
+}
+
+void Tiles_editor::put()
+{
+	if( chosen > -1 && type > -1 && !isrubbishon )
+	{
+		griding();
+		
+		if( type == FOE )
+		{
+			lastwasfoe = true;
+			foeblocks.push_back( HatchFoe( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+		}
+		else
+		{
+			lastwasfoe = false;
+			blocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+		}
+	}
+	
+	if( isrubbishon )
+	{
+		deleteOne();
+	}
 }
 
 
@@ -542,8 +544,8 @@ string Tiles_editor::getType()
 	
 	if( type == TILE )					line = "Tiles";
 	else if( type == UNVISIBLE_TILE )	line = "Unvisible Tiles";
-	else if( type == COIN )				line = "Treasure";
 	else if( type == OBJECT )			line = "Landscape";
+	else if( type == COIN )				line = "Treasure";
 	else if( type == FOE )				line = "Foes";
 	
 	return line;
@@ -551,7 +553,79 @@ string Tiles_editor::getType()
 
 string Tiles_editor::getChosen()
 {
-	return con::itos( chosen );
+	string line = "";
+	
+	if( type == TILE || type == UNVISIBLE_TILE )
+	{
+		switch( chosen )
+		{
+			case 0: line += "Left Solid Grass"; 			break;
+			case 1: line += "Middle Solid Grass"; 			break;
+			case 2: line += "Right Solid Grass"; 			break;
+			
+			case 3: line += "Left Hill Grass"; 				break;
+			case 4: line += "Right Hill Grass"; 			break;
+			
+			case 5: line += "Left Hovering Grass"; 			break;
+			case 6: line += "Middle Hovering Grass"; 		break;
+			case 7: line += "Right Hovering Grass";			break;
+			case 8: line += "Single Hovering Grass"; 		break;
+			
+			case 9: line += "Left Ground Border"; 			break;
+			case 10: line += "Ground";						break;
+			case 11: line += "Right Ground Border"; 		break;
+			
+			case 12: line += "Left Lower Ground Border"; 	break;
+			case 13: line += "Middle Lower Ground Border";	break;
+			case 14: line += "Right Lower Ground Border"; 	break;
+			
+			case 15: line += "Left Hill Addition"; 			break;
+			case 16: line += "Right Hill Addition";			break;
+		}
+	}
+	else if( type == OBJECT )
+	{
+		switch( chosen )
+		{
+			case 0: line += "Skull With Bone"; 		break;
+			case 1: line += "Skull"; 				break;
+			case 2: line += "Three Bones"; 			break;
+			case 3: line += "Two Bones"; 			break;
+			
+			case 4: line += "Wooden Arrow"; 		break;
+			case 5: line += "Wooden Sign"; 			break;
+			
+			case 6: line += "Round Bush"; 			break;
+			case 7: line += "Spiky Bush"; 			break;
+			
+			case 8: line += "Wooden Chest"; 		break;
+			case 9: line += "Bush Without Leaves"; 	break;
+			case 10: line += "Tree Without Leaves";	break;
+			
+			case 11: line += "Remains"; 			break;
+			case 12: line += "Tombstone"; 			break;
+			case 13: line += "Cross"; 				break;
+		}
+	}
+	else if( type == COIN )
+	{
+		line = "Coin";
+	}
+	else if( type == FOE )
+	{
+		switch( chosen )
+		{
+			case 0: line += "Skeleton";	 break;
+			case 1: line += "Vampire";	 break;
+			case 2: line += "Zombie";	 break;
+		}
+	}
+	else
+	{
+		line = "None";
+	}
+	
+	return line;
 }
 
 
@@ -595,11 +669,8 @@ void Tiles_editor::save( string path )
 		if( !foeblocks.empty() )
 		{
 			// Sort by x but foeblocks.
-			sort( foeblocks.begin(), foeblocks.end(), []( const Block& a, const Block& b ) { return a.x < b.x; } );
-			finalblocks.insert( finalblocks.end(), foeblocks.begin(), foeblocks.end() );
+			sort( foeblocks.begin(), foeblocks.end(), []( const HatchFoe& a, const HatchFoe& b ) { return a.x < b.x; } );
 		}
-		
-		
 		
 		// Write to file.
 		file.get() << "adriqun" << "|";	// Author.
@@ -614,6 +685,24 @@ void Tiles_editor::save( string path )
 			file.get() << static_cast <int> ( finalblocks[ i ].n ) << "*";
 			file.get() << std::fixed << std::setprecision( 2 ) << finalblocks[ i ].x << "*";
 			file.get() << std::fixed << std::setprecision( 2 ) << finalblocks[ i ].y << "|";
+		}
+		
+		for( unsigned i = 0; i < foeblocks.size(); i++ )
+		{
+			file.get() << static_cast <int> ( foeblocks[ i ].w ) << "*";
+			file.get() << static_cast <int> ( foeblocks[ i ].n ) << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].x << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].y << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].armour << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].damage << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].velocity << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].heartpoints;
+			for( unsigned j = 0; j < foeblocks[ i ].texts.size(); j++ )
+			{
+				file.get() << "*";
+				file.get() << foeblocks[ i ].texts[ j ];
+			}
+			file.get() << "|";
 		}
 		
 		// Clear.
@@ -721,7 +810,19 @@ void Tiles_editor::load( string path )
 				
 				if( w == FOE )
 				{
-					foeblocks.push_back( Block( w, t, x, y ) );
+					foeblocks.push_back( HatchFoe( w, t, x, y ) );
+					
+					// Features.
+					foeblocks[ foeblocks.size() -1 ].armour = con::stoi( data[ 4 ] );
+					foeblocks[ foeblocks.size() -1 ].damage = con::stoi( data[ 5 ] );
+					foeblocks[ foeblocks.size() -1 ].velocity = con::stoi( data[ 6 ] );
+					foeblocks[ foeblocks.size() -1 ].heartpoints = con::stoi( data[ 7 ] );
+					
+					// Texts.
+					for( unsigned i = 8; i < data.size(); i++ )
+					{
+						foeblocks[ foeblocks.size() -1 ].texts.push_back( data[ i ] );
+					}
 				}
 				else
 				{
@@ -747,10 +848,10 @@ void Tiles_editor::load( string path )
 
 
 
-void Tiles_editor::griding( bool isRubbish )
+void Tiles_editor::griding()
 {
 	// Grid works.
-	if( grid && !isRubbish )
+	if( grid && !isrubbishon )
 	{
 		int count = 0;
 		while( mouse_x >= width )

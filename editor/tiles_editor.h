@@ -5,17 +5,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
+#include "hatchfoe.h"
 
-struct Block
-{
-	sf::Uint8 w;
-	sf::Uint8 n;
-	float x;
-	float y;
-	
-	Block( sf::Uint8 w = 0, sf::Uint8 n = 0, float x = 0, float y = 0 );
-	~Block();
-};
+
 
 class Tiles_editor
 {
@@ -39,6 +31,9 @@ class Tiles_editor
 	float mouse_x;
 	float mouse_y;
 	
+	// Hatch Foe Visible
+	HatchFoeVisible hatchFoeVisible;
+	
 	MyText mouseInfo;
 	sf::RectangleShape line;
 	MySprite arrow;
@@ -46,9 +41,6 @@ class Tiles_editor
 	// Support.
 	float width;
 	bool grid;
-	
-	// Additional information.
-	MyText key_info;
 	
 	// Direction.
 	float additional_x;
@@ -63,7 +55,7 @@ class Tiles_editor
 	
 	// Main Major Vector.
 	vector <Block> blocks;
-	vector <Block> foeblocks;
+	vector <HatchFoe> foeblocks;
 	bool lastwasfoe;
 	bool isrubbishon;
 	
@@ -76,10 +68,13 @@ public:
 	void reset();
 	
 	void load( float screen_w, float screen_h );
-	void handle( sf::Event& event, bool isRubbish );
+	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
 	void drawTumbnails( sf::RenderWindow* &window );
 	void drawLines( sf::RenderWindow* &window );
+	
+	void setRubbish( bool rubbish );
+	void put();
 	
 	// Set.
 	void setAdditionalX( float newX );
@@ -95,7 +90,7 @@ public:
 	void load( string path );
 	
 	// The rest.
-	void griding( bool isRubbish );
+	void griding();
 	void clearVector();
 	void deleteOne();
 };
