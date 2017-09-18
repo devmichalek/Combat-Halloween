@@ -33,7 +33,9 @@ class Editor_details
 	
 	// Type and chosen.
 	MyText typeText;
+	MyText typeStatusText;
 	MyText chosenText;
+	MyText chosenStatusText;
 	
 	// Name.
 	int nameStatus;

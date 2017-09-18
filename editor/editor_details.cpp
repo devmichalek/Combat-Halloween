@@ -35,7 +35,9 @@ void Editor_details::free()
 	gridStatusText.free();
 	
 	typeText.free();
+	typeStatusText.free();
 	chosenText.free();
+	chosenStatusText.free();
 	
 	nameStatus = 0;
 	nameStr = "world";
@@ -87,28 +89,45 @@ void Editor_details::load( float screen_w, float screen_h )
 	gridText.setIdentity( "editor_details-gridText" );
 	gridStatusText.setIdentity( "editor_details-gridStatusText" );
 	typeText.setIdentity( "editor_details-typeText" );
+	typeStatusText.setIdentity( "editor_details-typeStatusText" );
 	chosenText.setIdentity( "editor_details-chosenText" );
+	chosenStatusText.setIdentity( "editor_details-chosenStatusText" );
 	
-	gridText.setFont( "fonts/Jaapokki-Regular.otf" );
-	gridStatusText.setFont( "fonts/Jaapokki-Regular.otf" );
-	typeText.setFont( "fonts/Jaapokki-Regular.otf" );
-	chosenText.setFont( "fonts/Jaapokki-Regular.otf" );
+	gridText.setFont( "fonts/jcandlestickextracond.ttf" );
+	gridStatusText.setFont( "fonts/jcandlestickextracond.ttf" );
+	typeText.setFont( "fonts/jcandlestickextracond.ttf" );
+	typeStatusText.setFont( "fonts/jcandlestickextracond.ttf" );
+	chosenText.setFont( "fonts/jcandlestickextracond.ttf" );
+	chosenStatusText.setFont( "fonts/jcandlestickextracond.ttf" );
 	
 	gridText.setText( "Grid: " );
 	gridText.setPosition( 160, 10 );
+	gridText.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
 	gridStatusText.setText( "Off" );
-	typeText.setText( "Type: None" );
-	chosenText.setText( "Chosen: 0" );
+	typeText.setText( "Category: " );
+	typeText.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	typeText.setPosition( gridText.getX(), 55 );
+	typeStatusText.setText( "None" );
+	chosenText.setText( "Chosen: " );
+	chosenText.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	chosenText.setPosition( gridText.getX(), 32 );
+	chosenStatusText.setText( "None" );
 	
-	gridText.setSize( 22 );
-	gridStatusText.setSize( 22 );
-	typeText.setSize( 22 );
-	chosenText.setSize( 22 );
+	int mySize = 26;
+	gridText.setSize( mySize );
+	gridStatusText.setSize( mySize );
+	typeText.setSize( mySize );
+	typeStatusText.setSize( mySize );
+	chosenText.setSize( mySize );
+	chosenStatusText.setSize( mySize );
 	
-	gridText.setAlpha( 0xFF );
-	gridStatusText.setAlpha( 0xFF );
-	typeText.setAlpha( 0xFF );
-	chosenText.setAlpha( 0xFF );
+	int alpha = 0xFF;
+	gridText.setAlpha( alpha );
+	gridStatusText.setAlpha( alpha );
+	typeText.setAlpha( alpha );
+	typeStatusText.setAlpha( alpha );
+	chosenText.setAlpha( alpha );
+	chosenStatusText.setAlpha( alpha );
 	
 	// Set stuff for name.
 	nameForm.setIdentity( "editor_details-chosenText" );
@@ -116,8 +135,8 @@ void Editor_details::load( float screen_w, float screen_h )
 	arrow.setIdentity( "editor_details-chosenText" );
 	table.setIdentity( "editor_details-chosenText" );
 	agreebutton.setIdentity( "editor_details-chosenText" );
-	nameForm.setFont( "fonts/Jaapokki-Regular.otf" );
-	name.setFont( "fonts/Jaapokki-Regular.otf" );
+	nameForm.setFont( "fonts/jcandlestickextracond.ttf" );
+	name.setFont( "fonts/jcandlestickextracond.ttf" );
 	arrow.setFont( "fonts/Jaapokki-Regular.otf" );
 	table.load( "images/menu/table_second.png" );
 	agreebutton.load( "images/editor/agree.png", 3 );
@@ -128,15 +147,16 @@ void Editor_details::load( float screen_w, float screen_h )
 	agreebutton.setPosition( screen_w/2 -agreebutton.getWidth()/2, table.getBot() -agreebutton.getHeight() *1.1 );
 	
 	nameForm.setText( "Current world name: " );
-	nameForm.setSize( 22 );
+	nameForm.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	nameForm.setSize( mySize );
 	nameForm.setAlpha( 0xFF );
 	
 	name.setText( nameStr );
-	name.setSize( 22 );
+	name.setSize( mySize );
 	name.setAlpha( 0xFF );
 	
 	arrow.setText( "|" );
-	arrow.setSize( 22 );
+	arrow.setSize( mySize );
 	arrow.setAlpha( 0xFF );
 	
 	nameForm.setPosition( screen_w /2 -nameForm.getWidth() /2, table.getY() +screen_h /54 );
@@ -172,12 +192,12 @@ void Editor_details::handle( sf::Event& event )
 					additional_x += 320;
 					arrows[ LEFT ]->setOffset( 1 );
 				}
-				else if( arrows[ RIGHT ]->checkCollision( mouse_x, mouse_y ) )
+				else if( arrows[ RIGHT ]->checkCollision( mouse_x, mouse_y ) && additional_x > -40000 )
 				{
 					additional_x -= 320;
 					arrows[ RIGHT ]->setOffset( 1 );
 				}
-				else if( arrows[ TOP ]->checkCollision( mouse_x, mouse_y ) )
+				else if( arrows[ TOP ]->checkCollision( mouse_x, mouse_y ) && additional_y < 20000 )
 				{
 					additional_y += 180;
 					arrows[ TOP ]->setOffset( 1 );
@@ -193,14 +213,6 @@ void Editor_details::handle( sf::Event& event )
 					additional_y = 0;
 				}
 			}
-		}
-	}
-	
-	if( event.type == sf::Event::MouseButtonReleased )
-	{
-		for( auto &it :arrows )
-		{
-			it->setOffset( 0 );
 		}
 	}
 	
@@ -238,6 +250,53 @@ void Editor_details::handle( sf::Event& event )
 			}
 		}
 	}
+	else
+	{
+		if( event.type == sf::Event::KeyPressed )
+		{
+			for( auto &it :arrows )
+			{
+				it->setOffset( 0 );
+			}
+			
+			// Arrows.
+			if( event.key.code == sf::Keyboard::Left && additional_x < 0 )
+			{
+				additional_x += 320;
+				arrows[ LEFT ]->setOffset( 1 );
+			}
+			else if( event.key.code == sf::Keyboard::Right && additional_x > -40000 )
+			{
+				additional_x -= 320;
+				arrows[ RIGHT ]->setOffset( 1 );
+			}
+			
+			if( event.key.code == sf::Keyboard::Up && additional_y < 20000 )
+			{
+				additional_y += 180;
+				arrows[ TOP ]->setOffset( 1 );
+			}
+			else if( event.key.code == sf::Keyboard::Down && additional_y > 0 )
+			{
+				additional_y -= 180;
+				arrows[ BOT ]->setOffset( 1 );
+			}
+			
+			if( event.key.code == sf::Keyboard::Return )
+			{
+				additional_x = 0;
+				additional_y = 0;
+			}
+		}
+	}
+	
+	if( event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::KeyReleased )
+	{
+		for( auto &it :arrows )
+		{
+			it->setOffset( 0 );
+		}
+	}
 }
 
 void Editor_details::draw( sf::RenderWindow* &window )
@@ -247,10 +306,18 @@ void Editor_details::draw( sf::RenderWindow* &window )
 	{
 		arrows[ LEFT ]->setOffset( 2 );
 	}
+	else if( additional_x <= -40000 )
+	{
+		arrows[ RIGHT ]->setOffset( 2 );
+	}
 	
 	if( additional_y <= 0 )
 	{
 		arrows[ BOT ]->setOffset( 2 );
+	}
+	else if( additional_y >= 20000 )
+	{
+		arrows[ TOP ]->setOffset( 2 );
 	}
 	
 	for( auto &it :arrows )
@@ -261,7 +328,9 @@ void Editor_details::draw( sf::RenderWindow* &window )
 	window->draw( gridText.get() );
 	window->draw( gridStatusText.get() );
 	window->draw( typeText.get() );
+	window->draw( typeStatusText.get() );
 	window->draw( chosenText.get() );
+	window->draw( chosenStatusText.get() );
 }
 
 void Editor_details::drawName( sf::RenderWindow* &window )
@@ -323,20 +392,20 @@ void Editor_details::setGrid( bool grid )
 			gridStatusText.setColor( sf::Color::Red );
 		}
 		
-		gridStatusText.setPosition( gridText.getRight() +4, gridText.getY() );
+		gridStatusText.setPosition( typeText.getRight() +4, gridText.getY() );
 	}
 }
 
 void Editor_details::setType( string type )
 {
-	typeText.setText( "Type: " +type );
-	typeText.setPosition( gridText.getX(), 32 );
+	typeStatusText.setText( type );
+	typeStatusText.setPosition( typeText.getRight() +4, typeText.getY() );
 }
 
 void Editor_details::setChosen( string chosen )
 {
-	chosenText.setText( "Chosen: " +chosen );
-	chosenText.setPosition( gridText.getX(), 64 );
+	chosenStatusText.setText( chosen );
+	chosenStatusText.setPosition( typeText.getRight() +4, chosenText.getY() );
 }
 
 
@@ -345,7 +414,7 @@ void Editor_details::setChosen( string chosen )
 void Editor_details::setWritten()
 {
 	name.setText( nameStr );
-	name.setPosition( screen_w /2 -name.getWidth()/2, nameForm.getBot() +nameForm.getHeight() );
+	name.setPosition( screen_w /2 -name.getWidth()/2, nameForm.getBot() +nameForm.getHeight()/2 );
 	arrow.setPosition( name.getRight(), name.getY() );
 }
 
