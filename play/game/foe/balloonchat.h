@@ -30,5 +30,5 @@ public:
 	void fadeout( float v = 1, int min = 0 );
 	
 	void setPosition( float x, float y, bool left = false );
-	void setText( wstring newtext );
+	void setText( string newtext );
 };

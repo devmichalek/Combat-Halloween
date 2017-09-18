@@ -158,9 +158,9 @@ void Balloonchat::setPosition( float x, float y, bool left )
 	}
 }
 
-void Balloonchat::setText( wstring newtext )
+void Balloonchat::setText( string newtext )
 {
-	text.setTextW( newtext );
+	text.setText( newtext );
 	bodyvertical.setScale( text.getWidth() +lefttopborder.getWidth()*2 -1, text.getHeight() );
 	bodyhorizontal.setScale( text.getWidth(), text.getHeight() +lefttopborder.getHeight()*2 );
 }
