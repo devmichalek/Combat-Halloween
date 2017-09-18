@@ -65,6 +65,16 @@ void Chat::reset()
 	}
 	
 	setWritten();
+	
+	for( auto &it :writtens )
+	{
+		it->setAlpha( 0 );
+	}
+	
+	escButton.setAlpha( 0 );
+	background.setAlpha( 0 );
+	arrow.setAlpha( 0 );
+	username.setAlpha( 0 );
 }
 
 
