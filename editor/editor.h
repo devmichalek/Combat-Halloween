@@ -3,6 +3,7 @@
 #include "editor_buttons.h"
 #include "editor_information.h"
 #include "editor_details.h"
+#include "editor_options.h"
 #include "tiles_editor.h"
 #include "level/chat.h"
 
@@ -17,6 +18,7 @@ class Editor
 	Editor_buttons editor_buttons;
 	Editor_information editor_information;
 	Editor_details editor_details;
+	Editor_options editor_options;
 	Tiles_editor tiles_editor;
 	Chat chat;
 	

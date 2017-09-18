@@ -19,6 +19,7 @@ void Editor::free()
 	editor_buttons.free();
 	editor_information.free();
 	editor_details.free();
+	editor_options.free();
 	tiles_editor.free();
 	chat.free();
 }
@@ -44,6 +45,9 @@ void Editor::load( float screen_w, float screen_h )
 	// Set editor details.
 	editor_details.load( screen_w, screen_h );
 	
+	// Set editor options.
+	editor_options.load( screen_w, screen_h );
+	
 	// Set tiles editor.
 	tiles_editor.load( screen_w, screen_h );
 	
@@ -57,7 +61,7 @@ void Editor::handle( sf::Event& event )
 {
 	if( !back && !play )
 	{
-		if( !editor_information.isActive() && editor_details.getNameStatus() == 0 )
+		if( editor_details.getNameStatus() == 0 && editor_options.getStatus() == 0 )
 		{
 			chat.handle( event );
 		}
@@ -66,18 +70,23 @@ void Editor::handle( sf::Event& event )
 		{
 			if( editor_details.getNameStatus() == 0 )
 			{
-				editor_information.handle( event );
-			
-				if( !editor_information.isActive() )
+				editor_options.handle( event );
+				
+				if( editor_options.getStatus() == 0 )
 				{
-					editor_buttons.handle( event );
-					tiles_editor.setAdditionalX( editor_details.getAdditionalX() );
-					tiles_editor.setAdditionalY( editor_details.getAdditionalY() );
-					tiles_editor.handle( event, editor_buttons.isDelete() );
+					editor_information.handle( event );
+			
+					if( !editor_information.isActive() )
+					{
+						tiles_editor.setAdditionalX( editor_details.getAdditionalX() );
+						tiles_editor.setAdditionalY( editor_details.getAdditionalY() );
+						tiles_editor.handle( event );
+						editor_buttons.handle( event );
+					}
 				}
 			}
 			
-			if( !editor_information.isActive() )
+			if( !editor_information.isActive() && editor_options.getStatus() == 0 )
 			{
 				editor_details.handle( event );
 			}
@@ -108,9 +117,10 @@ void Editor::draw( sf::RenderWindow* &window )
 	editor_details.setChosen( tiles_editor.getChosen() );
 	editor_details.draw( window );
 	
-	editor_information.drawLayout( window, editor_details.getNameStatus() );
+	editor_information.drawLayout( window, editor_details.getNameStatus() || editor_buttons.isOptions() );
 	editor_information.draw( window );
 	editor_details.drawName( window );
+	editor_options.draw( window );
 	
 	chat.draw( window );
 }
@@ -130,6 +140,12 @@ void Editor::mechanics( double elapsedTime )
 			else if( chat.findCommand( "@options" ) || chat.findCommand( "@settings" ) || chat.findCommand( "@sets" ) )
 			{
 				editor_buttons.setOptions();
+				chat.isOpen() = false;
+			}
+			else if( chat.findCommand( "@name" ) || chat.findCommand( "@title" ) )
+			{
+				editor_buttons.setName();
+				chat.isOpen() = false;
 			}
 			else if( chat.findCommand( "@rubbish" ) || chat.findCommand( "@erase" ) ||
 			chat.findCommand( "@delete" ) || chat.findCommand( "@remove" ) ||
@@ -160,12 +176,29 @@ void Editor::mechanics( double elapsedTime )
 				tiles_editor.clearVector();
 			}
 			
+			// Information settings.
+			else if( chat.findCommand( "@yes" ) )
+			{
+				if( editor_information.isActive() )
+				{
+					editor_information.setStatus( 2 );
+				}
+			}
+			else if( chat.findCommand( "@no" ) )
+			{
+				if( editor_information.isActive() )
+				{
+					editor_information.setStatus( 3 );
+				}
+			}
 			// Command doesn't exist.
 			else
 			{
 				chat.setError();
 			}
 		}
+		
+		tiles_editor.setRubbish( editor_buttons.isDelete() );
 		
 		if( !editor_information.isActive() )
 		{
@@ -182,7 +215,10 @@ void Editor::mechanics( double elapsedTime )
 		
 		if( editor_buttons.isOptions() )	// Show options.
 		{
-			
+			if( editor_options.getStatus() == 0 )
+			{
+				editor_options.setStatus( 1 );
+			}
 		}
 		else if( editor_buttons.isName() )	// Name.
 		{
@@ -196,18 +232,25 @@ void Editor::mechanics( double elapsedTime )
 			tiles_editor.reset();
 		}
 		
-		if( editor_details.getNameStatus() == 2 )
+		// Reset by action.
+		if( editor_options.getStatus() == 2 )
+		{
+			editor_buttons.reset();
+			editor_options.setStatus( 0 );
+		}
+		else if( editor_details.getNameStatus() == 2 )
 		{
 			editor_buttons.reset();
 			editor_details.setNameStatus( 0 );
 		}
 		
+		// Answers.
 		if( editor_information.answerYes() )
 		{
 			if( editor_buttons.isHome() )	// Back to menu.
 			{
-				chat.isOpen() = false;
 				back = true;
+				chat.isOpen() = false;
 			}
 			else if( editor_buttons.isSave() )	// Save.
 			{
@@ -219,8 +262,8 @@ void Editor::mechanics( double elapsedTime )
 			}
 			else if( editor_buttons.isPlay() )	// Test playing.
 			{
-				chat.isOpen() = false;
 				play = true;
+				chat.isOpen() = false;
 			}
 			else if( editor_buttons.isUpload() )	// Upload world.
 			{
