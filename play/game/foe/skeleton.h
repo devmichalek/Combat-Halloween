@@ -1,8 +1,6 @@
 #pragma once
 #include "own/sprite.h"
 #include <vector>
-#include <string>
-using namespace std;
 
 class Skeleton
 {
@@ -48,7 +46,7 @@ class Skeleton
 	int chosen_text;
 	float text_line;
 	float text_counter;
-	vector <wstring> texts;
+	vector <string> texts;
 	
 public:
 	
@@ -123,8 +121,8 @@ public:
 	
 	
 	// Text stuff.
-	void addText( wstring line );
+	void addText( string line );
 	bool showText();
-	wstring getText();
+	string getText();
 	bool isLeftText();
 };

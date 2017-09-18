@@ -541,7 +541,7 @@ void Skeleton::mechanics( double elapsedTime )
 
 
 
-void Skeleton::addText( wstring line )
+void Skeleton::addText( string line )
 {
 	this->texts.push_back( line );
 	chosen_text = rand() %texts.size();
@@ -557,7 +557,7 @@ bool Skeleton::showText()
 	return false;
 }
 
-wstring Skeleton::getText()
+string Skeleton::getText()
 {
 	return texts[ chosen_text ];
 }
