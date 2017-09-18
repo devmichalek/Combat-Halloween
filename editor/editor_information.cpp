@@ -50,12 +50,13 @@ void Editor_information::load( float screen_w, float screen_h )
 	disagreeButton.setPosition( table.getX() +agreeButton.getWidth()*0.1, agreeButton.getY() );
 	
 	// Texts.
-	info.setFont( "fonts/Jaapokki-Regular.otf" );
-	worldname.setFont( "fonts/Jaapokki-Regular.otf" );
+	info.setFont( "fonts/jcandlestickextracond.ttf" );
+	worldname.setFont( "fonts/jcandlestickextracond.ttf" );
 	info.setText( " " );
 	worldname.setText( " " );
-	info.setSize( 22 );
-	worldname.setSize( 22 );
+	info.setSize( 26 );
+	info.setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	worldname.setSize( 26 );
 	info.setAlpha( 0xFF );
 	worldname.setAlpha( 0xFF );
 	setInfo( " " );
@@ -160,4 +161,9 @@ bool Editor_information::answerNo()
 	}
 	
 	return false;
+}
+
+void Editor_information::setStatus( int status )
+{
+	this->status = status;
 }

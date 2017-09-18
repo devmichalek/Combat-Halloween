@@ -33,4 +33,6 @@ public:
 	bool isActive();
 	bool answerYes();
 	bool answerNo();
+	
+	void setStatus( int status );
 };
