@@ -58,6 +58,7 @@ const sf::Sprite& MySprite::get() const
 
 
 
+
 void MySprite::setIdentity( string identity )
 {
 	this->identity = identity;

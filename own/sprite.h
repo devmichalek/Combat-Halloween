@@ -1,9 +1,6 @@
 #pragma once
 #define _GLIBCXX_USE_CXX11_ABI 0
-#include "SFML/Graphics/Rect.hpp"
-#include "SFML/Graphics/Image.hpp"
-#include "SFML/Graphics/Sprite.hpp"
-#include "SFML/Graphics/Texture.hpp"
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
 using namespace std;
@@ -20,7 +17,7 @@ class MySprite
 public:
 
     MySprite();
-    ~MySprite();
+    virtual ~MySprite();
     void free();
 	const sf::Sprite& get() const;	// Return sprite
 	
