@@ -1,5 +1,6 @@
 #include "own/file.h"
 #include <stdio.h>
+#include <sstream>
 
 MyFile::MyFile()
 {
@@ -138,4 +139,13 @@ string con::itos( int n )
 	
 	tmp += n % 10 + 48;
 	return tmp;
+}
+
+string con::ftos( float n )
+{
+    std::ostringstream b;
+	
+    b << n;
+	
+    return b.str();   
 }
