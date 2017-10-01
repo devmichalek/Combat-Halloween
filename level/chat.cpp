@@ -181,7 +181,7 @@ void Chat::handle( sf::Event& event )
 				// BackSpace
 				if( event.key.code == sf::Keyboard::BackSpace )
 				{
-					if( writtenStrs[ 0 ].size() > 0 )
+					if( !writtenStrs[ 0 ].empty() )
 					{
 						writtenStrs[ 0 ].pop_back();
 						setWritten();
@@ -189,7 +189,7 @@ void Chat::handle( sf::Event& event )
 				}
 				
 				// Enter, return.
-				else if( event.key.code == sf::Keyboard::Return && writtenStrs[ 0 ].size() > 0 )
+				else if( event.key.code == sf::Keyboard::Return && !writtenStrs[ 0 ].empty() )
 				{
 					for( unsigned i = 0; i < writtenStrs[ 0 ].size(); i++ )
 					{
@@ -205,7 +205,7 @@ void Chat::handle( sf::Event& event )
 						}
 					}
 					
-					if( writtenStrs[ 0 ].size() > 0 )
+					if( !writtenStrs[ 0 ].empty() )
 					{
 						for( int i = writtenStrs[ 0 ].size() -1; i >= 0 ; i-- )
 						{
@@ -221,7 +221,7 @@ void Chat::handle( sf::Event& event )
 						}
 					}
 					
-					if( writtenStrs[ 0 ].size() > 0 )
+					if( !writtenStrs[ 0 ].empty() )
 					{
 						// Add \n if needed.
 						string teststring = "";
@@ -443,7 +443,7 @@ void Chat::setWritten()
 	float y0 = screen_h -screen_h /28;
 	
 	writtens[ 0 ]->setPosition( screen_w /256, y0 );
-	if( writtenStrs[ 0 ].size() > 0 )
+	if( !writtenStrs[ 0 ].empty() )
 	{
 		if( writtenStrs[ 0 ][ 0 ] == '@' )	writtens[ 0 ]->setColor( commandColor );
 		else								writtens[ 0 ]->setColor( typicalColor );
@@ -464,7 +464,7 @@ void Chat::setWritten()
 		
 		writtens[ i ]->setPosition( username.getRight() +screen_w /256, writtens[ i -1 ]->getY() -y_adder );
 		
-		if( writtenStrs[ i ].size() > 0 )
+		if( !writtenStrs[ i ].empty() )
 		{
 			if( writtenStrs[ i ][ 0 ] == '@' )	writtens[ i ]->setColor( commandColor );
 			else								writtens[ i ]->setColor( typicalColor );
@@ -476,7 +476,7 @@ void Chat::setWritten()
 	if( writtens[ 0 ]->getRight() < background.getRight() )	writtens[ 0 ]->setPosition( screen_w /256, y0 );
 	else	writtens[ 0 ]->setPosition( (background.getRight() -writtens[ 0 ]->getWidth()) -screen_w /256, y0 );
 	
-	if( writtenStrs[ 0 ].size() == 0 )	arrow.setPosition( 0, y0 );
+	if( writtenStrs[ 0 ].empty() )	arrow.setPosition( 0, y0 );
 	else	arrow.setPosition( writtens[ 0 ]->getRight(), y0 );
 }
 
