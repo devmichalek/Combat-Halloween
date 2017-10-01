@@ -24,7 +24,7 @@ class Skeleton
 	float width;
 	float centerX;		// The center.
 	float left, right;	// Borders.
-	float scale_x, scale_y;
+	float scale;
 	
 	// Animation part.
 	int state;
@@ -75,7 +75,7 @@ public:
 	void setWidth( float width );
 	void setCenterX( float centerX );
 	void setBorders( float left, float right );
-	void setScale( float scale_x, float scale_y );
+	void setScale( float scale );
 	void turnLeft();
 	void turnRight();
 	float getX();
@@ -93,8 +93,8 @@ public:
 	float getCenterX();
 	float getLeft();
 	float getRight();
-	float getXScale();
-	float getYScale();
+	float getScaleX();
+	float getScaleY();
 	
 	
 	// Animation.

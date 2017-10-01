@@ -12,46 +12,47 @@ Zombie::~Zombie()
 
 void Zombie::free()
 {
-	if( !lines.empty() )
-	{
-		lines.clear();
-	}
-	
 	armour = 0;
 	damage = 0;
 	velocity = 0;
 	heartpoints = 0;
 	heartpoints_state = 0;
 	
-	left = right = 0;
 	x = y = 0;
+	width = 0;
+	centerX = 0;
+	left = right = 0;
+	scale = 0;
 	
-	offset = 0;
 	state = -1;
-	appearwas = false;
+	offset = 0;
+	if( !lines.empty() )
+	{
+		lines.clear();
+	}
 	
+	appearwas = false;
+	attacks = 0;
 	attack_line = 1;
 	attack_counter = attack_line;
-	attack_howmany = 0;
+	
+	inactivity_x = 0;
+	inactivity_line = rand() %5 +3;	// 4 seconds.
+	inactivity_counter = -1;
+	
+	
+	chosen_text = 0;
+	text_line = text_line = rand() %8 +8;;	// 8 seconds.
+	text_counter = 0;
+	if( !texts.empty() )
+	{
+		texts.clear();
+		texts.shrink_to_fit();
+	}
 }
 
 
 
-void Zombie::setLines( vector <sf::Uint8> lines )
-{
-	this->lines = lines;
-}
-
-void Zombie::setWidth( float width )
-{
-	this->width = width;
-}
-
-void Zombie::setScale( float scale_x, float scale_y )
-{
-	this->scale_x = scale_x;
-	this->scale_y = scale_y;
-}
 
 void Zombie::setArmour( float value )
 {
@@ -68,7 +69,7 @@ void Zombie::setVelocity( float value )
 	this->velocity = value;
 }
 
-void Zombie::setHP( float value )
+void Zombie::setHeartpoints( float value )
 {
 	this->heartpoints = value;
 	this->heartpoints_state = value;
@@ -83,31 +84,36 @@ void Zombie::harm( float value )
 	}
 }
 
-void Zombie::setLeft( float value )
+float Zombie::getArmour()
 {
-	this->left = value;
+	return armour;
 }
 
-void Zombie::setRight( float value )
+float Zombie::getDamage()
 {
-	this->right = value;
+	return damage;
 }
 
-void Zombie::setOffset( float value )
+float Zombie::getVelocity()
 {
-	this->offset = value;
+	return velocity;
 }
 
-void Zombie::setCenterX( float centerX )
+float Zombie::getHeartpoints()
 {
-	this->centerX = centerX;
+	return heartpoints;
 }
 
-void Zombie::setPosition( float x, float y )
+float Zombie::getHPScale()
 {
-	this->x = x;
-	this->y = y;
+	if( heartpoints /heartpoints_state < 0 )
+	{
+		return 0;
+	}
+	
+	return heartpoints /heartpoints_state;
 }
+
 
 
 
@@ -119,21 +125,200 @@ void Zombie::moveX( double elapsedTime )
 	}
 }
 
+void Zombie::setPosition( float x, float y )
+{
+	this->x = x;
+	this->y = y;
+}
+
+void Zombie::setWidth( float width )
+{
+	this->width = width;
+}
+
+void Zombie::setCenterX( float centerX )
+{
+	this->centerX = centerX;
+}
+
+void Zombie::setBorders( float left, float right )
+{
+	this->left = left;
+	this->right = right;
+}
+
+void Zombie::setScale( float scale )
+{
+	this->scale = scale;
+}
+
 void Zombie::turnLeft()
 {
-	if( scale_x < 0 && attack_counter > attack_line /3 )
+	if( scale < 0 && attack_counter > attack_line /3 )
 	{
-		scale_x = -scale_x;
+		scale = -scale;
 	}
 }
 
 void Zombie::turnRight()
 {
-	if( scale_x > 0 && attack_counter > attack_line /3 )
+	if( scale > 0 && attack_counter > attack_line /3 )
 	{
-		scale_x = -scale_x;
+		scale = -scale;
 	}
 }
+
+float Zombie::getX()
+{
+	float xOffset = 0;
+	
+	if( scale < 0 )
+	{
+		if( state == APPEAR )		xOffset = width *1.2121;
+		else if( state == IDLE )	xOffset = width *1.12;
+		else if( state == WALK )	xOffset = width *1.12;
+		else if( state == ATTACK )	xOffset = width *1.58;
+		else if( state == DIE )		xOffset = width *1.21;
+	}
+	else
+	{
+		if( state == ATTACK )	xOffset = -width *0.47;
+		else if( state == DIE )	xOffset = -width *0.21;
+	}
+	
+	return x +xOffset;
+}
+
+float Zombie::getY()
+{
+	float yOffset = width *0.01;
+	if( state == ATTACK )
+	{
+		yOffset += width *0.032;
+	}
+		
+	
+	return y +yOffset;
+}
+
+float Zombie::getRealX()
+{
+	return x +(width *0.22);
+}
+
+float Zombie::getRealY()
+{
+	return y -getRealHeight();
+}
+
+float Zombie::getRealWidth()
+{
+	return width /1.5;
+}
+
+float Zombie::getRealHeight()
+{
+	return width *1.26;
+}
+
+float Zombie::getAttackX()
+{
+	float myx = getRealX() -getAttackWidth();
+	
+	if( scale < 0 )
+	{
+		myx += getRealX() +getRealWidth();
+	}
+	
+	return myx;
+}
+
+float Zombie::getAttackY()
+{
+	return getRealY() +width *0.5;
+}
+
+float Zombie::getAttackWidth()
+{
+	return width *0.5;
+}
+
+float Zombie::getAttackHeight()
+{
+	return width *0.6;
+}
+
+float Zombie::getMouthX()
+{
+	return getRealX() +getRealWidth()/1.5;
+}
+
+float Zombie::getMouthY()
+{
+	return getRealY() +width *0.37;
+}
+
+float Zombie::getCenterX()
+{
+	return centerX;
+}
+
+float Zombie::getLeft()
+{
+	return left;
+}
+
+float Zombie::getRight()
+{
+	return right;
+}
+
+float Zombie::getScaleX()
+{
+	return scale;
+}
+
+float Zombie::getScaleY()
+{
+	float newScale = scale;
+	if( newScale < 0 )	newScale = -newScale;
+	
+	return newScale;
+}
+
+
+
+
+void Zombie::setState( int value )
+{
+	this->state = value;
+}
+
+void Zombie::setOffset( float value )
+{
+	this->offset = value;
+}
+
+void Zombie::setLines( vector <sf::Uint8> lines )
+{
+	this->lines = lines;
+}
+
+int Zombie::getState()
+{
+	return state;
+}
+
+float Zombie::getOffset()
+{
+	return offset;
+}
+
+vector <sf::Uint8> Zombie::getLines()
+{
+	return lines;
+}
+
 
 
 
@@ -141,6 +326,8 @@ void Zombie::setAppear()
 {
 	state = APPEAR;
 	offset = 0;
+	inactivity_counter = 0;
+	inactivity_x = -1;
 }
 
 void Zombie::setIdle()
@@ -156,6 +343,8 @@ void Zombie::setWalk()
 	if( attack_counter > attack_line /3 )
 	{
 		state = WALK;
+		inactivity_counter = 0;
+		inactivity_x = -1;
 	}
 }
 
@@ -164,120 +353,17 @@ void Zombie::setAttack()
 	state = ATTACK;
 	offset = 0;
 	attack_counter = 0;
+	inactivity_counter = 0;
+	inactivity_x = -1;
 }
 
 void Zombie::setDie()
 {
 	state = DIE;
 	offset = 0;
+	inactivity_counter = 0;
+	inactivity_x = -1;
 }
-
-
-
-
-
-int Zombie::getState()
-{
-	return state;
-}
-
-float Zombie::getOffset()
-{
-	return offset;
-}
-
-
-float Zombie::getLeft()
-{
-	return left;
-}
-
-float Zombie::getRight()
-{
-	return right;
-}
-
-float Zombie::getX()
-{
-	float xOffset = 0;
-	
-	if( scale_x < 0 )
-	{
-		if( state == APPEAR )		xOffset = width *0.87;
-		else if( state == IDLE )	xOffset = width *0.59;
-		else if( state == WALK )	xOffset = width *0.59;
-		else if( state == ATTACK )	xOffset = width *1.01;
-		else if( state == DIE )		xOffset = width *1.01;
-	}
-	else
-	{
-		if( state == ATTACK )	xOffset = -width *0.42;
-		else if( state == DIE )	xOffset = -width *0.42;
-	}
-	
-	return x +xOffset;
-}
-
-float Zombie::getY()
-{
-	return y;
-}
-
-float Zombie::getCenterX()
-{
-	return centerX;
-}
-
-float Zombie::getRealX()
-{
-	return x +(width *0.05);
-}
-
-float Zombie::getRealY()
-{
-	return y -getRealHeight();
-}
-
-float Zombie::getRealWidth()
-{
-	return width /2;
-}
-
-float Zombie::getRealHeight()
-{
-	return width *1.26;
-}
-
-
-
-float Zombie::getAttackX()
-{
-	float myx = getRealX() -getAttackWidth();
-	
-	if( scale_x < 0 )
-	{
-		myx += getAttackWidth() *2;
-	}
-	
-	return myx;
-}
-
-float Zombie::getAttackY()
-{
-	return getRealY() +width *0.25;
-}
-
-float Zombie::getAttackWidth()
-{
-	return width *0.43;
-}
-
-float Zombie::getAttackHeight()
-{
-	return width *0.83;
-}
-
-
 
 bool Zombie::isAlive()
 {
@@ -329,21 +415,21 @@ bool Zombie::isAttacking( bool hide )
 			{
 				return true;
 			}
-			else if( attack_howmany == 0 )
+			else if( attacks == 0 )
 			{
-				attack_howmany ++;
+				attacks ++;
 				return true;
 			}
 		}
-		else if( static_cast <int> (offset) == 6 )
+		else if( static_cast <int> (offset) == 4 )
 		{
 			if( hide )
 			{
 				return true;
 			}
-			else if( attack_howmany == 1 )
+			else if( attacks == 1 )
 			{
-				attack_howmany ++;
+				attacks ++;
 				return true;
 			}
 		}
@@ -352,50 +438,11 @@ bool Zombie::isAttacking( bool hide )
 	return false;
 }
 
-
-float Zombie::getXScale()
-{
-	return scale_x;
-}
-
-float Zombie::getYScale()
-{
-	return scale_y;
-}
-
-float Zombie::getHPScale()
-{
-	if( heartpoints /heartpoints_state < 0 )
-	{
-		return 0;
-	}
-	
-	return heartpoints /heartpoints_state;
-}
-
-
-
-float Zombie::getHP()
-{
-	return heartpoints;
-}
-
-float Zombie::getArmour()
-{
-	return armour;
-}
-
-float Zombie::getDamage()
-{
-	return damage;
-}
-
-
 void Zombie::mechanics( double elapsedTime )
 {
 	if( state > -1 )
 	{
-		offset += elapsedTime *20;
+		offset += elapsedTime *18;	// 18 offsets per second.
 		
 		if( state == APPEAR )
 		{
@@ -407,13 +454,52 @@ void Zombie::mechanics( double elapsedTime )
 			}
 		}
 		
+		if( inactivity_x != -1 )
+		{
+			if( getRealX() +getRealWidth() < inactivity_x )
+			{
+				state = WALK;
+				turnRight();
+				moveX( elapsedTime );
+				if( getRealX() +getRealWidth() > inactivity_x )
+				{
+					inactivity_counter = 0;
+					inactivity_x = -1;
+					state = IDLE;
+					offset = 0;
+				}
+			}
+			else if( getRealX() > inactivity_x )
+			{
+				state = WALK;
+				turnLeft();
+				moveX( -elapsedTime );
+				if( getRealX() < inactivity_x )
+				{
+					inactivity_counter = 0;
+					inactivity_x = -1;
+					state = IDLE;
+					offset = 0;
+				}
+			}
+		}
+		
 		if( state == IDLE )
 		{
 			if( offset >= lines[ IDLE ] )
 			{
 				offset = 0;
 			}
+			
+			inactivity_counter += elapsedTime;
+			if( inactivity_counter > inactivity_line )
+			{
+				inactivity_line = rand() %5 +3;
+				inactivity_x = rand() %static_cast <int> (right -left) +left;
+				offset = 0;
+			}
 		}
+		
 		
 		if( state == WALK )
 		{
@@ -427,7 +513,7 @@ void Zombie::mechanics( double elapsedTime )
 		{
 			if( offset >= lines[ ATTACK ] )
 			{
-				attack_howmany = 0;
+				attacks = 0;
 				offset = 0;
 				state = IDLE;
 			}
@@ -445,5 +531,49 @@ void Zombie::mechanics( double elapsedTime )
 				state = -2;
 			}
 		}
+		else if( texts.size() > 0 )
+		{
+			text_counter += elapsedTime;
+			if( text_counter > text_line *1.5 )
+			{
+				text_counter = 0;
+				text_line = rand() %8 +8;
+				chosen_text = rand() %texts.size();
+			}
+		}
 	}
+}
+
+
+
+
+void Zombie::addText( string line )
+{
+	this->texts.push_back( line );
+	chosen_text = rand() %texts.size();
+}
+
+bool Zombie::showText()
+{
+	if( text_counter > text_line && state != DIE )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+string Zombie::getText()
+{
+	return texts[ chosen_text ];
+}
+
+bool Zombie::isLeftText()
+{
+	if( scale < 0 )
+	{
+		return false;
+	}
+	
+	return true;
 }

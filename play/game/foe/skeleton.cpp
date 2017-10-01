@@ -22,7 +22,7 @@ void Skeleton::free()
 	width = 0;
 	centerX = 0;
 	left = right = 0;
-	scale_x = scale_y = 0;
+	scale = 0;
 	
 	state = -1;
 	offset = 0;
@@ -147,25 +147,24 @@ void Skeleton::setBorders( float left, float right )
 	this->right = right;
 }
 
-void Skeleton::setScale( float scale_x, float scale_y )
+void Skeleton::setScale( float scale )
 {
-	this->scale_x = scale_x;
-	this->scale_y = scale_y;
+	this->scale = scale;
 }
 
 void Skeleton::turnLeft()
 {
-	if( scale_x < 0 && attack_counter > attack_line /3 )
+	if( scale < 0 && attack_counter > attack_line /3 )
 	{
-		scale_x = -scale_x;
+		scale = -scale;
 	}
 }
 
 void Skeleton::turnRight()
 {
-	if( scale_x > 0 && attack_counter > attack_line /3 )
+	if( scale > 0 && attack_counter > attack_line /3 )
 	{
-		scale_x = -scale_x;
+		scale = -scale;
 	}
 }
 
@@ -173,9 +172,9 @@ float Skeleton::getX()
 {
 	float xOffset = 0;
 	
-	if( scale_x < 0 )
+	if( scale < 0 )
 	{
-		if( state == APPEAR )		xOffset = width *0.87;
+		if( state == APPEAR )		xOffset = width *0.70;
 		else if( state == IDLE )	xOffset = width *0.59;
 		else if( state == WALK )	xOffset = width *0.59;
 		else if( state == ATTACK )	xOffset = width *1.01;
@@ -192,8 +191,12 @@ float Skeleton::getX()
 
 float Skeleton::getY()
 {
-	float yOffset = 0;
-	if( state == ATTACK )	yOffset = width *0.073;
+	float yOffset = width *0.01;
+	if( state == ATTACK )
+	{
+		yOffset += width *0.073;
+	}
+		
 	
 	return y +yOffset;
 }
@@ -222,7 +225,7 @@ float Skeleton::getAttackX()
 {
 	float myx = getRealX() -getAttackWidth();
 	
-	if( scale_x < 0 )
+	if( scale < 0 )
 	{
 		myx += getAttackWidth() *2;
 	}
@@ -270,14 +273,17 @@ float Skeleton::getRight()
 	return right;
 }
 
-float Skeleton::getXScale()
+float Skeleton::getScaleX()
 {
-	return scale_x;
+	return scale;
 }
 
-float Skeleton::getYScale()
+float Skeleton::getScaleY()
 {
-	return scale_y;
+	float newScale = scale;
+	if( newScale < 0 )	newScale = -newScale;
+	
+	return newScale;
 }
 
 
@@ -549,7 +555,7 @@ void Skeleton::addText( string line )
 
 bool Skeleton::showText()
 {
-	if( text_counter > text_line )
+	if( text_counter > text_line && state != DIE )
 	{
 		return true;
 	}
@@ -564,7 +570,7 @@ string Skeleton::getText()
 
 bool Skeleton::isLeftText()
 {
-	if( scale_x < 0 )
+	if( scale < 0 )
 	{
 		return false;
 	}
