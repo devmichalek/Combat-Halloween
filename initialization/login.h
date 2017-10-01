@@ -1,16 +1,15 @@
 #pragma once
-#include "own/sprite.h"
 #include "rectbutton.h"
-#include <thread>
+#include "own/sprite.h"
+#include "own/request.h"
 
 class Login
 {
 	// Basics.
-	bool ready;
 	float screen_w;
 	float screen_h;
+	
 	float counter;
-	float velocity;
 	float arrow_counter;
 	float arrow_line;
 	
@@ -32,10 +31,9 @@ class Login
 	
 	// Information
 	MyText info;
-	bool info_status;
 	
 	// Support.
-	int state;
+	int state;	// 0 - setting login, 1 - setting password, 2 - entered.
 	string username;
 	string password;
 	unsigned max_length_username;
@@ -44,32 +42,35 @@ class Login
 	unsigned min_length_password;
 	
 	// Thread.
-	std::thread* myThread;
-	bool thread_ready;
+	MyThread thread;
 	
-	// I forgot password.
+	// "I forgot password" stuff below.
 	int forget_counter;
 	Rectbutton forgetbutton;
 	
 public:
-
+	
+	// Basics.
 	Login();
 	~Login();
 	void free();
-	
-	void load( int screen_w, int screen_h );
+	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
-	void draw( sf::RenderWindow* &window, double elapsedTime );
+	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
+	// Getters
 	bool isReady();
-	
-	// Support.
-	bool isPossibleKey( sf::Event &event );
-	string getName( int n );
-	void organizeWritten();
-	string getPassword();
 	string getUsername();
+	
+private:
+
+	// Support.
 	void setArrow();
+	void setThread();
+	string getPassword();
+	void organizeWritten();
+	bool isPossibleKey( sf::Uint8 code );
+	void move( float y_add, float x_add );
 	void position( float x_add = 0, float y_add = 0 );
-	void sendRequest();
 };
