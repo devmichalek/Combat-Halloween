@@ -13,11 +13,13 @@ Play::~Play()
 
 void Play::free()
 {
-	level = false;
 	menu = false;
+	level = false;
+	editor = 0;
 	run = false;
 	
 	game.free();
+	editorbutton.free();
 	homebutton.free();
 	levelbutton.free();
 	chunkbutton.free();
@@ -37,7 +39,6 @@ void Play::load( float screen_w, float screen_h )
 	float scale_x = 0.5;
 	float scale_y = 0.5;
 	
-	
 	// Load game.
 	game.load( screen_w, screen_h );
 	
@@ -45,6 +46,10 @@ void Play::load( float screen_w, float screen_h )
 	homebutton.load( "images/level/home.png" );
 	homebutton.setPosition( screen_w /256 , screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
 	homebutton.setPosition( screen_w /256 +homebutton.getWidth(), screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
+	
+	editorbutton.load( "images/editor/back.png" );
+	editorbutton.setPosition( screen_w /256 +homebutton.getWidth(), screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
+	
 	levelbutton.load( "images/play/level.png" );
 	levelbutton.setPosition( homebutton.getRight() +screen_w /256 +homebutton.getWidth(), screen_h /144 +homebutton.getHeight(), scale_x, scale_y );
 	chunkbutton.load( "images/menu/chunk.png", true );
@@ -76,7 +81,7 @@ void Play::handle( sf::Event& event )
 {
 	if( loading_world.isReady() )
 	{
-		if( !menu && !level && !game.isTable() )
+		if( !menu && !level && editor < 2 && !game.isTable() )
 		{
 			if( !pausesystem.isActive() && pausesystem.getAlpha() == 0 )
 			{
@@ -85,17 +90,25 @@ void Play::handle( sf::Event& event )
 				if( !chat.isOpen() )
 				{
 					game.handle( event );
-					homebutton.handle( event );
-					levelbutton.handle( event );
 					
-					if( !chunk_volume.handle( event ) )
+					if( editor == 0 )
 					{
-						chunkbutton.handle( event );
+						homebutton.handle( event );
+						levelbutton.handle( event );
+						
+						if( !chunk_volume.handle( event ) )
+						{
+							chunkbutton.handle( event );
+						}
+						
+						if( !music_volume.handle( event ) )
+						{
+							musicbutton.handle( event );
+						}
 					}
-					
-					if( !music_volume.handle( event ) )
+					else
 					{
-						musicbutton.handle( event );
+						editorbutton.handle( event );
 					}
 				}
 			}
@@ -109,6 +122,12 @@ void Play::handle( sf::Event& event )
 	else
 	{
 		loading_world.handle( event );
+		
+		if( loading_world.backToPrevious() )
+		{
+			if( editor == 1 )	editor = 2;
+			else				level = true;
+		}
 	}
 }
 
@@ -124,13 +143,20 @@ void Play::head( sf::RenderWindow* &window, double elapsedTime )
 	// Loading tiles etc. - show status.
 	else
 	{
-		loading_world.draw( window, elapsedTime );
-		if( !loading_world.getStop() )
+		loading_world.mechanics( elapsedTime );
+		loading_world.draw( window );
+		
+		if( loading_world.ableData() )
+		{
+			game.setMessage( loading_world.getData() );
+		}
+		
+		if( !loading_world.getStop() && loading_world.getReady() > 0 )
 		{
 			game.loading( loading_world.getState() );
 			if( game.getStatus() == 1 )
 			{
-				loading_world.setError();
+				loading_world.setError( game.getLoadingError() );
 			}
 			else if( game.getStatus() == 2 )
 			{
@@ -147,12 +173,21 @@ void Play::head( sf::RenderWindow* &window, double elapsedTime )
 void Play::draw( sf::RenderWindow* &window )
 {
 	game.draw( window );
-	homebutton.draw( window );
-	levelbutton.draw( window );
-	chunkbutton.draw( window );
-	musicbutton.draw( window );
-	chunk_volume.draw( window );
-	music_volume.draw( window );
+	
+	if( editor == 0 )
+	{
+		homebutton.draw( window );
+		levelbutton.draw( window );
+		chunkbutton.draw( window );
+		musicbutton.draw( window );
+		chunk_volume.draw( window );
+		music_volume.draw( window );
+	}
+	else
+	{
+		editorbutton.draw( window );
+	}
+	
 	chat.draw( window );
 	pausesystem.draw( window );
 }
@@ -160,7 +195,7 @@ void Play::draw( sf::RenderWindow* &window )
 void Play::mechanics( double elapsedTime )
 {
 	// Mechanics.
-	if( !pausesystem.isActive() && !menu && !level && !game.isTable() )
+	if( !pausesystem.isActive() && !menu && !level && editor < 2 && !game.isTable() )
 	{
 		if( !chat.isOpen() )
 		{
@@ -172,7 +207,7 @@ void Play::mechanics( double elapsedTime )
 		if( chat.isCommand() )
 		{
 			// Someone clicked backtomenu button.
-			if( chat.findCommand( "@menu" ) )
+			if( chat.findCommand( "@menu" ) && editor == 0 )
 			{
 				homebutton.setChanged( true );
 			}
@@ -180,32 +215,50 @@ void Play::mechanics( double elapsedTime )
 			// Someone clicked level button.
 			else if( chat.findCommand( "@back" ) )
 			{
-				levelbutton.setChanged( true );
+				if( editor == 0 )
+				{
+					levelbutton.setChanged( true );
+				}
+				else
+				{
+					editor = 2;
+					editorbutton.setChanged( true );
+				}
 			}
 			
 			// Someone clicked level button.
-			else if( chat.findCommand( "@commit suicide" ) )
+			else if( chat.findCommand( "@edit" ) || chat.findCommand( "@editor" ) )
+			{
+				if( editor == 1 )
+				{
+					editor = 2;
+					editorbutton.setChanged( true );
+				}
+			}
+			
+			// Someone clicked level button.
+			else if( chat.findCommand( "@commit suicide" ) && editor == 0 )
 			{
 				game.commitSuicide();
 				chat.isOpen() = false;
 			}
 			
 			// Turn on/off all chunks.
-			else if( chat.findCommand( "@chunk" ) )
+			else if( chat.findCommand( "@chunk" ) && editor == 0 )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
 			}
 			
 			// Turn on/off music.
-			else if( chat.findCommand( "@music" ) )
+			else if( chat.findCommand( "@music" ) && editor == 0 )
 			{
 				musicbutton.setChanged( true );
 				musicbutton.setActive( !musicbutton.isActive() );
 			}
 			
 			// Turn on/off all sounds.
-			else if( chat.findCommand( "@sound" ) )
+			else if( chat.findCommand( "@sound" ) && editor == 0 )
 			{
 				chunkbutton.setChanged( true );
 				chunkbutton.setActive( !chunkbutton.isActive() );
@@ -237,11 +290,18 @@ void Play::mechanics( double elapsedTime )
 			menu = true;
 		}
 		
-		// Someone clicked play button.
+		// Someone clicked level button.
 		else if( levelbutton.isChanged() )
 		{
 			chat.isOpen() = false;
 			level = true;
+		}
+		
+		// Someone clicked editor button.
+		else if( editorbutton.isChanged() )
+		{
+			chat.isOpen() = false;
+			editor = 2;
 		}
 		
 		chunk_volume.mechanics( elapsedTime );
@@ -312,7 +372,7 @@ void Play::fades( double elapsedTime )
 	}
 	
 	// Fade out - closed.
-	else if( menu || level || game.isTable() )
+	else if( menu || level || editor == 2 || game.isTable() )
 	{
 		float value = elapsedTime *0xFF;
 		
@@ -347,6 +407,17 @@ void Play::fades( double elapsedTime )
 }
 
 
+
+void Play::setMessage( string message )
+{
+	if( message[ 0 ] == '0' && editor == 0 )
+	{
+		editor = 1;
+	}
+	
+	loading_world.setMessage( message );
+	loading_world.setThread();
+}
 
 void Play::setUsername( string line )
 {
@@ -427,12 +498,15 @@ void Play::saveSound()
 	// plus
 	menu = false;
 	level = false;
+	editor = 0;
 	run = false;
 	
 	// Reset.
 	game.reset();
 	homebutton.setActive( false );
 	levelbutton.setActive( false );
+	editorbutton.setActive( false );
+	loading_world.setMessage( "" );
 	loading_world.reset();
 	chat.reset();
 	music.stop();
@@ -463,6 +537,16 @@ bool Play::isLevel()
 bool Play::isTable()
 {
 	if( game.isTable() && game.getAlpha() == 0 )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
+bool Play::isEditor()
+{
+	if( editor == 2 && game.getAlpha() == 0 )
 	{
 		return true;
 	}

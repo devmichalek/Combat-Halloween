@@ -12,10 +12,12 @@ class Play
 	// Basics.
 	bool menu;
 	bool level;
+	int editor;
 	bool run;
 	
 	// Objects.
 	Game game;
+	Circlebutton editorbutton;
 	Circlebutton homebutton;
 	Circlebutton levelbutton;
 	Circlebutton chunkbutton;
@@ -43,7 +45,8 @@ public:
 	void mechanics( double elapsedTime );
 	void fades( double elapsedTime );
 	
-	// Sound.
+	// Sound and settings.
+	void setMessage( string message );
 	void setUsername( string line );
 	void loadSound();
 	void saveSound();
@@ -52,4 +55,5 @@ public:
 	bool isMenu();
 	bool isLevel();
 	bool isTable();
+	bool isEditor();
 };
