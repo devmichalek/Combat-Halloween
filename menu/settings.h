@@ -1,6 +1,8 @@
-#include "own/sprite.h"
+#pragma once
 #include "own/text.h"
 #include "own/chunk.h"
+#include "own/sprite.h"
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <vector>
