@@ -19,8 +19,6 @@ Engine::Engine()
 void Engine::free()
 {
 	delete core;
-	delete loading;
-	delete initialization;
 	delete login;
 	delete menu;
 	delete level;
@@ -31,7 +29,8 @@ void Engine::free()
 
 void Engine::load()
 {
-	loading->draw( core->getWindow(), core->getElapsedTime() );
+	loading->mechanics( core->getElapsedTime() );
+	loading->draw( core->getWindow() );
 	
 	switch( loading->getState() )
 	{
@@ -79,7 +78,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->getState() = EDITOR;
+		core->getState() = EDITOR;	// SET FIRST STATE.
 	}
 }
 
@@ -113,16 +112,22 @@ void Engine::states()
 	
 	if( core->getState() == INIT )
 	{
-		initialization->draw( core->getWindow(), core->getElapsedTime() );
+		initialization->mechanics( core->getElapsedTime() );
+		initialization->draw( core->getWindow() );
+		
 		if( initialization->isReady() )
 		{
 			core->getState() = LOGIN;
+			delete initialization;
+			initialization = NULL;
 		}
 	}
 	
 	if( core->getState() == LOGIN )
 	{
-		login->draw( core->getWindow(), core->getElapsedTime() );
+		login->mechanics( core->getElapsedTime() );
+		login->draw( core->getWindow() );
+		
 		if( login->isReady() )
 		{
 			menu->setUsername( login->getUsername() );
@@ -193,6 +198,11 @@ void Engine::states()
 			play->saveSound();
 			core->getState() = TABLE;
 		}
+		else if( play->isEditor() )
+		{
+			play->saveSound();
+			core->getState() = EDITOR;
+		}
 	}
 	
 	if( core->getState() == TABLE )
@@ -219,6 +229,11 @@ void Engine::states()
 		if( editor->isBack() )
 		{
 			core->getState() = MENU;
+		}
+		else if( editor->isPlay() )
+		{
+			core->getState() = PLAY;
+			play->setMessage( editor->getMessage() );
 		}
 	}
 }
