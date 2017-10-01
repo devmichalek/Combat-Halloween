@@ -33,8 +33,8 @@ public:
 	
 	void create( string line, int size, int ply );
 	void handle( sf::Event& event );
-	void draw( sf::RenderWindow* &window, double elapsedTime );
-	
+	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
 	// Fades.
 	void fadein( float v = 1, int max = 0xFF );

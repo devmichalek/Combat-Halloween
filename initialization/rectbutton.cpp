@@ -140,24 +140,29 @@ void Rectbutton::handle( sf::Event& event )
 				focus = false;
 			}
 		}
-
-		if( event.type == sf::Event::MouseButtonPressed )
+		else if( event.type == sf::Event::MouseButtonPressed )
 		{
-			if( checkCollision( event.mouseButton.x, event.mouseButton.y ) )
-			{	
-				focus = true;
-				clicked = true;
+			if( event.mouseButton.button == sf::Mouse::Left )
+			{
+				if( checkCollision( event.mouseButton.x, event.mouseButton.y ) )
+				{	
+					// printf( "%f %f\n", alpha, alphaBorders );
+					if( alpha > 0xFF /2 && alphaBorders > 0xFF /2 )
+					{
+						focus = true;
+						clicked = true;
+					}
+				}
 			}
 		}
-			
-		if( event.type == sf::Event::MouseButtonReleased )
+		else if( event.type == sf::Event::MouseButtonReleased )
 		{
 			focus = false;
 		}
 	}
 }
 
-void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
+void Rectbutton::draw( sf::RenderWindow* &window )
 {
 	// Background.
 	window->draw( text_two->get() );
@@ -170,21 +175,25 @@ void Rectbutton::draw( sf::RenderWindow* &window, double elapsedTime )
 	
 	// Front.
 	window->draw( text_one->get() );
-	
-	
+}
+
+void Rectbutton::mechanics( double elapsedTime )
+{
 	if( state == 1 )
 	{
+		float value = elapsedTime *0xFF *6;
+		
 		if( focus )
 		{
-			fadein( elapsedTime *0xFF *6 );
-			text_one->fadein( elapsedTime *0xFF *6 );
-			text_two->fadeout( elapsedTime *0xFF *6 );
+			fadein( value );
+			text_one->fadein( value );
+			text_two->fadeout( value );
 		}
 		else
 		{
-			fadeout( elapsedTime *0xFF *6 );
-			text_one->fadeout( elapsedTime *0xFF *6 );
-			text_two->fadein( elapsedTime *0xFF *6 );
+			fadeout( value );
+			text_one->fadeout( value );
+			text_two->fadein( value );
 		}
 	}
 }
