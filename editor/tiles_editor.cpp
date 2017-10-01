@@ -68,6 +68,8 @@ void Tiles_editor::free()
 		
 		foes.clear();
 	}
+	lightbulb.free();
+	lightcolor.free();
 	
 	if( !blocks.empty() )
 	{
@@ -78,8 +80,13 @@ void Tiles_editor::free()
 	{
 		foeblocks.clear();
 	}
-	lastwasfoe = false;
-	isrubbishon = false;
+	
+	if( !lightpoints.empty() )
+	{
+		lightpoints.clear();
+	}
+	
+	rubbish = false;
 }
 
 void Tiles_editor::reset()
@@ -115,7 +122,7 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	knight.setIdentity( "tiles_editor-knight" );
 	knight.load( "images/play/knight/0.png", 10 );
 	knight.setScale( 0.5, 0.5 );
-	knight.setAlpha( 0xFF /2 );
+	knight.setPosition( -knight.getWidth(), -knight.getHeight() );
 	
 	coin.setIdentity( "tiles_editor-coin" );
 	coin.load( "images/play/coin.png", 7 );
@@ -149,24 +156,26 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	foes[ 2 ]->load( "images/play/foes/zombie/1.png", 6 );
 	foes[ 2 ]->setScale( 0.5, 0.5 );
 	
+	lightbulb.setIdentity( "tiles_editor-lightbulb" );
+	lightbulb.load( "images/play/objects/lightbulb.png" );
+	lightbulb.setScale( 0.5, 0.5 );
+	lightcolor.setIdentity( "tiles_editor-lightcolor" );
+	lightcolor.load( "images/play/objects/lightcolor.png" );
+	lightcolor.setScale( 0.5, 0.5 );
+	lightcircle.setFillColor( sf::Color::Transparent );
+	lightcircle.setOutlineThickness( 1 );
+	lightcircle.setOutlineColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF /2 ) );
+	
 	// Set width.
 	width = tiles[ 0 ]->getWidth() /2;
 }
 
 void Tiles_editor::handle( sf::Event& event )
 {
-	if( event.type == sf::Event::MouseMoved )
-	{
-		mouse_x = event.mouseMove.x;
-		mouse_y = event.mouseMove.y;
-		
-		griding();
-	}
-	
 	hatchFoeVisible.handle( event );
 	if( !hatchFoeVisible.isVisible() )
 	{
-		if( event.type == sf::Event::KeyPressed && !isrubbishon )
+		if( event.type == sf::Event::KeyPressed && !rubbish )
 		{
 			int code = event.key.code;
 			
@@ -176,10 +185,8 @@ void Tiles_editor::handle( sf::Event& event )
 			else if( type == FOE )							size = foes.size();
 				
 				
-			if( code == sf::Keyboard::Space )
-			{
-				put();
-			}
+			if( code == sf::Keyboard::Space )		put();
+			else if( code == sf::Keyboard::Escape )	reset();
 			
 			// CHANGING CHOSEN ----------------------------------------
 			else if( code == sf::Keyboard::X )						chosen /= 2;
@@ -209,22 +216,37 @@ void Tiles_editor::handle( sf::Event& event )
 				grid = false;
 			}
 			
-			if( type == TILE || type == UNVISIBLE_TILE )	grid = true;
-			else if( type == OBJECT )						grid = false;
-			else if( type == COIN )							grid = true;
-			else if( type == FOE )							grid = false;
+			if( type == KNIGHT )								grid = false;
+			else if( type == TILE || type == UNVISIBLE_TILE )	grid = true;
+			else if( type == OBJECT )							grid = false;
+			else if( type == COIN )								grid = true;
+			else if( type == FOE )								grid = false;
+			else if( type == LIGHTPOINT )						grid = false;
 		}
-		
+		else if( event.type == sf::Event::MouseWheelMoved )
+		{
+			int size = 0;
+			if( type == TILE || type == UNVISIBLE_TILE )	size = tiles.size();
+			else if( type == OBJECT )						size = objects.size();
+			else if( type == FOE )							size = foes.size();
+
+			if( event.mouseWheel.delta < 0 && chosen < size -1 )
+			{
+				chosen ++;
+			}
+			else if( event.mouseWheel.delta > 0 && chosen > 0 )
+			{
+				chosen --;
+			}
+		}
 		
 		if( event.type == sf::Event::MouseButtonPressed )
 		{
-			mouse_x = event.mouseButton.x;
-			mouse_y = event.mouseButton.y;
-			
 			if( event.mouseButton.button == sf::Mouse::Left )
 			{
 				put();
 				
+				// Save Hatch Foe.
 				if( hatchFoeVisible.getType() != -1 )
 				{
 					int myType = hatchFoeVisible.getType();
@@ -233,22 +255,41 @@ void Tiles_editor::handle( sf::Event& event )
 					foeblocks[ myType ].damage = hatchFoeVisible.getDamage();
 					foeblocks[ myType ].velocity = hatchFoeVisible.getVelocity();
 					foeblocks[ myType ].heartpoints = hatchFoeVisible.getHeartpoints();
+					foeblocks[ myType ].scale = hatchFoeVisible.getScale();
+					foeblocks[ myType ].x = hatchFoeVisible.getX();
+					foeblocks[ myType ].y = hatchFoeVisible.getY();
 				}
 			}
 			else if( event.mouseButton.button == sf::Mouse::Right )
 			{
+				// Is this is a foe?
 				for( unsigned i = 0; i < foeblocks.size(); i++ )
 				{
 					int n = foeblocks[ i ].n;
 					float x = foeblocks[ i ].x -additional_x;
 					float y = foeblocks[ i ].y -additional_y;
-			
+					
+					foes[ n ]->setScale( 1, 1 );
+					float fullWidth = foes[ n ]->getWidth();
+					float fullHeight =  foes[ n ]->getHeight();
+					
+					foes[ n ]->setScale( foeblocks[ i ].scale, foeblocks[ i ].scale );
+					float scaledWidth = foes[ n ]->getWidth();
+					float scaledHeight =  foes[ n ]->getHeight();
+					
 					foes[ n ]->setPosition( x, y );
-					if( foes[ n ]->checkCollision( mouse_x, mouse_y ) )
+					if( foes[ n ]->checkCollision( mouse_x -additional_x*2, mouse_y -additional_y*2 ) )
 					{
-						hatchFoeVisible.setFeatures( foeblocks[ i ].armour, foeblocks[ i ].damage, foeblocks[ i ].velocity, foeblocks[ i ].heartpoints );
-						hatchFoeVisible.setPosition( x +foes[ n ]->getWidth()/2, y );
+						// printf( "happens\n" );
+						hatchFoeVisible.setFeatures( foeblocks[ i ].armour, foeblocks[ i ].damage, foeblocks[ i ].velocity, foeblocks[ i ].heartpoints, foeblocks[ i ].scale );
+						
+						foes[ n ]->setScale( foeblocks[ i ].scale, foeblocks[ i ].scale );
+						hatchFoeVisible.setPosition( x +scaledWidth/2 +fullWidth/2 +additional_x, y +scaledHeight -fullHeight +additional_y );
+						
 						hatchFoeVisible.setType( i );
+						hatchFoeVisible.setFoeSize( fullWidth, fullHeight );
+						hatchFoeVisible.setFoePosition( x +scaledWidth/2 +additional_x, y +scaledHeight +additional_y );
+						
 						break;
 					}
 				}
@@ -259,10 +300,36 @@ void Tiles_editor::handle( sf::Event& event )
 
 void Tiles_editor::draw( sf::RenderWindow* &window )
 {
-	knight.setPosition( screen_w /256 +additional_x, screen_h -width*2 -knight.getHeight() +additional_y );
-	window->draw( knight.get() );
+	sf::Vector2i mouse = sf::Mouse::getPosition( *window );
+	mouse_x = mouse.x;
+	mouse_y = mouse.y;
+	griding();
 	
-	// Draw vector.
+	// Update position of hatch foe.
+	if( hatchFoeVisible.getType() != -1 )
+	{
+		foeblocks[ hatchFoeVisible.getType() ].scale = hatchFoeVisible.getScale();
+		foeblocks[ hatchFoeVisible.getType() ].x = hatchFoeVisible.getX();
+		foeblocks[ hatchFoeVisible.getType() ].y = hatchFoeVisible.getY();
+		
+		int n = foeblocks[ hatchFoeVisible.getType() ].n;
+		float x = foeblocks[ hatchFoeVisible.getType() ].x +additional_x;
+		float y = foeblocks[ hatchFoeVisible.getType() ].y +additional_y;
+		float scale = foeblocks[ hatchFoeVisible.getType() ].scale;
+		
+		foes[ n ]->setScale( scale, scale );
+		float scaledWidth = foes[ n ]->getWidth();
+		float scaledHeight = foes[ n ]->getHeight();
+		
+		foes[ n ]->setScale( 1, 1 );
+		float fullWidth = foes[ n ]->getWidth();
+		float fullHeight = foes[ n ]->getHeight();
+		
+		hatchFoeVisible.setPosition( x +scaledWidth/2 +fullWidth/2, y +scaledHeight -fullHeight );
+	}
+	
+	
+	// Draw blocks.
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
 		int w = blocks[ i ].w;
@@ -272,42 +339,96 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		
 		if( w == TILE )
 		{
-			tiles[ n ]->setPosition( x, y );
-			tiles[ n ]->setAlpha( 0xFF );
-			window->draw( tiles[ n ]->get() );
+			if( x < screen_w && x +tiles[ n ]->getWidth() > 0 && y < screen_h && y +tiles[ n ]->getHeight() > 0 )
+			{
+				tiles[ n ]->setPosition( x, y );
+				tiles[ n ]->setAlpha( 0xFF );
+				window->draw( tiles[ n ]->get() );
+			}
 		}
 		else if( w == UNVISIBLE_TILE )
 		{
-			tiles[ n ]->setPosition( x, y );
-			tiles[ n ]->setAlpha( 0xFF /2 );
-			window->draw( tiles[ n ]->get() );
+			if( x < screen_w && x +tiles[ n ]->getWidth() > 0 && y < screen_h && y +tiles[ n ]->getHeight() > 0 )
+			{
+				tiles[ n ]->setPosition( x, y );
+				tiles[ n ]->setAlpha( 0xFF /2 );
+				window->draw( tiles[ n ]->get() );
+			}
 		}
 		else if( w == OBJECT )
 		{
-			objects[ n ]->setPosition( x, y );
-			window->draw( objects[ n ]->get() );
+			if( x < screen_w && x +objects[ n ]->getWidth() > 0 && y < screen_h && y +objects[ n ]->getHeight() > 0 )
+			{
+				objects[ n ]->setPosition( x, y );
+				window->draw( objects[ n ]->get() );
+			}
 		}
 		else if( w == COIN )
 		{
-			coin.setPosition( x, y );
-			window->draw( coin.get() );
+			if( x < screen_w && x +coin.getWidth() > 0 && y < screen_h && y +coin.getHeight() > 0 )
+			{
+				coin.setPosition( x, y );
+				window->draw( coin.get() );
+			}
 		}
 	}
 	
+	// Draw foeblocks.
 	for( unsigned i = 0; i < foeblocks.size(); i++ )
 	{
 		int n = foeblocks[ i ].n;
 		float x = foeblocks[ i ].x +additional_x;
 		float y = foeblocks[ i ].y +additional_y;
 		
-		foes[ n ]->setPosition( x, y );
-		window->draw( foes[ n ]->get() );
+		foes[ n ]->setScale( foeblocks[ i ].scale, foeblocks[ i ].scale );
+		if( x < screen_w && x +foes[ n ]->getWidth() > 0 && y < screen_h && y +foes[ n ]->getHeight() > 0 )
+		{
+			foes[ n ]->setPosition( x, y );
+			window->draw( foes[ n ]->get() );
+		}
 	}
+	
+	// Draw lightpoints.
+	for( unsigned i = 0; i < lightpoints.size(); i++ )
+	{
+		float x = lightpoints[ i ].x +additional_x;
+		float y = lightpoints[ i ].y +additional_y;
+		float radius = lightpoints[ i ].radius;
+		
+		float l = x -radius -lightbulb.getWidth()/2;
+		float r = x +radius +lightbulb.getWidth()/2;
+		float t = y -radius -lightbulb.getHeight()/2;
+		float b = y +radius +lightbulb.getHeight()/2;
+	
+		if( l < screen_w && r > 0 && t < screen_h && b > 0 )
+		{
+			lightbulb.setPosition( x, y );
+			window->draw( lightbulb.get() );
+			
+			lightcolor.setColor( lightpoints[ i ].color );
+			lightcolor.setPosition( x, y );
+			window->draw( lightcolor.get() );
+			
+			lightcircle.setRadius( radius );
+			lightcircle.setPosition( x +lightbulb.getWidth()/2 -radius, y +lightbulb.getHeight()/2 -radius );
+			lightcircle.setOutlineThickness( 1 );
+			window->draw( lightcircle );
+		}
+	}
+	
+	// Draw knight.
+	knight.setScale( 0.5, 0.5 );
+	float knight_x = knight.getX();
+	float knight_y = knight.getY();
+	knight.setPosition( knight_x +additional_x, knight_y +additional_y );
+	window->draw( knight.get() );
+	knight.setPosition( knight_x, knight_y );
 	
 	
 	// Draw current drawable thing.
 	if( chosen > -1 )
 	{
+		
 		if( type == TILE )
 		{
 			if( chosen < static_cast <int> (tiles.size()) )
@@ -343,9 +464,28 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		{
 			if( chosen < static_cast <int> (foes.size()) )
 			{
+				foes[ chosen ]->setScale( hatchFoeVisible.getScale(), hatchFoeVisible.getScale() );
 				foes[ chosen ]->setPosition( mouse_x, mouse_y );
 				window->draw( foes[ chosen ]->get() );
 			}
+		}
+		else if( type == LIGHTPOINT )
+		{
+			lightbulb.setPosition( mouse_x, mouse_y );
+			window->draw( lightbulb.get() );
+			
+			lightcolor.setColor( sf::Color::White );
+			lightcolor.setPosition( mouse_x, mouse_y );
+			window->draw( lightcolor.get() );
+		}
+		else if( type == KNIGHT )
+		{
+			float knight_x = knight.getX();
+			float knight_y = knight.getY();
+			knight.setPosition( mouse_x, mouse_y );
+			knight.setAlpha( 0xFF );
+			window->draw( knight.get() );
+			knight.setPosition( knight_x, knight_y );
 		}
 	}
 	
@@ -369,7 +509,18 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 		float scale_y = screen_h /2880;
 		float gap = screen_h /144;
 		
-		if( type == TILE || type == UNVISIBLE_TILE )
+		arrow.setPosition( -arrow.getWidth(), -arrow.getHeight() );
+		
+		/*if( type == KNIGHT )
+		{
+			float knight_x = knight.getX();
+			float knight_y = knight.getY();
+			knight.setScale( scale_x, scale_y );
+			knight.setPosition( start_x -knight.getWidth() /2, start_y );
+			window->draw( knight.get() );
+			knight.setPosition( knight_x, knight_y );
+		}
+		else*/ if( type == TILE || type == UNVISIBLE_TILE )
 		{
 			tiles[ 0 ]->setScale( scale_x, scale_y );
 			tiles[ 0 ]->setPosition( start_x -tiles[ 0 ]->getWidth() /2, start_y );
@@ -436,12 +587,7 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 
 void Tiles_editor::drawLines( sf::RenderWindow* &window )
 {
-	line.setFillColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF/2 ) );
-	line.setSize( sf::Vector2f( knight.getWidth() /1.5, 1 ) );
-	line.setPosition( sf::Vector2f( knight.getX() +knight.getWidth()/10, knight.getBot() ) );
-	window->draw( line );
-	
-	if( isrubbishon )
+	if( rubbish )
 	{
 		line.setFillColor( sf::Color( 0xFF, 0x00, 0x00, 0xFF/3 ) );
 		mouseInfo.setColor( sf::Color::Red );
@@ -461,7 +607,7 @@ void Tiles_editor::drawLines( sf::RenderWindow* &window )
 	window->draw( line );
 	
 	float mynewx = mouse_x +width/10;
-	if( grid && !isrubbishon )
+	if( grid && !rubbish )
 	{	
 		line.setSize( sf::Vector2f( screen_w, 1 ) );
 		line.setPosition( sf::Vector2f( 0, mouse_y +width*2 ) );
@@ -492,30 +638,40 @@ void Tiles_editor::drawLines( sf::RenderWindow* &window )
 
 void Tiles_editor::setRubbish( bool rubbish )
 {
-	this->isrubbishon = rubbish;
+	this->rubbish = rubbish;
 }
 
 void Tiles_editor::put()
 {
-	if( chosen > -1 && type > -1 && !isrubbishon )
+	if( rubbish )
+	{
+		deleteOne();
+	}
+	else if( chosen > -1 && type > -1 )
 	{
 		griding();
 		
-		if( type == FOE )
+		if( type == KNIGHT )
 		{
-			lastwasfoe = true;
+			knight.setPosition( mouse_x -additional_x, mouse_y -additional_y );
+		}
+		else if( type == FOE )
+		{
 			foeblocks.push_back( HatchFoe( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+			foeblocks[ foeblocks.size() -1 ].armour = hatchFoeVisible.getArmour();
+			foeblocks[ foeblocks.size() -1 ].damage = hatchFoeVisible.getDamage();
+			foeblocks[ foeblocks.size() -1 ].velocity = hatchFoeVisible.getVelocity();
+			foeblocks[ foeblocks.size() -1 ].heartpoints = hatchFoeVisible.getHeartpoints();
+			foeblocks[ foeblocks.size() -1 ].scale = hatchFoeVisible.getScale();
+		}
+		else if( type == LIGHTPOINT )
+		{
+			lightpoints.push_back( LightPoint( mouse_x -additional_x, mouse_y -additional_y ) );
 		}
 		else
 		{
-			lastwasfoe = false;
 			blocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
 		}
-	}
-	
-	if( isrubbishon )
-	{
-		deleteOne();
 	}
 }
 
@@ -542,11 +698,13 @@ string Tiles_editor::getType()
 {
 	string line = "None";
 	
-	if( type == TILE )					line = "Tiles";
+	if( type == KNIGHT )				line = "Character";
+	else if( type == TILE )				line = "Tiles";
 	else if( type == UNVISIBLE_TILE )	line = "Unvisible Tiles";
 	else if( type == OBJECT )			line = "Landscape";
 	else if( type == COIN )				line = "Treasure";
 	else if( type == FOE )				line = "Foes";
+	else if( type == LIGHTPOINT )		line = "Light points";
 	
 	return line;
 }
@@ -555,7 +713,11 @@ string Tiles_editor::getChosen()
 {
 	string line = "";
 	
-	if( type == TILE || type == UNVISIBLE_TILE )
+	if( type == KNIGHT )
+	{
+		line = "Knight";
+	}
+	else if( type == TILE || type == UNVISIBLE_TILE )
 	{
 		switch( chosen )
 		{
@@ -620,12 +782,21 @@ string Tiles_editor::getChosen()
 			case 2: line += "Zombie";	 break;
 		}
 	}
+	else if( type == LIGHTPOINT )
+	{
+		line = "Light bulb";
+	}
 	else
 	{
 		line = "None";
 	}
 	
 	return line;
+}
+
+string Tiles_editor::getMessage( string path )
+{
+	return "0txt/worlds/" +path +".txt";
 }
 
 
@@ -672,13 +843,24 @@ void Tiles_editor::save( string path )
 			sort( foeblocks.begin(), foeblocks.end(), []( const HatchFoe& a, const HatchFoe& b ) { return a.x < b.x; } );
 		}
 		
-		// Write to file.
+		if( !lightpoints.empty() )
+		{
+			sort( lightpoints.begin(), lightpoints.end(), []( const LightPoint& a, const LightPoint& b ) { return a.x < b.x; } );
+		}
+		
+		// Write to file author and .
 		file.get() << "adriqun" << "|";	// Author.
 		file.get() << screen_w << "|";
 		file.get() << screen_h << "|";
 		
 		// printf( "%d\n", finalblocks.size() );
 		
+		// Save knight pos.
+		file.get() << "0*0*";
+		file.get() << std::fixed << std::setprecision( 2 ) << knight.getX() << "*";
+		file.get() << std::fixed << std::setprecision( 2 ) << knight.getY() << "|";
+		
+		// Save blocks.
 		for( unsigned i = 0; i < finalblocks.size(); i++ )
 		{
 			file.get() << static_cast <int> ( finalblocks[ i ].w ) << "*";
@@ -687,20 +869,51 @@ void Tiles_editor::save( string path )
 			file.get() << std::fixed << std::setprecision( 2 ) << finalblocks[ i ].y << "|";
 		}
 		
+		// Save foeblocks.
 		for( unsigned i = 0; i < foeblocks.size(); i++ )
 		{
+			// w, t, x, y.
 			file.get() << static_cast <int> ( foeblocks[ i ].w ) << "*";
 			file.get() << static_cast <int> ( foeblocks[ i ].n ) << "*";
 			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].x << "*";
 			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].y << "*";
+			
+			// a, d, v, h, s.
 			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].armour << "*";
 			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].damage << "*";
 			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].velocity << "*";
-			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].heartpoints;
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].heartpoints << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << foeblocks[ i ].scale;
+			
+			// texts.
 			for( unsigned j = 0; j < foeblocks[ i ].texts.size(); j++ )
 			{
 				file.get() << "*";
 				file.get() << foeblocks[ i ].texts[ j ];
+			}
+			file.get() << "|";
+		}
+		
+		// Save light points.
+		for( unsigned i = 0; i < lightpoints.size(); i++ )
+		{
+			// w, t, x, y.
+			file.get() << LIGHTPOINT << "*0*";
+			file.get() << std::fixed << std::setprecision( 2 ) << lightpoints[ i ].x << "*";
+			file.get() << std::fixed << std::setprecision( 2 ) << lightpoints[ i ].y << "*";
+			
+			// r, v, color.
+			file.get() << lightpoints[ i ].radius << "*";
+			file.get() << lightpoints[ i ].velocity << "*";
+			file.get() << static_cast <int> (lightpoints[ i ].color.r) << "*";
+			file.get() << static_cast <int> (lightpoints[ i ].color.g) << "*";
+			file.get() << static_cast <int> (lightpoints[ i ].color.b);
+			
+			// lines.
+			for( unsigned j = 0; j < lightpoints[ i ].points.size(); j++ )
+			{
+				file.get() << "*" << lightpoints[ i ].points[ j ].x;
+				file.get() << "*" << lightpoints[ i ].points[ j ].y;
 			}
 			file.get() << "|";
 		}
@@ -817,11 +1030,35 @@ void Tiles_editor::load( string path )
 					foeblocks[ foeblocks.size() -1 ].damage = con::stoi( data[ 5 ] );
 					foeblocks[ foeblocks.size() -1 ].velocity = con::stoi( data[ 6 ] );
 					foeblocks[ foeblocks.size() -1 ].heartpoints = con::stoi( data[ 7 ] );
+					foeblocks[ foeblocks.size() -1 ].scale = con::stof( data[ 8 ] );
 					
 					// Texts.
-					for( unsigned i = 8; i < data.size(); i++ )
+					for( unsigned i = 9; i < data.size(); i++ )
 					{
 						foeblocks[ foeblocks.size() -1 ].texts.push_back( data[ i ] );
+					}
+				}
+				else if( w == KNIGHT )
+				{
+					knight.setPosition( x, y );
+				}
+				else if( w == LIGHTPOINT )
+				{
+					// x, y.
+					lightpoints.push_back( LightPoint( x, y ) );
+					
+					// r, v, color.
+					lightpoints[ lightpoints.size() -1 ].radius = con::stoi( data[ 4 ] );
+					lightpoints[ lightpoints.size() -1 ].velocity = con::stoi( data[ 5 ] );
+					sf::Color color( con::stoi( data[ 6 ] ), con::stoi( data[ 7 ] ), con::stoi( data[ 8 ] ) );
+					lightpoints[ lightpoints.size() -1 ].color = color;
+					
+					// lines.
+					for( unsigned i = 9; i < data.size(); i += 2 )
+					{
+						float newX = con::stoi( data[ i ] );
+						float newY = con::stoi( data[ i +1 ] );
+						lightpoints[ lightpoints.size() -1 ].points.push_back( sf::Vector2f( newX, newY ) );
 					}
 				}
 				else
@@ -843,6 +1080,9 @@ void Tiles_editor::load( string path )
 		save( path );
 	}
 	file.free();
+	
+	// printf( "Foes: %d\n", foeblocks.size() );
+	// printf( "Blocks: %d\n", blocks.size() );
 }
 
 
@@ -851,7 +1091,7 @@ void Tiles_editor::load( string path )
 void Tiles_editor::griding()
 {
 	// Grid works.
-	if( grid && !isrubbishon )
+	if( grid && !rubbish )
 	{
 		int count = 0;
 		while( mouse_x >= width )
@@ -883,6 +1123,13 @@ void Tiles_editor::clearVector()
 	{
 		foeblocks.clear();
 	}
+	
+	if( !lightpoints.empty() )
+	{
+		lightpoints.clear();
+	}
+	
+	knight.setPosition( -knight.getWidth(), -knight.getHeight() );
 }
 
 void Tiles_editor::deleteOne()
@@ -893,15 +1140,7 @@ void Tiles_editor::deleteOne()
 	int collision = -1;
 	for( unsigned i = 0; i < blocks.size(); i++ )
 	{
-		if( blocks[ i ].w == TILE )
-		{
-			tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
-			if( tiles[ blocks[ i ].n ]->checkCollision( newX, newY ) )
-			{
-				collision = i;
-			}
-		}
-		else if( blocks[ i ].w == UNVISIBLE_TILE )
+		if( blocks[ i ].w == TILE || blocks[ i ].w == UNVISIBLE_TILE )
 		{
 			tiles[ blocks[ i ].n ]->setPosition( blocks[ i ].x, blocks[ i ].y );
 			if( tiles[ blocks[ i ].n ]->checkCollision( newX, newY ) )
@@ -931,6 +1170,10 @@ void Tiles_editor::deleteOne()
 	{
 		blocks.erase( blocks.begin() +collision );
 	}
+	else if( knight.checkCollision( newX, newY ) )
+	{
+		knight.setPosition( -knight.getWidth(), -knight.getHeight() );
+	}
 	else
 	{
 		for( unsigned i = 0; i < foeblocks.size(); i++ )
@@ -945,6 +1188,22 @@ void Tiles_editor::deleteOne()
 		if( collision != -1 )
 		{
 			foeblocks.erase( foeblocks.begin() +collision );
+		}
+		else
+		{
+			for( unsigned i = 0; i < lightpoints.size(); i++ )
+			{
+				lightbulb.setPosition( lightpoints[ i ].x, lightpoints[ i ].y );
+				if( lightbulb.checkCollision( newX, newY ) )
+				{
+					collision = i;
+				}
+			}
+			
+			if( collision != -1 )
+			{
+				lightpoints.erase( lightpoints.begin() +collision );
+			}
 		}
 	}
 }

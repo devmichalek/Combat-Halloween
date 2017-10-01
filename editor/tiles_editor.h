@@ -5,9 +5,10 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
-#include "hatchfoe.h"
 
-
+#include "editor_part/block.h"
+#include "editor_part/hatchfoe.h"
+#include "editor_part/lightpoint.h"
 
 class Tiles_editor
 {
@@ -17,11 +18,13 @@ class Tiles_editor
 	
 	enum
 	{
-		TILE = 0,
+		KNIGHT = 0,
+		TILE,
 		UNVISIBLE_TILE,
 		OBJECT,
 		COIN,
 		FOE,
+		LIGHTPOINT,
 		AMOUNT
 	};
 	
@@ -41,6 +44,7 @@ class Tiles_editor
 	// Support.
 	float width;
 	bool grid;
+	bool rubbish;
 	
 	// Direction.
 	float additional_x;
@@ -52,12 +56,17 @@ class Tiles_editor
 	vector <MySprite*> tiles;
 	vector <MySprite*> objects;
 	vector <MySprite*> foes;
+	sf::CircleShape lightcircle;
+	MySprite lightbulb;
+	MySprite lightcolor;
 	
 	// Main Major Vector.
 	vector <Block> blocks;
 	vector <HatchFoe> foeblocks;
-	bool lastwasfoe;
-	bool isrubbishon;
+	vector <LightPoint> lightpoints;
+	
+	// int visibleLightPoints;
+	// int maxVisibleLightPoints;
 	
 public:
 	
@@ -84,6 +93,7 @@ public:
 	bool getGrid();
 	string getType();
 	string getChosen();
+	string getMessage( string path );
 	
 	// Streaming.
 	void save( string path );
