@@ -25,8 +25,6 @@ void Balloonchat::free()
 	bodyhorizontal.free();
 }
 
-
-
 void Balloonchat::load( float screen_w, float screen_h )
 {
 	free();
@@ -36,12 +34,11 @@ void Balloonchat::load( float screen_w, float screen_h )
 	
 	float scale_x = 0.5;
 	float scale_y = 0.5;
-	float fontSize = 20;
 	
 	text.setIdentity( "balloonchat-text" );
 	text.setFont( "fonts/jcandlestickextracond.ttf" );
 	text.setText( " " );
-	text.setSize( fontSize );
+	text.setSize( 20 );
 	text.setColor( sf::Color( 0x22, 0x22, 0x22 ) );
 	
 	arrow.setIdentity( "balloonchat-arrow" );
@@ -51,7 +48,7 @@ void Balloonchat::load( float screen_w, float screen_h )
 	lefttopborder.setIdentity( "balloonchat-lefttopborder" );
 	lefttopborder.load( "images/play/foes/chatborder.png" );
 	lefttopborder.setScale( scale_x, scale_y );
-	square.setIdentity( "balloonchat-leftbotborder" );
+	square.setIdentity( "balloonchat-square" );
 	square.create( lefttopborder.getWidth() +1, lefttopborder.getHeight() +1 );
 	square.setColor( sf::Color( 0xF8, 0xF8, 0xF8 ) );
 	
@@ -84,8 +81,6 @@ void Balloonchat::draw( sf::RenderWindow* &window )
 	window->draw( text.get() );
 }
 
-
-
 void Balloonchat::fadein( float v, int max )
 {
 	text.fadein( v, max );
@@ -111,6 +106,13 @@ void Balloonchat::fadeout( float v, int min )
 }
 
 
+
+void Balloonchat::setText( string newtext )
+{
+	text.setText( newtext );
+	bodyvertical.setScale( text.getWidth() +lefttopborder.getWidth()*2 -1, text.getHeight() );
+	bodyhorizontal.setScale( text.getWidth(), text.getHeight() +lefttopborder.getHeight()*2 );
+}
 
 void Balloonchat::setPosition( float x, float y, bool left )
 {
@@ -150,17 +152,10 @@ void Balloonchat::setPosition( float x, float y, bool left )
 	bodyhorizontal.move( -1, 0 );
 	if( left )
 	{
-		square.move( -1, 0 );
+		square.move( -1.5, -0.5 );
 	}
 	else
 	{
 		rightbotborder.move( -1, 0 );
 	}
-}
-
-void Balloonchat::setText( string newtext )
-{
-	text.setText( newtext );
-	bodyvertical.setScale( text.getWidth() +lefttopborder.getWidth()*2 -1, text.getHeight() );
-	bodyhorizontal.setScale( text.getWidth(), text.getHeight() +lefttopborder.getHeight()*2 );
 }
