@@ -1,11 +1,13 @@
-#include "own/sprite.h"
+#pragma once
 #include "own/text.h"
 #include "own/chunk.h"
+#include "own/sprite.h"
+#include "own/request.h"
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/View.hpp>
 #include <vector>
-#include <thread>
 
 class Knight_specs
 {
@@ -36,9 +38,9 @@ class Knight_specs
 	MySprite knight;
 	vector <MySprite*> parts;
 	vector <sf::Vector2f*> rects;
-	std::thread* myThread;
-	bool thread_ready;
-	bool ready;
+	
+	// Thread.
+	MyThread thread;
 	
 	int chosen;
 	int lastChosen;

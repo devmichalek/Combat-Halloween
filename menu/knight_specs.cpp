@@ -1,11 +1,10 @@
 #include "knight_specs.h"
-#include <SFML/Network.hpp>
 #include "own/file.h"
 #include <locale>
 #include <codecvt>
+
 Knight_specs::Knight_specs()
 {
-	myThread = NULL;
 	free();
 }
 
@@ -77,13 +76,8 @@ void Knight_specs::free()
 		values.clear();
 	}
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	thread_ready = false;
-	ready = false;
+	thread.free();
+	
 	text_x = 0;
 }
 
@@ -237,11 +231,9 @@ void Knight_specs::draw( sf::RenderWindow* &window )
 	window->draw( gear_bot.get() );
 	
 	// Delete thread if is ready
-	if( thread_ready )
+	if( thread.r )
 	{
-		delete myThread;
-		myThread = NULL;
-		thread_ready = false;
+		thread.reset();
 	}
 	
 	// VALUES AND CATEGORIES
@@ -452,9 +444,9 @@ void Knight_specs::fadeout( float v, int min )
 
 void Knight_specs::setThread()
 {
-	if( !ready )
+	if( !thread.s )
 	{
-		if( !thread_ready && myThread == NULL )
+		if( !thread.r && thread.t == NULL )
 		{
 			// Values.
 			for( auto &it :values )
@@ -472,8 +464,8 @@ void Knight_specs::setThread()
 				setPositionValues( screen_w );
 			}
 			
-			myThread = new std::thread( this->setValues, this );
-			myThread->detach();
+			thread.t = new std::thread( this->setValues, this );
+			thread.t->detach();
 		}
 	}
 }
@@ -592,7 +584,7 @@ void Knight_specs::setValues()
 				}
 			}
 			
-			ready = true;
+			thread.s = true;
 		}
 	}
 	
@@ -615,12 +607,12 @@ void Knight_specs::setValues()
 		setPositionValues( screen_w );
 	}
 			
-	thread_ready = true;
+	thread.r = true;
 }
 
 bool Knight_specs::isReady()
 {
-	return ready;
+	return thread.s;
 }
 
 void Knight_specs::reload()
@@ -705,7 +697,7 @@ void Knight_specs::setPositionValues( float x )
 
 void Knight_specs::reloadValues()
 {
-	ready = false;
+	thread.s = false;
 }
 
 
