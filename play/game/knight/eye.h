@@ -2,6 +2,8 @@
 
 #include "own/sprite.h"
 #include <SFML/Graphics.hpp>
+#include "play/game/foe/balloonchat.h"
+#include <vector>
 
 class Eye
 {
@@ -15,24 +17,24 @@ class Eye
 	float scale_x;
 	
 	MySprite sprite;
-	MySprite onlay;
 	
-	// Shader stuff.
-	MySprite shaderSprite;
-	sf::Shader shader;
-	sf::Clock clock;
+	// Texts.
+	Balloonchat balloonchat;
+	vector <string> texts;
+	int textWas;
+	float textCounter;
+	float textLine;
 	
 public:
 	
 	Eye();
 	~Eye();
 	void free();
-	void reset();
+	void reset( float x, float y );
 	
 	void load( float screen_w, float screen_h );
 	void draw( sf::RenderWindow* &window );
-	void drawShader( sf::RenderWindow* &window );
-	void mechanics( double elapsedTime, float viewX, float viewY );
+	void mechanics( double elapsedTime );
 	
 	void fadein( float v = 1, int max = 0xFF );
 	void fadeout( float v = 1, int min = 0 );

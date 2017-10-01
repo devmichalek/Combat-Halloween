@@ -1,4 +1,5 @@
 #include "eye.h"
+#include <cstdlib>
 
 Eye::Eye()
 {
@@ -22,19 +23,29 @@ void Eye::free()
 	scale_x = 0;
 	
 	sprite.free();
-	onlay.free();
-	shaderSprite.free();
-	clock.restart(); // start the timer
+	
+	balloonchat.free();
+	if( !texts.empty() )
+	{
+		texts.clear();
+	}
+	textWas = -1;
+	textCounter = 0;
+	textLine = 6;
 }
 
-void Eye::reset()
+void Eye::reset( float x, float y )
 {
 	distance_y = 0;
 	
-	x = y = 0;
+	this->x = x;
+	this->y = y;
 	scale_x = 0;
 	sprite.setPosition( x, y );
-	shader.setParameter( "eye", sf::Vector2f(sprite.getX() +sprite.getWidth()/2, sprite.getY() +sprite.getHeight()) );
+	
+	// Texts.
+	textWas = -1;
+	textCounter = 0;
 }
 
 
@@ -49,26 +60,13 @@ void Eye::load( float screen_w, float screen_h )
 	sprite.setIdentity( "eye-sprite" );
 	sprite.load( "images/play/knight/eye.png" );
 	sprite.setScale( 0.5, 0.5 );
-	line_y = sprite.getHeight();
+	line_y = sprite.getHeight() /3 *2;
 	scale_x = 0.5;
-	
-	onlay.setIdentity( "eye-onlay" );
-	onlay.create( screen_w, screen_h );
-	onlay.setColor( sf::Color::Black );
-	onlay.setAlpha( 150 );
-	
-	shaderSprite.setIdentity( "eye-shaderSprite" );
-	shaderSprite.create( screen_w, screen_h );
-	
-	// Set shader.
-	shader.loadFromFile( "images/play/knight/light.glsl", sf::Shader::Fragment );
-	if( !shader.isAvailable() )
-	{
-		std::cout << "The shader is not available\n";
-	}
 
-	// Set the resolution parameter ( the resoltion is divided to make the fire smaller )
-	shader.setParameter( "resolution", sf::Vector2f( screen_w /2, screen_h ) );
+	// Set texts.
+	balloonchat.load( screen_w, screen_h );
+	
+	srand( time( NULL ) );
 }
 
 void Eye::draw( sf::RenderWindow* &window )
@@ -84,52 +82,59 @@ void Eye::draw( sf::RenderWindow* &window )
 	{
 		window->draw( sprite.get() );
 	}
+	
+	// Draw texts.
+	if( textCounter > 0 )
+	{
+		bool left = false;
+		if( scale_x > 0 )	left = false;
+		else				left = true;
+		balloonchat.setPosition( sprite.getX() +sprite.getWidth()/2, sprite.getY(), !left );
+		balloonchat.draw( window );
+	}
 }
 
-void Eye::drawShader( sf::RenderWindow* &window )
+void Eye::mechanics( double elapsedTime )
 {
-	window->draw( onlay.get() );
-	window->draw( shaderSprite.get(), &shader );
-}
-
-void Eye::mechanics( double elapsedTime, float viewX, float viewY )
-{
+	if( textCounter > 0 && textCounter < textLine )
+	{
+		textCounter += elapsedTime;
+		if( textCounter > textLine )
+		{
+			textCounter = 0;
+		}
+	}
+	
+	
 	// Hovering.
-	distance_y += elapsedTime *4;
-	if( distance_y > line_y )
+	distance_y -= elapsedTime *4;
+	if( distance_y < -line_y )
 	{
 		distance_y = 0;
 	}
 	
-	// Set the others parameters who need to be updated every frames
-	shader.setParameter( "time", clock.getElapsedTime().asSeconds() );
-	
-	// Set position.
-	shader.setParameter( "eye", sf::Vector2f(sprite.getX() +sprite.getWidth()/2 -viewX, sprite.getY() +sprite.getHeight() -viewY) );
-	
 	// Set eye.
 	if( sprite.getX() < x -sprite.getWidth()/2 )
 	{
-		sprite.move( elapsedTime *((x-sprite.getWidth()/2) -sprite.getX()), 0 );
-		sprite.setScale( -screen_w /2560, screen_h /1440 );
-		scale_x = -screen_w /2560;
+		sprite.move( elapsedTime *((x-sprite.getWidth()/2) -sprite.getX()) *2, 0 );
+		sprite.setScale( -0.5, 0.5 );
+		scale_x = -0.5;
 	}
 	else if( sprite.getX() > x -sprite.getWidth()/2 )
 	{
-		sprite.move( -elapsedTime *(sprite.getX() -(x-sprite.getWidth()/2)), 0 );
-		sprite.setScale( screen_w /2560, screen_h /1440 );
-		scale_x = screen_w /2560;
+		sprite.move( -elapsedTime *(sprite.getX() -(x-sprite.getWidth()/2)) *2, 0 );
+		sprite.setScale( 0.5, 0.5 );
+		scale_x = 0.5;
 	}
 
 	
-
 	if( sprite.getY() < y +distance_y )
 	{
-		sprite.move( 0, elapsedTime *((y+distance_y) -sprite.getY()) );
+		sprite.move( 0, elapsedTime *((y+distance_y) -sprite.getY()) *2 );
 	}
 	else if( sprite.getY() > y +distance_y )
 	{
-		sprite.move( 0, -elapsedTime *(sprite.getY() -(y+distance_y)) );
+		sprite.move( 0, -elapsedTime *(sprite.getY() -(y+distance_y)) *2 );
 	}
 }
 
@@ -138,11 +143,13 @@ void Eye::mechanics( double elapsedTime, float viewX, float viewY )
 void Eye::fadein( float v, int max )
 {
 	sprite.fadein( v, max );
+	balloonchat.fadein( v, max );
 }
 
 void Eye::fadeout( float v, int min )
 {
 	sprite.fadeout( v, min );
+	balloonchat.fadeout( v, min );
 }
 
 
