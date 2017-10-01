@@ -1,12 +1,9 @@
 #include "factory.h"
 #include "own/file.h"
-#include <SFML/Network.hpp>
-#include "play/game/foe/skeleton.h"
 
 template <typename F>
 Factory <F>::Factory()
 {
-	myThread = NULL;
 	free();
 }
 
@@ -26,51 +23,11 @@ void Factory <F>::free()
 	
 	type = -1;
 	name = "";
-	collision = false;
 	
 	screen_w = 0;
 	screen_h = 0;
-	border_x = 0;
-	border_y = 0;
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	thread_ready = false;
-	ready = false;
-	
-	damaged = -1;
-	
-	if( !foes.empty() )
-	{
-		for( auto &it :foes )
-		{
-			it->free();
-			delete it;
-			it = NULL;
-		}
-		
-		foes.clear();
-	}
-	
-	if( !lines.empty() )
-	{
-		lines.clear();
-	}
-	
-	if( !sprites.empty() )
-	{
-		for( auto &it :sprites )
-		{
-			it->free();
-			delete it;
-			it = NULL;
-		}
-		
-		sprites.clear();
-	}
+	reset();
 }
 
 template <typename F>
@@ -80,13 +37,8 @@ void Factory <F>::reset()
 	border_y = 0;
 	collision = false;
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	thread_ready = false;
-	ready = false;
+	thread.free();
+	error = "";
 	
 	damaged = -1;
 	
@@ -125,11 +77,11 @@ void Factory <F>::load( float screen_w, float screen_h, int type, string name )
 {
 	free();
 	
-	bar.setIdentity( "factory-foebar" );
+	bar.setIdentity( "factory-bar" );
 	bar.load( "images/play/foes/foebar.png" );
 	bar.setScale( 0.5, 0.5 );
 	
-	table.setIdentity( "factory-foetable" );
+	table.setIdentity( "factory-table" );
 	table.load( "images/play/foes/foetable.png" );
 	table.setScale( 0.5, 0.5 );
 	
@@ -159,16 +111,17 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 			continue;
 		}
 		
+		sprites[ t ]->setScale( foes[ i ]->getScaleX(), foes[ i ]->getScaleY() );
 		x = foes[ i ]->getX();
-		y = foes[ i ]->getY();
-		sprites[ t ]->setScale( foes[ i ]->getXScale(), foes[ i ]->getYScale() );
+		y = foes[ i ]->getY() -sprites[ t ]->getHeight();
+		
 		
 		if( x < border_x +screen_w && y -sprites[ t ]->getHeight() < border_y +screen_h )
 		{
 			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
 			{
 				sprites[ t ]->setOffset( foes[ i ]->getOffset() );
-				sprites[ t ]->setPosition( x, y -sprites[ t ]->getHeight() );
+				sprites[ t ]->setPosition( x, y );
 				window->draw( sprites[ t ]->get() );
 				
 				// Just for test.
@@ -186,12 +139,15 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 					}
 				}
 				
+				float scale = foes[ i ]->getScaleY();
+				
 				// Info.
-				table.setPosition( foes[ i ]->getRealX() +foes[ i ]->getRealWidth()/2 -table.getWidth()/2, y -sprites[ t ]->getHeight() -table.getHeight() *1.5 );
+				table.setScale( scale, scale );
+				table.setPosition( foes[ i ]->getRealX() +foes[ i ]->getRealWidth()/2 -table.getWidth()/2, y -table.getHeight() *1.5 );
 				window->draw( table.get() );
 				
 				bar.setColor( sf::Color( 0xFF -(foes[ i ]->getArmour()/5), 0, 0 ) );
-				bar.setScale( foes[ i ]->getHPScale() *0.5, 0.5 );
+				bar.setScale( foes[ i ]->getHPScale() *scale, scale );
 				bar.setPosition( table.getX(), table.getY() );
 				window->draw( bar.get() );
 				
@@ -248,12 +204,12 @@ void Factory <F>::mechanics( double elapsedTime )
 			continue;
 		}
 		
+		sprites[ t ]->setScale( foes[ i ]->getScaleX(), foes[ i ]->getScaleY() );
 		x = foes[ i ]->getX();
-		y = foes[ i ]->getY();
+		y = foes[ i ]->getY() -sprites[ t ]->getHeight();
 		
 		if( x < border_x +screen_w && y < border_y +screen_h )
 		{
-			sprites[ t ]->setScale( foes[ i ]->getXScale(), foes[ i ]->getYScale() );
 			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
 			{
 				foes[ i ]->mechanics( elapsedTime );
@@ -283,14 +239,13 @@ template <typename F>
 bool Factory <F>::isNull()
 {
 	// Delete thread.
-	if( myThread != NULL && thread_ready )
+	if( thread.t != NULL && thread.r )
 	{
-		delete myThread;
-		myThread = NULL;
-		thread_ready = false;
+		thread.reset();
+		return true;
 	}
 	
-	if( myThread == NULL )
+	if( thread.t == NULL )
 	{
 		return true;
 	}
@@ -301,243 +256,222 @@ bool Factory <F>::isNull()
 template <typename F>
 bool Factory <F>::isReady()
 {
-	return ready;
+	return thread.s;
 }
 
 template <typename F>
-void Factory <F>::setThread()
+void Factory <F>::setThread( string message )
 {
-	if( !ready )
+	if( !thread.s )
 	{
-		if( !thread_ready && myThread == NULL )
+		if( !thread.r && thread.t == NULL )
 		{
-			myThread = new std::thread( [=] { prepare(); } );
-			myThread->detach();
+			thread.t = new std::thread( [=] { prepare( message ); } );
+			thread.t->detach();
 		}
 	}
 }
 
 template <typename F>
-void Factory <F>::prepare()
+void Factory <F>::prepare( string message )
 {
-	bool success = false;
+	// Bufor and start.
+	string bufor = "";
+	unsigned start = 0;
+	
+	string line = message;
+	
+	// AUTHOR --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			// printf( "%s\n", bufor.c_str() );
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
+	
+	// NEW SIZES --------------------------------------------------------------------------
+	// float my_screen_w = 0;
+	float my_screen_h = 0;
+	
+	// Set my_screen_w.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			// my_screen_w = screen_w -con::stof( bufor );
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
+	// Set my_screen_h.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			my_screen_h = screen_h -con::stof( bufor ) +1;
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
 	vector <sf::Vector2f> fs_tiles;
 	vector <sf::Uint8> types_tiles;
-	
-	MyFile file;
-	file.load( "txt/worlds/world_.txt" );
-	if( file.is_good() )
+	// FS --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
 	{
-		// Line and bufor.
-		string line = "";
-		string bufor = "";
-		unsigned start = 0;
-		
-		// Getline.
-		getline( file.get(), line );
-		
-		
-		// AUTHOR --------------------------------------------------------------------------
-		for( unsigned i = start; i < line.size(); i++ )
+		if( line[ i ] == '|' )
 		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				// printf( "%s\n", bufor.c_str() );
-				bufor = "";
-				break;
-			}
+			bufor += "*";
+			string nrstr = "";
+			vector <string> data;
 			
-			bufor += line[ i ];
-		}
-		
-		
-		// NEW SIZES --------------------------------------------------------------------------
-		// float my_screen_w = 0;
-		float my_screen_h = 0;
-		
-		// Set my_screen_w.
-		for( unsigned i = start; i < line.size(); i++ )
-		{
-			if( line[ i ] == '|' )
+			bool wrong = false;
+			for( unsigned j = 0; j < bufor.size(); j++ )
 			{
-				start = i +1;
-				// my_screen_w = screen_w -con::stof( bufor );
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
-		}
-		
-		// Set my_screen_h.
-		for( unsigned i = start; i < line.size(); i++ )
-		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				my_screen_h = screen_h -con::stof( bufor ) +1;
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
-		}
-		
-		
-		srand( static_cast <int> (time( NULL )) );
-		// FS --------------------------------------------------------------------------
-		for( unsigned i = start; i < line.size(); i++ )
-		{
-			if( line[ i ] == '|' )
-			{
-				bufor += "*";
-				string nrstr = "";
-				vector <string> data;
-				
-				bool wrong = false;
-				for( unsigned j = 0; j < bufor.size(); j++ )
+				if( bufor[ j ] == '*' )
 				{
-					if( bufor[ j ] == '*' )
+					if( data.size() == 0 )
 					{
-						if( data.size() == 0 )
+						if( con::stoi( nrstr ) != 1 && con::stoi( nrstr ) != 5 )
 						{
-							if( con::stoi( nrstr ) != 0 && con::stoi( nrstr ) != 4 )
-							{
-								wrong = true;
-								break;
-							}
-						}
-						
-						data.push_back( nrstr );
-						nrstr = "";
-					}
-					else
-					{
-						nrstr += bufor[ j ];
-					}
-				}
-				
-				if( !wrong )
-				{
-					sf::Uint8 w = con::stoi( data[ 0 ] );
-					sf::Uint8 t = con::stoi( data[ 1 ] );
-					float x = con::stoi( data[ 2 ] ) *0.999;
-					float y = con::stoi( data[ 3 ] ) +my_screen_h;
-					
-					if( w == 4 )
-					{
-						if( t == type )
-						{
-							// Features.
-							float myarmour = con::stoi( data[ 4 ] );
-							float mydamage = con::stoi( data[ 5 ] );
-							float myvelocity = con::stoi( data[ 6 ] );
-							float myheartpoints = con::stoi( data[ 7 ] );
-							
-							foes.push_back( new Skeleton );
-							foes[ foes.size() -1 ]->setPosition( x, y );
-							foes[ foes.size() -1 ]->setCenterX( x );
-							foes[ foes.size() -1 ]->setArmour( myarmour );
-							foes[ foes.size() -1 ]->setDamage( mydamage );
-							foes[ foes.size() -1 ]->setVelocity( myvelocity );
-							foes[ foes.size() -1 ]->setHeartpoints( myheartpoints );
-							
-							for( unsigned i = 8; i < data.size(); i++ )
-							{
-								foes[ foes.size() -1 ]->addText( data[ i ] );
-							}
-						}
-					}
-					else if( w == 0 )
-					{
-						fs_tiles.push_back( sf::Vector2f( x, y ) );
-						types_tiles.push_back( t );
-					}
-				}
-				
-				// Clear.
-				bufor = "";
-			}
-			else
-			{
-				bufor += line[ i ];
-			}
-		}
-		
-		success = true;
-	}
-	file.free();
-	
-	if( success )
-	{
-		// prepare message
-		string message = "name=" +name;
-		
-		// prepare the request
-		sf::Http::Request request( "/combathalloween/getline.php", sf::Http::Request::Post );
-		
-		// encode the parameters in the request body
-		request.setBody( message );
-		
-		// send the request
-		sf::Http http( "http://adrianmichalek.pl/" );
-		sf::Http::Response response = http.sendRequest( request );
-		
-		// check the status
-		if( response.getStatus() == sf::Http::Response::Ok )
-		{
-			string echostring = response.getBody();
-			
-			if( echostring != "0" )	// success
-			{
-				string line = "";
-				for( unsigned i = 0; i < echostring.size(); i++ )
-				{
-					if( echostring[ i ] == ',' || echostring[ i ] == '.' )
-					{
-						lines.push_back( con::stoi( line ) );
-						line = "";
-						
-						if( echostring[ i ] == '.' )
-						{
+							wrong = true;
 							break;
 						}
 					}
-					else
+					
+					data.push_back( nrstr );
+					nrstr = "";
+				}
+				else
+				{
+					nrstr += bufor[ j ];
+				}
+			}
+			
+			if( !wrong )
+			{
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *0.995;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
+				
+				if( w == 5 )
+				{
+					if( t == type )
 					{
-						line += echostring[ i ];
+						// Features.
+						float myarmour = con::stoi( data[ 4 ] );
+						float mydamage = con::stoi( data[ 5 ] );
+						float myvelocity = con::stoi( data[ 6 ] );
+						float myheartpoints = con::stoi( data[ 7 ] );
+						float myscale = con::stof( data[ 8 ] );
+						
+						foes.push_back( new F );
+						foes[ foes.size() -1 ]->setPosition( x, y );
+						foes[ foes.size() -1 ]->setCenterX( x );
+						foes[ foes.size() -1 ]->setArmour( myarmour );
+						foes[ foes.size() -1 ]->setDamage( mydamage );
+						foes[ foes.size() -1 ]->setVelocity( myvelocity );
+						foes[ foes.size() -1 ]->setHeartpoints( myheartpoints );
+						foes[ foes.size() -1 ]->setScale( myscale );
+						
+						for( unsigned i = 9; i < data.size(); i++ )
+						{
+							foes[ foes.size() -1 ]->addText( data[ i ] );
+						}
 					}
 				}
-				
-				// Load sprites.
-				for( unsigned i = 0; i < lines.size(); i++ )
+				else if( w == 1 )
 				{
-					sprites.push_back( new MySprite() );
-					sprites[ i ]->setIdentity( "factory-sprites" );
-					sprites[ i ]->load( "images/play/foes/" +name +"/" +con::itos(i) +".png", lines[ i ] );
-					sprites[ i ]->setScale( 0.5, 0.5 );
-					// printf( "%d\n", lines[ i ] );
+					fs_tiles.push_back( sf::Vector2f( x, y ) );
+					types_tiles.push_back( t );
 				}
-				
-				for( auto &it :foes )
-				{
-					it->setLines( lines );
-					it->setScale( 0.5, 0.5 );
-					it->setWidth( sprites[ 0 ]->getWidth() );
-				}
-				
-				positioning( fs_tiles, types_tiles );
-				
-				// Inform that everything is ok.
-				ready = true;
 			}
+			
+			// Clear.
+			bufor = "";
+		}
+		else
+		{
+			bufor += line[ i ];
 		}
 	}
 	
+	MyRequest request;
+	request.setMessage( "name=" +name );
+	request.setHttp( "http://adrianmichalek.pl/" );
+	request.setRequest( "/combathalloween/getline.php", sf::Http::Request::Post );
+	
+	if( request.sendRequest() )
+	{
+		string result = request.getResult();
+		if( result != "0" )	// success
+		{
+			string line = "";
+			for( unsigned i = 0; i < result.size(); i++ )
+			{
+				if( result[ i ] == ',' || result[ i ] == '.' )
+				{
+					lines.push_back( con::stoi( line ) );
+					line = "";
+					
+					if( result[ i ] == '.' )
+					{
+						break;
+					}
+				}
+				else
+				{
+					line += result[ i ];
+				}
+			}
+			
+			// Load sprites.
+			for( unsigned i = 0; i < lines.size(); i++ )
+			{
+				sprites.push_back( new MySprite() );
+				sprites[ i ]->setIdentity( "factory-sprites" );
+				sprites[ i ]->load( "images/play/foes/" +name +"/" +con::itos(i) +".png", lines[ i ] );
+				sprites[ i ]->setScale( 0.5, 0.5 );
+				// printf( "%d\n", lines[ i ] );
+			}
+			
+			for( auto &it :foes )
+			{
+				it->setLines( lines );
+				it->setWidth( sprites[ 0 ]->getWidth()*it->getScaleX()*2 );
+			}
+			
+			positioning( fs_tiles, types_tiles );
+			
+			// Inform that everything is ok.
+			thread.s = true;
+		}
+	}
+	else
+	{
+		error = "Cannot download foe settings.";
+	}
+	
+	fs_tiles.clear();
+	types_tiles.clear();
 	
 	// Inform that thread is ready for next action.
-	thread_ready = true;
+	thread.r = true;
 }
 
 template <typename F>
@@ -557,6 +491,8 @@ void Factory <F>::positioning( vector <sf::Vector2f> fs, vector <sf::Uint8> type
 	
 	for( int i = 0; i < static_cast <int> (foes.size()); i++ )
 	{
+		sprites[ 1 ]->setScale( foes[ i ]->getScaleX(), foes[ i ]->getScaleY() );
+		
 		foe_x = foes[ i ]->getX();
 		foe_y = foes[ i ]->getY() +sprites[ 1 ]->getHeight();
 		success = -1;
@@ -641,6 +577,12 @@ void Factory <F>::positioning( vector <sf::Vector2f> fs, vector <sf::Uint8> type
 	}
 
 	block.free();
+}
+
+template <typename F>
+string Factory <F>::getError()
+{
+	return error;
 }
 
 
@@ -753,6 +695,9 @@ void Factory <F>::walk( sf::Rect <float> rect, double elapsedTime )
 				{
 					if( foes[ i ]->ableToAppear() )
 					{
+						if( rx +rw/2 < rect.left +rect.width/2 )	foes[ i ]->turnRight();
+						else										foes[ i ]->turnLeft();
+						
 						foes[ i ]->setAppear();
 					}
 					else if( foes[ i ]->ableToWalk() )
@@ -762,11 +707,11 @@ void Factory <F>::walk( sf::Rect <float> rect, double elapsedTime )
 						
 						foes[ i ]->setWalk();
 						
-						if( rx +rw < r && rx +rw < rect.left && foes[ i ]->getXScale() < 0 )
+						if( rx +rw < r && rx +rw < rect.left && foes[ i ]->getScaleX() < 0 )
 						{
 							foes[ i ]->moveX( elapsedTime );
 						}
-						else if( rx > l && rx > rect.left +rect.width  && foes[ i ]->getXScale() > 0 )
+						else if( rx > l && rx > rect.left +rect.width  && foes[ i ]->getScaleX() > 0 )
 						{
 							foes[ i ]->moveX( -elapsedTime );
 						}
@@ -792,3 +737,4 @@ float Factory <F>::getDamage()
 }
 
 template class Factory <Skeleton>;
+template class Factory <Zombie>;

@@ -1,10 +1,12 @@
 #pragma once
+#include "own/request.h"
 #include "balloonchat.h"
 #include "skeleton.h"
+#include "zombie.h"
+
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "SFML/Graphics/RectangleShape.hpp"
 #include <vector>
-#include <thread>
 
 template <typename F>
 class Factory
@@ -31,9 +33,8 @@ class Factory
 	float border_y;
 	
 	// Thread stuff.
-	std::thread* myThread;
-	bool thread_ready;
-	bool ready;
+	MyThread thread;
+	string error;
 	
 	int damaged;
 	vector <F*> foes;
@@ -59,9 +60,10 @@ public:
 	// Thread.
 	bool isNull();
 	bool isReady();
-	void setThread();
-	void prepare();
+	void setThread( string message );
+	void prepare( string message );
 	void positioning( vector <sf::Vector2f> fs, vector <sf::Uint8> types );
+	string getError();
 	
 	// Borders.
 	void setBorderX( float x );
