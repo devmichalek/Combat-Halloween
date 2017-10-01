@@ -1,9 +1,9 @@
 #pragma once
 #include "menu/circlebutton.h"
-#include "editor_buttons.h"
-#include "editor_information.h"
-#include "editor_details.h"
-#include "editor_options.h"
+#include "editor_flare/editor_buttons.h"
+#include "editor_flare/editor_information.h"
+#include "editor_flare/editor_details.h"
+#include "editor_flare/editor_options.h"
 #include "tiles_editor.h"
 #include "level/chat.h"
 
@@ -42,4 +42,5 @@ public:
 	// Getters.
 	bool isBack();
 	bool isPlay();
+	string getMessage();
 };

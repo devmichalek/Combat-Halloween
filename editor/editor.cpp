@@ -33,7 +33,7 @@ void Editor::load( float screen_w, float screen_h )
 	
 	// Background.
 	background.setIdentity( "editor-background" );
-	background.load( "images/play/background.png" );
+	background.load( "images/play/background/0.png" );
 	background.setScale( scale_x, scale_y );
 	
 	// Set editor buttons.
@@ -61,11 +61,6 @@ void Editor::handle( sf::Event& event )
 {
 	if( !back && !play )
 	{
-		if( editor_details.getNameStatus() == 0 && editor_options.getStatus() == 0 )
-		{
-			chat.handle( event );
-		}
-		
 		if( !chat.isOpen() )
 		{
 			if( editor_details.getNameStatus() == 0 )
@@ -90,6 +85,11 @@ void Editor::handle( sf::Event& event )
 			{
 				editor_details.handle( event );
 			}
+		}
+		
+		if( editor_details.getNameStatus() == 0 && editor_options.getStatus() == 0 )
+		{
+			chat.handle( event );
 		}
 	}
 }
@@ -320,4 +320,9 @@ bool Editor::isPlay()
 	}
 	
 	return false;
+}
+
+string Editor::getMessage()
+{
+	return tiles_editor.getMessage( editor_details.getName() );
 }
