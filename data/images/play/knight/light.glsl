@@ -5,6 +5,7 @@ precision mediump float;
 uniform float time;
 uniform vec2 eye;
 uniform vec2 resolution;
+uniform float size;
 
 float snoise( vec3 uv, float res )
 {
@@ -36,9 +37,7 @@ void main( void )
 	p.x = p.x - eye.x / resolution.x;
 	p.y = p.y + eye.y / resolution.y;
 	p.y = p.y - 1.0;
-	p.x*=resolution.x/resolution.y;		
-
-	float size = 13;
+	p.x*=resolution.x/resolution.y;
 			  	
 	float color = 3 -size*length( p );		
 	
