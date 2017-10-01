@@ -32,7 +32,7 @@ void Initialization::free()
 
 
 
-void Initialization::load( int screen_width, int screen_height )
+void Initialization::load( int screen_w, int screen_h )
 {
 	free();
 	
@@ -42,16 +42,17 @@ void Initialization::load( int screen_width, int screen_height )
 	}
 	
 	// Set identity.
-	texts[ AUTHOR ]->setIdentity( "initialization-adrmic" );
-	texts[ PRESENTS ]->setIdentity( "initialization-pres" );
-	texts[ HALLOWEEN ]->setIdentity( "initialization-part" );
-	texts[ COMBAT ]->setIdentity( "initialization-title" );
+	texts[ AUTHOR ]->setIdentity( "initialization-AUTHOR" );
+	texts[ PRESENTS ]->setIdentity( "initialization-PRESENTS" );
+	texts[ HALLOWEEN ]->setIdentity( "initialization-HALLOWEEN" );
+	texts[ COMBAT ]->setIdentity( "initialization-COMBAT" );
 	
 	// Set font.
-	texts[ AUTHOR ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ PRESENTS ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ HALLOWEEN ]->setFont( "fonts/Jaapokki-Regular.otf" );
-	texts[ COMBAT ]->setFont( "fonts/Jaapokki-Regular.otf" );
+	string path = "fonts/Jaapokki-Regular.otf";
+	texts[ AUTHOR ]->setFont( path );
+	texts[ PRESENTS ]->setFont( path );
+	texts[ HALLOWEEN ]->setFont( path );
+	texts[ COMBAT ]->setFont( path );
 	
 	// Set text.
 	texts[ AUTHOR ]->setTextW( L"Adrian Michałek" );
@@ -60,7 +61,7 @@ void Initialization::load( int screen_width, int screen_height )
 	texts[ COMBAT ]->setText( "Combat" );
 	
 	// Set size.
-	int size = screen_height /24;
+	int size = screen_h /24;
 	texts[ AUTHOR ]->setSize( size );
 	texts[ PRESENTS ]->setSize( size );
 	texts[ HALLOWEEN ]->setSize( size );
@@ -73,13 +74,24 @@ void Initialization::load( int screen_width, int screen_height )
 	texts[ COMBAT ]->setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
 	
 	// Set position.
-	texts[ AUTHOR ]->center( 0, 0, screen_width, screen_height -screen_height /10 );
-	texts[ PRESENTS ]->setPosition( screen_width /2 -texts[ PRESENTS ]->getWidth() /2, texts[ AUTHOR ]->getBot() );
-	texts[ COMBAT ]->center( 0, 0, screen_width -texts[ HALLOWEEN ]->getWidth() -screen_height /72, screen_height  -screen_height /10 );
-	texts[ HALLOWEEN ]->setPosition( texts[ COMBAT ]->getRight() +screen_height /72, texts[ COMBAT ]->getBot() -texts[ HALLOWEEN ]->getHeight() );
+	texts[ AUTHOR ]->center( 0, 0, screen_w, screen_h -screen_h /10 );
+	texts[ PRESENTS ]->setPosition( screen_w /2 -texts[ PRESENTS ]->getWidth() /2, texts[ AUTHOR ]->getBot() );
+	texts[ COMBAT ]->center( 0, 0, screen_w -texts[ HALLOWEEN ]->getWidth() -screen_h /72, screen_h  -screen_h /10 );
+	texts[ HALLOWEEN ]->setPosition( texts[ COMBAT ]->getRight() +screen_h /72, texts[ COMBAT ]->getBot() -texts[ HALLOWEEN ]->getHeight() );
 }
 
-void Initialization::draw( sf::RenderWindow* &window, double elapsedTime )
+void Initialization::draw( sf::RenderWindow* &window )
+{
+	if( !ready )
+	{
+		window->draw( texts[ AUTHOR ]->get() );
+		window->draw( texts[ PRESENTS ]->get() );
+		window->draw( texts[ COMBAT ]->get() );
+		window->draw( texts[ HALLOWEEN ]->get() );
+	}
+}
+
+void Initialization::mechanics( double elapsedTime )
 {
 	if( !ready )
 	{
@@ -110,11 +122,6 @@ void Initialization::draw( sf::RenderWindow* &window, double elapsedTime )
 			texts[ COMBAT ]->fadeout( velocity *1.5 );
 			texts[ HALLOWEEN ]->fadeout( velocity *1.5 );
 		}
-		
-		window->draw( texts[ AUTHOR ]->get() );
-		window->draw( texts[ PRESENTS ]->get() );
-		window->draw( texts[ COMBAT ]->get() );
-		window->draw( texts[ HALLOWEEN ]->get() );
 		
 		// 1
 		if( texts[ AUTHOR ]->getAlpha() == 0xFF && state == 0 )

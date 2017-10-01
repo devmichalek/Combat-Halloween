@@ -5,8 +5,7 @@
 
 class Initialization
 {
-	// Enum with states of texts.
-	enum
+	enum	// Enum with states of texts.
 	{
 		AUTHOR = 0,
 		PRESENTS,
@@ -21,12 +20,13 @@ class Initialization
 	
 public:
 	
+	// Basics.
 	Initialization();
 	~Initialization();
 	void free();
-	
-	void load( int screen_width, int screen_height );
-	void draw( sf::RenderWindow* &window, double elapsedTime );
+	void load( int screen_w, int screen_h );
+	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
 	// Next state.
 	bool isReady();
