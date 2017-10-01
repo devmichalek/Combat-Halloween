@@ -1,3 +1,4 @@
+#pragma once
 #include "knight_specs.h"
 #include "link_button.h"
 #include "button.h"
