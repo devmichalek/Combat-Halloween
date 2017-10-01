@@ -50,19 +50,14 @@ void Loading::load( float screen_w, float screen_h )
 	progress_bar.setPosition( screen_w/2 - progress_bar.getWidth()/2, screen_h/2 +screen_h/36 );
 }
 
-void Loading::draw( sf::RenderWindow* &window, double elapsedTime )
+void Loading::draw( sf::RenderWindow* &window )
 {
 	window->draw( text.get() );
-	
-	if( !ready )
-	{
-		setText();
-		state ++;
-		progress_bar.setOffset( static_cast <int> (counter) );
-	}
-	
 	window->draw( progress_bar.get() );
-	
+}
+
+void Loading::mechanics( double elapsedTime )
+{
 	counter += elapsedTime *0xFF /8;
 	if( counter >= max )
 	{
@@ -73,6 +68,12 @@ void Loading::draw( sf::RenderWindow* &window, double elapsedTime )
 	{
 		text.fadeout( elapsedTime *0xFF *2 );
 		progress_bar.fadeout( elapsedTime *0xFF *2 );
+	}
+	else
+	{
+		setText();
+		state ++;
+		progress_bar.setOffset( static_cast <int> (counter) );
 	}
 }
 
@@ -93,12 +94,12 @@ bool Loading::isReady()
 	return false;
 }
 
+
+
 void Loading::beReady()
 {
 	ready = true;
 }
-
-
 
 void Loading::setText()
 {

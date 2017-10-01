@@ -25,15 +25,15 @@ public:
 	Loading();
 	~Loading();
 	void free();
-	
 	void load( float screen_w, float screen_h );
-	void draw( sf::RenderWindow* &window, double elapsedTime );
+	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
 	// In addition, getters.
 	const sf::Uint8& getState() const;
 	bool isReady();
-	void beReady();
 	
-	// Support.
+	// Setters.
+	void beReady();
 	void setText();
 };
