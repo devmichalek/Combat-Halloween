@@ -1,11 +1,9 @@
 #include "knight.h"
 #include "own/file.h"
 #include <SFML/Window/Keyboard.hpp>
-#include <SFML/Network.hpp>
 
 Knight::Knight()
 {
-	myThread = NULL;
 	free();
 }
 
@@ -64,14 +62,8 @@ void Knight::free()
 	attack_counter = 0;
 	dead = 0;
 	
-	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	thread_ready = false;
-	ready = false;
+	error = "";
+	thread.free();
 }
 
 void Knight::reset()
@@ -103,27 +95,8 @@ void Knight::reset()
 	attack_counter = 0;
 	dead = 0;
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	thread_ready = false;
-	ready = false;
-	
-	view.setCenter( view.getSize().x /2, view.getSize().y /2 );
-	viewX = view.getSize().x /2;
-	viewY = view.getSize().y /2;
-	for( auto &it :sprites )
-	{
-		it->setPosition( view.getSize().x /128, view.getSize().y -(sprites[ IDLE ]->getWidth()*2) +(sprites[ IDLE ]->getWidth() -it->getWidth()) );
-	}
-	
-	if( flip != 0 )
-	{
-		flip = 2;
-		flipping();
-	}
+	error = "";
+	thread.free();
 }
 
 void Knight::load( float screen_w, float screen_h )
@@ -310,15 +283,16 @@ void Knight::animation( double elapsedTime )
 		}
 		
 		// Set view.
+		float velocity = 1280 /view.getSize().x;
 		if( getX() +getWidth()/2 > view.getSize().x/2 || viewX > view.getSize().x/2 )
 		{
 			if( viewX < getX() +getWidth()/2 )
 			{
-				viewX += elapsedTime *(getX() +getWidth()/2 -viewX);
+				viewX += elapsedTime *(getX() +getWidth()/2 -viewX) *velocity;
 			}
 			else if( viewX > getX() +getWidth()/2 )
 			{
-				viewX -= elapsedTime *(viewX -getX() +getWidth()/2);
+				viewX -= elapsedTime *(viewX -getX() +getWidth()/2) *velocity;
 			}
 		}
 		else
@@ -330,11 +304,11 @@ void Knight::animation( double elapsedTime )
 		{
 			if( viewY < getY() +getHeight()/2 )
 			{
-				viewY += elapsedTime *(getY() +getHeight()/2 -viewY);
+				viewY += elapsedTime *(getY() +getHeight()/2 -viewY) *velocity;
 			}
 			else if( viewY > getY() +getHeight()/2 )
 			{
-				viewY -= elapsedTime *(viewY -getY() +getHeight()/2);
+				viewY -= elapsedTime *(viewY -getY() +getHeight()/2) *velocity;
 			}
 		}
 		else
@@ -546,20 +520,18 @@ void Knight::weightlessness( double elapsedTime )
 
 bool Knight::isReady()
 {
-	return ready;
+	return thread.s;
 }
 
 bool Knight::isNull()
 {
 	// Delete thread.
-	if( myThread != NULL && thread_ready )
+	if( thread.t != NULL && thread.r )
 	{
-		delete myThread;
-		myThread = NULL;
-		thread_ready = false;
+		thread.reset();
 	}
 	
-	if( myThread == NULL )
+	if( thread.t == NULL )
 	{
 		return true;
 	}
@@ -567,52 +539,175 @@ bool Knight::isNull()
 	return false;
 }
 
-void Knight::setThread()
+void Knight::setThread( string message )
 {
-	if( !ready )
+	if( !thread.s )
 	{
-		if( !thread_ready && myThread == NULL )
+		if( !thread.r && thread.t == NULL )
 		{
-			myThread = new std::thread( [=] { setFeatures(); } );
-			myThread->detach();
+			thread.t = new std::thread( [=] { setFeatures( message ); } );
+			thread.t->detach();
 		}
 	}
 }
 
-void Knight::setFeatures()
+void Knight::setFeatures( string message )
 {
-	// prepare message
-	string message = "username=" +username;
-	
-	// prepare the request
-	sf::Http::Request request( "/combathalloween/getparts.php", sf::Http::Request::Post );
-	
-	// encode the parameters in the request body
-	request.setBody( message );
-	
-	// send the request
-	sf::Http http( "http://adrianmichalek.pl/" );
-	sf::Http::Response response = http.sendRequest( request );
-	
-	// check the status
-	if( response.getStatus() == sf::Http::Response::Ok )
+	if( setFeaturesPartOne( message ) )
 	{
-		string echostring = response.getBody();
+		setFeaturesPartTwo();
+	}
+	
+	// Inform that thread is ready for next action.
+	thread.r = true;
+}
+
+bool Knight::setFeaturesPartOne( string line )
+{
+	// Bufor and start.
+	string bufor = "";
+	unsigned start = 0;
+	
+	
+	// AUTHOR --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			// printf( "%s\n", bufor.c_str() );
+			bufor = "";
+			break;
+		}
 		
-		if( echostring != "0" )	// success
+		bufor += line[ i ];
+	}
+	
+	
+	// NEW SIZES --------------------------------------------------------------------------
+	float my_screen_w = 0;
+	float my_screen_h = 0;
+	
+	// Set my_screen_w.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			my_screen_w = view.getSize().x -con::stof( bufor );
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
+	// Set my_screen_h.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			my_screen_h = view.getSize().y -con::stof( bufor ) +1;
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
+	vector <sf::Vector2f> fs_tiles;
+	vector <sf::Uint8> types_tiles;
+	float myKnightX = 0;
+	float myKnightY = 0;
+	// FS --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			bufor += "*";
+			string nrstr = "";
+			vector <string> data;
+			
+			bool wrong = false;
+			for( unsigned j = 0; j < bufor.size(); j++ )
+			{
+				if( bufor[ j ] == '*' )
+				{
+					if( data.size() == 0 )
+					{
+						if( con::stoi( nrstr ) != 0 && con::stoi( nrstr ) != 1 )
+						{
+							wrong = true;
+							break;
+						}
+					}
+					
+					data.push_back( nrstr );
+					nrstr = "";
+				}
+				else
+				{
+					nrstr += bufor[ j ];
+				}
+			}
+			
+			if( !wrong )
+			{
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *0.995;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
+				
+				// Set knight position
+				if( w == 0 )
+				{
+					myKnightX = x;
+					myKnightY = y;
+				}
+				else if( w == 1 )
+				{
+					fs_tiles.push_back( sf::Vector2f( x, y ) );
+					types_tiles.push_back( t );
+				}
+			}
+			
+			// Clear.
+			bufor = "";
+		}
+		else
+		{
+			bufor += line[ i ];
+		}
+	}
+	
+	return positionKnight( myKnightX, myKnightY, fs_tiles, types_tiles );
+}
+
+void Knight::setFeaturesPartTwo()
+{
+	MyRequest request;
+	request.setMessage( "username=" +username );
+	request.setHttp( "http://adrianmichalek.pl/" );
+	request.setRequest( "/combathalloween/getparts.php", sf::Http::Request::Post );
+	
+	if( request.sendRequest() )
+	{
+		string result = request.getResult();
+		if( result != "0" )	// success
 		{
 			float armour_temporary = 0;
 			float damage_temporary = 0;
 			float velocity_temporary = 0;
 			float heartpoints_temporary = 0;
 			
-			for( unsigned i = 0; i < echostring.size(); i++ )
+			for( unsigned i = 0; i < result.size(); i++ )
 			{
-				if( echostring[ i ] == 'c' )
+				if( result[ i ] == 'c' )
 				{
-					for( unsigned j = i +1; j < echostring.size(); j++ )
+					for( unsigned j = i +1; j < result.size(); j++ )
 					{
-						if( echostring[ j ] == 'a' )
+						if( result[ j ] == 'a' )
 						{
 							i = j -1;
 							break;
@@ -620,26 +715,26 @@ void Knight::setFeatures()
 					}
 				}
 				
-				else if( echostring[ i ] == 'a' || echostring[ i ] == 'h' || 
-						 echostring[ i ] == 'd' || echostring[ i ] == 's' )
+				else if( result[ i ] == 'a' || result[ i ] == 'h' || 
+						 result[ i ] == 'd' || result[ i ] == 's' )
 				{
 					int was = i;
 					string value = "";
-					for( unsigned j = i +1; j < echostring.size(); j++ )
+					for( unsigned j = i +1; j < result.size(); j++ )
 					{
-						if( isalpha( echostring[ j ] ) )
+						if( isalpha( result[ j ] ) )
 						{
 							i = j -1;
 							break;
 						}
 						else
 						{
-							value += echostring[ j ];
+							value += result[ j ];
 						}
 					}
 					
 					// printf( "%f\n", con::stof( value ) );
-					switch( echostring[ was ] )
+					switch( result[ was ] )
 					{
 						case 'a': armour_temporary += 		con::stof( value );	break;
 						case 'h': heartpoints_temporary += 	con::stof( value );	break;
@@ -649,7 +744,6 @@ void Knight::setFeatures()
 				}
 			}
 			
-			ready = true;
 			armour = armour +(armour*armour_temporary /100);
 			damage = damage +(damage*damage_temporary /100);
 			velocity = velocity +(velocity*velocity_temporary /100);
@@ -685,12 +779,92 @@ void Knight::setFeatures()
 					getline( file.get(), line );
 					keys.push_back( con::stoi( line ) );
 				}
+				
+				thread.s = true;
 			}
+			else
+			{
+				error = "Can't load txt/keys_current.txt";
+			}
+			
 			file.free();
 		}
 	}
+	else
+	{
+		error = "Can't correctly set character.";
+	}
 	
-	thread_ready = true;
+}
+
+bool Knight::positionKnight( float x, float y, vector <sf::Vector2f> fs, vector <sf::Uint8> types )
+{
+	
+	// Setting position of knight...
+	MySprite block;
+	block.setIdentity( "knight-block" );
+	block.load( "images/play/tiles/0.png" );
+	block.setScale( 0.5, 0.5 );
+
+	float block_x = 0;
+	float block_y = 0;
+	int success = -1;
+	
+	float knight_x = x;
+	float knight_y = y +sprites[ IDLE ]->getHeight();
+	
+	for( unsigned j = 0; j < fs.size(); j++ )
+	{
+		if( types[ j ] >= 0 && types[ j ] <= 8 )
+		{
+			block_x = fs[ j ].x;
+			block_y = fs[ j ].y;
+			
+			if( knight_x > block_x && knight_x < block_x +block.getWidth() )
+			{
+				if( knight_y > block_y && knight_y < block_y +block.getHeight() )
+				{
+					success = j;
+					break;
+				}
+			}
+		}
+	}
+	
+	if( success < 0 )	// Wrong put knight.
+	{
+		// printf( "%d %d\n", fs.size(), types.size() );
+		error = "The position of character is wrong.";
+		return false;
+	}
+	else
+	{
+		block_y -= sprites[ IDLE ]->getHeight() *1.1;
+		// printf( "%f  %f\n", knight_x, block_y );
+		
+		viewX = knight_x;
+		viewY = block_y;
+		view.setCenter( viewX, viewY );
+		for( auto &it :sprites )
+		{
+			it->setPosition( knight_x, block_y +sprites[ IDLE ]->getWidth() -it->getWidth() );
+		}
+		
+		if( flip != 0 )
+		{
+			flip = 2;
+			flipping();
+		}
+	}
+	
+	block.free();
+	
+	return true;
+}
+
+string Knight::getError()
+{
+	return error;
 }
 
 

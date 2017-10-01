@@ -1,10 +1,10 @@
 #pragma once
 #include "own/sprite.h"
+#include "own/request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <vector>
-#include <thread>
 
 class Knight
 {
@@ -74,9 +74,8 @@ class Knight
 	
 	
 	// Thread.
-	std::thread* myThread;
-	bool thread_ready;
-	bool ready;
+	string error;
+	MyThread thread;
 	
 public:
 	
@@ -115,8 +114,12 @@ public:
 	// Thread.
 	bool isNull();
 	bool isReady();
-	void setThread();
-	void setFeatures();
+	void setThread( string message );
+	void setFeatures( string message );
+	bool setFeaturesPartOne( string line );
+	void setFeaturesPartTwo();
+	bool positionKnight( float x, float y, vector <sf::Vector2f> fs, vector <sf::Uint8> types );
+	string getError();
 	
 	// Sound and username.
 	void setUsername( string line );

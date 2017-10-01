@@ -3,7 +3,6 @@
 
 Tiles::Tiles()
 {
-	myThread = NULL;
 	free();
 }
 
@@ -14,46 +13,22 @@ Tiles::~Tiles()
 
 void Tiles::free()
 {
-	collision = false;
 	screen_w = 0;
 	screen_h = 0;
-	border_x = 0;
-	border_y = 0;
-	fadingout = false;
 	
-	if( !fs.empty() )
+	if( !sprites.empty() )
 	{
-		fs.clear();
+		for( auto &it :sprites )
+		{
+			it->free();
+			delete it;
+			it = NULL;
+		}
+		
+		sprites.clear();
 	}
 	
-	if( !types.empty() )
-	{
-		types.clear();
-	}
-	
-	if( !ufs.empty() )
-	{
-		ufs.clear();
-	}
-	
-	if( !utypes.empty() )
-	{
-		utypes.clear();
-	}
-	
-	if( !ualpha.empty() )
-	{
-		ualpha.clear();
-	}
-	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	
-	thread_ready = false;
-	ready = false;
+	reset();
 }
 
 void Tiles::reset()
@@ -88,14 +63,8 @@ void Tiles::reset()
 		ualpha.clear();
 	}
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	
-	thread_ready = false;
-	ready = false;
+	error = "";
+	thread.free();
 }
 
 void Tiles::load( float screen_w, float screen_h )
@@ -193,14 +162,12 @@ void Tiles::turnCollision( bool collision )
 bool Tiles::isNull()
 {
 	// Delete thread.
-	if( myThread != NULL && thread_ready )
+	if( thread.t != NULL && thread.r )
 	{
-		delete myThread;
-		myThread = NULL;
-		thread_ready = false;
+		thread.reset();
 	}
 	
-	if( myThread == NULL )
+	if( thread.t == NULL )
 	{
 		return true;
 	}
@@ -210,153 +177,150 @@ bool Tiles::isNull()
 
 bool Tiles::isReady()
 {
-	return ready;
+	return thread.s;
 }
 
-void Tiles::setThread()
+void Tiles::setThread( string message )
 {
-	if( !ready )
+	if( !thread.s )
 	{
-		if( !thread_ready && myThread == NULL )
+		if( !thread.r && thread.t == NULL )
 		{
-			myThread = new std::thread( [=] { prepare(); } );
-			myThread->detach();
+			thread.t = new std::thread( [=] { prepare( message ); } );
+			thread.t->detach();
 		}
 	}
 }
 
-void Tiles::prepare()
+void Tiles::prepare( string message )
 {
-	MyFile file;
-	file.load( "txt/worlds/world_.txt" );
-	if( file.is_good() )
+	string line = message;
+
+	// Bufor and start.
+	string bufor = "";
+	unsigned start = 0;
+	
+	
+	// AUTHOR --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
 	{
-		// Line and bufor.
-		string line = "";
-		string bufor = "";
-		unsigned start = 0;
-		
-		// Getline.
-		getline( file.get(), line );
-		
-		
-		// AUTHOR --------------------------------------------------------------------------
-		for( unsigned i = start; i < line.size(); i++ )
+		if( line[ i ] == '|' )
 		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				// printf( "%s\n", bufor.c_str() );
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
+			start = i +1;
+			// printf( "%s\n", bufor.c_str() );
+			bufor = "";
+			break;
 		}
 		
-		
-		// NEW SIZES --------------------------------------------------------------------------
-		float my_screen_w = 0;
-		float my_screen_h = 0;
-		
-		// Set my_screen_w.
-		for( unsigned i = start; i < line.size(); i++ )
+		bufor += line[ i ];
+	}
+	
+	
+	// NEW SIZES --------------------------------------------------------------------------
+	float my_screen_w = 0;
+	float my_screen_h = 0;
+	
+	// Set my_screen_w.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
 		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				my_screen_w = screen_w -con::stof( bufor );
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
+			start = i +1;
+			my_screen_w = screen_w -con::stof( bufor );
+			bufor = "";
+			break;
 		}
 		
-		// Set my_screen_h.
-		for( unsigned i = start; i < line.size(); i++ )
+		bufor += line[ i ];
+	}
+	
+	// Set my_screen_h.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
 		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				my_screen_h = screen_h -con::stof( bufor ) +1;
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
+			start = i +1;
+			my_screen_h = screen_h -con::stof( bufor ) +1;
+			bufor = "";
+			break;
 		}
 		
-		
-		
-		// FS --------------------------------------------------------------------------
-		for( unsigned i = start; i < line.size(); i++ )
+		bufor += line[ i ];
+	}
+	
+	
+	
+	// FS --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
 		{
-			if( line[ i ] == '|' )
+			bufor += "*";
+			string nrstr = "";
+			vector <string> data;
+			
+			bool wrong = false;
+			for( unsigned j = 0; j < bufor.size(); j++ )
 			{
-				bufor += "*";
-				string nrstr = "";
-				vector <string> data;
-				
-				bool wrong = false;
-				for( unsigned j = 0; j < bufor.size(); j++ )
+				if( bufor[ j ] == '*' )
 				{
-					if( bufor[ j ] == '*' )
+					if( data.size() == 0 )
 					{
-						if( data.size() == 0 )
+						if( con::stoi( nrstr ) != 1 && con::stoi( nrstr ) != 2 )
 						{
-							if( con::stoi( nrstr ) != 0 && con::stoi( nrstr ) != 1 )
-							{
-								wrong = true;
-								break;
-							}
+							wrong = true;
+							break;
 						}
-						
-						data.push_back( nrstr );
-						nrstr = "";
 					}
-					else
-					{
-						nrstr += bufor[ j ];
-					}
-				}
-				
-				if( !wrong )
-				{
-					sf::Uint8 w = con::stoi( data[ 0 ] );
-					sf::Uint8 t = con::stoi( data[ 1 ] );
-					float x = con::stoi( data[ 2 ] ) *0.999;
-					float y = con::stoi( data[ 3 ] ) +my_screen_h;
 					
-					if( w == 0 )
-					{
-						types.push_back( t );
-						fs.push_back( sf::Vector2f( x, y ) );
-					}
-					else if( w == 1 )
-					{
-						utypes.push_back( t );
-						ufs.push_back( sf::Vector2f( x, y ) );
-						ualpha.push_back( 0 );
-					}
+					data.push_back( nrstr );
+					nrstr = "";
 				}
-				
-				// Clear.
-				bufor = "";
+				else
+				{
+					nrstr += bufor[ j ];
+				}
 			}
-			else
+			
+			if( !wrong )
 			{
-				bufor += line[ i ];
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *0.995;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
+				
+				if( w == 1 )
+				{
+					types.push_back( t );
+					fs.push_back( sf::Vector2f( x, y ) );
+				}
+				else if( w == 2 )
+				{
+					utypes.push_back( t );
+					ufs.push_back( sf::Vector2f( x, y ) );
+					ualpha.push_back( 0 );
+				}
 			}
+			
+			// Clear.
+			bufor = "";
 		}
-		
-		// Inform that everything is ok.
-		ready = true;
+		else
+		{
+			bufor += line[ i ];
+		}
 	}
-	file.free();
+	
+	// Inform that everything is ok.
+	thread.s = true;
 	
 	// Inform that thread is ready for next action.
-	thread_ready = true;
+	thread.r = true;
+}
+
+string Tiles::getError()
+{
+	return error;
 }
 
 
@@ -440,7 +404,7 @@ void Tiles::tickGravity( sf::Rect <float> rect, double elapsedTime )
 				sprites[ t ]->setPosition( x, y );
 				if( sprites[ t ]->checkCollisionRect( rect ) )
 				{
-					if( ualpha[ i ] < 0xFF )
+					if( ualpha[ i ] < 0xFF /2 )
 					{
 						ualpha[ i ] += elapsedTime *0xFF;
 					}

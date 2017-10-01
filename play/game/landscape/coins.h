@@ -1,8 +1,8 @@
 #pragma once
 #include "own/sprite.h"
+#include "own/request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
-#include <thread>
 
 class Coins
 {
@@ -18,9 +18,8 @@ class Coins
 	int line;
 	
 	// Thread stuff.
-	std::thread* myThread;
-	bool thread_ready;
-	bool ready;
+	string error;
+	MyThread thread;
 	
 public:
 	
@@ -38,8 +37,9 @@ public:
 	// Thread.
 	bool isNull();
 	bool isReady();
-	void setThread();
-	void prepare();
+	void setThread( string message );
+	void prepare( string message );
+	string getError();
 	
 	// Borders.
 	void setBorderX( float x );

@@ -1,9 +1,9 @@
 #pragma once
 #include "own/sprite.h"
+#include "own/request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <vector>
-#include <thread>
 
 class Tiles
 {
@@ -29,9 +29,8 @@ class Tiles
 	vector <float> ualpha;
 	
 	// Thread stuff.
-	std::thread* myThread;
-	bool thread_ready;
-	bool ready;
+	string error;
+	MyThread thread;
 	
 public:
 	
@@ -51,8 +50,9 @@ public:
 	// Thread.
 	bool isNull();
 	bool isReady();
-	void setThread();
-	void prepare();
+	void setThread( string message );
+	void prepare( string message );
+	string getError();
 	
 	// Check collision.
 	bool checkCollisionRect( sf::Rect <float> rect );

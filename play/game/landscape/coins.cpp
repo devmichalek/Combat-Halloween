@@ -3,7 +3,6 @@
 
 Coins::Coins()
 {
-	myThread = NULL;
 	free();
 }
 
@@ -16,31 +15,12 @@ void Coins::free()
 {
 	screen_w = 0;
 	screen_h = 0;
-	border_x = 0;
-	border_y = 0;
 	
 	sprite.free();
 	
-	if( !fs.empty() )
-	{
-		fs.clear();
-	}
-	
-	if( !offsets.empty() )
-	{
-		offsets.clear();
-	}
-	
 	line = 0;
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	
-	thread_ready = false;
-	ready = false;
+	reset();
 }
 
 void Coins::reset()
@@ -58,14 +38,8 @@ void Coins::reset()
 		offsets.clear();
 	}
 	
-	if( myThread != NULL )
-	{
-		delete myThread;
-		myThread = NULL;
-	}
-	
-	thread_ready = false;
-	ready = false;
+	error = "";
+	thread.free();
 }
 
 void Coins::load( float screen_w, float screen_h )
@@ -129,14 +103,13 @@ void Coins::fadeout( float v, int min )
 bool Coins::isNull()
 {
 	// Delete thread.
-	if( myThread != NULL && thread_ready )
+	if( thread.t != NULL && thread.r )
 	{
-		delete myThread;
-		myThread = NULL;
-		thread_ready = false;
+		thread.reset();
+		return true;
 	}
 	
-	if( myThread == NULL )
+	if( thread.t == NULL )
 	{
 		return true;
 	}
@@ -146,149 +119,143 @@ bool Coins::isNull()
 
 bool Coins::isReady()
 {
-	return ready;
+	return thread.s;
 }
 
-void Coins::setThread()
+void Coins::setThread( string message )
 {
-	if( !ready )
+	if( !thread.s )
 	{
-		if( !thread_ready && myThread == NULL )
+		if( !thread.r && thread.t == NULL )
 		{
-			myThread = new std::thread( [=] { prepare(); } );
-			myThread->detach();
+			thread.t = new std::thread( [=] { prepare( message ); } );
+			thread.t->detach();
 		}
 	}
 }
 
-void Coins::prepare()
+void Coins::prepare( string message )
 {
-	// Inform that we end.
-	thread_ready = true;
+	string line = message;
 	
-	MyFile file;
-	file.load( "txt/worlds/world_.txt" );
-	if( file.is_good() )
+	// Bufor and start.
+	string bufor = "";
+	unsigned start = 0;
+	
+	
+	// AUTHOR --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
 	{
-		// Line and bufor.
-		string line = "";
-		string bufor = "";
-		unsigned start = 0;
-		
-		// Getline.
-		getline( file.get(), line );
-		
-		
-		// AUTHOR --------------------------------------------------------------------------
-		for( unsigned i = start; i < line.size(); i++ )
+		if( line[ i ] == '|' )
 		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				// printf( "%s\n", bufor.c_str() );
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
+			start = i +1;
+			// printf( "%s\n", bufor.c_str() );
+			bufor = "";
+			break;
 		}
 		
-		
-		// NEW SIZES --------------------------------------------------------------------------
-		float my_screen_w = 0;
-		float my_screen_h = 0;
-		
-		// Set my_screen_w.
-		for( unsigned i = start; i < line.size(); i++ )
-		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				my_screen_w = screen_w -con::stof( bufor );
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
-		}
-		
-		// Set my_screen_h.
-		for( unsigned i = start; i < line.size(); i++ )
-		{
-			if( line[ i ] == '|' )
-			{
-				start = i +1;
-				my_screen_h = screen_h -con::stof( bufor ) +1;
-				bufor = "";
-				break;
-			}
-			
-			bufor += line[ i ];
-		}
-		
-		
-		// FS --------------------------------------------------------------------------
-		for( unsigned i = start; i < line.size(); i++ )
-		{
-			if( line[ i ] == '|' )
-			{
-				bufor += "*";
-				string nrstr = "";
-				vector <string> data;
-				
-				bool wrong = false;
-				for( unsigned j = 0; j < bufor.size(); j++ )
-				{
-					if( bufor[ j ] == '*' )
-					{
-						if( data.size() == 0 )
-						{
-							if( con::stoi( nrstr ) != 3 )
-							{
-								wrong = true;
-								break;
-							}
-						}
-						
-						data.push_back( nrstr );
-						nrstr = "";
-					}
-					else
-					{
-						nrstr += bufor[ j ];
-					}
-				}
-				
-				if( !wrong )
-				{
-					sf::Uint8 w = con::stoi( data[ 0 ] );
-					sf::Uint8 t = con::stoi( data[ 1 ] );
-					float x = con::stoi( data[ 2 ] ) *0.999;
-					float y = con::stoi( data[ 3 ] ) +my_screen_h;
-					
-					if( w == 3 )
-					{
-						fs.push_back( sf::Vector2f( x, y ) );
-						offsets.push_back( rand() %this->line );
-					}
-				}
-				
-				// Clear.
-				bufor = "";
-			}
-			else
-			{
-				bufor += line[ i ];
-			}
-		}
-		
-		// Inform that everything is ok.
-		ready = true;
+		bufor += line[ i ];
 	}
-	file.free();
+	
+	
+	// NEW SIZES --------------------------------------------------------------------------
+	float my_screen_w = 0;
+	float my_screen_h = 0;
+	
+	// Set my_screen_w.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			my_screen_w = screen_w -con::stof( bufor );
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
+	// Set my_screen_h.
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			start = i +1;
+			my_screen_h = screen_h -con::stof( bufor ) +1;
+			bufor = "";
+			break;
+		}
+		
+		bufor += line[ i ];
+	}
+	
+	
+	// FS --------------------------------------------------------------------------
+	for( unsigned i = start; i < line.size(); i++ )
+	{
+		if( line[ i ] == '|' )
+		{
+			bufor += "*";
+			string nrstr = "";
+			vector <string> data;
+			
+			bool wrong = false;
+			for( unsigned j = 0; j < bufor.size(); j++ )
+			{
+				if( bufor[ j ] == '*' )
+				{
+					if( data.size() == 0 )
+					{
+						if( con::stoi( nrstr ) != 4 )
+						{
+							wrong = true;
+							break;
+						}
+					}
+					
+					data.push_back( nrstr );
+					nrstr = "";
+				}
+				else
+				{
+					nrstr += bufor[ j ];
+				}
+			}
+			
+			if( !wrong )
+			{
+				sf::Uint8 w = con::stoi( data[ 0 ] );
+				sf::Uint8 t = con::stoi( data[ 1 ] );
+				float x = con::stoi( data[ 2 ] ) *0.995;
+				float y = con::stoi( data[ 3 ] ) +my_screen_h;
+				
+				if( w == 4 )
+				{
+					fs.push_back( sf::Vector2f( x, y ) );
+					offsets.push_back( rand() %this->line );
+				}
+			}
+			
+			// Clear.
+			bufor = "";
+		}
+		else
+		{
+			bufor += line[ i ];
+		}
+	}
+	
+	// Inform that everything is ok.
+	thread.s = true;
 	
 	// Inform that thread is ready for next action.
-	thread_ready = true;
+	thread.r = true;
+}
+
+string Coins::getError()
+{
+	return error;
 }
 
 
