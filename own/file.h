@@ -28,4 +28,5 @@ namespace con
 	float stof( string str );
 	
 	string itos( int n );
+	string ftos( float n );
 }
