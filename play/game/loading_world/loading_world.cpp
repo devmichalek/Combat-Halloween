@@ -302,10 +302,7 @@ void Loading_world::reset()
 	// printf( "%d\n", ready );
 	state = 0;
 	stop = false;
-	if( ready == 2 )
-	{
-		ready = 0;
-	}
+	ready = 0;
 	
 	back = false;
 	
