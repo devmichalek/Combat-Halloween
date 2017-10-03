@@ -833,7 +833,7 @@ bool Knight::positionKnight( float x, float y, vector <sf::Vector2f> fs, vector 
 	
 	if( success < 0 )	// Wrong put knight.
 	{
-		// printf( "%d %d\n", fs.size(), types.size() );
+		printf( "%d %d\n", fs.size(), types.size() );
 		error = "The position of character is wrong.";
 		return false;
 	}
@@ -992,7 +992,7 @@ sf::Rect <float> Knight::getRect()
 	rect.left = getX();
 	rect.top = getY();
 	rect.width = getWidth();
-	rect.height = getHeight();
+	rect.height = getHeight() *0.99;
 	
 	return rect;
 }
