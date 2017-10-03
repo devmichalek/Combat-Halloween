@@ -23,12 +23,19 @@ void Tiles_editor::free()
 	mouse_y = -1;
 	
 	hatchFoeVisible.free();
+	lightPointVisible.free();
 	
 	mouseInfo.free();
 	arrow.free();
 	
 	width = 0;
 	grid = false;
+	rubbish = false;
+	spaceLine = 0;
+	spaceCounter = 0;
+	
+	topBorder = 0;
+	rightBorder = 0;
 	
 	additional_x = 0;
 	additional_y = 0;
@@ -85,13 +92,12 @@ void Tiles_editor::free()
 	{
 		lightpoints.clear();
 	}
-	
-	rubbish = false;
 }
 
 void Tiles_editor::reset()
 {
 	grid = false;
+	spaceCounter = 0;
 	type = -1;
 	chosen = 0;
 }
@@ -106,8 +112,10 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	this->screen_h = screen_h;
 	float scale_x = screen_w /2560;
 	float scale_y = screen_h /1440;
+	spaceLine = 0.25; // 0.25 sec.
 	
 	hatchFoeVisible.load( screen_w, screen_h );
+	lightPointVisible.load( screen_w, screen_h );
 	
 	mouseInfo.setIdentity( "tiles_editor-mouseInfo" );
 	mouseInfo.setFont( "fonts/jcandlestickextracond.ttf" );
@@ -165,15 +173,19 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	lightcircle.setFillColor( sf::Color::Transparent );
 	lightcircle.setOutlineThickness( 1 );
 	lightcircle.setOutlineColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF /2 ) );
+	lightcircle.setOutlineThickness( 1 );
 	
-	// Set width.
+	// Set.
 	width = tiles[ 0 ]->getWidth() /2;
+	topBorder = 125 *(width*2);
+	rightBorder = 250 *(width*2);
 }
 
 void Tiles_editor::handle( sf::Event& event )
 {
 	hatchFoeVisible.handle( event );
-	if( !hatchFoeVisible.isVisible() )
+	lightPointVisible.handle( event );
+	if( !hatchFoeVisible.isVisible() && !lightPointVisible.isVisible() )
 	{
 		if( event.type == sf::Event::KeyPressed && !rubbish )
 		{
@@ -185,8 +197,7 @@ void Tiles_editor::handle( sf::Event& event )
 			else if( type == FOE )							size = foes.size();
 				
 				
-			if( code == sf::Keyboard::Space )		put();
-			else if( code == sf::Keyboard::Escape )	reset();
+			if( code == sf::Keyboard::Escape )	reset();
 			
 			// CHANGING CHOSEN ----------------------------------------
 			else if( code == sf::Keyboard::X )						chosen /= 2;
@@ -293,6 +304,24 @@ void Tiles_editor::handle( sf::Event& event )
 						break;
 					}
 				}
+				
+				// Is this is a light point?
+				for( unsigned i = 0; i < lightpoints.size(); i++ )
+				{
+					float x = lightpoints[ i ].x +additional_x;
+					float y = lightpoints[ i ].y +additional_y;
+					
+					float myWidth = lightbulb.getWidth();
+					
+					lightbulb.setPosition( x, y );
+					if( lightbulb.checkCollision( mouse_x, mouse_y ) )
+					{
+						lightPointVisible.setType( i );
+						lightPointVisible.setSpecs( lightpoints[ i ].radius, lightpoints[ i ].velocity, lightpoints[ i ].color, lightpoints[ i ].points );
+						lightPointVisible.setPosition( x +myWidth +additional_x, y +additional_y );
+						break;
+					}
+				}
 			}
 		}
 	}
@@ -326,6 +355,16 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		float fullHeight = foes[ n ]->getHeight();
 		
 		hatchFoeVisible.setPosition( x +scaledWidth/2 +fullWidth/2, y +scaledHeight -fullHeight );
+	}
+	
+	// Update position of light point visible.
+	if( lightPointVisible.getType() != -1 )
+	{
+		int t = lightPointVisible.getType();
+		float x = lightpoints[ t ].x +additional_x;
+		float y = lightpoints[ t ].y +additional_y;
+		float myWidth = lightbulb.getWidth();
+		lightPointVisible.setPosition( x +myWidth, y );
 	}
 	
 	
@@ -384,6 +423,13 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		if( x < screen_w && x +foes[ n ]->getWidth() > 0 && y < screen_h && y +foes[ n ]->getHeight() > 0 )
 		{
 			foes[ n ]->setPosition( x, y );
+			
+			foes[ n ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
+			if( hatchFoeVisible.getType() == i )
+			{
+				foes[ n ]->setColor( sf::Color( 0xFF, 0, 0xFF ) );
+			}
+			
 			window->draw( foes[ n ]->get() );
 		}
 	}
@@ -402,6 +448,12 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	
 		if( l < screen_w && r > 0 && t < screen_h && b > 0 )
 		{
+			lightcircle.setOutlineColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF /2 ) );
+			if( lightPointVisible.getType() == i )
+			{
+				lightcircle.setOutlineColor( sf::Color( 0xFF, 0, 0xFF, 0xFF /2 ) );
+			}
+			
 			lightbulb.setPosition( x, y );
 			window->draw( lightbulb.get() );
 			
@@ -411,7 +463,6 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 			
 			lightcircle.setRadius( radius );
 			lightcircle.setPosition( x +lightbulb.getWidth()/2 -radius, y +lightbulb.getHeight()/2 -radius );
-			lightcircle.setOutlineThickness( 1 );
 			window->draw( lightcircle );
 		}
 	}
@@ -428,7 +479,6 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	// Draw current drawable thing.
 	if( chosen > -1 )
 	{
-		
 		if( type == TILE )
 		{
 			if( chosen < static_cast <int> (tiles.size()) )
@@ -490,6 +540,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	}
 	
 	hatchFoeVisible.draw( window );
+	lightPointVisible.draw( window );
 	
 	drawTumbnails( window );
 	drawLines( window );
@@ -587,6 +638,17 @@ void Tiles_editor::drawTumbnails( sf::RenderWindow* &window )
 
 void Tiles_editor::drawLines( sf::RenderWindow* &window )
 {
+	// Draw borders.
+	line.setFillColor( sf::Color( 0xFA, 0xFA, 0xD2, 0xFF ) );
+	line.setSize( sf::Vector2f( screen_w, 5 ) );
+	line.setPosition( sf::Vector2f( 0, -topBorder +additional_y +screen_h ) );
+	// printf( "%f\n", -topBorder +additional_y +screen_h );
+	window->draw( line );
+	line.setSize( sf::Vector2f( 5, screen_h ) );
+	line.setPosition( sf::Vector2f( rightBorder +additional_x, 0 ) );
+	window->draw( line );
+	
+	
 	if( rubbish )
 	{
 		line.setFillColor( sf::Color( 0xFF, 0x00, 0x00, 0xFF/3 ) );
@@ -634,6 +696,28 @@ void Tiles_editor::drawLines( sf::RenderWindow* &window )
 	window->draw( mouseInfo.get() );
 }
 
+void Tiles_editor::mechanics( double elapsedTime )
+{
+	// Space.
+	if( sf::Keyboard::isKeyPressed( sf::Keyboard::Key( sf::Keyboard::Space ) ) )
+	{
+		if( rubbish )
+		{
+			deleteOne();
+		}
+		else if( spaceCounter > spaceLine )
+		{
+			spaceCounter = 0;
+			put();
+		}
+	}
+	
+	if( spaceCounter < spaceLine )
+	{
+		spaceCounter += elapsedTime *4;
+	}
+}
+
 
 
 void Tiles_editor::setRubbish( bool rubbish )
@@ -647,10 +731,10 @@ void Tiles_editor::put()
 	{
 		deleteOne();
 	}
-	else if( chosen > -1 && type > -1 )
+	else if( chosen > -1 && type > -1 && mouse_x -additional_x <= rightBorder && mouse_y -additional_y -screen_h >= -topBorder )
 	{
 		griding();
-		
+		// printf( "%f %f %f %f\n", mouse_x -additional_x, mouse_y -additional_y -screen_h, rightBorder, -topBorder );
 		if( type == KNIGHT )
 		{
 			knight.setPosition( mouse_x -additional_x, mouse_y -additional_y );
@@ -670,7 +754,44 @@ void Tiles_editor::put()
 		}
 		else
 		{
-			blocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+			// Check if there is no block with the same position.
+			bool isThere = false;
+			float myX = mouse_x -additional_x;
+			float myY = mouse_y -additional_y;
+			
+			if( type == TILE || type == UNVISIBLE_TILE )
+			{
+				for( auto &it :blocks )
+				{
+					if( it.w == TILE || it.w == UNVISIBLE_TILE )
+					{
+						if( myX +width >= it.x && myY +width >= it.y && myX < it.x +width*1.5 && myY < it.y +width*1.5 )
+						{
+							isThere = true;
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				for( auto &it :blocks )
+				{
+					// printf( "%f %f %f %f\n", mouse_x -additional_x, mouse_y -additional_y -screen_h, it.x, it.y );
+					if( myX == it.x && myY == it.y )
+					{
+						// printf( "Found!\n" );
+						isThere = true;
+						break;
+					}
+				}
+			}
+			
+			
+			if( !isThere )
+			{
+				blocks.push_back( Block( type, chosen, mouse_x -additional_x, mouse_y -additional_y ) );
+			}
 		}
 	}
 }

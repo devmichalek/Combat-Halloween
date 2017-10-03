@@ -34,8 +34,12 @@ class Tiles_editor
 	float mouse_x;
 	float mouse_y;
 	
-	// Hatch Foe Visible
+	// Hatch Foe Visible.
 	HatchFoeVisible hatchFoeVisible;
+	
+	// Light Point Visible.
+	LightPointVisible lightPointVisible;
+	
 	
 	MyText mouseInfo;
 	sf::RectangleShape line;
@@ -45,6 +49,12 @@ class Tiles_editor
 	float width;
 	bool grid;
 	bool rubbish;
+	float spaceLine;
+	float spaceCounter;
+	
+	// Borders
+	float topBorder;
+	float rightBorder;
 	
 	// Direction.
 	float additional_x;
@@ -81,6 +91,7 @@ public:
 	void draw( sf::RenderWindow* &window );
 	void drawTumbnails( sf::RenderWindow* &window );
 	void drawLines( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
 	void setRubbish( bool rubbish );
 	void put();
