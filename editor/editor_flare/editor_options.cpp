@@ -16,6 +16,9 @@ void Editor_options::free()
 	screen_h = 0;
 	status = 0;
 	
+	orText.free();
+	deleteText.free();
+	
 	if( !texts.empty() )
 	{
 		for( auto &it :texts )
@@ -73,6 +76,11 @@ void Editor_options::load( float screen_w, float screen_h )
 		texts2[ i ]->setFont( "fonts/jcandlestickextracond.ttf" );
 	}
 	
+	orText.setIdentity( "editor_options-orText" );
+	orText.setFont( "fonts/jcandlestickextracond.ttf" );
+	deleteText.setIdentity( "editor_options-deleteText" );
+	deleteText.setFont( "fonts/jcandlestickextracond.ttf" );
+	
 	// Set text.
 	texts[ KEYBOARD ]->setText( "KEYBOARD" );
 	texts[ KEY_A ]->setText( "A: " );
@@ -113,13 +121,15 @@ void Editor_options::load( float screen_w, float screen_h )
 	texts2[ KEY_ENTER ]->setText( "THE BEGINNING OF THE MAP / AGREE" );
 	texts2[ KEY_ESC ]->setText( "CLOSE WINDOW / RESET / DISAGREE" );
 	texts2[ KEY_CTRL ]->setText( "DELETE MODE" );
-	texts2[ KEY_SPACE ]->setText( "PUT CHOSEN" );
+	texts2[ KEY_SPACE ]->setText( "PUT CHOSEN (QUICKLY)" );
+	
+	orText.setText( " OR " );
+	deleteText.setText( "DELETE (QUICKLY)" );
 	
 	texts2[ MOUSE ]->setText( " " );
 	texts2[ MOUSE_LEFT ]->setText( "PUT CHOSEN" );
 	texts2[ MOUSE_RIGHT ]->setText( "SET OBJECT SETTINGS (CLICK ON THE OBJECT)" );
 	texts2[ MOUSE_SCROLL ]->setText( "BACK / NEXT CATEGORY" );
-	
 	
 	
 	int size = 28;
@@ -182,6 +192,14 @@ void Editor_options::load( float screen_w, float screen_h )
 	texts2[ KEY_SPACE ]->setColor( sf::Color( 0x2F, 0x9E, 0x75 ) );
 	texts2[ MOUSE_LEFT ]->setColor( sf::Color( 0x2F, 0x9E, 0x75 ) );
 	texts2[ MOUSE_RIGHT ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	
+	orText.setSize( size -4 );
+	deleteText.setSize( size -4 );
+	deleteText.setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
+	orText.setPosition( texts2[ KEY_SPACE ]->getRight(), texts2[ KEY_SPACE ]->getY() );
+	deleteText.setPosition( orText.getRight(), texts2[ KEY_SPACE ]->getY() );
+	orText.setAlpha( 0xFF );
+	deleteText.setAlpha( 0xFF );
 }
 
 void Editor_options::handle( sf::Event& event )
@@ -243,6 +261,9 @@ void Editor_options::draw( sf::RenderWindow* &window )
 		{
 			window->draw( it->get() );
 		}
+		
+		window->draw( orText.get()  );
+		window->draw( deleteText.get() );
 	}
 }
 

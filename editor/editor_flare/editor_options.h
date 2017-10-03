@@ -37,6 +37,9 @@ class Editor_options
 		AMOUNT
 	};
 	
+	MyText orText;
+	MyText deleteText;
+	
 	vector <MyText*> texts;
 	vector <MyText*> texts2;
 	MySprite table;
@@ -49,7 +52,6 @@ public:
 	Editor_options();
 	~Editor_options();
 	void free();
-	
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
