@@ -258,11 +258,11 @@ void HatchFoeVisible::handle( sf::Event& event )
 						break;
 					}
 				}
-			}
-			
-			if( table.checkCollision( mouse_x, mouse_y ) )
-			{
-				collision = true;
+				
+				if( table.checkCollision( mouse_x, mouse_y ) )
+				{
+					collision = true;
+				}
 			}
 			
 			if( !collision )
