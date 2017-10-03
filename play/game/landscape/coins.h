@@ -12,10 +12,11 @@ class Coins
 	float border_x;
 	float border_y;
 	
-	MySprite sprite;
-	vector <sf::Vector2f> fs;
-	vector <float> offsets;
 	int line;
+	int width;
+	float offset;
+	MySprite sprite;
+	vector <vector <bool>> tiles;
 	
 	// Thread stuff.
 	string error;

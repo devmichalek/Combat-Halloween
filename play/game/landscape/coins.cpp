@@ -16,9 +16,10 @@ void Coins::free()
 	screen_w = 0;
 	screen_h = 0;
 	
-	sprite.free();
-	
 	line = 0;
+	width = 32;
+	offset = 0;
+	sprite.free();
 	
 	reset();
 }
@@ -27,15 +28,16 @@ void Coins::reset()
 {
 	border_x = 0;
 	border_y = 0;
+	offset = 0;
 	
-	if( !fs.empty() )
+	if( !tiles.empty() )
 	{
-		fs.clear();
-	}
-	
-	if( !offsets.empty() )
-	{
-		offsets.clear();
+		for( auto &it :tiles )
+		{
+			it.clear();
+		}
+		
+		tiles.clear();
 	}
 	
 	error = "";
@@ -58,14 +60,19 @@ void Coins::load( float screen_w, float screen_h )
 
 void Coins::draw( sf::RenderWindow* &window )
 {
-	for( unsigned i = 0; i < fs.size(); i++ )
+	int l = static_cast <int> (border_x) /width;
+	int r = static_cast <int> (border_x +screen_w) /width +1;
+	int b = static_cast <int> (-border_y) /width;
+	int t = static_cast <int> (-border_y +screen_h) /width +1;
+	
+	for( int i = l; i < r; i++ )
 	{
-		if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
+		for( int j = b; j < t; j++ )
 		{
-			if( fs[ i ].x +sprite.getWidth() > border_x && fs[ i ].y +sprite.getHeight() > border_y )
+			if( tiles[ i ][ j ] )
 			{
-				sprite.setPosition( fs[ i ].x, fs[ i ].y );
-				sprite.setOffset( static_cast <int> ( offsets[ i ] ) );
+				sprite.setOffset( static_cast <int> ( offset ) );
+				sprite.setPosition( i *width, -(j *width) +screen_h );
 				window->draw( sprite.get() );
 			}
 		}
@@ -74,17 +81,10 @@ void Coins::draw( sf::RenderWindow* &window )
 
 void Coins::mechanics( double elapsedTime )
 {
-	for( unsigned i = 0; i < offsets.size(); i++ )
+	offset += elapsedTime *25;
+	if( offset >= line )
 	{
-		offsets[ i ] += elapsedTime *25;
-		if( offsets[ i ] == line )
-		{
-			offsets[ i ] = 0;
-		}
-		else if( offsets[ i ] > line )
-		{
-			offsets[ i ] = static_cast <int> (offsets[ i ]) %line;
-		}
+		offset = static_cast <int> (offset) %line;
 	}
 }
 
@@ -190,7 +190,18 @@ void Coins::prepare( string message )
 		bufor += line[ i ];
 	}
 	
+	for( unsigned i = 0; i < 550; i++ )
+	{
+		vector <bool> temporary;
+		for( unsigned j = 0; j < 300; j++ )
+		{
+			temporary.push_back( false );
+		}
+		
+		tiles.push_back( temporary );
+	}
 	
+	// printf( "%f %f\n", screen_w, screen_h );
 	// FS --------------------------------------------------------------------------
 	for( unsigned i = start; i < line.size(); i++ )
 	{
@@ -227,13 +238,15 @@ void Coins::prepare( string message )
 			{
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *0.995;
+				float x = con::stoi( data[ 2 ] );
 				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
 				if( w == 4 )
 				{
-					fs.push_back( sf::Vector2f( x, y ) );
-					offsets.push_back( rand() %this->line );
+					// printf( "%f=%d  %f=%d\n", x, static_cast <int> (x /width), y, static_cast <int>(-(y -screen_h) /width) );
+					// fs.push_back( sf::Vector2f( x, y ) );
+					// printf( "Coin: %f %f\n", x /width, -(y -screen_h) /width );
+					tiles[ x /width ][ -(y -screen_h) /width ] = true;
 				}
 			}
 			
