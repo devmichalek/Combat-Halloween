@@ -16,6 +16,8 @@ void Tiles::free()
 	screen_w = 0;
 	screen_h = 0;
 	
+	width = 32;
+	
 	if( !sprites.empty() )
 	{
 		for( auto &it :sprites )
@@ -34,33 +36,30 @@ void Tiles::free()
 void Tiles::reset()
 {
 	collision = false;
+	
 	border_x = 0;
 	border_y = 0;
-	fadingout = false;
 	
-	if( !fs.empty() )
+	globalAlpha = 0;
+	
+	if( !tiles.empty() )
 	{
-		fs.clear();
+		for( auto &it :tiles )
+		{
+			it.clear();
+		}
+		
+		tiles.clear();
 	}
 	
-	if( !types.empty() )
+	if( !alpha.empty() )
 	{
-		types.clear();
-	}
-	
-	if( !ufs.empty() )
-	{
-		ufs.clear();
-	}
-	
-	if( !utypes.empty() )
-	{
-		utypes.clear();
-	}
-	
-	if( !ualpha.empty() )
-	{
-		ualpha.clear();
+		for( auto &it :alpha )
+		{
+			it.clear();
+		}
+		
+		alpha.clear();
 	}
 	
 	error = "";
@@ -80,7 +79,7 @@ void Tiles::load( float screen_w, float screen_h )
 		sprites.push_back( new MySprite() );
 		sprites[ sprites.size() -1 ]->setIdentity( "tiles-sprites" );
 		sprites[ sprites.size() -1 ]->load( "images/play/tiles/" +con::itos(i) +".png" );
-		sprites[ sprites.size() -1 ]->setScale( 0.5, 0.5 );
+		sprites[ sprites.size() -1 ]->setScale( 0.51, 0.51 );
 	}
 	
 	// Collision.
@@ -90,35 +89,21 @@ void Tiles::load( float screen_w, float screen_h )
 
 void Tiles::draw( sf::RenderWindow* &window )
 {
-	for( unsigned i = 0; i < fs.size(); i++ )
-	{
-		if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
-		{
-			if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border_x && fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border_y )
-			{
-				sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-				window->draw( sprites[ types[ i ] ]->get() );
-			}
-		}
-	}
+	int l = static_cast <int> (border_x) /width /2;
+	int r = static_cast <int> (border_x +screen_w) /width +1;
+	int b = static_cast <int> (-border_y) /width;
+	int t = static_cast <int> (-border_y +screen_h) /width +1;
 	
-	if( !fadingout )
+	for( int i = l; i < r; i++ )
 	{
-		for( unsigned i = 0; i < ualpha.size(); i++ )
+		for( int j = b; j < t; j++ )
 		{
-			if( ualpha[ i ] > 0 )
+			if( tiles[ i ][ j ] != -1 )
 			{
-				if( ufs[ i ].x < border_x +screen_w && ufs[ i ].y < border_y +screen_h )
-				{
-					if( ufs[ i ].x +sprites[ utypes[ i ] ]->getWidth() > border_x && ufs[ i ].y +sprites[ utypes[ i ] ]->getHeight() > border_y )
-					{
-						float alpha = sprites[ utypes[ i ] ]->getAlpha();
-						sprites[ utypes[ i ] ]->setAlpha( ualpha[ i ] );
-						sprites[ utypes[ i ] ]->setPosition( ufs[ i ].x, ufs[ i ].y );
-						window->draw( sprites[ utypes[ i ] ]->get() );
-						sprites[ utypes[ i ] ]->setAlpha( alpha );
-					}
-				}
+				
+				sprites[ tiles[ i ][ j ] ]->setAlpha( globalAlpha /alpha[ i ][ j ] *0xFF );
+				sprites[ tiles[ i ][ j ] ]->setPosition( i *width, -((j +1) *width) +screen_h );
+				window->draw( sprites[ tiles[ i ][ j ] ]->get() );
 			}
 		}
 	}
@@ -138,7 +123,14 @@ void Tiles::fadein( float v, int max )
 		it->fadein( v, max );
 	}
 	
-	fadingout = false;
+	if( globalAlpha < max )
+	{
+		globalAlpha += v;
+		if( globalAlpha > max )
+		{
+			globalAlpha = max;
+		}
+	}
 }
 
 void Tiles::fadeout( float v, int min )
@@ -148,7 +140,14 @@ void Tiles::fadeout( float v, int min )
 		it->fadeout( v, min );
 	}
 	
-	fadingout = true;
+	if( globalAlpha > min )
+	{
+		globalAlpha -= v;
+		if( globalAlpha < min )
+		{
+			globalAlpha = min;
+		}
+	}
 }
 
 void Tiles::turnCollision( bool collision )
@@ -248,7 +247,19 @@ void Tiles::prepare( string message )
 		bufor += line[ i ];
 	}
 	
-	
+	for( unsigned i = 0; i < 550; i++ )
+	{
+		vector <sf::Int8> new_tiles;
+		vector <float> new_alpha;
+		for( unsigned j = 0; j < 300; j++ )
+		{
+			new_tiles.push_back( -1 );
+			new_alpha.push_back( static_cast <float> (0xFF) );
+		}
+		
+		tiles.push_back( new_tiles );
+		alpha.push_back( new_alpha );
+	}
 	
 	// FS --------------------------------------------------------------------------
 	for( unsigned i = start; i < line.size(); i++ )
@@ -286,19 +297,14 @@ void Tiles::prepare( string message )
 			{
 				sf::Uint8 w = con::stoi( data[ 0 ] );
 				sf::Uint8 t = con::stoi( data[ 1 ] );
-				float x = con::stoi( data[ 2 ] ) *0.995;
+				float x = con::stoi( data[ 2 ] );
 				float y = con::stoi( data[ 3 ] ) +my_screen_h;
 				
-				if( w == 1 )
+				if( w == 1 || w == 2 )
 				{
-					types.push_back( t );
-					fs.push_back( sf::Vector2f( x, y ) );
-				}
-				else if( w == 2 )
-				{
-					utypes.push_back( t );
-					ufs.push_back( sf::Vector2f( x, y ) );
-					ualpha.push_back( 0 );
+					// printf( "%f %f\n", x /width, -(y -screen_h) /width );
+					tiles[ x /width ][ -(y -screen_h) /width ] = static_cast <sf::Int8> (t);
+					if( w == 2 )	alpha[ x /width ][ -(y -screen_h) /width ] = 0;
 				}
 			}
 			
@@ -330,45 +336,26 @@ bool Tiles::checkCollisionRect( sf::Rect <float> rect )
 	// The rest.
 	float x;
 	float y;
-	sf::Uint8 t;
 	
-	// Visible tiles.
-	for( unsigned i = 0; i < fs.size(); i++ )
-	{
-		x = fs[ i ].x;
-		y = fs[ i ].y;
-		t = types[ i ];
-		
-		if( x < border_x +screen_w && y < border_y +screen_h )
-		{
-			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
-			{
-				sprites[ t ]->setPosition( x, y );
-				if( sprites[ t ]->checkCollisionRect( rect ) )
-				{
-					if( rect.top > y )	this->rect.setPosition( sf::Vector2f(x, y +sprites[ t ]->getHeight() -this->rect.getSize().y) );
-					else				this->rect.setPosition( sf::Vector2f(x, y) );
-					return true;
-				}
-			}
-		}
-	}
+	int l = static_cast <int> (border_x) /width /2;
+	int r = static_cast <int> (border_x +screen_w) /width +1;
+	int b = static_cast <int> (-border_y) /width;
+	int t = static_cast <int> (-border_y +screen_h) /width +1;
 	
-	// Unvisible tiles.
-	for( unsigned i = 0; i < ufs.size(); i++ )
+	for( int i = l; i < r; i++ )
 	{
-		x = ufs[ i ].x;
-		y = ufs[ i ].y;
-		t = utypes[ i ];
-		
-		if( x < border_x +screen_w && y < border_y +screen_h )
+		for( int j = b; j < t; j++ )
 		{
-			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
+			if( tiles[ i ][ j ] != -1 )
 			{
-				sprites[ t ]->setPosition( x, y );
-				if( sprites[ t ]->checkCollisionRect( rect ) )
+				x = i *width;
+				y = -((j +1) *width) +screen_h;
+				
+				sprites[ tiles[ i ][ j ] ]->setPosition( x, y );
+				if( sprites[ tiles[ i ][ j ] ]->checkCollisionRect( rect ) )
 				{
-					if( rect.top < y )	this->rect.setPosition( sf::Vector2f(x, y) );
+					if( rect.top < y )	this->rect.setPosition( sf::Vector2f( x, y ) );
+					else				this->rect.setPosition( sf::Vector2f( x, y +sprites[ tiles[ i ][ j ] ]->getHeight() -this->rect.getSize().y ) );
 					return true;
 				}
 			}
@@ -383,30 +370,30 @@ void Tiles::tickGravity( sf::Rect <float> rect, double elapsedTime )
 	// The rest.
 	float x;
 	float y;
-	sf::Uint8 t;
 	
-	// Unvisible tiles but for alpha.
-	for( unsigned i = 0; i < ufs.size(); i++ )
+	int l = static_cast <int> (border_x) /width /2;
+	int r = static_cast <int> (border_x +screen_w) /width +1;
+	int b = static_cast <int> (-border_y) /width;
+	int t = static_cast <int> (-border_y +screen_h) /width +1;
+	
+	for( int i = l; i < r; i++ )
 	{
-		x = ufs[ i ].x;
-		y = ufs[ i ].y;
-		t = utypes[ i ];
-		
-		if( ualpha[ i ] > 0 )
+		for( int j = b; j < t; j++ )
 		{
-			ualpha[ i ] -= elapsedTime *0xFF/2;
-		}
-		
-		if( x < border_x +screen_w && y < border_y +screen_h )
-		{
-			if( x +sprites[ t ]->getWidth() > border_x && y +sprites[ t ]->getHeight() > border_y )
+			if( tiles[ i ][ j ] != -1 && alpha[ i ][ j ] < 0xFF )
 			{
-				sprites[ t ]->setPosition( x, y );
-				if( sprites[ t ]->checkCollisionRect( rect ) )
+				x = i *width;
+				y = -((j +1) *width) +screen_h;
+				
+				if( alpha[ i ][ j ] > 0 ) 	alpha[ i ][ j ] -= elapsedTime *0xFF /2;
+				else 						alpha[ i ][ j ] = 0;
+				
+				sprites[ tiles[ i ][ j ] ]->setPosition( x, y );
+				if( sprites[ tiles[ i ][ j ] ]->checkCollisionRect( rect ) )
 				{
-					if( ualpha[ i ] < 0xFF /2 )
+					if( alpha[ i ][ j ] < 0xFF /2 )
 					{
-						ualpha[ i ] += elapsedTime *0xFF;
+						alpha[ i ][ j ] += elapsedTime *0xFF;
 					}
 				}
 			}

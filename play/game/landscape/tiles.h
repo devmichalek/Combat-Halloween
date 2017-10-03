@@ -16,17 +16,13 @@ class Tiles
 	float screen_h;
 	float border_x;
 	float border_y;
-	bool fadingout;
 	
-	// Visible tiles.
+	int width;
+	float globalAlpha;
+	
 	vector <MySprite*> sprites;
-	vector <sf::Vector2f> fs;
-	vector <sf::Uint8> types;
-	
-	// Unvisible tiles.
-	vector <sf::Vector2f> ufs;
-	vector <sf::Uint8> utypes;
-	vector <float> ualpha;
+	vector <vector <sf::Int8>> tiles;
+	vector <vector <float>> alpha;
 	
 	// Thread stuff.
 	string error;
