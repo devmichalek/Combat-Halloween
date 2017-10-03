@@ -87,14 +87,17 @@ void Objects::draw( sf::RenderWindow* &window )
 {
 	for( unsigned i = 0; i < fs.size(); i++ )
 	{
-		if( fs[ i ].x < border_x +screen_w && fs[ i ].y < border_y +screen_h )
+		if( fs[ i ].x > border_x +screen_w || fs[ i ].y > border_y +screen_h )
 		{
-			if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() > border_x && fs[ i ].y +sprites[ types[ i ] ]->getHeight() > border_y )
-			{
-				sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-				window->draw( sprites[ types[ i ] ]->get() );
-			}
+			continue;
 		}
+		else if( fs[ i ].x +sprites[ types[ i ] ]->getWidth() < border_x && fs[ i ].y +sprites[ types[ i ] ]->getHeight() < border_y )
+		{
+			continue;
+		}
+		
+		sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
+		window->draw( sprites[ types[ i ] ]->get() );
 	}
 }
 
