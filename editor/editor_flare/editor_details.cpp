@@ -15,6 +15,10 @@ void Editor_details::free()
 	screen_w = 0;
 	screen_h = 0;
 	
+	width = 0;
+	topBorder = 0;
+	rightBorder = 0;
+	
 	if( !arrows.empty() )
 	{
 		for( auto &it :arrows )
@@ -59,6 +63,10 @@ void Editor_details::load( float screen_w, float screen_h )
 	
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
+	
+	width = 64;
+	topBorder = 125 *width -screen_h/2;
+	rightBorder = 250 *width -screen_w/2;
 	
 	for( unsigned i = 0; i < AMOUNT; i++ )
 	{
@@ -190,22 +198,22 @@ void Editor_details::handle( sf::Event& event )
 				
 				if( arrows[ LEFT ]->checkCollision( mouse_x, mouse_y ) && additional_x < 0 )
 				{
-					additional_x += 320;
+					additional_x += width *5;
 					arrows[ LEFT ]->setOffset( 1 );
 				}
-				else if( arrows[ RIGHT ]->checkCollision( mouse_x, mouse_y ) && additional_x > -40000 )
+				else if( arrows[ RIGHT ]->checkCollision( mouse_x, mouse_y ) && additional_x > -rightBorder )
 				{
-					additional_x -= 320;
+					additional_x -= width *5;
 					arrows[ RIGHT ]->setOffset( 1 );
 				}
-				else if( arrows[ TOP ]->checkCollision( mouse_x, mouse_y ) && additional_y < 20000 )
+				else if( arrows[ TOP ]->checkCollision( mouse_x, mouse_y ) && additional_y < topBorder )
 				{
-					additional_y += 180;
+					additional_y += width *3;
 					arrows[ TOP ]->setOffset( 1 );
 				}
 				else if( arrows[ BOT ]->checkCollision( mouse_x, mouse_y ) && additional_y > 0 )
 				{
-					additional_y -= 180;
+					additional_y -= width *3;
 					arrows[ BOT ]->setOffset( 1 );
 				}
 				else if( arrows[ MIDDLE ]->checkCollision( mouse_x, mouse_y ) )
@@ -275,23 +283,23 @@ void Editor_details::handle( sf::Event& event )
 			// Arrows.
 			if( event.key.code == sf::Keyboard::Left && additional_x < 0 )
 			{
-				additional_x += 320;
+				additional_x += width *5;
 				arrows[ LEFT ]->setOffset( 1 );
 			}
-			else if( event.key.code == sf::Keyboard::Right && additional_x > -40000 )
+			else if( event.key.code == sf::Keyboard::Right && additional_x > -rightBorder )
 			{
-				additional_x -= 320;
+				additional_x -= width *5;
 				arrows[ RIGHT ]->setOffset( 1 );
 			}
 			
-			if( event.key.code == sf::Keyboard::Up && additional_y < 20000 )
+			if( event.key.code == sf::Keyboard::Up && additional_y < topBorder )
 			{
-				additional_y += 180;
+				additional_y += width *3;
 				arrows[ TOP ]->setOffset( 1 );
 			}
 			else if( event.key.code == sf::Keyboard::Down && additional_y > 0 )
 			{
-				additional_y -= 180;
+				additional_y -= width *3;
 				arrows[ BOT ]->setOffset( 1 );
 			}
 			else if( event.key.code == sf::Keyboard::Return )
@@ -318,7 +326,7 @@ void Editor_details::draw( sf::RenderWindow* &window )
 	{
 		arrows[ LEFT ]->setOffset( 2 );
 	}
-	else if( additional_x <= -40000 )
+	else if( additional_x <= -rightBorder )
 	{
 		arrows[ RIGHT ]->setOffset( 2 );
 	}
@@ -327,7 +335,7 @@ void Editor_details::draw( sf::RenderWindow* &window )
 	{
 		arrows[ BOT ]->setOffset( 2 );
 	}
-	else if( additional_y >= 20000 )
+	else if( additional_y >= topBorder )
 	{
 		arrows[ TOP ]->setOffset( 2 );
 	}

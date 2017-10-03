@@ -11,6 +11,10 @@ class Editor_details
 	float screen_w;
 	float screen_h;
 	
+	float width;
+	float topBorder;
+	float rightBorder;
+	
 	enum ARROWS
 	{
 		LEFT = 0,
