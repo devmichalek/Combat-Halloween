@@ -198,6 +198,7 @@ void Editor::mechanics( double elapsedTime )
 			}
 		}
 		
+		tiles_editor.mechanics( elapsedTime );
 		tiles_editor.setRubbish( editor_buttons.isDelete() );
 		
 		if( !editor_information.isActive() )
