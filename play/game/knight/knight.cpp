@@ -140,58 +140,35 @@ void Knight::handle( sf::Event& event )
 	}
 }
 
-void Knight::draw( sf::RenderWindow* &window )
+void Knight::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
 	sprites[ which ]->setOffset( offset );
-	window->draw( sprites[ which ]->get() );
+	window->draw( sprites[ which ]->get(), &shader );
 	
 	if( collision )
 	{
 		rectcollisionwalk.setSize( sf::Vector2f( getRect().width, getRect().height ) );
 		rectcollisionwalk.setPosition( sf::Vector2f( getRect().left, getRect().top ) );
-		window->draw( rectcollisionwalk );
+		window->draw( rectcollisionwalk, &shader );
 		
 		if( isAttacking( true ) )
 		{
 			rectcollisionattack.setSize( sf::Vector2f( getAttackRect().width, getAttackRect().height ) );
 			rectcollisionattack.setPosition( sf::Vector2f( getAttackRect().left, getAttackRect().top ) );
-			window->draw( rectcollisionattack );
+			window->draw( rectcollisionattack, &shader );
 		}
 	}
 	
 	// Info.
 	table.setPosition( getRect().left +getRect().width/2 -table.getWidth()/2, getRect().top -table.getHeight() *1.5 );
-	window->draw( table.get() );
+	window->draw( table.get(), &shader );
 	
-	bar.setColor( sf::Color( 0xFF -(armour*1.25), 0, 0 ) );
 	bar.setScale( getHPScale() *0.5, 0.5 );
 	bar.setPosition( table.getX(), table.getY() );
-	window->draw( bar.get() );
+	shader.setUniform( "hiddenColor", sf::Glsl::Vec4( (0xFF -(armour*1.25)) /0xFF, 0.0, 0.0, 1.0 ) );
+	window->draw( bar.get(), &shader );
+	shader.setUniform( "hiddenColor", sf::Glsl::Vec4( 1.0, 1.0, 1.0, 1.0 ) );
 }
-
-void Knight::fadein( float v, int max )
-{
-	bar.fadein( v, max );
-	table.fadein( v, max );
-	
-	for( auto &it :sprites )
-	{
-		it->fadein( v, max );
-	}
-}
-
-void Knight::fadeout( float v, int min )
-{
-	bar.fadeout( v, min );
-	table.fadeout( v, min );
-	
-	for( auto &it :sprites )
-	{
-		it->fadeout( v, min );
-	}
-}
-
-
 
 void Knight::turnCollision( bool collision )
 {

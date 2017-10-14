@@ -86,9 +86,7 @@ public:
 	void reset();
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
-	void draw( sf::RenderWindow* &window );
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
+	void draw( sf::RenderWindow* &window, sf::Shader &shader );
 	
 	// Keyboard - test.
 	void turnCollision( bool collision );
