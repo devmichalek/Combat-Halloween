@@ -93,14 +93,14 @@ void Moving_bg::load( float screen_w, float screen_h, int type )
 	}
 }
 
-void Moving_bg::draw( sf::RenderWindow* &window )
+void Moving_bg::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
 	if( type == 0 )
 	{
 		for( unsigned i = 0; i < fs.size(); i++ )
 		{
 			sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-			window->draw( sprites[ types[ i ] ]->get() );
+			window->draw( sprites[ types[ i ] ]->get(), &shader );
 		}
 	}
 	else
@@ -108,7 +108,7 @@ void Moving_bg::draw( sf::RenderWindow* &window )
 		for( auto &it :fs )
 		{
 			sprites[ 0 ]->setPosition( it.x, it.y );
-			window->draw( sprites[ 0 ]->get() );
+			window->draw( sprites[ 0 ]->get(), &shader );
 		}
 	}
 }
@@ -148,29 +148,4 @@ void Moving_bg::mechanics( double elapsedTime, float direction )
 			}
 		}
 	}
-}
-
-
-
-void Moving_bg::fadein( float v, int max )
-{
-	for( auto &it :sprites )
-	{
-		it->fadein( v, max );
-	}
-}
-
-void Moving_bg::fadeout( float v, int min )
-{
-	for( auto &it :sprites )
-	{
-		it->fadeout( v, min );
-	}
-}
-
-
-
-float Moving_bg::getAlpha()
-{
-	return sprites[ 0 ]->getAlpha();
 }

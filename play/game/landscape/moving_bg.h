@@ -21,11 +21,6 @@ public:
 	void free();
 	
 	void load( float screen_w, float screen_h, int type );
-	void draw( sf::RenderWindow* &window );
+	void draw( sf::RenderWindow* &window, sf::Shader &shader );
 	void mechanics( double elapsedTime, float direction );
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
-	
-	// Getters.
-	float getAlpha();
 };
