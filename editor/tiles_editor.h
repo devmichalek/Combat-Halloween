@@ -102,6 +102,7 @@ public:
 	
 	// Get.
 	bool getGrid();
+	bool isActive();
 	string getType();
 	string getChosen();
 	string getMessage( string path );

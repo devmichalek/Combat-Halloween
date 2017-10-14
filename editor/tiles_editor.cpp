@@ -171,7 +171,6 @@ void Tiles_editor::load( float screen_w, float screen_h )
 	lightcolor.load( "images/play/objects/lightcolor.png" );
 	lightcolor.setScale( 0.5, 0.5 );
 	lightcircle.setFillColor( sf::Color::Transparent );
-	lightcircle.setOutlineThickness( 1 );
 	lightcircle.setOutlineColor( sf::Color( 0xFF, 0xFF, 0xFF, 0xFF /2 ) );
 	lightcircle.setOutlineThickness( 1 );
 	
@@ -184,7 +183,7 @@ void Tiles_editor::load( float screen_w, float screen_h )
 void Tiles_editor::handle( sf::Event& event )
 {
 	hatchFoeVisible.handle( event );
-	lightPointVisible.handle( event );
+	lightPointVisible.handle( event, additional_x, additional_y );
 	if( !hatchFoeVisible.isVisible() && !lightPointVisible.isVisible() )
 	{
 		if( event.type == sf::Event::KeyPressed && !rubbish )
@@ -269,6 +268,16 @@ void Tiles_editor::handle( sf::Event& event )
 					foeblocks[ myType ].scale = hatchFoeVisible.getScale();
 					foeblocks[ myType ].x = hatchFoeVisible.getX();
 					foeblocks[ myType ].y = hatchFoeVisible.getY();
+					foeblocks[ myType ].texts = hatchFoeVisible.getComments();
+				}
+				else if( lightPointVisible.getType() != -1 )
+				{
+					int t = lightPointVisible.getType();
+					lightPointVisible.resetType();
+					lightpoints[ t ].color = lightPointVisible.getColor();
+					lightpoints[ t ].radius = lightPointVisible.getRadius();
+					lightpoints[ t ].velocity = lightPointVisible.getVelocity();
+					lightpoints[ t ].points = lightPointVisible.getPoints();
 				}
 			}
 			else if( event.mouseButton.button == sf::Mouse::Right )
@@ -300,7 +309,7 @@ void Tiles_editor::handle( sf::Event& event )
 						hatchFoeVisible.setType( i );
 						hatchFoeVisible.setFoeSize( fullWidth, fullHeight );
 						hatchFoeVisible.setFoePosition( x +scaledWidth/2 +additional_x, y +scaledHeight +additional_y );
-						
+						hatchFoeVisible.setComments( foeblocks[ i ].texts );
 						break;
 					}
 				}
@@ -317,8 +326,8 @@ void Tiles_editor::handle( sf::Event& event )
 					if( lightbulb.checkCollision( mouse_x, mouse_y ) )
 					{
 						lightPointVisible.setType( i );
-						lightPointVisible.setSpecs( lightpoints[ i ].radius, lightpoints[ i ].velocity, lightpoints[ i ].color, lightpoints[ i ].points );
 						lightPointVisible.setPosition( x +myWidth +additional_x, y +additional_y );
+						lightPointVisible.setSpecs( lightpoints[ i ].radius, lightpoints[ i ].velocity, lightpoints[ i ].color, lightpoints[ i ].points );
 						break;
 					}
 				}
@@ -354,13 +363,34 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 		float fullWidth = foes[ n ]->getWidth();
 		float fullHeight = foes[ n ]->getHeight();
 		
+		bool vis = hatchFoeVisible.isVisible();
 		hatchFoeVisible.setPosition( x +scaledWidth/2 +fullWidth/2, y +scaledHeight -fullHeight );
+		
+		if( !vis )
+		{
+			hatchFoeVisible.isVisible() = false;
+			int myType = hatchFoeVisible.getType();
+			hatchFoeVisible.setType( -1 );
+			foeblocks[ myType ].armour = hatchFoeVisible.getArmour();
+			foeblocks[ myType ].damage = hatchFoeVisible.getDamage();
+			foeblocks[ myType ].velocity = hatchFoeVisible.getVelocity();
+			foeblocks[ myType ].heartpoints = hatchFoeVisible.getHeartpoints();
+			foeblocks[ myType ].scale = hatchFoeVisible.getScale();
+			foeblocks[ myType ].x = hatchFoeVisible.getX();
+			foeblocks[ myType ].y = hatchFoeVisible.getY();
+			foeblocks[ myType ].texts = hatchFoeVisible.getComments();
+		}
 	}
 	
 	// Update position of light point visible.
 	if( lightPointVisible.getType() != -1 )
 	{
 		int t = lightPointVisible.getType();
+		
+		lightpoints[ t ].color = lightPointVisible.getColor();
+		lightpoints[ t ].radius = lightPointVisible.getRadius();
+		lightpoints[ t ].velocity = lightPointVisible.getVelocity();
+		
 		float x = lightpoints[ t ].x +additional_x;
 		float y = lightpoints[ t ].y +additional_y;
 		float myWidth = lightbulb.getWidth();
@@ -524,9 +554,14 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 			lightbulb.setPosition( mouse_x, mouse_y );
 			window->draw( lightbulb.get() );
 			
-			lightcolor.setColor( sf::Color::White );
+			lightcolor.setColor( lightPointVisible.getColor() );
 			lightcolor.setPosition( mouse_x, mouse_y );
 			window->draw( lightcolor.get() );
+			
+			float radius = lightPointVisible.getRadius();
+			lightcircle.setRadius( radius );
+			lightcircle.setPosition( mouse_x +lightbulb.getWidth()/2 -radius, mouse_y +lightbulb.getHeight()/2 -radius );
+			window->draw( lightcircle );
 		}
 		else if( type == KNIGHT )
 		{
@@ -540,7 +575,7 @@ void Tiles_editor::draw( sf::RenderWindow* &window )
 	}
 	
 	hatchFoeVisible.draw( window );
-	lightPointVisible.draw( window );
+	lightPointVisible.draw( window, additional_x, additional_y );
 	
 	drawTumbnails( window );
 	drawLines( window );
@@ -716,6 +751,9 @@ void Tiles_editor::mechanics( double elapsedTime )
 	{
 		spaceCounter += elapsedTime *4;
 	}
+	
+	hatchFoeVisible.mechanics( elapsedTime );
+	lightPointVisible.mechanics( elapsedTime );
 }
 
 
@@ -747,10 +785,14 @@ void Tiles_editor::put()
 			foeblocks[ foeblocks.size() -1 ].velocity = hatchFoeVisible.getVelocity();
 			foeblocks[ foeblocks.size() -1 ].heartpoints = hatchFoeVisible.getHeartpoints();
 			foeblocks[ foeblocks.size() -1 ].scale = hatchFoeVisible.getScale();
+			foeblocks[ foeblocks.size() -1 ].texts = hatchFoeVisible.getComments();
 		}
 		else if( type == LIGHTPOINT )
 		{
 			lightpoints.push_back( LightPoint( mouse_x -additional_x, mouse_y -additional_y ) );
+			lightpoints[ lightpoints.size() -1 ].color = lightPointVisible.getColor();
+			lightpoints[ lightpoints.size() -1 ].radius = lightPointVisible.getRadius();
+			lightpoints[ lightpoints.size() -1 ].velocity = lightPointVisible.getVelocity();
 		}
 		else
 		{
@@ -813,6 +855,20 @@ void Tiles_editor::setAdditionalY( float newY )
 bool Tiles_editor::getGrid()
 {
 	return grid;
+}
+
+bool Tiles_editor::isActive()
+{
+	if( hatchFoeVisible.isVisible() )
+	{
+		return true;
+	}
+	else if( lightPointVisible.isVisible() )
+	{
+		return true;
+	}
+	
+	return false;
 }
 
 string Tiles_editor::getType()
@@ -1009,6 +1065,14 @@ void Tiles_editor::save( string path )
 			// texts.
 			for( unsigned j = 0; j < foeblocks[ i ].texts.size(); j++ )
 			{
+				for( unsigned k = 0; k < foeblocks[ i ].texts[ j ].size(); k++ )
+				{
+					if( foeblocks[ i ].texts[ j ][ k ] == '\n' )
+					{
+						foeblocks[ i ].texts[ j ][ k ] = '~';
+					}
+				}
+				
 				file.get() << "*";
 				file.get() << foeblocks[ i ].texts[ j ];
 			}
@@ -1156,6 +1220,14 @@ void Tiles_editor::load( string path )
 					// Texts.
 					for( unsigned i = 9; i < data.size(); i++ )
 					{
+						for( unsigned k = 0; k < data[ i ].size(); k++ )
+						{
+							if( data[ i ][ k ] == '~' )
+							{
+								data[ i ][ k ] = '\n';
+							}
+						}
+						
 						foeblocks[ foeblocks.size() -1 ].texts.push_back( data[ i ] );
 					}
 				}
