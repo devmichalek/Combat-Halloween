@@ -69,18 +69,18 @@ void Eye::load( float screen_w, float screen_h )
 	srand( time( NULL ) );
 }
 
-void Eye::draw( sf::RenderWindow* &window )
+void Eye::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
 	if( scale_x < 0 )
 	{
 		float x = sprite.getX();
 		sprite.setPosition( sprite.getX() +sprite.getWidth(), sprite.getY() );
-		window->draw( sprite.get() );
+		window->draw( sprite.get(), &shader );
 		sprite.setPosition( x, sprite.getY() );
 	}
 	else
 	{
-		window->draw( sprite.get() );
+		window->draw( sprite.get(), &shader );
 	}
 	
 	// Draw texts.
@@ -90,7 +90,7 @@ void Eye::draw( sf::RenderWindow* &window )
 		if( scale_x > 0 )	left = false;
 		else				left = true;
 		balloonchat.setPosition( sprite.getX() +sprite.getWidth()/2, sprite.getY(), !left );
-		balloonchat.draw( window );
+		balloonchat.draw( window, shader );
 	}
 }
 
@@ -136,20 +136,6 @@ void Eye::mechanics( double elapsedTime )
 	{
 		sprite.move( 0, -elapsedTime *(sprite.getY() -(y+distance_y)) *2 );
 	}
-}
-
-
-
-void Eye::fadein( float v, int max )
-{
-	sprite.fadein( v, max );
-	balloonchat.fadein( v, max );
-}
-
-void Eye::fadeout( float v, int min )
-{
-	sprite.fadeout( v, min );
-	balloonchat.fadeout( v, min );
 }
 
 

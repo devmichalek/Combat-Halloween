@@ -33,11 +33,8 @@ public:
 	void reset( float x, float y );
 	
 	void load( float screen_w, float screen_h );
-	void draw( sf::RenderWindow* &window );
+	void draw( sf::RenderWindow* &window, sf::Shader &shader );
 	void mechanics( double elapsedTime );
-	
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
 	
 	// Position.
 	void setPosition( float x, float y );
