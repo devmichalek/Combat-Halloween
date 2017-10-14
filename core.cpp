@@ -61,7 +61,7 @@ bool Core::set( std::string title, int style )
 	{
 		this->width = 2560;
 	}
-	else if( this->width < 800 )
+	else if( this->width < 900 )
 	{
 		return false;
 	}
@@ -89,7 +89,7 @@ bool Core::set( std::string title, int style )
 		std::string path = "images/initialization/icon.png";
 		icon.loadFromFile( path.c_str() );
 		window->setIcon( icon.getSize().x, icon.getSize().y, icon.getPixelsPtr() );
-		// window->setFramerateLimit( 30 );
+		// window->setFramerateLimit( 10 );
 	}
 	
     return success;
