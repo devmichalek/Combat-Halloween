@@ -97,7 +97,7 @@ void Factory <F>::load( float screen_w, float screen_h, int type, string name )
 }
 
 template <typename F>
-void Factory <F>::draw( sf::RenderWindow* &window )
+void Factory <F>::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
 	float x;
 	float y;
@@ -122,20 +122,20 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 			{
 				sprites[ t ]->setOffset( foes[ i ]->getOffset() );
 				sprites[ t ]->setPosition( x, y );
-				window->draw( sprites[ t ]->get() );
+				window->draw( sprites[ t ]->get(), &shader );
 				
 				// Just for test.
 				if( collision )
 				{
 					rectcollisionwalk.setSize( sf::Vector2f( foes[ i ]->getRealWidth(), foes[ i ]->getRealHeight() ) );
 					rectcollisionwalk.setPosition( sf::Vector2f( foes[ i ]->getRealX(), foes[ i ]->getRealY() ) );
-					window->draw( rectcollisionwalk );
+					window->draw( rectcollisionwalk, &shader );
 					
 					if( foes[ i ]->isAttacking( true ) )
 					{
 						rectcollisionattack.setSize( sf::Vector2f( foes[ i ]->getAttackWidth(), foes[ i ]->getAttackHeight() ) );
 						rectcollisionattack.setPosition( sf::Vector2f( foes[ i ]->getAttackX(), foes[ i ]->getAttackY() ) );
-						window->draw( rectcollisionattack );
+						window->draw( rectcollisionattack, &shader );
 					}
 				}
 				
@@ -144,48 +144,23 @@ void Factory <F>::draw( sf::RenderWindow* &window )
 				// Info.
 				table.setScale( scale, scale );
 				table.setPosition( foes[ i ]->getRealX() +foes[ i ]->getRealWidth()/2 -table.getWidth()/2, y -table.getHeight() *1.5 );
-				window->draw( table.get() );
+				window->draw( table.get(), &shader );
 				
-				bar.setColor( sf::Color( 0xFF -(foes[ i ]->getArmour()/5), 0, 0 ) );
 				bar.setScale( foes[ i ]->getHPScale() *scale, scale );
 				bar.setPosition( table.getX(), table.getY() );
-				window->draw( bar.get() );
+				shader.setUniform( "hiddenColor", sf::Glsl::Vec4( (0xFF -(foes[ i ]->getArmour()/5)) /0xFF, 0.0, 0.0, 1.0 ) );
+				window->draw( bar.get(), &shader );
+				shader.setUniform( "hiddenColor", sf::Glsl::Vec4( 1.0, 1.0, 1.0, 1.0 ) );
 				
 				// Comments from foes.
 				if( foes[ i ]->showText() )
 				{
 					balloonchat.setText( foes[ i ]->getText() );
 					balloonchat.setPosition( foes[ i ]->getMouthX(), foes[ i ]->getMouthY(), foes[i ]->isLeftText() );
-					balloonchat.draw( window );
+					balloonchat.draw( window, shader );
 				}
 			}
 		}
-	}
-}
-
-template <typename F>
-void Factory <F>::fadein( float v, int max )
-{
-	bar.fadein( v, max );
-	table.fadein( v, max );
-	balloonchat.fadein( v, max );
-	
-	for( auto &it :sprites )
-	{
-		it->fadein( v, max );
-	}
-}
-
-template <typename F>
-void Factory <F>::fadeout( float v, int min )
-{
-	bar.fadeout( v, min );
-	table.fadeout( v, min );
-	balloonchat.fadeout( v, min );
-	
-	for( auto &it :sprites )
-	{
-		it->fadeout( v, min );
 	}
 }
 
@@ -391,6 +366,14 @@ void Factory <F>::prepare( string message )
 						
 						for( unsigned i = 9; i < data.size(); i++ )
 						{
+							for( unsigned k = 0; k < data[ i ].size(); k++ )
+							{
+								if( data[ i ][ k ] == '~' )
+								{
+									data[ i ][ k ] = '\n';
+								}
+							}
+							
 							foes[ foes.size() -1 ]->addText( data[ i ] );
 						}
 					}

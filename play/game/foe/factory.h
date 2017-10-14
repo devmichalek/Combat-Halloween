@@ -48,9 +48,7 @@ public:
 	void free();
 	void reset();
 	void load( float screen_w, float screen_h, int type, string name );
-	void draw( sf::RenderWindow* &window );
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
+	void draw( sf::RenderWindow* &window, sf::Shader &shader );
 	void mechanics( double elapsedTime );
 	
 	// Keyboard.
