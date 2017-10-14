@@ -24,11 +24,18 @@ public:
 	~Balloonchat();
 	void free();
 	void load( float screen_w, float screen_h );
+	void draw( sf::RenderWindow* &window, sf::Shader &shader );
 	void draw( sf::RenderWindow* &window );
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
 	
 	// Setters.
 	void setText( string newtext );
 	void setPosition( float x, float y, bool left = false );
+	
+	// Getters.
+	float getLeft();
+	float getRight();
+	float getTop();
+	float getBot();
+	float getWidth();
+	float getHeight();
 };

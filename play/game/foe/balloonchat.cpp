@@ -67,11 +67,35 @@ void Balloonchat::load( float screen_w, float screen_h )
 	bodyhorizontal.setColor( sf::Color( 0xF8, 0xF8, 0xF8 ) );
 	
 	setPosition( 0, 0 );
+	
+	// Set alpha.
+	text.setAlpha( 0xFF );
+	arrow.setAlpha( 0xFF );
+	lefttopborder.setAlpha( 0xFF );
+	square.setAlpha( 0xFF );
+	righttopborder.setAlpha( 0xFF );
+	rightbotborder.setAlpha( 0xFF );
+	bodyvertical.setAlpha( 0xFF );
+	bodyhorizontal.setAlpha( 0xFF );
+}
+
+void Balloonchat::draw( sf::RenderWindow* &window, sf::Shader &shader )
+{
+	window->draw( arrow.get(), &shader );
+	window->draw( lefttopborder.get(), &shader );
+	window->draw( square.get(), &shader );
+	window->draw( righttopborder.get(), &shader );
+	window->draw( rightbotborder.get(), &shader );
+	window->draw( bodyvertical.get(), &shader );
+	window->draw( bodyhorizontal.get(), &shader );
+	
+	shader.setUniform( "hiddenColor", sf::Glsl::Vec4( 0.0, 0.0, 0.0, 1.0 ) );
+	window->draw( text.get(), &shader );
+	shader.setUniform( "hiddenColor", sf::Glsl::Vec4( 1.0, 1.0, 1.0, 1.0 ) );
 }
 
 void Balloonchat::draw( sf::RenderWindow* &window )
 {
-	window->draw( arrow.get() );
 	window->draw( lefttopborder.get() );
 	window->draw( square.get() );
 	window->draw( righttopborder.get() );
@@ -79,30 +103,6 @@ void Balloonchat::draw( sf::RenderWindow* &window )
 	window->draw( bodyvertical.get() );
 	window->draw( bodyhorizontal.get() );
 	window->draw( text.get() );
-}
-
-void Balloonchat::fadein( float v, int max )
-{
-	text.fadein( v, max );
-	arrow.fadein( v, max );
-	lefttopborder.fadein( v, max );
-	square.fadein( v, max );
-	righttopborder.fadein( v, max );
-	rightbotborder.fadein( v, max );
-	bodyvertical.fadein( v, max );
-	bodyhorizontal.fadein( v, max );
-}
-
-void Balloonchat::fadeout( float v, int min )
-{
-	text.fadeout( v, min );
-	arrow.fadeout( v, min );
-	lefttopborder.fadeout( v, min );
-	square.fadeout( v, min );
-	righttopborder.fadeout( v, min );
-	rightbotborder.fadeout( v, min );
-	bodyvertical.fadeout( v, min );
-	bodyhorizontal.fadeout( v, min );
 }
 
 
@@ -147,7 +147,7 @@ void Balloonchat::setPosition( float x, float y, bool left )
 	
 	// Corrections.
 	arrow.move( 0, 1 );
-	text.move( -1, -text.getHeight()/10 );
+	text.move( -1, -2 );
 	righttopborder.move( -1, 0 );
 	bodyhorizontal.move( -1, 0 );
 	if( left )
@@ -158,4 +158,36 @@ void Balloonchat::setPosition( float x, float y, bool left )
 	{
 		rightbotborder.move( -1, 0 );
 	}
+}
+
+
+
+float Balloonchat::getLeft()
+{
+	return text.getLeft();
+}
+
+float Balloonchat::getRight()
+{
+	return text.getRight();
+}
+
+float Balloonchat::getTop()
+{
+	return text.getTop();
+}
+
+float Balloonchat::getBot()
+{
+	return text.getBot();
+}
+
+float Balloonchat::getWidth()
+{
+	return text.getWidth();
+}
+
+float Balloonchat::getHeight()
+{
+	return text.getHeight();
 }
