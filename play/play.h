@@ -14,6 +14,7 @@ class Play
 	bool level;
 	int editor;
 	bool run;
+	float alpha;
 	
 	// Objects.
 	Game game;

@@ -17,6 +17,7 @@ void Play::free()
 	level = false;
 	editor = 0;
 	run = false;
+	alpha = 0;
 	
 	game.free();
 	editorbutton.free();
@@ -150,8 +151,7 @@ void Play::head( sf::RenderWindow* &window, double elapsedTime )
 		{
 			game.setMessage( loading_world.getData() );
 		}
-		
-		if( !loading_world.getStop() && loading_world.getReady() > 0 )
+		else if( !loading_world.getStop() && loading_world.getReady() > 0 )
 		{
 			game.loading( loading_world.getState() );
 			if( game.getStatus() == 1 )
@@ -355,35 +355,46 @@ void Play::fades( double elapsedTime )
 	// Fade out - paused.
 	if( pausesystem.isActive() )
 	{
-		float value = elapsedTime *0xFF *2;
 		float min = 0xFF *3 /4;
+		float value = elapsedTime *0xFF *2;
 		
-		game.fadeout( value, min );
-		homebutton.fadeout( value, min );
-		levelbutton.fadeout( value, min );
-		chunkbutton.fadeout( value, min );
-		musicbutton.fadeout( value, min );
-		chunk_volume.fadeout( value, min );
-		music_volume.fadeout( value, min );
-		chat.fadeout( value, min );
+		if( alpha > min )
+		{
+			alpha -= value;
+			if( alpha < min )	alpha = min;
+			
+			game.setAlpha( alpha );
+			homebutton.fadeout( value, min );
+			levelbutton.fadeout( value, min );
+			chunkbutton.fadeout( value, min );
+			musicbutton.fadeout( value, min );
+			chunk_volume.fadeout( value, min );
+			music_volume.fadeout( value, min );
+			chat.fadeout( value, min );
+		}
+		
 		pausesystem.fadein( value *3, min );
-		
 		music.fadeout( elapsedTime *100, music_volume.getMainVolume() *0.2 );
 	}
 	
 	// Fade out - closed.
 	else if( menu || level || editor == 2 || game.isTable() )
 	{
-		float value = elapsedTime *0xFF;
-		
-		game.fadeout( value );
-		homebutton.fadeout( value );
-		levelbutton.fadeout( value );
-		chunkbutton.fadeout( value );
-		musicbutton.fadeout( value );
-		chunk_volume.fadeout( value );
-		music_volume.fadeout( value );
-		chat.fadeout( value );
+		if( alpha > 0 )
+		{
+			float value = elapsedTime *0xFF;
+			alpha -= value;
+			if( alpha < 0 )	alpha = 0;
+			
+			game.setAlpha( alpha );
+			homebutton.fadeout( value );
+			levelbutton.fadeout( value );
+			chunkbutton.fadeout( value );
+			musicbutton.fadeout( value );
+			chunk_volume.fadeout( value );
+			music_volume.fadeout( value );
+			chat.fadeout( value );
+		}
 		
 		music.fadeout( elapsedTime *100 );
 	}
@@ -392,16 +403,21 @@ void Play::fades( double elapsedTime )
 	else
 	{
 		float value = elapsedTime *0xFF *2;
+		if( alpha < 0xFF )
+		{
+			alpha += value;
+			if( alpha > value )	alpha = 0xFF;
+			
+			game.setAlpha( alpha );
+			homebutton.fadein( value );
+			levelbutton.fadein( value );
+			chunkbutton.fadein( value );
+			musicbutton.fadein( value );
+			chunk_volume.fadein( value );
+			music_volume.fadein( value );
+		}
 		
-		game.fadein( value );
-		homebutton.fadein( value );
-		levelbutton.fadein( value );
-		chunkbutton.fadein( value );
-		musicbutton.fadein( value );
-		chunk_volume.fadein( value );
-		music_volume.fadein( value );
 		pausesystem.fadeout( value );
-		
 		music.fadein( elapsedTime *100, music_volume.getMainVolume() );
 	}
 }
@@ -500,6 +516,7 @@ void Play::saveSound()
 	level = false;
 	editor = 0;
 	run = false;
+	alpha = 0;
 	
 	// Reset.
 	game.reset();
@@ -516,7 +533,7 @@ void Play::saveSound()
 
 bool Play::isMenu()
 {
-	if( menu && game.getAlpha() == 0 )
+	if( menu && alpha == 0 )
 	{
 		return true;
 	}
@@ -526,7 +543,7 @@ bool Play::isMenu()
 
 bool Play::isLevel()
 {
-	if( level && game.getAlpha() == 0 )
+	if( level && alpha == 0 )
 	{
 		return true;
 	}
@@ -536,7 +553,7 @@ bool Play::isLevel()
 
 bool Play::isTable()
 {
-	if( game.isTable() && game.getAlpha() == 0 )
+	if( game.isTable() && alpha == 0 )
 	{
 		return true;
 	}
@@ -546,7 +563,7 @@ bool Play::isTable()
 
 bool Play::isEditor()
 {
-	if( editor == 2 && game.getAlpha() == 0 )
+	if( editor == 2 && alpha == 0 )
 	{
 		return true;
 	}
