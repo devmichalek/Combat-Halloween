@@ -15,7 +15,6 @@ void Game::free()
 {
 	table = false;
 	loaded = false;
-	alpha = 0;
 	message = "";
 	
 	moving_bg.free();
@@ -24,6 +23,7 @@ void Game::free()
 	tiles.free();
 	objects.free();
 	coins.free();
+	lightbulbs.free();
 	skeletons.free();
 	zombies.free();
 }
@@ -32,7 +32,6 @@ void Game::reset()
 {
 	table = false;
 	loaded = false;
-	alpha = 0;
 	message = "";
 	
 	knight.reset();
@@ -40,6 +39,7 @@ void Game::reset()
 	tiles.reset();
 	objects.reset();
 	coins.reset();
+	lightbulbs.reset();
 	skeletons.reset();
 	zombies.reset();
 }
@@ -56,6 +56,7 @@ void Game::load( float screen_w, float screen_h )
 	tiles.load( screen_w, screen_h );
 	objects.load( screen_w, screen_h );
 	coins.load( screen_w, screen_h );
+	lightbulbs.load( screen_w, screen_h );
 	skeletons.load( screen_w, screen_h, 0, "skeleton" );
 	zombies.load( screen_w, screen_h, 2, "zombie" );
 	
@@ -72,15 +73,15 @@ void Game::handle( sf::Event& event )
 
 void Game::draw( sf::RenderWindow* &window )
 {
-	moving_bg.draw( window );
+	moving_bg.draw( window, lightbulbs.getShader() );
 	window->setView( knight.getView() );
-	coins.draw( window );
-	knight.draw( window );
-	tiles.draw( window );
-	skeletons.draw( window );
-	zombies.draw( window );
-	objects.draw( window );
-	eye.draw( window );
+	coins.draw( window, lightbulbs.getShader() );
+	knight.draw( window, lightbulbs.getShader() );
+	tiles.draw( window, lightbulbs.getShader() );
+	skeletons.draw( window, lightbulbs.getShader() );
+	zombies.draw( window, lightbulbs.getShader() );
+	objects.draw( window, lightbulbs.getShader() );
+	eye.draw( window, lightbulbs.getShader() );
 	window->setView( window->getDefaultView() );
 	objects.drawFPS( window );
 }
@@ -152,8 +153,10 @@ void Game::mechanics( double elapsedTime )
 	}
 	knight.animation( elapsedTime );
 	
-	// Coins
+	// Coins and lightbulbs.
 	coins.mechanics( elapsedTime );
+	lightbulbs.mechanics( elapsedTime );
+	
 	
 	// Skeletons
 	skeletons.walk( knight.getRect(), elapsedTime );
@@ -178,6 +181,8 @@ void Game::mechanics( double elapsedTime )
 	objects.setBorderY( knight.getViewY() );
 	coins.setBorderX( knight.getViewX() );
 	coins.setBorderY( knight.getViewY() );
+	lightbulbs.setBorderX( knight.getViewX() );
+	lightbulbs.setBorderY( knight.getViewY() );
 	
 	// Foes borders.
 	skeletons.setBorderX( knight.getViewX() );
@@ -190,55 +195,15 @@ void Game::mechanics( double elapsedTime )
 	objects.mechanics( elapsedTime );
 }
 
-
-
-void Game::fadein( float v, int max )
+void Game::setAlpha( float alpha )
 {
-	if( alpha < max )
-	{
-		alpha += v;
-		if( alpha > max )
-		{
-			alpha = max;
-		}
-		
-		moving_bg.fadein( v, max );
-		knight.fadein( v, max );
-		eye.fadein( v, max );
-		tiles.fadein( v, max );
-		objects.fadein( v, max );
-		coins.fadein( v, max );
-		skeletons.fadein( v, max );
-		zombies.fadein( v, max );
-	}
+	lightbulbs.setAlpha( alpha );
 }
-
-void Game::fadeout( float v, int min )
-{
-	if( alpha > min )
-	{
-		alpha -= v;
-		if( alpha < min )
-		{
-			alpha = min;
-		}
-	
-		moving_bg.fadeout( v, min );
-		knight.fadeout( v, min );
-		eye.fadeout( v, min );
-		tiles.fadeout( v, min );
-		objects.fadeout( v, min );
-		coins.fadeout( v, min );
-		skeletons.fadeout( v, min );
-		zombies.fadeout( v, min );
-	}
-}
-
-
 
 void Game::setMessage( string message )
 {
 	this->message = message;
+	printf( "%d\n", message.size() );
 }
 
 void Game::setUsername( string line )
@@ -263,11 +228,6 @@ bool Game::isTable()
 	return table;
 }
 
-float Game::getAlpha()
-{
-	return moving_bg.getAlpha();
-}
-
 
 
 void Game::loading( int which )
@@ -275,6 +235,7 @@ void Game::loading( int which )
 	switch( which )
 	{
 		case 1:
+		printf( "setthread\n" );
 		knight.setThread( message );
 		break;
 		
@@ -291,17 +252,22 @@ void Game::loading( int which )
 		break;
 		
 		case 5:
-		skeletons.setThread( message );
+		lightbulbs.setThread( message );
 		break;
 		
 		case 6:
+		skeletons.setThread( message );
+		break;
+		
+		case 7:
 		zombies.setThread( message );
 		break;
 		
 		default:
 		if( knight.isNull() && tiles.isNull() &&
 			objects.isNull() && coins.isNull() &&
-			skeletons.isNull() && zombies.isNull() )
+			lightbulbs.isNull() && skeletons.isNull() &&
+			zombies.isNull() )
 		{
 			loaded = true;
 		}
@@ -315,7 +281,8 @@ int Game::getStatus()
 	{
 		if( knight.isReady() && tiles.isReady() &&
 			objects.isReady() && coins.isReady() &&
-			skeletons.isReady() && zombies.isReady() )
+			lightbulbs.isReady() && skeletons.isReady() &&
+			zombies.isReady() )
 		{
 			eye.reset( knight.getRect().left +knight.getRect().width/2, knight.getRect().top -knight.getRect().height );
 			return 2;
@@ -336,12 +303,13 @@ string Game::getLoadingError()
 {
 	string addError = "";
 	
-	if( !knight.isReady() )			addError += knight.getError();
-	else if( !tiles.isReady() )		addError += tiles.getError();
-	else if( !objects.isReady() )	addError += objects.getError();
-	else if( !coins.isReady() )		addError += coins.getError();
-	else if( !skeletons.isReady() )	addError += skeletons.getError();
-	else if( !zombies.isReady() )	addError += zombies.getError();
+	if( !knight.isReady() )				addError += knight.getError();
+	else if( !tiles.isReady() )			addError += tiles.getError();
+	else if( !objects.isReady() )		addError += objects.getError();
+	else if( !coins.isReady() )			addError += coins.getError();
+	else if( !lightbulbs.isReady() )	addError += lightbulbs.getError();
+	else if( !skeletons.isReady() )		addError += skeletons.getError();
+	else if( !zombies.isReady() )		addError += zombies.getError();
 	
 	return addError;
 }

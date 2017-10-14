@@ -3,6 +3,7 @@
 #include "play/game/landscape/tiles.h"
 #include "play/game/landscape/objects.h"
 #include "play/game/landscape/coins.h"
+#include "play/game/landscape/lightbulbs.h"
 #include "play/game/knight/knight.h"
 #include "play/game/knight/eye.h"
 #include "play/game/foe/factory.h"
@@ -14,7 +15,6 @@ class Game
 	// Basics.
 	bool table;
 	bool loaded;
-	float alpha;
 	string message;
 	
 	// Objects.
@@ -24,6 +24,7 @@ class Game
 	Tiles tiles;
 	Objects objects;
 	Coins coins;
+	LightBulbs lightbulbs;
 	Factory <Skeleton> skeletons;
 	Factory <Zombie> zombies;
 	
@@ -39,9 +40,7 @@ public:
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
 	void mechanics( double elapsedTime );
-	
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
+	void setAlpha( float alpha );
 	
 	// Sound and username.
 	void setMessage( string message );
@@ -51,7 +50,6 @@ public:
 	
 	// Getters.
 	bool isTable();
-	float getAlpha();
 	
 	// Loading.
 	void loading( int which );
