@@ -67,6 +67,7 @@ void Objects::load( float screen_w, float screen_h )
 	FPS.setText( "FPS: " );
 	FPS.setSize( screen_h /36 );
 	FPS.setPosition( screen_w -FPS.getWidth(), screen_h -FPS.getHeight()*1.5 );
+	FPS.setAlpha( 0xFF );
 	line = 0.25;
 	counter = line;
 	
@@ -83,7 +84,7 @@ void Objects::load( float screen_w, float screen_h )
 	}
 }
 
-void Objects::draw( sf::RenderWindow* &window )
+void Objects::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
 	for( unsigned i = 0; i < fs.size(); i++ )
 	{
@@ -97,7 +98,7 @@ void Objects::draw( sf::RenderWindow* &window )
 		}
 		
 		sprites[ types[ i ] ]->setPosition( fs[ i ].x, fs[ i ].y );
-		window->draw( sprites[ types[ i ] ]->get() );
+		window->draw( sprites[ types[ i ] ]->get(), &shader );
 	}
 }
 
@@ -126,24 +127,6 @@ void Objects::mechanics( double elapsedTime )
 		{
 			counter += elapsedTime;
 		}
-	}
-}
-
-void Objects::fadein( float v, int max )
-{
-	FPS.fadein( v, max );
-	for( auto &it :sprites )
-	{
-		it->fadein( v, max );
-	}
-}
-
-void Objects::fadeout( float v, int min )
-{
-	FPS.fadeout( v, min );
-	for( auto &it :sprites )
-	{
-		it->fadeout( v, min );
 	}
 }
 
