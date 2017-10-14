@@ -84,17 +84,17 @@ void Editor_information::handle( sf::Event& event )
 				}
 			}
 		}
-	}
-	
-	if( event.type == sf::Event::KeyPressed )
-	{
-		if( event.key.code == sf::Keyboard::Escape )
+		
+		if( event.type == sf::Event::KeyPressed )
 		{
-			status = 3;
-		}
-		else if( status > 0 && event.key.code == sf::Keyboard::Return )
-		{
-			status = 2;
+			if( event.key.code == sf::Keyboard::Escape )
+			{
+				status = 3;
+			}
+			else if( status > 0 && event.key.code == sf::Keyboard::Return )
+			{
+				status = 2;
+			}
 		}
 	}
 }
