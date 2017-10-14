@@ -58,9 +58,9 @@ void Coins::load( float screen_w, float screen_h )
 	sprite.setScale( 0.5, 0.5 );
 }
 
-void Coins::draw( sf::RenderWindow* &window )
+void Coins::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
-	int l = static_cast <int> (border_x) /width;
+	int l = static_cast <int> (border_x) /width /2;
 	int r = static_cast <int> (border_x +screen_w) /width +1;
 	int b = static_cast <int> (-border_y) /width;
 	int t = static_cast <int> (-border_y +screen_h) /width +1;
@@ -72,8 +72,8 @@ void Coins::draw( sf::RenderWindow* &window )
 			if( tiles[ i ][ j ] )
 			{
 				sprite.setOffset( static_cast <int> ( offset ) );
-				sprite.setPosition( i *width, -(j *width) +screen_h );
-				window->draw( sprite.get() );
+				sprite.setPosition( i *width, -((j +1) *width) +screen_h );
+				window->draw( sprite.get(), &shader );
 			}
 		}
 	}
@@ -86,16 +86,6 @@ void Coins::mechanics( double elapsedTime )
 	{
 		offset = static_cast <int> (offset) %line;
 	}
-}
-
-void Coins::fadein( float v, int max )
-{
-	sprite.fadein( v, max );
-}
-
-void Coins::fadeout( float v, int min )
-{
-	sprite.fadeout( v, min );
 }
 
 
