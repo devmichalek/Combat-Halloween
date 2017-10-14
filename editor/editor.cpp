@@ -89,7 +89,10 @@ void Editor::handle( sf::Event& event )
 		
 		if( editor_details.getNameStatus() == 0 && editor_options.getStatus() == 0 )
 		{
-			chat.handle( event );
+			if( !tiles_editor.isActive() )
+			{
+				chat.handle( event );
+			}
 		}
 	}
 }
