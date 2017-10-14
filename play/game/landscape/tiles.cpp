@@ -40,8 +40,6 @@ void Tiles::reset()
 	border_x = 0;
 	border_y = 0;
 	
-	globalAlpha = 0;
-	
 	if( !tiles.empty() )
 	{
 		for( auto &it :tiles )
@@ -87,7 +85,7 @@ void Tiles::load( float screen_w, float screen_h )
 	rect.setFillColor( sf::Color( 0x99, 0x99, 0x00, 0x99 ) );
 }
 
-void Tiles::draw( sf::RenderWindow* &window )
+void Tiles::draw( sf::RenderWindow* &window, sf::Shader &shader )
 {
 	int l = static_cast <int> (border_x) /width /2;
 	int r = static_cast <int> (border_x +screen_w) /width +1;
@@ -100,53 +98,20 @@ void Tiles::draw( sf::RenderWindow* &window )
 		{
 			if( tiles[ i ][ j ] != -1 )
 			{
-				
-				sprites[ tiles[ i ][ j ] ]->setAlpha( globalAlpha /alpha[ i ][ j ] *0xFF );
 				sprites[ tiles[ i ][ j ] ]->setPosition( i *width, -((j +1) *width) +screen_h );
-				window->draw( sprites[ tiles[ i ][ j ] ]->get() );
+				shader.setUniform( "addAlpha", alpha[ i ][ j ] /0xFF );
+				window->draw( sprites[ tiles[ i ][ j ] ]->get(), &shader );
 			}
 		}
 	}
 	
+	shader.setUniform( "addAlpha", 1 );
+	
 	// Test.
 	if( collision )
 	{
-		window->draw( rect );
+		window->draw( rect, &shader );
 		rect.setPosition( -rect.getSize().x, -rect.getSize().y );
-	}
-}
-
-void Tiles::fadein( float v, int max )
-{
-	for( auto &it :sprites )
-	{
-		it->fadein( v, max );
-	}
-	
-	if( globalAlpha < max )
-	{
-		globalAlpha += v;
-		if( globalAlpha > max )
-		{
-			globalAlpha = max;
-		}
-	}
-}
-
-void Tiles::fadeout( float v, int min )
-{
-	for( auto &it :sprites )
-	{
-		it->fadeout( v, min );
-	}
-	
-	if( globalAlpha > min )
-	{
-		globalAlpha -= v;
-		if( globalAlpha < min )
-		{
-			globalAlpha = min;
-		}
 	}
 }
 

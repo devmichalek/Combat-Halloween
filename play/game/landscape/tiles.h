@@ -18,7 +18,6 @@ class Tiles
 	float border_y;
 	
 	int width;
-	float globalAlpha;
 	
 	vector <MySprite*> sprites;
 	vector <vector <sf::Int8>> tiles;
@@ -36,9 +35,7 @@ public:
 	void free();
 	void reset();
 	void load( float screen_w, float screen_h );
-	void draw( sf::RenderWindow* &window );
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
+	void draw( sf::RenderWindow* &window, sf::Shader &shader );
 	
 	// Keyboard - test.
 	void turnCollision( bool collision );
