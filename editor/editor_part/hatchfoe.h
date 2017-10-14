@@ -3,6 +3,7 @@
 #include "own/text.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include "play/game/foe/balloonchat.h"
 #include <vector>
 
 struct HatchFoe
@@ -53,6 +54,20 @@ class HatchFoeVisible
 	vector <MyText*> texts;
 	vector <MyText*> formTexts;
 	
+	// Comments.
+	int commentState;
+	int which;
+	MyText arrow;
+	MyText oneOf;
+	float arrowLine;
+	float arrowCounter;
+	MySprite addCommentButton;
+	MySprite deleteCommentButton;
+	MySprite nextCommentButton;
+	MySprite backCommentButton;
+	vector <string> commentsStr;
+	Balloonchat balloonchat;
+	
 	int type;
 	bool visible;
 	bool wasminus;
@@ -72,13 +87,15 @@ public:
 	void load( float screen_w, float screen_h );
 	void handle( sf::Event& event );
 	void draw( sf::RenderWindow* &window );
+	void mechanics( double elapsedTime );
 	
-	bool isVisible();
+	bool& isVisible();
 	void clear();
 	int getType();
 	void setType( int type );
 	void setPosition( float x, float y );
 	void setFeatures( float a, float d, float v, float h, float s );
+	void setComments( vector <string> newComments );
 	
 	void setFoeSize( float width, float height );
 	void setFoePosition( float foe_x, float foe_y );
@@ -90,9 +107,12 @@ public:
 	float getScale();
 	float getX();
 	float getY();
-};
-
-class BalloonSetter
-{
+	vector <string> getComments();
 	
+private:
+	
+	void setUpComments();
+	void setBalloonChat();
+	void setCommentPosition();
+	void deleteSpaces( string &line );
 };
