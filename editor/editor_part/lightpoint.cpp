@@ -7,7 +7,7 @@ LightPoint::LightPoint( float x, float y )
 	this->x = x;
 	this->y = y;
 	radius = 100;
-	velocity = 100;
+	velocity = 50;
 	color = sf::Color::White;
 	
 	if( !points.empty() )
@@ -47,6 +47,8 @@ void LightPointVisible::free()
 {
 	table.free();
 	button.free();
+	minusbutton.free();
+	deletebutton.free();
 	
 	if( !texts.empty() )
 	{
@@ -93,7 +95,7 @@ void LightPointVisible::free()
 	
 	type = -1;
 	radius = 100;
-	velocity = 100;
+	velocity = 50;
 	color = sf::Color::White;
 	
 	written = "";
@@ -120,7 +122,15 @@ void LightPointVisible::load( float screen_w, float screen_h )
 	button.load( "images/editor/specs.png", 3 );
 	button.setScale( 0.4, 0.4 );
 	
-	rectColor.setSize( sf::Vector2f( table.getWidth(), table.getHeight() *0.22 ) );
+	minusbutton.setIdentity( "lightPointVisible-minusbutton" );
+	minusbutton.load( "images/menu/minus.png", 3 );
+	minusbutton.setScale( 0.4, 0.4 );
+	
+	deletebutton.setIdentity( "lightPointVisible-deletebutton" );
+	deletebutton.load( "images/editor/disagree.png", 3 );
+	deletebutton.setScale( 0.17, 0.17 );
+	
+	rectColor.setSize( sf::Vector2f( table.getWidth() /7, table.getHeight() /5 ) );
 	rectColor.setFillColor( sf::Color::White );
 	
 	// Load texts.
@@ -144,16 +154,15 @@ void LightPointVisible::load( float screen_w, float screen_h )
 	// Set strs.
 	valueStrs.push_back( "FFFFFF" );
 	valueStrs.push_back( "100" );
-	valueStrs.push_back( "100" );
+	valueStrs.push_back( "50" );
 	
 	// Set mins and maxs.
-	mins.push_back( 100 );
-	mins.push_back( 100 );
-	maxs.push_back( 500 );
+	mins.push_back( 50 );
+	mins.push_back( 20 );
 	maxs.push_back( 300 );
+	maxs.push_back( 100 );
 	
 	// Set texts.
-	texts[ CURRENT ]->setText( "CURRENT LIGHT COLOR" );
 	texts[ COLOR ]->setText( "COLOR:      #" );
 	texts[ RADIUS ]->setText( "RADIUS: " );
 	texts[ RADIUS_UNIT ]->setText( "px" );
@@ -165,7 +174,7 @@ void LightPointVisible::load( float screen_w, float screen_h )
 	texts_value[ COLOR_VALUE ]->setText( valueStrs[ COLOR_VALUE ] );
 	texts_value[ RADIUS_VALUE ]->setText( valueStrs[ RADIUS_VALUE ]  );
 	texts_value[ VEL_VALUE ]->setText( valueStrs[ VEL_VALUE ]  );
-	texts_value[ LINES ]->setText( "CLICK TO DRAW PATH" );
+	texts_value[ LINES ]->setText( "PATH MANIPULATION" );
 	
 	int size = 22;
 	for( unsigned i = 0; i < AMOUNT; i++ )
@@ -183,16 +192,21 @@ void LightPointVisible::load( float screen_w, float screen_h )
 	}
 	
 	// In addition.
-	texts[ CURRENT ]->setSize( size +2 );
 	texts_value[ LINES ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+	
+	// Set vertex.
+	vertex.setPrimitiveType( sf::Lines );
 }
 
-void LightPointVisible::handle( sf::Event& event )
+void LightPointVisible::handle( sf::Event& event, float add_x, float add_y )
 {
 	if( active > 0 )
 	{
 		if( event.type == sf::Event::MouseButtonReleased )
 		{
+			deletebutton.setOffset( 0 );
+			minusbutton.setOffset( 0 );
+			
 			for( unsigned i = 0; i < pressed.size(); i++ )
 			{
 				pressed[ i ] = false;
@@ -208,6 +222,18 @@ void LightPointVisible::handle( sf::Event& event )
 			
 			if( event.mouseButton.button == sf::Mouse::Left )
 			{
+				if( chosen != -1 )
+				{
+					textEntered();
+				}
+				
+				if( table.checkCollision( mouse_x, mouse_y ) )
+				{
+					chosen = -1;
+					active = 1;
+					collision = true;
+				}
+				
 				if( active < 2 )
 				{
 					for( unsigned i = 0; i < pressed.size(); i++ )
@@ -215,9 +241,13 @@ void LightPointVisible::handle( sf::Event& event )
 						button.setPosition( table.getRight(), texts_value[ i ]->getY() +2 );
 						if( button.checkCollision( mouse_x, mouse_y ) )
 						{
-							chosen = i;
 							pressed[ i ] = true;
-							if( i != LINES )	written = valueStrs[ i ];
+							if( i != LINES )
+							{
+								texts[ ARROW ]->setPosition( texts_value[ i ]->getRight(), texts_value[ i ]->getY() );
+								chosen = i;
+								written = valueStrs[ i ];
+							}
 							else
 							{
 								chosen = -1;
@@ -228,57 +258,100 @@ void LightPointVisible::handle( sf::Event& event )
 						}
 					}
 				}
-				
-				if( table.checkCollision( mouse_x, mouse_y ) )
+				else
 				{
-					chosen = -1;
-					collision = true;
+					if( deletebutton.checkCollision( mouse_x, mouse_y ) )
+					{
+						deletebutton.setOffset( 1 );
+						if( !points.empty() )
+						{
+							points.clear();
+						}
+					}
+					else if( minusbutton.checkCollision( mouse_x, mouse_y ) )
+					{
+						minusbutton.setOffset( 1 );
+						if( !points.empty() )
+						{
+							points.pop_back();
+						}
+					}
+					else
+					{
+						points.push_back( sf::Vector2f( mouse_x -add_x, mouse_y -add_y ) );
+					}
 				}
 			}
 			
-			if( !collision )
+			if( !collision && active == 1 )
 			{
 				clear();
 			}
 		}
 		
-		else if( event.type == sf::Event::TextEntered )
+		if( chosen != -1 )
 		{
-			bool success = false;
-			if( chosen == 1 )	success = isPossibleCharColor( event.text.unicode );
-			else				success = isPossibleChar( event.text.unicode );
-			
-			if( success )
+			if( event.type == sf::Event::TextEntered )
 			{
+				bool success = false;
+				if( chosen == COLOR_VALUE )	success = isPossibleCharColor( event.text.unicode );
+				else						success = isPossibleChar( event.text.unicode );
 				
-			}
-		}
-		
-		if( event.type == sf::Event::KeyPressed )
-		{
-			if( event.key.code == sf::Keyboard::BackSpace )
-			{
-				if( !written.empty() )
+				if( success )
 				{
+					if( chosen == COLOR_VALUE && written.size() < 6 )
+					{
+						written += event.text.unicode;
+						std::transform( written.begin(), written.end(), written.begin(), ::tolower );
+					}
+					else if( written.size() < 3 )
+					{
+						written += event.text.unicode;
+					}
 					
+					setWritten();
 				}
 			}
-			else if( event.key.code == sf::Keyboard::Return )
+			
+			if( event.type == sf::Event::KeyPressed )
 			{
-				
+				if( event.key.code == sf::Keyboard::BackSpace )
+				{
+					if( !written.empty() )
+					{
+						written.pop_back();
+					}
+					
+					setWritten();
+				}
+				else if( event.key.code == sf::Keyboard::Return )
+				{
+					textEntered();
+				}
+			}
+		}
+	
+		if( event.type == sf::Event::KeyPressed )
+		{
+			if( event.key.code == sf::Keyboard::Escape )
+			{
+				if( active == 2 )	active --;
+				else				clear();
 			}
 		}
 	}
 }
 
-void LightPointVisible::draw( sf::RenderWindow* &window )
+void LightPointVisible::draw( sf::RenderWindow* &window, float add_x, float add_y )
 {
+	// printf( "%d\n", chosen );
+	
 	if( active > 0 )
 	{
 		window->draw( table.get() );
 		window->draw( rectColor );
 		
-		for( unsigned i = 0; i < texts.size(); i++ )
+		for( unsigned i = 0; i < ARROW; i++ )
 		{
 			if( i < LINES )
 			{
@@ -304,27 +377,72 @@ void LightPointVisible::draw( sf::RenderWindow* &window )
 		if( active == 2 )
 		{
 			texts_value[ LINES ]->setColor( sf::Color( 0xFF, 0, 0xFF ) );
+			
+			if( points.empty() )
+			{
+				minusbutton.setOffset( 2 );
+				deletebutton.setOffset( 2 );
+			}
+			
+			window->draw( minusbutton.get() );
+			window->draw( deletebutton.get() );
 		}
-		else
+		else				texts_value[ LINES ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+		
+		if( !points.empty() )
 		{
-			texts_value[ LINES ]->setColor( sf::Color( 0xDD, 0xDD, 0xDD ) );
+			if( points.size() > 1 )
+			{
+				vertex.resize( 0 );
+				for( unsigned i = 0; i < points.size() -1; i++ )
+				{
+					vertex.resize( vertex.getVertexCount() +1 );
+					vertex[ vertex.getVertexCount() -1 ] = sf::Vector2f( points[ i ].x +add_x, points[ i ].y +add_y );
+					
+					vertex.resize( vertex.getVertexCount() +1 );
+					vertex[ vertex.getVertexCount() -1 ] = sf::Vector2f( points[ i+1 ].x +add_x, points[ i+1 ].y +add_y );
+				}
+				
+				window->draw( vertex );
+			}
+			
+			float r = 12;
+			circle.setRadius( r /2 );
+			for( unsigned i = 1; i < points.size(); i++ )
+			{
+				circle.setPosition( sf::Vector2f( points[ i ].x -r/2 +add_x, points[ i ].y -r/2 +add_y ) );
+				window->draw( circle );
+			}
+			
+			circle.setRadius( r );
+			circle.setPosition( sf::Vector2f( points[ 0 ].x -r +add_x, points[ 0 ].y -r +add_y ) );
+			window->draw( circle );
 		}
 		
-		if( arrow_counter > arrow_line && chosen > 0 )
+		if( chosen > -1 )
 		{
-			window->draw( texts[ ARROW ]->get() );
+			if( arrow_counter > arrow_line )
+			{
+				// printf( "%f\n", arrow_counter );
+				window->draw( texts[ ARROW ]->get() );
+			}
+			
+			if( arrow_counter > arrow_line *2 )
+			{
+				arrow_counter = 0;
+			}
 		}
 		
-		if( arrow_counter > arrow_line *2 )
-		{
-			arrow_counter = 0;
-		}
+		// printf( "%d\n", points.size() );
 	}
 }
 
 void LightPointVisible::mechanics( double elapsedTime )
 {
-	arrow_counter += elapsedTime;
+	if( chosen > -1 )
+	{
+		arrow_counter += elapsedTime;
+	}
 }
 
 
@@ -345,9 +463,6 @@ void LightPointVisible::setPosition( float x, float y )
 	
 	table.setPosition( x, y );
 	
-	rectColor.setPosition( sf::Vector2f( table.getX(), table.getY() -rectColor.getSize().y ) );
-	texts[ CURRENT ]->setPosition( table.getX() +table.getWidth() /2 -texts[ CURRENT ]->getWidth()/2, rectColor.getPosition().y -2 );
-	
 	float myX = table.getX() +5;
 	texts[ COLOR ]->setPosition( myX, table.getY() +5 );
 	texts[ RADIUS ]->setPosition( myX, texts[ COLOR ]->getBot() +5 );
@@ -358,8 +473,13 @@ void LightPointVisible::setPosition( float x, float y )
 	texts_value[ VEL_VALUE ]->setPosition( texts[ COLOR ]->getRight(), texts[ VEL ]->getY() );
 	texts_value[ LINES ]->setPosition( myX, texts[ VEL ]->getBot() +5 );
 	
+	rectColor.setPosition( sf::Vector2f( texts[ COLOR_VALUE ]->getRight() +75, texts[ COLOR_VALUE ]->getY() +3 ) );
 	texts[ RADIUS_UNIT ]->setPosition( table.getRight() -5 -texts[ RADIUS_UNIT ]->getWidth(), texts[ RADIUS ]->getY() );
 	texts[ VEL_UNIT ]->setPosition( table.getRight() -5 -texts[ VEL_UNIT ]->getWidth(), texts[ VEL ]->getY() );
+	
+	// Set that two buttons.
+	deletebutton.setPosition( table.getRight() +deletebutton.getWidth(), texts_value[ LINES ]->getY() +2 );
+	minusbutton.setPosition( table.getRight() +minusbutton.getWidth() *2, texts_value[ LINES ]->getY() +2 );
 }
 
 void LightPointVisible::setSpecs( float radius, float velocity, sf::Color color, vector <sf::Vector2f> points )
@@ -368,6 +488,20 @@ void LightPointVisible::setSpecs( float radius, float velocity, sf::Color color,
 	this->velocity = velocity;
 	this->color = color;
 	this->points = points;
+	
+	valueStrs[ COLOR_VALUE ] = getTextFromColor( color );
+	valueStrs[ RADIUS_VALUE ] = con::itos( radius );
+	valueStrs[ VEL_VALUE ] = con::itos( velocity );
+	
+	texts_value[ COLOR_VALUE ]->setText( valueStrs[ COLOR_VALUE ] );
+	texts_value[ RADIUS_VALUE ]->setText( valueStrs[ RADIUS_VALUE ] );
+	texts_value[ VEL_VALUE ]->setText( valueStrs[ VEL_VALUE ] );
+	
+	texts_value[ COLOR_VALUE ]->setPosition( texts[ COLOR ]->getRight(), texts[ COLOR ]->getY() );
+	texts_value[ RADIUS_VALUE ]->setPosition( texts[ COLOR ]->getRight(), texts[ RADIUS ]->getY() );
+	texts_value[ VEL_VALUE ]->setPosition( texts[ COLOR ]->getRight(), texts[ VEL ]->getY() );
+	
+	rectColor.setFillColor( color );
 }
 
 
@@ -410,8 +544,12 @@ bool LightPointVisible::isVisible()
 void LightPointVisible::clear()
 {
 	active = 0;
-	type = -1;
 	chosen = -1;
+}
+
+void LightPointVisible::resetType()
+{
+	type = -1;
 }
 
 
@@ -435,27 +573,60 @@ sf::Color LightPointVisible::getColorFromText( string line )
     stream >> std::hex >> r;
 	
 	// Set green.
+	std::stringstream().swap( stream );
     stream << green;
     stream >> std::hex >> g;
 	
 	// Set blue.
+	std::stringstream().swap( stream );
     stream << blue;
     stream >> std::hex >> b;
 	
-	return sf::Color( r, g, b );
+	// printf( "%s %s %s\n", red.c_str(), green.c_str(), blue.c_str() );
+	// printf( "%d %d %d\n", r, g, b );
+	
+	return sf::Color( r, g, b, 0xFF );
+}
+
+string LightPointVisible::getTextFromColor( sf::Color color )
+{
+	string r, g, b;
+	int red = color.r, green = color.g, blue = color.b;
+	
+    std::stringstream stream;
+	
+	// Set red.
+    stream << std::hex << red;
+    stream >> r;
+	
+	// Set green.
+	std::stringstream().swap( stream );
+    stream << std::hex << green;
+    stream >> g;
+	
+	// Set blue.
+	std::stringstream().swap( stream );
+    stream << std::hex << blue;
+    stream >> b;
+	
+	if( r.size() == 1 )	r = "0" +r;
+	if( g.size() == 1 )	g = "0" +g;
+	if( b.size() == 1 )	b = "0" +b;
+	
+	return r +g +b;
 }
 
 bool LightPointVisible::isPossibleCharColor( sf::Uint8 code )
 {
-	if( code >= 48 && code <= 57 )	// 0 ... 9.
+	if( code >= '0' && code <= '9' )	// 0 ... 9.
 	{
 		return true;
 	}
-	else if( code >= 65 && code <= 70 )	// A ... F.
+	else if( code >= 'A' && code <= 'F' )	// A ... F.
 	{
 		return true;
 	}
-	else if( code >= 97 && code <= 102 )	// a ... f.
+	else if( code >= 'a' && code <= 'f' )	// a ... f.
 	{
 		return true;
 	}
@@ -465,7 +636,7 @@ bool LightPointVisible::isPossibleCharColor( sf::Uint8 code )
 
 bool LightPointVisible::isPossibleChar( sf::Uint8 code )
 {
-	if( code >= 48 && code <= 57 )	// 0 ... 9.
+	if( code >= '0' && code <= '9' )	// 0 ... 9.
 	{
 		return true;
 	}
@@ -475,5 +646,51 @@ bool LightPointVisible::isPossibleChar( sf::Uint8 code )
 
 void LightPointVisible::setWritten()
 {
+	texts_value[ chosen ]->setText( written );
+	texts_value[ chosen ]->setPosition( texts[ COLOR ]->getRight(), texts[ chosen ]->getY() );
+	texts[ ARROW ]->setPosition( texts_value[ chosen ]->getRight(), texts_value[ chosen ]->getY() );
+}
+
+void LightPointVisible::textEntered()
+{
+	if( written.empty() )
+	{
+		written = valueStrs[ chosen ];
+		// printf( "happened\n" );
+	}
+	else
+	{
+		if( chosen == COLOR_VALUE )
+		{
+			if( written.size() < 6 )
+			{
+				written = valueStrs[ chosen ];
+			}
+		}
+		else
+		{
+			int newChosen = chosen -1;
+			if( con::stoi( written ) < mins[ newChosen ] )	written = con::itos( mins[ newChosen ] );
+			else if( con::stoi( written ) > maxs[ newChosen ] )	written = con::itos( maxs[ newChosen ] );
+			// printf( "%d\n", mins[ newChosen ] );
+		}
+	}
 	
+	setWritten();
+	
+	valueStrs[ chosen ] = written;
+	
+	if( chosen == COLOR_VALUE )
+	{
+		color = getColorFromText( written );
+		rectColor.setFillColor( sf::Color( color.r, color.g, color.b, 0xFF ) );
+	}
+	else if( chosen == RADIUS_VALUE )
+	{
+		radius = con::stoi( written );
+	}
+	else if( chosen == VEL_VALUE )
+	{
+		velocity = con::stoi( written );
+	}
 }
