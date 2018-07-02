@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
     core.h
     Purpose: class Core responsible for sending renderer, accessing start valuables etc.
@@ -20,6 +21,19 @@ Core::Core( unsigned w, unsigned h, int state )
 	height = h;
 	
 	// printf( /*"\x1B[1mFPS\x1B[0m=%d  */"\x1B[33mscreen_width\x1B[0m=%d  \x1B[33mscreen_height\x1B[0m=%d\n"/*, FPS*/, width, height );
+=======
+#include "core.h"
+// #include <SFML/OpenGL.hpp>
+// #include <stdio.h>
+
+Core::Core( int state )
+{
+	this->width = 0;
+	this->height = 0;
+	
+	this->state = state;
+	open = true;
+>>>>>>> Combat-Halloween/master
 
     window = NULL;
 	
@@ -54,18 +68,54 @@ void Core::free()
         color.g = 0;
         color.b = 0;
         color.a = 0;
+<<<<<<< HEAD
 		
 		Mix_Quit();
     }
 }
 
 bool Core::load( string title )
+=======
+    }
+}
+
+bool Core::set( std::string title, int style )
+>>>>>>> Combat-Halloween/master
 {
     bool success = true;
 
     free();
+<<<<<<< HEAD
 
     window = new sf::RenderWindow( sf::VideoMode( width, height ), title, sf::Style::Fullscreen );
+=======
+	
+	// Find correct window size.
+	// height / width = 0.5625
+	int screen_width = sf::VideoMode::getDesktopMode().width /1.15;
+	this->width = screen_width;
+	// Security.
+	if( this->width > 2560 )
+	{
+		this->width = 2560;
+	}
+	else if( this->width < 900 )
+	{
+		return false;
+	}
+	this->height = this->width *0.5625;
+	// printf( "%d %d\n", width, height );
+	
+	/*
+	sf::ContextSettings settings;
+	settings.depthBits = 24;
+	settings.stencilBits = 8;
+	settings.antialiasingLevel = 8;
+	settings.majorVersion = 3;
+	settings.minorVersion = 0;
+	*/
+    window = new sf::RenderWindow( sf::VideoMode( width, height ), title.c_str(), style/*, settings*/ );
+>>>>>>> Combat-Halloween/master
     if( window == NULL )
     {
         printf( "Not created window!\n" );
@@ -73,6 +123,7 @@ bool Core::load( string title )
     }
     else
     {
+<<<<<<< HEAD
         // window->setFramerateLimit( FPS );
         // printf( "\x1B[97;1mCreated window!\x1B[0m\n" );
 
@@ -92,6 +143,16 @@ bool Core::load( string title )
 	width = window->getSize().x;
 	height = window->getSize().y;
 	
+=======
+		// glEnable(GL_TEXTURE_2D);
+		sf::Image icon;
+		std::string path = "images/initialization/icon.png";
+		icon.loadFromFile( path.c_str() );
+		window->setIcon( icon.getSize().x, icon.getSize().y, icon.getPixelsPtr() );
+		// window->setFramerateLimit( 10 );
+	}
+	
+>>>>>>> Combat-Halloween/master
     return success;
 }
 
@@ -111,16 +172,41 @@ sf::RenderWindow*& Core::getWindow()
 
 void Core::clear()
 {
+<<<<<<< HEAD
     window->clear( color );
+=======
+    // glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	//window->pushGLStates();
+	window->clear( color );
+>>>>>>> Combat-Halloween/master
 }
 
 void Core::display()
 {
+<<<<<<< HEAD
+=======
+	// window->popGLStates();
+>>>>>>> Combat-Halloween/master
     window->display();
 }
 
 
 
+<<<<<<< HEAD
+=======
+void Core::setView( sf::View view )
+{
+	window->setView( view );
+}
+
+void Core::resetView()
+{
+	window->setView( window->getDefaultView() );
+}
+
+
+
+>>>>>>> Combat-Halloween/master
 void Core::setVisible( const bool& visible )
 {
     window->setVisible( visible );
@@ -148,12 +234,30 @@ bool& Core::isOpen()
 
 
 
+<<<<<<< HEAD
 const unsigned Core::getWidth() const
+=======
+const int& Core::getWidth() const
+>>>>>>> Combat-Halloween/master
 {
     return width;
 }
 
+<<<<<<< HEAD
 const unsigned Core::getHeight() const
 {
     return height;
+=======
+const int& Core::getHeight() const
+{
+    return height;
+}
+
+const double Core::getElapsedTime()
+{
+	double elapsedTime = static_cast <double> (clock.getElapsedTime().asMicroseconds()) /1000000; // per sec
+    clock.restart();
+	
+	return elapsedTime;
+>>>>>>> Combat-Halloween/master
 }

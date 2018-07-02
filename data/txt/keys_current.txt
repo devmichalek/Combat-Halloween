@@ -1,0 +1,56 @@
+71
+72
+73
+57
+
+Possible keys below:
+  Unknown = -1, 
+  A = 0, 
+  B, 
+  C, 
+  D, // 3
+  E, 
+  F, 
+  G, 
+  H, 
+  I, 
+  J, 
+  K, // 10
+  L, 
+  M, 
+  N, 
+  Q, // 16 (because there is no 'o' and 'p' key)
+  R, 
+  S, 
+  T, 
+  U, // 20
+  V, 
+  W, 
+  X, 
+  Y, 
+  Z, // 25
+  Num0, 
+  Num1, 
+  Num2, 
+  Num3, 
+  Num4, // 30
+  Num5, 
+  Num6, 
+  Num7, 
+  Num8, 
+  Num9, // 35
+  Space, // 57
+  Left, // 71
+  Right, // 72
+  Up, // 73
+  Down, // 74 
+  Numpad0, // 75
+  Numpad1, 
+  Numpad2, 
+  Numpad3, 
+  Numpad4, 
+  Numpad5, 
+  Numpad6, 
+  Numpad7, 
+  Numpad8, 
+  Numpad9, // 84

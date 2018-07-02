@@ -1,4 +1,5 @@
 #pragma once
+<<<<<<< HEAD
 
 #include "core.h"
 #include "timer.h"
@@ -55,6 +56,43 @@ class Engine
 public:
 
     Engine();
+=======
+#include "core.h"
+#include "initialization/loading.h"
+#include "initialization/initialization.h"
+#include "initialization/login.h"
+#include "menu/menu.h"
+#include "level/level.h"
+#include "play/play.h"
+#include "table/table.h"
+#include "editor/editor.h"
+
+class Engine {
+	
+	enum {
+		LOADING = 0,
+		INIT,
+		LOGIN,
+		MENU,
+		LEVEL,
+		PLAY,
+		TABLE,
+		EDITOR
+	};
+	
+	Core* core;
+	Loading* loading;
+	Initialization* initialization;
+	Login* login;
+	Menu* menu;
+	Level* level;
+	Play* play;
+	Table* table;
+	Editor* editor;
+	
+public:
+	Engine();
+>>>>>>> Combat-Halloween/master
     ~Engine();
 
     void free();
@@ -64,6 +102,7 @@ public:
     void states();
 
     void loop();
+<<<<<<< HEAD
 	
 	template <typename world>
 	void load_world( world w );
@@ -71,3 +110,6 @@ public:
 	template <typename world>
 	void setPanel( world w );
 };
+=======
+};
+>>>>>>> Combat-Halloween/master
