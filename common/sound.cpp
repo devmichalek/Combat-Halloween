@@ -1,65 +1,56 @@
 #include "sound.h"
-#include <stdio.h>
 
-bool Sound::chunk_play = false;
-bool Sound::music_play = false;
-sf::Uint8 Sound::chunk_volume = 0;
-sf::Uint8 Sound::music_volume = 0;
+bool cmm::Sound::playable = false;
 
-Sound::Sound()
+void cmm::Sound::stop()
 {
-	// empty.
+	sound->stop();
 }
 
-Sound::~Sound()
+void cmm::Sound::play()
 {
-	free();
+	if (playable && !isPlaying())
+	{
+		sound->play();
+	}
 }
 
-void Sound::free()
+bool cmm::Sound::isPlaying() const
 {
-	// empty.
-}
-	
-
-void Sound::setChunkVolume( sf::Uint8 volume )
-{
-	this->chunk_volume = volume;
+	return sound->getStatus() == sf::SoundSource::Status::Playing;
 }
 
-void Sound::setChunkPlay( bool play )
+void cmm::Sound::pause()
 {
-	this->chunk_play = play;
-}
-	
-sf::Uint8 Sound::getChunkVolume()
-{
-	return chunk_volume;
+	sound->pause();
 }
 
-bool Sound::getChunkPlay()
+void cmm::Sound::load(const char* path)
 {
-	return chunk_play;
+	buffer = std::make_unique<sf::SoundBuffer>();
+	if (buffer->loadFromFile(path))
+	{
+		sound = std::make_unique<sf::Sound>();
+		sound->setBuffer(*buffer.get());
+	}
 }
 
-
-
-void Sound::setMusicVolume( sf::Uint8 volume )
+void cmm::Sound::setVolume(float volume)
 {
-	this->music_volume = volume;
+	sound->setVolume(static_cast<float> (volume));
 }
 
-void Sound::setMusicPlay( bool play )
+float cmm::Sound::getVolume() const
 {
-	this->music_play = play;
+	return sound->getVolume();
 }
 
-sf::Uint8 Sound::getMusicVolume()
+void cmm::Sound::setPlayable(bool newPlayable)
 {
-	return music_volume;
+	playable = newPlayable;
 }
 
-bool Sound::getMusicPlay()
+const bool& cmm::Sound::isPlayable() const
 {
-	return music_play;
+	return playable;
 }

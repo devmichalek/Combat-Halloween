@@ -1,30 +1,26 @@
 #pragma once
+#include <memory>
+#include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 
-#include <SFML/Graphics/Color.hpp>
-#include <stdbool.h>
-
-class Sound
+namespace cmm
 {
-	static bool chunk_play;
-	static bool music_play;
-	static sf::Uint8 chunk_volume;
-	static sf::Uint8 music_volume;
-	
-public:
-	
-	Sound();
-	~Sound();
-	void free();
-	
-	void setChunkVolume( sf::Uint8 volume );
-	void setChunkPlay( bool play );
-	
-	sf::Uint8 getChunkVolume();
-	bool getChunkPlay();
-	
-	void setMusicVolume( sf::Uint8 volume );
-	void setMusicPlay( bool play );
-	
-	sf::Uint8 getMusicVolume();
-	bool getMusicPlay();
-};
+	class Sound
+	{
+		static bool playable;
+	protected:
+		std::unique_ptr<sf::Sound> sound;
+		std::unique_ptr<sf::SoundBuffer> buffer;
+
+	public:
+		void stop();
+		void play();
+		bool isPlaying() const;
+		void pause();
+		void load(const char* path);
+		void setVolume(float volume = 50);
+		float getVolume() const;
+		static void setPlayable(bool newPlayable = true);
+		const bool& isPlayable() const;
+	};
+}
