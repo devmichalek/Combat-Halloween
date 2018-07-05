@@ -1,87 +1,64 @@
 #include "request.h"
 
-
-MyRequest::MyRequest()
+bool cmm::Request::sendRequest()
 {
-	free();
-}
+	sf::Http::Response response = http.sendRequest(request);
 
-MyRequest::~MyRequest()
-{
-	free();
-}
-
-void MyRequest::free()
-{
-	result = "";
-	message = "";
-}
-
-
-
-void MyRequest::setMessage( string message )
-{
-	this->message = message;
-}
-
-void MyRequest::setHttp( string url )
-{
-	this->http.setHost( url );
-}
-
-void MyRequest::setRequest( string uri, sf::Http::Request::Method method )
-{
-	request.setUri( uri );
-	request.setMethod( method );
-	request.setBody( message );	// Encode the parameters in the request body.
-}
-
-
-
-bool MyRequest::sendRequest()
-{
-    sf::Http::Response response = http.sendRequest( request );
-	
 	// Check the status.
-    if( response.getStatus() == sf::Http::Response::Ok )
-    {
+	if (response.getStatus() == sf::Http::Response::Ok)
+	{
 		result = response.getBody();
 		return true;
 	}
-	
+
+	result = "";
 	return false;
 }
 
-string MyRequest::getResult()
+const std::string& cmm::Request::getResult() const
 {
 	return result;
 }
 
-
-MyThread::MyThread()
+void cmm::Request::setHttp(std::string url)
 {
-	t = NULL;
+	http.setHost(url);
+}
+
+void cmm::Request::setMessage(std::string message)
+{
+	request.setBody(message);	// Encode the parameters in the request body.
+}
+
+void cmm::Request::setRequest(std::string uri, sf::Http::Request::Method method)
+{
+	request.setUri(uri);
+	request.setMethod(method);
+}
+
+cmm::Thread::Thread()
+{
+	thread = nullptr;
 	free();
 }
 
-MyThread::~MyThread()
+cmm::Thread::~Thread()
 {
 	free();
 }
 
-void MyThread::free()
+void cmm::Thread::free()
 {
 	reset();
-	s = false;
+	success = false;
 }
 
-void MyThread::reset()
+void cmm::Thread::reset()
 {
-	r = false;
-	
-	if( t != NULL )
+	ready = false;
+	if (thread)
 	{
-		delete t;
-		t = NULL;
+		delete thread;
+		thread = NULL;
 	}
 }

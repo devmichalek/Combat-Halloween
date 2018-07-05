@@ -1,41 +1,35 @@
 #pragma once
-#define _GLIBCXX_USE_CXX11_ABI 0
-#include <SFML/Network.hpp>
 #include <thread>
-#include <iostream>
+#include <string>
+#include <memory>
+#include <SFML/Network.hpp>
 
-using namespace std;
-
-class MyRequest
+namespace cmm
 {
-	string result;
-	string message;
-	
-	sf::Http http;
-	sf::Http::Request request;
-	sf::Http::Response response;
-	
-public:
-	
-	MyRequest();
-	~MyRequest();
-	void free();
-	
-	void setMessage( string message );
-	void setHttp( string url );
-	void setRequest( string uri, sf::Http::Request::Method method = sf::Http::Request::Post );
-	
-	bool sendRequest();
-	string getResult();
-};
+	class Request
+	{
+		sf::Http http;
+		std::string result;
+		sf::Http::Request request;
+		sf::Http::Response response;
 
-struct MyThread
-{
-	bool r, s;	// Ready, success.
-	thread* t;	// Thread.
-	
-	MyThread();
-	~MyThread();
-	void free();
-	void reset();
-};
+	public:
+		bool sendRequest();
+		const std::string& getResult() const;
+		void setHttp(std::string url);
+		void setMessage(std::string message);
+		void setRequest(std::string uri, sf::Http::Request::Method method = sf::Http::Request::Post);
+	};
+
+	struct Thread
+	{
+		bool ready;
+		bool success;
+		std::thread* thread;
+
+		Thread();
+		~Thread();
+		void free();
+		void reset();
+	};
+}
