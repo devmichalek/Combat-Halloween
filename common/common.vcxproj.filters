@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{72a8b5e4-d4dc-4842-92c0-206039ad4ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{83f3c5d0-1015-418e-9b71-633b6cbe53d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="music.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="request.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="sprite.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="text.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\core.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="music.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="request.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="sprite.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="text.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
