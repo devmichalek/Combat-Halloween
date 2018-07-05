@@ -1,304 +1,197 @@
 #include "text.h"
 
-MyText::MyText()
-{
-	identity = "";
-    font = NULL;
-	text = NULL;
-	alpha = 0;
-}
-
-MyText::~MyText()
-{
-	free();
-}
-
-void MyText::free()
-{
-    if( font != NULL )
-    {
-        delete font;
-        font = NULL;
-    }
-	
-	if( text != NULL )
-    {
-        delete text;
-        text = NULL;
-    }
-	
-	alpha = 0;
-}
-
-const sf::Text& MyText::get() const
+const sf::Text& cmm::Text::get() const
 {
 	return *text;
 }
 
-sf::Font* &MyText::getFont()
+void cmm::Text::setFont(const char* path)
 {
-	return font;
+	font = std::make_unique<sf::Font>();
+	if (font->loadFromFile(path))
+	{
+		text = std::make_unique<sf::Text>();
+		text->setFont(*font);
+	}
 }
 
-
-
-void MyText::setIdentity( string identity )
+void cmm::Text::setText(sf::String line)
 {
-	this->identity = identity;
-}
-
-const string& MyText::getIdentity() const
-{
-	return identity;
-}
-
-
-
-void MyText::setFont( string path )
-{
-	if( font == NULL )
+	if(text)
     {
-        font = new sf::Font;
-    }
-	
-	try
-	{
-		if( !font->loadFromFile( path ) )
-		{
-			throw identity + " not loaded " + path;
-		}
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-	
-	if( text == NULL )
-	{
-		text = new sf::Text;
-		text->setFont( *font );
-	}
-}
-
-/*
-void MyText::setFontByFont( sf::Font* &newFont )
-{
-	if( font != NULL )
-	{
-		delete font;
-		font = NULL;
-	}
-	
-	this->font = newFont;
-	
-	if( text == NULL )
-	{
-		text = new sf::Text;
-		text->setFont( *font );
-	}
-}
-*/
-void MyText::setText( string line )
-{
-	if( text != NULL )
-    {
-		text->setString( line );
-		
-		sf::Color newColor( text->getColor() );
-		newColor.a = alpha;
-		text->setColor( newColor );
-	}
-}
-
-void MyText::setTextW( wstring line )
-{
-	if( text != NULL )
-    {
-		text->setString( line );
-		
-		sf::Color newColor( text->getColor() );
-		newColor.a = alpha;
-		text->setColor( newColor );
+		text->setString(line);
+		setRawAlpha();
 	}
 }
 
 
 
-void MyText::fadein( float v, int max )
+void cmm::Text::fadein(float v, int max)
 {
-	if( alpha < max )
+	if(alpha < max)
 	{
 		alpha += v;
 		
-		if( alpha > max )
+		if(alpha > max)
 		{
-			alpha = max;
+			alpha = static_cast<float>(max);
 		}
 		
-		sf::Color newColor( text->getColor() );
-		newColor.a = alpha;
-		text->setColor( newColor );
+		setRawAlpha();
 	}
 }
 
-void MyText::fadeout( float v, int min )
+void cmm::Text::fadeout(float v, int min)
 {
-	if( alpha > min )
+	if (alpha > min)
 	{
 		alpha -= v;
-		
-		if( alpha < min )
+
+		if (alpha < min)
 		{
-			alpha = min;
+			alpha = static_cast<float>(min);
 		}
 
-		sf::Color newColor( text->getColor() );
-		newColor.a = alpha;
-		text->setColor( newColor );
+		setRawAlpha();
 	}
 }
 
-void MyText::flipHorizontally()
+
+
+void cmm::Text::flipHorizontally()
 {
-	text->setScale( text->getScale().x *-1, text->getScale().y );
+	text->setScale(text->getScale().x * -1, text->getScale().y);
 }
 
-void MyText::flipVertically()
+void cmm::Text::flipVertically()
 {
-	text->setScale( text->getScale().x, text->getScale().y *-1 );
+	text->setScale(text->getScale().x, text->getScale().y * -1);
 }
 
-
-
-void MyText::setPosition( float x, float y )
-{
-	text->setPosition( x, y );
-}
-
-void MyText::move( float x, float y )
-{
-	text->move( x, y );
-}
-
-void MyText::center( float x, float y, int w, int h )
-{
-	float left = x +(w/2 - text->getLocalBounds().width/2);
-    float top = y +(h/2 - text->getLocalBounds().height/2);
-
-	text->setPosition( left, top );
-}
-
-
-
-
-void MyText::setScale( float x, float y )
-{
-	text->setScale( x, y );
-}
-
-void MyText::setSize( int size )
-{
-	text->setCharacterSize( size );
-}
-
-int MyText::getSize()
+int cmm::Text::getSize() const
 {
 	return text->getCharacterSize();
 }
 
-void MyText::setRotation( float angle )
+
+
+void cmm::Text::setAlpha(float alpha)
 {
-	text->setRotation( angle );
-}
-
-
-
-void MyText::setAlpha( float alpha )
-{
-	if( this->alpha != alpha )
+	if(this->alpha != alpha)
 	{
 		this->alpha = alpha;
-		sf::Color newColor( text->getColor() );
-		newColor.a = alpha;
-		text->setColor( newColor );
+		setRawAlpha();
 	}
 }
 
-float MyText::getAlpha()
+inline void cmm::Text::setRawAlpha()
+{
+	sf::Color fColor(text->getFillColor());
+	sf::Color oColor(text->getOutlineColor());
+	text->setFillColor(sf::Color(fColor.r, fColor.g, fColor.b, static_cast<sf::Uint8>(alpha)));
+	text->setOutlineColor(sf::Color(oColor.r, oColor.g, oColor.b, static_cast<sf::Uint8>(alpha)));
+}
+
+const float& cmm::Text::getAlpha() const
 {
 	return alpha;
 }
 
-void MyText::setColor( sf::Color color )
+void cmm::Text::setFillColor(sf::Color color)
 {
-	sf::Color newColor( text->getColor() );
-	newColor.r = color.r;
-	newColor.g = color.g;
-	newColor.b = color.b;
+	text->setFillColor(sf::Color(color.r, color.g, color.b, static_cast<sf::Uint8>(alpha)));
+}
 
-	text->setColor( newColor );
+void cmm::Text::setOutlineColor(sf::Color color)
+{
+	text->setOutlineColor(sf::Color(color.r, color.g, color.b, static_cast<sf::Uint8>(alpha)));
+}
+
+sf::Color cmm::Text::getFillColor() const
+{
+	return text->getFillColor();
+}
+
+sf::Color cmm::Text::getOutlineColor() const
+{
+	return text->getOutlineColor();
 }
 
 
 
-const float& MyText::getX() const
+const float& cmm::Text::getX() const
 {
 	return text->getPosition().x;
 }
 
-const float& MyText::getY() const
+const float& cmm::Text::getY() const
 {
 	return text->getPosition().y;
 }
 
-const float MyText::getWidth() const
+float cmm::Text::getWidth() const
+{
+	return text->getLocalBounds().width * text->getScale().x;
+}
+
+float cmm::Text::getHeight() const
+{
+	return text->getLocalBounds().height * text->getScale().y;
+}
+
+const float& cmm::Text::getLeft() const
+{
+	return text->getPosition().x;
+}
+
+float cmm::Text::getRight() const
+{
+	return text->getPosition().x + getWidth();
+}
+
+const float& cmm::Text::getTop() const
+{
+	return text->getPosition().y;
+}
+
+float cmm::Text::getBot() const
+{
+	return text->getPosition().y + getHeight();
+}
+
+
+float cmm::Text::getFixedWidth() const
 {
 	float scale = text->getScale().x;
-	if( scale < 0 )	scale = -scale;
-	return text->getLocalBounds().width *scale;
+	if (scale < 0)
+		scale = -scale;
+	return text->getLocalBounds().width * scale;
 }
 
-const float MyText::getHeight() const
+float cmm::Text::getFixedHeight() const
 {
 	float scale = text->getScale().y;
-	if( scale < 0 )	scale = -scale;
-	
-	return text->getLocalBounds().height *scale;
+	if (scale < 0)
+		scale = -scale;
+	return text->getLocalBounds().height * scale;
 }
 
-const float& MyText::getLeft() const
-{
-	return text->getPosition().x;
-}
 
-const float MyText::getRight() const
+/*
+bool cmm::Text::checkCollision(float x, float y, float w, float h) const
 {
-	return text->getPosition().x +getWidth();
-}
-
-const float& MyText::getTop() const
-{
-	return text->getPosition().y;
-}
-
-const float MyText::getBot() const
-{
-	return text->getPosition().y +getHeight();
-}
-
-bool MyText::checkCollision( float x, float y, float w, float h )
-{
-	if( y + h <= getTop() )
+	if(y + h <= getTop())
         return false;
 
-    if( y >= getBot() )
+    if(y >= getBot())
         return false;
 
-    if( x + w <= getLeft() )
+    if(x + w <= getLeft())
         return false;
 
-    if( x >= getRight() )
+    if(x >= getRight())
         return false;
 
     return true;
 }
+*/

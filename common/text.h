@@ -1,62 +1,57 @@
 #pragma once
-#define _GLIBCXX_USE_CXX11_ABI 0
+#include <memory>
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
-#include <iostream>
-using namespace std;
 
-class MyText
+namespace cmm
 {
-	string identity;
-	sf::Font* font;
-	sf::Text* text;
-	float alpha;
-	
-public:
-	
-	MyText();
-	~MyText();
-	void free();
-	const sf::Text& get() const;
-	sf::Font* &getFont();
-	
-	void setIdentity( string identity );	// To find errors.
-	const string& getIdentity() const;
-	
-	void setFont( string path );
-	// void setFontByFont( sf::Font* &newFont );
-	void setText( string line );
-	void setTextW( wstring line );
-	
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
-	
-	void flipHorizontally();
-	void flipVertically();
-	
-	void setPosition( float x, float y );
-	void move( float x, float y );
-	void center( float x, float y, int w, int h );
-	
-	void setScale( float x = 1, float y = 1 );
-	void setSize( int size = 1 );
-	int getSize();
-	void setRotation( float angle );
-	
-	void setAlpha( float alpha = 0 );
-	float getAlpha();
-	void setColor( sf::Color color );
-	
-	// rest accessors
-	const float& getX() const;
-	const float& getY() const;
-    const float getWidth() const;
-    const float getHeight() const;
-	
-    const float& getLeft() const;
-    const float getRight() const;
-    const float& getTop() const;
-    const float getBot() const;
-	
-	bool checkCollision( float x, float y, float w = 0, float h = 0 );
-};
+	class Text
+	{
+		std::unique_ptr<sf::Font> font;
+		std::unique_ptr<sf::Text> text;
+		float alpha;
+
+	public:
+		const sf::Text& get() const;
+		void setFont(const char* path);
+		void setText(sf::String line);
+
+		void fadein(float v = 1, int max = 0xFF);
+		void fadeout(float v = 1, int min = 0);
+
+		void flipHorizontally();
+		void flipVertically();
+
+		template<class T1, class T2> inline void setPosition(T1 x, T2 y) { text->setPosition(static_cast<float>(x), static_cast<float>(y)); }
+		template<class T1, class T2> inline void move(T1 x, T2 y) { text->move(static_cast<float>(x), static_cast<float>(y)); }
+		template<class T1, class T2> inline void center(T1 x, T2 y) { text->setPosition(static_cast<float>(x) - getWidth() / 2, static_cast<float>(y) - getHeight() / 2); }
+
+		template<class T1, class T2> inline void setScale(T1 x = 1, T2 y = 1) { text->setScale(static_cast<float>(x), static_cast<float>(y)); }
+		template<class Type> inline void setSize(Type size) { text->setCharacterSize(static_cast<int>(size)); }
+		int getSize() const;
+		template<class Type> inline void setRotation(Type angle) { text->setRotation(static_cast<float>(angle)); }
+
+		void setAlpha(float alpha = 0);
+		private: void setRawAlpha(); public:
+		const float& getAlpha() const;
+		void setFillColor(sf::Color color);
+		void setOutlineColor(sf::Color color);
+		sf::Color getFillColor() const;
+		sf::Color getOutlineColor() const;
+		template<class Type> inline void setOutlineThickness(Type thickness) { text->setOutlineThickness(static_cast<float>(thickness)); }
+
+		const float& getX() const;
+		const float& getY() const;
+		float getWidth() const;
+		float getHeight() const;
+		const float& getLeft() const;
+		float getRight() const;
+		const float& getTop() const;
+		float getBot() const;
+
+		float getFixedWidth() const;
+		float getFixedHeight() const;
+
+		// bool checkCollision(float x, float y, float w = 0, float h = 0) const;
+	};
+}
