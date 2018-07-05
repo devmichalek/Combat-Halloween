@@ -1,116 +1,85 @@
 #include "music.h"
 
-Music::Music()
-{
-	identity = "";
-    music = NULL;
-}
+bool cmm::Music::playable = false;
 
-Music::~Music()
-{
-    free();
-}
-
-void Music::free()
-{
-    if( music != NULL )
-    {
-        delete music;
-        music = NULL;
-    }
-}
-
-const sf::Music* Music::get() const
-{
-    return music;
-}
-
-
-
-void Music::setIdentity( string identity )
-{
-	this->identity = identity;
-}
-
-const string& Music::getIdentity() const
-{
-	return identity;
-}
-
-
-
-void Music::load( string path )
-{
-    free();
-	
-	try
-	{
-		music = new sf::Music;
-		if( !music->openFromFile( path ) )
-		{
-			throw identity + " not found music " + path;
-		}
-		else
-		{
-			music->setLoop( true );
-		}
-	}
-	catch( string msg )
-	{
-		cerr << msg << endl;
-	}
-}
-
-
-
-void Music::fadein( float v, int max )
-{
-	if( music->getVolume() < max )
-	{
-		float newVolume = music->getVolume() +v;
-		
-		if( newVolume > max )
-		{
-			newVolume = max;
-		}
-		
-		music->setVolume( newVolume );
-	}
-}
-
-void Music::fadeout( float v, int min )
-{
-	if( music->getVolume() > min )
-	{
-		float newVolume = music->getVolume() -v;
-		
-		if( newVolume < min )
-		{
-			newVolume = min;
-		}
-		
-		music->setVolume( newVolume );
-	}
-}
-
-
-
-void Music::stop()
+void cmm::Music::stop()
 {
 	music->stop();
 }
 
-void Music::play()
+void cmm::Music::play()
 {
-	music->play();
+	if (playable && !isPlaying())
+	{
+		music->play();
+	}
 }
 
-void Music::pause()
+bool cmm::Music::isPlaying() const
+{
+	return music->getStatus() == sf::SoundSource::Status::Playing;
+}
+
+void cmm::Music::pause()
 {
 	music->pause();
 }
 
-void Music::setVolume( float volume )
+void cmm::Music::load(const char* path)
 {
-	music->setVolume( volume );
+	music = std::make_unique<sf::Music>();
+	if(music->openFromFile(path))
+	{
+		music->setLoop(true);
+	}
+}
+
+void cmm::Music::setVolume(float volume)
+{
+	music->setVolume(volume);
+}
+
+float cmm::Music::getVolume() const
+{
+	return music->getVolume();
+}
+
+void cmm::Music::fadein(float v, int max)
+{
+	if(music->getVolume() < max)
+	{
+		float newVolume = music->getVolume() + v;
+		
+		if(newVolume > max)
+		{
+			newVolume = static_cast<float>(max);
+		}
+		
+		music->setVolume(newVolume);
+	}
+}
+
+void cmm::Music::fadeout(float v, int min)
+{
+	if(music->getVolume() > min)
+	{
+		float newVolume = music->getVolume() - v;
+		
+		if(newVolume < min)
+		{
+			newVolume = static_cast<float>(min);
+		}
+		
+		music->setVolume(newVolume);
+	}
+}
+
+void cmm::Music::setPlayable(bool newPlayable)
+{
+	playable = newPlayable;
+}
+
+const bool& cmm::Music::isPlayable() const
+{
+	return playable;
 }

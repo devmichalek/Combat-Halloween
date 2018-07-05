@@ -1,34 +1,26 @@
 #pragma once
-#define _GLIBCXX_USE_CXX11_ABI 0
+#include <memory>
 #include <SFML/Audio/Music.hpp>
-#include <iostream>
-using namespace std;
 
-class Music
+namespace cmm
 {
-	
-protected:
-	
-	string identity;
-    sf::Music* music;
+	class Music
+	{
+		static bool playable;
+	protected:
+		std::unique_ptr<sf::Music> music;
 
-public:
-
-    Music();
-    ~Music();
-    void free();
-	const sf::Music* get() const;
-	
-	void setIdentity( string identity );
-	const string& getIdentity() const;
-	
-    void load( string path );
-	
-	void fadein( float v = 1, int max = 100 );
-	void fadeout( float v = 1, int min = 0 );
-	
-	void stop();
-    void play();
-	void pause();
-	void setVolume( float volume = 50 );
-};
+	public:
+		void stop();
+		void play();
+		bool isPlaying() const;
+		void pause();
+		void load(const char* path);
+		void setVolume(float volume = 50);
+		float getVolume() const;
+		void fadein(float v = 1, int max = 100);
+		void fadeout(float v = 1, int min = 0);
+		static void setPlayable(bool newPlayable = true);
+		const bool& isPlayable() const;
+	};
+}
