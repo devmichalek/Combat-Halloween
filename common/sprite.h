@@ -15,6 +15,7 @@ namespace cmm
 	public:
 		const sf::Sprite& get() const;
 		void load(const char* path, int numOfOffsets = 1);
+		void loadRepeated(const char* path, float w, float h, bool borders = false);
 		void create(int w, int h);
 
 		void setColor(sf::Color color);

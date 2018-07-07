@@ -32,6 +32,50 @@ void cmm::Sprite::load(const char* path, int numOfOffsets)
 	}
 }
 
+void cmm::Sprite::loadRepeated(const char* path, float w, float h, bool borders)
+{
+	sf::Image image;
+	if (image.loadFromFile(path))
+	{
+		int width = image.getSize().x;
+		int height = image.getSize().y;
+		int realWidth = borders ? w : width;
+		int realHeight = borders ? h : height;
+		if (!borders)
+		{
+			while (realWidth < w)	realWidth += width;
+			while (realHeight < h)	realHeight += height;
+		}
+		
+		sf::Image output;
+		output.create(realWidth, realHeight);
+		for (int i = 0; i < realWidth; ++i)
+		{
+			for (int j = 0; j < realHeight; ++j)
+			{
+				output.setPixel(i, j, image.getPixel(i % width, j % height));
+			}
+		}
+
+		texture = std::make_unique<sf::Texture>();
+		if (texture->loadFromImage(output))
+		{
+			texture->setSmooth(true);
+			// texture->setRepeated(true);
+
+			sf::IntRect intRect(0, 0, realWidth, realHeight);
+			rects.push_back(intRect);
+
+			sprite = std::make_unique<sf::Sprite>();
+			if (sprite)
+			{
+				sprite->setTexture(*texture);
+				setOffset(0);
+			}
+		}
+	}
+}
+
 void cmm::Sprite::create(int w, int h)
 {
 	texture = std::make_unique<sf::Texture>();
@@ -45,9 +89,7 @@ void cmm::Sprite::create(int w, int h)
 
 		if (sprite)
 		{
-			sf::Uint8* pixels;
-			pixels = new sf::Uint8[w * h * 4];
-
+			sf::Uint8* pixels = new sf::Uint8[w * h * 4];
 			for (int i = 0; i < w * h * 4; ++i)
 			{
 				pixels[i] = 0xFF;
@@ -146,8 +188,8 @@ void cmm::Sprite::flipVertically()
 
 void cmm::Sprite::center(float x, float y)
 {
-	float left = x - (float)texture->getSize().x * sprite->getScale().x / rects.size() / 2;
-	float top = y - (float)texture->getSize().y * sprite->getScale().y / 2;
+	float left = x - ((float)texture->getSize().x * sprite->getScale().x / rects.size()) / 2;
+	float top = y - ((float)texture->getSize().y * sprite->getScale().y) / 2;
 	sprite->setPosition(left, top);
 }
 
