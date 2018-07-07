@@ -12,98 +12,85 @@ Pausesystem::~Pausesystem()
 
 void Pausesystem::free()
 {
-	blackout.free();
-	text.free();
-	
 	active = false;
-	release = false;
-	
-	click.free();
+	key_released = false;
 }
 
 
 
-void Pausesystem::load( float screen_w, float screen_h )
+void Pausesystem::load(float screen_w, float screen_h)
 {
 	free();
-	
-	blackout.setIdentity( "pausesystem-blackout" );
-	blackout.create( screen_w, screen_h );
-	blackout.setColor( sf::Color( 0, 0, 0, 0 ) );
-	
-	text.setIdentity( "pausesystem-text" );
-	text.setFont( "fonts/jcandlestickextracond.ttf" );
-	text.setText( "PAUSED" );
-	text.setSize( screen_h /10 );
-	text.setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	text.center( 0, 0, screen_w, screen_h );
-	
-	click.setIdentity( "pausesystem-chunk" );
-	click.load( "sounds/click.wav" );
+
+	text.setFont("fonts/jcandlestickextracond.ttf");
+	text.setText("GAME PAUSED");
+	text.setSize(screen_h / 10);
+	text.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+	text.center(screen_w / 2, screen_h / 2);
+
+	click.load("sounds/click.wav");
+
+	blackout.create(screen_w, screen_h);
+	blackout.setColor(sf::Color(0, 0, 0));
 }
 
-void Pausesystem::handle( sf::Event& event )
+void Pausesystem::handle(sf::Event& event)
 {
 	// keyboard stuff
-	if( event.type == sf::Event::KeyPressed && !release )
+	if (event.type == sf::Event::KeyPressed && !key_released)
 	{
-		if( event.key.code == 15 )	// 'p'
+		if (event.key.code == 15)	// 'p'
 		{
-			release = true;
+			key_released = true;
 			active = !active;
 			click.play();
 		}
 	}
-	
-	if( event.type == sf::Event::KeyReleased )
+
+	if (event.type == sf::Event::KeyReleased)
 	{
-		release = false;
+		key_released = false;
 	}
 }
 
-void Pausesystem::draw( sf::RenderWindow* &window )
+void Pausesystem::draw(sf::RenderWindow* &window)
 {
-	window->draw( blackout.get() );
-	window->draw( text.get() );
-}
-
-void Pausesystem::fadein( float v, int max )
-{
-	blackout.fadein( v, max );
-	text.fadein( v, max );
-}
-
-void Pausesystem::fadeout( float v, int min )
-{
-	blackout.fadeout( v, min );
-	text.fadeout( v, min );
+	window->draw(blackout.get());
+	window->draw(text.get());
 }
 
 
 
-bool Pausesystem::isActive()
+void Pausesystem::fadein(float v, int max)
+{
+	blackout.fadein(v, max);
+	text.fadein(v, max);
+}
+
+void Pausesystem::fadeout(float v, int min)
+{
+	blackout.fadeout(v, min);
+	text.fadeout(v, min);
+}
+
+
+
+const bool& Pausesystem::isActive() const
 {
 	return active;
 }
 
-void Pausesystem::setActive( bool active )
+void Pausesystem::turnOnOff()
 {
-	this->active = active;
+	active = !active;
 }
 
-int Pausesystem::getAlpha()
+int Pausesystem::getAlpha() const
 {
 	return blackout.getAlpha();
 }
 
-
-
-void Pausesystem::setPlayable( bool playable )
+void Pausesystem::setVolume(float volume)
 {
-	click.setPlayable( playable );
-}
-
-void Pausesystem::setVolume( float volume )
-{
-	click.setVolume( volume );
+	click.setVolume(volume);
 }

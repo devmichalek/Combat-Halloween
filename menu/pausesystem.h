@@ -1,41 +1,33 @@
 #pragma once
-#include "own/chunk.h"
-#include "own/sprite.h"
-#include "own/text.h"
+#include "sound.h"
+#include "sprite.h"
+#include "text.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
 class Pausesystem
 {
-	MySprite blackout;
-	MyText text;
-	
+	cmm::Text text;
+	cmm::Sound click;
+	cmm::Sprite blackout;
+
 	bool active;
-	bool release;
-	
-	// Sound.
-	Chunk click;
-	
+	bool key_released;
+
 public:
-	
-	// Basics.
 	Pausesystem();
 	~Pausesystem();
 	void free();
-	
-	void load( float screen_w, float screen_h );
-	void handle( sf::Event& event );
-	void draw( sf::RenderWindow* &window );
-	
-	void fadein( float v = 1, int max = 0xFF );
-	void fadeout( float v = 1, int min = 0 );
-	
-	// The rest.
-	bool isActive();
-	void setActive( bool active );
-	int getAlpha();
-	
-	// Sound.
-	void setPlayable( bool playable );
-	void setVolume( float volume );
+
+	void load(float screen_w, float screen_h);
+	void handle(sf::Event& event);
+	void draw(sf::RenderWindow* &window);
+
+	void fadein(float v = 1, int max = 0xFF);
+	void fadeout(float v = 1, int min = 0);
+
+	const bool& isActive() const;
+	void turnOnOff();
+	int getAlpha() const;
+	void setVolume(float volume);
 };
