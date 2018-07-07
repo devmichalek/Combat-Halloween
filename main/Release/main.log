@@ -1,0 +1,13 @@
+﻿  engine.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(17): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(40): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  loading.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\init\loading.cpp(51): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\init\loading.cpp(52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating code
+  4 of 670 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  main.vcxproj -> C:\Users\adriqun\source\repos\Combat Halloween\Release\main.exe

@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Headers\core">
+      <UniqueIdentifier>{2feae285-8eea-480d-96a9-f2b3df3b581c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\init">
+      <UniqueIdentifier>{df943093-105c-4f76-b19d-b67efe59183c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers\common">
+      <UniqueIdentifier>{0e3d35a1-09d9-46be-8b9e-576138c9d82d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Sources\core">
+      <UniqueIdentifier>{89176e81-8834-47f4-b8ce-057ee51e21b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\init">
+      <UniqueIdentifier>{814225ae-7779-4a57-ab0f-ecd250c7d55f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\common">
+      <UniqueIdentifier>{0d3a7076-cff7-45a3-aaae-ea39bb08fe82}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\core.cpp">
+      <Filter>Sources\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\engine.cpp">
+      <Filter>Sources\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\music.cpp">
+      <Filter>Sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\request.cpp">
+      <Filter>Sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sound.cpp">
+      <Filter>Sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sprite.cpp">
+      <Filter>Sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\text.cpp">
+      <Filter>Sources\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\init\initialization.cpp">
+      <Filter>Sources\init</Filter>
+    </ClCompile>
+    <ClCompile Include="..\init\loading.cpp">
+      <Filter>Sources\init</Filter>
+    </ClCompile>
+    <ClCompile Include="..\init\login.cpp">
+      <Filter>Sources\init</Filter>
+    </ClCompile>
+    <ClCompile Include="..\init\rectbutton.cpp">
+      <Filter>Sources\init</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\engine.h">
+      <Filter>Headers\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\music.h">
+      <Filter>Headers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\request.h">
+      <Filter>Headers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sound.h">
+      <Filter>Headers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sprite.h">
+      <Filter>Headers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\text.h">
+      <Filter>Headers\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\init\initialization.h">
+      <Filter>Headers\init</Filter>
+    </ClInclude>
+    <ClInclude Include="..\init\loading.h">
+      <Filter>Headers\init</Filter>
+    </ClInclude>
+    <ClInclude Include="..\init\login.h">
+      <Filter>Headers\init</Filter>
+    </ClInclude>
+    <ClInclude Include="..\init\rectbutton.h">
+      <Filter>Headers\init</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
