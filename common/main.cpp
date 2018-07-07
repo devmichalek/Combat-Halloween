@@ -12,7 +12,7 @@ int main(int argc, char** argv)
 	if (!strcmp(argv[1], "sound"))
 	{
 		cmm::Sound sound;
-		sound.load(argv[2]);
+		sound.load("sounds/click.wav");
 		cmm::Sound::setPlayable();
 		sound.setVolume(100);
 		sound.play();
@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	else if (!strcmp(argv[1], "music"))
 	{
 		cmm::Music music;
-		music.load(argv[2]);
+		music.load("music/menu.ogg");
 		cmm::Music::setPlayable();
 		music.setVolume(100);
 		music.play();
@@ -86,7 +86,7 @@ int main(int argc, char** argv)
 		core.create("Combat Halloween");
 
 		cmm::Sprite sprite;
-		sprite.load("images/editor/agree.png", 3);
+		sprite.load("images/buttons/agree.png", 3);
 		sprite.setAlpha(0xFF);
 		sprite.setPosition(100, 100);
 		sprite.setColor(sf::Color::Red);
