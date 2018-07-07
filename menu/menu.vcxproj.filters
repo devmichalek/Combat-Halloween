@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Main">
+      <UniqueIdentifier>{c41eea94-f645-42cc-b51f-130ddac6a595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{b1cae5f5-6b04-4a51-817a-e651e12cc23d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\core\core.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\music.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\request.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sound.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sprite.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\text.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="button.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="menu.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="pausesystem.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="settings.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="state.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="menuinformation.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\music.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\request.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sound.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sprite.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\text.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="button.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="menu.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="pausesystem.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="settings.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="state.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="menuinformation.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

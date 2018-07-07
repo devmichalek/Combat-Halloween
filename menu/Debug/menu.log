@@ -1,0 +1,6 @@
+﻿  main.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\main.cpp(19): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  menu.cpp
+  settings.cpp
+  Generating Code...
+  menu.vcxproj -> C:\Users\adriqun\source\repos\Combat Halloween\Debug\menu.exe
