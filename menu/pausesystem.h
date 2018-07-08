@@ -22,7 +22,6 @@ public:
 	void load(float screen_w, float screen_h);
 	void handle(sf::Event& event);
 	void draw(sf::RenderWindow* &window);
-
 	void fadein(float v = 1, int max = 0xFF);
 	void fadeout(float v = 1, int min = 0);
 

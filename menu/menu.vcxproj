@@ -22,6 +22,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="pausesystem.cpp" />
+    <ClCompile Include="robotspecs.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="state.cpp" />
   </ItemGroup>
@@ -36,6 +37,7 @@
     <ClInclude Include="menuinformation.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="pausesystem.h" />
+    <ClInclude Include="robotspecs.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="state.h" />
   </ItemGroup>

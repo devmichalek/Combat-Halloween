@@ -1,5 +1,6 @@
 #include "menuinformation.h"
 #include "state.h"
+#include "boost/lexical_cast.hpp"
 #include <ctime>
 
 MenuInformation::MenuInformation()
@@ -16,7 +17,6 @@ void MenuInformation::free()
 {
 	screen_w = 0;
 	screen_h = 0;
-	username_str = "";
 }
 
 
@@ -36,17 +36,16 @@ void MenuInformation::load(float screen_w, float screen_h)
 	username_form.setFont(path);
 
 	// Set text.
-	username_str = Username::getUsername();
 	money.setText("error");
 	money_form.setText("Money: ");
-	username.setText(username_str);
+	username.setText(Username::getUsername());
 	username_form.setText("Logged as ");
 
 	// Set color.
-	money.setFillColor(getErrorColor());
-	money_form.setFillColor(sf::Color(0xDD, 0xDD, 0xDD));
-	username.setFillColor(getSuccessColor());
-	username_form.setFillColor(sf::Color(0xDD, 0xDD, 0xDD));
+	money.setFillColor(Username::getErrorColor());
+	money_form.setFillColor(Username::getLockedColor());
+	username.setFillColor(Username::getSuccessColor());
+	username_form.setFillColor(Username::getLockedColor());
 
 	// Set size.
 	float size = screen_h / 32;
@@ -127,7 +126,7 @@ void MenuInformation::setThread()
 		{
 			// Money.
 			money.setText("loading...");
-			money.setFillColor(sf::Color::White);
+			money.setFillColor(Username::getLoadingColor());
 			money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
 
 			thread.thread = new std::thread(&MenuInformation::setMoney, this);
@@ -136,10 +135,15 @@ void MenuInformation::setThread()
 	}
 }
 
+void MenuInformation::reloadThread()
+{
+	thread.success = false;
+}
+
 void MenuInformation::setMoney()
 {
 	cmm::Request request;
-	request.setMessage("username=" + username_str);
+	request.setMessage("username=" + boost::lexical_cast<std::string>(Username::getUsername()));
 	request.setRequest("/combathalloween/getmoney.php", sf::Http::Request::Post);
 	request.setHttp("http://adrianmichalek.pl/");
 
@@ -153,23 +157,20 @@ void MenuInformation::setMoney()
 		else
 		{
 			money.setText(request.getResult());
-			money.setFillColor(getSuccessColor());
+			money.setFillColor(Username::getSuccessColor());
 			thread.success = true;
 		}
 	}
-	else // error
+
+	// Error
+	if (!success)
 	{
 		money.setText("error");
-		money.setFillColor(getErrorColor());
+		money.setFillColor(Username::getErrorColor());
 	}
 
 	money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
 	thread.ready = true;
-}
-
-void MenuInformation::reloadMoney()
-{
-	thread.success = false;
 }
 
 bool MenuInformation::isReady() const

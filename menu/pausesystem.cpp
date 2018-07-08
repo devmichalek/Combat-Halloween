@@ -59,8 +59,6 @@ void Pausesystem::draw(sf::RenderWindow* &window)
 	window->draw(text.get());
 }
 
-
-
 void Pausesystem::fadein(float v, int max)
 {
 	blackout.fadein(v, max);

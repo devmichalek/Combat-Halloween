@@ -19,7 +19,7 @@ void Menu::free()
 	exit = false;
 	loaded = false;
 
-	// knight_specs.free();
+	robotspecs.free();
 	github.free();
 	scores.free();
 	website.free();
@@ -46,12 +46,12 @@ void Menu::set()
 		loaded = true;
 
 		// Set threads.
-		// knight_specs.setThread();
+		robotspecs.setThread();
 		information.setThread();
 
 		// Sound.
 		float soundVolume = 50;
-		// knight_specs.setVolume			(soundVolume);
+		robotspecs.setVolume				(soundVolume);
 		github.setVolume					(soundVolume);
 		scores.setVolume					(soundVolume);
 		website.setVolume					(soundVolume);
@@ -92,11 +92,10 @@ void Menu::reset()
 	next = false;
 	exit = false;
 	loaded = false;
-
-	// knight_specs.reload();
+	
 	singleplayerbutton.reset();
 	settingsbutton.setActive(false);
-	settings.reload();
+	settings.reset();
 	// chat.reset();
 	music.stop();
 }
@@ -110,7 +109,7 @@ void Menu::load(float screen_w, float screen_h)
 	float scale_x = screen_w / 2560;
 	float scale_y = screen_h / 1440;
 
-	// knight_specs.load( screen_w, screen_h );
+	robotspecs.load(screen_w, screen_h);
 
 	// Load link buttons.
 	github.load			("images/buttons/github.png");
@@ -182,7 +181,6 @@ void Menu::handle(sf::Event& event)
 
 			// if (!chat.isOpen())
 			// {
-				// knight_specs.handle		(event);
 				github.handle				(event);
 				scores.handle				(event);
 				website.handle				(event);
@@ -192,7 +190,7 @@ void Menu::handle(sf::Event& event)
 
 				if (!sound_volumebutton.handle(event))	soundbutton.handle(event);
 				if (!music_volumebutton.handle(event))	musicbutton.handle(event);
-				// !knight_specs.isReady() || !information.isReady() ? reloadbutton.handle(event) : updatebutton.handle(event);
+				!robotspecs.isReady() || !information.isReady() ? reloadbutton.handle(event) : updatebutton.handle(event);
 
 				settingsbutton.handle		(event);
 				settings.handle				(event);
@@ -219,7 +217,7 @@ void Menu::head(sf::RenderWindow* &window, double elapsedTime)
 void Menu::draw(sf::RenderWindow* &window)
 {
 	information.draw		(window);
-	// knight_specs.draw	(window);
+	robotspecs.draw			(window);
 	github.draw				(window);
 	scores.draw				(window);
 	website.draw			(window);
@@ -228,7 +226,7 @@ void Menu::draw(sf::RenderWindow* &window)
 	exitbutton.draw			(window);
 	soundbutton.draw		(window);
 	musicbutton.draw		(window);
-	// !knight_specs.isReady() || !information.isReady() ? reloadbutton.draw(window) : updatebutton.draw(window);
+	!robotspecs.isReady() || !information.isReady() ? reloadbutton.draw(window) : updatebutton.draw(window);
 	settingsbutton.draw		(window);
 	settings.draw			(window);
 	sound_volumebutton.draw	(window);
@@ -330,9 +328,7 @@ void Menu::mechanics(double elapsedTime)
 		//	}
 		//}
 
-		// Knight specs
-		// knight_specs.mechanics(elapsedTime);
-
+		robotspecs.mechanics(elapsedTime);
 
 		// Close application.
 		if (exitbutton.isPressed())
@@ -341,7 +337,6 @@ void Menu::mechanics(double elapsedTime)
 			exit = true;
 		}
 
-
 		// Someone clicked singleplayer.
 		if (singleplayerbutton.isPressed())
 		{
@@ -349,40 +344,32 @@ void Menu::mechanics(double elapsedTime)
 			next = true;
 		}
 
-
 		// Exsert / shovel settings.
 		settingsbutton.isActive() ? settings.exsertTable(elapsedTime) : settings.shovelTable(elapsedTime);
 
 		// If we dont have answer from database
-		// !knight_specs.isReady() || !information.isReady() ? singleplayerbutton.lock() : singleplayerbutton.unlock();
+		!robotspecs.isReady() || !information.isReady() ? singleplayerbutton.lock() : singleplayerbutton.unlock();
 
-		// update data
+		// Update data
 		if (updatebutton.isActive())
 		{
 			updatebutton.setActive(false);
 
-			if (/*knight_specs.isReady() && */information.isReady())
+			if (robotspecs.isReady() && information.isReady())
 			{
-				// knight_specs.reloadValues();
-				// knight_specs.setThread();
-				information.reloadMoney();
+				robotspecs.reloadThread();
+				robotspecs.setThread();
+				information.reloadThread();
 				information.setThread();
 			}
 		}
 
-		// reload data
+		// Reload data
 		if (reloadbutton.isActive())
 		{
 			reloadbutton.setActive(false);
-			/*if (!knight_specs.isReady())
-			{
-				knight_specs.setThread();
-			}*/
-
-			if (!information.isReady())
-			{
-				information.setThread();
-			}
+			if (!robotspecs.isReady())	robotspecs.setThread();
+			if (!information.isReady())	information.setThread();
 		}
 
 		settings.mechanics(elapsedTime);
@@ -400,7 +387,7 @@ void Menu::mechanics(double elapsedTime)
 		if (sound_volumebutton.hasChanged())
 		{
 			float value = sound_volumebutton.getGlobalVolume();
-			// knight_specs.setVolume		(value);
+			robotspecs.setVolume			(value);
 			github.setVolume				(value);
 			scores.setVolume				(value);
 			website.setVolume				(value);
@@ -455,7 +442,7 @@ void Menu::fades(double elapsedTime)
 
 void Menu::fadein(float value, int max)
 {
-	// knight_specs.fadein		(value, max);
+	robotspecs.fadein			(value, max);
 	github.fadein				(value, max);
 	scores.fadein				(value, max);
 	website.fadein				(value, max);
@@ -475,7 +462,7 @@ void Menu::fadein(float value, int max)
 
 void Menu::fadeout(float value, int min)
 {
-	// knight_specs.fadeout		(value, min);
+	robotspecs.fadeout			(value, min);
 	github.fadeout				(value, min);
 	scores.fadeout				(value, min);
 	website.fadeout				(value, min);

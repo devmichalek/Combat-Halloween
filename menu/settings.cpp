@@ -138,11 +138,11 @@ void Settings::load(float screen_w, float screen_h)
 	table.load("images/other/plank.png");
 	table.setScale(screen_w / 2560, screen_h / 1440);
 	x1 = screen_w - screen_w / 128;
-	x2 = screen_w + screen_w / 128 - table.getWidth();
+	x2 = screen_w + screen_w / 64 - table.getWidth();
 	table.setPosition(x1, screen_h / 2.6);
 
 	// Set second table.
-	chart.load("images/old/menu/table_second.png");
+	chart.load("images/other/plank2.png");
 	chart.setScale(screen_w / 2560, screen_h / 1440);
 	y1 = screen_h - screen_h / 72;
 	y2 = screen_h + screen_h / 72 - chart.getHeight();
@@ -162,7 +162,7 @@ void Settings::load(float screen_w, float screen_h)
 	gears[RIGHT]->setPosition(chart.getRight(), screen_h);
 
 	// Set reset button.
-	resetbutton.load("images/old/menu/resetbutton.png", 3);
+	resetbutton.load("images/buttons/resetbutton.png", 3);
 	resetbutton.setScale(screen_w / 2560, screen_h / 1440);
 
 	// Set info.
@@ -191,7 +191,7 @@ bool Settings::handle(sf::Event& event)
 				if (resetbutton.checkCollision(event.mouseButton.x, event.mouseButton.y))
 				{
 					resetbutton.setOffset(1);
-					reset();
+					resetKeys();
 					return true;
 				}
 			}
@@ -237,7 +237,7 @@ bool Settings::handle(sf::Event& event)
 					}
 
 					positionTable();
-					save();
+					setKeys();
 				}
 			}
 		}
@@ -313,7 +313,6 @@ void Settings::mechanics(double elapsedTime)
 		positionTable();
 
 		float rotation = static_cast<float>(elapsedTime) * 0xFF;
-
 		if (tableMoves < 0)
 		{
 			gears[TOP]->setRotation(gears[TOP]->getRotation() + rotation);
@@ -351,7 +350,6 @@ void Settings::mechanics(double elapsedTime)
 		chart.move(0, chartMoves);
 
 		float rotation = static_cast<float>(elapsedTime) * 0xFF;
-
 		if (chartMoves < 0)
 		{
 			gears[LEFT]->setRotation(gears[LEFT]->getRotation() - rotation);
@@ -439,7 +437,7 @@ void Settings::shovelTable(double elapsedTime)
 	}
 }
 
-void Settings::reset()
+void Settings::resetKeys()
 {
 	// Reset values.
 	keys[MOVE_LEFT] = 71;
@@ -455,12 +453,12 @@ void Settings::reset()
 	}
 
 	// Overwrite.
-	save();
+	setKeys();
 
 	positionTable();
 }
 
-void Settings::save()
+void Settings::setKeys()
 {
 	std::ofstream file("txt/keys.txt");
 	if (file.good())
@@ -567,7 +565,7 @@ std::string Settings::getName(int n)
 	return name;
 }
 
-void Settings::reload()
+void Settings::reset()
 {
 	tableMoves = chartMoves = 0;
 	table.setPosition(x1, table.getY());

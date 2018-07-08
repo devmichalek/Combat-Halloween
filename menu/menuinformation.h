@@ -10,7 +10,6 @@ class MenuInformation
 {
 	float screen_w;
 	float screen_h;
-	std::string username_str;
 
 	cmm::Text money;
 	cmm::Text money_form;
@@ -34,12 +33,8 @@ public:
 	void fadeout(float v = 1, int min = 0);
 
 	void setThread();
-	void setMoney();
-	void reloadMoney();
+	void reloadThread();
+	private: void setMoney(); public:
 	bool isReady() const;		// money is loaded correctly from database
 	int getBackgroundAlpha() const;
-
-private:
-	sf::Color getErrorColor() { return sf::Color(0xF2, 0x58, 0x3E); }
-	sf::Color getSuccessColor() { return sf::Color(0xFF, 0xDE, 0x00); }
 };

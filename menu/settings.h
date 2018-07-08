@@ -66,22 +66,19 @@ public:
 	bool handle(sf::Event& event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(double elapsedTime);
-
 	void fadein(float v = 1, int max = 0xFF);
 	void fadeout(float v = 1, int min = 0);
 
 	// Support.
 	void exsertTable(double elapsedTime);
 	void shovelTable(double elapsedTime);
-	void reset();
-	void save();
+	private: void resetKeys();
+	void setKeys();
 	void positionTable();
 	void positionChart();
 	bool isPossibleKey(sf::Event &event);
-	std::string getName(int n);
-	void reload();
-
-	// Sound.
+	std::string getName(int n); public:
+	void reset();
 	void setVolume(float volume);
 };
 

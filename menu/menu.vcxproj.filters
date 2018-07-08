@@ -48,6 +48,9 @@
     <ClCompile Include="menuinformation.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="robotspecs.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\core\core.h">
@@ -84,6 +87,9 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="menuinformation.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="robotspecs.h">
       <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>

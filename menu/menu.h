@@ -1,6 +1,6 @@
 #pragma once
 #include "state.h"
-// #include "knight_specs.h"
+#include "robotspecs.h"
 #include "button.h"
 #include "settings.h"
 #include "menuinformation.h"
@@ -11,7 +11,7 @@
 class Menu :public State
 {
 	bool loaded;
-	// Knight_specs knight_specs;
+	Robotspecs robotspecs;
 	LinkButton github;
 	LinkButton scores;
 	LinkButton website;
