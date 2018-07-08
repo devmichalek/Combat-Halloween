@@ -27,6 +27,12 @@
     <Filter Include="Sources\common">
       <UniqueIdentifier>{0d3a7076-cff7-45a3-aaae-ea39bb08fe82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\menu">
+      <UniqueIdentifier>{01a11bf7-5ae1-4ddb-bcc7-f66bffea19d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\menu">
+      <UniqueIdentifier>{088ac38b-a401-41e5-a20e-8b8743d91fac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -65,6 +71,27 @@
     <ClCompile Include="..\init\rectbutton.cpp">
       <Filter>Sources\init</Filter>
     </ClCompile>
+    <ClCompile Include="..\menu\button.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\menu.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\menuinformation.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\pausesystem.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\robotspecs.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\settings.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\state.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\core\core.h">
@@ -99,6 +126,27 @@
     </ClInclude>
     <ClInclude Include="..\init\rectbutton.h">
       <Filter>Headers\init</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\button.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\menu.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\menuinformation.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\pausesystem.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\robotspecs.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\settings.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\state.h">
+      <Filter>Headers\menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

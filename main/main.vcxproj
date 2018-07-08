@@ -52,7 +52,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\adriqun\source\repos\SFML-2.5.032\include;C:\Users\adriqun\source\repos\boost;..\core;..\common;..\init</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\adriqun\source\repos\SFML-2.5.032\include;C:\Users\adriqun\source\repos\boost;..\core;..\common;..\init;..\menu</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -89,6 +89,13 @@
     <ClCompile Include="..\init\loading.cpp" />
     <ClCompile Include="..\init\login.cpp" />
     <ClCompile Include="..\init\rectbutton.cpp" />
+    <ClCompile Include="..\menu\button.cpp" />
+    <ClCompile Include="..\menu\menu.cpp" />
+    <ClCompile Include="..\menu\menuinformation.cpp" />
+    <ClCompile Include="..\menu\pausesystem.cpp" />
+    <ClCompile Include="..\menu\robotspecs.cpp" />
+    <ClCompile Include="..\menu\settings.cpp" />
+    <ClCompile Include="..\menu\state.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -103,6 +110,13 @@
     <ClInclude Include="..\init\loading.h" />
     <ClInclude Include="..\init\login.h" />
     <ClInclude Include="..\init\rectbutton.h" />
+    <ClInclude Include="..\menu\button.h" />
+    <ClInclude Include="..\menu\menu.h" />
+    <ClInclude Include="..\menu\menuinformation.h" />
+    <ClInclude Include="..\menu\pausesystem.h" />
+    <ClInclude Include="..\menu\robotspecs.h" />
+    <ClInclude Include="..\menu\settings.h" />
+    <ClInclude Include="..\menu\state.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

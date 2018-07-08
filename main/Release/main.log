@@ -1,13 +1,50 @@
-﻿  engine.cpp
+﻿  music.cpp
+  request.cpp
+  sound.cpp
+  sprite.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\common\sprite.cpp(17): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\common\sprite.cpp(18): warning C4244: 'initializing': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\common\sprite.cpp(22): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\common\sprite.cpp(42): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\common\sprite.cpp(43): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\common\sprite.cpp(86): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+  text.cpp
+  core.cpp
+  engine.cpp
 c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(17): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
 c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(40): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
 c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(45): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\core\engine.cpp(50): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
+  initialization.cpp
   loading.cpp
 c:\users\adriqun\source\repos\combat halloween\combat halloween\init\loading.cpp(51): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 c:\users\adriqun\source\repos\combat halloween\combat halloween\init\loading.cpp(52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  login.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\init\login.cpp(108): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  rectbutton.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\init\rectbutton.cpp(79): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\init\rectbutton.cpp(85): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\init\rectbutton.cpp(122): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  button.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(135): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(184): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(258): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(346): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(347): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(393): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\button.cpp(403): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+  menu.cpp
+  menuinformation.cpp
+  pausesystem.cpp
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\pausesystem.cpp(33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\pausesystem.cpp(88): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  robotspecs.cpp
+  settings.cpp
+  state.cpp
+  main.cpp
   Generating code
-  4 of 670 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+  882 of 1386 functions (63.6%) were compiled, the rest were copied from previous compilation.
+    634 functions were new in current compilation
+    108 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   main.vcxproj -> C:\Users\adriqun\source\repos\Combat Halloween\Release\main.exe
