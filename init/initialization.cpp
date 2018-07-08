@@ -1,18 +1,4 @@
-<<<<<<< HEAD
-/**
-    initialazation.h
-    Purpose: class Initialization - contains nick stuff.
-
-    @author Adrian Michalek
-    @version 2017.04.22
-	@email adrmic98@gmail.com
-*/
-
 #include "initialization.h"
-#include "file/file.h"
-=======
-#include "initialization.h"
->>>>>>> Combat-Halloween/master
 
 Initialization::Initialization()
 {
@@ -26,223 +12,144 @@ Initialization::~Initialization()
 
 void Initialization::free()
 {
-<<<<<<< HEAD
-	next = false;
-	
-	nick_setter.free();
-	nick_info.free();
-=======
 	ready = false;
 	state = 0;
-	
-	if( !texts.empty() )
+
+	if (!texts.empty())
 	{
-		for( auto &it :texts )
+		for (auto &it : texts)
 		{
-			if( it != NULL )
-			{
-				delete it;
-				it = NULL;
-			}
+			delete it;
 		}
-		
+
 		texts.clear();
 	}
->>>>>>> Combat-Halloween/master
 }
 
 
 
-<<<<<<< HEAD
-void Initialization::load( unsigned screen_w, unsigned screen_h )
+void Initialization::load(float screen_w, float screen_h)
 {
 	free();
-	
-	// Set "next".
-	MyFile file;
-	file.load( "data/txt/nick/nick_status.txt" );
-	if( file.is_good() )
-	{
-		string line;
-		file.get() >> line;
-		next = con::stoi( line );
-	}
-	file.free();
-	
-	nick_setter.load( screen_w, screen_h );
-	nick_info.load( screen_w, screen_h );
-}
 
-void Initialization::handle( sf::Event &event )
-{
-	if( !next )
+	for (unsigned i = 0; i < AMOUNT; i++)
 	{
-		nick_setter.handle( event );
-		if( nick_setter.nextState() )
-		{
-			next = true;
-		}
+		texts.push_back(new cmm::Text);
 	}
-}
 
-void Initialization::draw( sf::RenderWindow* &window )
-{
-	if( !next )
-	{
-		int value = 3;
-		
-		nick_setter.fadein( value );
-		nick_info.fadein( value );
-	}
-	else
-	{
-		int value = 4;
-		
-		nick_setter.fadeout( value );
-		nick_info.fadeout( value );
-	}
-	
-	// Draw.
-	nick_setter.draw( window );
-	nick_info.draw( window );
-=======
-void Initialization::load( int screen_w, int screen_h )
-{
-	free();
-	
-	for( unsigned i = 0; i < AMOUNT; i++ )
-	{
-		texts.push_back( new MyText );
-	}
-	
-	// Set identity.
-	texts[ AUTHOR ]->setIdentity( "initialization-AUTHOR" );
-	texts[ PRESENTS ]->setIdentity( "initialization-PRESENTS" );
-	texts[ HALLOWEEN ]->setIdentity( "initialization-HALLOWEEN" );
-	texts[ COMBAT ]->setIdentity( "initialization-COMBAT" );
-	
 	// Set font.
-	string path = "fonts/Jaapokki-Regular.otf";
-	texts[ AUTHOR ]->setFont( path );
-	texts[ PRESENTS ]->setFont( path );
-	texts[ HALLOWEEN ]->setFont( path );
-	texts[ COMBAT ]->setFont( path );
-	
+	const char* path = "fonts/Jaapokki-Regular.otf";
+	texts[AUTHOR]->setFont(path);
+	texts[PRESENTS]->setFont(path);
+	texts[HALLOWEEN]->setFont(path);
+	texts[COMBAT]->setFont(path);
+
 	// Set text.
-	texts[ AUTHOR ]->setTextW( L"Adrian Michałek" );
-	texts[ PRESENTS ]->setText( "presents" );
-	texts[ HALLOWEEN ]->setText( "Halloween" );
-	texts[ COMBAT ]->setText( "Combat" );
-	
+	texts[AUTHOR]->setText(L"Adrian Micha\u0142ek");
+	texts[PRESENTS]->setText("presents");
+	texts[HALLOWEEN]->setText("Halloween");
+	texts[HALLOWEEN]->setOutlineThickness(3);
+	texts[COMBAT]->setText("Combat");
+	texts[COMBAT]->setOutlineThickness(3);
+
 	// Set size.
-	int size = screen_h /24;
-	texts[ AUTHOR ]->setSize( size );
-	texts[ PRESENTS ]->setSize( size );
-	texts[ HALLOWEEN ]->setSize( size );
-	texts[ COMBAT ]->setSize( size );
-	
+	texts[AUTHOR]->setSize(screen_h / 24);
+	texts[PRESENTS]->setSize(screen_h / 24);
+	texts[HALLOWEEN]->setSize(screen_h / 10);
+	texts[COMBAT]->setSize(screen_h / 10);
+
 	// Set color.
-	texts[ AUTHOR ]->setColor( sf::Color( 0xFF, 0xFF, 0xFF ) );
-	texts[ PRESENTS ]->setColor( sf::Color( 0xB0, 0xC4, 0xDE ) );
-	texts[ HALLOWEEN ]->setColor( sf::Color( 0xF2, 0x58, 0x3E ) );
-	texts[ COMBAT ]->setColor( sf::Color( 0xD5, 0xE1, 0xDD ) );
-	
+	texts[AUTHOR]->setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+	texts[PRESENTS]->setFillColor(sf::Color(0xB0, 0xC4, 0xDE));
+	texts[HALLOWEEN]->setFillColor(sf::Color(21, 21, 29));
+	texts[HALLOWEEN]->setOutlineColor(sf::Color(0xF2, 0x58, 0x3E));
+	texts[COMBAT]->setFillColor(sf::Color(21, 21, 29));
+	texts[COMBAT]->setOutlineColor(sf::Color(0xD5, 0xE1, 0xDD));
+
+
 	// Set position.
-	texts[ AUTHOR ]->center( 0, 0, screen_w, screen_h -screen_h /10 );
-	texts[ PRESENTS ]->setPosition( screen_w /2 -texts[ PRESENTS ]->getWidth() /2, texts[ AUTHOR ]->getBot() );
-	texts[ COMBAT ]->center( 0, 0, screen_w -texts[ HALLOWEEN ]->getWidth() -screen_h /72, screen_h  -screen_h /10 );
-	texts[ HALLOWEEN ]->setPosition( texts[ COMBAT ]->getRight() +screen_h /72, texts[ COMBAT ]->getBot() -texts[ HALLOWEEN ]->getHeight() );
+	texts[AUTHOR]->center(screen_w / 2, screen_h / 2 - screen_h / 20);
+	texts[PRESENTS]->setPosition(screen_w / 2 - texts[PRESENTS]->getWidth() / 2, texts[AUTHOR]->getBot());
+	texts[COMBAT]->center(screen_w / 2 - texts[HALLOWEEN]->getWidth() / 2 - screen_h / 32 - screen_h / 144, screen_h / 2 - screen_h / 20);
+	texts[HALLOWEEN]->setPosition(texts[COMBAT]->getRight() + screen_h / 72 + screen_h / 16, texts[COMBAT]->getBot() - texts[HALLOWEEN]->getHeight());
 }
 
-void Initialization::draw( sf::RenderWindow* &window )
+void Initialization::draw(sf::RenderWindow* &window)
 {
-	if( !ready )
+	if (!ready)
 	{
-		window->draw( texts[ AUTHOR ]->get() );
-		window->draw( texts[ PRESENTS ]->get() );
-		window->draw( texts[ COMBAT ]->get() );
-		window->draw( texts[ HALLOWEEN ]->get() );
+		window->draw(texts[AUTHOR]->get());
+		window->draw(texts[PRESENTS]->get());
+		window->draw(texts[COMBAT]->get());
+		window->draw(texts[HALLOWEEN]->get());
 	}
 }
 
-void Initialization::mechanics( double elapsedTime )
+void Initialization::mechanics(double elapsedTime)
 {
-	if( !ready )
+	if (!ready)
 	{
-		float velocity = elapsedTime *0xFF;
-		if( state == 0 )
+		float velocity = static_cast<float>(elapsedTime) * 0xFF;
+		if (state == 0)
 		{
-			texts[ AUTHOR ]->fadein( velocity );
+			texts[AUTHOR]->fadein(velocity);
 		}
-		else if( state == 1 )
+		else if (state == 1)
 		{
-			texts[ PRESENTS ]->fadein( velocity *1.5 );
+			texts[PRESENTS]->fadein(velocity * (float)1.5);
 		}
-		else if( state == 2 )
+		else if (state == 2)
 		{
-			texts[ AUTHOR ]->fadeout( velocity );
-			texts[ PRESENTS ]->fadeout( velocity );
+			texts[AUTHOR]->fadeout(velocity);
+			texts[PRESENTS]->fadeout(velocity);
 		}
-		else if( state == 3 )
+		else if (state == 3)
 		{
-			texts[ COMBAT ]->fadein( velocity );
+			texts[COMBAT]->fadein(velocity);
 		}
-		else if( state == 4 )
+		else if (state == 4)
 		{
-			texts[ HALLOWEEN ]->fadein( velocity );
+			texts[HALLOWEEN]->fadein(velocity);
 		}
-		else if( state == 5 )
+		else if (state == 5)
 		{
-			texts[ COMBAT ]->fadeout( velocity *1.5 );
-			texts[ HALLOWEEN ]->fadeout( velocity *1.5 );
+			texts[COMBAT]->fadeout(velocity);
+			texts[HALLOWEEN]->fadeout(velocity);
 		}
-		
+
 		// 1
-		if( texts[ AUTHOR ]->getAlpha() == 0xFF && state == 0 )
+		if (texts[AUTHOR]->getAlpha() == 0xFF && state == 0)
 		{
 			state = 1;
 		}
-		else if( texts[ PRESENTS ]->getAlpha() == 0xFF && state == 1 )
+		else if (texts[PRESENTS]->getAlpha() == 0xFF && state == 1)
 		{
 			state = 2;
 		}
-		else if( texts[ PRESENTS ]->getAlpha() == 0 && state == 2 )
+		else if (texts[PRESENTS]->getAlpha() == 0 && state == 2)
 		{
 			state = 3;
 		}
-		
+
 		// 2
-		else if( texts[ COMBAT ]->getAlpha() == 0xFF && state == 3 )
+		else if (texts[COMBAT]->getAlpha() == 0xFF && state == 3)
 		{
 			state = 4;
 		}
-		else if( texts[ HALLOWEEN ]->getAlpha() == 0xFF && state == 4 )
+		else if (texts[HALLOWEEN]->getAlpha() == 0xFF && state == 4)
 		{
 			state = 5;
 		}
-		else if( texts[ HALLOWEEN ]->getAlpha() == 0 && state == 5 )
+		else if (texts[HALLOWEEN]->getAlpha() == 0 && state == 5)
 		{
 			ready = true;
 		}
 	}
->>>>>>> Combat-Halloween/master
 }
 
 
 
-<<<<<<< HEAD
-bool Initialization::nextState()
-{
-	if( next && nick_info.getAlpha() == 0 )
-	{
-		return true;
-	}
-	
-	return false;
-}
-=======
-bool Initialization::isReady()
+const bool& Initialization::isNext() const
 {
 	return ready;
 }
->>>>>>> Combat-Halloween/master
