@@ -23,8 +23,8 @@ namespace cmm
 
 	struct Thread
 	{
-		bool ready;
-		bool success;
+		bool ready;		// ready to start next action
+		bool success;	// thread finished action with success
 		std::thread* thread;
 
 		Thread();
