@@ -43,11 +43,9 @@ public:
 
 	void load(float screen_w, float screen_h);
 	void handle(sf::Event& event);
-	void head(sf::RenderWindow* &window, double elapsedTime);
-
-private:
 	void draw(sf::RenderWindow* &window);
 	void mechanics(double elapsedTime);
+private:
 	void fades(double elapsedTime);
 	void fadein(float value = 1, int max = 0xFF);
 	void fadeout(float value = 1, int min = 0);

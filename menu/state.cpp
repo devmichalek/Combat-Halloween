@@ -37,9 +37,36 @@ bool State::isState() const
 
 
 
-char* Username::username = (char*)"error";
+char* Username::username = (char*)"admin";
 
-char* Username::getUsername()
+
+
+sf::Clock FPS::clock = sf::Clock();
+float FPS::currentTime = 0;
+unsigned FPS::fps = 0;
+
+double FPS::counter = 0;
+double FPS::max = 0.25;	// every 0.25sec have the ability to getFPS()
+
+void FPS::mechanics(double elapsedTime)
 {
-	return username;
+	fps = 1.f / currentTime;
+	currentTime = clock.restart().asSeconds();
+	counter += elapsedTime;
+}
+
+bool FPS::timePassed()
+{
+	if (counter > max)
+	{
+		counter = 0;
+		return true;
+	}
+
+	return false;
+}
+
+const unsigned& FPS::getFPS()
+{
+	return fps;
 }

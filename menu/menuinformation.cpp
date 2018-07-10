@@ -144,8 +144,8 @@ void MenuInformation::setMoney()
 {
 	cmm::Request request;
 	request.setMessage("username=" + boost::lexical_cast<std::string>(Username::getUsername()));
-	request.setRequest("/combathalloween/getmoney.php", sf::Http::Request::Post);
-	request.setHttp("http://adrianmichalek.pl/");
+	request.setRequest("/getmoney.php", sf::Http::Request::Post);
+	request.setHttp("http://combathalloween.netne.net/");
 
 	bool success = request.sendRequest();
 	if (success)

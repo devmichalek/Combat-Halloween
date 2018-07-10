@@ -39,7 +39,8 @@ int main(int argc, char** argv)
 
 		if (core->state == MENU)
 		{
-			menu->head(core->getWindow(), core->getElapsedTime());
+			menu->mechanics(core->getElapsedTime());
+			menu->draw(core->getWindow());
 
 			if (menu->isPrev())
 			{

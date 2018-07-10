@@ -204,16 +204,6 @@ void Menu::handle(sf::Event& event)
 	}
 }
 
-void Menu::head(sf::RenderWindow* &window, double elapsedTime)
-{
-	set();
-	mechanics(elapsedTime);
-	fades(elapsedTime);
-	draw(window);
-}
-
-
-
 void Menu::draw(sf::RenderWindow* &window)
 {
 	information.draw		(window);
@@ -237,6 +227,17 @@ void Menu::draw(sf::RenderWindow* &window)
 
 void Menu::mechanics(double elapsedTime)
 {
+	set();
+
+	fades(elapsedTime);
+
+	// FPS.
+	/*FPS::mechanics(elapsedTime);
+	if (FPS::timePassed())
+	{
+		printf("%d\n", FPS::getFPS());
+	}*/
+
 	// Mechanics.
 	if (!pausesystem.isActive() && !isState())
 	{

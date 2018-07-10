@@ -1,12 +1,2 @@
-﻿  main.cpp
-c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\main.cpp(19): warning C4244: 'argument': conversion from 'const int' to 'float', possible loss of data
-  menu.cpp
-  menuinformation.cpp
-  pausesystem.cpp
-c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\pausesystem.cpp(33): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\adriqun\source\repos\combat halloween\combat halloween\menu\pausesystem.cpp(88): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
-  robotspecs.cpp
-  settings.cpp
-  state.cpp
-  Generating Code...
+﻿  menu.cpp
   menu.vcxproj -> C:\Users\adriqun\source\repos\Combat Halloween\Debug\menu.exe
