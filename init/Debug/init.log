@@ -1,3 +1,0 @@
-﻿  login.cpp
-c:\users\adriqun\source\repos\combat halloween\combat halloween\init\login.cpp(108): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-  init.vcxproj -> C:\Users\adriqun\source\repos\Combat Halloween\Debug\init.exe
