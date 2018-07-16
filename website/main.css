@@ -2,15 +2,7 @@ body {
 
     background: url(images/tile.png);
     background-repeat: repeat;
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
 }
-
-main {
-flex: 1 0 auto;
-}
-
 
 @font-face {
 	font-family: jcandle;
@@ -20,11 +12,6 @@ flex: 1 0 auto;
 @font-face {
 	font-family: japokki;
 	src: url( "fonts/Jaapokki-Regular.otf" );
-}
-
-html *
-{
-   font-family: japokki !important;
 }
 
 nav {
@@ -116,6 +103,37 @@ h5.modcon2 {
 	color: #EF5350;
 }
 
+input {
+    font-family: japokki;
+}
+
+.select-content {
+    font-family: japokki;
+}
+
+.japokki {
+    font-family: japokki !important;
+}
+
+.dropdown-content {
+    font-family: japokki;
+}
+
+textarea {
+    font-family: japokki;
+}
+
+label {
+    font-family: japokki;
+}
+
+.btn {
+    font-family: japokki;
+}
+
+p {
+    font-family: japokki;
+}
 
 .thin-text {
 	font-family: japokki;
