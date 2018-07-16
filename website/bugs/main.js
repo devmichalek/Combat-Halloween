@@ -37,6 +37,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
   $(".button-collapse").sideNav();
   
+    $(document).ready(function(){
+    $('.sidenav').sidenav();
+  });
+
+
+$('.dropdown-trigger').dropdown();
+
+  
   $('.datepicker').datepicker({
     minDate : new Date()
 });
+
+$('select').material_select();
