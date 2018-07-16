@@ -12,20 +12,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<!-- Standard Meta -->
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=1.0">
-
+    <!-- Standard Meta -->
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=1.0">
+    
 	<!-- Site Properties -->
-	<title>Combat Halloween</title>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-  	
-	<link rel="stylesheet" type="text/css" href="main.css">
-	<link rel="icon" href="https://user-images.githubusercontent.com/19840443/42683508-c8c24644-868d-11e8-9a8a-cbde02588774.png">
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-	<meta http-equiv="cache-control" content="max-age=0" />
+   <title>Combat Halloween</title>
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+   <link rel = "stylesheet" href = "https://fonts.googleapis.com/icon?family=Material+Icons">
+   <link rel="stylesheet" type="text/css" href="main.css">
+   <link rel="icon" href="https://user-images.githubusercontent.com/19840443/42683508-c8c24644-868d-11e8-9a8a-cbde02588774.png">
+   
+   <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="cache-control" content="no-store" />
     <meta http-equiv="cache-control" content="must-revalidate" />
@@ -38,7 +37,7 @@
 	<div class="navbar-fixed">
 		<nav>
 		    <div class="nav-wrapper">
-		      	<a class="nav-main brand-logo">Combat Halloween</a>
+		      	<a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
 		      	<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 			    	<li><a class="nav" href="home.php">Home</a></li>
@@ -292,10 +291,19 @@
 	<footer class="page-footer">
       <div class="container">
         <div class="row">
-          <div class="col l6 s12">
-            <h5 class="white-text">Adrian Michałek </h5>
-            <p class="grey-text text-lighten-4">Project of SFML & QT.</p>
-          </div>
+            <div class="col s4">
+                <h5 class="white-text">Admins:</h5>
+                <p class="white-text">Adrian Michałek (devmichalek@gmail.com)</p>
+            </div>
+            <div class="col s4">
+                <h5 class="white-text">Moderators:</h5>
+                <p class="white-text">Sebastian Bialucha (sebastek321@gmail.com)</p>
+                <p class="white-text">Kamil Gawlik (kamilgawlik@icloud.com)</p>
+            </div>
+            <div class="col s4">
+                <h5 class="white-text">About:</h5>
+                <p class="grey-text text-lighten-4">Project of SFML & QT.</p>
+            </div>
         </div>
       </div>
       <div class="footer-copyright">
