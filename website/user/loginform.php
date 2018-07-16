@@ -112,10 +112,19 @@
 	<footer class="page-footer">
       <div class="container">
         <div class="row">
-          <div class="col l6 s12">
-            <h5 class="white-text">Adrian Michałek </h5>
-            <p class="grey-text text-lighten-4">Project of SFML & QT.</p>
-          </div>
+            <div class="col s4">
+                <h5 class="white-text">Admins:</h5>
+                <p class="white-text">Adrian Michałek (devmichalek@gmail.com)</p>
+            </div>
+            <div class="col s4">
+                <h5 class="white-text">Moderators:</h5>
+                <p class="white-text">Sebastian Bialucha (sebastek321@gmail.com)</p>
+                <p class="white-text">Kamil Gawlik (kamilgawlik@icloud.com)</p>
+            </div>
+            <div class="col s4">
+                <h5 class="white-text">About:</h5>
+                <p class="grey-text text-lighten-4">Project of SFML & QT.</p>
+            </div>
         </div>
       </div>
       <div class="footer-copyright">
