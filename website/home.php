@@ -85,29 +85,38 @@
 		      	<a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
 		      	<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-			      	<a class='dropdown-trigger btn nav-button' href='../index.php'>Home</a>
-			      	<a class='dropdown-trigger btn nav-button' href='bugs/index.php'>Bugs</a>
-			      	<a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a>
+			      	<li><a class='nav' href='../index.php'>Start</a></li>
+			      	<li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'>Bugs</a></li>
+			      	<li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
 		    	</ul>
 		    </div>
 		</nav>
 		
 	</div>
 	<ul class="nav-main sidenav" id="mobile-demo">
-      	<a class='dropdown-trigger btn nav-button' href='../index.php'>Home</a>
-      	<a class='dropdown-trigger btn nav-button' href='bugs/index.php'>Bugs</a>
-		<a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a>
+        <li><a class='nav' href='../index.php'>Start</a></li>
+      	<li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'>Bugs</a></li>
+		<li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
 	</ul>
 	</div>
 
-		<!-- Footer -->
+	<!-- Footer -->
 	<footer class="page-footer">
       <div class="container">
         <div class="row">
-          <div class="col l6 s12">
-            <h5 class="white-text">Adrian Michałek </h5>
-            <p class="grey-text text-lighten-4">Project of SFML & QT.</p>
-          </div>
+            <div class="col s4">
+                <h5 class="white-text">Admins:</h5>
+                <p class="white-text">Adrian Michałek (devmichalek@gmail.com)</p>
+            </div>
+            <div class="col s4">
+                <h5 class="white-text">Moderators:</h5>
+                <p class="white-text">Sebastian Bialucha (sebastek321@gmail.com)</p>
+                <p class="white-text">Kamil Gawlik (kamilgawlik@icloud.com)</p>
+            </div>
+            <div class="col s4">
+                <h5 class="white-text">About:</h5>
+                <p class="grey-text text-lighten-4">Project of SFML & QT.</p>
+            </div>
         </div>
       </div>
       <div class="footer-copyright">
