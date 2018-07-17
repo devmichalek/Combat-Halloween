@@ -2,6 +2,13 @@ body {
 
     background: url(images/tile.png);
     background-repeat: repeat;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+flex: 1 0 auto;
 }
 
 @font-face {
@@ -87,6 +94,11 @@ h4.modcon {
 	font-family: japokki;
 	font-size: 150%;
 	color: black;
+}
+
+h5 {
+	font-family: japokki;
+	font-size: 130%;
 }
 
 h5.modcon2 {
