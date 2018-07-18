@@ -203,10 +203,10 @@
 		  	</div>
 
 			<!-- BUTTON -->
-			<button class="btn waves-effect waves-light red lighten-1 nav-button" type="submit" name="action">Add
+			<a href="http://combathalloween.netne.net/bugs" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">cancel</i>Cancel </a>
+			<button class="btn waves-effect waves-light green lighten-1 nav-button" type="submit" name="action">Add
 		    <i class="material-icons right">send</i>
 			</button>
-			<!-- NEW BUTTON HERE, DELETE THIS COMMENT LATER -->
 			
 		</form>
 	</div>
