@@ -1,10 +1,12 @@
+// preloader
+document.addEventListener("DOMContentLoaded", function(){
+	$('.preloader-background').delay(1000).fadeOut('slow');
+	$('.preloader-wrapper').delay(1000).fadeOut();
+});
+
 $(document).ready(function(){
   $('.modal').modal();
 });
-
-$('#modal1').modal('open');
-
-$('#modal1').modal('close');
 
 
 
@@ -29,11 +31,6 @@ $(document).ready(function(){
 
 $('.dropdown-trigger').dropdown();
 
-document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.dropdown-trigger');
-    var instances = M.Dropdown.init(elems, options);
-  });
-
 $(".button-collapse").sideNav();
 
 
@@ -46,4 +43,8 @@ $(document).ready(function() {
 
 $(document).ready(function(){
     $('.scrollspy').scrollSpy();
+  });
+  
+$(document).ready(function(){
+    $('.tap-target').tapTarget();
   });

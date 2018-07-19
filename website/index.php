@@ -11,35 +11,36 @@
 
 <?php require_once("head.php"); ?>
   
-  <!-- NAVBAR -->
-  <div class="navbar-fixed"><nav><div class="nav-wrapper">
+    <!-- NAVBAR -->
+    <nav>
+    <div class="nav-wrapper">
     <div class="row">
-      <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class="nav" href="home.php">Home</a></li>
+            <li><a class="nav" href="#about">About</a></li>
+            <li><a class="nav" href="#section4">High Scores</a></li>
+            <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown1'>User</a></li>
+        </ul>
+        <ul id='dropdown1' class='dropdown-content'>
+            <li><a class="nav" href="user/loginform.php">Log In</a></li>
+            <li><a class="nav" href="user/register.php">Sign In</a></li>
+        </ul>
+    </div>
+    </div>
+    </nav>
+    <ul class="nav-main sidenav" id="mobile-demo">
         <li><a class="nav" href="home.php">Home</a></li>
         <li><a class="nav" href="#about">About</a></li>
         <li><a class="nav" href="#contact">Contact</a></li>
         <li><a class="nav" href="#section4">High Scores</a></li>
-        <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown1'>User</a></li>
-      </ul>
-      <ul id='dropdown1' class='dropdown-content'>
-        <li><a class="nav" href="user/loginform.php">Log In</a></li>
-        <li><a class="nav" href="user/register.php">Sign In</a></li>
-      </ul>
-    </div>
-  </div></nav></div>
-  <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class="nav" href="home.php">Home</a></li>
-      <li><a class="nav" href="#about">About</a></li>
-      <li><a class="nav" href="#contact">Contact</a></li>
-      <li><a class="nav" href="#section4">High Scores</a></li>
-      <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown2'>User</a></li>
-      <ul id='dropdown2' class='dropdown-content'>
-        <li><a class="nav" href="user/loginform.php">Log In</a></li>
-        <li><a class="nav" href="user/register.php">Sign In</a></li>
-      </ul>
-  </ul>
+        <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown2'>User</a></li>
+        <ul id='dropdown2' class='dropdown-content'>
+            <li><a class="nav" href="user/loginform.php">Log In</a></li>
+            <li><a class="nav" href="user/register.php">Sign In</a></li>
+        </ul>
+    </ul>
 
   <!-- TOP -->
   <div class="parallax-container valign-wrapper">
@@ -246,5 +247,5 @@
       </div>
     </div> -->
   </div>
-
+    </div>
 <?php require_once("footer.php"); ?>

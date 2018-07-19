@@ -28,21 +28,23 @@
 
 <?php require_once("head.php"); ?>
   
-  <div class="navbar-fixed"><nav><div class="nav-wrapper">
+    <nav>
+    <div class="nav-wrapper">
       <div class="row">
-          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class='nav' href='../index.php'>Start</a></li>
-            <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'>Bugs</a></li>
-            <li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
-          </ul>
+            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class='nav' href='../index.php'>Start</a></li>
+                <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'><i class="material-icons right">bug_report</i>Bugs</a></li>
+                <li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
+            </ul>
         </div>
-  </div></nav></div>
-  <ul class="nav-main sidenav" id="mobile-demo">
-    <li><a class='nav' href='../index.php'>Start</a></li>
-    <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'>Bugs</a></li>
-    <li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
-  </ul>
+    </div>
+    </nav>
+    <ul class="nav-main sidenav" id="mobile-demo">
+        <li><a class='nav' href='../index.php'>Start</a></li>
+        <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'><i class="material-icons right">bug_report</i>Bugs</a></li>
+        <li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
+    </ul>
 
 <?php require_once("footer.php"); ?>
