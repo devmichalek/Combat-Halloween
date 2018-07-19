@@ -41,6 +41,8 @@
 							$_SESSION['username'] = $row['username'];
 							$_SESSION['firsttime'] = $row['firsttime'];
 							$_SESSION['email'] = $row['email'];
+							$_SESSION['resolutionselect'] = "unresolved";
+							$_SESSION['developerselect'] = "mine";
 							unset($_SESSION['error']);
 							$result->free_result();
 							header('Location: http://combathalloween.netne.net/home.php');

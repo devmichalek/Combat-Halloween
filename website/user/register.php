@@ -156,6 +156,25 @@
 
 <?php require_once("../head.php"); ?>
 
+    <!-- NAVBAR -->
+    <nav>
+    <div class="nav-wrapper">
+      <div class="row">
+          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a class='nav' href='../index.php'>Start</a></li>
+            <li><a class='btn nav-button' href='loginform.php'>Log In</a></li>
+          </ul>
+        </div>
+    </div>
+    </nav>
+  <!-- NAVBAR MOBILE -->
+    <ul class="nav-main sidenav" id="mobile-demo">
+      <li><a class='nav' href='../index.php'>Start</a></li>
+      <li><a class='btn nav-button' href='loginform.php'>Login In</a></li>
+  </ul>
+  <!-- END OF NAVBAR -->
     
     <!-- Header -->
     <div class="twelve columns">
@@ -221,9 +240,9 @@
     </form>
 
 
-    <?php
+ 	     <?php
       // Errors.
-      echo '<div class="twelve columns myfont" style="text-align: center; color: red;">';
+      echo '<h5 class="errorColor">';
       if( isset($_SESSION['e_username']))
       {
         echo $_SESSION['e_username'];
@@ -249,7 +268,7 @@
         echo $_SESSION['e_bot'];
         unset($_SESSION['e_bot']);
       }
-      echo '</div>';
+      echo '</h5>';
     ?>
     
 <?php require_once("../footer.php"); ?>

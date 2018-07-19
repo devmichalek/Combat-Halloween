@@ -1,39 +1,42 @@
 <?php
-  session_start();
+    session_start();
+    
+    // Reset errors.
+    unset($_SESSION['e_username']);
+    unset($_SESSION['e_email']);
+    unset($_SESSION['e_password']);
+    unset($_SESSION['e_passwordcon']);
+    unset($_SESSION['e_bot']);
 
-  unset($_SESSION['e_username']);
-  unset($_SESSION['e_email']);
-  unset($_SESSION['e_password']);
-  unset($_SESSION['e_passwordcon']);
-  unset($_SESSION['e_bot']);
-
-  // If user is logged.
-  if(isset($_SESSION['logged']))
-  {
-    header('Location: ../home.php');
-    exit();
-  }
-
+    // If user is logged.
+    if(isset($_SESSION['logged']))
+    {
+        header('Location: ../home.php');
+        exit();
+    }
+    
+    require_once("../head.php");
 ?>
 
-<?php require_once("../head.php"); ?>
-
-  <!-- NAVBAR -->
-  <div class="navbar-fixed"><nav><div class="nav-wrapper">
-      <div class="row">
-          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class='nav' href='../index.php'>Start</a></li>
-            <li><a class='btn nav-button' href='register.php'>Sign In</a></li>
-          </ul>
+    <!-- NAVBAR -->
+    <nav>
+    <div class="nav-wrapper">
+        <div class="row">
+            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class='nav' href='../index.php'>Start</a></li>
+                <li><a class='btn nav-button' href='register.php'>Sign In</a></li>
+            </ul>
         </div>
-  </div></nav></div>
+    </div>
+    </nav>
     <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class='nav' href='../index.php'>Start</a></li>
-      <li><a class='btn nav-button' href='register.php'>Sign In</a></li>
-  </ul>
-
+        <li><a class='nav' href='../index.php'>Start</a></li>
+        <li><a class='btn nav-button' href='register.php'>Sign In</a></li>
+    </ul>
+    <!-- END OF NAVBAR-->
+    
 
   <div class="container center">
 
