@@ -27,6 +27,29 @@
 		}
 		else
 		{
+		    $sql = "SELECT * FROM bugs";
+    		$records = $connection->query($sql);
+    
+    		$basicstr = "nn";
+    		if($_SESSION['email'] == "devmichalek@gmail.com")		$basicstr = "am";
+    		else if($_SESSION['email'] == "sebastek321@gmail.com")	$basicstr = "sb";
+    		else if($_SESSION['email'] == "kamilgawlik@icloud.com")	$basicstr = "kg";
+    
+    		$num = 1;
+    		while($row=$records->fetch_assoc())
+    		{
+    			if($row['author'] == $_SESSION['email'])
+    				++$num;
+    		}
+    
+    		// Prepare name.
+    		$temp = str_repeat("0", 4 - strlen(strval($num)));
+    		
+    		// Free memory.
+    		mysqli_data_seek($records, 0);
+    		$records->free_result();
+		    
+            $IDname = $basicstr.$temp.strval($num);
 			$name =         addslashes($_POST['name']);
 			$type =         $_POST['type'];
 			$actiontodo =   $_POST['actiontodo'];
@@ -39,7 +62,7 @@
 			$developer =    $_POST['developer'];
 			$resolution =   $_POST['resolution'];
 
-			if(!$connection->query("INSERT INTO bugs VALUES (NULL, '$name', '$type', '$actiontodo', '$description', '$location', '$severity', '$priority', '$deadline', '$author', '$developer', '$resolution')"))
+			if(!$connection->query("INSERT INTO bugs VALUES (NULL, '$IDname', '$name', '$type', '$actiontodo', '$description', '$location', '$severity', '$priority', '$deadline', '$author', '$developer', '$resolution')"))
 			{
 				throw new Exception($connection->error);
 			}

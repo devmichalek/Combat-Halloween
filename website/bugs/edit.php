@@ -27,6 +27,7 @@
 		}
 		else
 		{
+		    $IDname =       $_SESSION['IDname'];
 			$name =         addslashes($_POST['name']);
 			$type =         $_POST['type'];
 			$actiontodo =   $_POST['actiontodo'];
@@ -39,7 +40,7 @@
 			$developer =    $_POST['developer'];
 			$resolution =   $_POST['resolution'];
 
-			if(!$connection->query("UPDATE bugs SET type='$type', action='$actiontodo', description='$description', location='$location', severity='$severity', priority='$priority', deadline='$deadline', author='$author', developer='$developer', resolution='$resolution' WHERE name='$name'"))
+			if(!$connection->query("UPDATE bugs SET name='$name', type='$type', action='$actiontodo', description='$description', location='$location', severity='$severity', priority='$priority', deadline='$deadline', author='$author', developer='$developer', resolution='$resolution' WHERE IDname='$IDname'"))
 			{
 				throw new Exception($connection->error);
 			}

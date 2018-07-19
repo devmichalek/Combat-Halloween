@@ -36,12 +36,13 @@
 
   if($connection->connect_errno == 0)
   {
-    $name = $_GET['name'];
-
-    $sql = "SELECT * FROM bugs WHERE name='$name'";
+    $IDname = $_GET['IDname'];
+    $_SESSION['IDname'] = $_GET['IDname'];
+    $sql = "SELECT * FROM bugs WHERE IDname='$IDname'";
     $records = $connection->query($sql);
     $row=$records->fetch_assoc();
-
+    
+    $name = $row['name'];
     $type = $row['type'];
     $actiontodo = $row['action'];
 
@@ -66,16 +67,18 @@
 
 <?php require_once("../head.php"); ?>
 
-  <div class="navbar-fixed"><nav><div class="nav-wrapper">
+  <nav><div class="nav-wrapper">
       <div class="row">
           <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
+              <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
             <li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
           </ul>
         </div>
-  </div></nav></div>
+  </div></nav>
   <ul class="nav-main sidenav" id="mobile-demo">
+      <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
       <li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
   </ul>
 
@@ -90,8 +93,7 @@
       <!-- NAME -->
       <div class="row">
       <div class="input-field col s12 m6 push-m3">
-        <input id="name" type="text" class="validate" name="name" value="<?php echo $name; ?>" selected hidden>
-      <input id="name" type="text" class="validate" name="name" value="<?php echo $name; ?>" disabled>
+        <input id="name" type="text" class="validate" name="name" value="<?php echo $name; ?>">
         <label for="name"><h5 class="modcon2">Name</h5></label>
       </div>
       </div>
@@ -113,12 +115,12 @@
         <div class="input-field col s6 m3 push-m3">
           <select name="actiontodo">
               <?php
-                echo "<option "; if($type=="Repair")  echo " selected "; echo 'value="Repair">Repair</option>';
-                echo "<option "; if($type=="Add")     echo " selected "; echo 'value="Add">Add</option>';
-                echo "<option "; if($type=="Create")  echo " selected "; echo 'value="Create">Create</option>';
-                echo "<option "; if($type=="Modify")  echo " selected "; echo 'value="Modify">Modify</option>';
-                echo "<option "; if($type=="Correct") echo " selected "; echo 'value="Correct">Correct</option>';
-                echo "<option "; if($type=="Remove")  echo " selected "; echo 'value="Remove">Remove</option>';
+                echo "<option "; if($actiontodo=="Repair")  echo " selected "; echo 'value="Repair">Repair</option>';
+                echo "<option "; if($actiontodo=="Add")     echo " selected "; echo 'value="Add">Add</option>';
+                echo "<option "; if($actiontodo=="Create")  echo " selected "; echo 'value="Create">Create</option>';
+                echo "<option "; if($actiontodo=="Modify")  echo " selected "; echo 'value="Modify">Modify</option>';
+                echo "<option "; if($actiontodo=="Correct") echo " selected "; echo 'value="Correct">Correct</option>';
+                echo "<option "; if($actiontodo=="Remove")  echo " selected "; echo 'value="Remove">Remove</option>';
               ?>
           </select>
             <label>Action to do</label>
@@ -184,7 +186,7 @@
           <select name="resolution">
             <?php
               echo "<option "; if($resolution=="Deferred")  echo " selected "; echo 'value="Deferred">Deferred</option>';
-              echo "<option "; if($resolution=="Disagree With Suggestion")  echo " selected "; echo 'value="Disagree With Suggestion">Disagree With Suggestion</option>';
+              echo "<option "; if($resolution=="Disagree")  echo " selected "; echo 'value="Disagree">Disagree</option>';
               echo "<option "; if($resolution=="Duplicated")  echo " selected "; echo 'value="Duplicated">Duplicated</option>';
               echo "<option "; if($resolution=="Fixed") echo " selected "; echo 'value="Fixed">Fixed</option>';
               echo "<option "; if($resolution=="Hold")  echo " selected "; echo 'value="Hold">Hold</option>';
@@ -197,8 +199,8 @@
               echo "<option "; if($resolution=="Obsolete")  echo " selected "; echo 'value="Obsolete">Obsolete</option>';
               echo "<option "; if($resolution=="Reeopen") echo " selected "; echo 'value="Reeopen">Reeopen</option>';
               echo "<option "; if($resolution=="Revised") echo " selected "; echo 'value="Revised">Revised</option>';
-              echo "<option "; if($resolution=="Suggestion Not To Correct") echo " selected "; echo 'value="Suggestion Not To Correct">Suggestion Not To Correct</option>';
-              echo "<option "; if($resolution=="Support Action Required") echo " selected "; echo 'value="Support Action Required">Support Action Required</option>';
+              echo "<option "; if($resolution=="Not To Correct") echo " selected "; echo 'value="Not To Correct">Not To Correct</option>';
+              echo "<option "; if($resolution=="Support Needed") echo " selected "; echo 'value="Support Needed">Support Needed</option>';
               echo "<option "; if($resolution=="Withdrawn") echo " selected "; echo 'value="Withdrawn">Withdrawn</option>';
             ?>
           </select>
@@ -215,12 +217,36 @@
           <label>Choose developer</label>
         </div>
         </div>
-
-        <!-- BUTTON -->
-        <button class="btn waves-effect waves-light red lighten-1 nav-button" type="submit" name="action">Update
+        
+        <div class="row">
+        <!-- CANCEL BUTTON -->
+        <a href="http://combathalloween.netne.net/bugs" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
+        
+        <!-- DELETE BUTTON -->
+        <a href="#bugdeleter" class="waves-effect waves-light btn modal-trigger purple lighten-1"><i class="material-icons right">delete</i>Delete </a>
+        
+        <!-- UPDATE BUTTON-->
+        <button class="btn waves-effect waves-light green lighten-1 nav-button" type="submit" name="action">Update
           <i class="material-icons right">send</i>
         </button>
+        </div>
+        
     </form>
+    
+    <div id="bugdeleter" class="modal">
+        <div class="modal-content">
+            <h4 class="modcon">Information</h4>
+            <h5>You want to delete bug "<?php echo $name; ?>" ID(<?php echo $IDname; ?>). Please confirm your decision.</h5>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-blue btn-flat japokki"><i class='material-icons right'>clear</i>CANCEL </a>
+            <form action="delete.php" method="get">
+                <input type="hidden" name="IDname" value="<?php echo $IDname; ?>">
+                <button type='submit' name="action" class="modal-close waves-effect waves-red btn-flat japokki"><i class='material-icons right'>delete</i>DELETE </button>
+            </form>
+        </div>
+    </div>
+    
   </div>
 
 <?php require_once("../footer.php"); ?>

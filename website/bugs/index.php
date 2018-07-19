@@ -52,50 +52,112 @@
       else
         ++$opennum;
     }
-    mysqli_data_seek($records, 0);
+    $records->free_result();
+    
+    $resolutionselect = $_SESSION['resolutionselect'];
+    $developerselect = $_SESSION['developerselect'];
+    
+    $addres = "WHERE 1";
+    if($resolutionselect == "finished")  $addres="WHERE resolution IN ('fixed', 'revised', 'implemented')";
+    else if($resolutionselect == "unresolved")  $addres="WHERE NOT resolution IN ('fixed', 'revised', 'implemented')";
+    
+    $email = $_SESSION['email'];
+    $adddev = " AND 1";
+    if($developerselect == "mine")  $adddev=" AND developer='".$email."'";
+    else if($developerselect == "their")  $adddev=" AND NOT developer='".$email."'";
+    
+    
+    $sql = "SELECT * FROM bugs ".$addres.$adddev;
+    $records = $connection->query($sql);
+    $isempty = empty($records);
   }
   else
   {
     die("Could not connect: ".mysql_error());
   }
+  
+    require_once("../head.php");
 ?>
-    
-
-<?php require_once("../head.php"); ?>
-
-  <div class="navbar-fixed"><nav><div class="nav-wrapper">
-      <div class="row">
-          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class="nav" href="../home.php">Home</a></li>
-            <li><a class="nav btn red lighten-1 nav-button" href="addbug.php">Add</a></li>
-          </ul>
+    <!-- NAVBAR -->
+    <nav>
+    <div class="nav-wrapper">
+        <div class="row">
+            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
+                <li><a class="btn-floating btn-medium pulse deep-orange lighten-1" href="modules.php"><i class="material-icons">view_module</i></a></li>
+                <li><a class="btn-floating btn-medium pulse indigo lighten-1" href="documentation.php"><i class="material-icons">info_outline</i></a></li>
+                <li><a class="nav btn amber lighten-1 nav-button" href="https://drive.google.com/uc?authuser=0&id=1ICi0LeAdMGU-SH1oENlz-cR86b6AEmYx&export=download">Sprite Tester</a></li>
+                <li><a class="nav btn red lighten-1 nav-button" href="addbug.php"><i class="material-icons right">bug_report</i>Add</a></li>
+            </ul>
         </div>
-  </div></nav></div>
+    </div>
+    </nav>
     <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class="nav" href="../home.php">Home</a></li>
-      <li><a class="nav btn red lighten-1 nav-button" href="addbug.php">Add</a></li>
-  </ul>
+        <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
+        <li><a class="btn-floating btn-medium pulse deep-orange lighten-1" href="modules.php"><i class="material-icons">view_module</i></a></li>
+        <li><a class="btn-floating btn-medium pulse indigo lighten-1" href="documentation.php"><i class="material-icons">info_outline</i></a></li>
+        <li><a class="nav btn amber lighten-1 nav-button" href="https://drive.google.com/uc?authuser=0&id=1ICi0LeAdMGU-SH1oENlz-cR86b6AEmYx&export=download">Sprite Tester</a></li>
+        <li><a class="nav btn red lighten-1 nav-button" href="addbug.php"><i class="material-icons right">bug_report</i>Add</a></li>
+    </ul>
+    <!-- END OF NAVBAR -->
 
   <div class="container center">
-
     <div class="row">
       <h2 class="center">Combat Halloween Bugs</h2>
-      <h4 class="modcon">The list of things to repair, modify, add, create or remove is below. What we called bug is a thing that need to be repair, It is usually memory leak or GUI errors. New feature is like: it would be nice to add this feature to the GUI, It is not necessary but rather sth that would ease users to interact with game or would make more fun while playing, so new files (png, wav etc.), new options inside GUI etc. Syntax Error, this type informs about language mistakes, It can be also a proposal to rename sth. If the info button is red that means it is your task.</h4>
-      <h4 class="modcon">Done: <?php echo $donenum;?> Open: <?php echo $opennum;?> All: <?php echo $sumnum;?></h4>
+      <h4 class="modcon">Finished: <?php echo $donenum;?> Unresolved: <?php echo $opennum;?> All: <?php echo $sumnum;?></h4>
+      
+      <!-- SORT BY-->
+      <div class="row">
+        <form action="sort.php" method="get">
+            
+            <div class="input-field col s4 m2 push-m4">
+            <select name="resolutionselect">
+                <?php
+                echo "<option "; if($resolutionselect=="all")   echo " selected "; echo 'value="all">All</option>';
+                echo "<option "; if($resolutionselect=="finished")   echo " selected "; echo 'value="finished">Finished</option>';
+                echo "<option "; if($resolutionselect=="unresolved")   echo " selected "; echo 'value="unresolved">Unresolved</option>';
+                ?>
+            </select>
+                <label>Sort by resolution</label>
+            </div>
+            
+            <div class="input-field col s4 m2 push-m4">
+            <select name="developerselect">
+                <?php
+                echo "<option "; if($developerselect=="all")   echo " selected "; echo 'value="all">All</option>';
+                echo "<option "; if($developerselect=="mine")   echo " selected "; echo 'value="mine">Mine</option>';
+                echo "<option "; if($developerselect=="their")   echo " selected "; echo 'value="their">Their</option>';
+                ?>
+            </select>
+                <label>Sort by developer</label>
+            </div>
+            
+            <div class="col s2 m1 push-m4">
+            <button class="btn-floating btn-medium pulse green lighten-1 nav-button" type="submit"><i class="material-icons right">redo</i></button>
+            </div>
+            </form>
+        </div>
+      <!-- ------ -->
+      
       <div class="center col s12">
         <table class="striped centered responsive-table bordered">
               <thead class="tableheader">
                 <tr>
-                    <th>Name</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>Location</th>
-                    <th>Severity</th>
-                    <th>Priority</th>
-                    <th>Deadline</th>
-                    <th>Resolution</th>
+                    <?php
+                    if(!$isempty)
+                    {
+                        echo "<th>Name</th>";
+                        echo "<th>Type</th>";
+                        echo "<th>Description</th>";
+                        echo "<th>Location</th>";
+                        echo "<th>Severity</th>";
+                        echo "<th>Priority</th>";
+                        echo "<th>Deadline</th>";
+                        echo "<th>Resolution</th>";
+                    }
+                    ?>
                 </tr>
               </thead>
           <tbody class="member">
@@ -113,17 +175,17 @@
                  $resolution == "Revised" ||
                  $resolution == "Implemented")
               $color = "'grey lighten-2'";
-
+              
               // Name
               echo "<td class=".$color.">";
               echo '<form action="editbug.php" method="get">';
               echo $row['name'];
-              echo '<input type="hidden" name="name" value="';
-              echo $row['name'].'"> ';
+              echo '<input type="hidden" name="IDname" value="';
+              echo $row['IDname'].'"> ';
               $descolor = ltrim($color, "'");
               if($descolor == "")
-                  $descolor = "amber lighten-1'";
-              echo "<button type='submit' class='btn ".$descolor.">Edit</button>";
+                  $descolor = "cyan lighten-1'";
+              echo "<button type='submit' class='btn-floating ".$descolor."><i class='material-icons'>edit</i></button>";
               echo '</form>'."</td>";
 
               // Type
@@ -154,14 +216,14 @@
                   
               }
               
-              echo "<a class='waves-effect waves-light btn modal-trigger ".$descolor." ";
-              echo "href='#".$row['name']."'>";
-              echo "Info</a></td>";
-              echo "<div id='".$row['name']."' class='modal'>";
+                echo "<a class='waves-effect waves-light btn modal-trigger ".$descolor." ";
+                echo "href='#".$row['name']."'>";
+                echo "Info</a></td>";
+                echo "<div id='".$row['name']."' class='modal'>";
                 echo "<div class='modal-content'>";
-                echo "<h4 class='modcon'>".$row['name']."</h4>";
-                echo "<p class='japokki red lighten-1'>Reported by: ".$row['author']."</p>";
-                echo "<p class='japokki blue'>Developer: ".$row['developer'];"</p>";
+                echo "<h4 class='modcon'>".$row['name']." ID(".$row['IDname'].")</h4>";
+                echo "<p class='japokki'>Reported by:  ".'<img style="position: relative; top: 10px;" src="../images/'.$row['author'].'.jpg" class="circle"> '.$row['author']."</p>";
+                echo "<p class='japokki'>Developer:  ".'<img style="position: relative; top: 10px;" src="../images/'.$row['developer'].'.jpg" class="circle"> '.$row['developer']."</p>";
                 echo "<p class='japokki'>Action to do: ".$row['action']."</p>";
                 echo "<p class='japokki'>".$row['description']."</p>";
                 echo "</div>";
@@ -220,7 +282,7 @@
               switch($resolution)
               {
                   case "Deferred":                    echo "<td class='red lighten-1'>";          break;
-                  case "Disagree With Suggestion":    echo "<td class='pink lighten-1'>";         break;
+                  case "Disagree":                    echo "<td class='pink lighten-1'>";         break;
                   case "Duplicated":                  echo "<td class='red lighten-1'>";          break;
                   case "Fixed":                       echo "<td class='green lighten-1'>";        break;
                   case "Hold":                        echo "<td class='red lighten-1'>";          break;
@@ -232,8 +294,8 @@
                   case "Obsolete":                    echo "<td class='red lighten-1'>";          break;
                   case "Reeopen":                     echo "<td class='red lighten-1'>";          break;
                   case "Revised":                     echo "<td class='green lighten-1'>";        break;
-                  case "Suggestion Not To Correct":   echo "<td class='pink lighten-1'>";         break;
-                  case "Support Action Required":     echo "<td class='pink lighten-1'>";         break;
+                  case "Not To Correct":              echo "<td class='pink lighten-1'>";         break;
+                  case "Support Needed":              echo "<td class='pink lighten-1'>";         break;
                   case "Withdrawn":                   echo "<td class='pink lighten-1'>";         break;
                   default:                            echo "<td class='grey lighten-1'>";         break;
               }
@@ -246,7 +308,7 @@
             $records->free_result()
           ?>
           </tbody>
-           </table>
+        </table>
       </div>
     </div>
   </div>

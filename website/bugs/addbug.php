@@ -30,55 +30,25 @@
 		$connection->close();
 		header('Location: http://combathalloween.netne.net/bugs/index.php');
 	}
-
-	if($connection->connect_errno == 0)
-	{
-		$sql = "SELECT * FROM bugs";
-		$records = $connection->query($sql);
-
-		$basicstr = "nn";
-		if($_SESSION['email'] == "devmichalek@gmail.com")		$basicstr = "am";
-		else if($_SESSION['email'] == "sebastek321@gmail.com")	$basicstr = "sb";
-		else if($_SESSION['email'] == "kamilgawlik@icloud.com")	$basicstr = "kg";
-
-		$num = 1;
-		while($row=$records->fetch_assoc())
-		{
-			if($row['author'] == $_SESSION['email'])
-				++$num;
-		}
-
-		// Prepare name.
-		$temp = str_repeat("0", 4 - strlen(strval($num)));
-		$name = $basicstr.$temp.strval($num);
-
-		// Free memory.
-		mysqli_data_seek($records, 0);
-		$records->free_result();
-	}
-	else
-	{
-		die("Could not connect: ".mysql_error());
-	}
 ?>
 
 
 
 <?php require_once("../head.php"); ?>
 
-	<div class="navbar-fixed"><nav><div class="nav-wrapper">
+	<nav><div class="nav-wrapper">
     	<div class="row">
       		<a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
       		<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-	      		<li><a class="nav" href="../home.php">Home</a></li>
-	        	<li><a class="nav btn red lighten-1 nav-button" href="index.php">Bugs</a></li>
+	      		<li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
+	        	<li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
 	      	</ul>
       	</div>
-	</div></nav></div>
+	</div></nav>
   	<ul class="nav-main sidenav" id="mobile-demo">
-	    <li><a class="nav" href="../home.php">Home</a></li>
-      	<li><a class="nav btn red lighten-1 nav-button" href="index.php">Bugs</a></li>
+	    <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
+      	<li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
 	</ul>
 
 	<div class="container center">
@@ -92,9 +62,8 @@
 			<!-- NAME -->
 			<div class="row">
 			<div class="input-field col s12 m6 push-m3">
-	          	<input id="name" type="text" class="validate" name="name" value="<?php echo $name; ?>" selected hidden>
-				<input id="name" type="text" class="validate" name="name" value="<?php echo $name; ?>" disabled>
-	          <label for="name"><h5 class="modcon2">Name</h5></label>
+	          	<input id="name" type="text" class="validate" name="name" value="None" >
+	            <label for="name"><h5 class="modcon2">Name</h5></label>
 	        </div>
 	    	</div>
 			
@@ -173,7 +142,7 @@
 		  	<div class="input-field col s6 m3 push-m3">
 		    <select name="resolution">
 		        <option value="Deferred">Deferred</option>
-		        <option value="Disagree With Suggestion">Disagree With Suggestion</option>
+		        <option value="Disagree">Disagree</option>
 		        <option value="Duplicated">Duplicated</option>
 		        <option value="Fixed">Fixed</option>
 		        <option value="Hold">Hold</option>
@@ -186,8 +155,8 @@
 	        	<option value="Obsolete">Obsolete</option>
 	        	<option value="Reeopen">Reeopen</option>
 	        	<option value="Revised">Revised</option>
-	        	<option value="Suggestion Not To Correct">Suggestion Not To Correct</option>
-	        	<option value="Support Action Required">Support Action Required</option>
+	        	<option value="Not To Correct">Not To Correct</option>
+	        	<option value="Support Needed">Support Needed</option>
 	        	<option value="Withdrawn">Withdrawn</option>
 		    </select>
 		    	<label>Resolution</label>
@@ -203,7 +172,7 @@
 		  	</div>
 
 			<!-- BUTTON -->
-			<a href="http://combathalloween.netne.net/bugs" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">cancel</i>Cancel </a>
+			<a href="http://combathalloween.netne.net/bugs" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
 			<button class="btn waves-effect waves-light green lighten-1 nav-button" type="submit" name="action">Add
 		    <i class="material-icons right">send</i>
 			</button>
