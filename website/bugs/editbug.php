@@ -37,7 +37,7 @@
   if($connection->connect_errno == 0)
   {
     $IDname = $_GET['IDname'];
-    $_SESSION['IDname'] = $_GET['IDname'];
+    
     $sql = "SELECT * FROM bugs WHERE IDname='$IDname'";
     $records = $connection->query($sql);
     $row=$records->fetch_assoc();
@@ -89,7 +89,10 @@
     <div class="s12"><h2>Combat Halloween Edit Bug</h2></div>
     
     <form class="col s6 push-s3" method="post" action="edit.php" style="margin-bottom: 20px;">
-
+        
+      <!-- HIDDEN ID NAME-->
+        <input type="hidden" name="IDname" value="<?php echo $IDname; ?>" />
+        
       <!-- NAME -->
       <div class="row">
       <div class="input-field col s12 m6 push-m3">
