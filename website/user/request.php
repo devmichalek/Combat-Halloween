@@ -2,7 +2,7 @@
 
 	session_start();
 
-	require_once "connect.php";
+	require_once("../connect.php");
 
 	mysqli_report(MYSQLI_REPORT_STRICT);
 	
@@ -15,7 +15,7 @@
 		}
 		else
 		{
-			$username = $_POST['username']; // poniewaz w login_form.php tak ustawilismy
+			$username = $_POST['username'];
 			$password = $_POST['password'];
 
 			$username = htmlentities($username, ENT_QUOTES, "UTF-8");
