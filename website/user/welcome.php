@@ -4,19 +4,17 @@
 
 	if(!isset($_SESSION['wellregistered']))
 	{
-		header('Location: home.php');
-		exit();
+		// header('Location: home.php');
+		// exit();
 	}
 	else
 	{
 		unset($_SESSION['wellregistered']);
 	}
 
-	$username = $_SESSION['temporaryusername'];
-	$email = $_SESSION['temporaryemail'];
-	$activation_code = $_SESSION['activation_code'];
-	unset($_SESSION['temporaryusername']);
-	unset($_SESSION['temporaryemail']);
+	$username = "kurwaaaaamac"; // $_SESSION['rem_username'];
+	$email = "example@gmail.com"; //  $_SESSION['rem_email'];
+	$activation_code = "dupa"; // $_SESSION['activation_code'];
 	unset($_SESSION['activation_code']);
 
 	// DELETE TEMPORARY DATA
@@ -32,8 +30,7 @@
 	if(isset($_SESSION['e_passwordcon'])) 	unset($_SESSION['e_passwordcon']);
 	if(isset($_SESSION['e_bot'])) 			unset($_SESSION['e_bot']);
 
-	
-
+	/*
 	// Send email
 	$subject = 'Combat Halloween - Confirm Email';
 
@@ -43,7 +40,7 @@
 
 	$message = '<html><body><h3 style="text-align: center;">';
 	$message .= 'Dear '.$username.',</h3><p style="text-align: center;">';
-	$message .= "Thank You for registration, I appreciate that you want to be part of Combat Halloween community. It is really uplifting to have a new player because I know I aroused interest of another person. Programming gives me the opportunity to see effects of my work, like a moving and fighting foe or responsive environment. For any advice about game, about found bug or chating stuff contact me via devmichalek@gmail.com. Thank you for your support by playing!</p>";
+	$message .= "Thank You for registration, I appreciate that you want to be part of Combat Halloween community. It is really uplifting to have a new player because I know I aroused the interest of another person. Programming gives me the opportunity to see effects of my work, like a moving and fighting foe or the responsive environment. For any advice about the game, about found bug or chatting stuff contact me via devmichalek@gmail.com. Thank you for your support by playing!</p>";
 	$message .= '<p style="text-align: center;">Activation link: ';
 	$message .= "</a>";
 	$message .= 'combathalloween.netne.net/confirmemail.php?email='.$email.'&code='.$activation_code;
@@ -55,49 +52,47 @@
 	$message .= "</body></html>";
 	
 	mail($email, $subject, $message, $headers);
+	*/
+	require_once("../head.php");
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<!-- Standard Meta -->
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+	<!-- NAVBAR -->
+    <nav>
+    <div class="nav-wrapper">
+        <div class="row">
+            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+    <ul class="nav-main sidenav" id="mobile-demo">
+        <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
+    </ul>
+    <!-- END OF NAVBAR-->
 
-	<!-- Site Properties -->
-	<title>Welcome - Combat Halloween</title>
-	<link rel="stylesheet" href="skeleton.css">
-	<link rel="stylesheet" href="normalize.css">
-	<link rel="stylesheet" href="main.css">
-	<link rel="shortcut icon" href="images/icon.png">
-</head>
-<body>
-	<div class="container">
+	<div class="container center">
 		
 		<!-- Header -->
-		<div class="twelve columns">
-			<section class="header" style="text-align: center; margin-top: 6em;">
-				<div class="title myfont">
-					<h2>Check Your Email</h2>
-				</div>
-			</section>
+		<div class="col s12">
+			<h2 class="japokki modcon2">Check Your Email</h2>
 		</div>
 
 		<!-- The rest-->
-		<div class="twelve columns myfont" style="text-align: center;">
-			<h5 class="nobotmargin">
-			<?php
-				echo 'An email was sent to ';
-				echo '<span style="color: #F2583E; margin-right: 0em; margin-left: 0em;"><b>';
-				echo $email;
-				echo '</b></span>';
-				echo '.';
-			?>
-			</h5>
-			<h5 class="notopmargin nobotmargin">It has a link to sign you in. Check your spam!</h5>
-			<h5 class="notopmargin">Go to logging <a href="login_form.php">page</a></h5>
+		<div class="row">
+			<h5 class="col s12">An email was sent to<div style="color: #EF5350;"><b>
+			<?php echo $email.'.</div>'; ?></h5>
 		</div>
+		<div class="row">
+			<h5 class="col s12">It has a link to sign you in. Check your spam!</h5>
+			<h5>Go to logging <a href="loginform.php">page</a></h5>
+		</div>
+
+		<!-- We have to add some information here because footer is floating in the middle of this site :/-->
+		<h2 class="col s12 center japokki modcon2">Some info.</h2>
+		<h5 class="col s6 center japokki modcon2">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</h5>
 	</div>
-</body>
-</html>
+
+<?php require_once("../footer.php"); ?>
