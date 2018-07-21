@@ -25,7 +25,7 @@
         </ul>
         <ul id='dropdown1' class='dropdown-content'>
             <li><a class="nav" href="user/loginform.php">Log In</a></li>
-            <li><a class="nav" href="user/register.php">Sign In</a></li>
+            <li><a class="nav" href="user/registerform.php">Sign In</a></li>
         </ul>
     </div>
     </div>
@@ -38,7 +38,7 @@
         <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown2'>User</a></li>
         <ul id='dropdown2' class='dropdown-content'>
             <li><a class="nav" href="user/loginform.php">Log In</a></li>
-            <li><a class="nav" href="user/register.php">Sign In</a></li>
+            <li><a class="nav" href="user/registerform.php">Sign In</a></li>
         </ul>
     </ul>
 
