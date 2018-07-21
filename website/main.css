@@ -11,6 +11,11 @@ main {
 flex: 1 0 auto;
 }
 
+.sidenav {
+    background: url(images/tile.png);
+    background-repeat: repeat;
+}
+
 @font-face {
 	font-family: jcandle;
 	src: url( "fonts/BADABB__.TTF" );
