@@ -1,30 +1,30 @@
 <?php
+
+	// Start session.
 	session_start();
 
-	if(!isset($_SESSION['logged']))
-	{
-		header('Location: http://combathalloween.netne.net/user/loginform.php');
-		exit();
-	}
+	// Check if user is logged.
+  	require_once("../user/isLogged.php");
 
-	require_once "../connect.php";
+  	// Check if user has admin permissions.
+  	require_once("../user/isAdmin.php");
+
+  	// Get $host, $db_user, $db_password and $db_name
+	require_once("../connect.php");
+
+	// Set flag to see more details about errors.
 	mysqli_report(MYSQLI_REPORT_STRICT);
+
 	try
 	{
 		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
-		if($connection->connect_errno != 0)
+	    if($connection->connect_errno != 0)
+	    	throw new Exception(mysqli_connect_errno());
+	    else
 		{
-			throw new Exception(mysqli_connect_errno());
-		}
-		else
-		{
-		    $IDname = $_GET['IDname'];
-		    $sql = "DELETE FROM bugs WHERE IDname='".$IDname."'";
-
+		    $sql = "DELETE FROM bugs WHERE IDname='".$_GET['IDname']."'";
 			if(!$connection->query($sql))
-			{
 				throw new Exception($connection->error);
-			}
 			else
 			{
 				header('Location: http://combathalloween.netne.net/bugs/index.php');
