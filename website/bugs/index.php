@@ -1,74 +1,47 @@
 <?php
+
+  // Start session.
   session_start();
 
-  if(!isset($_SESSION['logged']))
-  {
-    header('Location: http://combathalloween.netne.net/user/loginform.php');
-    exit();
-  }
+  // Check if user is logged.
+  require_once("../user/isLogged.php");
 
-  require_once "../connect.php";
-  mysqli_report(MYSQLI_REPORT_STRICT);
-  $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-
-  if($result = @$connection->query( sprintf("SELECT * FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $_SESSION['username']))))
-  {
-    $row = $result->fetch_assoc();
-    
-    if($row['permissions'] != "admin" && $row['permissions'] != "moderator")
-    {
-      $result->free_result();
-      $connection->close();
-      header('Location: http://combathalloween.netne.net/home.php');
-      exit();
-    }
-
-    $result->free_result();
-  }
-  else
-  {
-    $result->free_result();
-    $connection->close();
-    header('Location: http://combathalloween.netne.net/home.php');
-    exit();
-  }
-
+  // Check if user has admin permissions.
+  require_once("../user/isAdmin.php");
 
   if($connection->connect_errno == 0)
   {
     $sql = "SELECT * FROM bugs";
     $records = $connection->query($sql);
 
+    $sumnum = 0;
     $donenum = 0;
     $opennum = 0;
-    $sumnum = 0;
     while($row=$records->fetch_assoc())
     {
       ++$sumnum;
-      if($row['resolution'] == "Fixed" ||
-         $row['resolution'] == "Implemented" ||
-         $row['resolution'] == "Revised")
+      if($row['resolution'] == "Fixed" || $row['resolution'] == "Implemented" || $row['resolution'] == "Revised")
         ++$donenum;
       else
         ++$opennum;
     }
     $records->free_result();
+
+    // Set resolution and developer select.
+    $rselect = "unresolved";
+    $dselect = "mine";
+    if(isset($_GET['rselect']))  $rselect = $_GET['rselect'];
+    if(isset($_GET['dselect']))  $dselect = $_GET['dselect'];
     
-    $resolutionselect = $_SESSION['resolutionselect'];
-    $developerselect = $_SESSION['developerselect'];
+    $rresult = "WHERE 1";
+    if($rselect == "finished")        $rresult = "WHERE resolution IN ('fixed', 'revised', 'implemented')";
+    else if($rselect == "unresolved") $rresult = "WHERE NOT resolution IN ('fixed', 'revised', 'implemented')";
+
+    $dresult = " AND 1";
+    if($dselect == "mine")        $dresult = " AND developer='".$_SESSION['email']."'";
+    else if($dselect == "their")  $dresult = " AND NOT developer='".$_SESSION['email']."'";
     
-    $addres = "WHERE 1";
-    if($resolutionselect == "finished")  $addres="WHERE resolution IN ('fixed', 'revised', 'implemented')";
-    else if($resolutionselect == "unresolved")  $addres="WHERE NOT resolution IN ('fixed', 'revised', 'implemented')";
-    
-    $email = $_SESSION['email'];
-    $adddev = " AND 1";
-    if($developerselect == "mine")  $adddev=" AND developer='".$email."'";
-    else if($developerselect == "their")  $adddev=" AND NOT developer='".$email."'";
-    
-    
-    $sql = "SELECT * FROM bugs ".$addres.$adddev;
-    $records = $connection->query($sql);
+    $records = $connection->query("SELECT * FROM bugs ".$rresult.$dresult);
     $isempty = empty($records);
   }
   else
@@ -109,36 +82,36 @@
       <h4 class="modcon">Finished: <?php echo $donenum;?> Unresolved: <?php echo $opennum;?> All: <?php echo $sumnum;?></h4>
       
       <!-- SORT BY-->
-      <div class="row">
-        <form action="sort.php" method="get">
-            
-            <div class="input-field col s4 m2 push-m4">
-            <select name="resolutionselect">
+        <form action="index.php" method="get">
+          <div class="row">
+            <div class="input-field col s6 m3 push-m3">
+            <select name="rselect">
                 <?php
-                echo "<option "; if($resolutionselect=="all")   echo " selected "; echo 'value="all">All</option>';
-                echo "<option "; if($resolutionselect=="finished")   echo " selected "; echo 'value="finished">Finished</option>';
-                echo "<option "; if($resolutionselect=="unresolved")   echo " selected "; echo 'value="unresolved">Unresolved</option>';
+                echo "<option "; if($rselect=="all")   echo " selected "; echo 'value="all">All</option>';
+                echo "<option "; if($rselect=="finished")   echo " selected "; echo 'value="finished">Finished</option>';
+                echo "<option "; if($rselect=="unresolved")   echo " selected "; echo 'value="unresolved">Unresolved</option>';
                 ?>
             </select>
                 <label>Sort by resolution</label>
             </div>
             
-            <div class="input-field col s4 m2 push-m4">
-            <select name="developerselect">
+            <div class="input-field col s6 m3 push-m3">
+            <select name="dselect">
                 <?php
-                echo "<option "; if($developerselect=="all")   echo " selected "; echo 'value="all">All</option>';
-                echo "<option "; if($developerselect=="mine")   echo " selected "; echo 'value="mine">Mine</option>';
-                echo "<option "; if($developerselect=="their")   echo " selected "; echo 'value="their">Their</option>';
+                echo "<option "; if($dselect=="all")   echo " selected "; echo 'value="all">All</option>';
+                echo "<option "; if($dselect=="mine")   echo " selected "; echo 'value="mine">Mine</option>';
+                echo "<option "; if($dselect=="their")   echo " selected "; echo 'value="their">Their</option>';
                 ?>
             </select>
                 <label>Sort by developer</label>
             </div>
-            
-            <div class="col s2 m1 push-m4">
-            <button class="btn-floating btn-medium pulse green lighten-1 nav-button" type="submit"><i class="material-icons right">redo</i></button>
+          </div>
+
+            <div class="center col s8 m4 push-m4 push-s2">
+            <button class="waves-effect waves-light btn green lighten-1 japokki" type="submit"><i class="material-icons right">redo</i>Reload </button>
             </div>
-            </form>
-        </div>
+        </form>
+        
       <!-- ------ -->
       
       <div class="center col s12">
