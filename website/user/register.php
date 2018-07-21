@@ -1,21 +1,30 @@
 <?php
-  session_start();
+	
+	// Start session.
+	session_start();
 
-  unset($_SESSION['error']);
+	// Just in case.
+	unset($_SESSION['error']);
 
-  function generateRandomString($length = 30)
-  {
-      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $charactersLength = strlen($characters);
-      $randomString = '';
-      for ($i = 0; $i < $length; $i++) {
-          $randomString .= $characters[rand(0, $charactersLength - 1)];
-      }
-      return $randomString;
-  }
+	function generateCode($length = 30)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; ++$i)
+        {
+           $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
 
-  if(isset($_POST['email']))
-  {
+    function backToRegisterForm()
+    {
+    	header('Location: register.php');
+		exit();
+    }
+
+    // Status.
     $success = true;
 
     // USERNAME
@@ -36,16 +45,7 @@
       $_SESSION['e_username'] = "This name is unavailable.";
     }
 
-    // EMAIL
-    $email = $_POST['email'];
-    $email_safe = filter_var($email, FILTER_SANITIZE_EMAIL);
-    if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $email)
-    {
-      $success = false;
-      $_SESSION['e_email'] = "Valid adress email required.";
-    }
-
-    // PASSWORD
+	// PASSWORD
     $password = $_POST['password'];
     $passwordcon = $_POST['passwordcon'];
     if((strlen($password)) < 8)
@@ -65,6 +65,15 @@
     }
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
+	// EMAIL
+    $email = $_POST['email'];
+    $email_safe = filter_var($email, FILTER_SANITIZE_EMAIL);
+    if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $email)
+    {
+      $success = false;
+      $_SESSION['e_email'] = "Valid adress email required.";
+    }
+
     // RECAPTCHA
     $mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
     $confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
@@ -80,9 +89,12 @@
     $_SESSION['rem_password'] = $password;
     $_SESSION['rem_passwordcon'] = $passwordcon;
 
-    // OTHER
-    require_once "connect.php";
+    if(!$success)	backToRegisterForm();
+
+    require_once ("../connect.php");
+
     mysqli_report(MYSQLI_REPORT_STRICT);
+
     try
     {
       $connection = @new mysqli($host, $db_user, $db_password, $db_name);
@@ -118,11 +130,13 @@
           $_SESSION['e_username'] = "This username already exists.";
         }
 
+        if(!$success)	backToRegisterForm();
+
         // SUCCESS
-        if( $success )
+        if($success)
         {
           $first_time = date("d.m.Y");
-          $activation_code = generateRandomString();
+          $activation_code = generateCode();
 
           if(!$connection->query("INSERT INTO usersfeatures VALUES (NULL, '$username', '@71@72@73@25@23@74', '100', '10', '0', '1', '2', '3', '4', '10', '0')"))
           {
@@ -132,10 +146,9 @@
           if($connection->query("INSERT INTO users VALUES (NULL, '$username', '$password_hashed', '$email', '$first_time', '0', '$activation_code', 'user')"))
           {
             $_SESSION['wellregistered'] = true;
-            $_SESSION['temporaryusername'] = $username;
-            $_SESSION['temporaryemail'] = $email;
             $_SESSION['activation_code'] = $activation_code;
             header('Location: welcome.php');
+            exit();
           }
           else
           {
@@ -151,124 +164,4 @@
       echo 'Error';
       // echo 'Error: '.$e;
     }
-  }
 ?>
-
-<?php require_once("../head.php"); ?>
-
-    <!-- NAVBAR -->
-    <nav>
-    <div class="nav-wrapper">
-      <div class="row">
-          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class='nav' href='../index.php'>Start</a></li>
-            <li><a class='btn nav-button' href='loginform.php'>Log In</a></li>
-          </ul>
-        </div>
-    </div>
-    </nav>
-  <!-- NAVBAR MOBILE -->
-    <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class='nav' href='../index.php'>Start</a></li>
-      <li><a class='btn nav-button' href='loginform.php'>Login In</a></li>
-  </ul>
-  <!-- END OF NAVBAR -->
-    
-    <!-- Header -->
-    <div class="twelve columns">
-      <section class="header" style="text-align: center; margin-top: 6em;">
-        <div class="title myfont">
-          <h2>Sign Up your account - Combat <span style="color: #F2583E; margin-right: 0em; margin-left: 0em; display: inline-block;">Halloween</span></h2>
-        </div>
-      </section>
-    </div>
-
-
-    <form method="post">
-      <div class="row myfont">
-          <div class="offset-by-three six columns myfont" style="text-align: center; margin-top: 3em;">
-            <label for="exampleEmailInput" style="text-align: center;">Your username</label>
-            <input class="u-full-width" type="text" placeholder="username" id="exampleEmailInput" name="username" value="<?php
-          if(isset($_SESSION['rem_username']))
-          {
-            echo $_SESSION['rem_username'];
-            unset($_SESSION['rem_username']);
-          }?>">
-          </div>
-
-          <div class="offset-by-three six columns myfont" style="text-align: center; margin-top: 1em;">
-            <label for="exampleEmailInput" style="text-align: center;">Your email</label>
-            <input class="u-full-width" type="email" placeholder="email" id="exampleEmailInput" name="email" value="<?php
-          if(isset($_SESSION['rem_email']))
-          {
-            echo $_SESSION['rem_email'];
-            unset($_SESSION['rem_email']);
-          }?>">
-          </div>
-      </div>
-
-      <div class="row myfont">
-          <div class="offset-by-three six columns myfont" style="text-align: center; margin-top: 1em;">
-            <label for="exampleEmailInput" style="text-align: center;">Your password</label>
-            <input class="u-full-width" type="password" placeholder="password" id="exampleEmailInput" name="password" value="<?php
-          if(isset($_SESSION['rem_password']))
-          {
-            echo $_SESSION['rem_password'];
-            unset($_SESSION['rem_password']);
-          }?>">
-          </div>
-
-          <div class="offset-by-three six columns myfont" style="text-align: center; margin-top: 1em;">
-            <label for="exampleEmailInput" style="text-align: center;">Confirm password</label>
-            <input class="u-full-width" type="password" placeholder="password" id="exampleEmailInput" name="passwordcon" value="<?php
-          if(isset($_SESSION['rem_passwordcon']))
-          {
-            echo $_SESSION['rem_passwordcon'];
-            unset($_SESSION['rem_passwordcon']);
-          }?>">
-          </div>
-        </div>
-
-      <div class="g-recaptcha" style="margin: auto; margin-top: 1em; display: table;" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
-
-      
-      <div style="text-align: center; margin-top: 1em;">
-        <input class="button-primary myfont" type="submit" value="Register">
-      </div>
-    </form>
-
-
- 	     <?php
-      // Errors.
-      echo '<h5 class="errorColor">';
-      if( isset($_SESSION['e_username']))
-      {
-        echo $_SESSION['e_username'];
-        unset($_SESSION['e_username']);
-      }
-      else if( isset($_SESSION['e_email']))
-      {
-        echo $_SESSION['e_email'];
-        unset($_SESSION['e_email']);
-      }
-      else if( isset($_SESSION['e_password']))
-      {
-        echo $_SESSION['e_password'];
-        unset($_SESSION['e_password']);
-      }
-      else if( isset($_SESSION['e_passwordcon']))
-      {
-        echo $_SESSION['e_passwordcon'];
-        unset($_SESSION['e_passwordcon']);
-      }
-      else if( isset($_SESSION['e_bot']))
-      {
-        echo $_SESSION['e_bot'];
-        unset($_SESSION['e_bot']);
-      }
-      echo '</h5>';
-    ?>
-    
-<?php require_once("../footer.php"); ?>
