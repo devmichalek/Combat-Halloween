@@ -1,4 +1,5 @@
 <?php
+    // Start session.
     session_start();
     
     // Reset errors.
@@ -8,12 +9,11 @@
     unset($_SESSION['e_passwordcon']);
     unset($_SESSION['e_bot']);
 
-    // If user is logged.
     if(isset($_SESSION['logged']))
-    {
-        header('Location: ../home.php');
-        exit();
-    }
+	{
+		header('Location: ../home.php');
+		exit();
+	}
     
     require_once("../head.php");
 ?>
@@ -26,14 +26,14 @@
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a class='nav' href='../index.php'>Start</a></li>
-                <li><a class='btn nav-button' href='register.php'>Sign In</a></li>
+                <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
             </ul>
         </div>
     </div>
     </nav>
     <ul class="nav-main sidenav" id="mobile-demo">
         <li><a class='nav' href='../index.php'>Start</a></li>
-        <li><a class='btn nav-button' href='register.php'>Sign In</a></li>
+        <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
     </ul>
     <!-- END OF NAVBAR-->
     
@@ -56,11 +56,16 @@
           <label for="password"><h5 class="modcon2">Password</h5></label>
         </div></div>
         
+        <div class="row"><div class="col s6 m3" style="margin-bottom: 10px;">
+        <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
+		</div></div>
+
+		<div class="row"><div class="col s12">
         <button class="btn waves-effect waves-light nav-button" type="submit" name="action">Login
         <i class="material-icons right">send</i>
-        </button>
+        </button></div></div>
 
-      <?php
+        <?php
         echo '<h5 class="errorColor">';
         if(isset($_SESSION['error']) )
         {
@@ -68,7 +73,7 @@
           unset($_SESSION['error']);
         }
         echo '</h5>';
-      ?>
+        ?>
     </form>
   </div>
   </div>

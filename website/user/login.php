@@ -1,12 +1,17 @@
 <?php
+    
 	session_start();
+	
 	if(!isset($_POST['username']) || !isset($_POST['password']))
 	{
 		header('Location: loginform.php');
 		exit();
 	}
-	require_once "../connect.php";
+	
+	require_once("../connect.php");
+	
 	mysqli_report(MYSQLI_REPORT_STRICT);
+	
 	try
 	{
 		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
@@ -32,17 +37,14 @@
 					{
 						if($row['activated'] == 0)
 						{
-							$_SESSION['error'] = 'Confirm your adress email.';
+							$_SESSION['error'] = 'Confirm your address email.';
 							header('Location: loginform.php');
 						}
 						else
 						{
 							$_SESSION['logged'] = true;
 							$_SESSION['username'] = $row['username'];
-							$_SESSION['firsttime'] = $row['firsttime'];
 							$_SESSION['email'] = $row['email'];
-							$_SESSION['resolutionselect'] = "unresolved";
-							$_SESSION['developerselect'] = "mine";
 							unset($_SESSION['error']);
 							$result->free_result();
 							header('Location: http://combathalloween.netne.net/home.php');
