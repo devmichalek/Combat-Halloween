@@ -1,13 +1,12 @@
 <?php
-  session_start();
 
-  if(!isset($_SESSION['logged']))
-  {
-    header('Location: http://combathalloween.netne.net/user/loginform.php');
-    exit();
-  }
+  	session_start();
 
-  require_once("../head.php");
+	require_once("../user/isLogged.php");
+
+	require_once("../user/isAdmin.php");
+
+	require_once("../head.php");
 ?>
     
     <!-- NAVBAR -->
@@ -31,26 +30,51 @@
 
   <div class="container center">
     <div class="row">
-      <h2 class="center">Documentation</h2>
-      <h4 class="modcon">Some text.</h4>
+      <h2>Documentation</h2>
+      <h4 class="modcon">This part of the website was made to make clear some rules that we should keep when we add/edit bug. The bug (in other words the problem) is a thing that needs developer's action. Always remember to make clear the name of the bug and to make tidy description so that developer is not wasting time to try to understand the author's means. We work with agile software development style, we do small tasks means small updates. By keeping our project growing slowly but steady we at the end have final product and that's our goal. Below you can find useful information about types and resolutions.</h4>
 
-      <h5>Bug Types</h5>
-      <p>New - </p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
 
-      <h5>Bug Resolutions</h5>
-      <p>Deffered - </p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
-      <p></p>
+      <h2>Bug Types</h2>
+      <h4 class="modcon">
+        <span style="color: #ef5350;">Bug</span> - evident error, crash, fault, memory leaks, mistakes made by mechanisms etc.<br>
+        <span style="color: #ffca28;">Change</span> - layout displaying, algorithm's change, change of page layout etc.<br>
+        <span style="color: #66bb6a;">New Feature</span> - new system, new picture, new file, new mechanism, anything that was not before.<br>
+        <span style="color: #ffca28;">Syntax Error</span> - language mistakes, suggestion to rename etc.<br>
+        <span style="color: #bdbdbd;">Other</span> - just anything else that does not match the other types.
+      </h4>
 
+
+      <h2>Bug Resolutions</h2>
+      <h4 class="modcon">
+        <span style="color: #ef5350;">Deffered</span> - by this you tell others that bug will be done in the "far" future.<br>
+        <span style="color: #ec407a;">Disagree</span> - you disagree with the author of the bug.<br>
+        <span style="color: #ec407a;">Duplicated</span> - this bug has been added someday, if we see duplicated bug for more than week then we should simply remove it if we are sure.<br>
+        <span style="color: #66bb6a;">Fixed</span> - the bug has been resolved, usually for the bug with repairing as the action.<br>
+        <span style="color: #ef5350;">Held</span> - you had to stop to do another task but you will come back to revise this one in a short time.<br>
+        <span style="color: #66bb6a;">Implemented</span> - code has been implemented, bug is resolved.<br>
+        <span style="color: #ffca28;">In Development</span> - always remember to check this one if you are working the bug. Others know that someone is currently solving.<br>
+        <span style="color: #9c27b0;">Irreproducible</span> - somehow is impossible to revise the bug. This is the worst scenario, for example data that you have to work on does not exist.<br>
+        <span style="color: #ef5350;">Known Problem</span> - it's a very known problem, usual task like truncating the image.<br>
+        <span style="color: #42a5f5;">Need More Info</span> - you don't understand the author of the bug.<br>
+        <span style="color: #ef5350;">New</span> - you would likely choose it if the bug is new.<br>
+        <span style="color: #ef5350;">Obsolete</span> - bug is unresolved for such a long time, if you saw a bug with deadline that passed choose this option.<br>
+        <span style="color: #ef5350;">Reopen</span> - simply reopen problem.<br>
+        <span style="color: #66bb6a;">Revised</span> - the bug has been resolved, used for any king of resolving like modyfing, creating etc.<br>
+        <span style="color: #ec407a;">Not To Correct</span> - Suggestion by the developer to not to correct.<br>
+        <span style="color: #42a5f5;">Support Needed</span> - You need more hands to do this job.<br>
+        <span style="color: #9c27b0;">Withdrawn</span> - You are fed up with the bug and want to leave it for someone else.
+      </h4>
+      
+        <?php
+            for($i = 0; $i < 8; ++$i)
+            {
+                echo '<div class="col s6 m3"><div class="card grey lighten-5"><div class="card-content">';
+                echo '<img class="responsive-img" src="../images/bugs/';
+                echo $i;
+                echo '.png">';
+                echo '</div></div></div>';
+            }
+        ?>
     </div>
   </div>
 
