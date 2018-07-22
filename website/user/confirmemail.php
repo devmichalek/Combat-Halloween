@@ -2,10 +2,12 @@
 	
 	session_start();
 
-	if( isset( $_GET['email'] ) && isset( $_GET['code'] ) )
+	$confirmedemail = false;
+
+	if(isset($_GET['email']) && isset($_GET['code']))
 	{
     	// Connect.
-		require_once "connect.php";
+		require_once("../connect.php");
 		mysqli_report(MYSQLI_REPORT_STRICT);
 
 		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
@@ -13,13 +15,11 @@
 		{
 			$email = $_GET['email'];
 			$code = $_GET['code'];
-			unset( $_GET['email'] );
-			unset( $_GET['code'] );
+			unset($_GET['email']);
+			unset($_GET['code']);
 
 			$email = htmlentities($email, ENT_QUOTES, "UTF-8");
-			if($result = @$connection->query(
-			sprintf("SELECT * FROM users WHERE email='%s'",
-			mysqli_real_escape_string($connection, $email))))
+			if($result = @$connection->query(sprintf("SELECT * FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $email))))
 			{
 				$how_many = $result->num_rows;
 				if($how_many > 0)
@@ -29,12 +29,11 @@
 					{
 						$result->free_result();
 						$connection->query("UPDATE users SET activated='1' WHERE email='$email'");
-						$_SESSION['confirmedemail'] = true;
-						header('Location: confirmedemail.php');
+						$confirmedemail = true;
 					}
 					else
 				  	{
-				  		header('Location: http://combathalloween.netne.net/home.php');
+				  		header('Location: ../home.php');
 				  	}
 				}
 			}
@@ -44,6 +43,46 @@
   	}
   	else
   	{
-  		header('Location: http://combathalloween.netne.net/home.php');
+  		header('Location: ../home.php');
   	}
+
+	if(!$confirmedemail)
+	{
+		header('Location: ../home.php');
+		exit();
+	}
+
+	require_once("../head.php");
 ?>
+
+	<!-- NAVBAR -->
+    <nav>
+    <div class="nav-wrapper">
+        <div class="row">
+            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
+                <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
+            </ul>
+        </div>
+    </div>
+    </nav>
+    <ul class="nav-main sidenav" id="mobile-demo">
+        <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
+        <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
+    </ul>
+    <!-- END OF NAVBAR-->
+
+	<div class="container center">
+		<!-- Header -->
+		<div class="col s12"><h2 class="modcon2">Congratulations!</h2></div>
+
+		<!-- The rest-->
+		<div class="col s12">
+			<h5 class="modcon2">Now you're a part of our society!</h5>
+			<h5 class="modcon2">Go to logging <a href="../user/loginform.php">page</a></h5>
+		</div>
+	</div>
+
+<?php require_once("../footer.php"); ?>

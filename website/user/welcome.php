@@ -43,7 +43,7 @@
 	$message .= "Thank You for registration, I appreciate that you want to be part of Combat Halloween community. It is really uplifting to have a new player because I know I aroused the interest of another person. Programming gives me the opportunity to see effects of my work, like a moving and fighting foe or the responsive environment. For any advice about the game, about found bug or chatting stuff contact me via devmichalek@gmail.com. Thank you for your support by playing!</p>";
 	$message .= '<p style="text-align: center;">Activation link: ';
 	$message .= "</a>";
-	$message .= 'combathalloween.netne.net/confirmemail.php?email='.$email.'&code='.$activation_code;
+	$message .= 'combathalloween.netne.net/user/confirmemail.php?email='.$email.'&code='.$activation_code;
 	$message .= "</a>";
 	$message .= "</p>";
 	$message .= '<p style="text-align: right;">Best Regards, Adrian.</p>';
