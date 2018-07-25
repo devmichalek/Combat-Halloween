@@ -4,13 +4,13 @@
 	session_start();
 
 	// Check if user is logged.
-  	require_once("../user/isLogged.php");
+  	require_once("../../user/login/isLogged.php");
 
   	// Check if user has admin permissions.
-  	require_once("../user/isAdmin.php");
+  	require_once("../../user/other/isAdmin.php");
 
   	// Get $host, $db_user, $db_password and $db_name
-	require_once("../connect.php");
+	require_once("../../connect.php");
 
 	// Set flag to see more details about errors.
 	mysqli_report(MYSQLI_REPORT_STRICT);
@@ -27,7 +27,7 @@
 				throw new Exception($connection->error);
 			else
 			{
-				header('Location: http://combathalloween.netne.net/bugs/index.php');
+				header('Location: ../index.php');
 				exit();
 			}
 

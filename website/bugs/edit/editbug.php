@@ -1,54 +1,30 @@
 <?php
-  session_start();
-
-  if(!isset($_SESSION['logged']))
-  {
-    header('Location: http://combathalloween.netne.net/user/loginform.php');
-    exit();
-  }
-
-  require_once "../connect.php";
-  mysqli_report(MYSQLI_REPORT_STRICT);
-  $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-
-  if($result = @$connection->query( sprintf("SELECT * FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $_SESSION['username']))))
-  {
-    $row = $result->fetch_assoc();
     
-    if($row['permissions'] != "admin" && $row['permissions'] != "moderator")
-    {
-      $result->free_result();
-      $connection->close();
-      header('Location: http://combathalloween.netne.net/home.php');
-      exit();
-    }
+    // Start session.
+	session_start();
 
-    $result->free_result();
-  }
-  else
-  {
-    $result->free_result();
-    $connection->close();
-    header('Location: http://combathalloween.netne.net/home.php');
-    exit();
-  }
+	// Check if user is logged.
+	require_once("../../user/login/isLogged.php");
 
+	// Check if user has admin permissions.
+	require_once("../../user/other/isAdmin.php");
 
-  if($connection->connect_errno == 0)
-  {
+    require_once "../../connect.php";
+    
+    mysqli_report(MYSQLI_REPORT_STRICT);
+    
     $IDname = $_GET['IDname'];
-    
-    $sql = "SELECT * FROM bugs WHERE IDname='$IDname'";
-    $records = $connection->query($sql);
-    $row=$records->fetch_assoc();
-    
+    $connection = @new mysqli($host, $db_user, $db_password, $db_name);
+    $records = $connection->query("SELECT * FROM bugs WHERE IDname='$IDname'");
+    $row = $records->fetch_assoc();
+
     $name = $row['name'];
     $type = $row['type'];
     $actiontodo = $row['action'];
-
+    
     $description = $row['description'];
     $breaks = array("<br />","<br>","<br/>");  
-      $description = str_ireplace($breaks, "", $description); 
+    $description = str_ireplace($breaks, "", $description); 
     
     $location = $row['location'];
     $severity = $row['severity'];
@@ -57,30 +33,29 @@
     $author = $row['author'];
     $developer = $row['developer'];
     $resolution = $row['resolution'];
-  }
-  else
-  {
-    die("Could not connect: ".mysql_error());
-  }
+
+    $records->free_result();
 ?>
     
 
-<?php require_once("../head.php"); ?>
-
-  <nav><div class="nav-wrapper">
-      <div class="row">
-          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
-            <li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
-          </ul>
+<?php require_once("../../common/head.php"); ?>
+    
+    <div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
+        <div class="row">
+            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
+            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../../home.php"><i class="material-icons">home</i></a></li>
+                <li><a class="nav btn red lighten-1 nav-button" href="../index.php">Back</a></li>
+            </ul>
         </div>
-  </div></nav>
-  <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
-      <li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
-  </ul>
+    </div></nav>
+    </div>
+    <?php require_once("../../common/sidenav-b.php"); ?>
+        <li><a href="../../home.php"><i class="material-icons">home</i>Home</a></li>
+        <li><a href="../index.php"><i class="material-icons">arrow_back</i>Back</a></li>
+    <?php require_once("../../common/sidenav-e.php"); ?>
 
 
   <div class="container center">
@@ -192,7 +167,7 @@
               echo "<option "; if($resolution=="Disagree")  echo " selected "; echo 'value="Disagree">Disagree</option>';
               echo "<option "; if($resolution=="Duplicated")  echo " selected "; echo 'value="Duplicated">Duplicated</option>';
               echo "<option "; if($resolution=="Fixed") echo " selected "; echo 'value="Fixed">Fixed</option>';
-              echo "<option "; if($resolution=="Hold")  echo " selected "; echo 'value="Hold">Hold</option>';
+              echo "<option "; if($resolution=="Held")  echo " selected "; echo 'value="Held">Held</option>';
               echo "<option "; if($resolution=="Implemented") echo " selected "; echo 'value="Implemented">Implemented</option>';
               echo "<option "; if($resolution=="In Development")  echo " selected "; echo 'value="In Development">In Development</option>';
               echo "<option "; if($resolution=="Irreproducible")  echo " selected "; echo 'value="Irreproducible">Irreproducible</option>';
@@ -200,7 +175,7 @@
               echo "<option "; if($resolution=="Need More Info")  echo " selected "; echo 'value="Need More Info">Need More Info</option>';
               echo "<option "; if($resolution=="New") echo " selected "; echo 'value="New">New</option>';
               echo "<option "; if($resolution=="Obsolete")  echo " selected "; echo 'value="Obsolete">Obsolete</option>';
-              echo "<option "; if($resolution=="Reeopen") echo " selected "; echo 'value="Reeopen">Reeopen</option>';
+              echo "<option "; if($resolution=="Reopen") echo " selected "; echo 'value="Reopen">Reopen</option>';
               echo "<option "; if($resolution=="Revised") echo " selected "; echo 'value="Revised">Revised</option>';
               echo "<option "; if($resolution=="Not To Correct") echo " selected "; echo 'value="Not To Correct">Not To Correct</option>';
               echo "<option "; if($resolution=="Support Needed") echo " selected "; echo 'value="Support Needed">Support Needed</option>';
@@ -223,7 +198,7 @@
         
         <div class="row">
         <!-- CANCEL BUTTON -->
-        <a href="http://combathalloween.netne.net/bugs" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
+        <a href="../index.php" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
         
         <!-- DELETE BUTTON -->
         <a href="#bugdeleter" class="waves-effect waves-light btn modal-trigger purple lighten-1"><i class="material-icons right">delete</i>Delete </a>
@@ -252,4 +227,4 @@
     
   </div>
 
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../common/footer.php"); ?>
