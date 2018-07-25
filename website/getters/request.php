@@ -31,18 +31,16 @@
 					if(password_verify($password, $row['password']))
 					{
 						echo 'success';
-
-						unset($_SESSION['error']);
 						$result->free_result();
 					}
 					else
 					{
-						echo 'Wrong username or password.';
+						echo '0';
 					}
 				}
 				else
 				{
-					echo 'Wrong username or password.';
+					echo '0';
 				}
 			}
 
@@ -51,7 +49,7 @@
 	}
 	catch(Exception $e)
 	{
-		echo 'Unexpected error';
+		echo '-1';
 		// echo 'Error: '.$e;
 	}
 ?>

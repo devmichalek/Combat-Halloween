@@ -2,7 +2,7 @@
 
 	session_start();
 
-	require_once "../connect.php";
+	require_once("../connect.php");
 
 	mysqli_report(MYSQLI_REPORT_STRICT);
 	
