@@ -11,29 +11,29 @@
 
     if(isset($_SESSION['logged']))
 	{
-		header('Location: ../home.php');
+		header('Location: ../../home.php');
 		exit();
 	}
     
-    require_once("../head.php");
+    require_once("../../common/head.php");
 ?>
 
     <!-- NAVBAR -->
-    <nav>
-    <div class="nav-wrapper">
+    <div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
         <div class="row">
             <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class='nav' href='../index.php'>Start</a></li>
-                <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
+                <li><a class='nav' href='../../index.php'>Start</a></li>
+                <li><a class='btn nav-button' href='../register/registerform.php'>Sign Up</a></li>
             </ul>
         </div>
+    </div></nav>
     </div>
-    </nav>
     <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class='nav' href='../index.php'>Start</a></li>
-        <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
+        <li><a class='nav' href='../../index.php'>Start</a></li>
+        <li><a class='btn nav-button' href='../register/registerform.php'>Sign Up</a></li>
     </ul>
     <!-- END OF NAVBAR-->
     
@@ -43,25 +43,24 @@
     <!-- Header -->
     <div class="col s12 m12 l12 xl12"><section><div><h2>Account - Log In</h2></div></section></div>
       
-    <div class="row">
-      <form class="col s6 push-s3" action="login.php" method="post">
+      <form action="login.php" method="post">
 
-        <div class="row"><div class="input-field col s12">
+        <div class="row"><div class="input-field col s12 m6 push-m3">
             <input id="username" type="text" class="validate" name="username">
             <label for="username"><h5 class="modcon2">Username</h5></label>
         </div></div>
 
-        <div class="row"><div class="input-field col s12">
+        <div class="row"><div class="input-field col s12 m6 push-m3">
           <input id="password" type="password" class="validate" name="password">
           <label for="password"><h5 class="modcon2">Password</h5></label>
         </div></div>
         
-        <div class="row"><div class="col s6 m3" style="margin-bottom: 10px;">
+        <div class="row"><div class="col s12 m6 push-m3" style="margin-bottom: 10px;">
         <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
 		</div></div>
 
 		<div class="row"><div class="col s12">
-        <button class="btn waves-effect waves-light nav-button" type="submit" name="action">Login
+        <button class="btn waves-effect waves-light nav-button" type="submit" name="action">Log In
         <i class="material-icons right">send</i>
         </button></div></div>
 
@@ -76,6 +75,5 @@
         ?>
     </form>
   </div>
-  </div>
 
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../common/footer.php"); ?>
