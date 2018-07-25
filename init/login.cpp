@@ -255,6 +255,13 @@ void Login::draw(sf::RenderWindow* &window)
 
 void Login::mechanics(double elapsedTime)
 {
+	// FPS.
+	/*FPS::mechanics(elapsedTime);
+	if (FPS::timePassed())
+	{
+		printf("%d\n", FPS::getFPS());
+	}*/
+
 	// Delete thread if is done.
 	if (thread.ready)
 	{
@@ -317,13 +324,13 @@ void Login::mechanics(double elapsedTime)
 
 	if (signupbutton.getClicked())
 	{
-		const char* command = "start http://www.adrianmichalek.pl/combathalloween/registration_form.php";
+		const char* command = "start http://combathalloween.netne.net/user/register/registerform.php";
 		system(command);
 		signupbutton.getClicked() = false;
 	}
 	else if (forgetbutton.getClicked())
 	{
-		const char* command = "start http://www.adrianmichalek.pl/combathalloween/registration_form.php";
+		const char* command = "start empty";
 		system(command);
 		forgetbutton.getClicked() = false;
 	}
@@ -410,12 +417,12 @@ void Login::setThread()
 {
 	cmm::Request request;
 	request.setMessage("username=" + username + "&password=" + password);
-	request.setHttp("http://adrianmichalek.pl/");
-	request.setRequest("/combathalloween/request.php", sf::Http::Request::Post);
-	
+	request.setHttp("http://combathalloween.netne.net/");
+	request.setRequest("/getters/request.php", sf::Http::Request::Post);
+
 	if (!request.sendRequest())
 	{
-		info.setText("No internet connection.");
+		info.setText("Cannot connect to database.");
 		info.setFillColor(Username::getErrorColor());
 	}
 	else if (request.getResult() == "success")
@@ -429,7 +436,8 @@ void Login::setThread()
 	else
 	{
 		forget_counter++;
-		info.setText(request.getResult());
+		if(request.getResult() == "-1")		info.setText("Unexpected Error.");
+		else if(request.getResult() == "0")	info.setText("Wrong username or password.");
 		info.setFillColor(Username::getErrorColor());
 	}
 
