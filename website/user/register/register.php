@@ -20,7 +20,7 @@
 
     function backToRegisterForm()
     {
-    	header('Location: register.php');
+    	header('Location: registerform.php');
 		exit();
     }
 
@@ -91,7 +91,7 @@
 
     if(!$success)	backToRegisterForm();
 
-    require_once ("../connect.php");
+    require_once ("../../connect.php");
 
     mysqli_report(MYSQLI_REPORT_STRICT);
 
@@ -147,7 +147,7 @@
           {
             $_SESSION['wellregistered'] = true;
             $_SESSION['activation_code'] = $activation_code;
-            header('Location: welcome.php');
+            header('Location: ../other/welcome.php');
             exit();
           }
           else

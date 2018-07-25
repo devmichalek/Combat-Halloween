@@ -3,26 +3,26 @@
 	// Start session.
 	session_start();
 
-	require_once("../head.php"); 
+	require_once("../../common/head.php"); 
 ?>
 
     <!-- NAVBAR -->
-    <nav>
-    <div class="nav-wrapper">
+    <div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
       <div class="row">
           <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class='nav' href='../index.php'>Start</a></li>
-            <li><a class='btn nav-button' href='loginform.php'>Log In</a></li>
+            <li><a class='nav' href='../../index.php'>Start</a></li>
+            <li><a class='btn nav-button' href='../login/loginform.php'>Log In</a></li>
           </ul>
         </div>
+    </div></nav>
     </div>
-    </nav>
   <!-- NAVBAR MOBILE -->
     <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class='nav' href='../index.php'>Start</a></li>
-      <li><a class='btn nav-button' href='loginform.php'>Login In</a></li>
+      <li><a class='nav' href='../../index.php'>Start</a></li>
+      <li><a class='btn nav-button' href='../login/loginform.php'>Log In</a></li>
   </ul>
   <!-- END OF NAVBAR -->
     
@@ -33,7 +33,7 @@
     </div>
 
 
-    <form class="col s6 push-s3" action="register.php" method="post">
+    <form action="register.php" method="post">
 		
 		<div class="row"><div class="input-field col s12 m6 push-m3">
           <input id="username" type="text" class="validate" name="username" value="<?php
@@ -80,7 +80,7 @@
 		</div></div>
 
 		<div class="row"><div class="col s12">
-        <button class="btn waves-effect waves-light nav-button" type="submit" name="action">Register
+        <button class="btn waves-effect waves-light nav-button" type="submit" name="action">Sign Up
         <i class="material-icons right">send</i>
         </button></div></div>
     </form>
@@ -118,4 +118,4 @@
     ?>
     </div>
     
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../common/footer.php"); ?>
