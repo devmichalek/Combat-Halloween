@@ -1,56 +1,34 @@
 <?php
-	session_start();
+    
+    session_start();
 
-	if(!isset($_SESSION['logged']))
-	{
-		header('Location: http://combathalloween.netne.net/user/loginform.php');
-		exit();
-	}
+	// Check if user is logged.
+  	require_once("../../user/login/isLogged.php");
 
-	require_once "../connect.php";
-	mysqli_report(MYSQLI_REPORT_STRICT);
-	$connection = @new mysqli($host, $db_user, $db_password, $db_name);
-
-	if($result = @$connection->query( sprintf("SELECT * FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $_SESSION['username']))))
-	{
-		$row = $result->fetch_assoc();
-		
-		if($row['permissions'] != "admin" && $row['permissions'] != "moderator")
-		{
-			$result->free_result();
-			$connection->close();
-			header('Location: http://combathalloween.netne.net/home.php');
-		}
-
-		$result->free_result();
-	}
-	else
-	{
-		$result->free_result();
-		$connection->close();
-		header('Location: http://combathalloween.netne.net/bugs/index.php');
-	}
+  	// Check if user has admin permissions.
+  	require_once("../../user/other/isAdmin.php");
+  	
+  	require_once("../../common/head.php");
 ?>
-
-
-
-<?php require_once("../head.php"); ?>
-
+    
+    <div class="navbar-fixed">
 	<nav><div class="nav-wrapper">
     	<div class="row">
       		<a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
       		<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-	      		<li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
-	        	<li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
+	      		<li><a class="btn-floating btn-medium pulse blue lighten-1" href="../../home.php"><i class="material-icons">home</i></a></li>
+	        	<li><a class="nav btn red lighten-1 nav-button" href="../index.php">Back</a></li>
 	      	</ul>
       	</div>
 	</div></nav>
-  	<ul class="nav-main sidenav" id="mobile-demo">
-	    <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../home.php"><i class="material-icons">home</i></a></li>
-      	<li><a class="nav btn red lighten-1 nav-button" href="index.php">Back</a></li>
-	</ul>
+	</div>
+  	<?php require_once("../../common/sidenav-b.php"); ?>
+  	    <li><a href="../../home.php"><i class="material-icons">home</i>Home</a></li>
+  	    <li><a href="../index.php"><i class="material-icons">arrow_back</i>Back</a></li>
+	<?php require_once("../../common/sidenav-e.php"); ?>
 
+    
 	<div class="container center">
 		
 		<!-- Header -->
@@ -145,7 +123,7 @@
 		        <option value="Disagree">Disagree</option>
 		        <option value="Duplicated">Duplicated</option>
 		        <option value="Fixed">Fixed</option>
-		        <option value="Hold">Hold</option>
+		        <option value="Held">Held</option>
 		        <option value="Implemented">Implemented</option>
 		        <option value="In Development">In Development</option>
 		        <option value="Irreproducible">Irreproducible</option>
@@ -153,7 +131,7 @@
 	        	<option value="Need More Info">Need More Info</option>
 	        	<option value="New">New</option>
 	        	<option value="Obsolete">Obsolete</option>
-	        	<option value="Reeopen">Reeopen</option>
+	        	<option value="Reopen">Reopen</option>
 	        	<option value="Revised">Revised</option>
 	        	<option value="Not To Correct">Not To Correct</option>
 	        	<option value="Support Needed">Support Needed</option>
@@ -172,7 +150,7 @@
 		  	</div>
 
 			<!-- BUTTON -->
-			<a href="http://combathalloween.netne.net/bugs" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
+			<a href="../index.php" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
 			<button class="btn waves-effect waves-light green lighten-1 nav-button" type="submit" name="action">Add
 		    <i class="material-icons right">send</i>
 			</button>
@@ -180,4 +158,4 @@
 		</form>
 	</div>
 
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../common/footer.php"); ?>
