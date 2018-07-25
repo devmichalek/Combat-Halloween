@@ -43,7 +43,7 @@
 	$message .= "Thank You for registration, I appreciate that you want to be part of Combat Halloween community. It is really uplifting to have a new player because I know I aroused the interest of another person. Programming gives me the opportunity to see effects of my work, like a moving and fighting foe or the responsive environment. For any advice about the game, about found bug or chatting stuff contact me via devmichalek@gmail.com. Thank you for your support by playing!</p>";
 	$message .= '<p style="text-align: center;">Activation link: ';
 	$message .= "</a>";
-	$message .= 'combathalloween.netne.net/user/confirmemail.php?email='.$email.'&code='.$activation_code;
+	$message .= 'combathalloween.netne.net/user/other/confirmemail.php?email='.$email.'&code='.$activation_code;
 	$message .= "</a>";
 	$message .= "</p>";
 	$message .= '<p style="text-align: right;">Best Regards, Adrian.</p>';
@@ -53,23 +53,23 @@
 	
 	mail($email, $subject, $message, $headers);
 	*/
-	require_once("../head.php");
+	require_once("../../common/head.php");
 ?>
 
 	<!-- NAVBAR -->
-    <nav>
-    <div class="nav-wrapper">
+	<div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
         <div class="row">
             <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
+                <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
             </ul>
         </div>
+    </div></nav>
     </div>
-    </nav>
     <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
+        <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
     </ul>
     <!-- END OF NAVBAR-->
 
@@ -95,4 +95,4 @@
 		<h5 class="col s6 center japokki modcon2">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</h5>
 	</div>
 
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../common/footer.php"); ?>

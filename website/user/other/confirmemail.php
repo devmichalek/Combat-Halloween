@@ -7,7 +7,7 @@
 	if(isset($_GET['email']) && isset($_GET['code']))
 	{
     	// Connect.
-		require_once("../connect.php");
+		require_once("../../connect.php");
 		mysqli_report(MYSQLI_REPORT_STRICT);
 
 		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
@@ -33,7 +33,7 @@
 					}
 					else
 				  	{
-				  		header('Location: ../home.php');
+				  		header('Location: ../../home.php');
 				  	}
 				}
 			}
@@ -43,34 +43,35 @@
   	}
   	else
   	{
-  		header('Location: ../home.php');
+  		header('Location: ../../home.php');
+  		exit();
   	}
 
 	if(!$confirmedemail)
 	{
-		header('Location: ../home.php');
+		header('Location: ../../home.php');
 		exit();
 	}
 
-	require_once("../head.php");
+	require_once("../../common/head.php");
 ?>
 
 	<!-- NAVBAR -->
-    <nav>
-    <div class="nav-wrapper">
+	<div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
         <div class="row">
             <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
-                <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
+                <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
+                <li><a class='btn nav-button' href='../register/registerform.php'>Sign In</a></li>
             </ul>
         </div>
+    </div></nav>
     </div>
-    </nav>
     <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class='btn nav-button red lighten-1' href='../index.php'>Start</a></li>
-        <li><a class='btn nav-button' href='registerform.php'>Sign In</a></li>
+        <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
+        <li><a class='btn nav-button' href='../register/registerform.php'>Sign In</a></li>
     </ul>
     <!-- END OF NAVBAR-->
 
@@ -81,8 +82,8 @@
 		<!-- The rest-->
 		<div class="col s12">
 			<h5 class="modcon2">Now you're a part of our society!</h5>
-			<h5 class="modcon2">Go to logging <a href="../user/loginform.php">page</a></h5>
+			<h5 class="modcon2">Go to logging <a href="../login/loginform.php">page</a></h5>
 		</div>
 	</div>
 
-<?php require_once("../footer.php"); ?>
+<?php require_once("../../common/footer.php"); ?>

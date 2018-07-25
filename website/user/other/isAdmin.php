@@ -1,5 +1,5 @@
 <?php
-	require_once "../connect.php";
+	require_once("/storage/ssd1/697/6426697/public_html/connect.php");
 	mysqli_report(MYSQLI_REPORT_STRICT);
 	$connection = @new mysqli($host, $db_user, $db_password, $db_name);
 
@@ -12,6 +12,7 @@
 			$result->free_result();
 			$connection->close();
 			header('Location: http://combathalloween.netne.net/home.php');
+			exit();
 		}
 
 		$result->free_result();
@@ -21,5 +22,6 @@
 		$result->free_result();
 		$connection->close();
 		header('Location: http://combathalloween.netne.net/home.php');
+		exit();
 	}
 ?>
