@@ -1,50 +1,30 @@
 <?php
-  session_start();
+    // Start session.
+	session_start();
 
-  if(!isset($_SESSION['logged']))
-  {
-    header('Location: user/loginform.php');
-    exit();
-  }
-  
-  /*
-  require_once "connect.php";
-
-  mysqli_report(MYSQLI_REPORT_STRICT);
-  try
-  {
-    $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-
-    $connection->close();
-  }
-  catch(Exception $e)
-  {
-    echo 'Error';
-    // echo 'Error: '.$e;
-  }
-  */
+	// Check if user is logged.
+	require_once("user/login/isLogged.php");
+	
+	require_once("common/head.php");
 ?>
-
-
-<?php require_once("head.php"); ?>
-  
-    <nav>
-    <div class="nav-wrapper">
+    
+    <div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
       <div class="row">
             <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class='nav' href='../index.php'>Start</a></li>
+                <li><a class="btn-floating btn-medium pulse indigo lighten-1" href="index.php"><i class="material-icons">stay_primary_portrait</i></a></li>
                 <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'><i class="material-icons right">bug_report</i>Bugs</a></li>
-                <li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
+                <li><a class='dropdown-trigger btn nav-button' href='user/login/logout.php'>Log Out</a></li>
             </ul>
         </div>
+    </div></nav>
     </div>
-    </nav>
-    <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class='nav' href='../index.php'>Start</a></li>
-        <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'><i class="material-icons right">bug_report</i>Bugs</a></li>
-        <li><a class='dropdown-trigger btn nav-button' href='user/logout.php'>Log Out</a></li>
-    </ul>
-
-<?php require_once("footer.php"); ?>
+    <?php require_once("common/sidenav-b.php"); ?>
+        <li><a href="index.php"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
+        <li><a href="bugs/index.php"><i class="material-icons">bug_report</i>Bugs</a></li>
+        <li><a href="user/login/logout.php"><i class="material-icons">exit_to_app</i>Log Out</a></li>
+    <?php require_once("common/sidenav-e.php"); ?>
+    
+<?php require_once("common/footer.php"); ?>

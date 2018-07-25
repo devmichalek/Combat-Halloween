@@ -9,38 +9,58 @@
   unset($_SESSION['e_bot']);
 ?>
 
-<?php require_once("head.php"); ?>
+<?php require_once("common/head.php"); ?>
   
     <!-- NAVBAR -->
-    <nav>
-    <div class="nav-wrapper">
+    <div class="navbar-fixed">
+    <nav><div class="nav-wrapper">
     <div class="row">
         <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class="nav" href="home.php">Home</a></li>
             <li><a class="nav" href="#about">About</a></li>
             <li><a class="nav" href="#section4">High Scores</a></li>
-            <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown1'>User</a></li>
+            <li><a class="btn-floating btn-medium pulse blue lighten-1" href="home.php"><i class="material-icons">home</i></a></li>
+            <?php
+                if(isset($_SESSION['logged']))
+                    echo "<li><a class='dropdown-trigger btn nav-button' href='user/login/logout.php'>Log Out</a></li>";
+                else
+                    echo "<li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown1'>User</a></li>";
+            ?>
+            
         </ul>
-        <ul id='dropdown1' class='dropdown-content'>
-            <li><a class="nav" href="user/loginform.php">Log In</a></li>
-            <li><a class="nav" href="user/registerform.php">Sign In</a></li>
-        </ul>
+        <?php
+            if(!isset($_SESSION['logged']))
+            {
+                echo "<ul id='dropdown1' class='dropdown-content'>";
+                echo '<li><a class="nav" href="user/login/loginform.php">Log In</a></li>';
+                echo '<li><a class="nav" href="user/register/registerform.php">Sign Up</a></li>';
+                echo '</ul>';
+            }
+        ?>
     </div>
+    </div></nav>
     </div>
-    </nav>
-    <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class="nav" href="home.php">Home</a></li>
-        <li><a class="nav" href="#about">About</a></li>
-        <li><a class="nav" href="#contact">Contact</a></li>
-        <li><a class="nav" href="#section4">High Scores</a></li>
-        <li><a class='dropdown-trigger btn nav-button' href='#' data-target='dropdown2'>User</a></li>
-        <ul id='dropdown2' class='dropdown-content'>
-            <li><a class="nav" href="user/loginform.php">Log In</a></li>
-            <li><a class="nav" href="user/registerform.php">Sign In</a></li>
-        </ul>
-    </ul>
+    <?php require_once("common/sidenav-b.php"); ?>
+        <li><a href="#abou"><i class="material-icons">short_text</i>About</a></li>
+        <li><a href="#section4"><i class="material-icons">insert_chart</i>High Scores</a></li>
+        <li><a href="home.php"><i class="material-icons">home</i>Home</a></li>
+        <?php
+                if(isset($_SESSION['logged']))
+                    echo '<li><a href="user/login/logout.php"><i class="material-icons">exit_to_app</i>Log Out</a></li>';
+                else
+                    echo '<li><a class="dropdown-trigger" href="#" data-target="dropdown2"><i class="material-icons">person</i>User</a></li>';
+            ?>
+        <?php
+            if(!isset($_SESSION['logged']))
+            {
+                echo "<ul id='dropdown2' class='dropdown-content'>";
+                echo '<li><a class="nav" href="user/login/loginform.php">Log In</a></li>';
+                echo '<li><a class="nav" href="user/register/registerform.php">Sign Up</a></li>';
+                echo '</ul>';
+            }
+        ?>
+    <?php require_once("common/sidenav-e.php"); ?>
 
   <!-- TOP -->
   <div class="parallax-container valign-wrapper">
@@ -48,19 +68,19 @@
         <div class="container">
         <div class="row">
           <div class="col s9 white-text">
-            <h4 class="thin-text left-align valign">Right now game is available only for windows users. I still migrate source code for linux. Download below.</h4>
+            <h4 class="thin-text left-align valign">Some text some text some text some text some text some text some text some text some text some text some text.</h4>
           </div>
         </div>
         <div class="row">
           <div class="col 14">
             <a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5 disabled" target="_blank" href="#">Linux<a/>
-            <a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5" target="_blank" href="#">Windows<a/>
+            <a class="waves-effect waves-light btn-large hoverable nav-button z-depth-5 disabled" target="_blank" href="#">Windows<a/>
           </div>
         </div>
         <div class="row">
           <div class="col 14">
-            <a class="btn waves-effect waves-light hoverable nav-button blue-grey" target="_blank" href="https://github.com/devmichalek/Combat-Halloween">Source Code<a/>
-            <a class="btn waves-effect waves-light hoverable nav-button blue-grey" target="_blank" href="#">You Tube<a/>
+            <a class="btn waves-effect waves-light hoverable nav-button blue-grey disabled" target="_blank" href="https://github.com/devmichalek/Combat-Halloween">Source Code<a/>
+            <a class="btn waves-effect waves-light hoverable nav-button blue-grey disabled" target="_blank" href="#">You Tube<a/>
           </div>
         </div>
       </div>
@@ -248,4 +268,4 @@
     </div> -->
   </div>
     </div>
-<?php require_once("footer.php"); ?>
+<?php require_once("common/footer.php"); ?>
