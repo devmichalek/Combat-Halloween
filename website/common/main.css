@@ -1,41 +1,46 @@
 body {
-
-    background: url(images/tile.png);
+    background: url(http://combathalloween.netne.net/images/tile.png);
     background-repeat: repeat;
+}
+
+.background {
+    background: url(http://combathalloween.netne.net/images/tile-sidenav.png);
+    background-repeat: repeat;
+}
+
+body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
 
 main {
-flex: 1 0 auto;
+    flex: 1 0 auto;
 }
 
-.sidenav {
-    background: url(images/tile.png);
-    background-repeat: repeat;
+.navbar-fixed {
+    z-index: 99 !important;
 }
 
-@font-face {
-	font-family: jcandle;
-	src: url( "fonts/BADABB__.TTF" );
+.fixed-action-btn {
+    z-index: 98 !important;
 }
 
 @font-face {
 	font-family: japokki;
-	src: url( "fonts/Jaapokki-Regular.otf" );
+	src: url( "http://combathalloween.netne.net/fonts/Jaapokki-Regular.otf" );
 }
 
 nav {
   background-color: #253234 !important;
 }
 
-tbody.member {
+.member {
 	font-family: japokki;
 	font-size: 120%;
 }
 
-thead.tableheader {
+.tableheader {
 	font-family: japokki;
 	font-size: 150%;
 }
@@ -51,33 +56,33 @@ thead.tableheader {
       height: 460px;
     }
 
-a.nav {
+.nav {
 	font-family: japokki;
 	font-size: 150%;
 	color: #FCFEFD;
 }
 
-a.cardy {
+.cardy {
 	font-family: japokki;
 	font-size: 100%;
 	color: #FCFEFD;
 }
 
-a.nav-main {
+.nav-main {
 	font-family: japokki;
 	font-size: 225%;
 	color: #FCFEFD;
 	padding-left: 10px;
 }
 
-a.nav-button {
+.nav-button {
 	font-family: japokki;
 	font-size: 100%;
 	color: #FCFEFD;
 }
 
 
-p.info {
+.info {
 	font-family: japokki;
 	font-size: 125%;
 	color: #424242;
@@ -95,7 +100,7 @@ h4 {
 	color: #FCFEFD;
 }
 
-h4.modcon {
+.modcon {
 	font-family: japokki;
 	font-size: 150%;
 	color: black;
@@ -106,7 +111,7 @@ h5 {
 	font-size: 130%;
 }
 
-h5.modcon2 {
+.modcon2 {
 	font-family: japokki;
 	font-size: 130%;
 	color: black;
