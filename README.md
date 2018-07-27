@@ -1,1 +1,1 @@
-In progress... Release ~ 31.10.2018
+In progress... Beta ~ 31.10.2018
