@@ -46,12 +46,22 @@
       <form action="login.php" method="post">
 
         <div class="row"><div class="input-field col s12 m6 push-m3">
-            <input id="username" type="text" class="validate" name="username">
+            <input id="username" type="text" class="validate" name="username" value="<?php
+          if(isset($_SESSION['rem_username']))
+          {
+            echo $_SESSION['rem_username'];
+            unset($_SESSION['rem_username']);
+          }?>">
             <label for="username"><h5 class="modcon2">Username</h5></label>
         </div></div>
 
         <div class="row"><div class="input-field col s12 m6 push-m3">
-          <input id="password" type="password" class="validate" name="password">
+          <input id="password" type="password" class="validate" name="password" value="<?php
+          if(isset($_SESSION['rem_password']))
+          {
+            echo $_SESSION['rem_password'];
+            unset($_SESSION['rem_password']);
+          }?>">
           <label for="password"><h5 class="modcon2">Password</h5></label>
         </div></div>
         

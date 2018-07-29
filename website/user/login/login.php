@@ -21,6 +21,12 @@
     	header('Location: http://combathalloween.netne.net/user/login/loginform.php');
     	exit();
     }
+    
+    // REMEMBER DATA
+    $username = $_POST['username'];
+	$password = $_POST['password'];
+    $_SESSION['rem_username'] = $username;
+    $_SESSION['rem_password'] = $password;
 	
 	try
 	{
@@ -31,8 +37,6 @@
 		}
 		else
 		{
-			$username = $_POST['username'];
-			$password = $_POST['password'];
 			$username = htmlentities($username, ENT_QUOTES, "UTF-8");
 
 			if($result = @$connection->query(sprintf("SELECT * FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $username))))
@@ -54,6 +58,7 @@
 							$_SESSION['logged'] = true;
 							$_SESSION['username'] = $row['username'];
 							$_SESSION['email'] = $row['email'];
+							$_SESSION['permissions'] = $row['permissions'];
 							unset($_SESSION['error']);
 							$result->free_result();
 							header('Location: http://combathalloween.netne.net/home.php');
