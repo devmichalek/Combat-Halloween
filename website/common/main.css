@@ -125,6 +125,10 @@ h5 {
 	color: #EF5350;
 }
 
+.successColor {
+	color: #66BB6A;
+}
+
 input {
     font-family: japokki;
 }
@@ -178,4 +182,16 @@ p {
 	left: 0;
 	right: 0;
 	bottom: 0;	
+}
+
+/* For scrollspy to move offset */
+.anchor {
+    display: block;
+    position: relative;
+    top: -60px;
+}
+
+.disabled {
+    pointer-events:none;
+    opacity:0.6;
 }
