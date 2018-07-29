@@ -15,7 +15,12 @@
             <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 <li><a class="btn-floating btn-medium pulse indigo lighten-1" href="index.php"><i class="material-icons">stay_primary_portrait</i></a></li>
-                <li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'><i class="material-icons right">bug_report</i>Bugs</a></li>
+                <?php
+                    echo "<li><a class='dropdown-trigger btn nav-button' href='bugs/index.php'";
+                    if($_SESSION['permissions'] == "user")
+                        echo " disabled ";
+                    echo '><i class="material-icons right">bug_report</i>Bugs</a></li>';
+                ?>
                 <li><a class='dropdown-trigger btn nav-button' href='user/login/logout.php'>Log Out</a></li>
             </ul>
         </div>
@@ -23,7 +28,12 @@
     </div>
     <?php require_once("common/sidenav-b.php"); ?>
         <li><a href="index.php"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
-        <li><a href="bugs/index.php"><i class="material-icons">bug_report</i>Bugs</a></li>
+        <?php
+            echo '<li><a href="bugs/index.php"';
+            if($_SESSION['permissions'] == "user")
+                echo " class='disabled' ";
+            echo '><i class="material-icons">bug_report</i>Bugs</a></li>';
+        ?>
         <li><a href="user/login/logout.php"><i class="material-icons">exit_to_app</i>Log Out</a></li>
     <?php require_once("common/sidenav-e.php"); ?>
     
