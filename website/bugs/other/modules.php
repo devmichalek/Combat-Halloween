@@ -4,7 +4,7 @@
 
 	require_once("../../user/login/isLogged.php");
 
-	require_once("../../user/other/isAdmin.php");
+	require_once("../../user/other/isModerator.php");
 
 	require_once("../../common/head.php");
 ?>

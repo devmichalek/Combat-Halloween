@@ -5,8 +5,8 @@
 	// Check if user is logged.
   	require_once("../../user/login/isLogged.php");
 
-  	// Check if user has admin permissions.
-  	require_once("../../user/other/isAdmin.php");
+  	// Check if user has admin/moderator permissions.
+  	require_once("../../user/other/isModerator.php");
   	
   	require_once("../../common/head.php");
 ?>

@@ -6,16 +6,16 @@
 	// Check if user is logged.
 	require_once("../../user/login/isLogged.php");
 
-	// Check if user has admin permissions.
-	require_once("../../user/other/isAdmin.php");
+	// Check if user has admin/moderator permissions.
+	require_once("../../user/other/isModerator.php");
 
     require_once "../../connect.php";
     
     mysqli_report(MYSQLI_REPORT_STRICT);
     
-    $IDname = $_GET['IDname'];
+    $ID = $_GET['ID'];
     $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-    $records = $connection->query("SELECT * FROM bugs WHERE IDname='$IDname'");
+    $records = $connection->query("SELECT * FROM bugs WHERE ID='$ID'");
     $row = $records->fetch_assoc();
 
     $name = $row['name'];
@@ -66,7 +66,7 @@
     <form class="col s6 push-s3" method="post" action="edit.php" style="margin-bottom: 20px;">
         
       <!-- HIDDEN ID NAME-->
-        <input type="hidden" name="IDname" value="<?php echo $IDname; ?>" />
+        <input type="hidden" name="ID" value="<?php echo $ID; ?>" />
         
       <!-- NAME -->
       <div class="row">
@@ -214,12 +214,12 @@
     <div id="bugdeleter" class="modal">
         <div class="modal-content">
             <h4 class="modcon">Information</h4>
-            <h5>You want to delete bug "<?php echo $name; ?>" ID(<?php echo $IDname; ?>). Please confirm your decision.</h5>
+            <h5>You want to delete bug "<?php echo $name; ?>" ID(<?php echo $ID; ?>). Please confirm your decision.</h5>
         </div>
         <div class="modal-footer">
             <a class="modal-close waves-effect waves-blue btn-flat japokki"><i class='material-icons right'>clear</i>CANCEL </a>
             <form action="delete.php" method="get">
-                <input type="hidden" name="IDname" value="<?php echo $IDname; ?>">
+                <input type="hidden" name="ID" value="<?php echo $ID; ?>">
                 <button type='submit' name="action" class="modal-close waves-effect waves-red btn-flat japokki"><i class='material-icons right'>delete</i>DELETE </button>
             </form>
         </div>

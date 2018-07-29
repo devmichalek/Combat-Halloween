@@ -6,8 +6,8 @@
 	// Check if user is logged.
 	require_once("../../user/login/isLogged.php");
 
-	// Check if user has admin permissions.
-	require_once("../../user/other/isAdmin.php");
+	// Check if user has admin/moderator permissions.
+	require_once("../../user/other/isModerator.php");
 
 	// Check if all fields are filled.
 	$error_msg = "";
@@ -42,7 +42,7 @@
 			throw new Exception(mysqli_connect_errno());
 		else
 		{
-		    $IDname =       $_POST['IDname'];
+		    $ID =       $_POST['ID'];
 			$name =         addslashes($_POST['name']);
 			$type =         $_POST['type'];
 			$action =   	$_POST['actiontodo'];
@@ -55,7 +55,7 @@
 			$developer =    $_POST['developer'];
 			$resolution =   $_POST['resolution'];
 
-			if(!$connection->query("UPDATE bugs SET name='$name', type='$type', action='$action', description='$description', location='$location', severity='$severity', priority='$priority', deadline='$deadline', author='$author', developer='$developer', resolution='$resolution' WHERE IDname='$IDname'"))
+			if(!$connection->query("UPDATE bugs SET name='$name', type='$type', action='$action', description='$description', location='$location', severity='$severity', priority='$priority', deadline='$deadline', author='$author', developer='$developer', resolution='$resolution' WHERE ID='$ID'"))
 			{
 				throw new Exception($connection->error);
 			}

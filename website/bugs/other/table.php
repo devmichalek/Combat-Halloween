@@ -27,10 +27,10 @@
       
     	// Name
 	    echo "<td class=".$color.">";
-	    echo '<form action="edit/editbug.php" method="get">';
+	    echo '<form target="_blank" action="edit/editbug.php" method="get">';
 	    echo $row['name'];
-	    echo '<input type="hidden" name="IDname" value="';
-      	echo $row['IDname'].'"> ';
+	    echo '<input type="hidden" name="ID" value="';
+      	echo $row['ID'].'"> ';
 	    $descolor = ltrim($color, "'");
 	    if($descolor == "")
 	        $descolor = "cyan lighten-1'";
@@ -66,16 +66,16 @@
 	    
       
         echo "<a class='waves-effect waves-light btn modal-trigger ".$descolor." ";
-        echo "href='#".$row['IDname']."'>";
+        echo "href='#".$row['ID']."'>";
         echo "Info</a></td>";
-        echo "<div id='".$row['IDname']."' class='modal'>";
+        echo "<div id='".$row['ID']."' class='modal'>";
         echo "<div class='modal-content'>";
-        echo "<h4 class='modcon'>".$row['name']." ID(".$row['IDname'].")</h4>";
+        echo "<h4 class='modcon'>".$row['name']." ID(".$row['ID'].")</h4>";
         
-        echo "<p class='japokki'>Reported by: ";
-        echo '<div class="chip"><img src="../../images/users/'.$row['author'].'.jpg" alt="Contact Person"><span class="japokki">'.$row['author'].'</span></div>'."</p>";
-        echo "<p class='japokki'>Developer: ";
-        echo '<div class="chip"><img src="../../images/users/'.$row['developer'].'.jpg" alt="Contact Person"><span class="japokki">'.$row['developer'].'</span></div>'."</p>";
+        echo "<div class='row japokki'>Reported by: ";
+        echo '<div class="chip"><img src="../../images/users/'.$row['author'].'.jpg" alt="Contact Person"><span class="japokki">'.$row['author'].'</span></div>'."</div>";
+        echo "<div class='row japokki'>Developer: ";
+        echo '<div class="chip"><img src="../../images/users/'.$row['developer'].'.jpg" alt="Contact Person"><span class="japokki">'.$row['developer'].'</span></div>'."</div>";
         
         echo "<p class='japokki'>Action to do: ".$row['action']."</p>";
         echo "<p class='japokki'>".$row['description']."</p>";

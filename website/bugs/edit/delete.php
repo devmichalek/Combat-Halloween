@@ -6,8 +6,8 @@
 	// Check if user is logged.
   	require_once("../../user/login/isLogged.php");
 
-  	// Check if user has admin permissions.
-  	require_once("../../user/other/isAdmin.php");
+  	// Check if user has admin/moderator permissions.
+  	require_once("../../user/other/isModerator.php");
 
   	// Get $host, $db_user, $db_password and $db_name
 	require_once("../../connect.php");
@@ -22,7 +22,7 @@
 	    	throw new Exception(mysqli_connect_errno());
 	    else
 		{
-		    $sql = "DELETE FROM bugs WHERE IDname='".$_GET['IDname']."'";
+		    $sql = "DELETE FROM bugs WHERE ID='".$_GET['ID']."'";
 			if(!$connection->query($sql))
 				throw new Exception($connection->error);
 			else
