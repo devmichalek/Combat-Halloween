@@ -4,98 +4,142 @@
 	session_start();
 
 	// Just in case.
-	unset($_SESSION['emailError']);
+	unset($_SESSION['errorEmail']);
 
 	function generateCode($length = 30)
-  {
-      $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      $charactersLength = strlen($characters);
-      $randomString = '';
-      for ($i = 0; $i < $length; ++$i)
-      {
-         $randomString .= $characters[rand(0, $charactersLength - 1)];
-      }
-      return $randomString;
-  }
-
-  function backToProfile()
-  {
-    header('Location: profile.php');
-	   exit();
-  }
-
-  $success = true;
-  $newemail = $_POST['newemail'];
-  $email = $_SESSION['email'];
-
-  // Check if this username is not occupied.
-  require_once ("../connect.php");
-  mysqli_report(MYSQLI_REPORT_STRICT);
-  try
-  {
-    $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-    if($connection->connect_errno != 0)
     {
-      throw new Exception(mysqli_connect_errno());
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; ++$i)
+        {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
     }
-    else
+
+    function backToProfile()
     {
-      $result = $connection->query("SELECT ID FROM users WHERE email='$newemail'");
-      if(!$result)
-      {
-        throw new Exception($connection->error);
-      }
-      $how_many_emails = $result->num_rows;
-      if($how_many_emails > 0)
-      {
-        $success = false;
-        $_SESSION['emailError'] = "This email already exists.";
-      }
+        header('Location: profile.php');
+    	exit();
     }
-  }
-  catch(Exception $e)
-  {
-    echo 'Error';
-    // echo 'Error: '.$e;
-  }
 
-  // SQL Injection Barier.
-  $email_safe = filter_var($newemail, FILTER_SANITIZE_EMAIL);
-  if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $newemail)
-  {
-    $success = false;
-    $_SESSION['emailError'] = "Valid adress email required.";
-  }
+	$success = true;
+	$newemail = $_POST['email'];
+	$password =  $_POST['password'];
+	$email = $_SESSION['email'];
 
+	// Get current password from database.
+	require_once ("../../connect.php");
+	mysqli_report(MYSQLI_REPORT_STRICT);
 
-  // RECAPTCHA
-  $mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
-  $confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
-  if(!json_decode($confirm)->success)
-  {
-    $success = false;
-    $_SESSION['passwordError'] = "Confirm humanity.";
-  }
+	try
+	{
+		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
+		if($connection->connect_errno != 0)
+		{
+			throw new Exception(mysqli_connect_errno());
+		}
+		else
+		{
+			if($result = @$connection->query(sprintf("SELECT * FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $email))))
+			{
+		    	$row = $result->fetch_assoc();
+		    	if(!password_verify($password, $row['password']))
+		    	{
+		        	$success = false;
+		        	$_SESSION['errorEmail'] = "Password is incorrect. ";
+		    	}
+		    }
+		}
+	}
+	catch(Exception $e)
+	{
+		echo 'Error';
+		// echo 'Error: '.$e;
+	}
 
-  // REMEMBER DATA
-  $_SESSION['rem_newemail'] = $newemail;
+	// Check if this email is not occupied.
+	try
+	{
+		$result = $connection->query("SELECT ID FROM users WHERE email='$newemail'");
+		if(!$result)
+		{
+		    throw new Exception($connection->error);
+		}
 
-  if(!$success)
-  {
-    backToProfile();
-  }
-  else
-  {
-    if(!$connection->query("UPDATE users SET email='$newemail' WHERE email='$email'"))
+		$how_many_emails = $result->num_rows;
+
+		if($how_many_emails > 0)
+		{
+		    $success = false;
+		    $_SESSION['errorEmail'] = "This email already exists.";
+		}
+	}
+	catch(Exception $e)
+	{
+		echo 'Error';
+		// echo 'Error: '.$e;
+	}
+
+    $email_safe = filter_var($newemail, FILTER_SANITIZE_EMAIL);
+    if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $newemail)
     {
-      throw new Exception($connection->error);
+    	$success = false;
+    	$_SESSION['errorEmail'] = "Valid address email required.";
     }
-    else
-    {
-      header('Location: profile.php');
-      exit();
-    }
-  }
 
-  $connection->close();
+
+	// RECAPTCHA
+	$mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
+	$confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
+	if(!json_decode($confirm)->success)
+	{
+		$success = false;
+		$_SESSION['errorEmail'] = "Confirm humanity.";
+	}
+
+	// REMEMBER DATA
+	$_SESSION['rem_email'] = $newemail;
+	$_SESSION['rem_passwordEmail'] = $password;
+
+	if(!$success)
+	{
+		backToProfile();
+	}
+	else
+	{
+	    $activationcode = generateCode();
+	    $connection->query("UPDATE users SET activationcode='$activationcode' WHERE email='$email'");
+	    
+		// Send email
+		$subject = 'Combat Halloween - New Email';
+
+		$headers = "From: devmichalek@gmail.com"."\r\n";
+		$headers .= "MIME-Version: 1.0\r\n";
+		$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+		$message = '<html><body><h3 style="text-align: center;">';
+		$message .= 'Dear '.$_SESSION['username'].',</h3><p style="text-align: center;">';
+		$message .= "If this email reached your mailbox without your interference contact me: devmichalek@gmail.com. If you want to change the email you have to confirm it by clicking on the link below.</p>";
+		$message .= '<p style="text-align: center;">Activation link: ';
+		$message .= "</a>";
+		$message .= 'combathalloween.netne.net/user/other/confirmnewemail.php?email='.$email.'&code='.$activationcode.'&newemail='.$newemail;
+		$message .= "</a>";
+		$message .= "</p>";
+		$message .= '<p style="text-align: right;">Best Regards, Adrian.</p>';
+
+
+		$message .= "</body></html>";
+		
+		mail($email, $subject, $message, $headers);
+		
+
+
+		$_SESSION['successEmail'] = "The activation link was send to ".$email;
+		header('Location: profile.php');
+		exit();
+	}
+
+	$connection->close();
 ?>

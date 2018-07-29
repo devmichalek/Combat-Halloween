@@ -89,10 +89,6 @@
 			<h5 class="col s12">It has a link to sign you in. Check your spam!</h5>
 			<h5>Go to logging <a href="loginform.php">page</a></h5>
 		</div>
-
-		<!-- We have to add some information here because footer is floating in the middle of this site :/-->
-		<h2 class="col s12 center japokki modcon2">Some info.</h2>
-		<h5 class="col s6 center japokki modcon2">Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah</h5>
 	</div>
 
 <?php require_once("../../common/footer.php"); ?>
