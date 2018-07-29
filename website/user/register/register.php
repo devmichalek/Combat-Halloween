@@ -71,7 +71,7 @@
     if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $email)
     {
       $success = false;
-      $_SESSION['e_email'] = "Valid adress email required.";
+      $_SESSION['e_email'] = "Valid address email required.";
     }
 
     // RECAPTCHA
