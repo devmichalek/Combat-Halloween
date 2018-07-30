@@ -3,20 +3,13 @@
 	// Start session.
 	session_start();
 
+	// Check if user is logged.
+	require_once("../../user/login/isLogged.php");
+
 	// Just in case.
 	unset($_SESSION['errorEmail']);
 
-	function generateCode($length = 30)
-    {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
-        for ($i = 0; $i < $length; ++$i)
-        {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
-        }
-        return $randomString;
-    }
+	require_once("generateCode.php");
 
     function backToProfile()
     {

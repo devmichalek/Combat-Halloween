@@ -12,9 +12,9 @@
 		unset($_SESSION['wellregistered']);
 	}
 
-	$username = "kurwaaaaamac"; // $_SESSION['rem_username'];
-	$email = "example@gmail.com"; //  $_SESSION['rem_email'];
-	$activation_code = "dupa"; // $_SESSION['activation_code'];
+	$username = $_SESSION['rem_username'];
+	$email = $_SESSION['rem_email'];
+	$activation_code = $_SESSION['activation_code'];
 	unset($_SESSION['activation_code']);
 
 	// DELETE TEMPORARY DATA
@@ -30,7 +30,6 @@
 	if(isset($_SESSION['e_passwordcon'])) 	unset($_SESSION['e_passwordcon']);
 	if(isset($_SESSION['e_bot'])) 			unset($_SESSION['e_bot']);
 
-	/*
 	// Send email
 	$subject = 'Combat Halloween - Confirm Email';
 
@@ -52,42 +51,32 @@
 	$message .= "</body></html>";
 	
 	mail($email, $subject, $message, $headers);
-	*/
+	
 	require_once("../../common/head.php");
 ?>
 
 	<!-- NAVBAR -->
-	<div class="navbar-fixed">
-    <nav><div class="nav-wrapper">
-        <div class="row">
-            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
-            </ul>
-        </div>
-    </div></nav>
-    </div>
-    <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
-    </ul>
+	<?php require_once("../../common/navbar-b.php"); ?>
+        <li><a class='btn blue-grey darken-1 japokki-white' href='../../index.php'>Start</a></li>
+    <?php require_once("../../common/navbar-e.php"); ?>
+    <?php require_once("../../common/sidebar-b.php"); ?>
+        <li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
+    <?php require_once("../../common/sidebar-e.php"); ?>
     <!-- END OF NAVBAR-->
 
 	<div class="container center">
 		
 		<!-- Header -->
-		<div class="col s12">
-			<h2 class="japokki modcon2">Check Your Email</h2>
-		</div>
+		<div class="col s12"><h2 class="japokki-black A22">Check Your Email</h2></div>
 
 		<!-- The rest-->
 		<div class="row">
-			<h5 class="col s12">An email was sent to<div style="color: #EF5350;"><b>
+			<h5 class="col s12 japokki-black A7">An email was sent to<div style="color: #EF5350;"><b>
 			<?php echo $email.'.</div>'; ?></h5>
 		</div>
 		<div class="row">
-			<h5 class="col s12">It has a link to sign you in. Check your spam!</h5>
-			<h5>Go to logging <a href="loginform.php">page</a></h5>
+			<h5 class="col s12 japokki-black A7">It has a link to sign you in. Check your spam!</h5>
+			<h5>Go to logging <a href="../login/loginform.php">page</a></h5>
 		</div>
 	</div>
 

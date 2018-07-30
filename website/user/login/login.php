@@ -59,6 +59,20 @@
 							$_SESSION['username'] = $row['username'];
 							$_SESSION['email'] = $row['email'];
 							$_SESSION['permissions'] = $row['permissions'];
+							
+							// DELETE TEMPORARY DATA
+                        	if(isset($_SESSION['rem_username'])) 	unset($_SESSION['rem_username']);
+                        	if(isset($_SESSION['rem_email'])) 		unset($_SESSION['rem_email']);
+                        	if(isset($_SESSION['rem_password'])) 	unset($_SESSION['rem_password']);
+                        	if(isset($_SESSION['rem_passwordcon'])) unset($_SESSION['rem_passwordcon']);
+                        
+                        	// DELETE ERROR DATA
+                        	if(isset($_SESSION['e_username'])) 		unset($_SESSION['e_username']);
+                        	if(isset($_SESSION['e_email'])) 		unset($_SESSION['e_email']);
+                        	if(isset($_SESSION['e_password'])) 		unset($_SESSION['e_password']);
+                        	if(isset($_SESSION['e_passwordcon'])) 	unset($_SESSION['e_passwordcon']);
+                        	if(isset($_SESSION['e_bot'])) 			unset($_SESSION['e_bot']);
+							
 							unset($_SESSION['error']);
 							$result->free_result();
 							header('Location: http://combathalloween.netne.net/home.php');

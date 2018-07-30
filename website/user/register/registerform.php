@@ -7,33 +7,24 @@
 ?>
 
     <!-- NAVBAR -->
-    <div class="navbar-fixed">
-    <nav><div class="nav-wrapper">
-      <div class="row">
-          <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a class='nav' href='../../index.php'>Start</a></li>
-            <li><a class='btn nav-button' href='../login/loginform.php'>Log In</a></li>
-          </ul>
-        </div>
-    </div></nav>
-    </div>
-  <!-- NAVBAR MOBILE -->
-    <ul class="nav-main sidenav" id="mobile-demo">
-      <li><a class='nav' href='../../index.php'>Start</a></li>
-      <li><a class='btn nav-button' href='../login/loginform.php'>Log In</a></li>
-  </ul>
+    <?php require_once("../../common/navbar-b.php"); ?>
+            <li><a class='nav japokki-white A3' href='../../index.php'>Start</a></li>
+            <li><a class='btn blue-grey darken-1 japokki-white' href='../login/loginform.php'>Log In</a></li>
+    <?php require_once("../../common/navbar-e.php"); ?>
+    <?php require_once("../../common/sidenav-b.php"); ?>
+        <li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
+        <li><a class='btn blue-grey darken-1 japokki-white' href='../login/loginform.php'>Log In</a></li>
+    <?php require_once("../../common/sidenav-e.php"); ?>
   <!-- END OF NAVBAR -->
     
     <div class="container center">
     <!-- Header -->
     <div class="col s12 m12">
-          <h2>Account - Sign Up</h2>
+          <h2 class="japokki-black A22">Account - Sign Up</h2>
     </div>
 
 
-    <form action="register.php" method="post">
+    <form action="register.php" method="post" class="japokki-black">
 		
 		<div class="row"><div class="input-field col s12 m6 push-m3">
           <input id="username" type="text" class="validate" name="username" value="<?php
@@ -42,7 +33,7 @@
             echo $_SESSION['rem_username'];
             unset($_SESSION['rem_username']);
           }?>">
-          <label for="username"><h5 class="modcon2">Username</h5></label>
+          <label for="username"><h5 class="A2">Username</h5></label>
         </div></div>
 
         <div class="row"><div class="input-field col s12 m6 push-m3">
@@ -52,7 +43,7 @@
             echo $_SESSION['rem_email'];
             unset($_SESSION['rem_email']);
           }?>">
-          <label for="email"><h5 class="modcon2">Email</h5></label>
+          <label for="email"><h5 class="A2">Email</h5></label>
         </div></div>
 
 		<div class="row"><div class="input-field col s12 m6 push-m3">
@@ -62,7 +53,7 @@
             echo $_SESSION['rem_password'];
             unset($_SESSION['rem_password']);
           }?>">
-          <label for="password"><h5 class="modcon2">Password</h5></label>
+          <label for="password"><h5 class="A2">Password</h5></label>
         </div></div>
 
         <div class="row"><div class="input-field col s12 m6 push-m3">
@@ -72,7 +63,7 @@
             echo $_SESSION['rem_passwordcon'];
             unset($_SESSION['rem_passwordcon']);
           }?>">
-          <label for="passwordcon"><h5 class="modcon2">Confirm Password</h5></label>
+          <label for="passwordcon"><h5 class="A2">Confirm Password</h5></label>
         </div></div>
 		
 		<div class="row"><div class="col s6 m3 push-m3" style="margin-bottom: 10px;">
@@ -80,7 +71,7 @@
 		</div></div>
 
 		<div class="row"><div class="col s12">
-        <button class="btn waves-effect waves-light nav-button" type="submit" name="action">Sign Up
+        <button class="btn waves-effect waves-light blue-grey darken-1 japokki-white" type="submit" name="action">Sign Up
         <i class="material-icons right">send</i>
         </button></div></div>
     </form>

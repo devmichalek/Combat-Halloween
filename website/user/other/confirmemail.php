@@ -57,32 +57,24 @@
 ?>
 
 	<!-- NAVBAR -->
-	<div class="navbar-fixed">
-    <nav><div class="nav-wrapper">
-        <div class="row">
-            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
-                <li><a class='btn nav-button' href='../register/registerform.php'>Sign In</a></li>
-            </ul>
-        </div>
-    </div></nav>
-    </div>
-    <ul class="nav-main sidenav" id="mobile-demo">
-        <li><a class='btn nav-button red lighten-1' href='../../index.php'>Start</a></li>
-        <li><a class='btn nav-button' href='../register/registerform.php'>Sign In</a></li>
-    </ul>
+    <?php require_once("../../common/navbar-b.php"); ?>
+                <li><a class='nav japokki-white A3' href='../../index.php'>Start</a></li>
+                <li><a class='btn blue-grey darken-1 japokki-white' href='../register/registerform.php'>Sign Up</a></li>
+    <?php require_once("../../common/navbar-e.php"); ?>
+    <?php require_once("../../common/sidenav-b.php"); ?>
+        <li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
+        <li><a class='btn blue-grey darken-1 japokki-white' href='../register/registerform.php'>Sign Up</a></li>
+    <?php require_once("../../common/sidenav-e.php"); ?>
     <!-- END OF NAVBAR-->
 
-	<div class="container center">
+	<div class="container center japokki-black">
 		<!-- Header -->
-		<div class="col s12"><h2 class="modcon2">Congratulations!</h2></div>
+		<div class="col s12"><h2 class="A22">Congratulations!</h2></div>
 
 		<!-- The rest-->
 		<div class="col s12">
-			<h5 class="modcon2">Now you're a part of our society!</h5>
-			<h5 class="modcon2">Go to logging <a href="../login/loginform.php">page</a></h5>
+			<h5 class="A22">Now you're a part of our society!</h5>
+			<h5 class="A22">Go to logging <a href="../login/loginform.php">page</a></h5>
 		</div>
 	</div>
 

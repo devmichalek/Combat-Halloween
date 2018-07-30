@@ -3,6 +3,9 @@
 	// Start session.
 	session_start();
 
+	// Check if user is logged.
+	require_once("../../user/login/isLogged.php");
+
 	// Just in case.
 	unset($_SESSION['errorPassword']);
 
