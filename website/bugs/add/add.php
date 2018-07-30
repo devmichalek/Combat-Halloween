@@ -3,18 +3,6 @@
 	// Start session.
 	session_start();
 
-	// Funtion to generate ID name.
-	function generateIDname($email, $number)
-	{
-		$basic = "nn";
-		if($email == "devmichalek@gmail.com")		$basic = "am";
-		else if($email == "sebastek321@gmail.com")	$basic = "sb";
-		else if($email == "kamilgawlik@icloud.com") $basic = "kg";
-
-		$temp = str_repeat("0", 4 - strlen(strval($number)));
-		return $basic.$temp.strval($number + 1);
-	}
-
 	// Check if user is logged.
 	require_once("../../user/login/isLogged.php");
 
@@ -62,7 +50,6 @@
 			$sum = mysqli_num_rows($result);
 
 			// Set variables.
-			$IDname =		generateIDname($author, $sum);
 			$name =			addslashes($_POST['name']);
 			$type =			$_POST['type'];
 			$action =		$_POST['actiontodo'];
@@ -74,7 +61,7 @@
 			$developer =	$_POST['developer'];
 			$resolution =	$_POST['resolution'];
 
-			if(!$connection->query("INSERT INTO bugs VALUES (NULL, '$IDname', '$name', '$type', '$action', '$description', '$location', '$severity', '$priority', '$deadline', '$author', '$developer', '$resolution')"))
+			if(!$connection->query("INSERT INTO bugs VALUES (NULL, '$name', '$type', '$action', '$description', '$location', '$severity', '$priority', '$deadline', '$author', '$developer', '$resolution')"))
 			{
 				throw new Exception($connection->error);
 			}
