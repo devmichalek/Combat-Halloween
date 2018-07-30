@@ -40,30 +40,22 @@
 
 <?php require_once("../../common/head.php"); ?>
     
-    <div class="navbar-fixed">
-    <nav><div class="nav-wrapper">
-        <div class="row">
-            <a class="nav-main brand-logo">&nbsp;&nbsp;&nbsp;Combat&nbsp;Halloween</a>
-            <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-            <ul id="nav-mobile" class="right hide-on-med-and-down">
-                <li><a class="btn-floating btn-medium pulse blue lighten-1" href="../../home.php"><i class="material-icons">home</i></a></li>
-                <li><a class="nav btn red lighten-1 nav-button" href="../index.php">Back</a></li>
-            </ul>
-        </div>
-    </div></nav>
-    </div>
-    <?php require_once("../../common/sidenav-b.php"); ?>
-        <li><a href="../../home.php"><i class="material-icons">home</i>Home</a></li>
-        <li><a href="../index.php"><i class="material-icons">arrow_back</i>Back</a></li>
-    <?php require_once("../../common/sidenav-e.php"); ?>
+    <?php require_once("../../common/navbar-b.php"); ?>
+	      		<li><a class="btn-floating btn-medium pulse blue lighten-1" href="../../home.php"><i class="material-icons">home</i></a></li>
+	        	<li><a class="nav btn white japokki-black" href="../index.php">Back</a></li>
+	<?php require_once("../../common/navbar-e.php"); ?>
+  	<?php require_once("../../common/sidenav-b.php"); ?>
+  	    <li><a class="japokki-black" href="../../home.php"><i class="material-icons">home</i>Home</a></li>
+  	    <li><a class="japokki-black" href="../index.php"><i class="material-icons">arrow_back</i>Back</a></li>
+	<?php require_once("../../common/sidenav-e.php"); ?>
 
-
-  <div class="container center">
     
-    <!-- Header -->
-    <div class="s12"><h2>Combat Halloween Edit Bug</h2></div>
+	<div class="container center">
+		
+		<!-- Header -->
+		<div class="s12"><h2 class="japokki-black A22">Combat Halloween Edit Bug</h2></div>
     
-    <form class="col s6 push-s3" method="post" action="edit.php" style="margin-bottom: 20px;">
+    <form class="col s6 push-s3 japokki-black" method="post" action="edit.php" style="margin-bottom: 20px;">
         
       <!-- HIDDEN ID NAME-->
         <input type="hidden" name="ID" value="<?php echo $ID; ?>" />
@@ -72,7 +64,7 @@
       <div class="row">
       <div class="input-field col s12 m6 push-m3">
         <input id="name" type="text" class="validate" name="name" value="<?php echo $name; ?>">
-        <label for="name"><h5 class="modcon2">Name</h5></label>
+        <label for="name"><h5 class="A2">Name</h5></label>
       </div>
       </div>
 
@@ -114,7 +106,7 @@
         <!-- LOCATION OF THE BUG -->
         <div class="row"><div class="input-field col s12 m6 push-m3">
           <input id="location" type="text" class="validate" name="location" value="<?php echo $location; ?>">
-          <label for="location"><h5 class="modcon2">Location</h5></label>
+          <label for="location"><h5 class="A2">Location</h5></label>
         </div></div>
           
           <!-- SEVERITY, PRIORITY -->
@@ -146,7 +138,7 @@
         <div class="row">
           <div class="input-field col s12 m6 push-m3">
             <input id="deadline" type="text" class="datepicker" name="deadline" value="<?php echo $deadline; ?>">
-            <label for="deadline"><h5 class="modcon2">Deadline</h5></label>
+            <label for="deadline"><h5 class="A2">Deadline</h5></label>
           </div>
         </div>
 
@@ -154,7 +146,7 @@
         <div class="row">
           <div class="disabled input-field col s12 m6 push-m3">
             <input id="author" type="text" class="validate" name="author" value="<?php echo $author;?>">
-            <label for="author"><h5 class="modcon2">Author</h5></label>
+            <label for="author"><h5 class="A2">Author</h5></label>
           </div>
         </div>
 
@@ -198,23 +190,23 @@
         
         <div class="row">
         <!-- CANCEL BUTTON -->
-        <a href="../index.php" class="waves-effect waves-light btn red lighten-1"><i class="material-icons right">clear</i>Cancel </a>
+        <a href="../index.php" class="waves-effect waves-light btn red lighten-1 japokki-white"><i class="material-icons right">clear</i>Cancel </a>
         
         <!-- DELETE BUTTON -->
-        <a href="#bugdeleter" class="waves-effect waves-light btn modal-trigger purple lighten-1"><i class="material-icons right">delete</i>Delete </a>
+        <a href="#bugdeleter" class="waves-effect waves-light btn modal-trigger purple lighten-1 japokki-white"><i class="material-icons right">delete</i>Delete </a>
         
         <!-- UPDATE BUTTON-->
-        <button class="btn waves-effect waves-light green lighten-1 nav-button" type="submit" name="action">Update
+        <button class="btn waves-effect waves-light green lighten-1 japokki-white" type="submit" name="action">Update
           <i class="material-icons right">send</i>
         </button>
         </div>
         
     </form>
     
-    <div id="bugdeleter" class="modal">
+    <div id="bugdeleter" class="modal japokki-black">
         <div class="modal-content">
-            <h4 class="modcon">Information</h4>
-            <h5>You want to delete bug "<?php echo $name; ?>" ID(<?php echo $ID; ?>). Please confirm your decision.</h5>
+            <h4 class="A5">Information</h4>
+            <h5 class="A2">You want to delete bug "<?php echo $name; ?>" ID(<?php echo $ID; ?>). Please confirm your decision.</h5>
         </div>
         <div class="modal-footer">
             <a class="modal-close waves-effect waves-blue btn-flat japokki"><i class='material-icons right'>clear</i>CANCEL </a>
