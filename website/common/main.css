@@ -22,6 +22,10 @@ main {
     z-index: 99 !important;
 }
 
+#sidenav-overlay {
+   left: 300px;
+}
+
 .fixed-action-btn {
     z-index: 98 !important;
 }
@@ -31,150 +35,101 @@ main {
 	src: url( "http://combathalloween.netne.net/fonts/Jaapokki-Regular.otf" );
 }
 
-nav {
-  background-color: #253234 !important;
+
+/* Colors */
+.bg-white {
+    background-color: #FCFEFD;
 }
 
-.member {
-	font-family: japokki;
-	font-size: 120%;
+.bg-black {
+    background-color: #263238;
 }
 
-.tableheader {
-	font-family: japokki;
-	font-size: 150%;
+.char-white {
+    color: #FCFEFD !important;
 }
 
-.page-footer {
-	font-family: japokki;
-	font-size: 100%;
-	color: #FCFEFD;
-	background-color: #253234;
+.char-black {
+    color: #263238 !important;
 }
 
-.parallax-container {
-      height: 460px;
-    }
-
-.nav {
-	font-family: japokki;
-	font-size: 150%;
-	color: #FCFEFD;
+/* Font */
+.japokki {
+    font-family: japokki;
 }
 
-.cardy {
-	font-family: japokki;
-	font-size: 100%;
-	color: #FCFEFD;
+.japokki-white {
+    font-family: japokki;
+    color: #FCFEFD !important;
 }
 
-.nav-main {
-	font-family: japokki;
-	font-size: 225%;
-	color: #FCFEFD;
-	padding-left: 10px;
+.japokki-black {
+    font-family: japokki !important;
+    color: #263238 !important;
 }
 
-.nav-button {
-	font-family: japokki;
-	font-size: 100%;
-	color: #FCFEFD;
+.japokki-success {
+    font-family: japokki;
+    color: #66BB6A;
 }
 
-
-.info {
-	font-family: japokki;
-	font-size: 125%;
-	color: #424242;
+.japokki-error {
+    font-family: japokki;
+    color: #EF5350;
 }
 
-
-h2 {
-	font-family: japokki;
-	font-size: 240%;
-	color: #424242;
+.A1 {
+    font-size: 110%;
 }
 
-h4 {
-	font-family: japokki;
-	color: #FCFEFD;
+.A2 {
+    font-size: 120%;
 }
 
-.modcon {
-	font-family: japokki;
-	font-size: 150%;
-	color: black;
+.A3 {
+    font-size: 130%;
 }
 
-h5 {
-	font-family: japokki;
-	font-size: 130%;
+.A4 {
+    font-size: 140%;
 }
 
-.modcon2 {
-	font-family: japokki;
-	font-size: 130%;
-	color: black;
+.A5 {
+    font-size: 150%;
 }
 
-#sidenav-overlay {
-   left: 300px;
+.A7 {
+    font-size: 170%;
 }
 
-.errorColor {
-	color: #EF5350;
+.A22 {
+    font-size: 220%;
 }
 
-.successColor {
-	color: #66BB6A;
+.dropdown-content.select-dropdown li span {
+    font-family: japokki !important;
+    color: #263238 !important;
 }
 
 input {
     font-family: japokki;
 }
 
-.select-content {
-    font-family: japokki;
-}
-
-.japokki {
+select {
     font-family: japokki !important;
-}
-
-.dropdown-content {
-    font-family: japokki;
+    color: #263238 !important;
 }
 
 textarea {
-    font-family: japokki;
-}
-
-label {
-    font-family: japokki;
-}
-
-.btn {
-    font-family: japokki;
-}
-
-p {
-    font-family: japokki;
-}
-
-.thin-text {
-	font-family: japokki;
-	font-size: 175%;
-	font-weight: 300;
-	background-color: rgba( 20, 20, 20, 0.2 );
-	padding: 25px;
-	border-radius: 10px
+    font-family: japokki !important;
+    color: #263238 !important;
 }
 
 .preloader-background {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	background-color: #253234;
+	background-color: #263238;
 	
 	position: fixed;
 	z-index: 100;
@@ -191,6 +146,7 @@ p {
     top: -60px;
 }
 
+/* To disable links in a tags*/
 .disabled {
     pointer-events:none;
     opacity:0.6;

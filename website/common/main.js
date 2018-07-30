@@ -52,3 +52,7 @@ $(document).ready(function(){
 $(document).ready(function(){
     $('.tap-target').tapTarget();
   });
+  
+$(document).ready(function(){
+    $('.tooltipped').tooltip();
+  });
