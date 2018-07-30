@@ -12,7 +12,7 @@
 	        <th>Resolution</th>
 	    </tr>
 	</thead>
-  	<tbody class="member">
+  	<tbody class="member japokki">
   
   	<?php
     while($row=$records->fetch_assoc())
@@ -70,7 +70,7 @@
         echo "Info</a></td>";
         echo "<div id='".$row['ID']."' class='modal'>";
         echo "<div class='modal-content'>";
-        echo "<h4 class='modcon'>".$row['name']." ID(".$row['ID'].")</h4>";
+        echo "<h4 class='japokki-black A7'>".$row['name']." ID(".$row['ID'].")</h4>";
         
         echo "<div class='row japokki'>Reported by: ";
         echo '<div class="chip"><img src="../../images/users/'.$row['author'].'.jpg" alt="Contact Person"><span class="japokki">'.$row['author'].'</span></div>'."</div>";
@@ -143,13 +143,13 @@
 	        case "In Development":              echo "<td class='amber lighten-1'>";      break;
 	        case "Irreproducible":              echo "<td class='deep-purple'>";          break;
 	        case "Known Problem":               echo "<td class='red lighten-1'>";        break;
-	        case "Need More Info":              echo "<td class='blue lighten-1'>";       break;
+	        case "Need More Info":              echo "<td class='purple lighten-1'>";       break;
 	        case "New":                         echo "<td class='red lighten-1'>";        break;
 	        case "Obsolete":                    echo "<td class='deep-purple'>";          break;
 	        case "Reopen":                     echo "<td class='red lighten-1'>";        break;
 	        case "Revised":                     echo "<td class='green lighten-1'>";      break;
 	        case "Not To Correct":              echo "<td class='pink lighten-1'>";       break;
-	        case "Support Needed":              echo "<td class='blue lighten-1'>";       break;
+	        case "Support Needed":              echo "<td class='purple lighten-1'>";       break;
 	        case "Withdrawn":                   echo "<td class='deep-purple'>";          break;
 	        default:                            echo "<td class='grey lighten-1'>";       break;
 	      }
