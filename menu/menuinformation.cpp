@@ -38,14 +38,14 @@ void MenuInformation::load(float screen_w, float screen_h)
 	// Set text.
 	money.setText("error");
 	money_form.setText("Money: ");
-	username.setText(Username::getUsername());
+	username.setText(User::getUsername());
 	username_form.setText("Logged as ");
 
 	// Set color.
-	money.setFillColor(Username::getErrorColor());
-	money_form.setFillColor(Username::getLockedColor());
-	username.setFillColor(Username::getSuccessColor());
-	username_form.setFillColor(Username::getLockedColor());
+	money.setFillColor(User::getErrorColor());
+	money_form.setFillColor(User::getLockedColor());
+	username.setFillColor(User::getSuccessColor());
+	username_form.setFillColor(User::getLockedColor());
 
 	// Set size.
 	float size = screen_h / 32;
@@ -67,7 +67,8 @@ void MenuInformation::load(float screen_w, float screen_h)
 	scene.load("images/other/scene.png");
 	scene.setScale(screen_w / 2560, screen_h / 1440);
 	scene.setPosition(screen_w / 9, screen_h - scene.getHeight());
-	background.loadRepeated("images/other/sayagata.png", screen_w, screen_h, true);
+	background.loadRepeated("images/other/sayagata.png", screen_w*1.5, screen_h*1.5, true);
+	background.setScale(0.75, 0.75);
 }
 
 void MenuInformation::draw(sf::RenderWindow* &window)
@@ -126,7 +127,7 @@ void MenuInformation::setThread()
 		{
 			// Money.
 			money.setText("loading...");
-			money.setFillColor(Username::getLoadingColor());
+			money.setFillColor(User::getLoadingColor());
 			money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
 
 			thread.thread = new std::thread(&MenuInformation::setMoney, this);
@@ -143,8 +144,8 @@ void MenuInformation::reloadThread()
 void MenuInformation::setMoney()
 {
 	cmm::Request request;
-	request.setMessage("username=" + boost::lexical_cast<std::string>(Username::getUsername()));
-	request.setRequest("/getmoney.php", sf::Http::Request::Post);
+	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
+	request.setRequest("/getters/getmoney.php", sf::Http::Request::Post);
 	request.setHttp("http://combathalloween.netne.net/");
 
 	bool success = request.sendRequest();
@@ -157,7 +158,7 @@ void MenuInformation::setMoney()
 		else
 		{
 			money.setText(request.getResult());
-			money.setFillColor(Username::getSuccessColor());
+			money.setFillColor(User::getSuccessColor());
 			thread.success = true;
 		}
 	}
@@ -166,7 +167,7 @@ void MenuInformation::setMoney()
 	if (!success)
 	{
 		money.setText("error");
-		money.setFillColor(Username::getErrorColor());
+		money.setFillColor(User::getErrorColor());
 	}
 
 	money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
