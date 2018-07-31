@@ -17,12 +17,13 @@
     <ClCompile Include="..\common\sprite.cpp" />
     <ClCompile Include="..\common\text.cpp" />
     <ClCompile Include="..\core\core.cpp" />
+    <ClCompile Include="..\levelmenu\chat.cpp" />
     <ClCompile Include="button.cpp" />
     <ClCompile Include="menuinformation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="pausesystem.cpp" />
-    <ClCompile Include="robotspecs.cpp" />
+    <ClCompile Include="knightspecs.cpp" />
     <ClCompile Include="settings.cpp" />
     <ClCompile Include="state.cpp" />
   </ItemGroup>
@@ -33,11 +34,12 @@
     <ClInclude Include="..\common\sprite.h" />
     <ClInclude Include="..\common\text.h" />
     <ClInclude Include="..\core\core.h" />
+    <ClInclude Include="..\levelmenu\chat.h" />
     <ClInclude Include="button.h" />
     <ClInclude Include="menuinformation.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="pausesystem.h" />
-    <ClInclude Include="robotspecs.h" />
+    <ClInclude Include="knightspecs.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="state.h" />
   </ItemGroup>
@@ -79,11 +81,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\adriqun\source\repos\SFML-2.5.032\include;C:\Users\adriqun\source\repos\boost;..\core;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\\boost;..\core;..\common;..\levelmenu;..\menu</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\adriqun\source\repos\SFML-2.5.032\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

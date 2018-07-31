@@ -48,8 +48,11 @@
     <ClCompile Include="menuinformation.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="robotspecs.cpp">
+    <ClCompile Include="knightspecs.cpp">
       <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\chat.cpp">
+      <Filter>Dependencies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,8 +92,11 @@
     <ClInclude Include="menuinformation.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="robotspecs.h">
+    <ClInclude Include="knightspecs.h">
       <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\levelmenu\chat.h">
+      <Filter>Dependencies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
