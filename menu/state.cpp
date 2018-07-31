@@ -37,7 +37,7 @@ bool State::isState() const
 
 
 
-char* Username::username = (char*)"admin";
+char* User::username = (char*)"user";
 
 
 

@@ -18,7 +18,7 @@ public:
 	bool isState() const;
 };
 
-class Username
+class User
 {
 public:
 	static char* username;
