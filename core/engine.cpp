@@ -21,8 +21,8 @@ void Engine::loop()
 {
 	while (core->open)
 	{
-		core->clear();
 		events();
+		core->clear();
 		states();
 		core->display();
 	}
@@ -46,9 +46,9 @@ void Engine::load()
 		break;
 
 	case 25:
-	menu = new Menu;
-	menu->load( core->getWidth(), core->getHeight() );
-	break;
+		menu = new Menu;
+		menu->load( core->getWidth(), core->getHeight() );
+		break;
 	
 		//	case 70:
 		//	level = new Level;
@@ -95,8 +95,8 @@ void Engine::events()
 		switch (core->state)
 		{
 		case LOGIN: 	login->handle(core->getEvent()); 	break;
-		case MENU: 		menu->handle( core->getEvent() ); 	break;
-				/*case LEVEL: 	level->handle( core->getEvent() );	break;
+		case MENU: 		menu->handle(core->getEvent()); 	break;
+			/*case LEVEL: 	level->handle( core->getEvent() );	break;
 			case PLAY: 		play->handle( core->getEvent() ); 	break;
 			case TABLE: 	table->handle( core->getEvent() ); 	break;*/
 		}
@@ -105,37 +105,38 @@ void Engine::events()
 
 void Engine::states()
 {
-	if (core->state == LOADING)
+	switch (core->state)
 	{
+	case LOADING:
 		load();
-	}
+		break;
 
-	if (core->state == INIT)
-	{
+	case INIT:
 		initialization->mechanics(core->getElapsedTime());
 		initialization->draw(core->getWindow());
-
 		if (initialization->isNext())
 		{
 			core->state = LOGIN;
 			delete initialization;
-			initialization = NULL;
+			initialization = nullptr;
 		}
-	}
+		break;
 
-	if (core->state == LOGIN)
-	{
+	case LOGIN:
 		login->mechanics(core->getElapsedTime());
 		login->draw(core->getWindow());
-		if (login->isNext())	core->state = MENU;
-	}
+		if (login->isNext())		core->state = MENU;
+		break;
 
-	if (core->state == MENU)
-	{
-		menu->head(core->getWindow(), core->getElapsedTime());
+	case MENU:
+		menu->mechanics(core->getElapsedTime());
+		menu->draw(core->getWindow());
 		/*if (menu->isPrev()) // add editor exe
 		else */if (menu->isNext())	core->state = LEVEL;
 		else if (menu->isExit())	core->open = false;
+		break;
+
+	default: break;
 	}
 
 	/*if( core->getState() == LEVEL )
