@@ -1,18 +1,18 @@
-#include "robotspecs.h"
+#include "knightspecs.h"
 #include "state.h"
 #include "boost/lexical_cast.hpp"
 
-Robotspecs::Robotspecs()
+Knightspecs::Knightspecs()
 {
 	free();
 }
 
-Robotspecs::~Robotspecs()
+Knightspecs::~Knightspecs()
 {
 	free();
 }
 
-void Robotspecs::free()
+void Knightspecs::free()
 {
 	screen_w = 0;
 	screen_h = 0;
@@ -36,7 +36,7 @@ void Robotspecs::free()
 
 
 
-void Robotspecs::load(float screen_w, float screen_h)
+void Knightspecs::load(float screen_w, float screen_h)
 {
 	free();
 
@@ -58,15 +58,15 @@ void Robotspecs::load(float screen_w, float screen_h)
 	botgear.setPosition(0, plank.getBot());
 
 	max_offset = 10;
-	robot.load("images/other/menurobot.png", max_offset);
-	robot.setScale(screen_w / 2560, screen_h / 1440);
-	robot.setPosition(screen_w / 6.5, screen_h - screen_h / 72 - robot.getHeight());
+	knight.load("images/other/menuknight.png", max_offset);
+	knight.setScale(screen_w / 2560, screen_h / 1440);
+	knight.setPosition(screen_w / 7.6, screen_h - screen_h / 72 - knight.getHeight());
 
 	click.load("sounds/click.wav");
 
 	categories.setFont("fonts/jcandlestickextracond.ttf");
-	categories.setText("Heart Points:\nArmour:\nSpeed:\nClip:\nShoot Damage:\nLaser Beam Damage:\nLuckiness:\nExperience:");
-	categories.setFillColor(Username::getLockedColor());
+	categories.setText("Heart Points:\nArmour:\nMovement Speed:\nDamage:\nAttack Speed:\nLuckiness:\nExperience:\nLevel:");
+	categories.setFillColor(User::getLockedColor());
 	categories.setSize(screen_h / 28);
 	categories.setPosition(screen_h / 128, plank.getTop() + screen_h / 24);
 
@@ -75,19 +75,19 @@ void Robotspecs::load(float screen_w, float screen_h)
 		values.push_back(new cmm::Text);
 		values[i]->setFont("fonts/jcandlestickextracond.ttf");
 		values[i]->setText("loading...");
-		values[i]->setFillColor(Username::getLoadingColor());
+		values[i]->setFillColor(User::getLoadingColor());
 		values[i]->setSize(screen_h / 28);
 	}
 
 	position();
 }
 
-void Robotspecs::draw(sf::RenderWindow* &window)
+void Knightspecs::draw(sf::RenderWindow* &window)
 {
 	window->draw(plank.get());
 	window->draw(topgear.get());
 	window->draw(botgear.get());
-	window->draw(robot.get());
+	window->draw(knight.get());
 	window->draw(categories.get());
 	
 	for (auto &it : values)
@@ -96,7 +96,7 @@ void Robotspecs::draw(sf::RenderWindow* &window)
 	}
 }
 
-void Robotspecs::mechanics(double elapsedTime)
+void Knightspecs::mechanics(double elapsedTime)
 {
 	// Delete thread if is ready
 	if (thread.ready)
@@ -107,15 +107,15 @@ void Robotspecs::mechanics(double elapsedTime)
 	// Offset.
 	offset += elapsedTime * 25;
 	if (offset > max_offset)	offset = 0;
-	robot.setOffset(offset);
+	knight.setOffset(offset);
 }
 
-void Robotspecs::fadein(float v, int max)
+void Knightspecs::fadein(float v, int max)
 {
 	plank.fadein(v, max);
 	topgear.fadein(v, max);
 	botgear.fadein(v, max);
-	robot.fadein(v, max);
+	knight.fadein(v, max);
 	categories.fadein(v, max);
 
 	for (auto &it : values)
@@ -124,12 +124,12 @@ void Robotspecs::fadein(float v, int max)
 	}
 }
 
-void Robotspecs::fadeout(float v, int min)
+void Knightspecs::fadeout(float v, int min)
 {
 	plank.fadeout(v, min);
 	topgear.fadeout(v, min);
 	botgear.fadeout(v, min);
-	robot.fadeout(v, min);
+	knight.fadeout(v, min);
 	categories.fadeout(v, min);
 
 	for (auto &it : values)
@@ -140,7 +140,7 @@ void Robotspecs::fadeout(float v, int min)
 
 
 
-void Robotspecs::setThread()
+void Knightspecs::setThread()
 {
 	if (!thread.success)
 	{
@@ -150,28 +150,28 @@ void Robotspecs::setThread()
 			for (auto &it : values)
 			{
 				it->setText("loading...");
-				it->setFillColor(Username::getLoadingColor());
+				it->setFillColor(User::getLoadingColor());
 			}
 
 			position();
 
-			thread.thread = new std::thread(&Robotspecs::setValues, this);
+			thread.thread = new std::thread(&Knightspecs::setValues, this);
 			thread.thread->detach();
 		}
 	}
 }
 
-void Robotspecs::reloadThread()
+void Knightspecs::reloadThread()
 {
 	thread.success = false;
 }
 
-void Robotspecs::setValues()
+void Knightspecs::setValues()
 {
 	cmm::Request request;
-	request.setMessage("username=" + boost::lexical_cast<std::string>(Username::getUsername()));
-	request.setRequest("/combathalloween/getparts.php", sf::Http::Request::Post);
-	request.setHttp("http://adrianmichalek.pl/");
+	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
+	request.setRequest("/getters/getfeatures.php", sf::Http::Request::Post);
+	request.setHttp("http://combathalloween.netne.net/");
 
 	bool success = request.sendRequest();
 	if (success)
@@ -182,11 +182,38 @@ void Robotspecs::setValues()
 		}
 		else
 		{
-			for (auto &it : values)
+			std::string result = request.getResult(), buf = "";
+			std::vector<std::string> strs;
+			for (unsigned i = 0; i < result.size(); ++i)
 			{
-				it->setText("value");
-				it->setFillColor(Username::getSuccessColor());
+				if (result[i] == '@')
+				{
+					strs.push_back(buf);
+					buf = "";
+					continue;
+				}
+
+				buf += result[i];
 			}
+
+			values[HEART_POINTS]->setText(strs[HEART_POINTS] + " hp");
+			values[ARMOUR]->setText(strs[ARMOUR] + " %");
+			values[MOVEMENT_SPEED]->setText(strs[MOVEMENT_SPEED] + " %");
+			values[DAMAGE]->setText(strs[DAMAGE] + " dmg");
+			values[ATTACK_SPEED]->setText(strs[ATTACK_SPEED] + " %");
+			values[LUCKINESS]->setText(strs[LUCKINESS] + " %");
+			values[EXPERIENCE]->setText(strs[EXPERIENCE] + " %");
+			values[LEVEL]->setText(strs[LEVEL] + " lv");
+			strs.clear();
+
+			values[HEART_POINTS]->setFillColor(User::getErrorColor());
+			values[ARMOUR]->setFillColor(User::getLockedColor());
+			values[MOVEMENT_SPEED]->setFillColor(User::getGreenColor());
+			values[DAMAGE]->setFillColor(User::getErrorColor());
+			values[ATTACK_SPEED]->setFillColor(User::getGreenColor());
+			values[LUCKINESS]->setFillColor(User::getSuccessColor());
+			values[EXPERIENCE]->setFillColor(User::getSuccessColor());
+			values[LEVEL]->setFillColor(User::getSuccessColor());
 
 			thread.success = true;
 		}
@@ -198,7 +225,7 @@ void Robotspecs::setValues()
 		for (auto &it : values)
 		{
 			it->setText("error");
-			it->setFillColor(Username::getErrorColor());
+			it->setFillColor(User::getErrorColor());
 		}
 	}
 
@@ -206,12 +233,12 @@ void Robotspecs::setValues()
 	thread.ready = true;
 }
 
-bool Robotspecs::isReady() const
+bool Knightspecs::isReady() const
 {
 	return thread.success;
 }
 
-void Robotspecs::position()
+void Knightspecs::position()
 {
 	float x = categories.getRight() + screen_h / 27;
 	float y = categories.getTop();
@@ -221,7 +248,7 @@ void Robotspecs::position()
 	}
 }
 
-void Robotspecs::setVolume(float volume)
+void Knightspecs::setVolume(float volume)
 {
 	click.setVolume(volume);
 }

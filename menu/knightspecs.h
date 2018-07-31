@@ -7,7 +7,7 @@
 #include <SFML/Window/Event.hpp>
 #include <vector>
 
-class Robotspecs
+class Knightspecs
 {
 	float screen_w;
 	float screen_h;
@@ -16,12 +16,12 @@ class Robotspecs
 	{
 		HEART_POINTS = 0,
 		ARMOUR,
-		SPEED,
-		CLIP,
-		SHOOT_DAMAGE,
-		LASERB_DAMAGE,
+		MOVEMENT_SPEED,
+		DAMAGE,
+		ATTACK_SPEED,
 		LUCKINESS,
 		EXPERIENCE,
+		LEVEL,
 		AMOUNT
 	};
 
@@ -31,7 +31,7 @@ class Robotspecs
 	// Animation.
 	float offset;
 	float max_offset;
-	cmm::Sprite robot;
+	cmm::Sprite knight;
 
 	cmm::Sound click;
 	cmm::Thread thread;
@@ -41,8 +41,8 @@ class Robotspecs
 	std::vector <cmm::Text*> values;
 
 public:
-	Robotspecs();
-	~Robotspecs();
+	Knightspecs();
+	~Knightspecs();
 	void free();
 
 	void load(float screen_w, float screen_h);
