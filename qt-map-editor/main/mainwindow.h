@@ -2,14 +2,14 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_mainwindow.h"
+#include <qmenubar.h>
 
-class mainwindow : public QMainWindow
+class MainWindow : public QMainWindow
 {
 	Q_OBJECT
+	Ui::mainwindowClass ui;
 
 public:
-	mainwindow(QWidget *parent = Q_NULLPTR);
-
-private:
-	Ui::mainwindowClass ui;
+	MainWindow(QWidget *parent = Q_NULLPTR);
+	~MainWindow();
 };
