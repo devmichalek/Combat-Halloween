@@ -1,0 +1,3 @@
+﻿  state.cpp
+c:\users\adriqun\source\repos\combat halloween\menu\state.cpp(53): warning C4244: '=': conversion from 'float' to 'unsigned int', possible loss of data
+  levelmenu.vcxproj -> C:\Users\adriqun\source\repos\Combat Halloween\Debug\levelmenu.exe
