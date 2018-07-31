@@ -2,6 +2,7 @@
 #include "text.h"
 #include "sound.h"
 #include "sprite.h"
+#include "request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <vector>
@@ -16,11 +17,10 @@ class Settings
 		MOVE_LEFT = 0,
 		MOVE_RIGHT,
 		JUMP,
-		CHOP,
-		SHOOT,
-		SLIDE,
-		JUMP_CHOP,
-		JUMP_SHOOT,
+		ATTACK,
+		SHIELD,
+		JUMP_ATTACK,
+		JUMP_SHIELD,
 		PAUSE,
 		CHAT,
 		AMOUNT
@@ -56,6 +56,7 @@ class Settings
 
 	// Sound.
 	cmm::Sound click;
+	cmm::Thread thread;
 
 public:
 	Settings();
@@ -79,6 +80,10 @@ public:
 	bool isPossibleKey(sf::Event &event);
 	std::string getName(int n); public:
 	void reset();
+
+	void setThread();
+	void reloadThread();
+	bool isReady() const;	// values are loaded correctly from database
 	void setVolume(float volume);
 };
 

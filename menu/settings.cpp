@@ -1,6 +1,6 @@
 #include "settings.h"
-#include <boost/lexical_cast.hpp>
-#include <fstream>
+#include "state.h"
+#include "boost/lexical_cast.hpp"
 
 Settings::Settings()
 {
@@ -67,6 +67,7 @@ void Settings::free()
 	y1 = y2 = 0;
 
 	target = -1;
+	thread.free();
 }
 
 
@@ -92,29 +93,20 @@ void Settings::load(float screen_w, float screen_h)
 	state_texts[MOVE_LEFT]->setText("move left");
 	state_texts[MOVE_RIGHT]->setText("move right");
 	state_texts[JUMP]->setText("jump");
-	state_texts[CHOP]->setText("chop");
-	state_texts[SHOOT]->setText("shoot");
-	state_texts[SLIDE]->setText("slide");
-	state_texts[JUMP_CHOP]->setText("jump chop");
-	state_texts[JUMP_SHOOT]->setText("jump shoot");
+	state_texts[ATTACK]->setText("attack");
+	state_texts[SHIELD]->setText("shield");
+	state_texts[JUMP_ATTACK]->setText("jump attack");
+	state_texts[JUMP_SHIELD]->setText("jump shield");
 	state_texts[PAUSE]->setText("pause");
 	state_texts[CHAT]->setText("chat");
 
 	// Set active_texts text.
-	std::ifstream file("txt/keys.txt");
-	if (file.good())
+	for (unsigned i = 0; i < AMOUNT; i++)
 	{
-		for (unsigned i = 0; i < JUMP_CHOP; i++)
-		{
-			text_collisions.push_back(sf::Rect<float>());
-			std::string line = "";
-			file >> line;
-			keys.push_back(boost::lexical_cast<int>(line));
-			active_texts[i]->setText(getName(keys[i]));
-		}
+		text_collisions.push_back(sf::Rect<float>());
+		keys.push_back(-1);
+		active_texts[i]->setText("loading...");
 	}
-	active_texts[JUMP_CHOP]->setText(getName(keys[JUMP]) + " + " + getName(keys[CHOP]));
-	active_texts[JUMP_SHOOT]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHOOT]));
 	active_texts[PAUSE]->setText("p");
 	active_texts[CHAT]->setText("o");
 
@@ -124,15 +116,15 @@ void Settings::load(float screen_w, float screen_h)
 	{
 		state_texts[i]->setSize(size);
 		active_texts[i]->setSize(size);
-		state_texts[i]->setFillColor(sf::Color(0xDD, 0xDD, 0xDD));
-		i < JUMP_CHOP ? active_texts[i]->setFillColor(sf::Color(0xFF, 0xFF, 0xFF)) : active_texts[i]->setFillColor(sf::Color(0xDD, 0xDD, 0xDD));
+		state_texts[i]->setFillColor(User::getLockedColor());
+		i < JUMP_ATTACK ? active_texts[i]->setFillColor(User::getLoadingColor()) : active_texts[i]->setFillColor(User::getLockedColor());
 	}
 
 	// Set contact me information.
 	contactme.setFont(text_path);
 	contactme.setText("Contact me: devmichalek@gmail.com");
-	contactme.setSize(size - 4);
-	contactme.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+	contactme.setSize(size);
+	contactme.setFillColor(User::getLoadingColor());
 
 	// Set table.
 	table.load("images/other/plank.png");
@@ -225,19 +217,18 @@ bool Settings::handle(sf::Event& event)
 					keys[target] = event.key.code;
 
 					active_texts[target]->setText(getName(event.key.code));
-					active_texts[target]->setFillColor(sf::Color(0xF2, 0x58, 0x3E));
+					active_texts[target]->setFillColor(User::getErrorColor());
 
-					if (target == CHOP || target == JUMP)
+					if (target == ATTACK || target == JUMP)
 					{
-						active_texts[JUMP_CHOP]->setText(getName(keys[JUMP]) + " + " + getName(keys[CHOP]));
+						active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
 					}
-					else if (target == SHOOT || target == JUMP)
+					else if (target == SHIELD || target == JUMP)
 					{
-						active_texts[JUMP_SHOOT]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHOOT]));
+						active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
 					}
 
 					positionTable();
-					setKeys();
 				}
 			}
 		}
@@ -257,7 +248,7 @@ bool Settings::handle(sf::Event& event)
 
 				// Check if it is collide.
 				target = -1;
-				for (unsigned i = 0; i < JUMP_CHOP; i++)
+				for (unsigned i = 0; i < JUMP_ATTACK; i++)
 				{
 					if (text_collisions[i].contains(event.mouseButton.x, event.mouseButton.y))
 					{
@@ -306,6 +297,12 @@ void Settings::draw(sf::RenderWindow* &window)
 
 void Settings::mechanics(double elapsedTime)
 {
+	// Delete thread if is ready
+	if (thread.ready)
+	{
+		thread.reset();
+	}
+
 	if (tableMoves != 0)	// is moving
 	{
 		table.move(tableMoves, 0);
@@ -443,31 +440,78 @@ void Settings::resetKeys()
 	keys[MOVE_LEFT] = 71;
 	keys[MOVE_RIGHT] = 72;
 	keys[JUMP] = 73;
-	keys[CHOP] = 25;
-	keys[SHOOT] = 23;
-	keys[SLIDE] = 74;
-	for (unsigned i = 0; i < JUMP_CHOP; i++)
+	keys[ATTACK] = 23;
+	keys[SHIELD] = 25;
+	for (unsigned i = 0; i < JUMP_ATTACK; i++)
 	{
 		active_texts[i]->setText(getName(keys[i]));
-		active_texts[i]->setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+		active_texts[i]->setFillColor(User::getLoadingColor());
 	}
+	active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
+	active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
 
-	// Overwrite.
-	setKeys();
+	// Overwrite / Send to database.
+	
 
 	positionTable();
 }
 
 void Settings::setKeys()
 {
-	std::ofstream file("txt/keys.txt");
-	if (file.good())
+	cmm::Request request;
+	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
+	request.setRequest("/getters/getsettings.php", sf::Http::Request::Post);
+	request.setHttp("http://combathalloween.netne.net/");
+
+	bool success = request.sendRequest();
+	if (success)
 	{
-		for (unsigned i = 0; i < JUMP_CHOP; i++)
+		if (request.getResult() == "0")	// error
 		{
-			file << keys[i] << std::endl;
+			success = false;
+		}
+		else
+		{
+			keys.clear();
+			std::string result = request.getResult(), buf = "";
+			for (unsigned i = 0; i < result.size(); ++i)
+			{
+				if (result[i] == '@')
+				{
+					keys.push_back(std::stoi(buf));
+					buf = "";
+					continue;
+				}
+
+				buf += result[i];
+			}
+
+			for (unsigned i = 0; i < JUMP_ATTACK; ++i)
+			{
+				active_texts[i]->setText(static_cast<sf::String>(getName(keys[i])));
+				active_texts[i]->setFillColor(User::getLoadingColor());
+			}
+			active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
+			active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
+			active_texts[JUMP_ATTACK]->setFillColor(User::getLockedColor());
+			active_texts[JUMP_SHIELD]->setFillColor(User::getLockedColor());
+
+			thread.success = true;
 		}
 	}
+
+	// Error.
+	if (!success)
+	{
+		for (unsigned i = 0; i < PAUSE; ++i)
+		{
+			active_texts[i]->setText("error");
+			active_texts[i]->setFillColor(User::getErrorColor());
+		}
+	}
+
+	positionTable();
+	thread.ready = true;
 }
 
 void Settings::positionTable()
@@ -475,24 +519,24 @@ void Settings::positionTable()
 	// Position state texts.
 	for (unsigned i = 0; i < state_texts.size(); i++)
 	{
-		state_texts[i]->setPosition(table.getX() + screen_w / 80, table.getY() + (screen_h / 28 * i) + screen_h / 256);
+		state_texts[i]->setPosition(table.getX() + screen_w / 80, table.getY() + screen_h / 56 + (screen_h / 28 * i) + screen_h / 256);
 	}
 
 	// Position active texts.
 	for (unsigned i = 0; i < active_texts.size(); i++)
 	{
 		active_texts[i]->setPosition(table.getX() + table.getWidth() / 2, state_texts[i]->getY());
-		if (i < JUMP_CHOP)
+		if (i < JUMP_ATTACK)
 		{
 			text_collisions[i].width = table.getWidth();
-			text_collisions[i].height = active_texts[i]->getHeight();
+			text_collisions[i].height = active_texts[i]->getHeight() *1.5;
 			text_collisions[i].left = table.getX();
 			text_collisions[i].top = active_texts[i]->getY();
 		}
 	}
 
 	// Contactme.
-	contactme.setPosition(table.getX() + screen_w / 80, table.getBot() - contactme.getHeight() - screen_h / 108);
+	contactme.setPosition(table.getX() + screen_w / 80, table.getBot() - contactme.getHeight() - screen_h / 54);
 }
 
 void Settings::positionChart()
@@ -576,6 +620,38 @@ void Settings::reset()
 
 
 
+
+void Settings::setThread()
+{
+	if (!thread.success)
+	{
+		if (!thread.ready && !thread.thread)
+		{
+			// Values.
+			for (unsigned i = 0; i < PAUSE; ++i)
+			{
+				active_texts[i]->setText("loading...");
+				active_texts[i]->setFillColor(User::getLoadingColor());
+				i < JUMP_ATTACK ? active_texts[i]->setFillColor(User::getLoadingColor()) : active_texts[i]->setFillColor(User::getLockedColor());
+			}
+
+			positionTable();
+
+			thread.thread = new std::thread(&Settings::setKeys, this);
+			thread.thread->detach();
+		}
+	}
+}
+
+void Settings::reloadThread()
+{
+	thread.success = false;
+}
+
+bool Settings::isReady() const
+{
+	return thread.success;
+}
 
 void Settings::setVolume(float volume)
 {
