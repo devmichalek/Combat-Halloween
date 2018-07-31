@@ -1,6 +1,5 @@
 #include "menu.h"
 #include "boost/lexical_cast.hpp"
-#include <fstream>
 
 Menu::Menu()
 {
@@ -19,7 +18,7 @@ void Menu::free()
 	exit = false;
 	loaded = false;
 
-	robotspecs.free();
+	knightspecs.free();
 	github.free();
 	scores.free();
 	website.free();
@@ -35,7 +34,7 @@ void Menu::free()
 	sound_volumebutton.free();
 	music_volumebutton.free();
 	information.free();
-	// chat.free();
+	chat.free();
 	pausesystem.free();
 }
 
@@ -46,12 +45,14 @@ void Menu::set()
 		loaded = true;
 
 		// Set threads.
-		robotspecs.setThread();
+		knightspecs.setThread();
 		information.setThread();
+		settings.setThread();
 
 		// Sound.
 		float soundVolume = 50;
-		robotspecs.setVolume				(soundVolume);
+		cmm::Sound::setGlobalVolume			(soundVolume);
+		knightspecs.setVolume				(soundVolume);
 		github.setVolume					(soundVolume);
 		scores.setVolume					(soundVolume);
 		website.setVolume					(soundVolume);
@@ -68,15 +69,16 @@ void Menu::set()
 		sound_volumebutton.setGlobalVolume	(soundVolume);
 		music_volumebutton.setVolume		(soundVolume);
 		pausesystem.setVolume				(soundVolume);
-		cmm::Sound::setPlayable	(true);
-		soundbutton.setActive	(true);
+		cmm::Sound::setGlobalPlayable		(true);
+		soundbutton.setActive				(true);
 
 		// Music.
 		float musicVolume = 60;
+		cmm::Music::setGlobalVolume			(musicVolume);
 		music.setVolume						(musicVolume);
 		music_volumebutton.setGlobalVolume	(musicVolume);
-		cmm::Music::setPlayable	(true);
-		musicbutton.setActive	(true);
+		cmm::Music::setGlobalPlayable		(true);
+		musicbutton.setActive				(true);
 		music.play();
 	}
 }
@@ -96,7 +98,7 @@ void Menu::reset()
 	singleplayerbutton.reset();
 	settingsbutton.setActive(false);
 	settings.reset();
-	// chat.reset();
+	chat.reset();
 	music.stop();
 }
 
@@ -109,7 +111,7 @@ void Menu::load(float screen_w, float screen_h)
 	float scale_x = screen_w / 2560;
 	float scale_y = screen_h / 1440;
 
-	robotspecs.load(screen_w, screen_h);
+	knightspecs.load(screen_w, screen_h);
 
 	// Load link buttons.
 	github.load			("images/buttons/github.png");
@@ -123,7 +125,7 @@ void Menu::load(float screen_w, float screen_h)
 	website.setPosition	(scores.getRight() + screen_w / 256, screen_h / 144);
 	github.setUrl		("https://github.com/devmichalek/Combat-Halloween");
 	scores.setUrl		("empty");
-	website.setUrl		("http://adrianmichalek.pl/combathalloween/");
+	website.setUrl		("http://combathalloween.netne.net/");
 
 	// Main buttons.
 	singleplayerbutton.load			("images/buttons/singleplayer.png");
@@ -161,9 +163,9 @@ void Menu::load(float screen_w, float screen_h)
 	music_volumebutton.setPosition	(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
 	// Set chat.
-	/*chat.load(screen_w, screen_h);
+	chat.load(screen_w, screen_h);
 	chat.setCommandColor(sf::Color(0, 0, 0));
-	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));*/
+	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));
 
 	information.load	(screen_w, screen_h);
 	settings.load		(screen_w, screen_h);
@@ -177,10 +179,10 @@ void Menu::handle(sf::Event& event)
 	{
 		if (!pausesystem.isActive() && pausesystem.getAlpha() == 0)
 		{
-			// chat.handle(event);
+			chat.handle(event);
 
-			// if (!chat.isOpen())
-			// {
+			if (!chat.isActive())
+			{
 				github.handle				(event);
 				scores.handle				(event);
 				website.handle				(event);
@@ -190,24 +192,24 @@ void Menu::handle(sf::Event& event)
 
 				if (!sound_volumebutton.handle(event))	soundbutton.handle(event);
 				if (!music_volumebutton.handle(event))	musicbutton.handle(event);
-				!robotspecs.isReady() || !information.isReady() ? reloadbutton.handle(event) : updatebutton.handle(event);
+				!knightspecs.isReady() || !information.isReady() || !settings.isReady() ? reloadbutton.handle(event) : updatebutton.handle(event);
 
 				settingsbutton.handle		(event);
-				settings.handle				(event);
-			// }
+				if(settings.isReady())		settings.handle(event);
+			}
 		}
 
-		// if (!chat.isOpen())
-		// {
+		if (!chat.isActive())
+		{
 			pausesystem.handle(event);
-		// }
+		}
 	}
 }
 
 void Menu::draw(sf::RenderWindow* &window)
 {
 	information.draw		(window);
-	robotspecs.draw			(window);
+	knightspecs.draw		(window);
 	github.draw				(window);
 	scores.draw				(window);
 	website.draw			(window);
@@ -216,12 +218,12 @@ void Menu::draw(sf::RenderWindow* &window)
 	exitbutton.draw			(window);
 	soundbutton.draw		(window);
 	musicbutton.draw		(window);
-	!robotspecs.isReady() || !information.isReady() ? reloadbutton.draw(window) : updatebutton.draw(window);
+	!knightspecs.isReady() || !information.isReady() || !settings.isReady() ? reloadbutton.draw(window) : updatebutton.draw(window);
 	settingsbutton.draw		(window);
 	settings.draw			(window);
 	sound_volumebutton.draw	(window);
 	music_volumebutton.draw	(window);
-	// chat.draw			(window);
+	chat.draw				(window);
 	pausesystem.draw		(window);
 }
 
@@ -241,107 +243,92 @@ void Menu::mechanics(double elapsedTime)
 	// Mechanics.
 	if (!pausesystem.isActive() && !isState())
 	{
-		//chat.mechanics(elapsedTime);
-		//if (chat.isCommand())
-		//{
-		//	// Knight specs.
-		//	if (chat.findCommand("@clear"))			knight_specs.setChosen(-1);
-		//	else if (chat.findCommand("@helmet"))	knight_specs.setChosen(0);
-		//	else if (chat.findCommand("@body"))		knight_specs.setChosen(1);
-		//	else if (chat.findCommand("@shield"))	knight_specs.setChosen(2);
-		//	else if (chat.findCommand("@sword"))		knight_specs.setChosen(3);
-		//	else if (chat.findCommand("@boots"))		knight_specs.setChosen(4);
+		chat.mechanics(elapsedTime);
+		if (chat.isCommand())
+		{
+			// Close application.
+			if (chat.findCommand("@close") || chat.findCommand("@exit"))
+			{
+				exitbutton.setPressed();
+			}
 
-		//	// Close application.
-		//	else if (chat.findCommand("@close") || chat.findCommand("@exit"))
-		//	{
-		//		exit.setPressed();
-		//	}
+			// Someone clicked singleplayer.
+			else if (chat.findCommand("@start") || chat.findCommand("@play"))
+			{
+				if (knightspecs.isReady() && information.isReady() && settings.isReady())
+				{
+					singleplayerbutton.setPressed();
+				}
+			}
 
-		//	// Someone clicked singleplayer.
-		//	else if (chat.findCommand("@start") || chat.findCommand("@play"))
-		//	{
-		//		if (knight_specs.isReady() && information.isReady())
-		//		{
-		//			singleplayer.setPressed();
-		//		}
-		//	}
+			// Exsert / shovel settings.
+			else if (chat.findCommand("@settings") || chat.findCommand("@keyboard") ||
+				chat.findCommand("@keys") || chat.findCommand("@sets"))
+			{
+				settingsbutton.setActive(!settingsbutton.isActive());
+			}
 
-		//	// Exsert / shovel settings.
-		//	else if (chat.findCommand("@settings") || chat.findCommand("@keyboard") ||
-		//		chat.findCommand("@keys") || chat.findCommand("@sets"))
-		//	{
-		//		settingsbutton.setActive(!settingsbutton.isActive());
-		//	}
+			// Reload data.
+			else if ((!knightspecs.isReady() || !information.isReady() || !settings.isReady()) &&
+				(chat.findCommand("@reload") || chat.findCommand("@rel")))
+			{
+				reloadbutton.setActive(true);
+			}
 
-		//	// Reload data.
-		//	else if (chat.findCommand("@reload") || chat.findCommand("@connect") ||
-		//		chat.findCommand("@rel") || chat.findCommand("@con"))
-		//	{
-		//		reloadbutton.setActive(true);
-		//	}
+			// Update data - works if reload data done its job.
+			else if (chat.findCommand("@reload") || chat.findCommand("@rel"))
+			{
+				updatebutton.setActive(true);
+			}
 
-		//	// Update data.
-		//	else if (chat.findCommand("@update"))
-		//	{
-		//		updatebutton.setActive(true);
-		//	}
+			// Turn on/off all sounds.
+			else if (chat.findCommand("@sound"))
+			{
+				cmm::Sound::setGlobalPlayable(!cmm::Sound::getGlobalPlayable());
+				soundbutton.setChanged(true);
+				soundbutton.setActive(!soundbutton.isActive());
+			}
 
-		//	// Turn on/off all chunks.
-		//	else if (chat.findCommand("@chunk"))
-		//	{
-		//		chunkbutton.setChanged(true);
-		//		chunkbutton.setActive(!chunkbutton.isActive());
-		//	}
-
-		//	// Turn on/off music.
-		//	else if (chat.findCommand("@music"))
-		//	{
-		//		musicbutton.setChanged(true);
-		//		musicbutton.setActive(!musicbutton.isActive());
-		//	}
-
-		//	// Turn on/off all sounds.
-		//	else if (chat.findCommand("@sound"))
-		//	{
-		//		chunkbutton.setChanged(true);
-		//		chunkbutton.setActive(!chunkbutton.isActive());
-		//		musicbutton.setChanged(true);
-		//		musicbutton.setActive(!musicbutton.isActive());
-		//	}
+			// Turn on/off music.
+			else if (chat.findCommand("@music"))
+			{
+				cmm::Music::setGlobalPlayable(!cmm::Music::getGlobalPlayable());
+				musicbutton.setChanged(true);
+				musicbutton.setActive(!musicbutton.isActive());
+			}
 
 		//	// Map editor.
-		//	else if (chat.findCommand("@editor") || chat.findCommand("@edit"))
+		//	else if (chat.findCommand("@mapeditor"))
 		//	{
 		//		editor = true;
 		//		chat.isOpen() = false;
 		//	}
 
-		//	// Link buttons in addition.
-		//	else if (chat.findCommand("@github"))		github.openWebsite();
-		//	else if (chat.findCommand("@scores"))		scores.openWebsite();
-		//	else if (chat.findCommand("@website"))	website.openWebsite();
+			// Link buttons in addition.
+			else if (chat.findCommand("@github"))		github.openWebsite();
+			else if (chat.findCommand("@scores"))		scores.openWebsite();
+			else if (chat.findCommand("@website"))		website.openWebsite();
 
-		//	// Tell that command doesn't exist.
-		//	else
-		//	{
-		//		chat.setError();
-		//	}
-		//}
+			// Command doesn't exist.
+			else
+			{
+				chat.setError();
+			}
+		}
 
-		robotspecs.mechanics(elapsedTime);
+		knightspecs.mechanics(elapsedTime);
 
 		// Close application.
 		if (exitbutton.isPressed())
 		{
-			// chat.isOpen() = false;
+			chat.isActive() = false;
 			exit = true;
 		}
 
 		// Someone clicked singleplayer.
 		if (singleplayerbutton.isPressed())
 		{
-			// chat.isOpen() = false;
+			chat.isActive() = false;
 			next = true;
 		}
 
@@ -349,28 +336,27 @@ void Menu::mechanics(double elapsedTime)
 		settingsbutton.isActive() ? settings.exsertTable(elapsedTime) : settings.shovelTable(elapsedTime);
 
 		// If we dont have answer from database
-		!robotspecs.isReady() || !information.isReady() ? singleplayerbutton.lock() : singleplayerbutton.unlock();
+		!knightspecs.isReady() || !information.isReady() || !settings.isReady() ? singleplayerbutton.lock() : singleplayerbutton.unlock();
 
-		// Update data
+		// Update data.
 		if (updatebutton.isActive())
 		{
 			updatebutton.setActive(false);
-
-			if (robotspecs.isReady() && information.isReady())
-			{
-				robotspecs.reloadThread();
-				robotspecs.setThread();
-				information.reloadThread();
-				information.setThread();
-			}
+			knightspecs.reloadThread();
+			information.reloadThread();
+			settings.reloadThread();
+			knightspecs.setThread();
+			information.setThread();
+			settings.setThread();
 		}
 
-		// Reload data
+		// Reload data.
 		if (reloadbutton.isActive())
 		{
 			reloadbutton.setActive(false);
-			if (!robotspecs.isReady())	robotspecs.setThread();
+			if (!knightspecs.isReady())	knightspecs.setThread();
 			if (!information.isReady())	information.setThread();
+			if (!settings.isReady())	settings.setThread();
 		}
 
 		settings.mechanics(elapsedTime);
@@ -381,14 +367,15 @@ void Menu::mechanics(double elapsedTime)
 		// Turn on/off all sounds.
 		if (soundbutton.hasChanged())
 		{
-			cmm::Sound::setPlayable(soundbutton.isActive());
+			cmm::Sound::setGlobalPlayable(soundbutton.isActive());
 		}
 
 		// Volume of sounds is changed.
 		if (sound_volumebutton.hasChanged())
 		{
 			float value = sound_volumebutton.getGlobalVolume();
-			robotspecs.setVolume			(value);
+			cmm::Sound::setGlobalVolume		(value);
+			knightspecs.setVolume			(value);
 			github.setVolume				(value);
 			scores.setVolume				(value);
 			website.setVolume				(value);
@@ -398,6 +385,7 @@ void Menu::mechanics(double elapsedTime)
 			soundbutton.setVolume			(value);
 			musicbutton.setVolume			(value);
 			settingsbutton.setVolume		(value);
+			settings.setVolume				(value);
 			sound_volumebutton.setVolume	(value);
 			music_volumebutton.setVolume	(value);
 			pausesystem.setVolume			(value);
@@ -406,14 +394,16 @@ void Menu::mechanics(double elapsedTime)
 		// Turn on/off music.
 		if (musicbutton.hasChanged())
 		{
-			cmm::Music::setPlayable(musicbutton.isActive());
+			cmm::Music::setGlobalPlayable(musicbutton.isActive());
 			musicbutton.isActive() ? music.play() : music.pause();
 		}
 
 		// Volume of music is changed.
 		if (music_volumebutton.hasChanged())
 		{
-			music.setVolume(music_volumebutton.getGlobalVolume());
+			float value = music_volumebutton.getGlobalVolume();
+			cmm::Music::setGlobalVolume	(value);
+			music.setVolume				(value);
 		}
 	}
 }
@@ -443,7 +433,7 @@ void Menu::fades(double elapsedTime)
 
 void Menu::fadein(float value, int max)
 {
-	robotspecs.fadein			(value, max);
+	knightspecs.fadein			(value, max);
 	github.fadein				(value, max);
 	scores.fadein				(value, max);
 	website.fadein				(value, max);
@@ -463,7 +453,7 @@ void Menu::fadein(float value, int max)
 
 void Menu::fadeout(float value, int min)
 {
-	robotspecs.fadeout			(value, min);
+	knightspecs.fadeout			(value, min);
 	github.fadeout				(value, min);
 	scores.fadeout				(value, min);
 	website.fadeout				(value, min);
@@ -479,5 +469,5 @@ void Menu::fadeout(float value, int min)
 	sound_volumebutton.fadeout	(value, min);
 	music_volumebutton.fadeout	(value, min);
 	information.fadeout			(value, min);
-	// chat.fadeout				(value, min);
+	chat.fadeout				(value, min);
 }

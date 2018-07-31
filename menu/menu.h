@@ -1,17 +1,17 @@
 #pragma once
 #include "state.h"
-#include "robotspecs.h"
+#include "knightspecs.h"
 #include "button.h"
 #include "settings.h"
 #include "menuinformation.h"
-// #include "level/chat.h"
+#include "chat.h"
 #include "pausesystem.h"
 #include "music.h"
 
 class Menu :public State
 {
 	bool loaded;
-	Robotspecs robotspecs;
+	Knightspecs knightspecs;
 	LinkButton github;
 	LinkButton scores;
 	LinkButton website;
@@ -27,7 +27,7 @@ class Menu :public State
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
 	MenuInformation information;
-	// Chat chat;
+	Chat chat;
 	Pausesystem pausesystem;
 	cmm::Music music;
 
