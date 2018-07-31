@@ -18,11 +18,22 @@
     <QtUic Include="other\mainwindow.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="buttonfactory.cpp" />
+    <ClCompile Include="buttonstate.cpp" />
+    <ClCompile Include="logging.cpp" />
     <ClCompile Include="main\main.cpp" />
     <ClCompile Include="main\mainwindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="main\mainwindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="buttonfactory.h" />
+    <ClInclude Include="buttonstate.h" />
+    <QtMoc Include="logging.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtWidgets</IncludePath>
+    </QtMoc>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>

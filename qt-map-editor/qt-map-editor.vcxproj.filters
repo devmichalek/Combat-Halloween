@@ -9,6 +9,12 @@
       <Extensions>qrc;*</Extensions>
       <ParseFiles>false</ParseFiles>
     </Filter>
+    <Filter Include="Buttons">
+      <UniqueIdentifier>{c6ac2547-bc17-4f18-b180-607112ac35a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Logging">
+      <UniqueIdentifier>{76080cff-b9b6-4385-97eb-6d8f31c75ff9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="other\mainwindow.qrc">
@@ -30,10 +36,30 @@
     <ClCompile Include="main\mainwindow.cpp">
       <Filter>Main</Filter>
     </ClCompile>
+    <ClCompile Include="buttonstate.cpp">
+      <Filter>Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="buttonfactory.cpp">
+      <Filter>Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="logging.cpp">
+      <Filter>Logging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="main\mainwindow.h">
       <Filter>Main</Filter>
     </QtMoc>
+    <QtMoc Include="logging.h">
+      <Filter>Logging</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="buttonstate.h">
+      <Filter>Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="buttonfactory.h">
+      <Filter>Buttons</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
