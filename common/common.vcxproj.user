@@ -3,6 +3,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommandArguments>sprite</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>..\..\Release\data</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>..\data</LocalDebuggerWorkingDirectory>
   </PropertyGroup>
 </Project>
