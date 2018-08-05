@@ -33,6 +33,12 @@
     <Filter Include="Sources\menu">
       <UniqueIdentifier>{088ac38b-a401-41e5-a20e-8b8743d91fac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headers\levelmenu">
+      <UniqueIdentifier>{05ae9496-7de9-4324-a5d5-f1cc82b4d0b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\levelmenu">
+      <UniqueIdentifier>{0e96c174-1a78-453c-a18c-146856eacfd9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -83,14 +89,23 @@
     <ClCompile Include="..\menu\pausesystem.cpp">
       <Filter>Sources\menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\robotspecs.cpp">
-      <Filter>Sources\menu</Filter>
-    </ClCompile>
     <ClCompile Include="..\menu\settings.cpp">
       <Filter>Sources\menu</Filter>
     </ClCompile>
     <ClCompile Include="..\menu\state.cpp">
       <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\knightspecs.cpp">
+      <Filter>Sources\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\chat.cpp">
+      <Filter>Sources\levelmenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\levelmenu.cpp">
+      <Filter>Sources\levelmenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\levelmenuinformation.cpp">
+      <Filter>Sources\levelmenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -139,14 +154,23 @@
     <ClInclude Include="..\menu\pausesystem.h">
       <Filter>Headers\menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\robotspecs.h">
-      <Filter>Headers\menu</Filter>
-    </ClInclude>
     <ClInclude Include="..\menu\settings.h">
       <Filter>Headers\menu</Filter>
     </ClInclude>
     <ClInclude Include="..\menu\state.h">
       <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\knightspecs.h">
+      <Filter>Headers\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\levelmenu\chat.h">
+      <Filter>Headers\levelmenu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\levelmenu\levelmenu.h">
+      <Filter>Headers\levelmenu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\levelmenu\levelmenuinformation.h">
+      <Filter>Headers\levelmenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
