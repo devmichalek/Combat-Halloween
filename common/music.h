@@ -7,6 +7,7 @@ namespace cmm
 	class Music
 	{
 		static bool playable;
+		static float volume;
 	protected:
 		std::unique_ptr<sf::Music> music;
 
@@ -16,11 +17,15 @@ namespace cmm
 		bool isPlaying() const;
 		void pause();
 		void load(const char* path);
-		void setVolume(float volume = 50);
+		void setVolume(float newVolume = 50);
 		float getVolume() const;
 		void fadein(float v = 1, int max = 100);
 		void fadeout(float v = 1, int min = 0);
-		static void setPlayable(bool newPlayable = true);
 		const bool& isPlayable() const;
+
+		static void setGlobalPlayable(bool newPlayable = true);
+		static bool getGlobalPlayable();
+		static void setGlobalVolume(float newVolume);
+		static float getGlobalVolume();
 	};
 }

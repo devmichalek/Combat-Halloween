@@ -8,6 +8,7 @@ namespace cmm
 	class Sound
 	{
 		static bool playable;
+		static float volume;
 	protected:
 		std::unique_ptr<sf::Sound> sound;
 		std::unique_ptr<sf::SoundBuffer> buffer;
@@ -18,9 +19,13 @@ namespace cmm
 		bool isPlaying() const;
 		void pause();
 		void load(const char* path);
-		void setVolume(float volume = 50);
+		void setVolume(float newVolume = 50);
 		float getVolume() const;
-		static void setPlayable(bool newPlayable = true);
 		const bool& isPlayable() const;
+
+		static void setGlobalPlayable(bool newPlayable = true);
+		static bool getGlobalPlayable();
+		static void setGlobalVolume(float newVolume);
+		static float getGlobalVolume();
 	};
 }

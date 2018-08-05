@@ -1,6 +1,7 @@
 #include "sound.h"
 
-bool cmm::Sound::playable = false;
+bool cmm::Sound::playable = true;
+float cmm::Sound::volume = 50.0;
 
 void cmm::Sound::stop()
 {
@@ -35,9 +36,9 @@ void cmm::Sound::load(const char* path)
 	}
 }
 
-void cmm::Sound::setVolume(float volume)
+void cmm::Sound::setVolume(float newVolume)
 {
-	sound->setVolume(static_cast<float> (volume));
+	sound->setVolume(newVolume);
 }
 
 float cmm::Sound::getVolume() const
@@ -45,12 +46,27 @@ float cmm::Sound::getVolume() const
 	return sound->getVolume();
 }
 
-void cmm::Sound::setPlayable(bool newPlayable)
+const bool& cmm::Sound::isPlayable() const
+{
+	return playable;
+}
+
+void cmm::Sound::setGlobalPlayable(bool newPlayable)
 {
 	playable = newPlayable;
 }
 
-const bool& cmm::Sound::isPlayable() const
+bool cmm::Sound::getGlobalPlayable()
 {
 	return playable;
+}
+
+void cmm::Sound::setGlobalVolume(float newVolume)
+{
+	volume = newVolume;
+}
+
+float cmm::Sound::getGlobalVolume()
+{
+	return volume;
 }
