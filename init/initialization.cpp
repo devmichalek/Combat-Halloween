@@ -45,7 +45,7 @@ void Initialization::load(float screen_w, float screen_h)
 	texts[COMBAT]->setFont(path);
 
 	// Set text.
-	texts[AUTHOR]->setText(L"Adrian Micha\u0142ek");
+	texts[AUTHOR]->setTextW(L"Adrian Micha\u0142ek");
 	texts[PRESENTS]->setText("presents");
 	texts[HALLOWEEN]->setText("Halloween");
 	texts[HALLOWEEN]->setOutlineThickness(3);
