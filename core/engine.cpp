@@ -2,8 +2,12 @@
 #include <stdio.h>
 #include <cstdlib>
 
-Engine::Engine()
+Engine::Engine(int initState, int endState)
 {
+	// Set init state.
+	this->initState = initState;
+	this->endState = endState;
+
 	// Set seed.
 	srand(static_cast<int>(time(NULL)));
 
@@ -36,25 +40,37 @@ void Engine::load()
 	switch (loading->getState())
 	{
 	case 1:
-		initialization = new Initialization;
-		initialization->load(core->getWidth(), core->getHeight());
+		if (INIT >= initState && INIT <= endState)
+		{
+			initialization = new Initialization;
+			initialization->load(core->getWidth(), core->getHeight());
+		}
 		break;
 
 	case 20:
-		login = new Login;
-		login->load(core->getWidth(), core->getHeight());
+		if (LOGIN >= initState && LOGIN <= endState)
+		{
+			login = new Login;
+			login->load(core->getWidth(), core->getHeight());
+		}
 		break;
 
 	case 25:
-		menu = new Menu;
-		menu->load( core->getWidth(), core->getHeight() );
+		if (MENU >= initState && MENU <= endState)
+		{
+			menu = new Menu;
+			menu->load(core->getWidth(), core->getHeight());
+		}
 		break;
-	
-		//	case 70:
-		//	level = new Level;
-		//	level->load( core->getWidth(), core->getHeight() );
-		//	break;
-	
+
+	case 35:
+		if (LEVELMENU >= initState && LEVELMENU <= endState)
+		{
+			levelMenu = new LevelMenu;
+			levelMenu->load(core->getWidth(), core->getHeight());
+		}
+		break;
+
 		//	case 71:
 		//	play = new Play;
 		//	play->load( core->getWidth(), core->getHeight() );
@@ -79,7 +95,7 @@ void Engine::load()
 	{
 		delete loading;
 		loading = NULL;
-		core->state = INIT;	// SET FIRST STATE.
+		core->state = initState;	// SET FIRST STATE.
 	}
 }
 
@@ -94,10 +110,10 @@ void Engine::events()
 
 		switch (core->state)
 		{
-		case LOGIN: 	login->handle(core->getEvent()); 	break;
-		case MENU: 		menu->handle(core->getEvent()); 	break;
-			/*case LEVEL: 	level->handle( core->getEvent() );	break;
-			case PLAY: 		play->handle( core->getEvent() ); 	break;
+		case LOGIN: 	login->handle(core->getEvent()); 		break;
+		case MENU: 		menu->handle(core->getEvent()); 		break;
+		case LEVELMENU: levelMenu->handle(core->getEvent());	break;
+			/*case PLAY: 		play->handle( core->getEvent() ); 	break;
 			case TABLE: 	table->handle( core->getEvent() ); 	break;*/
 		}
 	}
@@ -116,7 +132,7 @@ void Engine::states()
 		initialization->draw(core->getWindow());
 		if (initialization->isNext())
 		{
-			core->state = LOGIN;
+			core->state = LOGIN > endState ? -2 : LOGIN;
 			delete initialization;
 			initialization = nullptr;
 		}
@@ -125,38 +141,37 @@ void Engine::states()
 	case LOGIN:
 		login->mechanics(core->getElapsedTime());
 		login->draw(core->getWindow());
-		if (login->isNext())		core->state = MENU;
+		if (login->isNext())	core->state = MENU > endState ? -2 : MENU;
 		break;
 
 	case MENU:
 		menu->mechanics(core->getElapsedTime());
 		menu->draw(core->getWindow());
 		/*if (menu->isPrev()) // add editor exe
-		else */if (menu->isNext())	core->state = LEVEL;
+		else */if (menu->isNext())
+		{
+			levelMenu->reset();
+			core->state = LEVELMENU > endState ? -2 : LEVELMENU;
+		}
 		else if (menu->isExit())	core->open = false;
+		break;
+
+	case LEVELMENU:
+		levelMenu->mechanics(core->getElapsedTime());
+		levelMenu->draw(core->getWindow());
+		if (levelMenu->isPrev())
+		{
+			menu->reset();
+			core->state = MENU < initState ? -2 : MENU;
+		}
+		else if (levelMenu->isNext())	core->state = PLATFORM > endState ? -2 : PLATFORM;
+		else if (levelMenu->isExit())	core->open = false;
 		break;
 
 	default: break;
 	}
 
-	/*if( core->getState() == LEVEL )
-	{
-	level->loadSound();
-	level->head( core->getWindow(), core->getElapsedTime() );
-
-	if( level->isNext() )
-	{
-	level->saveSound();
-	core->getState() = PLAY;
-	}
-	else if( level->isBack() )
-	{
-	level->saveSound();
-	core->getState() = MENU;
-	}
-	}
-
-	if( core->getState() == PLAY )
+	/*if( core->getState() == PLAY )
 	{
 	play->loadSound();
 	play->head( core->getWindow(), core->getElapsedTime() );

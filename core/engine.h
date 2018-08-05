@@ -4,7 +4,7 @@
 #include "initialization.h"
 #include "login.h"
 #include "menu.h"
-//#include "level/level.h"
+#include "levelmenu.h"
 //#include "play/play.h"
 //#include "table/table.h"
 //#include "editor/editor.h"
@@ -17,22 +17,24 @@ class Engine
 		INIT,
 		LOGIN,
 		MENU,
-		LEVEL,
-		PLAY,
-		TABLE
+		LEVELMENU,
+		PLATFORM,
+		TABLE,
+		DEFAULT
 	};
 	
+	int initState, endState;
 	std::unique_ptr<Core> core;
 	Loading* loading;
 	Initialization* initialization;
 	Login* login;
 	Menu* menu;
-	/*Level* level;
-	Play* play;
+	LevelMenu* levelMenu;
+	/*Play* play;
 	Table* table;*/
 	
 public:
-	Engine();
+	Engine(int initState = STATES::INIT, int endState = STATES::DEFAULT);
 	void loop();
 private:
 	void load();
