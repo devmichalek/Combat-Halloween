@@ -324,7 +324,7 @@ void Login::mechanics(double elapsedTime)
 
 	if (signupbutton.getClicked())
 	{
-		const char* command = "start http://combathalloween.netne.net/user/register/registerform.php";
+		const char* command = "start http://amichalek.pl/combathalloween/user/register/registerform.php";
 		system(command);
 		signupbutton.getClicked() = false;
 	}
@@ -417,19 +417,19 @@ void Login::setThread()
 {
 	cmm::Request request;
 	request.setMessage("username=" + username + "&password=" + password);
-	request.setHttp("http://combathalloween.netne.net/");
-	request.setRequest("/getters/request.php", sf::Http::Request::Post);
-
+	request.setHttp("http://amichalek.pl/");
+	request.setRequest("/combathalloween/getters/request.php", sf::Http::Request::Post);
+	
 	if (!request.sendRequest())
 	{
 		info.setText("Cannot connect to database.");
-		info.setFillColor(Username::getErrorColor());
+		info.setFillColor(User::getErrorColor());
 	}
 	else if (request.getResult() == "success")
 	{
 		info.setText("You are logged!");
-		info.setFillColor(Username::getGreenColor());
-		Username user;
+		info.setFillColor(User::getGreenColor());
+		User user;
 		user.username = const_cast<char*>(username.c_str());
 		thread.success = true;
 	}
@@ -438,7 +438,7 @@ void Login::setThread()
 		forget_counter++;
 		if(request.getResult() == "-1")		info.setText("Unexpected Error.");
 		else if(request.getResult() == "0")	info.setText("Wrong username or password.");
-		info.setFillColor(Username::getErrorColor());
+		info.setFillColor(User::getErrorColor());
 	}
 
 	// Set alpha and position of info.

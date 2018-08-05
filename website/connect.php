@@ -1,6 +1,6 @@
 <?php
 	$host = "localhost";
-	$db_user = "id6426697_combathalloween";
-	$db_password = "bUrn2000";
-	$db_name = "id6426697_combathalloween";
+	$db_user = "user";
+	$db_password = "pass";
+	$db_name = "name";
 ?>
