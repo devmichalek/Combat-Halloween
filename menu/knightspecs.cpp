@@ -170,8 +170,8 @@ void Knightspecs::setValues()
 {
 	cmm::Request request;
 	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
-	request.setRequest("/getters/getfeatures.php", sf::Http::Request::Post);
-	request.setHttp("http://combathalloween.netne.net/");
+	request.setRequest("/combathalloween/getters/getfeatures.php", sf::Http::Request::Post);
+	request.setHttp("http://amichalek.pl/");
 
 	bool success = request.sendRequest();
 	if (success)

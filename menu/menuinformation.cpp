@@ -145,8 +145,8 @@ void MenuInformation::setMoney()
 {
 	cmm::Request request;
 	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
-	request.setRequest("/getters/getmoney.php", sf::Http::Request::Post);
-	request.setHttp("http://combathalloween.netne.net/");
+	request.setRequest("/combathalloween/getters/getmoney.php", sf::Http::Request::Post);
+	request.setHttp("http://amichalek.pl/");
 
 	bool success = request.sendRequest();
 	if (success)
@@ -170,7 +170,13 @@ void MenuInformation::setMoney()
 		money.setFillColor(User::getErrorColor());
 	}
 
+	// Set username and position again.
+	username.setText(User::getUsername());
+	username_form.setPosition(plank.getRight() - (username_form.getWidth() + username.getWidth() + screen_h / 64), screen_h / 144);
+	username.setPosition(username_form.getRight() + screen_h / 128, username_form.getTop());
+	money_form.setPosition(username_form.getX(), username.getBot() + screen_h / 144);
 	money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
+
 	thread.ready = true;
 }
 

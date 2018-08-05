@@ -460,8 +460,8 @@ void Settings::setKeys()
 {
 	cmm::Request request;
 	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
-	request.setRequest("/getters/getsettings.php", sf::Http::Request::Post);
-	request.setHttp("http://combathalloween.netne.net/");
+	request.setRequest("/combathalloween/getters/getsettings.php", sf::Http::Request::Post);
+	request.setHttp("http://amichalek.pl/");
 
 	bool success = request.sendRequest();
 	if (success)
@@ -488,7 +488,7 @@ void Settings::setKeys()
 
 			for (unsigned i = 0; i < JUMP_ATTACK; ++i)
 			{
-				active_texts[i]->setText(static_cast<sf::String>(getName(keys[i])));
+				active_texts[i]->setText(getName(keys[i]));
 				active_texts[i]->setFillColor(User::getLoadingColor());
 			}
 			active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
