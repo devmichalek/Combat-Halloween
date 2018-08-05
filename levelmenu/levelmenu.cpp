@@ -78,6 +78,8 @@ void LevelMenu::reset()
 	exit = false;
 	loaded = false;
 	
+	homebutton.setActive(false);
+	playbutton.setActive(false);
 	chat.reset();
 	music.stop();
 }

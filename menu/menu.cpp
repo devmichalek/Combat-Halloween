@@ -50,8 +50,9 @@ void Menu::set()
 		settings.setThread();
 
 		// Sound.
-		float soundVolume = 50;
-		cmm::Sound::setGlobalVolume			(soundVolume);
+		bool soundPlayable = cmm::Sound::getGlobalPlayable();
+		float soundVolume = cmm::Sound::getGlobalVolume();
+
 		knightspecs.setVolume				(soundVolume);
 		github.setVolume					(soundVolume);
 		scores.setVolume					(soundVolume);
@@ -69,17 +70,16 @@ void Menu::set()
 		sound_volumebutton.setGlobalVolume	(soundVolume);
 		music_volumebutton.setVolume		(soundVolume);
 		pausesystem.setVolume				(soundVolume);
-		cmm::Sound::setGlobalPlayable		(true);
-		soundbutton.setActive				(true);
+		soundbutton.setActive				(soundPlayable);
 
 		// Music.
-		float musicVolume = 60;
-		cmm::Music::setGlobalVolume			(musicVolume);
+		bool musicPlayable = cmm::Music::getGlobalPlayable();
+		float musicVolume = cmm::Music::getGlobalVolume();
+
 		music.setVolume						(musicVolume);
 		music_volumebutton.setGlobalVolume	(musicVolume);
-		cmm::Music::setGlobalPlayable		(true);
-		musicbutton.setActive				(true);
-		music.play();
+		musicbutton.setActive				(musicPlayable);
+		musicbutton.isActive() ? music.play() : music.pause();
 	}
 }
 
