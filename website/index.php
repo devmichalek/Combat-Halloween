@@ -108,7 +108,7 @@
               </div>
               <div class="card-action brown darken-4">
                 <a target="_blank" href="https://www.behance.net/gallery/19084983/Jaapokki-Free-Font">Mikko Nuuttila</a>
-                <a target="_blank" href="http://www.dafont.com/badaboom-bb.font">Blambot</a>
+                <a target="_blank" href="https://www.dafont.com/badaboom-bb.font">Blambot</a>
               </div>
             </div>
           </div>

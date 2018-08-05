@@ -91,7 +91,7 @@
 
 
 	// RECAPTCHA
-	$mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
+	$mysecret = "6Lf9NWgUAAAAAAe-lNJAcxTOubIdu_KUe-cSMwTU";
 	$confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
 	if(!json_decode($confirm)->success)
 	{
@@ -109,13 +109,19 @@
 	}
 	else
 	{
+	    $oldusername = $_SESSION['username'];
 		if(!$connection->query("UPDATE users SET username='$username' WHERE email='$email'"))
+		{
+			throw new Exception($connection->error);
+		}
+		else if(!$connection->query("UPDATE usersfeatures SET username='$username' WHERE username='$oldusername'"))
 		{
 			throw new Exception($connection->error);
 		}
 		else
 		{
 			$_SESSION['successUsername'] = "The username was changed correctly! Log In again to see results.";
+			$_SESSION['username'] = $username;
 			header('Location: profile.php');
 			exit();
 		}

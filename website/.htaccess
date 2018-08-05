@@ -1,4 +1,7 @@
+RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI}
 
-# HTID:5991499: DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES BELOW
-php_value display_errors 1
-# DO NOT REMOVE OR MODIFY THIS LINE AND THE LINES ABOVE HTID:5991499:
+RewriteBase /
+RewriteCond %{THE_REQUEST} ^GET.*index\.php [NC]
+RewriteRule (.*?)index\.php/*(.*) /$1$2 [R=301,NE,L]

@@ -29,6 +29,7 @@
 					{
 						$result->free_result();
 						$connection->query("UPDATE users SET email='$newemail', activationcode='0' WHERE email='$email'");
+						$_SESSION['email'] = $newemail;
 					}
 				}
 			}
@@ -38,6 +39,6 @@
   	}
 
 
-	header('Location: http://combathalloween.netne.net/home.php');
+	header('Location: https://amichalek.pl/combathalloween/home.php');
 	exit();
 ?>

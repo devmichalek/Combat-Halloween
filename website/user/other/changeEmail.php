@@ -84,7 +84,7 @@
 
 
 	// RECAPTCHA
-	$mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
+	$mysecret = "6Lf9NWgUAAAAAAe-lNJAcxTOubIdu_KUe-cSMwTU";
 	$confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
 	if(!json_decode($confirm)->success)
 	{
@@ -117,7 +117,7 @@
 		$message .= "If this email reached your mailbox without your interference contact me: devmichalek@gmail.com. If you want to change the email you have to confirm it by clicking on the link below.</p>";
 		$message .= '<p style="text-align: center;">Activation link: ';
 		$message .= "</a>";
-		$message .= 'combathalloween.netne.net/user/other/confirmnewemail.php?email='.$email.'&code='.$activationcode.'&newemail='.$newemail;
+		$message .= 'amichalek.pl/combathalloween/user/other/confirmnewemail.php?email='.$email.'&code='.$activationcode.'&newemail='.$newemail;
 		$message .= "</a>";
 		$message .= "</p>";
 		$message .= '<p style="text-align: right;">Best Regards, Adrian.</p>';

@@ -58,7 +58,7 @@
         </div></div>
         
         <div class="row"><div class="col s12 m6 push-m3" style="margin-bottom: 10px;">
-        <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
+        <div class="g-recaptcha" data-sitekey="6Lf9NWgUAAAAAOLFVsbFykwsfSLCnZAE6TQi584V"></div>
 		</div></div>
 
 		<div class="row"><div class="col s12">

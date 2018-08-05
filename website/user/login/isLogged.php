@@ -1,7 +1,7 @@
 <?php
 	if(!isset($_SESSION['logged']))
 	{
-		header('Location: http://combathalloween.netne.net/user/login/loginform.php');
+		header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
 		exit();
 	}
 ?>

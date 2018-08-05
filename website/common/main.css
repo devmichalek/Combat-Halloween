@@ -1,10 +1,10 @@
 body {
-    background: url(http://combathalloween.netne.net/images/tile.png);
+    background: url(https://amichalek.pl/combathalloween/images/tile.png);
     background-repeat: repeat;
 }
 
 .background {
-    background: url(http://combathalloween.netne.net/images/tile-sidenav.png);
+    background: url(https://amichalek.pl/combathalloween/images/tile-sidenav.png);
     background-repeat: repeat;
 }
 
@@ -32,7 +32,7 @@ main {
 
 @font-face {
 	font-family: japokki;
-	src: url( "http://combathalloween.netne.net/fonts/Jaapokki-Regular.otf" );
+	src: url( "https://amichalek.pl/combathalloween/fonts/Jaapokki-Regular.otf" );
 }
 
 

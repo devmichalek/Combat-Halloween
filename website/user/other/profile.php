@@ -67,7 +67,7 @@
                 </div></div>
                 
                 <div class="row"><div class="col s12 m10" style="margin-bottom: 10px;">
-                    <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lf9NWgUAAAAAOLFVsbFykwsfSLCnZAE6TQi584V"></div>
             	</div></div>
 
                 <div class="row"><div class="col s12">
@@ -76,14 +76,14 @@
             <?php
                 if(isset($_SESSION['errorUsername']))
                 {
-                	echo '<h5 class="errorColor">';
+                	echo '<h5 class="japokki-error h2">';
                     echo $_SESSION['errorUsername'];
                     unset($_SESSION['errorUsername']);
                     echo '</h5>';
                 }
                 else if(isset($_SESSION['successUsername']))
                 {
-                	echo '<h5 class="successColor">';
+                	echo '<h5 class="japokki-success h2">';
                     echo $_SESSION['successUsername'];
                     unset($_SESSION['successUsername']);
                     echo '</h5>';
@@ -116,7 +116,7 @@
                 </div></div>
                 
                 <div class="row"><div class="col s12 m10 push-m2" style="margin-bottom: 10px;">
-                    <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lf9NWgUAAAAAOLFVsbFykwsfSLCnZAE6TQi584V"></div>
             	</div></div>
 
                 <div class="row"><div class="col s12">
@@ -125,14 +125,14 @@
             <?php
                 if(isset($_SESSION['errorEmail']))
                 {
-                	echo '<h5 class="errorColor">';
+                	echo '<h5 class="japokki-error h2">';
                     echo $_SESSION['errorEmail'];
                     unset($_SESSION['errorEmail']);
                     echo '</h5>';
                 }
                 else if(isset($_SESSION['successEmail']))
                 {
-                	echo '<h5 class="successColor">';
+                	echo '<h5 class="japokki-success h2">';
                     echo $_SESSION['successEmail'];
                     unset($_SESSION['successEmail']);
                     echo '</h5>';
@@ -181,7 +181,7 @@
                 </div></div>
                 
                 <div class="row"><div class="col s12 m10" style="margin-bottom: 10px;">
-                    <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lf9NWgUAAAAAOLFVsbFykwsfSLCnZAE6TQi584V"></div>
             	</div></div>
 
                 <div class="row"><div class="col s12">
@@ -190,14 +190,14 @@
             <?php
                 if(isset($_SESSION['errorPassword']))
                 {
-                	echo '<h5 class="errorColor">';
+                	echo '<h5 class="japokki-error h2">';
                     echo $_SESSION['errorPassword'];
                     unset($_SESSION['errorPassword']);
                     echo '</h5>';
                 }
                 else if(isset($_SESSION['successPassword']))
                 {
-                	echo '<h5 class="successColor">';
+                	echo '<h5 class="japokki-success h2">';
                     echo $_SESSION['successPassword'];
                     unset($_SESSION['successPassword']);
                     echo '</h5>';
@@ -228,7 +228,7 @@
                 </div></div>
                 
                 <div class="row"><div class="col s12 m10 push-m2" style="margin-bottom: 10px;">
-                    <div class="g-recaptcha" data-sitekey="6Lcs3GIUAAAAAPOX9QzHOA_farHU1IKYvWrWpB-Z"></div>
+                    <div class="g-recaptcha" data-sitekey="6Lf9NWgUAAAAAOLFVsbFykwsfSLCnZAE6TQi584V"></div>
             	</div></div>
 
                 <div class="row"><div class="col s12">
@@ -237,14 +237,14 @@
             <?php
                 if(isset($_SESSION['errorAvatar']))
                 {
-                	echo '<h5 class="errorColor">';
+                	echo '<h5 class="japokki-error h2">';
                     echo $_SESSION['errorAvatar'];
                     unset($_SESSION['errorAvatar']);
                     echo '</h5>';
                 }
                 else if(isset($_SESSION['successAvatar']))
                 {
-                	echo '<h5 class="successColor">';
+                	echo '<h5 class="japokki-success h2">';
                     echo $_SESSION['successAvatar'];
                     unset($_SESSION['successAvatar']);
                     echo '</h5>';

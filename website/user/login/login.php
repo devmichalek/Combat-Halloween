@@ -4,7 +4,7 @@
 	
 	if(!isset($_POST['username']) || !isset($_POST['password']))
 	{
-		header('Location: http://combathalloween.netne.net/login/loginform.php');
+		header('Location: https://amichalek.pl/combathalloween/login/loginform.php');
 		exit();
 	}
 	
@@ -13,12 +13,12 @@
 	mysqli_report(MYSQLI_REPORT_STRICT);
 
 	// RECAPTCHA
-    $mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
+    $mysecret = "6Lf9NWgUAAAAAAe-lNJAcxTOubIdu_KUe-cSMwTU";
     $confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
     if(!json_decode($confirm)->success)
     {
     	$_SESSION['error'] = "Confirm humanity.";
-    	header('Location: http://combathalloween.netne.net/user/login/loginform.php');
+    	header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
     	exit();
     }
     
@@ -50,7 +50,7 @@
 						if($row['activated'] == 0)
 						{
 							$_SESSION['error'] = 'Confirm your address email.';
-							header('Location: http://combathalloween.netne.net/user/login/loginform.php');
+							header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
     						exit();
 						}
 						else
@@ -75,20 +75,20 @@
 							
 							unset($_SESSION['error']);
 							$result->free_result();
-							header('Location: http://combathalloween.netne.net/home.php');
+							header('Location: https://amichalek.pl/combathalloween/home.php');
 						}
 					}
 					else
 					{
 						$_SESSION['error'] = 'Wrong username or password.';
-						header('Location: http://combathalloween.netne.net/user/login/loginform.php');
+						header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
     					exit();
 					}
 				}
 				else
 				{
 					$_SESSION['error'] = 'Wrong username or password.';
-					header('Location: http://combathalloween.netne.net/user/login/loginform.php');
+					header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
     				exit();
 				}
 			}

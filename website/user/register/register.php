@@ -65,7 +65,7 @@
     }
 
     // RECAPTCHA
-    $mysecret = "6Lcs3GIUAAAAAG9qpx2wImGLmkhzh_KF2Y0YZrNV";
+    $mysecret = "6Lf9NWgUAAAAAAe-lNJAcxTOubIdu_KUe-cSMwTU";
     $confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
     if(!json_decode($confirm)->success)
     {
@@ -127,8 +127,8 @@
         {
           $first_time = date("d.m.Y");
           $activation_code = generateCode();
-
-          if(!$connection->query("INSERT INTO usersfeatures VALUES (NULL, '$username', '@71@72@73@25@23@74', '100', '10', '0', '1', '2', '3', '4', '10', '0')"))
+            $luckiness = rand(2, 99);
+          if(!$connection->query("INSERT INTO usersfeatures VALUES (NULL, '$username', '71@72@73@23@25@', '100', '10', '0', '1', '2', '3', '$luckiness', '0', '1')"))
           {
             throw new Exception($connection->error);
           }
