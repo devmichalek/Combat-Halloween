@@ -15,7 +15,7 @@ void cmm::Text::setFont(const char* path)
 	}
 }
 
-void cmm::Text::setText(sf::String line)
+void cmm::Text::setText(std::string line)
 {
 	if(text)
     {
@@ -23,6 +23,16 @@ void cmm::Text::setText(sf::String line)
 		setRawAlpha();
 	}
 }
+
+void cmm::Text::setTextW(std::wstring line)
+{
+	if (text)
+	{
+		text->setString(line);
+		setRawAlpha();
+	}
+}
+
 
 
 

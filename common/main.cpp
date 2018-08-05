@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 	{
 		cmm::Sound sound;
 		sound.load("sounds/click.wav");
-		cmm::Sound::setPlayable();
+		cmm::Sound::setGlobalPlayable();
 		sound.setVolume(100);
 		sound.play();
 		while (sound.isPlaying()) {}
@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 	{
 		cmm::Music music;
 		music.load("music/menu.ogg");
-		cmm::Music::setPlayable();
+		cmm::Music::setGlobalPlayable();
 		music.setVolume(100);
 		music.play();
 		bool state = true;

@@ -14,7 +14,8 @@ namespace cmm
 	public:
 		const sf::Text& get() const;
 		void setFont(const char* path);
-		void setText(sf::String line);
+		void setText(std::string line);
+		void setTextW(std::wstring line);
 
 		void fadein(float v = 1, int max = 0xFF);
 		void fadeout(float v = 1, int min = 0);
