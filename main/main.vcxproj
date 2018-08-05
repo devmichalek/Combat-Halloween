@@ -43,7 +43,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <TargetName>combathalloween</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -52,7 +54,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;..\init;..\menu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;..\init;..\menu;..\levelmenu</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
@@ -90,11 +92,14 @@
     <ClCompile Include="..\init\loading.cpp" />
     <ClCompile Include="..\init\login.cpp" />
     <ClCompile Include="..\init\rectbutton.cpp" />
+    <ClCompile Include="..\levelmenu\chat.cpp" />
+    <ClCompile Include="..\levelmenu\levelmenu.cpp" />
+    <ClCompile Include="..\levelmenu\levelmenuinformation.cpp" />
     <ClCompile Include="..\menu\button.cpp" />
+    <ClCompile Include="..\menu\knightspecs.cpp" />
     <ClCompile Include="..\menu\menu.cpp" />
     <ClCompile Include="..\menu\menuinformation.cpp" />
     <ClCompile Include="..\menu\pausesystem.cpp" />
-    <ClCompile Include="..\menu\robotspecs.cpp" />
     <ClCompile Include="..\menu\settings.cpp" />
     <ClCompile Include="..\menu\state.cpp" />
     <ClCompile Include="main.cpp" />
@@ -111,11 +116,14 @@
     <ClInclude Include="..\init\loading.h" />
     <ClInclude Include="..\init\login.h" />
     <ClInclude Include="..\init\rectbutton.h" />
+    <ClInclude Include="..\levelmenu\chat.h" />
+    <ClInclude Include="..\levelmenu\levelmenu.h" />
+    <ClInclude Include="..\levelmenu\levelmenuinformation.h" />
     <ClInclude Include="..\menu\button.h" />
+    <ClInclude Include="..\menu\knightspecs.h" />
     <ClInclude Include="..\menu\menu.h" />
     <ClInclude Include="..\menu\menuinformation.h" />
     <ClInclude Include="..\menu\pausesystem.h" />
-    <ClInclude Include="..\menu\robotspecs.h" />
     <ClInclude Include="..\menu\settings.h" />
     <ClInclude Include="..\menu\state.h" />
   </ItemGroup>
