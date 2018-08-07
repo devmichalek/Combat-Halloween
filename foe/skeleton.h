@@ -1,10 +1,10 @@
 #pragma once
 #include "xynode.h"
-#include <vector>
-#include <string>
+#include "foeanimation.h"
 
-class Skeleton :public XYNode
+class Skeleton: public XYNode, public FoeAnimation
 {
+protected:
 	enum ACTIONS
 	{
 		APPEAR = 0,
@@ -23,19 +23,8 @@ class Skeleton :public XYNode
 	// Positioning
 	float x, y;
 	float scale;
+	float width;
 	float left, right; // x borders
-
-	// Animation
-	int state;
-	float offset;
-	std::vector<int> lines;
-
-	// Text
-	int chosenText;
-	float textLine;
-	float textCounter;
-	float textFrequency;
-	std::vector<std::string> texts;
 
 	// Support
 	bool appeared;
@@ -49,7 +38,7 @@ class Skeleton :public XYNode
 
 public:
 	Skeleton();
-	~Skeleton();
+	virtual ~Skeleton();
 	void free();
 
 	// Features
@@ -66,40 +55,41 @@ public:
 	void harm(float value);
 	float getHPScale();
 
+
 	// Positioning.
+	void setScale(float newScale);
+	void setWidth(float newWidth);
+	void setPosition(float newX, float newY);
+	void setBorders(float newLeft, float newRight);
+
 	void moveX(double elapsedTime);
-	void setPosition(float x, float y);
-	void setWidth(float width);
-	void setCenterX(float centerX);
-	void setBorders(float left, float right);
-	void setScale(float scale);
 	void turnLeft();
 	void turnRight();
+
 	float getX();
 	float getY();
+
 	float getRealX();
 	float getRealY();
 	float getRealWidth();
 	float getRealHeight();
+
 	float getAttackX();
 	float getAttackY();
 	float getAttackWidth();
 	float getAttackHeight();
+
 	float getMouthX();
 	float getMouthY();
-	float getCenterX();
-	const float& getLeft() const;
-	const float& getRight() const;
+
+	bool isLeftAlign();
+	bool isRightAlign();
+
 	const float& getScaleX() const;
 	float getScaleY();
-
-	// Animation
-	void setState(int value);
-	void setOffset(float value);
-	void setLines(std::vector<int> lines);
-	const int& getState() const;
-	const float& getOffset() const;
-	const std::vector<int>& getLines() const;
+	const float& getWidth() const;
+	const float& getLeft() const;
+	const float& getRight() const;
 
 
 	// Set Action
@@ -116,13 +106,4 @@ public:
 	bool isAttackDone();
 	bool isAttacking(bool hide = false);
 	void mechanics(double elapsedTime);
-
-
-	// Text.
-	void setTextFrequency(float seconds = 8);
-	void setText();
-	void addText(std::string line);
-	bool showText();
-	const std::string& getText() const;
-	bool isLeftText();
 };

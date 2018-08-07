@@ -18,26 +18,9 @@ void Skeleton::free()
 	heartPoints = hp = 0;
 
 	x = y = 0;
-	width = 0;
-	centerX = 0;
-	left = right = 0;
 	scale = 0;
-
-	state = -1;
-	offset = 0;
-	if (!lines.empty())
-	{
-		lines.clear();
-		lines.shrink_to_fit();
-	}
-		
-	setText();
-	textFrequency = 8;
-	if (!texts.empty())
-	{
-		texts.clear();
-		texts.shrink_to_fit();
-	}
+	width = 0;
+	left = right = 0;
 
 	appeared = false;
 	attackNum = 0;
@@ -48,6 +31,7 @@ void Skeleton::free()
 	inactionLine = rand() % static_cast <int>(walkFrequency) + walkFrequency;
 	inactionCounter = -1;
 }
+
 
 
 void Skeleton::setArmour(float value)
@@ -116,44 +100,41 @@ float Skeleton::getHPScale()
 
 
 
+void Skeleton::setScale(float newScale)
+{
+	scale = newScale;
+}
+
+void Skeleton::setWidth(float newWidth)
+{
+	width = newWidth;
+}
+
+void Skeleton::setPosition(float newX, float newY)
+{
+	x = x;
+	y = y;
+}
+
+void Skeleton::setBorders(float newLeft, float newRight)
+{
+	left = left;
+	right = right;
+}
+
+
+
 void Skeleton::moveX(double elapsedTime)
 {
-	if (attackCounter > attackLine / 3)
+	if (isAttackDone())
 	{
-		this->x += (elapsedTime * velocity);
+		x += (elapsedTime * velocity);
 	}
-}
-
-void Skeleton::setPosition(float x, float y)
-{
-	this->x = x;
-	this->y = y;
-}
-
-void Skeleton::setWidth(float width)
-{
-	this->width = width;
-}
-
-void Skeleton::setCenterX(float centerX)
-{
-	this->centerX = centerX;
-}
-
-void Skeleton::setBorders(float left, float right)
-{
-	this->left = left;
-	this->right = right;
-}
-
-void Skeleton::setScale(float scale)
-{
-	this->scale = scale;
 }
 
 void Skeleton::turnLeft()
 {
-	if (scale < 0 && isAttackDone())
+	if (isRightAlign() && isAttackDone())
 	{
 		scale = -scale;
 	}
@@ -161,11 +142,13 @@ void Skeleton::turnLeft()
 
 void Skeleton::turnRight()
 {
-	if (scale > 0 && isAttackDone())
+	if (isLeftAlign() && isAttackDone())
 	{
 		scale = -scale;
 	}
 }
+
+
 
 float Skeleton::getX()
 {
@@ -174,15 +157,15 @@ float Skeleton::getX()
 	if (scale < 0)
 	{
 		if (state == APPEAR)		xOffset = width * 0.70;
-		else if (state == IDLE)	xOffset = width * 0.59;
-		else if (state == WALK)	xOffset = width * 0.59;
+		else if (state == IDLE)		xOffset = width * 0.59;
+		else if (state == WALK)		xOffset = width * 0.59;
 		else if (state == ATTACK)	xOffset = width * 1.01;
 		else if (state == DIE)		xOffset = width * 1.01;
 	}
 	else
 	{
-		if (state == ATTACK)	xOffset = -width * 0.42;
-		else if (state == DIE)	xOffset = -width * 0.42;
+		if (state == ATTACK)		xOffset = -width * 0.42;
+		else if (state == DIE)		xOffset = -width * 0.42;
 	}
 
 	return x + xOffset;
@@ -191,18 +174,18 @@ float Skeleton::getX()
 float Skeleton::getY()
 {
 	float yOffset = width * 0.01;
+
 	if (state == ATTACK)
 	{
 		yOffset += width * 0.073;
 	}
-
 
 	return y + yOffset;
 }
 
 float Skeleton::getRealX()
 {
-	return x + (width *0.05);
+	return x + (width * 0.05);
 }
 
 float Skeleton::getRealY()
@@ -257,19 +240,14 @@ float Skeleton::getMouthY()
 	return getRealY() + width * 0.45;
 }
 
-float Skeleton::getCenterX()
+bool Skeleton::isLeftAlign()
 {
-	return centerX;
+	return scale > 0;
 }
 
-const float& Skeleton::getLeft() const
+bool Skeleton::isRightAlign()
 {
-	return left;
-}
-
-const float& Skeleton::getRight() const
-{
-	return right;
+	return scale < 0;
 }
 
 const float& Skeleton::getScaleX() const
@@ -282,39 +260,20 @@ float Skeleton::getScaleY()
 	return scale < 0 ? -scale : scale;
 }
 
-
-
-
-void Skeleton::setState(int value)
+const float& getWidth() const
 {
-	this->state = value;
+	return width;
 }
 
-void Skeleton::setOffset(float value)
+const float& Skeleton::getLeft() const
 {
-	this->offset = value;
+	return left;
 }
 
-void Skeleton::setLines(std::vector<int> lines)
+const float& Skeleton::getRight() const
 {
-	this->lines = lines;
+	return right;
 }
-
-const int& Skeleton::getState() const
-{
-	return state;
-}
-
-const float& Skeleton::getOffset() const
-{
-	return offset;
-}
-
-const std::vector<int>& Skeleton::getLines() const
-{
-	return lines;
-}
-
 
 
 
@@ -505,49 +464,5 @@ void Skeleton::mechanics(double elapsedTime)
 				state = -2;
 			}
 		}
-		else if (!texts.empty())
-		{
-			textCounter += elapsedTime;
-			if (textCounter > textLine * 1.6)
-			{
-				setText();
-			}
-		}
 	}
-}
-
-
-
-
-void Skeleton::setTextFrequency(float seconds)
-{
-	textFrequency = seconds;
-}
-
-void Skeleton::setText()
-{
-	textCounter = 0;
-	textLine = (rand() % static_cast<int>(textFrequency) + textFrequency);
-	chosenText = rand() % texts.size();
-}
-
-void Skeleton::addText(std::string line)
-{
-	this->texts.push_back(line);
-	chosenText = rand() % texts.size();	// rand again
-}
-
-bool Skeleton::showText()
-{
-	return textCounter > textLine && state != DIE;
-}
-
-const std::string& Skeleton::getText() const
-{
-	return texts[chosenText];
-}
-
-bool Skeleton::isLeftText()
-{
-	return scale > 0;
 }
