@@ -2,17 +2,25 @@
 
 FoeFactory::FoeFactory()
 {
-
+	XYQuadTree = nullptr;
+	free();
 }
 
 FoeFactory::~FoeFactory()
 {
-
+	free();
 }
 
 void FoeFactory::free()
 {
-
+	screen_w = 0;
+	screen_h = 0;
+	
+	if(XYQuadTree)
+	{
+		delete XYQuadTree;
+		XYQuadTree = nullptr;
+	}
 }
 
 void FoeFactory::reset()

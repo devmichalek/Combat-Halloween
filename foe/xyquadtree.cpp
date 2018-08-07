@@ -2,7 +2,9 @@
 
 XYQuadTree::XYQuadTree()
 {
+	mW = mH = 0
 	count = 0;
+	damage = 0;
 	root = nullptr;
 }
 
@@ -40,6 +42,36 @@ bool XYQuadTree::insert(XYNode* node)
 	++count;
 	return insertPrivate(node, root);
 }
+
+void XYQuadTree::harm(sf::Rect<float> rect, float damage);
+{
+	if(!empty())
+	{
+		harmPrivate(rect, damage, root)
+	}
+}
+
+void XYQuadTree::attack(sf::Rect<float> rect)
+{
+	if(!empty())
+	{
+		return harmPrivate(rect, root)
+	}
+
+	return false;
+}
+
+void XYQuadTree::mechanics(sf::Rect<float> rect, double elapsedTime)
+{
+	if(!empty())
+	{
+		int state = -1;
+		return mechanicsPrivate(rect, state, elapsedTime, root)
+	}
+}
+
+
+
 
 
 
@@ -95,6 +127,12 @@ const int& XYQuadTree::getSize() const
 {
 	return count;
 }
+
+const float& XYQuadTree::getDamage() const
+{
+	return damage;
+}
+
 
 
 
@@ -353,6 +391,153 @@ bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
 	}
 
 	return false;
+}
+
+void XYQuadTree::harmPrivate(sf::Rect<float> &rect, float &damage, XYQuad* quad)
+{
+	if(quad->topLeft &&
+	   quad->topLeft->node->cX >= rect.left &&
+	   quad->topLeft->node->cX <= rect.left + rect.width &&
+	   quad->topLeft->node->cY >= rect.top &&
+	   quad->topLeft->node->cY <= rect.top + rect.height)
+	{
+		harmPrivate(rect, damage, quad->topLeft);
+	}
+
+	if(quad->topRight &&
+	   quad->topRight->node->cX >= rect.left &&
+	   quad->topRight->node->cX <= rect.left + rect.width &&
+	   quad->topRight->node->cY >= rect.top &&
+	   quad->topRight->node->cY <= rect.top + rect.height)
+	{
+		harmPrivate(rect, damage, quad->topRight);
+	}
+
+	if(quad->botLeft &&
+	   quad->botLeft->node->cX >= rect.left &&
+	   quad->botLeft->node->cX <= rect.left + rect.width &&
+	   quad->botLeft->node->cY >= rect.top &&
+	   quad->botLeft->node->cY <= rect.top + rect.height)
+	{
+		harmPrivate(rect, damage, quad->botLeft);
+	}
+
+	if(quad->botRight &&
+	   quad->botRight->node->cX >= rect.left &&
+	   quad->botRight->node->cX <= rect.left + rect.width &&
+	   quad->botRight->node->cY >= rect.top &&
+	   quad->botRight->node->cY <= rect.top + rect.height)
+	{
+		harmPrivate(rect, damage, quad->botRight);
+	}
+
+	if(!quad->node->isAlive())		return;
+
+	float l = quad->node->getRealX(), w = quad->node->getRealWidth();	// left, width
+	float t = quad->node->getRealY(), h = quad->node->getRealHeight();	// top, height
+
+	if(rect.left + rect.width < l)	return;
+	if(rect.left > l + w)			return;
+	if(rect.top + rect.height < t)	return;
+	if(rect.top > t + h)			return;
+
+	quad->node->harm(damage);
+}
+
+bool XYQuadTree::attackPrivate(sf::Rect<float> &rect, XYQuad* quad)
+{
+	if(quad->topLeft &&
+	   quad->topLeft->node->cX >= rect.left &&
+	   quad->topLeft->node->cX <= rect.left + rect.width &&
+	   quad->topLeft->node->cY >= rect.top &&
+	   quad->topLeft->node->cY <= rect.top + rect.height)
+	{
+		return attackPrivate(rect, quad->topLeft);
+	}
+
+	if(quad->topRight &&
+	   quad->topRight->node->cX >= rect.left &&
+	   quad->topRight->node->cX <= rect.left + rect.width &&
+	   quad->topRight->node->cY >= rect.top &&
+	   quad->topRight->node->cY <= rect.top + rect.height)
+	{
+		return attackPrivate(rect, quad->topRight);
+	}
+
+	if(quad->botLeft &&
+	   quad->botLeft->node->cX >= rect.left &&
+	   quad->botLeft->node->cX <= rect.left + rect.width &&
+	   quad->botLeft->node->cY >= rect.top &&
+	   quad->botLeft->node->cY <= rect.top + rect.height)
+	{
+		return attackPrivate(rect, quad->botLeft);
+	}
+
+	if(quad->botRight &&
+	   quad->botRight->node->cX >= rect.left &&
+	   quad->botRight->node->cX <= rect.left + rect.width &&
+	   quad->botRight->node->cY >= rect.top &&
+	   quad->botRight->node->cY <= rect.top + rect.height)
+	{
+		return attackPrivate(rect, quad->botRight);
+	}
+
+	if(!quad->node->isAttacking())	return false;
+
+	float l = quad->node->getAttackX(), w = quad->node->getAttackWidth();	// left, width
+	float t = quad->node->getAttackY(), h = quad->node->getAttackHeight();	// top, height
+
+	if(rect.left + rect.width < l)	return false;
+	if(rect.left > l + w)			return false;
+	if(rect.top + rect.height < t)	return false;
+	if(rect.top > t + h)			return false;
+
+	damage = quad->node->getDamage();
+	return true;
+}
+
+void XYQuadTree::mechanicsPrivate(sf::Rect<float> &rect, int &state, double &elapsedTime, XYQuad* quad)
+{
+	if(quad->topLeft &&
+	   quad->topLeft->node->cX >= rect.left &&
+	   quad->topLeft->node->cX <= rect.left + rect.width &&
+	   quad->topLeft->node->cY >= rect.top &&
+	   quad->topLeft->node->cY <= rect.top + rect.height)
+	{
+		mechanicsPrivate(rect, quad->topLeft);
+	}
+
+	if(quad->topRight &&
+	   quad->topRight->node->cX >= rect.left &&
+	   quad->topRight->node->cX <= rect.left + rect.width &&
+	   quad->topRight->node->cY >= rect.top &&
+	   quad->topRight->node->cY <= rect.top + rect.height)
+	{
+		mechanicsPrivate(rect, quad->topRight);
+	}
+
+	if(quad->botLeft &&
+	   quad->botLeft->node->cX >= rect.left &&
+	   quad->botLeft->node->cX <= rect.left + rect.width &&
+	   quad->botLeft->node->cY >= rect.top &&
+	   quad->botLeft->node->cY <= rect.top + rect.height)
+	{
+		mechanicsPrivate(rect, quad->botLeft);
+	}
+
+	if(quad->botRight &&
+	   quad->botRight->node->cX >= rect.left &&
+	   quad->botRight->node->cX <= rect.left + rect.width &&
+	   quad->botRight->node->cY >= rect.top &&
+	   quad->botRight->node->cY <= rect.top + rect.height)
+	{
+		mechanicsPrivate(rect, quad->botRight);
+	}
+
+	if(quad->node->getState() < 0)
+		return;
+
+	quad->node->mechanics(elapsedTime);
 }
 
 XYNode* XYQuadTree::findSmallest(XYQuad* quad)

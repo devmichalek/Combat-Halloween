@@ -1,8 +1,7 @@
 #pragma once
 #include "xynode.h"
-#include "foeanimation.h"
 
-class Skeleton: public XYNode, public FoeAnimation
+class Skeleton: public XYNode
 {
 protected:
 	enum ACTIONS

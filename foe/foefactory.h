@@ -6,7 +6,7 @@ class FoeFactory
 {
 	int screen_w;
 	int screen_h;
-	XYQuadTree tree;
+	XYQuadTree* tree;
 
 public:
 	FoeFactory();
