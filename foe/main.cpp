@@ -15,7 +15,10 @@ int main(int argc, char** argv)
 {
 	core->create("Combat Halloween");
 	core->state = PLATFORM;
-	foeFactory->load(core->getWidth(), core->getHeight());
+	float screen_w = core->getWidth();
+	float screen_h = core->getHeight();
+	double elapsedTime = 0;
+	foeFactory->load(screen_w, screen_h);
 
 	while (core->open)
 	{
@@ -30,15 +33,13 @@ int main(int argc, char** argv)
 				core->open = false;
 			}
 
-			switch (core->state)
-			{
-			default: break;
-			}
+			
 		}
 
 		if (core->state == PLATFORM)
 		{
-			foeFactory->mechanics(core->getElapsedTime());
+			elapsedTime = core->getElapsedTime();
+			foeFactory->mechanics(elapsedTime);
 			foeFactory->draw(core->getWindow());
 		}
 
