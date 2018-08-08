@@ -7,6 +7,18 @@
     <Filter Include="Dependencies">
       <UniqueIdentifier>{03d7eab1-8bab-4f7e-8470-a2959298701d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Tree">
+      <UniqueIdentifier>{e4e2c283-7096-402b-a439-7397e5560636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Foes">
+      <UniqueIdentifier>{38e8a98b-d952-4e78-aad9-2c2ad6cb7573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Foes\Other">
+      <UniqueIdentifier>{f0f4d254-1f59-4188-95fe-91f47d516ae0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Foes\Tree">
+      <UniqueIdentifier>{28989261-a7da-4f76-bfaf-a84369d3ebb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,14 +45,35 @@
     <ClCompile Include="..\core\core.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
-    <ClCompile Include="xyquadtree.cpp">
-      <Filter>Main</Filter>
+    <ClCompile Include="skeleton.cpp">
+      <Filter>Main\Foes</Filter>
+    </ClCompile>
+    <ClCompile Include="zombie.cpp">
+      <Filter>Main\Foes</Filter>
     </ClCompile>
     <ClCompile Include="xynode.cpp">
-      <Filter>Main</Filter>
+      <Filter>Main\Tree</Filter>
     </ClCompile>
     <ClCompile Include="xyquad.cpp">
-      <Filter>Main</Filter>
+      <Filter>Main\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="xyquadtree.cpp">
+      <Filter>Main\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="foeanimation.cpp">
+      <Filter>Main\Foes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="foetext.cpp">
+      <Filter>Main\Foes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="foetree.cpp">
+      <Filter>Main\Foes\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="foefeatures.cpp">
+      <Filter>Main\Foes\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="foenode.cpp">
+      <Filter>Main\Foes\Tree</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,20 +92,41 @@
     <ClInclude Include="..\common\text.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="foefactory.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="..\core\core.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="xyquadtree.h">
+    <ClInclude Include="skeleton.h">
+      <Filter>Main\Foes</Filter>
+    </ClInclude>
+    <ClInclude Include="zombie.h">
+      <Filter>Main\Foes</Filter>
+    </ClInclude>
+    <ClInclude Include="foefactory.h">
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="xynode.h">
-      <Filter>Main</Filter>
+      <Filter>Main\Tree</Filter>
     </ClInclude>
     <ClInclude Include="xyquad.h">
-      <Filter>Main</Filter>
+      <Filter>Main\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="xyquadtree.h">
+      <Filter>Main\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="foeanimation.h">
+      <Filter>Main\Foes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="foetext.h">
+      <Filter>Main\Foes\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="foetree.h">
+      <Filter>Main\Foes\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="foenode.h">
+      <Filter>Main\Foes\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="foefeatures.h">
+      <Filter>Main\Foes\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
