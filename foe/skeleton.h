@@ -1,7 +1,9 @@
 #pragma once
-#include "xynode.h"
+#include "foenode.h"
+#include "foeanimation.h"
+#include "foefeatures.h"
 
-class Skeleton: public XYNode
+class Skeleton: public FoeNode, protected FoeAnimation, protected FoeFeatures
 {
 protected:
 	enum ACTIONS
@@ -12,20 +14,7 @@ protected:
 		ATTACK,
 		DIE
 	};
-
-	// Features
-	float armour;
-	float damage;
-	float velocity;
-	float heartPoints, hp;
-
-	// Positioning
-	float x, y;
-	float scale;
-	float width;
-	float left, right; // x borders
-
-	// Support
+	
 	bool appeared;
 	int attackNum;
 	float attackLine;
@@ -33,65 +22,43 @@ protected:
 	float inactionX;
 	float inactionLine;
 	float inactionCounter;
-	float walkFrequency;
+	float inactionFrequency;
+
+	Rect* realBox;
+	Rect* attackBox;
+	Rect* borderBox;
 
 public:
 	Skeleton();
 	virtual ~Skeleton();
 	void free();
 
-	// Features
-	void setArmour(float value);
-	void setDamage(float value);
-	void setVelocity(float value);
-	void setHeartPoints(float value);
-	void setWalkFrequency(float seconds = 4);
+	void setBoxes();	// call it if width is set
+	void setInactionFrequency(float seconds = 4);
 	void setAttackFrequency(float seconds = 1);
-	const float& getArmour() const;
-	const float& getDamage() const;
-	const float& getVelocity() const;
-	const float& getHeartPoints() const;
-	void harm(float value);
 	float getHPScale();
-
-
-	// Positioning.
-	void setScale(float newScale);
-	void setWidth(float newWidth);
-	void setPosition(float newX, float newY);
-	void setBorders(float newLeft, float newRight);
 
 	void moveX(double elapsedTime);
 	void turnLeft();
 	void turnRight();
-
-	float getX();
-	float getY();
-
-	float getRealX();
-	float getRealY();
-	float getRealWidth();
-	float getRealHeight();
-
-	float getAttackX();
-	float getAttackY();
-	float getAttackWidth();
-	float getAttackHeight();
-
-	float getMouthX();
-	float getMouthY();
-
 	bool isLeftAlign();
 	bool isRightAlign();
 
-	const float& getScaleX() const;
-	float getScaleY();
-	const float& getWidth() const;
-	const float& getLeft() const;
-	const float& getRight() const;
+	// Sprite x, y
+	float getSpriteX();
+	float getSpriteY();
 
+	// Real box and attack box
+	float getRealX();
+	float getRealY();
+	float getAttackX();
+	float getAttackY();
 
-	// Set Action
+	// Text x, y
+	float getMouthX();
+	float getMouthY();
+
+	// Actions
 	void setAppear();
 	void setIdle();
 	void setWalk();
@@ -103,6 +70,14 @@ public:
 	bool isAbleToWalk();
 	bool isAbleToAttack();
 	bool isAttackDone();
-	bool isAttacking(bool hide = false);
-	void mechanics(double elapsedTime);
+	bool isAttacking();
+
+	void mechanics(	double &,
+					Rect* &,
+					Rect* &,
+					bool &,
+					float &,
+					float &,
+					float &
+				  );
 };

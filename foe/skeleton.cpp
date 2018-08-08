@@ -2,6 +2,9 @@
 
 Skeleton::Skeleton()
 {
+	realBox = nullptr;
+	attackBox = nullptr;
+	borderBox = nullptr;
 	free();
 }
 
@@ -12,51 +15,56 @@ Skeleton::~Skeleton()
 
 void Skeleton::free()
 {
-	armour = 0;
-	damage = 0;
-	velocity = 0;
-	heartPoints = hp = 0;
-
-	x = y = 0;
-	scale = 0;
-	width = 0;
-	left = right = 0;
-
 	appeared = false;
 	attackNum = 0;
 	attackLine = 1;
 	attackCounter = attackLine;
-	walkFrequency = 4;
+	inactionFrequency = 4;
 	inactionX = -1;
-	inactionLine = rand() % static_cast <int>(walkFrequency) + walkFrequency;
+	inactionLine = rand() % static_cast <int>(inactionFrequency) + inactionFrequency;
 	inactionCounter = -1;
+
+	if (realBox)
+	{
+		delete realBox;
+		realBox = nullptr;
+	}
+	
+	if (attackBox)
+	{
+		delete attackBox;
+		attackBox = nullptr;
+	}
+
+	if (borderBox)
+	{
+		delete borderBox;
+		borderBox = nullptr;
+	}
 }
 
 
 
-void Skeleton::setArmour(float value)
+void Skeleton::setBoxes()
 {
-	armour = value;
+	realBox = new Rect;
+	realBox->width = width / 2;
+	realBox->height = width * 1.26;
+
+	attackBox = new Rect;
+	attackBox->width = width * 0.43;
+	attackBox->height = width * 0.6;
+
+	borderBox = new Rect;
+	borderBox->width = right - left;
+	borderBox->height = realBox->height;
+	borderBox->left = left;
+	borderBox->top = y - realBox->height;
 }
 
-void Skeleton::setDamage(float value)
+void Skeleton::setInactionFrequency(float seconds)
 {
-	damage = value;
-}
-
-void Skeleton::setVelocity(float value)
-{
-	velocity = value;
-}
-
-void Skeleton::setHeartPoints(float value)
-{
-	heartPoints = hp = value;
-}
-
-void Skeleton::setWalkFrequency(float seconds)
-{
-	walkFrequency = seconds;
+	inactionFrequency = seconds;
 }
 
 void Skeleton::setAttackFrequency(float seconds)
@@ -64,62 +72,9 @@ void Skeleton::setAttackFrequency(float seconds)
 	attackLine = seconds;
 }
 
-const float& Skeleton::getArmour() const
-{
-	return armour;
-}
-
-const float& Skeleton::getDamage() const
-{
-	return damage;
-}
-
-const float& Skeleton::getVelocity() const
-{
-	return velocity;
-}
-
-const float& Skeleton::getHeartPoints() const
-{
-	return heartPoints;
-}
-
-void Skeleton::harm(float value)
-{
-	heartPoints -= (value - (value * armour / 1000));
-
-	if (heartPoints <= 0)
-		setDie();
-}
-
 float Skeleton::getHPScale()
 {
 	return heartPoints / hp < 0 ? 0 : heartPoints / hp;
-}
-
-
-
-
-void Skeleton::setScale(float newScale)
-{
-	scale = newScale;
-}
-
-void Skeleton::setWidth(float newWidth)
-{
-	width = newWidth;
-}
-
-void Skeleton::setPosition(float newX, float newY)
-{
-	x = x;
-	y = y;
-}
-
-void Skeleton::setBorders(float newLeft, float newRight)
-{
-	left = left;
-	right = right;
 }
 
 
@@ -148,9 +103,19 @@ void Skeleton::turnRight()
 	}
 }
 
+bool Skeleton::isLeftAlign()
+{
+	return scale > 0;
+}
+
+bool Skeleton::isRightAlign()
+{
+	return scale < 0;
+}
 
 
-float Skeleton::getX()
+
+float Skeleton::getSpriteX()
 {
 	float xOffset = 0;
 
@@ -171,7 +136,7 @@ float Skeleton::getX()
 	return x + xOffset;
 }
 
-float Skeleton::getY()
+float Skeleton::getSpriteY()
 {
 	float yOffset = width * 0.01;
 
@@ -183,6 +148,8 @@ float Skeleton::getY()
 	return y + yOffset;
 }
 
+
+
 float Skeleton::getRealX()
 {
 	return x + (width * 0.05);
@@ -190,26 +157,16 @@ float Skeleton::getRealX()
 
 float Skeleton::getRealY()
 {
-	return y - getRealHeight();
-}
-
-float Skeleton::getRealWidth()
-{
-	return width / 2;
-}
-
-float Skeleton::getRealHeight()
-{
-	return width * 1.26;
+	return y - realBox->height;
 }
 
 float Skeleton::getAttackX()
 {
-	float myx = getRealX() - getAttackWidth();
+	float myx = getRealX() - realBox->width;
 
 	if (scale < 0)
 	{
-		myx += getAttackWidth() * 2;
+		myx += realBox->width * 2;
 	}
 
 	return myx;
@@ -220,59 +177,16 @@ float Skeleton::getAttackY()
 	return getRealY() + width * 0.5;
 }
 
-float Skeleton::getAttackWidth()
-{
-	return width * 0.43;
-}
 
-float Skeleton::getAttackHeight()
-{
-	return width * 0.6;
-}
 
 float Skeleton::getMouthX()
 {
-	return getRealX() + getRealWidth() / 1.5;
+	return getRealX() + realBox->width / 1.5;
 }
 
 float Skeleton::getMouthY()
 {
 	return getRealY() + width * 0.45;
-}
-
-bool Skeleton::isLeftAlign()
-{
-	return scale > 0;
-}
-
-bool Skeleton::isRightAlign()
-{
-	return scale < 0;
-}
-
-const float& Skeleton::getScaleX() const
-{
-	return scale;
-}
-
-float Skeleton::getScaleY()
-{
-	return scale < 0 ? -scale : scale;
-}
-
-const float& getWidth() const
-{
-	return width;
-}
-
-const float& Skeleton::getLeft() const
-{
-	return left;
-}
-
-const float& Skeleton::getRight() const
-{
-	return right;
 }
 
 
@@ -287,7 +201,7 @@ void Skeleton::setAppear()
 
 void Skeleton::setIdle()
 {
-	if (appeared && state != ATTACK)
+	if (appeared)
 	{
 		state = IDLE;
 	}
@@ -320,6 +234,8 @@ void Skeleton::setDie()
 	inactionCounter = 0;
 }
 
+
+
 bool Skeleton::isAlive()
 {
 	return state > -2 && state != DIE;
@@ -337,7 +253,7 @@ bool Skeleton::isAbleToWalk()
 
 bool Skeleton::isAbleToAttack()
 {
-	return (state == IDLE || state == WALK) && attackCounter > attackLine;
+	return attackCounter > attackLine;
 }
 
 bool Skeleton::isAttackDone()
@@ -345,124 +261,194 @@ bool Skeleton::isAttackDone()
 	return attackCounter > attackLine / 3;
 }
 
-bool Skeleton::isAttacking(bool hide)
+bool Skeleton::isAttacking()
 {
 	if (state == ATTACK)
 	{
-		if (static_cast <int> (offset) == 3)
+		if (static_cast <int> (offset) == 3 && attackNum == 0)
 		{
-			if (hide)
-				return true;
-			else if (attackNum == 0)
-			{
-				attackNum++;
-				return true;
-			}
+			attackNum++;
+			return true;
 		}
-		else if (static_cast <int> (offset) == 6)
+		else if (static_cast <int> (offset) == 6 && attackNum == 1)
 		{
-			if (hide)
-				return true;
-			else if (attackNum == 1)
-			{
-				attackNum++;
-				return true;
-			}
+			attackNum++;
+			return true;
 		}
 	}
 
 	return false;
 }
 
-void Skeleton::mechanics(double elapsedTime)
+
+
+void Skeleton::mechanics(	double &elapsedTime,
+							Rect* &character,
+							Rect* &characterAttack,
+							bool &characterHasAttacked,
+							float &characterDamage,
+							float &characterHP,
+							float &characterArmour
+						)
 {
-	if (state > -1)
+	if (isAlive())
 	{
-		offset += elapsedTime * 20;	// 20 offsets per second.
-
-		if (state == APPEAR)
+		if (characterHasAttacked)
 		{
-			if (offset >= lines[APPEAR])
+			realBox->left = getRealX();
+			realBox->top = getRealY();
+
+			if (contains(realBox, characterAttack))
 			{
-				offset = 0;
-				state = IDLE;
-				appeared = true;
+				harm(characterDamage);
 			}
 		}
 
-		if (inactionX != -1)
+		if (isAttacking())
 		{
-			if (getRealX() + getRealWidth() < inactionX)
-			{
-				state = WALK;
-				turnRight();
-				moveX(elapsedTime);
-				if (getRealX() + getRealWidth() > inactionX)
-				{
-					offset = 0;
-					state = IDLE;
-					inactionX = -1;
-					inactionCounter = 0;
-				}
-			}
-			else if (getRealX() > inactionX)
-			{
-				state = WALK;
-				turnLeft();
-				moveX(-elapsedTime);
-				if (getRealX() < inactionX)
-				{
-					offset = 0;
-					state = IDLE;
-					inactionX = -1;
-					inactionCounter = 0;
-				}
-			}
-		}
+			attackBox->left = getRealX();
+			attackBox->top = getRealY();
 
-		if (state == IDLE)
-		{
-			if (offset >= lines[IDLE])
+			if (contains(attackBox, character))
 			{
-				offset = 0;
-			}
-
-			inactionCounter += elapsedTime;
-			if (inactionCounter > inactionLine)
-			{
-				offset = 0;
-				inactionX = rand() % static_cast <int> (right - left) + left;
-				inactionLine = rand() % static_cast <int> (walkFrequency) + walkFrequency;
-			}
-		}
-
-
-		if (state == WALK && offset >= lines[WALK])
-		{
-			offset = 0;
-		}
-
-		if (state == ATTACK)
-		{
-			if (offset >= lines[ATTACK])
-			{
-				attackNum = 0;
-				offset = 0;
-				state = IDLE;
+				characterHP -= (damage - (damage * characterArmour / 1000));
 			}
 		}
 		else
 		{
-			attackCounter += elapsedTime;
+			setIdle();
 		}
 
-		if (state == DIE)
+	
+		if (contains(borderBox, character))
 		{
-			if (offset >= lines[DIE])
+			if (isAbleToWalk())
+			{
+				realBox->left = getRealX();
+
+				if (realBox->left + realBox->width / 2 < character->left + character->width / 2)
+					turnRight();
+				else
+					turnLeft();
+				setWalk();
+
+				if (realBox->left + realBox->width < right && realBox->left + realBox->width < character->left)
+				{
+					moveX(elapsedTime);
+				}
+				else if (realBox->left > left && realBox->left > character->left + character->width)
+				{
+					moveX(-elapsedTime);
+				}
+				else if (isAbleToAttack())
+				{
+					setAttack();
+				}
+				else
+				{
+					state = IDLE;
+				}
+			}
+			else if (isAbleToAppear())
+			{
+				if (getRealX() + realBox->width / 2 < character->left + character->width / 2)
+					turnRight();
+				else
+					turnLeft();
+				setAppear();
+			}
+		}
+	}
+
+	offset += elapsedTime * 20;	// 20 offsets per second.
+
+	if (state == APPEAR)
+	{
+		if (offset >= lines[APPEAR])
+		{
+			offset = 0;
+			state = IDLE;
+			appeared = true;
+		}
+	}
+
+	if (inactionX != -1)
+	{
+		realBox->left = getRealX();
+
+		if (realBox->left + realBox->width < inactionX)
+		{
+			state = WALK;
+			turnRight();
+			moveX(elapsedTime);
+			if (realBox->left + realBox->width > inactionX)
 			{
 				offset = 0;
-				state = -2;
+				state = IDLE;
+				inactionX = -1;
+				inactionCounter = 0;
 			}
+		}
+		else if (realBox->left > inactionX)
+		{
+			state = WALK;
+			turnLeft();
+			moveX(-elapsedTime);
+			if (realBox->left < inactionX)
+			{
+				offset = 0;
+				state = IDLE;
+				inactionX = -1;
+				inactionCounter = 0;
+			}
+		}
+	}
+
+	if (state == IDLE)
+	{
+		if (offset >= lines[IDLE])
+		{
+			offset = 0;
+		}
+
+		inactionCounter += elapsedTime;
+		if (inactionCounter > inactionLine)
+		{
+			offset = 0;
+			inactionX = rand() % static_cast <int> (right - left) + left;
+			inactionLine = rand() % static_cast <int> (inactionFrequency) + inactionFrequency;
+		}
+	}
+
+
+	if (state == WALK)
+	{
+		if (offset >= lines[WALK])
+		{
+			offset = 0;
+		}
+	}
+
+	if (state == ATTACK)
+	{
+		if (offset >= lines[ATTACK])
+		{
+			attackNum = 0;
+			offset = 0;
+			state = IDLE;
+		}
+	}
+	else
+	{
+		attackCounter += elapsedTime;
+	}
+
+	if (state == DIE)
+	{
+		if (offset >= lines[DIE])
+		{
+			offset = 0;
+			state = -2;
 		}
 	}
 }
