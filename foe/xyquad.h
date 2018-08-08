@@ -1,10 +1,10 @@
 #pragma once
-#include "xynode.h"
 
+template<class Node>
 struct XYQuad
 {
-	XYNode* node;
+	Node* node;
 	XYQuad *topLeft, *topRight;
 	XYQuad *botLeft, *botRight;
-	XYQuad(XYNode* node = nullptr);
+	XYQuad(Node* node = nullptr);
 };

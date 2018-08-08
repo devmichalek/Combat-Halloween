@@ -1,6 +1,10 @@
 #include "xyquad.h"
 
-XYQuad::XYQuad(XYNode* node)
+// includes of classes that would use XYQuad
+#include "foenode.h"
+
+template<class Node>
+XYQuad<Node>::XYQuad(Node* node)
 {
 	this->node = node;
 	topLeft = nullptr;
@@ -8,3 +12,6 @@ XYQuad::XYQuad(XYNode* node)
 	botLeft = nullptr;
 	botRight = nullptr;
 }
+
+// definitions of classes that would use XYQuad
+template class XYQuad <FoeNode>;
