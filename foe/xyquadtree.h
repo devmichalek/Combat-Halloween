@@ -1,51 +1,49 @@
+// @author Adrian Michalek
+// @email devmichalek@gmail.com
+
+// This template class is for all the objects inside of the game that
+// Cannot be directly adjust to the game grid
+// While searching the tree dismiss many quads per quad so it is really fast
+// For instance we want quads in area x=0 y=0 w=1000 h=1000
+// We start searching from root, then clockwise starting from left top corner to bot left corner
+// If the current quad is not inside of given area we simply refuse to keep searching
+// So that we dismiss a lot of data because further searching in particular quad is redundant
+
 #pragma once
-#include "xyquad.h"
-#include "sprite.h"
-#include <SFML/Graphics/RenderWindow.hpp>
 
-
+template<class Node, class Quad>
 class XYQuadTree
 {
-	float mW, mH;	// Mean (large) width and height of the foe
-	int count;		// Size of tree
-	float damage;
-	XYQuad* root;
+protected:
+	int count;
+	Quad* root;
 
 public:
 	XYQuadTree();
-	~XYQuadTree();
+	virtual ~XYQuadTree();
 	bool empty();
-	// void remove(XYNode* node = nullptr);
+	// void remove(Node* node = nullptr);
 	// void remove(float x, float y, int ID);
-	bool insert(XYNode* node = nullptr);
-
-	// Advanced
-	void harm(sf::Rect<float> rect, float damage);				// send character's attack rect + its damage
-	void attack(sf::Rect<float> rect);							// send larger character's rect
-	void mechanics(sf::Rect<float> rect, double elapsedTime);	// send larger window rect + elapsedTime
-
+	bool insert(Node* node = nullptr);
 
 	float getGreatestX();
 	float getGreatestY();
 	float getSmallestX();
 	float getSmallestY();
 	const int& getSize() const;
-	const float& getDamage() const;
-
+	
 private:
-	void free(XYQuad* quad = nullptr);
+	void free(Quad* quad = nullptr);
 	// void removeRoot();
-	// void removeMatch(XYQuad* parent = nullptr, XYQuad* match = nullptr, int dir = 0);
-	// void removePrivate(XYNode* node = nullptr, XYQuad* quad = nullptr);
-	bool insertPrivate(XYNode* node = nullptr, XYQuad* quad = nullptr);
-	void harmPrivate(sf::Rect<float> &rect, float &damage, XYQuad* quad = nullptr);	// check if foe got hit
-	bool attackPrivate(sf::Rect<float> &rect, XYQuad* quad = nullptr);				// check if character got hit
-	void mechanicsPrivate(sf::Rect<float> &rect, int &state, double &elapsedTime, XYQuad* quad = nullptr);
-	XYNode* findSmallest(XYQuad* quad = nullptr);
-	XYNode* findGreatest(XYQuad* quad = nullptr);
+	// void removeMatch(Quad* parent = nullptr, Quad* match = nullptr, int dir = 0);
+	// void removePrivate(Node* node = nullptr, Quad* quad = nullptr);
+	bool insertPrivate(Node* node = nullptr, Quad* quad = nullptr);
+	// Node* findSmallest(Quad* quad = nullptr);
+	// Node* findGreatest(Quad* quad = nullptr);
 
-	void findSmallestX(XYQuad* quad, float& v);
-	void findGreatestX(XYQuad* quad, float& v);
-	void findSmallestY(XYQuad* quad, float& v);
-	void findGreatestY(XYQuad* quad, float& v);
+	void findSmallestX(Quad* quad, float& v);
+	void findGreatestX(Quad* quad, float& v);
+	void findSmallestY(Quad* quad, float& v);
+	void findGreatestY(Quad* quad, float& v);
+	// Example: bool containsPrivate(Quad* quad = nullptr, Rect* rect = nullptr);
 };

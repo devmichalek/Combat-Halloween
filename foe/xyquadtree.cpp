@@ -1,25 +1,31 @@
 #include "xyquadtree.h"
 
-XYQuadTree::XYQuadTree()
+// includes of classes that would use XYQuadTree
+#include "xyquad.h"
+#include "foenode.h"
+
+template<class Node, class Quad>
+XYQuadTree<Node, Quad>::XYQuadTree()
 {
-	mW = mH = 0
 	count = 0;
-	damage = 0;
 	root = nullptr;
 }
 
-XYQuadTree::~XYQuadTree()
+template<class Node, class Quad>
+XYQuadTree<Node, Quad>::~XYQuadTree()
 {
 	count = 0;
 	free(root);
 }
 
-bool XYQuadTree::empty()
+template<class Node, class Quad>
+bool XYQuadTree<Node, Quad>::empty()
 {
 	return root == nullptr;
 }
 /*
-void XYQuadTree::remove(XYNode* node)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::remove(Node* node)
 {
 	if (!empty() && node)
 	{
@@ -27,55 +33,29 @@ void XYQuadTree::remove(XYNode* node)
 	}
 }
 
-void XYQuadTree::remove(float x, float y, int ID)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::remove(float x, float y, int ID)
 {
 	if (!empty())
 	{
-		XYNode* node = new XYNode(x, y, ID);
+		Node* node = new Node(x, y, ID);
 		removePrivate(node, root);
 		delete node;
 	}
 }
 */
-bool XYQuadTree::insert(XYNode* node)
+
+template<class Node, class Quad>
+bool XYQuadTree<Node, Quad>::insert(Node* node)
 {
 	++count;
 	return insertPrivate(node, root);
 }
 
-void XYQuadTree::harm(sf::Rect<float> rect, float damage);
-{
-	if(!empty())
-	{
-		harmPrivate(rect, damage, root)
-	}
-}
-
-void XYQuadTree::attack(sf::Rect<float> rect)
-{
-	if(!empty())
-	{
-		return harmPrivate(rect, root)
-	}
-
-	return false;
-}
-
-void XYQuadTree::mechanics(sf::Rect<float> rect, double elapsedTime)
-{
-	if(!empty())
-	{
-		int state = -1;
-		return mechanicsPrivate(rect, state, elapsedTime, root)
-	}
-}
 
 
-
-
-
-
-float XYQuadTree::getGreatestX()
+template<class Node, class Quad>
+float XYQuadTree<Node, Quad>::getGreatestX()
 {
 	if (!empty())
 	{
@@ -87,7 +67,8 @@ float XYQuadTree::getGreatestX()
 	return 0;
 }
 
-float XYQuadTree::getGreatestY()
+template<class Node, class Quad>
+float XYQuadTree<Node, Quad>::getGreatestY()
 {
 	if (!empty())
 	{
@@ -99,7 +80,8 @@ float XYQuadTree::getGreatestY()
 	return 0;
 }
 
-float XYQuadTree::getSmallestX()
+template<class Node, class Quad>
+float XYQuadTree<Node, Quad>::getSmallestX()
 {
 	if (!empty())
 	{
@@ -111,7 +93,8 @@ float XYQuadTree::getSmallestX()
 	return 0;
 }
 
-float XYQuadTree::getSmallestY()
+template<class Node, class Quad>
+float XYQuadTree<Node, Quad>::getSmallestY()
 {
 	if (!empty())
 	{
@@ -123,20 +106,19 @@ float XYQuadTree::getSmallestY()
 	return 0;
 }
 
-const int& XYQuadTree::getSize() const
+template<class Node, class Quad>
+const int& XYQuadTree<Node, Quad>::getSize() const
 {
 	return count;
 }
 
-const float& XYQuadTree::getDamage() const
-{
-	return damage;
-}
 
 
 
 
-void XYQuadTree::free(XYQuad* quad)
+
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::free(Quad* quad)
 {
 	if (quad)
 	{
@@ -150,9 +132,10 @@ void XYQuadTree::free(XYQuad* quad)
 	}
 }
 /*
-void XYQuadTree::removeRoot()
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::removeRoot()
 {
-	XYQuad* delQuad = root;
+	Quad* delQuad = root;
 
 	// No children.
 	if (!root->topLeft && !root->topRight && !root->botLeft && !root->botRight)
@@ -198,9 +181,10 @@ void XYQuadTree::removeRoot()
 	//}
 }
 
-void XYQuadTree::removeMatch(XYQuad* parent, XYQuad* match, int dir)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::removeMatch(Quad* parent, Quad* match, int dir)
 {
-	XYQuad* delQuad = match;
+	Quad* delQuad = match;
 
 	int childrenCount = 0;
 	if (match->topLeft)		++childrenCount;
@@ -303,7 +287,8 @@ void XYQuadTree::removeMatch(XYQuad* parent, XYQuad* match, int dir)
 	}
 }
 
-void XYQuadTree::removePrivate(XYNode* node, XYQuad* quad)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::removePrivate(Node* node, Quad* quad)
 {
 	if (root->node->ID == node->ID)
 	{
@@ -334,11 +319,13 @@ void XYQuadTree::removePrivate(XYNode* node, XYQuad* quad)
 	}
 }
 */
-bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
+
+template<class Node, class Quad>
+bool XYQuadTree<Node, Quad>::insertPrivate(Node* node, Quad* quad)
 {
 	if (empty())
 	{
-		root = new XYQuad(node);
+		root = new Quad(node);
 		return true;
 	}
 
@@ -349,7 +336,7 @@ bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
 			insertPrivate(node, quad->topLeft);
 		else
 		{
-			quad->topLeft = new XYQuad(node);
+			quad->topLeft = new Quad(node);
 			return true;
 		}
 	}
@@ -361,7 +348,7 @@ bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
 			insertPrivate(node, quad->topRight);
 		else
 		{
-			quad->topRight = new XYQuad(node);
+			quad->topRight = new Quad(node);
 			return true;
 		}
 	}
@@ -373,7 +360,7 @@ bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
 			insertPrivate(node, quad->botLeft);
 		else
 		{
-			quad->botLeft = new XYQuad(node);
+			quad->botLeft = new Quad(node);
 			return true;
 		}
 	}
@@ -385,7 +372,7 @@ bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
 			insertPrivate(node, quad->botRight);
 		else
 		{
-			quad->botRight = new XYQuad(node);
+			quad->botRight = new Quad(node);
 			return true;
 		}
 	}
@@ -393,154 +380,9 @@ bool XYQuadTree::insertPrivate(XYNode* node, XYQuad* quad)
 	return false;
 }
 
-void XYQuadTree::harmPrivate(sf::Rect<float> &rect, float &damage, XYQuad* quad)
-{
-	if(quad->topLeft &&
-	   quad->topLeft->node->cX >= rect.left &&
-	   quad->topLeft->node->cX <= rect.left + rect.width &&
-	   quad->topLeft->node->cY >= rect.top &&
-	   quad->topLeft->node->cY <= rect.top + rect.height)
-	{
-		harmPrivate(rect, damage, quad->topLeft);
-	}
-
-	if(quad->topRight &&
-	   quad->topRight->node->cX >= rect.left &&
-	   quad->topRight->node->cX <= rect.left + rect.width &&
-	   quad->topRight->node->cY >= rect.top &&
-	   quad->topRight->node->cY <= rect.top + rect.height)
-	{
-		harmPrivate(rect, damage, quad->topRight);
-	}
-
-	if(quad->botLeft &&
-	   quad->botLeft->node->cX >= rect.left &&
-	   quad->botLeft->node->cX <= rect.left + rect.width &&
-	   quad->botLeft->node->cY >= rect.top &&
-	   quad->botLeft->node->cY <= rect.top + rect.height)
-	{
-		harmPrivate(rect, damage, quad->botLeft);
-	}
-
-	if(quad->botRight &&
-	   quad->botRight->node->cX >= rect.left &&
-	   quad->botRight->node->cX <= rect.left + rect.width &&
-	   quad->botRight->node->cY >= rect.top &&
-	   quad->botRight->node->cY <= rect.top + rect.height)
-	{
-		harmPrivate(rect, damage, quad->botRight);
-	}
-
-	if(!quad->node->isAlive())		return;
-
-	float l = quad->node->getRealX(), w = quad->node->getRealWidth();	// left, width
-	float t = quad->node->getRealY(), h = quad->node->getRealHeight();	// top, height
-
-	if(rect.left + rect.width < l)	return;
-	if(rect.left > l + w)			return;
-	if(rect.top + rect.height < t)	return;
-	if(rect.top > t + h)			return;
-
-	quad->node->harm(damage);
-}
-
-bool XYQuadTree::attackPrivate(sf::Rect<float> &rect, XYQuad* quad)
-{
-	if(quad->topLeft &&
-	   quad->topLeft->node->cX >= rect.left &&
-	   quad->topLeft->node->cX <= rect.left + rect.width &&
-	   quad->topLeft->node->cY >= rect.top &&
-	   quad->topLeft->node->cY <= rect.top + rect.height)
-	{
-		return attackPrivate(rect, quad->topLeft);
-	}
-
-	if(quad->topRight &&
-	   quad->topRight->node->cX >= rect.left &&
-	   quad->topRight->node->cX <= rect.left + rect.width &&
-	   quad->topRight->node->cY >= rect.top &&
-	   quad->topRight->node->cY <= rect.top + rect.height)
-	{
-		return attackPrivate(rect, quad->topRight);
-	}
-
-	if(quad->botLeft &&
-	   quad->botLeft->node->cX >= rect.left &&
-	   quad->botLeft->node->cX <= rect.left + rect.width &&
-	   quad->botLeft->node->cY >= rect.top &&
-	   quad->botLeft->node->cY <= rect.top + rect.height)
-	{
-		return attackPrivate(rect, quad->botLeft);
-	}
-
-	if(quad->botRight &&
-	   quad->botRight->node->cX >= rect.left &&
-	   quad->botRight->node->cX <= rect.left + rect.width &&
-	   quad->botRight->node->cY >= rect.top &&
-	   quad->botRight->node->cY <= rect.top + rect.height)
-	{
-		return attackPrivate(rect, quad->botRight);
-	}
-
-	if(!quad->node->isAttacking())	return false;
-
-	float l = quad->node->getAttackX(), w = quad->node->getAttackWidth();	// left, width
-	float t = quad->node->getAttackY(), h = quad->node->getAttackHeight();	// top, height
-
-	if(rect.left + rect.width < l)	return false;
-	if(rect.left > l + w)			return false;
-	if(rect.top + rect.height < t)	return false;
-	if(rect.top > t + h)			return false;
-
-	damage = quad->node->getDamage();
-	return true;
-}
-
-void XYQuadTree::mechanicsPrivate(sf::Rect<float> &rect, int &state, double &elapsedTime, XYQuad* quad)
-{
-	if(quad->topLeft &&
-	   quad->topLeft->node->cX >= rect.left &&
-	   quad->topLeft->node->cX <= rect.left + rect.width &&
-	   quad->topLeft->node->cY >= rect.top &&
-	   quad->topLeft->node->cY <= rect.top + rect.height)
-	{
-		mechanicsPrivate(rect, quad->topLeft);
-	}
-
-	if(quad->topRight &&
-	   quad->topRight->node->cX >= rect.left &&
-	   quad->topRight->node->cX <= rect.left + rect.width &&
-	   quad->topRight->node->cY >= rect.top &&
-	   quad->topRight->node->cY <= rect.top + rect.height)
-	{
-		mechanicsPrivate(rect, quad->topRight);
-	}
-
-	if(quad->botLeft &&
-	   quad->botLeft->node->cX >= rect.left &&
-	   quad->botLeft->node->cX <= rect.left + rect.width &&
-	   quad->botLeft->node->cY >= rect.top &&
-	   quad->botLeft->node->cY <= rect.top + rect.height)
-	{
-		mechanicsPrivate(rect, quad->botLeft);
-	}
-
-	if(quad->botRight &&
-	   quad->botRight->node->cX >= rect.left &&
-	   quad->botRight->node->cX <= rect.left + rect.width &&
-	   quad->botRight->node->cY >= rect.top &&
-	   quad->botRight->node->cY <= rect.top + rect.height)
-	{
-		mechanicsPrivate(rect, quad->botRight);
-	}
-
-	if(quad->node->getState() < 0)
-		return;
-
-	quad->node->mechanics(elapsedTime);
-}
-
-XYNode* XYQuadTree::findSmallest(XYQuad* quad)
+/*
+template<class Node, class Quad>
+Node* XYQuadTree<Node, Quad>::findSmallest(Quad* quad)
 {
 	if (quad->botLeft)
 		return findSmallest(quad->botLeft);
@@ -548,15 +390,18 @@ XYNode* XYQuadTree::findSmallest(XYQuad* quad)
 	return quad->node;
 }
 
-XYNode* XYQuadTree::findGreatest(XYQuad* quad)
+template<class Node, class Quad>
+Node* XYQuadTree<Node, Quad>::findGreatest(Quad* quad)
 {
 	if (quad->topRight)
 		return findGreatest(quad->topRight);
 
 	return quad->node;
 }
+*/
 
-void XYQuadTree::findSmallestX(XYQuad* quad, float& v)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::findSmallestX(Quad* quad, float& v)
 {
 	if (quad->topLeft)
 		findSmallestX(quad->topLeft, v);
@@ -568,7 +413,8 @@ void XYQuadTree::findSmallestX(XYQuad* quad, float& v)
 		v = quad->node->cX;
 }
 
-void XYQuadTree::findGreatestX(XYQuad* quad, float& v)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::findGreatestX(Quad* quad, float& v)
 {
 	if (quad->topRight)
 		findGreatestX(quad->topRight, v);
@@ -580,7 +426,8 @@ void XYQuadTree::findGreatestX(XYQuad* quad, float& v)
 		v = quad->node->cX;
 }
 
-void XYQuadTree::findSmallestY(XYQuad* quad, float& v)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::findSmallestY(Quad* quad, float& v)
 {
 	if (quad->botLeft)
 		findSmallestY(quad->botLeft, v);
@@ -592,7 +439,8 @@ void XYQuadTree::findSmallestY(XYQuad* quad, float& v)
 		v = quad->node->cY;
 }
 
-void XYQuadTree::findGreatestY(XYQuad* quad, float& v)
+template<class Node, class Quad>
+void XYQuadTree<Node, Quad>::findGreatestY(Quad* quad, float& v)
 {
 	if (quad->topLeft)
 		findGreatestY(quad->topLeft, v);
@@ -603,3 +451,20 @@ void XYQuadTree::findGreatestY(XYQuad* quad, float& v)
 	if (quad->node->cY > v)
 		v = quad->node->cY;
 }
+
+/*
+Example
+template<class Node, class Quad>
+bool XYQuadTree<Node, Quad>::containsPrivate(Quad* quad, Rect* rect)
+{
+	if (!quad)										return false;	// quad does not exist
+	if (quad->node->cX < rect->left)				return false;	// point is on the left outside of area
+	if (quad->node->cX > rect->left + rect->width)	return false;	// point is on the right outside of area
+	if (quad->node->cY < rect->top)					return false;	// point is above the area
+	if (quad->node->cY > rect->top + rect->height)	return false;	// point is below the area
+	return true;
+}
+*/
+
+// definitions of classes that would use XYQuadTree
+template class XYQuadTree <FoeNode, XYQuad<FoeNode>>;
