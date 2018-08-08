@@ -1,6 +1,7 @@
 #pragma once
 #include "skeleton.h"
 
+/*
 class Zombie: public Skeleton
 {
 
@@ -17,3 +18,4 @@ public:
 	bool isAttacking(bool hide = false);
 	void mechanics(double elapsedTime);
 };
+*/

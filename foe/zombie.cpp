@@ -1,3 +1,4 @@
+/*
 #include "zombie.h"
 
 float Zombie::getX()
@@ -161,10 +162,10 @@ void Zombie::mechanics(double elapsedTime)
 			}
 			
 			inactionCounter += elapsedTime;
-			if(inactionCounter > inactivity_line)
+			if(inactionCounter > inactionLine)
 			{
-				inactivity_line = rand() % 5 + 3;
-				inactionX= rand() % static_cast <int> (right - left) + left;
+				inactionLine = rand() % 5 + 3;
+				inactionX = rand() % static_cast <int> (right - left) + left;
 				offset = 0;
 			}
 		}
@@ -202,3 +203,4 @@ void Zombie::mechanics(double elapsedTime)
 		}
 	}
 }
+*/
