@@ -19,7 +19,7 @@ inline void FoeText::free()
 	removeVector();
 }
 
-bool FoeText::isEmpty()
+bool FoeText::empty()
 {
 	return texts.empty();
 }
@@ -51,7 +51,7 @@ void FoeText::insertVector(std::vector<std::string> newTexts)
 
 void FoeText::removeBack()
 {
-	if (!isEmpty())
+	if (!empty())
 	{
 		texts.pop_back();
 		texts.shrink_to_fit();
@@ -60,16 +60,17 @@ void FoeText::removeBack()
 
 void FoeText::removeFront()
 {
-	if (!isEmpty())
+	if (!empty())
 	{
-		texts.pop_front();
+		texts.front() = std::move(texts.back());
+		texts.pop_back();
 		texts.shrink_to_fit();
 	}
 }
 
 void FoeText::removeVector()
 {
-	if (!isEmpty())
+	if (!empty())
 	{
 		texts.clear();
 		texts.shrink_to_fit();

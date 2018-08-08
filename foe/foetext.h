@@ -37,4 +37,4 @@ public:
 	void mechanics(double elapsedTime);
 	bool isAble();
 	const std::string& getCurrentText() const;
-}
+};
