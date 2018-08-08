@@ -2,7 +2,7 @@
 
 FoeFactory::FoeFactory()
 {
-	XYQuadTree = nullptr;
+	tree = nullptr;
 	free();
 }
 
@@ -13,13 +13,10 @@ FoeFactory::~FoeFactory()
 
 void FoeFactory::free()
 {
-	screen_w = 0;
-	screen_h = 0;
-	
-	if(XYQuadTree)
+	if(tree)
 	{
-		delete XYQuadTree;
-		XYQuadTree = nullptr;
+		delete tree;
+		tree = nullptr;
 	}
 }
 
@@ -28,9 +25,16 @@ void FoeFactory::reset()
 
 }
 
-void FoeFactory::load(float screen_w, float screen_h)
+void FoeFactory::load(const float &screen_w, const float &screen_h)
 {
+	free();
 
+	res.width = screen_w;
+	res.height = screen_h;
+	resBulk.width = screen_w * 2;
+	resBulk.height = screen_h * 2;
+
+	tree = new FoeTree;
 }
 
 void FoeFactory::draw(sf::RenderWindow* &window)
@@ -38,7 +42,27 @@ void FoeFactory::draw(sf::RenderWindow* &window)
 
 }
 
-void FoeFactory::mechanics(double elapsedTime)
+void FoeFactory::mechanics(const double &elapsedTime)
 {
 
+}
+
+
+
+void FoeFactory::setBorderX(const float &newX)
+{
+	res.left = newX;
+	resBulk.left = newX - res.width / 2;
+}
+
+void FoeFactory::setBorderY(const float &newY)
+{
+	res.top = newY;
+	res.top = newY - res.height / 2;
+}
+
+void FoeFactory::setBorders(const float &newX, const float &newY)
+{
+	setBorderX(newX);
+	setBorderY(newY);
 }

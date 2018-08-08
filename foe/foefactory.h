@@ -1,12 +1,12 @@
 #pragma once
-#include "xyquadtree.h"
-#include <SFML/Graphics/RenderWindow.hpp>
+#include "foetree.h"
+
 
 class FoeFactory
 {
-	int screen_w;
-	int screen_h;
-	XYQuadTree* tree;
+	sf::Rect<float> res;		// resolution of the window
+	sf::Rect<float> resBulk;	// resolution + window width and window height are doubled
+	FoeTree* tree;
 
 public:
 	FoeFactory();
@@ -16,7 +16,11 @@ private:
 public:
 	void reset();
 
-	void load(float screen_w, float screen_h);
+	void load(const float &screen_w, const float &screen_h);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
+	void mechanics(const double &elapsedTime);
+
+	void setBorderX(const float &newX);
+	void setBorderY(const float &newY);
+	void setBorders(const float &newX, const float &newY);
 };
