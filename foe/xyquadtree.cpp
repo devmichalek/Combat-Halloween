@@ -19,13 +19,6 @@ XYQuadTree<Node, Quad>::~XYQuadTree()
 }
 
 template<class Node, class Quad>
-void XYQuadTree<Node, Quad>::incinerate()
-{
-	count = 0;
-	free(root);
-}
-
-template<class Node, class Quad>
 bool XYQuadTree<Node, Quad>::empty()
 {
 	return root == nullptr;

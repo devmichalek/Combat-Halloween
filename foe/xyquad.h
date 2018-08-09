@@ -1,9 +1,8 @@
 #pragma once
 
 template<class Node>
-class XYQuad
+struct XYQuad
 {
-public:
 	Node* node;
 	XYQuad *topLeft, *topRight;
 	XYQuad *botLeft, *botRight;

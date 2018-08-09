@@ -8,5 +8,5 @@ public:
 
 	XYNode(float cX = -1, float cY = -1, int ID = -1);
 	virtual ~XYNode();
-	void setXYID(float cX = -1, float cY = -1, int ID = -1);
+	void set(float cX = -1, float cY = -1, int ID = -1);
 };

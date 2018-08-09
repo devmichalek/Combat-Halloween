@@ -16,23 +16,9 @@ FoeTree::~FoeTree()
 	cleanProcessedData();
 }
 
-void FoeTree::load(std::vector<std::string> &str, std::vector<int> &s, std::vector<int>&o)
+void FoeTree::load(std::vector<std::vector<cmm::Sprite*>> newSprites)
 {
-	int counter = 0;
-	std::vector<cmm::Sprite*> temp;
-	for (int i = 0; i < (int)str.size(); ++i)
-	{
-		temp.clear();
-		for (int j = 0; j < s[i]; ++j)
-		{
-			cmm::Sprite* sprite = new cmm::Sprite;
-			sprite->load((str[i] + std::to_string(j) + ".png").c_str(), o[counter]);
-			temp.push_back(sprite);
-			++counter;
-		}
-
-		sprites.emplace_back(temp);
-	}
+	sprites = newSprites;
 }
 
 
@@ -80,7 +66,7 @@ void FoeTree::cleanProcessedData()
 
 
 
-bool FoeTree::containsPrivate(Quad* quad, Rect* &rect)
+bool FoeTree::containsPrivate(Quad* quad, Rect* rect)
 {
 	if (!quad)										return false;	// quad does not exist
 	if(quad->node->cX < rect->left)					return false;	// point is on the left outside of area
@@ -93,27 +79,22 @@ bool FoeTree::containsPrivate(Quad* quad, Rect* &rect)
 void FoeTree::processPrivate(Quad* quad)
 {
 	// Check if particular foe is inside of visible for player area
-	if(quad->topLeft && screen->left <= quad->node->cX && screen->top <= quad->node->cY)
-		processPrivate(quad->topLeft);
+	// We keep searching if particular quad is inside of visible area
+	if (containsPrivate(quad->topLeft))		processPrivate(quad->topLeft);
+	if (containsPrivate(quad->topRight))	processPrivate(quad->topRight);
+	if (containsPrivate(quad->botLeft))		processPrivate(quad->botLeft);
+	if (containsPrivate(quad->botRight))	processPrivate(quad->botRight);
 
-	if (quad->topRight && screen->left + screen->width >= quad->node->cX && screen->top < quad->node->cY)
-		processPrivate(quad->topRight);
-
-	if (quad->botRight && screen->left + screen->width >= quad->node->cX && screen->top + screen->height >= quad->node->cY)
-		processPrivate(quad->botRight);
-
-	if (quad->botLeft && screen->left <= quad->node->cX && screen->top + screen->height >= quad->node->cY)
-		processPrivate(quad->botLeft);
-		
-
-	if (!containsPrivate(quad, screen))
-		return;
-
-	// At this point a particular quad is inside of visible area
+	// At this point a particular quad has no children so we do stuff here
 	// Here we send all the data that each foe needs
 	// To make it as much flexible we call one function that all the foes have
 	// And inside of this function a foe does whatever it wants
 	// Giving feedback of all the actions that has taken place
+
+	int s = quad->node->getSpriteState();	// Foe's state e. g. IDLE, ATTACK etc.
+
+	if (s < 0)
+		return;
 
 	quad->node->mechanics(	elapsedTime,
 							character,
@@ -126,12 +107,9 @@ void FoeTree::processPrivate(Quad* quad)
 
 
 	// Draw
-	int s = quad->node->getSpriteState();	// Foe's state e. g. IDLE, ATTACK etc.
-	if (s < 0)
-		return;
-
 	int t = quad->node->getSpriteType();	// Foe's type e. g. SKELETON, ZOMBIE etc.
-	sprites[t][s]->setScale(quad->node->getScaleX(), quad->node->getScaleY());
+	float sc = quad->node->getScale();
+	sprites[t][s]->setScale(sc, sc);
 	sprites[t][s]->setOffset(quad->node->getSpriteOffset());
 	sprites[t][s]->setPosition(quad->node->getSpriteX(), quad->node->getSpriteY());
 	window->draw(sprites[t][s]->get()/*, &shader*/);

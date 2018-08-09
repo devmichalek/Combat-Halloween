@@ -21,7 +21,6 @@ protected:
 public:
 	XYQuadTree();
 	virtual ~XYQuadTree();
-	void incinerate();
 	bool empty();
 	// void remove(Node* node = nullptr);
 	// void remove(float x, float y, int ID);
