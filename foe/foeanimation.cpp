@@ -33,7 +33,7 @@ void FoeAnimation::setSpriteType(int newType)
 {
 	type = newType;
 }
-
+/*
 void FoeAnimation::setSpriteState(int newState)
 {
 	state = newState;
@@ -43,32 +43,32 @@ void FoeAnimation::setSpriteOffset(float newOffset)
 {
 	offset = newOffset;
 }
-
+*/
 void FoeAnimation::setSpriteLines(std::vector<int> newLines)
 {
 	lines = newLines;
 }
 
-const int& FoeAnimation::getSpriteType() const
+const int FoeAnimation::getSpriteType() const
 {
 	return type;
 }
 
-const int& FoeAnimation::getSpriteState() const
+const int FoeAnimation::getSpriteState() const
 {
 	return state;
 }
 
-const float& FoeAnimation::getSpriteOffset() const
+const int FoeAnimation::getSpriteOffset() const
 {
 	return offset;
 }
-
-const std::vector<int>& FoeAnimation::getSpriteLines() const
+/*
+const std::vector<int> FoeAnimation::getSpriteLines() const
 {
 	return lines;
 }
-
+*/
 
 
 void FoeAnimation::setScale(float newScale)
@@ -83,32 +83,38 @@ void FoeAnimation::setWidth(float newWidth)
 
 void FoeAnimation::setPosition(float newX, float newY)
 {
-	x = x;
-	y = y;
+	x = newX;
+	y = newY;
 }
 
 void FoeAnimation::setBorders(float newLeft, float newRight)
 {
-	left = left;
-	right = right;
+	left = newLeft;
+	right = newRight;
 }
 
-float FoeAnimation::getScale() const
+const float& FoeAnimation::getScaleX() const
+{
+	return scale;
+}
+
+float FoeAnimation::getScaleY() const
 {
 	return scale < 0 ? -scale : scale;
 }
-
-const float& FoeAnimation::getWidth() const
+/*
+const float FoeAnimation::getWidth() const
 {
 	return width;
 }
 
-const float& FoeAnimation::getLeft() const
+const float FoeAnimation::getLeft() const
 {
 	return left;
 }
 
-const float& FoeAnimation::getRight() const
+const float FoeAnimation::getRight() const
 {
 	return right;
 }
+*/
