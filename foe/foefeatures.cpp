@@ -37,27 +37,27 @@ void FoeFeatures::setHeartPoints(float newHeartPoints)
 {
 	heartPoints = hp = newHeartPoints;
 }
-
-const float& FoeFeatures::getArmour() const
+/*
+const float FoeFeatures::getArmour() const
 {
 	return armour;
 }
 
-const float& FoeFeatures::getDamage() const
+const float FoeFeatures::getDamage() const
 {
 	return damage;
 }
 
-const float& FoeFeatures::getVelocity() const
+const float FoeFeatures::getVelocity() const
 {
 	return velocity;
 }
 
-const float& FoeFeatures::getHeartPoints() const
+const float FoeFeatures::getHeartPoints() const
 {
 	return heartPoints;
 }
-
+*/
 
 void FoeFeatures::harm(float value)
 {

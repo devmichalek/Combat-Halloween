@@ -1,6 +1,7 @@
 #pragma once
+#include "foenode.h"
 
-class FoeFeatures
+class FoeFeatures : virtual public FoeNode
 {
 protected:
 	float armour;
@@ -16,13 +17,13 @@ public:
 	void setDamage(float newDamage);
 	void setVelocity(float newVelocity);
 	void setHeartPoints(float newHeartPoints);
+	virtual float getHPScale() = 0;
 
-	const float& getArmour() const;
-	const float& getDamage() const;
-	const float& getVelocity() const;
-	const float& getHeartPoints() const;
-
+protected:
+	// const float getArmour() const;
+	// const float getDamage() const;
+	// const float getVelocity() const;
+	// const float getHeartPoints() const;
 	void harm(float value);
 	virtual void setDie() = 0;
-	virtual float getHPScale() = 0;
 };
