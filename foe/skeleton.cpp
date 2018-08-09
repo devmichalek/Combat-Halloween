@@ -59,7 +59,7 @@ void Skeleton::setBoxes()
 	borderBox->width = right - left;
 	borderBox->height = realBox->height;
 	borderBox->left = left;
-	borderBox->top = y - realBox->height;
+	borderBox->top = y + realBox->height;
 }
 
 void Skeleton::setInactionFrequency(float seconds)
@@ -103,12 +103,12 @@ void Skeleton::turnRight()
 	}
 }
 
-bool Skeleton::isLeftAlign()
+bool Skeleton::isLeftAlign() const
 {
 	return scale > 0;
 }
 
-bool Skeleton::isRightAlign()
+bool Skeleton::isRightAlign() const
 {
 	return scale < 0;
 }
@@ -371,6 +371,9 @@ void Skeleton::mechanics(	double &elapsedTime,
 			appeared = true;
 		}
 	}
+
+	if (!appeared)
+		return;
 
 	if (inactionX != -1)
 	{

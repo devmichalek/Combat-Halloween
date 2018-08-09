@@ -3,7 +3,7 @@
 #include "foeanimation.h"
 #include "foefeatures.h"
 
-class Skeleton: public FoeNode, protected FoeAnimation, protected FoeFeatures
+class Skeleton: public FoeAnimation, public FoeFeatures
 {
 protected:
 	enum ACTIONS
@@ -24,16 +24,12 @@ protected:
 	float inactionCounter;
 	float inactionFrequency;
 
-	Rect* realBox;
-	Rect* attackBox;
-	Rect* borderBox;
-
 public:
 	Skeleton();
 	virtual ~Skeleton();
 	void free();
-
-	void setBoxes();	// call it if width is set
+	
+	void setBoxes();
 	void setInactionFrequency(float seconds = 4);
 	void setAttackFrequency(float seconds = 1);
 	float getHPScale();
@@ -41,8 +37,8 @@ public:
 	void moveX(double elapsedTime);
 	void turnLeft();
 	void turnRight();
-	bool isLeftAlign();
-	bool isRightAlign();
+	bool isLeftAlign() const;
+	bool isRightAlign() const;
 
 	// Sprite x, y
 	float getSpriteX();
@@ -72,7 +68,7 @@ public:
 	bool isAttackDone();
 	bool isAttacking();
 
-	void mechanics(	double &,
+	void mechanics(	double &elapsedTime,
 					Rect* &,
 					Rect* &,
 					bool &,
