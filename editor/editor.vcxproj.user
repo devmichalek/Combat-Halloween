@@ -3,9 +3,9 @@
   <PropertyGroup />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <QTDIR>C:\Qt\5.11.1\msvc2017_64</QTDIR>
+    <LocalDebuggerCommandArguments>&gt; results.txt</LocalDebuggerCommandArguments>
     <LocalDebuggerWorkingDirectory>..\data</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerCommandArguments>&gt; results.txt</LocalDebuggerCommandArguments>
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
