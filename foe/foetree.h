@@ -29,7 +29,7 @@ public:
 	FoeTree();
 	~FoeTree();
 
-	void load(std::vector<std::vector<cmm::Sprite*>> newSprites);
+	void load(std::vector<std::string>&, std::vector<int>&, std::vector<int>&);
 	
 	// Process ------------------------
 	void processData(	sf::RenderWindow* &,
@@ -47,6 +47,6 @@ public:
 	// --------------------------------
 
 private:
-	bool containsPrivate(Quad* quad = nullptr, Rect* rect = nullptr);
+	bool containsPrivate(Quad* quad, Rect* &rect);
 	void processPrivate(Quad* quad = nullptr);
 };
