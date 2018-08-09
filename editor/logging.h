@@ -4,21 +4,9 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
-#include <QtNetwork/QNetworkAccessManager.h>
 #include <qstring.h>
-
-class NetworkManager :public QNetworkAccessManager
-{
-	QUrl url;
-	QNetworkRequest request;
-	QUrl parameters;
-public:
-	NetworkManager();
-	~NetworkManager();
-
-	void setUrl(QString host);
-	void addQuery(QString s1, QString s2);
-};
+#include <qnetworkreply.h>
+#include "buttonfactory.h"
 
 class Logging :public QGroupBox
 {
@@ -29,7 +17,6 @@ class Logging :public QGroupBox
 	QHBoxLayout password_form;
 	QPushButton button;
 	QVBoxLayout layout;
-	NetworkManager network;
 
 public:
 	Logging();
@@ -40,4 +27,6 @@ public:
 
 public slots:
 	void sendRequest();
+	void onFinishRequest(QNetworkReply* reply);
+	static void isReady();
 };
