@@ -20,9 +20,11 @@ int main(int argc, char *argv[])
 	logging.setWindowAsParent(window);
 
 	// Buttons.
-	//ButtonFactory buttonFactory;
-	//buttonFactory.load(window->size());
-	//buttonFactory.setParent(window);
+	ButtonFactory buttonFactory;
+	buttonFactory.load(window->size());
+	buttonFactory.setParent(window);
+	// buttonFactory.setEnabledAll(false);
+	// QObject::connect(&logging, SIGNAL(&Logging::isReady()), &buttonFactory, SLOT(&ButtonFactory::setEnabledAll(true)));
 
 	window->show();
 	return application.exec();
