@@ -33,9 +33,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mainwindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="buttonfactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,31 +42,49 @@
     <ClCompile Include="logging.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="loggingwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainwindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="logging.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="buttonfactory.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="loggingwindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="window.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwindow.ui">
+    <QtUic Include="window.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="loggingwindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="mainwindow.qrc">
+    <QtRcc Include="loggingwindow.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="buttonstate.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_window.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_loggingwindow.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

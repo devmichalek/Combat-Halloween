@@ -117,18 +117,33 @@
     <ClCompile Include="buttonstate.cpp" />
     <ClCompile Include="logging.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mainwindow.cpp" />
+    <ClCompile Include="window.cpp" />
+    <ClCompile Include="loggingwindow.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="mainwindow.h" />
+    <QtMoc Include="loggingwindow.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_WEBCHANNEL_LIB;QT_WEBSOCKETS_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_WEBCHANNEL_LIB;QT_WEBSOCKETS_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="mainwindow.ui" />
+    <QtUic Include="loggingwindow.ui" />
+    <QtUic Include="window.ui" />
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="mainwindow.qrc" />
+    <QtRcc Include="loggingwindow.qrc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GeneratedFiles\ui_loggingwindow.h" />
+    <ClInclude Include="GeneratedFiles\ui_window.h" />
+    <QtMoc Include="window.h">
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_WEBCHANNEL_LIB;QT_WEBSOCKETS_LIB;QT_WIDGETS_LIB</Define>
+      <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtWidgets</IncludePath>
+      <Define Condition="'$(Configuration)|$(Platform)'=='Release|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_WEBCHANNEL_LIB;QT_WEBSOCKETS_LIB;QT_WIDGETS_LIB</Define>
+    </QtMoc>
     <QtMoc Include="buttonfactory.h">
       <IncludePath Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\GeneratedFiles;.;$(QTDIR)\include;.\GeneratedFiles\$(ConfigurationName)\.;$(QTDIR)\include\QtCore;$(QTDIR)\include\QtGui;$(QTDIR)\include\QtANGLE;$(QTDIR)\include\QtNetwork;$(QTDIR)\include\QtWebChannel;$(QTDIR)\include\QtWebSockets;$(QTDIR)\include\QtWidgets</IncludePath>
       <Define Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">UNICODE;_UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_NETWORK_LIB;QT_WEBCHANNEL_LIB;QT_WEBSOCKETS_LIB;QT_WIDGETS_LIB</Define>
