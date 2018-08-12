@@ -6,7 +6,7 @@
 #include <qpushbutton.h>
 #include <qstring.h>
 #include <qnetworkreply.h>
-#include "buttonfactory.h"
+#include "window.h"
 
 class Logging :public QGroupBox
 {
@@ -17,6 +17,7 @@ class Logging :public QGroupBox
 	QHBoxLayout password_form;
 	QPushButton button;
 	QVBoxLayout layout;
+	Window* window;
 
 public:
 	Logging();
@@ -24,9 +25,7 @@ public:
 
 	void load(QSize size);
 	void setWindowAsParent(QWidget* widget);
-
-public slots:
+private slots:
 	void sendRequest();
 	void onFinishRequest(QNetworkReply* reply);
-	static void isReady();
 };
