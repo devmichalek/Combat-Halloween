@@ -16,7 +16,7 @@ void cmm::Sound::play()
 	}
 }
 
-bool cmm::Sound::isPlaying() const
+const bool cmm::Sound::isPlaying() const
 {
 	return sound->getStatus() == sf::SoundSource::Status::Playing;
 }
@@ -36,7 +36,7 @@ void cmm::Sound::load(const char* path)
 	}
 }
 
-void cmm::Sound::setVolume(float newVolume)
+void cmm::Sound::setVolume(const float &newVolume)
 {
 	sound->setVolume(newVolume);
 }
@@ -61,7 +61,7 @@ bool cmm::Sound::getGlobalPlayable()
 	return playable;
 }
 
-void cmm::Sound::setGlobalVolume(float newVolume)
+void cmm::Sound::setGlobalVolume(const float &newVolume)
 {
 	volume = newVolume;
 }

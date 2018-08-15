@@ -31,7 +31,9 @@ int main(int argc, char** argv)
 		{
 			if (music.getVolume() == 100)		state = true;
 			else if (music.getVolume() == 0)	state = false;
-			state ? music.fadeout(v) : music.fadein(v);
+			int v = 1;
+			float min = 0.0f, max = 255.0f;
+			state ? music.fadeout(v, min) : music.fadein(v, max);
 		}
 	}
 	else if (!strcmp(argv[1], "text"))
@@ -42,8 +44,8 @@ int main(int argc, char** argv)
 		cmm::Text text;
 		text.setFont("fonts/Jaapokki-Regular.otf");
 		text.setText("dap mm");
-		text.fadein(5);
-		text.fadeout(5);
+		// text.fadein(5);
+		// text.fadeout(5);
 		text.setPosition(core.getWidth() / 2, core.getHeight() / 2);
 		text.move(2, 2);
 		text.center(core.getWidth() / 2, core.getHeight() / 2);
@@ -106,7 +108,9 @@ int main(int argc, char** argv)
 
 			if (sprite.getAlpha() == 0xFF)		state = true;
 			else if (sprite.getAlpha() == 0)	state = false;
-			state ? sprite.fadeout() : sprite.fadein();
+			int v = 1;
+			float min = 0.0f, max = 255.0f;
+			state ? sprite.fadeout(v, min) : sprite.fadein(v, max);
 			//sprite.setOffset(offset);
 			//offset == limit - 1 ? offset = 0 : ++offset;
 			core.display();

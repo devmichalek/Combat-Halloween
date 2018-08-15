@@ -36,7 +36,7 @@ void cmm::Text::setTextW(std::wstring line)
 
 
 
-void cmm::Text::fadein(float v, int max)
+void cmm::Text::fadein(const float &v, const int &max)
 {
 	if(alpha < max)
 	{
@@ -51,7 +51,7 @@ void cmm::Text::fadein(float v, int max)
 	}
 }
 
-void cmm::Text::fadeout(float v, int min)
+void cmm::Text::fadeout(const float &v, const int &min)
 {
 	if (alpha > min)
 	{

@@ -35,7 +35,7 @@ void cmm::Music::load(const char* path)
 	}
 }
 
-void cmm::Music::setVolume(float newVolume)
+void cmm::Music::setVolume(const float &newVolume)
 {
 	music->setVolume(newVolume);
 }
@@ -45,7 +45,7 @@ float cmm::Music::getVolume() const
 	return music->getVolume();
 }
 
-void cmm::Music::fadein(float v, int max)
+void cmm::Music::fadein(const float &v, const int &max)
 {
 	if(music->getVolume() < max)
 	{
@@ -60,7 +60,7 @@ void cmm::Music::fadein(float v, int max)
 	}
 }
 
-void cmm::Music::fadeout(float v, int min)
+void cmm::Music::fadeout(const float &v, const int &min)
 {
 	if(music->getVolume() > min)
 	{
@@ -90,7 +90,7 @@ bool cmm::Music::getGlobalPlayable()
 	return playable;
 }
 
-void cmm::Music::setGlobalVolume(float newVolume)
+void cmm::Music::setGlobalVolume(const float &newVolume)
 {
 	volume = newVolume;
 }

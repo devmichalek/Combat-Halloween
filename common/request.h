@@ -1,7 +1,5 @@
 #pragma once
-#include <thread>
 #include <string>
-#include <memory>
 #include <SFML/Network.hpp>
 
 namespace cmm
@@ -21,15 +19,5 @@ namespace cmm
 		void setRequest(std::string uri, sf::Http::Request::Method method = sf::Http::Request::Post);
 	};
 
-	struct Thread
-	{
-		bool ready;		// ready to start next action
-		bool success;	// thread finished action with success
-		std::thread* thread;
-
-		Thread();
-		~Thread();
-		void free();
-		void reset();
-	};
+	
 }

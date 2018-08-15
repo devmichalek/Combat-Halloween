@@ -17,8 +17,8 @@ namespace cmm
 		void setText(std::string line);
 		void setTextW(std::wstring line);
 
-		void fadein(float v = 1, int max = 0xFF);
-		void fadeout(float v = 1, int min = 0);
+		void fadein(const float &v, const int &max);
+		void fadeout(const float &v, const int &min);
 
 		void flipHorizontally();
 		void flipVertically();

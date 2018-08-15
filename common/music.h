@@ -17,15 +17,15 @@ namespace cmm
 		bool isPlaying() const;
 		void pause();
 		void load(const char* path);
-		void setVolume(float newVolume = 50);
+		void setVolume(const float &newVolume);
 		float getVolume() const;
-		void fadein(float v = 1, int max = 100);
-		void fadeout(float v = 1, int min = 0);
+		void fadein(const float &v, const int &max);
+		void fadeout(const float &v, const int &min);
 		const bool& isPlayable() const;
 
 		static void setGlobalPlayable(bool newPlayable = true);
 		static bool getGlobalPlayable();
-		static void setGlobalVolume(float newVolume);
+		static void setGlobalVolume(const float &newVolume);
 		static float getGlobalVolume();
 	};
 }

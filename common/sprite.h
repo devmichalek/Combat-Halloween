@@ -21,10 +21,10 @@ namespace cmm
 		void setColor(sf::Color color);
 		sf::Color getColor() const;
 		void setAlpha(float alpha = 0);
-		float getAlpha() const;
+		const float& getAlpha() const;
 
-		void fadein(float v = 1, int max = 0xFF);
-		void fadeout(float v = 1, int min = 0);
+		void fadein(const float &v, const int &max);
+		void fadeout(const float &v, const int &min);
 
 		void flipHorizontally();
 		void flipVertically();
@@ -48,7 +48,7 @@ namespace cmm
 		float getRight() const;
 		const float& getTop() const;
 		const float getBot() const;
-
+		
 		bool checkCollision(float x, float y, float w = 0, float h = 0) const;
 		bool checkCollisionRect(sf::Rect <float> rect) const;
 		bool checkCollisionCircle(float x, float y) const;

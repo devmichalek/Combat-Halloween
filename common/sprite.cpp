@@ -14,8 +14,8 @@ void cmm::Sprite::load(const char* path, int numOfOffsets)
 		texture->setSmooth(true);
 		numOfOffsets = numOfOffsets < 1 ? 1 : numOfOffsets;
 
-		float width = texture->getSize().x;
-		float height = texture->getSize().y;
+		int width = texture->getSize().x;
+		int height = texture->getSize().y;
 
 		for (int i = 0; i < numOfOffsets; ++i)
 		{
@@ -39,8 +39,8 @@ void cmm::Sprite::loadRepeated(const char* path, float w, float h, bool borders)
 	{
 		int width = image.getSize().x;
 		int height = image.getSize().y;
-		int realWidth = borders ? w : width;
-		int realHeight = borders ? h : height;
+		int realWidth = borders ? static_cast<int>(w) : width;
+		int realHeight = borders ? static_cast<int>(h) : height;
 		if (!borders)
 		{
 			while (realWidth < w)	realWidth += width;
@@ -83,7 +83,7 @@ void cmm::Sprite::create(int w, int h)
 	{
 		texture->setSmooth(true);
 
-		sf::IntRect intRect(0, 0, (float)texture->getSize().x, (float)texture->getSize().y);
+		sf::IntRect intRect(0, 0, texture->getSize().x, texture->getSize().y);
 		rects.push_back(intRect);
 		sprite = std::make_unique<sf::Sprite>();
 
@@ -130,14 +130,14 @@ void cmm::Sprite::setAlpha(float alpha)
 	}
 }
 
-float cmm::Sprite::getAlpha() const
+const float& cmm::Sprite::getAlpha() const
 {
 	return alpha;
 }
 
 
 
-void cmm::Sprite::fadein(float v, int max)
+void cmm::Sprite::fadein(const float &v, const int &max)
 {
 	if (alpha < max)
 	{
@@ -154,7 +154,7 @@ void cmm::Sprite::fadein(float v, int max)
 	}
 }
 
-void cmm::Sprite::fadeout(float v, int min)
+void cmm::Sprite::fadeout(const float &v, const int &min)
 {
 	if (alpha > min)
 	{
@@ -261,6 +261,8 @@ const float cmm::Sprite::getBot() const
 	return sprite->getPosition().y + getHeight();
 }
 
+
+
 bool cmm::Sprite::checkCollision(float x, float y, float w, float h) const
 {
 	if (y + h <= getTop())
@@ -298,7 +300,9 @@ bool cmm::Sprite::checkCollisionRect(sf::Rect <float> rect) const
 bool cmm::Sprite::checkCollisionCircle(float x, float y) const
 {
 	float r = getWidth() > getHeight() ? getWidth() : getHeight();
+
 	r /= 2;
+
 	float xCenter = getX() + getWidth() / 2;
 	float yCenter = getY() + getHeight() / 2;
 
