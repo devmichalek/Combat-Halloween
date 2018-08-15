@@ -61,7 +61,7 @@ const int FoeAnimation::getSpriteState() const
 
 const int FoeAnimation::getSpriteOffset() const
 {
-	return offset;
+	return static_cast<int>(offset);
 }
 /*
 const std::vector<int> FoeAnimation::getSpriteLines() const

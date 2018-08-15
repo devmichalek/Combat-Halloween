@@ -24,6 +24,6 @@ protected:
 	// const float getDamage() const;
 	// const float getVelocity() const;
 	// const float getHeartPoints() const;
-	void harm(float value);
+	void harm(const float &value);
 	virtual void setDie() = 0;
 };

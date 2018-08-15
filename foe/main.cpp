@@ -1,5 +1,6 @@
 #include "core.h"
 #include "foefactory.h"
+#include "text.h"
 
 Core* core = new Core(0, sf::Color(21, 21, 29, 0xFF));
 FoeFactory* foeFactory = new FoeFactory;
@@ -31,6 +32,7 @@ int main(int argc, char** argv)
 	characterAttack->width = 50;
 	characterAttack->height = 50;
 
+	bool makeUpdate = true;
 	bool characterHasAttacked = false;
 	float characterDamage = 0;
 	float characterArmour = 1;
@@ -43,8 +45,20 @@ int main(int argc, char** argv)
 	charRect.setSize(sf::Vector2f(character->width, character->height));
 	charAttackRect.setSize(sf::Vector2f(characterAttack->width, characterAttack->height));
 
+	cmm::Text fpsText;
+	fpsText.setFont("fonts/Jaapokki-Regular.otf");
+	fpsText.setFillColor(sf::Color::White);
+	fpsText.setPosition(0, 0);
+	fpsText.setSize(22);
+	fpsText.setAlpha(0xFF);
+	fpsText.setText("a");
+
+	double counter = 0;
+	double max = 0.25;
+	double elapsedTime = 0;
 	while (core->open)
 	{
+		elapsedTime = core->getElapsedTime();
 		characterHasAttacked = false;
 
 		// clear
@@ -64,12 +78,19 @@ int main(int argc, char** argv)
 				{
 					characterHasAttacked = true;
 				}
+				else if (core->getEvent().mouseButton.button == sf::Mouse::Right)
+				{
+					makeUpdate = !makeUpdate;
+				}
 			}
 
 			if (core->getEvent().type == sf::Event::MouseMoved)
 			{
-				character->left = static_cast<float>(core->getEvent().mouseMove.x) - (character->width / 2);
-				character->top = static_cast<float>(core->getEvent().mouseMove.y) - (character->height / 2);
+				if (makeUpdate)
+				{
+					character->left = static_cast<float>(core->getEvent().mouseMove.x) - (character->width / 2);
+					character->top = static_cast<float>(core->getEvent().mouseMove.y) - (character->height / 2);
+				}
 			}
 		}
 
@@ -80,16 +101,22 @@ int main(int argc, char** argv)
 		charAttackRect.setPosition(sf::Vector2f(characterAttack->left, characterAttack->top));
 		core->getWindow()->draw(charRect);
 		core->getWindow()->draw(charAttackRect);
-
+		core->getWindow()->draw(fpsText.get());
 
 		if (core->state == PLATFORM)
 		{
 			foeFactory->setBorders(0, 0);
-			foeFactory->processData(core->getWindow(), core->getElapsedTime(),
+			foeFactory->processData(core->getWindow(), elapsedTime,
 				character, characterAttack, characterHasAttacked, characterDamage, characterHP,
 				characterArmour);
 		}
 
+		counter += elapsedTime;
+		if (counter > max)
+		{
+			fpsText.setText(std::to_string(1.0f / elapsedTime));
+			counter = 0;
+		}
 
 		core->display();
 	}

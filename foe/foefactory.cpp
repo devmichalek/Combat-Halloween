@@ -86,7 +86,7 @@ void FoeFactory::load(const float &screen_w, const float &screen_h)
 		
 	foeNode->setArmour(10);
 	foeNode->setDamage(10);
-	foeNode->setVelocity(10);
+	foeNode->setVelocity(100);
 	foeNode->setHeartPoints(100);
 	foeNode->setBoxes();
 

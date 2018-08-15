@@ -48,12 +48,12 @@ void Skeleton::free()
 void Skeleton::setBoxes()
 {
 	realBox = new Rect;
-	realBox->width = width / 2;
-	realBox->height = width * 1.26;
+	realBox->width = width / 2.0f;
+	realBox->height = width * 1.26f;
 
 	attackBox = new Rect;
-	attackBox->width = width * 0.43;
-	attackBox->height = width * 0.6;
+	attackBox->width = width * 0.43f;
+	attackBox->height = width * 0.6f;
 
 	borderBox = new Rect;
 	borderBox->width = right - left;
@@ -79,11 +79,11 @@ float Skeleton::getHPScale()
 
 
 
-void Skeleton::moveX(double elapsedTime)
+void Skeleton::moveX(const double &elapsedTime)
 {
 	if (isAttackDone())
 	{
-		x += (elapsedTime * velocity);
+		x += ((float)elapsedTime * velocity);
 	}
 }
 
@@ -121,16 +121,16 @@ float Skeleton::getSpriteX()
 
 	if (scale < 0)
 	{
-		if (state == APPEAR)		xOffset = width * 0.70;
-		else if (state == IDLE)		xOffset = width * 0.59;
-		else if (state == WALK)		xOffset = width * 0.59;
-		else if (state == ATTACK)	xOffset = width * 1.01;
-		else if (state == DIE)		xOffset = width * 1.01;
+		if (state == APPEAR)		xOffset = width * 0.70f;
+		else if (state == IDLE)		xOffset = width * 0.59f;
+		else if (state == WALK)		xOffset = width * 0.59f;
+		else if (state == ATTACK)	xOffset = width * 1.01f;
+		else if (state == DIE)		xOffset = width * 1.01f;
 	}
 	else
 	{
-		if (state == ATTACK)		xOffset = -width * 0.42;
-		else if (state == DIE)		xOffset = -width * 0.42;
+		if (state == ATTACK)		xOffset = -width * 0.42f;
+		else if (state == DIE)		xOffset = -width * 0.42f;
 	}
 
 	return x + xOffset;
@@ -138,21 +138,14 @@ float Skeleton::getSpriteX()
 
 float Skeleton::getSpriteY()
 {
-	float yOffset = width * 0.01;
-
-	if (state == ATTACK)
-	{
-		yOffset += width * 0.073;
-	}
-
-	return y + yOffset;
+	return y;
 }
 
 
 
 float Skeleton::getRealX()
 {
-	return x + (width * 0.05);
+	return x + (width * 0.05f);
 }
 
 float Skeleton::getRealY()
@@ -174,19 +167,19 @@ float Skeleton::getAttackX()
 
 float Skeleton::getAttackY()
 {
-	return getRealY() + width * 0.5;
+	return getRealY() + width * 0.5f;
 }
 
 
 
 float Skeleton::getMouthX()
 {
-	return getRealX() + realBox->width / 1.5;
+	return getRealX() + realBox->width / 1.5f;
 }
 
 float Skeleton::getMouthY()
 {
-	return getRealY() + width * 0.45;
+	return getRealY() + width * 0.45f;
 }
 
 
@@ -201,7 +194,7 @@ void Skeleton::setAppear()
 
 void Skeleton::setIdle()
 {
-	if (appeared)
+	if (appeared && state != ATTACK)
 	{
 		state = IDLE;
 	}
@@ -253,7 +246,7 @@ bool Skeleton::isAbleToWalk()
 
 bool Skeleton::isAbleToAttack()
 {
-	return attackCounter > attackLine;
+	return isAbleToWalk() && attackCounter > attackLine;
 }
 
 bool Skeleton::isAttackDone()
@@ -360,7 +353,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 		}
 	}
 
-	offset += elapsedTime * 20;	// 20 offsets per second.
+	offset += elapsedTime * 20.0f;	// 20 offsets per second.
 
 	if (state == APPEAR)
 	{
@@ -414,7 +407,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 			offset = 0;
 		}
 
-		inactionCounter += elapsedTime;
+		inactionCounter += (float)elapsedTime;
 		if (inactionCounter > inactionLine)
 		{
 			offset = 0;
@@ -443,7 +436,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 	}
 	else
 	{
-		attackCounter += elapsedTime;
+		attackCounter += (float)elapsedTime;
 	}
 
 	if (state == DIE)

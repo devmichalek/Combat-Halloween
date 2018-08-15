@@ -108,11 +108,11 @@ void FoeText::setFrequency(float seconds)
 
 
 
-void FoeText::mechanics(double elapsedTime)
+void FoeText::mechanics(const double &elapsedTime)
 {
 	if (!empty())
 	{
-		counter += elapsedTime;
+		counter += (float)elapsedTime;
 		if (counter > line * 1.6)
 		{
 			blend();

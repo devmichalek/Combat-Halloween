@@ -35,8 +35,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;foes;foes\other;foes\tree;tree</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;foes;foes\other;foes\tree;tree;..\menu</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>

@@ -34,7 +34,7 @@ public:
 	void setAttackFrequency(float seconds = 1);
 	float getHPScale();
 
-	void moveX(double elapsedTime);
+	void moveX(const double &elapsedTime);
 	void turnLeft();
 	void turnRight();
 	bool isLeftAlign() const;
@@ -68,7 +68,7 @@ public:
 	bool isAttackDone();
 	bool isAttacking();
 
-	void mechanics(	double &elapsedTime,
+	void mechanics( double &elapsedTime,
 					Rect* &,
 					Rect* &,
 					bool &,

@@ -34,7 +34,7 @@ private:
 public:
 	void setFrequency(float seconds = 8);
 
-	void mechanics(double elapsedTime);
+	void mechanics(const double &elapsedTime);
 	bool isAble();
 	const std::string& getCurrentText() const;
 };

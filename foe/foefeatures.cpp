@@ -59,7 +59,7 @@ const float FoeFeatures::getHeartPoints() const
 }
 */
 
-void FoeFeatures::harm(float value)
+void FoeFeatures::harm(const float &value)
 {
 	heartPoints -= (value - (value * armour / 1000));
 

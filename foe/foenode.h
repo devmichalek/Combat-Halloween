@@ -47,7 +47,7 @@ public:
 	// virtual const float getDamage() const = 0;
 	// virtual const float getVelocity() const = 0;
 	// virtual const float getHeartPoints() const = 0;
-	virtual void harm(float value) = 0;
+	virtual void harm(const float &value) = 0;
 	virtual void setDie() = 0;
 
 	virtual void mechanics(	double &elapsedTime,
