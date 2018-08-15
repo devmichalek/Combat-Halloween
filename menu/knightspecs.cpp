@@ -36,7 +36,7 @@ void Knightspecs::free()
 
 
 
-void Knightspecs::load(float screen_w, float screen_h)
+void Knightspecs::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -96,7 +96,7 @@ void Knightspecs::draw(sf::RenderWindow* &window)
 	}
 }
 
-void Knightspecs::mechanics(double elapsedTime)
+void Knightspecs::mechanics(const double &elapsedTime)
 {
 	// Delete thread if is ready
 	if (thread.ready)
@@ -110,7 +110,7 @@ void Knightspecs::mechanics(double elapsedTime)
 	knight.setOffset(offset);
 }
 
-void Knightspecs::fadein(float v, int max)
+void Knightspecs::fadein(const float &v, const int &max)
 {
 	plank.fadein(v, max);
 	topgear.fadein(v, max);
@@ -124,7 +124,7 @@ void Knightspecs::fadein(float v, int max)
 	}
 }
 
-void Knightspecs::fadeout(float v, int min)
+void Knightspecs::fadeout(const float &v, const int &min)
 {
 	plank.fadeout(v, min);
 	topgear.fadeout(v, min);
@@ -233,7 +233,7 @@ void Knightspecs::setValues()
 	thread.ready = true;
 }
 
-bool Knightspecs::isReady() const
+const bool& Knightspecs::isReady() const
 {
 	return thread.success;
 }
@@ -248,7 +248,7 @@ void Knightspecs::position()
 	}
 }
 
-void Knightspecs::setVolume(float volume)
+void Knightspecs::setVolume(const float &volume)
 {
 	click.setVolume(volume);
 }

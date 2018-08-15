@@ -1,5 +1,4 @@
 #include "menu.h"
-#include "boost/lexical_cast.hpp"
 
 Menu::Menu()
 {
@@ -104,7 +103,7 @@ void Menu::reset()
 
 
 
-void Menu::load(float screen_w, float screen_h)
+void Menu::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -125,7 +124,7 @@ void Menu::load(float screen_w, float screen_h)
 	website.setPosition	(scores.getRight() + screen_w / 256, screen_h / 144);
 	github.setUrl		("https://github.com/devmichalek/Combat-Halloween");
 	scores.setUrl		("empty");
-	website.setUrl		("http://combathalloween.netne.net/");
+	website.setUrl		("http://amichalek.pl/combathalloween/");
 
 	// Main buttons.
 	singleplayerbutton.load			("images/buttons/singleplayer.png");
@@ -134,9 +133,9 @@ void Menu::load(float screen_w, float screen_h)
 	singleplayerbutton.setScale		(scale_x, scale_y);
 	multiplayerbutton.setScale		(scale_x, scale_y);
 	exitbutton.setScale				(scale_x, scale_y);
-	singleplayerbutton.setPosition	(screen_w / 1.9, screen_h / 2.35);
-	multiplayerbutton.setPosition	(screen_w / 1.9, singleplayerbutton.getBot() + screen_h / 72);
-	exitbutton.setPosition			(screen_w / 1.9, multiplayerbutton.getBot() + screen_h / 72);
+	singleplayerbutton.setPosition	(static_cast<float>(screen_w) / 1.9f, static_cast<float>(screen_h) / 2.35f);
+	multiplayerbutton.setPosition	(static_cast<float>(screen_w) / 1.9f, singleplayerbutton.getBot() + static_cast<float>(screen_h) / 72.0f);
+	exitbutton.setPosition			(static_cast<float>(screen_w) / 1.9f, multiplayerbutton.getBot() + static_cast<float>(screen_h) / 72.0f);
 	
 	// Circle buttons.
 	soundbutton.load			("images/buttons/sound.png");
@@ -173,7 +172,7 @@ void Menu::load(float screen_w, float screen_h)
 	music.load("music/menu.ogg");
 }
 
-void Menu::handle(sf::Event& event)
+void Menu::handle(const sf::Event &event)
 {
 	if (!isState())
 	{
@@ -227,11 +226,11 @@ void Menu::draw(sf::RenderWindow* &window)
 	pausesystem.draw		(window);
 }
 
-void Menu::mechanics(double elapsedTime)
+void Menu::mechanics(const double &elapsedTime)
 {
 	set();
 
-	fades(elapsedTime);
+	fades(static_cast<float>(elapsedTime));
 
 	// FPS.
 	/*FPS::mechanics(elapsedTime);
@@ -408,30 +407,33 @@ void Menu::mechanics(double elapsedTime)
 	}
 }
 
-void Menu::fades(double elapsedTime)
+void Menu::fades(const float &elapsedTime)
 {
 	if (pausesystem.isActive())
 	{
-		float value = elapsedTime * 0xFF * 2, min = 0xFF * 3 / 4;
+		float value = elapsedTime * 0xFF * 2;
+		int min = 0xFF * 3 / 4;
 		fadeout(value, min);
 		pausesystem.fadein(value * 3, min);
-		music.fadeout(elapsedTime * 100, music_volumebutton.getGlobalVolume() *0.2);
+		music.fadeout(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume() * 0.2));
 	}
 	else if (isState())
 	{
-		fadeout(elapsedTime * 0xFF);
-		music.fadeout(elapsedTime * 100);
+		int min = 0;
+		fadeout(elapsedTime * 0xFF, min);
+		music.fadeout(elapsedTime * 100, min);
 	}
 	else
 	{
 		float value = elapsedTime * 0xFF * 2;
-		fadein(value);
-		pausesystem.fadeout(value);
-		music.fadein(elapsedTime * 100, music_volumebutton.getGlobalVolume());
+		int max = 0xFF;
+		fadein(value, max);
+		pausesystem.fadeout(value, max);
+		music.fadein(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume()));
 	}
 }
 
-void Menu::fadein(float value, int max)
+void Menu::fadein(const float &value, const int &max)
 {
 	knightspecs.fadein			(value, max);
 	github.fadein				(value, max);
@@ -451,7 +453,7 @@ void Menu::fadein(float value, int max)
 	information.fadein			(value, max);
 }
 
-void Menu::fadeout(float value, int min)
+void Menu::fadeout(const float &value, const int &min)
 {
 	knightspecs.fadeout			(value, min);
 	github.fadeout				(value, min);

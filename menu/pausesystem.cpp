@@ -18,7 +18,7 @@ void Pausesystem::free()
 
 
 
-void Pausesystem::load(float screen_w, float screen_h)
+void Pausesystem::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -30,11 +30,11 @@ void Pausesystem::load(float screen_w, float screen_h)
 
 	click.load("sounds/click.wav");
 
-	blackout.create(screen_w, screen_h);
+	blackout.create(static_cast<int>(screen_w), static_cast<int>(screen_h));
 	blackout.setColor(sf::Color(0, 0, 0));
 }
 
-void Pausesystem::handle(sf::Event& event)
+void Pausesystem::handle(const sf::Event &event)
 {
 	// keyboard stuff
 	if (event.type == sf::Event::KeyPressed && !key_released)
@@ -59,13 +59,13 @@ void Pausesystem::draw(sf::RenderWindow* &window)
 	window->draw(text.get());
 }
 
-void Pausesystem::fadein(float v, int max)
+void Pausesystem::fadein(const float &v, const int &max)
 {
 	blackout.fadein(v, max);
 	text.fadein(v, max);
 }
 
-void Pausesystem::fadeout(float v, int min)
+void Pausesystem::fadeout(const float &v, const int &min)
 {
 	blackout.fadeout(v, min);
 	text.fadeout(v, min);
@@ -83,12 +83,12 @@ void Pausesystem::turnOnOff()
 	active = !active;
 }
 
-int Pausesystem::getAlpha() const
+float Pausesystem::getAlpha() const
 {
 	return blackout.getAlpha();
 }
 
-void Pausesystem::setVolume(float volume)
+void Pausesystem::setVolume(const float &volume)
 {
 	click.setVolume(volume);
 }

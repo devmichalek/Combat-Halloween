@@ -19,14 +19,14 @@ public:
 	~Pausesystem();
 	void free();
 
-	void load(float screen_w, float screen_h);
-	void handle(sf::Event& event);
+	void load(const float &screen_w, const float &screen_h);
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
-	void fadein(float v = 1, int max = 0xFF);
-	void fadeout(float v = 1, int min = 0);
+	void fadein(const float &v, const int &max);
+	void fadeout(const float &v, const int &min);
 
 	const bool& isActive() const;
 	void turnOnOff();
-	int getAlpha() const;
-	void setVolume(float volume);
+	float getAlpha() const;
+	void setVolume(const float &volume);
 };

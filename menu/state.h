@@ -33,14 +33,15 @@ public:
 // Usage: If timePassed() - checks whether amount of set time elapsed (do update every n sec), then getFPS()
 class FPS
 {
-	static sf::Clock clock;
-	static float currentTime;
-	static unsigned fps;
+	sf::Clock clock;
+	float currentTime;
+	float fps;
 
-	static double counter;
-	static double max;
+	double counter;
+	double max;
 public:
-	static void mechanics(double elapsedTime);
-	static bool timePassed();
-	static const unsigned& getFPS();
+	FPS();
+	void mechanics(double elapsedTime);
+	bool timePassed();
+	const float& getFPS();
 };

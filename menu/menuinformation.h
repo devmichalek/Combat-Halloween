@@ -1,6 +1,7 @@
 #pragma once
 #include "text.h"
 #include "sprite.h"
+#include "thread.h"
 #include "request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>

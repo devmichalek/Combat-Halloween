@@ -2,10 +2,10 @@
 #include "text.h"
 #include "sound.h"
 #include "sprite.h"
+#include "thread.h"
 #include "request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-#include <vector>
 
 class Settings
 {
@@ -63,28 +63,30 @@ public:
 	~Settings();
 	void free();
 
-	void load(float screen_w, float screen_h);
-	bool handle(sf::Event& event);
+	void load(const float &screen_w, const float &screen_h);
+	bool handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
-	void fadein(float v = 1, int max = 0xFF);
-	void fadeout(float v = 1, int min = 0);
+	void mechanics(const double &elapsedTime);
+	void fadein(const float &v, const int &max);
+	void fadeout(const float &v, const int &min);
 
 	// Support.
-	void exsertTable(double elapsedTime);
-	void shovelTable(double elapsedTime);
-	private: void resetKeys();
+	void exsertTable(const double &elapsedTime);
+	void shovelTable(const double &elapsedTime);
+private:
+	void resetKeys();
 	void setKeys();
 	void positionTable();
 	void positionChart();
-	bool isPossibleKey(sf::Event &event);
-	std::string getName(int n); public:
+	bool isPossibleKey(const int &n);
+	const std::string getName(const int &n);
+public:
 	void reset();
 
 	void setThread();
 	void reloadThread();
-	bool isReady() const;	// values are loaded correctly from database
-	void setVolume(float volume);
+	const bool& isReady() const;	// values are loaded correctly from database
+	void setVolume(const float &volume);
 };
 
 /*

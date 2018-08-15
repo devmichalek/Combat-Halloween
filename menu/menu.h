@@ -1,7 +1,10 @@
 #pragma once
 #include "state.h"
 #include "knightspecs.h"
-#include "button.h"
+#include "linkbutton.h"
+#include "squarebutton.h"
+#include "circlebutton.h"
+#include "volumebutton.h"
 #include "settings.h"
 #include "menuinformation.h"
 #include "chat.h"
@@ -41,12 +44,12 @@ private:
 public:
 	void reset();
 
-	void load(float screen_w, float screen_h);
-	void handle(sf::Event& event);
+	void load(const float &screen_w, const float &screen_h);
+	void handle(const sf::Event& event);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
+	void mechanics(const double &elapsedTime);
 private:
-	void fades(double elapsedTime);
-	void fadein(float value = 1, int max = 0xFF);
-	void fadeout(float value = 1, int min = 0);
+	void fades(const float &elapsedTime);
+	void fadein(const float &value, const int &max);
+	void fadeout(const float &value, const int &min);
 };

@@ -72,7 +72,7 @@ void Settings::free()
 
 
 
-void Settings::load(float screen_w, float screen_h)
+void Settings::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -171,7 +171,7 @@ void Settings::load(float screen_w, float screen_h)
 	click.load("sounds/click.wav");
 }
 
-bool Settings::handle(sf::Event& event)
+bool Settings::handle(const sf::Event &event)
 {
 	if (chartMoves == 0 && target != -1)
 	{
@@ -180,7 +180,7 @@ bool Settings::handle(sf::Event& event)
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				if (resetbutton.checkCollision(event.mouseButton.x, event.mouseButton.y))
+				if (resetbutton.checkCollision(event.mouseButton.x, event.mouseButton.y, 0, 0))
 				{
 					resetbutton.setOffset(1);
 					resetKeys();
@@ -210,7 +210,7 @@ bool Settings::handle(sf::Event& event)
 			// Set key.
 			if (success)
 			{
-				if (isPossibleKey(event))
+				if (isPossibleKey(event.key.code))
 				{
 					click.play();
 
@@ -295,7 +295,7 @@ void Settings::draw(sf::RenderWindow* &window)
 	}
 }
 
-void Settings::mechanics(double elapsedTime)
+void Settings::mechanics(const double &elapsedTime)
 {
 	// Delete thread if is ready
 	if (thread.ready)
@@ -362,7 +362,7 @@ void Settings::mechanics(double elapsedTime)
 
 
 
-void Settings::fadein(float v, int max)
+void Settings::fadein(const float &v, const int &max)
 {
 	for (auto &it : state_texts)
 	{
@@ -386,7 +386,7 @@ void Settings::fadein(float v, int max)
 	resetbutton.fadein(v, max);
 }
 
-void Settings::fadeout(float v, int min)
+void Settings::fadeout(const float &v, const int &min)
 {
 	for (auto &it : state_texts)
 	{
@@ -412,7 +412,7 @@ void Settings::fadeout(float v, int min)
 
 
 
-void Settings::exsertTable(double elapsedTime)
+void Settings::exsertTable(const double &elapsedTime)
 {
 	table.getX() > x2 ? tableMoves = -elapsedTime * 0xFF : tableMoves = 0;
 
@@ -423,7 +423,7 @@ void Settings::exsertTable(double elapsedTime)
 	}
 }
 
-void Settings::shovelTable(double elapsedTime)
+void Settings::shovelTable(const double &elapsedTime)
 {
 	table.getX() < x1 ? tableMoves = elapsedTime * 0xFF : tableMoves = 0;
 	
@@ -545,10 +545,8 @@ void Settings::positionChart()
 	resetbutton.setPosition(chart.getRight() - resetbutton.getWidth(), chart.getBot() - resetbutton.getHeight());
 }
 
-bool Settings::isPossibleKey(sf::Event &event)
+bool Settings::isPossibleKey(const int &code)
 {
-	sf::Uint8 code = event.key.code;
-
 	if (code == 14 || code == 15)	// pause key or chat key
 	{
 		return false;
@@ -573,7 +571,7 @@ bool Settings::isPossibleKey(sf::Event &event)
 	return false;
 }
 
-std::string Settings::getName(int n)
+const std::string Settings::getName(const int &n)
 {
 	std::string name = "";
 
@@ -648,12 +646,12 @@ void Settings::reloadThread()
 	thread.success = false;
 }
 
-bool Settings::isReady() const
+const bool& Settings::isReady() const
 {
 	return thread.success;
 }
 
-void Settings::setVolume(float volume)
+void Settings::setVolume(const float &volume)
 {
 	click.setVolume(volume);
 }

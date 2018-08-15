@@ -1,6 +1,7 @@
 #pragma once
 #include "text.h"
 #include "sound.h"
+#include "thread.h"
 #include "sprite.h"
 #include "request.h"
 #include <SFML/Graphics/RenderWindow.hpp>
@@ -45,16 +46,16 @@ public:
 	~Knightspecs();
 	void free();
 
-	void load(float screen_w, float screen_h);
+	void load(const float &screen_w, const float &screen_h);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
-	void fadein(float v = 1, int max = 0xFF);
-	void fadeout(float v = 1, int min = 0);
+	void mechanics(const double &elapsedTime);
+	void fadein(const float &v, const int &max);
+	void fadeout(const float &v, const int &min);
 
 	void setThread();
 	void reloadThread();
-	bool isReady() const;	// values are loaded correctly from database
-	void setVolume(float volume);
+	const bool& isReady() const;	// values are loaded correctly from database
+	void setVolume(const float &volume);
 private:
 	void setValues();
 	void position();

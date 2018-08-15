@@ -41,12 +41,17 @@ char* User::username = (char*)"user";
 
 
 
-sf::Clock FPS::clock = sf::Clock();
-float FPS::currentTime = 0;
-unsigned FPS::fps = 0;
 
-double FPS::counter = 0;
-double FPS::max = 0.25;	// every 0.25sec have the ability to getFPS()
+
+FPS::FPS()
+{
+	clock = sf::Clock();
+	currentTime = 0;
+	fps = 0.0f;
+
+	counter = 0;
+	max = 0.25;	// every 0.25sec have the ability to getFPS()
+}
 
 void FPS::mechanics(double elapsedTime)
 {
@@ -66,7 +71,7 @@ bool FPS::timePassed()
 	return false;
 }
 
-const unsigned& FPS::getFPS()
+const float& FPS::getFPS()
 {
 	return fps;
 }
