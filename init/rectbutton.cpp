@@ -70,19 +70,19 @@ void Rectbutton::create(std::string line, int size, float ply)
 	}
 }
 
-void Rectbutton::handle(sf::Event& event)
+void Rectbutton::handle(const sf::Event &event)
 {
 	if (state == 1 && !clicked)
 	{
 		if (event.type == sf::Event::MouseMoved)
 		{
-			checkCollision(event.mouseMove.x, event.mouseMove.y) ? focus = true : focus = false;
+			checkCollision((float)event.mouseMove.x, (float)event.mouseMove.y) ? focus = true : focus = false;
 		}
 		else if (event.type == sf::Event::MouseButtonPressed)
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				if (checkCollision(event.mouseButton.x, event.mouseButton.y))
+				if (checkCollision((float)event.mouseButton.x, (float)event.mouseButton.y))
 				{
 					// printf("%f %f\n", alpha, alphaBorders);
 					if (alpha > 0xFF / 2 && alphaBorders > 0xFF / 2)
@@ -115,23 +115,25 @@ void Rectbutton::draw(sf::RenderWindow* &window)
 	window->draw(text_one.get());
 }
 
-void Rectbutton::mechanics(double elapsedTime)
+void Rectbutton::mechanics(const double &elapsedTime)
 {
 	if (state == 1)
 	{
-		float value = elapsedTime * 0xFF * 6;
+		float value = (float)elapsedTime * 0xFF * 6;
 
 		if (focus)
 		{
-			fadein(value);
-			text_one.fadein(value);
-			text_two.fadeout(value);
+			int max = 0xFF;
+			fadein(value, max);
+			text_one.fadein(value, max);
+			text_two.fadeout(value, max);
 		}
 		else
 		{
-			fadeout(value);
-			text_one.fadeout(value);
-			text_two.fadein(value);
+			int min = 0;
+			fadeout(value, min);
+			text_one.fadeout(value, min);
+			text_two.fadein(value, min);
 		}
 	}
 }
@@ -139,7 +141,7 @@ void Rectbutton::mechanics(double elapsedTime)
 
 
 
-void Rectbutton::fadein(float v, int max)
+void Rectbutton::fadein(const float &v, const int &max)
 {
 	if (alpha < max)
 	{
@@ -156,7 +158,7 @@ void Rectbutton::fadein(float v, int max)
 	}
 }
 
-void Rectbutton::fadeinBorders(float v, int max)
+void Rectbutton::fadeinBorders(const float &v, const int &max)
 {
 	if (alphaBorders < max)
 	{
@@ -176,12 +178,12 @@ void Rectbutton::fadeinBorders(float v, int max)
 	}
 }
 
-void Rectbutton::fadeinGlobal(float v, int max)
+void Rectbutton::fadeinGlobal(const float &v, const int &max)
 {
 	if (state == 0)
 	{
-		fadeinBorders(v);
-		text_two.fadein(v);
+		fadeinBorders(v, max);
+		text_two.fadein(v, max);
 		if (alphaBorders == max)
 		{
 			state = 1;
@@ -189,7 +191,7 @@ void Rectbutton::fadeinGlobal(float v, int max)
 	}
 }
 
-void Rectbutton::fadeout(float v, int min)
+void Rectbutton::fadeout(const float &v, const int &min)
 {
 	if (alpha > min)
 	{
@@ -206,7 +208,7 @@ void Rectbutton::fadeout(float v, int min)
 	}
 }
 
-void Rectbutton::fadeoutBorders(float v, int min)
+void Rectbutton::fadeoutBorders(const float &v, const int &min)
 {
 	if (alphaBorders > min)
 	{
@@ -226,14 +228,14 @@ void Rectbutton::fadeoutBorders(float v, int min)
 	}
 }
 
-void Rectbutton::fadeoutGlobal(float v, int min)
+void Rectbutton::fadeoutGlobal(const float &v, const int &min)
 {
 	if (state == 1)
 	{
-		fadeout(v);
-		fadeoutBorders(v);
-		text_one.fadeout(v);
-		text_two.fadeout(v);
+		fadeout(v, min);
+		fadeoutBorders(v, min);
+		text_one.fadeout(v, min);
+		text_two.fadeout(v, min);
 		if (alphaBorders == min)
 		{
 			state = 2;

@@ -1,5 +1,6 @@
 #include "login.h"
 #include "state.h"
+#include <string>
 
 Login::Login()
 {
@@ -41,7 +42,7 @@ void Login::free()
 
 
 
-void Login::load(float screen_w, float screen_h)
+void Login::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -105,7 +106,7 @@ void Login::load(float screen_w, float screen_h)
 	info.setText(" ");
 
 	// Set size.
-	size = screen_h / 20;
+	size = static_cast<int>(screen_h / 20);
 	title.setSize(screen_h / 12);
 	arrow.setSize(size);
 	username_form.setSize(size);
@@ -129,7 +130,7 @@ void Login::load(float screen_w, float screen_h)
 	min_length_password = 8;
 }
 
-void Login::handle(sf::Event& event)
+void Login::handle(const sf::Event &event)
 {
 	// If there is no moving and next state.
 	if (counter == 0 && !thread.success && state < 2)
@@ -253,7 +254,7 @@ void Login::draw(sf::RenderWindow* &window)
 	}
 }
 
-void Login::mechanics(double elapsedTime)
+void Login::mechanics(const double &elapsedTime)
 {
 	// FPS.
 	/*FPS::mechanics(elapsedTime);
@@ -309,18 +310,19 @@ void Login::mechanics(double elapsedTime)
 		signupbg.fadeout(value * 4, 0);
 	}
 
-	loginbutton.fadeinGlobal(value);
-	signupbutton.fadeinGlobal(value);
-	backbutton.fadeinGlobal(value);
-	title.fadein(value);
-	username_form.fadein(value);
-	password_form.fadein(value);
-	username_written.fadein(value);
-	password_written.fadein(value);
-	arrow.fadein(value);
-	gobutton.fadeinGlobal(value);
-	info.fadeout(value / 2);
-	forgetbutton.fadeinGlobal(value);
+	int max = 0xFF;
+	loginbutton.fadeinGlobal(value, max);
+	signupbutton.fadeinGlobal(value, max);
+	backbutton.fadeinGlobal(value, max);
+	title.fadein(value, max);
+	username_form.fadein(value, max);
+	password_form.fadein(value, max);
+	username_written.fadein(value, max);
+	password_written.fadein(value, max);
+	arrow.fadein(value, max);
+	gobutton.fadeinGlobal(value, max);
+	info.fadeout(value / 2, max);
+	forgetbutton.fadeinGlobal(value, max);
 
 	if (signupbutton.getClicked())
 	{
@@ -470,7 +472,7 @@ void Login::organizeWritten()
 	setArrow();
 }
 
-bool Login::isPossibleKey(sf::Uint8 code) const
+bool Login::isPossibleKey(const sf::Uint8 &code) const
 {
 	if (code >= 48 && code <= 57)	// 0 .. 9
 	{

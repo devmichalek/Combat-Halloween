@@ -23,16 +23,19 @@ void load()
 	loading->mechanics(core->getElapsedTime());
 	loading->draw(core->getWindow());
 
+	float screen_w = (float)core->getWidth();
+	float screen_h = (float)core->getHeight();
+
 	switch (loading->getState())
 	{
 	case 1:
 		initialization = new Initialization;
-		initialization->load(core->getWidth(), core->getHeight());
+		initialization->load(screen_w, screen_h);
 		break;
 
 	case 20:
 		login = new Login;
-		login->load(core->getWidth(), core->getHeight());
+		login->load(screen_w, screen_h);
 		break;
 
 	case 101:
@@ -51,7 +54,9 @@ void load()
 int main(int argc, char** argv)
 {
 	core->create("Combat Halloween");
-	loading->load(core->getWidth(), core->getHeight());
+	float screen_w = (float)core->getWidth();
+	float screen_h = (float)core->getHeight();
+	loading->load(screen_w, screen_h);
 	while (core->open)
 	{
 		// clear

@@ -18,7 +18,7 @@ void Loading::free()
 	state = 0;
 }
 
-void Loading::load(float screen_w, float screen_h)
+void Loading::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -44,12 +44,13 @@ void Loading::draw(sf::RenderWindow* &window)
 	window->draw(progress_bar.get());
 }
 
-void Loading::mechanics(double elapsedTime)
+void Loading::mechanics(const double &elapsedTime)
 {
 	if (ready)
 	{
-		text.fadeout(elapsedTime * 0xFF * 2);
-		progress_bar.fadeout(elapsedTime * 0xFF * 2);
+		int min = 0;
+		text.fadeout((float)elapsedTime * 0xFF * 2, min);
+		progress_bar.fadeout((float)elapsedTime * 0xFF * 2, min);
 	}
 	else
 	{

@@ -26,17 +26,17 @@ public:
 
 	void setFont(const char* path);
 	void create(std::string line, int size, float ply);
-	void handle(sf::Event& event);
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
+	void mechanics(const double &elapsedTime);
 
 	// Fades.
-	void fadein(float v = 1, int max = 0xFF);
-	void fadeinBorders(float v = 1, int max = 0xFF);
-	void fadeinGlobal(float v = 1, int max = 0xFF);
-	void fadeout(float v = 1, int min = 0);
-	void fadeoutBorders(float v = 1, int min = 0);
-	void fadeoutGlobal(float v = 1, int min = 0xFF);
+	void fadein			(const float &v, const int &max);
+	void fadeinBorders	(const float &v, const int &max);
+	void fadeinGlobal	(const float &v, const int &max);
+	void fadeout		(const float &v, const int &min);
+	void fadeoutBorders	(const float &v, const int &min);
+	void fadeoutGlobal	(const float &v, const int &min);
 
 	// Setters.
 	void move(float x, float y);

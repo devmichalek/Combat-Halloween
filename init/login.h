@@ -1,4 +1,5 @@
 #pragma once
+#include "thread.h"
 #include "sprite.h"
 #include "request.h"
 #include "rectbutton.h"
@@ -54,10 +55,10 @@ public:
 	Login();
 	~Login();
 	void free();
-	void load(float screen_w, float screen_h);
-	void handle(sf::Event& event);
+	void load(const float &screen_w, const float &screen_h);
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
+	void mechanics(const double &elapsedTime);
 	bool isNext() const;
 
 private:	// Support.
@@ -65,7 +66,7 @@ private:	// Support.
 	void setThread();
 	std::string getPassword();
 	void organizeWritten();
-	bool isPossibleKey(sf::Uint8 code) const;
+	bool isPossibleKey(const sf::Uint8 &code) const;
 	void move(float y_add, float x_add);
 	void position(float x_add = 0, float y_add = 0);
 };

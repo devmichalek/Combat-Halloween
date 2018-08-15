@@ -28,7 +28,7 @@ void Initialization::free()
 
 
 
-void Initialization::load(float screen_w, float screen_h)
+void Initialization::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -85,36 +85,38 @@ void Initialization::draw(sf::RenderWindow* &window)
 	}
 }
 
-void Initialization::mechanics(double elapsedTime)
+void Initialization::mechanics(const double &elapsedTime)
 {
 	if (!ready)
 	{
+		int min = 0, max = 0xFF;
+
 		float velocity = static_cast<float>(elapsedTime) * 0xFF;
 		if (state == 0)
 		{
-			texts[AUTHOR]->fadein(velocity);
+			texts[AUTHOR]->fadein(velocity, max);
 		}
 		else if (state == 1)
 		{
-			texts[PRESENTS]->fadein(velocity * (float)1.5);
+			texts[PRESENTS]->fadein(velocity * (float)1.5, max);
 		}
 		else if (state == 2)
 		{
-			texts[AUTHOR]->fadeout(velocity);
-			texts[PRESENTS]->fadeout(velocity);
+			texts[AUTHOR]->fadeout(velocity, min);
+			texts[PRESENTS]->fadeout(velocity, min);
 		}
 		else if (state == 3)
 		{
-			texts[COMBAT]->fadein(velocity);
+			texts[COMBAT]->fadein(velocity, max);
 		}
 		else if (state == 4)
 		{
-			texts[HALLOWEEN]->fadein(velocity);
+			texts[HALLOWEEN]->fadein(velocity, max);
 		}
 		else if (state == 5)
 		{
-			texts[COMBAT]->fadeout(velocity);
-			texts[HALLOWEEN]->fadeout(velocity);
+			texts[COMBAT]->fadeout(velocity, min);
+			texts[HALLOWEEN]->fadeout(velocity, min);
 		}
 
 		// 1
