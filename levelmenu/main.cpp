@@ -1,4 +1,3 @@
-// Test of objects: 
 #include "core.h"
 #include "levelmenu.h"
 
@@ -16,7 +15,7 @@ int main(int argc, char** argv)
 {
 	core->create("Combat Halloween");
 	core->state = LEVELMENU;
-	levelMenu->load(core->getWidth(), core->getHeight());
+	levelMenu->load((float)core->getWidth(), (float)core->getHeight());
 
 	while (core->open)
 	{

@@ -31,15 +31,15 @@ public:
 	~LevelMenuInformation();
 	void free();
 
-	void load(float screen_w, float screen_h);
+	void load(const float &screen_w, const float &screen_h);
 	void draw(sf::RenderWindow* &window);
-	void handle(sf::Event &event);
-	void fadein(float v = 1, int max = 0xFF);
-	void fadeout(float v = 1, int min = 0);
-
-private: void prepareChosen(); public:
-	
-	void setVolume(float newVolume);
-	int getBackgroundAlpha() const;
+	void handle(const sf::Event &event);
+	void fadein(const float &v, const int &max);
+	void fadeout(const float &v, const int &min);
+private:
+	void prepareChosen();
+public:
+	void setVolume(const float &newVolume);
+	const float getBackgroundAlpha() const;
 	const int& getChosen() const;
 };

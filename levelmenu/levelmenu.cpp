@@ -86,7 +86,7 @@ void LevelMenu::reset()
 
 
 
-void LevelMenu::load(float screen_w, float screen_h)
+void LevelMenu::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -127,7 +127,7 @@ void LevelMenu::load(float screen_w, float screen_h)
 	music.load("music/levelmenu.ogg");
 }
 
-void LevelMenu::handle(sf::Event& event)
+void LevelMenu::handle(const sf::Event &event)
 {
 	if (!isState())
 	{
@@ -169,7 +169,7 @@ void LevelMenu::draw(sf::RenderWindow* &window)
 	pausesystem.draw			(window);
 }
 
-void LevelMenu::mechanics(double elapsedTime)
+void LevelMenu::mechanics(const double &elapsedTime)
 {
 	set();
 
@@ -292,7 +292,7 @@ void LevelMenu::mechanics(double elapsedTime)
 	}
 }
 
-void LevelMenu::fades(double elapsedTime)
+void LevelMenu::fades(const double &elapsedTime)
 {
 	if (pausesystem.isActive())
 	{
@@ -303,19 +303,21 @@ void LevelMenu::fades(double elapsedTime)
 	}
 	else if (isState())
 	{
-		fadeout(elapsedTime * 0xFF);
-		music.fadeout(elapsedTime * 100);
+		int min = 0;
+		fadeout(elapsedTime * 0xFF, min);
+		music.fadeout(elapsedTime * 100, min);
 	}
 	else
 	{
 		float value = elapsedTime * 0xFF * 2;
-		fadein(value);
-		pausesystem.fadeout(value);
+		int max = 0xFF;
+		fadein(value, max);
+		pausesystem.fadeout(value, max);
 		music.fadein(elapsedTime * 100, music_volumebutton.getGlobalVolume());
 	}
 }
 
-void LevelMenu::fadein(float value, int max)
+void LevelMenu::fadein(const float &value, const int &max)
 {
 	homebutton.fadein			(value, max);
 	updatebutton.fadein			(value, max);
@@ -327,7 +329,7 @@ void LevelMenu::fadein(float value, int max)
 	information.fadein			(value, max);
 }
 
-void LevelMenu::fadeout(float value, int min)
+void LevelMenu::fadeout(const float &value, const int &min)
 {
 	homebutton.fadeout			(value, min);
 	updatebutton.fadeout		(value, min);

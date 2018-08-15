@@ -22,7 +22,7 @@ void LevelMenuInformation::free()
 	chosen = -1;
 }
 
-void LevelMenuInformation::load(float screen_w, float screen_h)
+void LevelMenuInformation::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -32,10 +32,10 @@ void LevelMenuInformation::load(float screen_w, float screen_h)
 	plank.load("images/other/plank2.png");
 	plank.setScale(screen_w / 5120, screen_h / 2880);
 
-	background.loadRepeated("images/other/sayagata.png", screen_w*1.5, screen_h*1.5, true);
+	background.loadRepeated("images/other/sayagata.png", screen_w * 1.5f, screen_h * 1.5f, true);
 	background.setScale(0.75, 0.75);
 
-	plankbar.loadRepeated("images/other/plankbar.png", screen_w*1.5, screen_h / 18, true);
+	plankbar.loadRepeated("images/other/plankbar.png", screen_w * 1.5f, screen_h / 18.0f, true);
 	plankbar.setScale(0.75, 0.5);
 
 	for (unsigned i = 0; i < SIZE; ++i)
@@ -79,17 +79,17 @@ void LevelMenuInformation::draw(sf::RenderWindow* &window)
 	window->draw(plankbar.get());
 }
 
-void LevelMenuInformation::handle(sf::Event &event)
+void LevelMenuInformation::handle(const sf::Event &event)
 {
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
 		if (event.mouseButton.button == sf::Mouse::Left)
 		{
-			for (int i = 0; i < texts.size(); ++i)
+			for (int i = 0; i < (int)texts.size(); ++i)
 			{
 				if (i == chosen) continue;
 				plank.setPosition(texts[i]->getX() + texts[i]->getWidth() / 2 - plank.getWidth() / 2, texts[i]->getY());
-				if (plank.checkCollision(event.mouseButton.x, event.mouseButton.y))
+				if (plank.checkCollision((float)event.mouseButton.x, (float)event.mouseButton.y))
 				{
 					sound.play();
 					chosen = i;
@@ -101,7 +101,7 @@ void LevelMenuInformation::handle(sf::Event &event)
 	}
 }
 
-void LevelMenuInformation::fadein(float v, int max)
+void LevelMenuInformation::fadein(const float &v, const int &max)
 {
 	plank.fadein(v, max);
 	background.fadein(v, max);
@@ -112,7 +112,7 @@ void LevelMenuInformation::fadein(float v, int max)
 	}
 }
 
-void LevelMenuInformation::fadeout(float v, int min)
+void LevelMenuInformation::fadeout(const float &v, const int &min)
 {
 	plank.fadeout(v, min);
 	background.fadeout(v, min);
@@ -139,12 +139,12 @@ void LevelMenuInformation::prepareChosen()
 
 
 
-void LevelMenuInformation::setVolume(float newVolume)
+void LevelMenuInformation::setVolume(const float &newVolume)
 {
 	sound.setVolume(newVolume);
 }
 
-int LevelMenuInformation::getBackgroundAlpha() const
+const float LevelMenuInformation::getBackgroundAlpha() const
 {
 	return background.getAlpha();
 }

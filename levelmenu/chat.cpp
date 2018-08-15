@@ -69,7 +69,7 @@ void Chat::reset()
 
 
 
-void Chat::load(float screen_w, float screen_h)
+void Chat::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -117,7 +117,7 @@ void Chat::load(float screen_w, float screen_h)
 	}
 }
 
-void Chat::handle(sf::Event& event)
+void Chat::handle(const sf::Event &event)
 {
 	if (active)
 	{
@@ -239,7 +239,7 @@ void Chat::handle(sf::Event& event)
 			if (event.key.code == 14)
 			{
 				active = true;
-				globalYScale = 0.1;
+				globalYScale = 0.1f;
 			}
 		}
 	}
@@ -270,28 +270,30 @@ void Chat::draw(sf::RenderWindow* &window)
 	}
 }
 
-void Chat::mechanics(double elapsedTime)
+void Chat::mechanics(const double &elapsedTime)
 {
-	counter += elapsedTime;
+	counter += static_cast<float>(elapsedTime);
 	if (counter > line)
 	{
 		counter = 0;
 	}
 
+	int max = 0xFF;
 	if (active)
 	{
-		float value = elapsedTime * 0xFF * 2;
-		background.fadein(value);
-		username.fadein(value);
-		arrow.fadein(value);
+		float value = static_cast<float>(elapsedTime) * 255.0f * 2.0f;
+		
+		background.fadein(value, max);
+		username.fadein(value, max);
+		arrow.fadein(value, max);
 		for (auto &it : writtens)
 		{
-			it->fadein(value);
+			it->fadein(value, max);
 		}
 
 		if (globalYScale < globalYLine)
 		{
-			globalYScale += elapsedTime * 5;
+			globalYScale += static_cast<float>(elapsedTime) * 5.0f;
 		}
 		else
 		{
@@ -300,18 +302,18 @@ void Chat::mechanics(double elapsedTime)
 	}
 	else
 	{
-		float value = elapsedTime * 0xFF * 2;
-		background.fadeout(value);
-		username.fadeout(value);
-		arrow.fadeout(value);
+		float value = static_cast<float>(elapsedTime) * 255.0f * 2.0f;
+		background.fadeout(value, max);
+		username.fadeout(value, max);
+		arrow.fadeout(value, max);
 		for (auto &it : writtens)
 		{
-			it->fadeout(value);
+			it->fadeout(value, max);
 		}
 
 		if (globalYScale > 0)
 		{
-			globalYScale -= elapsedTime * 5;
+			globalYScale -= static_cast<float>(elapsedTime) * 5.0f;
 		}
 		else
 		{
@@ -334,7 +336,7 @@ void Chat::mechanics(double elapsedTime)
 	}
 }
 
-void Chat::fadeout(float v, int min)
+void Chat::fadeout(const float &v, const int &min)
 {
 
 	background.fadeout(v, min);

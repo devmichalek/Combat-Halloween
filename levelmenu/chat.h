@@ -40,11 +40,11 @@ public:
 	void free();
 	void reset();
 
-	void load(float screen_w, float screen_h);
-	void handle(sf::Event& event);
+	void load(const float &screen_w, const float &screen_h);
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
-	void fadeout(float v = 1, int min = 0);
+	void mechanics(const double &elapsedTime);
+	void fadeout(const float &v, const int &min);
 
 	// Getters.
 	bool& isActive();
