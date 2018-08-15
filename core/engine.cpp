@@ -14,7 +14,7 @@ Engine::Engine(int initState, int endState)
 	// Set core.
 	core = std::make_unique<Core>(STATES::LOADING, 21, 21, 29, 0xFF);
 	core->create("Combat Halloween");
-	core->setIcon("images/other/icon.png");
+	core->setIcon("images/icons/icon.png");
 
 	// Set loading.
 	loading = new Loading;
@@ -47,7 +47,7 @@ void Engine::load()
 		}
 		break;
 
-	case 20:
+	case 2:
 		if (LOGIN >= initState && LOGIN <= endState)
 		{
 			login = new Login;
@@ -132,7 +132,7 @@ void Engine::states()
 		initialization->draw(core->getWindow());
 		if (initialization->isNext())
 		{
-			core->state = LOGIN > endState ? -2 : LOGIN;
+			core->state = LOGIN > endState ? EMPTY : LOGIN;
 			delete initialization;
 			initialization = nullptr;
 		}
@@ -141,17 +141,21 @@ void Engine::states()
 	case LOGIN:
 		login->mechanics(core->getElapsedTime());
 		login->draw(core->getWindow());
-		if (login->isNext())	core->state = MENU > endState ? -2 : MENU;
+		if (login->isNext())	core->state = MENU > endState ? EMPTY : MENU;
 		break;
 
 	case MENU:
 		menu->mechanics(core->getElapsedTime());
 		menu->draw(core->getWindow());
-		/*if (menu->isPrev()) // add editor exe
-		else */if (menu->isNext())
+		if (menu->isPrev())
+		{
+			// editor->reset();
+			core->state = EDITOR > endState ? EMPTY : EDITOR;
+		}
+		else if (menu->isNext())
 		{
 			levelMenu->reset();
-			core->state = LEVELMENU > endState ? -2 : LEVELMENU;
+			core->state = LEVELMENU > endState ? EMPTY : LEVELMENU;
 		}
 		else if (menu->isExit())	core->open = false;
 		break;
@@ -162,9 +166,13 @@ void Engine::states()
 		if (levelMenu->isPrev())
 		{
 			menu->reset();
-			core->state = MENU < initState ? -2 : MENU;
+			core->state = MENU < initState ? EMPTY : MENU;
 		}
-		else if (levelMenu->isNext())	core->state = PLATFORM > endState ? -2 : PLATFORM;
+		else if (levelMenu->isNext())
+		{
+			// platform->reset();
+			core->state = PLATFORM > endState ? EMPTY : PLATFORM;
+		}
 		else if (levelMenu->isExit())	core->open = false;
 		break;
 

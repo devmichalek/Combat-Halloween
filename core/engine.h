@@ -13,6 +13,7 @@ class Engine
 {
 	enum STATES
 	{
+		EMPTY = -2,
 		LOADING = 0,
 		INIT,
 		LOGIN,
@@ -20,6 +21,7 @@ class Engine
 		LEVELMENU,
 		PLATFORM,
 		TABLE,
+		EDITOR,
 		DEFAULT
 	};
 	

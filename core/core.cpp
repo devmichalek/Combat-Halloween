@@ -64,15 +64,15 @@ bool Core::create(const char* title, int style)
 	close();
 
 	// Find correct window size.
-	width = static_cast<int>(sf::VideoMode::getDesktopMode().width / 1.2);
+	width = sf::VideoMode::getDesktopMode().width / 1.2f;
 	if (width > 2560)
 		width = 2560;
 	else if (width < 900)
 		return false;
-	height = static_cast<int>(width *0.5625);
+	height = width * 0.5625f;
 
 	// Create window.
-	window = new sf::RenderWindow(sf::VideoMode(width, height), title, style);
+	window = new sf::RenderWindow(sf::VideoMode((int)width, (int)height), title, style);
 	if (!window)
 	{
 		return false;
@@ -116,7 +116,7 @@ bool Core::isEvent()
 	return window->pollEvent(event);
 }
 
-sf::Event& Core::getEvent()
+const sf::Event& Core::getEvent()
 {
 	return event;
 }
@@ -126,12 +126,12 @@ sf::RenderWindow*& Core::getWindow()
 	return window;
 }
 
-const int& Core::getWidth() const
+const float& Core::getWidth() const
 {
 	return width;
 }
 
-const int& Core::getHeight() const
+const float& Core::getHeight() const
 {
 	return height;
 }

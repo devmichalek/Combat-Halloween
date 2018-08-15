@@ -4,8 +4,8 @@
 
 class Core
 {
-	int width;	// Screen width.
-	int height; // Screen height.
+	float width;	// Screen width.
+	float height; // Screen height.
 	
 	sf::Clock clock;
 	sf::Event event;
@@ -30,10 +30,10 @@ public:
 	void display() const;
 
 	bool isEvent();
-	sf::Event& getEvent();
+	const sf::Event& getEvent();
 	sf::RenderWindow*& getWindow();
-	const int& getWidth() const;
-	const int& getHeight() const;
+	const float& getWidth() const;
+	const float& getHeight() const;
 	double getElapsedTime();
 	const sf::Color& getColor() const;
 };
