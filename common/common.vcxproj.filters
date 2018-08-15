@@ -7,6 +7,9 @@
     <Filter Include="Main">
       <UniqueIdentifier>{83f3c5d0-1015-418e-9b71-633b6cbe53d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies\Core">
+      <UniqueIdentifier>{3bddc518-b1d2-48ce-be41-13019f685b6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -28,13 +31,13 @@
       <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="..\core\core.cpp">
-      <Filter>Dependencies</Filter>
+      <Filter>Dependencies\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="thread.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="music.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -48,6 +51,12 @@
       <Filter>Main</Filter>
     </ClInclude>
     <ClInclude Include="text.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Dependencies\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="thread.h">
       <Filter>Main</Filter>
     </ClInclude>
   </ItemGroup>
