@@ -106,7 +106,7 @@ int main(int argc, char** argv)
 		if (core->state == PLATFORM)
 		{
 			foeFactory->setBorders(0, 0);
-			foeFactory->processData(core->getWindow(), elapsedTime,
+			foeFactory->update(core->getWindow(), elapsedTime,
 				character, characterAttack, characterHasAttacked, characterDamage, characterHP,
 				characterArmour);
 		}
