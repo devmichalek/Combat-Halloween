@@ -5,7 +5,7 @@ void Zombie::setFPS()
 	FPS = 18.0f;
 }
 
-void Zombie::setBoxes()
+void Zombie::marshial()
 {
 	realBox = new Rect;
 	realBox->width = width / 1.5f;

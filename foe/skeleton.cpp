@@ -1,4 +1,5 @@
 #include "skeleton.h"
+#include <boost/lexical_cast.hpp>
 
 Skeleton::Skeleton()
 {
@@ -43,14 +44,14 @@ void Skeleton::free()
 	}
 }
 
-
-
 void Skeleton::setFPS()
 {
 	FPS = 20.0f;
 }
 
-void Skeleton::setBoxes()
+
+
+void Skeleton::marshial()
 {
 	realBox = new Rect;
 	realBox->width = width / 2.0f;
@@ -64,7 +65,7 @@ void Skeleton::setBoxes()
 	borderBox->width = right - left;
 	borderBox->height = realBox->height;
 	borderBox->left = left;
-	borderBox->top = y + realBox->height;
+	borderBox->top = y;	// was: y + realBox->height
 }
 
 void Skeleton::setInactionFrequency(float seconds)
@@ -80,6 +81,16 @@ void Skeleton::setAttackFrequency(float seconds)
 float Skeleton::getHPScale()
 {
 	return heartPoints / hp < 0 ? 0 : heartPoints / hp;
+}
+
+void Skeleton::setFeatures(std::vector<std::string> features)
+{
+	setArmour(boost::lexical_cast<float>(features[0]));
+	setDamage(boost::lexical_cast<float>(features[1]));
+	setVelocity(boost::lexical_cast<float>(features[2]));
+	setHeartPoints(boost::lexical_cast<float>(features[3]));
+	setInactionFrequency(boost::lexical_cast<float>(features[4]));
+	setAttackFrequency(boost::lexical_cast<float>(features[5]));
 }
 
 
@@ -296,7 +307,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 			realBox->left = getRealX();
 			realBox->top = getRealY();
 
-			if (contains(realBox, characterAttack))
+			if (realBox->intersects(*characterAttack))
 			{
 				harm(characterDamage);
 			}
@@ -307,7 +318,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 			attackBox->left = getRealX();
 			attackBox->top = getRealY();
 
-			if (contains(attackBox, character))
+			if (attackBox->intersects(*character))
 			{
 				characterHP -= (damage - (damage * characterArmour / 1000));
 			}
@@ -318,7 +329,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 		}
 
 	
-		if (contains(borderBox, character))
+		if (borderBox->intersects(*character))
 		{
 			if (isAbleToWalk())
 			{
@@ -358,7 +369,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 		}
 	}
 
-	offset += elapsedTime * foeFPS;
+	offset += elapsedTime * FPS;
 
 	if (state == APPEAR)
 	{
@@ -382,6 +393,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 			state = WALK;
 			turnRight();
 			moveX(elapsedTime);
+			realBox->left = getRealX();
 			if (realBox->left + realBox->width > inactionX)
 			{
 				offset = 0;
@@ -395,6 +407,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 			state = WALK;
 			turnLeft();
 			moveX(-elapsedTime);
+			realBox->left = getRealX();
 			if (realBox->left < inactionX)
 			{
 				offset = 0;

@@ -1,10 +1,10 @@
-pragma once
+#pragma once
 #include "skeleton.h"
 
 class Zombie: public Skeleton
 {
 	void setFPS();
-	void setBoxes();
+	void marshial();
 public:
 	// Sprite x, y
 	float getSpriteX();

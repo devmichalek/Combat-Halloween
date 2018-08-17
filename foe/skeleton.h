@@ -1,9 +1,8 @@
 #pragma once
-#include "foenode.h"
 #include "foeanimation.h"
 #include "foefeatures.h"
 
-class Skeleton: public FoeAnimation, public FoeFeatures
+class Skeleton: public FoeAnimation, public FoeFeaturesCommon
 {
 protected:
 	enum ACTIONS
@@ -24,38 +23,42 @@ protected:
 	float inactionCounter;
 	float inactionFrequency;
 
+	Rect* realBox;
+	Rect* attackBox;
+	Rect* borderBox;
+protected:
+	virtual void setFPS();
 public:
 	Skeleton();
 	virtual ~Skeleton();
 	void free();
-protected:
-	void setFPS();
-	virtual void setBoxes();
-public:
+	
+	virtual void marshial();
 	void setInactionFrequency(float seconds = 4);
 	void setAttackFrequency(float seconds = 1);
 	float getHPScale();
-protected:
+	void setFeatures(std::vector<std::string> features);
+
 	void moveX(const double &elapsedTime);
 	void turnLeft();
 	void turnRight();
 	bool isLeftAlign() const;
 	bool isRightAlign() const;
-public:
+
 	// Sprite x, y
 	virtual float getSpriteX();
 	virtual float getSpriteY();
-protected:
+
 	// Real box and attack box
 	virtual float getRealX();
 	virtual float getRealY();
 	virtual float getAttackX();
 	virtual float getAttackY();
-public:
+
 	// Text x, y
 	float getMouthX();
 	virtual float getMouthY();
-protected:
+
 	// Actions
 	void setAppear();
 	void setIdle();
@@ -69,7 +72,7 @@ protected:
 	bool isAbleToAttack();
 	bool isAttackDone();
 	virtual bool isAttacking();
-public:
+
 	void mechanics( double &elapsedTime,
 					Rect* &,
 					Rect* &,
