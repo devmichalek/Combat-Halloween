@@ -45,6 +45,11 @@ void Skeleton::free()
 
 
 
+void Skeleton::setFPS()
+{
+	FPS = 20.0f;
+}
+
 void Skeleton::setBoxes()
 {
 	realBox = new Rect;
@@ -353,7 +358,7 @@ void Skeleton::mechanics(	double &elapsedTime,
 		}
 	}
 
-	offset += elapsedTime * 20.0f;	// 20 offsets per second.
+	offset += elapsedTime * foeFPS;
 
 	if (state == APPEAR)
 	{

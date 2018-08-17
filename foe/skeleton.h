@@ -28,32 +28,34 @@ public:
 	Skeleton();
 	virtual ~Skeleton();
 	void free();
-	
-	void setBoxes();
+protected:
+	void setFPS();
+	virtual void setBoxes();
+public:
 	void setInactionFrequency(float seconds = 4);
 	void setAttackFrequency(float seconds = 1);
 	float getHPScale();
-
+protected:
 	void moveX(const double &elapsedTime);
 	void turnLeft();
 	void turnRight();
 	bool isLeftAlign() const;
 	bool isRightAlign() const;
-
+public:
 	// Sprite x, y
-	float getSpriteX();
-	float getSpriteY();
-
+	virtual float getSpriteX();
+	virtual float getSpriteY();
+protected:
 	// Real box and attack box
-	float getRealX();
-	float getRealY();
-	float getAttackX();
-	float getAttackY();
-
+	virtual float getRealX();
+	virtual float getRealY();
+	virtual float getAttackX();
+	virtual float getAttackY();
+public:
 	// Text x, y
 	float getMouthX();
-	float getMouthY();
-
+	virtual float getMouthY();
+protected:
 	// Actions
 	void setAppear();
 	void setIdle();
@@ -66,8 +68,8 @@ public:
 	bool isAbleToWalk();
 	bool isAbleToAttack();
 	bool isAttackDone();
-	bool isAttacking();
-
+	virtual bool isAttacking();
+public:
 	void mechanics( double &elapsedTime,
 					Rect* &,
 					Rect* &,
