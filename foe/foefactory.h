@@ -1,12 +1,11 @@
 #pragma once
-#include "foetree.h"
+#include "foewrapper.h"
 
 
 class FoeFactory
 {
-	sf::Rect<float>* res;		// resolution of the window
-	sf::Rect<float>* resBulk;	// resolution, window width and window height are doubled
-	FoeTree* tree;
+	sf::Rect<float>* resolution;
+	FoeWrapper* wrapper;
 
 public:
 	FoeFactory();
@@ -18,16 +17,14 @@ public:
 
 	void load(const float &screen_w, const float &screen_h);
 	
-	// Process ------------------------
-	void processData(	sf::RenderWindow* &,
-						double,
-						Rect* &,
-						Rect* &,
-						bool &,
-						float &,
-						float &,
-						float &
-					);
+	void update(sf::RenderWindow* &,
+				double,
+				Rect* &,
+				Rect* &,
+				bool &,
+				float &,
+				float &,
+				float &);
 
 	void setBorderX(const float &newX);
 	void setBorderY(const float &newY);
