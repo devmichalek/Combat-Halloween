@@ -1,6 +1,7 @@
 #include "foefeatures.h"
+#include <boost/lexical_cast.hpp>
 
-FoeFeatures::FoeFeatures()
+FoeFeaturesCommon::FoeFeaturesCommon()
 {
 	armour = 0;
 	damage = 0;
@@ -8,7 +9,7 @@ FoeFeatures::FoeFeatures()
 	heartPoints = hp = 0;
 }
 
-FoeFeatures::~FoeFeatures()
+FoeFeaturesCommon::~FoeFeaturesCommon()
 {
 	armour = 0;
 	damage = 0;
@@ -18,48 +19,57 @@ FoeFeatures::~FoeFeatures()
 
 
 
-void FoeFeatures::setArmour(float newArmour)
+void FoeFeaturesCommon::setArmour(float newArmour)
 {
 	armour = newArmour;
 }
 
-void FoeFeatures::setDamage(float newDamage)
+void FoeFeaturesCommon::setDamage(float newDamage)
 {
 	damage = newDamage;
 }
 
-void FoeFeatures::setVelocity(float newVelocity)
+void FoeFeaturesCommon::setVelocity(float newVelocity)
 {
 	velocity = newVelocity;
 }
 
-void FoeFeatures::setHeartPoints(float newHeartPoints)
+void FoeFeaturesCommon::setHeartPoints(float newHeartPoints)
 {
 	heartPoints = hp = newHeartPoints;
 }
+
+void FoeFeaturesCommon::setFeatures(std::vector<std::string> features)
+{
+	setArmour(boost::lexical_cast<float>(features[0]));
+	setDamage(boost::lexical_cast<float>(features[1]));
+	setVelocity(boost::lexical_cast<float>(features[2]));
+	setHeartPoints(boost::lexical_cast<float>(features[3]));
+}
+
 /*
-const float FoeFeatures::getArmour() const
+const float FoeFeaturesCommon::getArmour() const
 {
 	return armour;
 }
 
-const float FoeFeatures::getDamage() const
+const float FoeFeaturesCommon::getDamage() const
 {
 	return damage;
 }
 
-const float FoeFeatures::getVelocity() const
+const float FoeFeaturesCommon::getVelocity() const
 {
 	return velocity;
 }
 
-const float FoeFeatures::getHeartPoints() const
+const float FoeFeaturesCommon::getHeartPoints() const
 {
 	return heartPoints;
 }
 */
 
-void FoeFeatures::harm(const float &value)
+void FoeFeaturesCommon::harm(const float &value)
 {
 	heartPoints -= (value - (value * armour / 1000));
 
