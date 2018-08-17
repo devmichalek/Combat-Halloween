@@ -1,21 +1,23 @@
-#pragma once
+pragma once
 #include "skeleton.h"
 
-/*
 class Zombie: public Skeleton
 {
-
+	void setFPS();
+	void setBoxes();
 public:
-	float getX();
-	float getY();
+	// Sprite x, y
+	float getSpriteX();
+	float getSpriteY();
+private:
+	// Real box and attack box
 	float getRealX();
-	float getRealWidth();
-	float getRealHeight();
+	float getRealY();
 	float getAttackX();
-	float getAttackWidth();
+	float getAttackY();
+public:
+	// Text x, y
 	float getMouthY();
-	
-	bool isAttacking(bool hide = false);
-	void mechanics(double elapsedTime);
+private:
+	bool isAttacking();
 };
-*/
