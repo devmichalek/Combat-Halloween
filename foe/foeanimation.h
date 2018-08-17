@@ -7,6 +7,7 @@ protected:
 	int type;
 	int state;
 	float offset;
+	float FPS;
 	std::vector<int> lines;
 
 	float x, y;

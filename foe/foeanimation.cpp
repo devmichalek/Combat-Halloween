@@ -5,6 +5,7 @@ FoeAnimation::FoeAnimation()
 	type = -1;
 	state = -1;
 	offset = 0;
+	FPS = 20.0f;
 
 	x = y = 0;
 	scale = 0;
@@ -38,7 +39,6 @@ void FoeAnimation::setSpriteState(int newState)
 {
 	state = newState;
 }
-
 void FoeAnimation::setSpriteOffset(float newOffset)
 {
 	offset = newOffset;
@@ -107,12 +107,10 @@ const float FoeAnimation::getWidth() const
 {
 	return width;
 }
-
 const float FoeAnimation::getLeft() const
 {
 	return left;
 }
-
 const float FoeAnimation::getRight() const
 {
 	return right;
