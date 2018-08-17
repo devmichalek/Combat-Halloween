@@ -23,6 +23,7 @@ FoeAnimation::~FoeAnimation()
 		lines.clear();
 		lines.shrink_to_fit();
 	}
+	FPS = 20.0f;
 
 	x = y = 0;
 	scale = 0;
@@ -39,6 +40,7 @@ void FoeAnimation::setSpriteState(int newState)
 {
 	state = newState;
 }
+
 void FoeAnimation::setSpriteOffset(float newOffset)
 {
 	offset = newOffset;
@@ -87,9 +89,13 @@ void FoeAnimation::setPosition(float newX, float newY)
 	y = newY;
 }
 
-void FoeAnimation::setBorders(float newLeft, float newRight)
+void FoeAnimation::setLeft(float newLeft)
 {
 	left = newLeft;
+}
+
+void FoeAnimation::setRight(float newRight)
+{
 	right = newRight;
 }
 
@@ -107,12 +113,23 @@ const float FoeAnimation::getWidth() const
 {
 	return width;
 }
+*/
 const float FoeAnimation::getLeft() const
 {
 	return left;
 }
+
 const float FoeAnimation::getRight() const
 {
 	return right;
 }
-*/
+
+const float FoeAnimation::getTop() const
+{
+	return y;
+}
+
+const float FoeAnimation::getBot()
+{
+	return y + width * 2;
+}
