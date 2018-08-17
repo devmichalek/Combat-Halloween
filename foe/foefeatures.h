@@ -1,7 +1,7 @@
 #pragma once
-#include "foenode.h"
+#include "foe.h"
 
-class FoeFeatures : virtual public FoeNode
+class FoeFeaturesCommon : virtual public Foe
 {
 protected:
 	float armour;
@@ -10,14 +10,15 @@ protected:
 	float heartPoints, hp;
 
 public:
-	FoeFeatures();
-	virtual ~FoeFeatures();
+	FoeFeaturesCommon();
+	virtual ~FoeFeaturesCommon();
 
 	void setArmour(float newArmour);
 	void setDamage(float newDamage);
 	void setVelocity(float newVelocity);
 	void setHeartPoints(float newHeartPoints);
 	virtual float getHPScale() = 0;
+	virtual void setFeatures(std::vector<std::string> features);
 
 protected:
 	// const float getArmour() const;
