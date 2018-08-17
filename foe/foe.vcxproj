@@ -54,14 +54,10 @@
     <ClCompile Include="foeanimation.cpp" />
     <ClCompile Include="foefactory.cpp" />
     <ClCompile Include="foefeatures.cpp" />
-    <ClCompile Include="foenode.cpp" />
     <ClCompile Include="foetext.cpp" />
-    <ClCompile Include="foetree.cpp" />
+    <ClCompile Include="foewrapper.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="skeleton.cpp" />
-    <ClCompile Include="xynode.cpp" />
-    <ClCompile Include="xyquad.cpp" />
-    <ClCompile Include="xyquadtree.cpp" />
     <ClCompile Include="zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -74,13 +70,11 @@
     <ClInclude Include="foeanimation.h" />
     <ClInclude Include="foefactory.h" />
     <ClInclude Include="foefeatures.h" />
-    <ClInclude Include="foenode.h" />
+    <ClInclude Include="foe.h" />
     <ClInclude Include="foetext.h" />
-    <ClInclude Include="foetree.h" />
+    <ClInclude Include="foewrapper.h" />
     <ClInclude Include="skeleton.h" />
-    <ClInclude Include="xynode.h" />
-    <ClInclude Include="xyquad.h" />
-    <ClInclude Include="xyquadtree.h" />
+    <ClInclude Include="treedefinitions.h" />
     <ClInclude Include="zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
