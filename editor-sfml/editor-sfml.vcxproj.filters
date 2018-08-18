@@ -7,6 +7,24 @@
     <Filter Include="Main">
       <UniqueIdentifier>{fc568578-bd84-4a5b-8c59-a412cbdc10f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\File Manager">
+      <UniqueIdentifier>{60580df9-e99b-4440-8828-53721a000be8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Core">
+      <UniqueIdentifier>{1835aa54-90a9-4c31-8d2c-b2ebfd061b88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Common">
+      <UniqueIdentifier>{0fb64725-033f-4b17-ac7d-247c68d2ee31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Button">
+      <UniqueIdentifier>{2de46200-591c-45de-ad31-da0a44f1a7e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Chat">
+      <UniqueIdentifier>{d0e9b356-6528-434b-a8a7-034a28e6a098}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Message Board">
+      <UniqueIdentifier>{03cf31aa-ae5d-4099-a779-6f3443cd0944}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -15,76 +33,94 @@
     <ClCompile Include="editor.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\core.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\music.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\request.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\sound.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\sprite.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\text.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\levelmenu\chat.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\button.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
     <ClCompile Include="..\menu\state.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
-    <ClCompile Include="editor_filemanager.cpp">
+    <ClCompile Include="editorfilemanager.cpp">
       <Filter>Main</Filter>
     </ClCompile>
-    <ClCompile Include="editorwindow.cpp">
-      <Filter>Main</Filter>
+    <ClCompile Include="filemanager.cpp">
+      <Filter>Main\File Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\button.cpp">
+      <Filter>Dependencies\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\chat.cpp">
+      <Filter>Dependencies\Chat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\core.cpp">
+      <Filter>Dependencies\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\music.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\request.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sound.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sprite.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\text.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\thread.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\circlebutton.cpp">
+      <Filter>Dependencies\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="messageboard.cpp">
+      <Filter>Main\Message Board</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\music.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\request.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\sound.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\sprite.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\text.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\levelmenu\chat.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\button.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\menu\state.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="editor_filemanager.h">
+    <ClInclude Include="editorfilemanager.h">
       <Filter>Main</Filter>
     </ClInclude>
-    <ClInclude Include="editorwindow.h">
-      <Filter>Main</Filter>
+    <ClInclude Include="filemanager.h">
+      <Filter>Main\File Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\button.h">
+      <Filter>Dependencies\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="..\levelmenu\chat.h">
+      <Filter>Dependencies\Chat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Dependencies\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\music.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\request.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sound.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sprite.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\text.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\thread.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\circlebutton.h">
+      <Filter>Dependencies\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="messageboard.h">
+      <Filter>Main\Message Board</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

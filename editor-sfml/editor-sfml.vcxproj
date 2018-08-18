@@ -36,6 +36,9 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;..\menu;..\levelmenu</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <EnableModules>false</EnableModules>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -48,14 +51,17 @@
     <ClCompile Include="..\common\sound.cpp" />
     <ClCompile Include="..\common\sprite.cpp" />
     <ClCompile Include="..\common\text.cpp" />
+    <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="..\core\core.cpp" />
     <ClCompile Include="..\levelmenu\chat.cpp" />
     <ClCompile Include="..\menu\button.cpp" />
+    <ClCompile Include="..\menu\circlebutton.cpp" />
     <ClCompile Include="..\menu\state.cpp" />
     <ClCompile Include="editor.cpp" />
-    <ClCompile Include="editorwindow.cpp" />
-    <ClCompile Include="editor_filemanager.cpp" />
+    <ClCompile Include="editorfilemanager.cpp" />
+    <ClCompile Include="filemanager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="messageboard.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\music.h" />
@@ -63,13 +69,16 @@
     <ClInclude Include="..\common\sound.h" />
     <ClInclude Include="..\common\sprite.h" />
     <ClInclude Include="..\common\text.h" />
+    <ClInclude Include="..\common\thread.h" />
     <ClInclude Include="..\core\core.h" />
     <ClInclude Include="..\levelmenu\chat.h" />
     <ClInclude Include="..\menu\button.h" />
+    <ClInclude Include="..\menu\circlebutton.h" />
     <ClInclude Include="..\menu\state.h" />
     <ClInclude Include="editor.h" />
-    <ClInclude Include="editorwindow.h" />
-    <ClInclude Include="editor_filemanager.h" />
+    <ClInclude Include="editorfilemanager.h" />
+    <ClInclude Include="filemanager.h" />
+    <ClInclude Include="messageboard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
