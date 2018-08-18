@@ -1,8 +1,7 @@
 #pragma once
 #include "state.h"
-#include "button.h"
 #include "chat.h"
-#include "editorwindow.h"
+#include "editorfilemanager.h"
 // #include "editor_flare/editor_buttons.h"
 // #include "editor_flare/editor_information.h"
 // #include "editor_flare/editor_details.h"
@@ -13,10 +12,11 @@ class Editor :public State
 {
 	bool loaded;
 	
+	cmm::Sprite background;
 	Circlebutton homebutton;
 	Circlebutton levelmenubutton;
 	Circlebutton playbutton;
-	EditorWindow editorWindow;
+	EditorFileManager editorFileManager;
 	// Editor_buttons editor_buttons;
 	// Editor_information editor_information;
 	// Editor_details editor_details;
@@ -34,10 +34,10 @@ private:
 public:
 	void reset();
 
-	void load(float screen_w, float screen_h);
-	void handle(sf::Event& event);
+	void load(const float &screen_w, const float &screen_h);
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
-	void mechanics(double elapsedTime);
+	void mechanics(const double &elapsedTime);
 private:
 	// void fades(double elapsedTime);
 	// void fadein(float value = 1, int max = 0xFF);

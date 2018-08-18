@@ -59,6 +59,7 @@ void Editor::reset()
 	homebutton.setActive(false);
 	levelmenubutton.setActive(false);
 	playbutton.setActive(false);
+	editorFileManager.reset();
 	//editor_buttons.reset();
 	//tiles_editor.reset();
 	//editor_details.setGrid(tiles_editor.getGrid());
@@ -69,12 +70,16 @@ void Editor::reset()
 
 
 
-void Editor::load(float screen_w, float screen_h)
+void Editor::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
 	float scale_x = screen_w / 2560;
 	float scale_y = screen_h / 1440;
+
+	// BG
+	background.load("images/platform/background/full.png");
+	background.setScale(scale_x, scale_y);
 
 	// Circle buttons.
 	homebutton.load("images/buttons/home.png");
@@ -87,8 +92,7 @@ void Editor::load(float screen_w, float screen_h)
 	levelmenubutton.setPosition(homebutton.getRight() + screen_w / 256, screen_h / 144);
 	playbutton.setPosition(screen_w - screen_w / 256 - playbutton.getWidth(), screen_h / 144);
 
-	editorWindow.load(screen_w, screen_h);
-
+	editorFileManager.load(screen_w, screen_h);
 	// Set editor buttons.
 	// editor_buttons.load(screen_w, screen_h);
 
@@ -110,15 +114,19 @@ void Editor::load(float screen_w, float screen_h)
 	chat.setTypicalColor(sf::Color(0xBA, 0xBA, 0xBA));
 }
 
-void Editor::handle(sf::Event& event)
+void Editor::handle(const sf::Event &event)
 {
 	if (!isState())
 	{
 		if (!chat.isActive())
 		{
+			editorFileManager.handle(event);
+
 			homebutton.handle(event);
 			levelmenubutton.handle(event);
 			playbutton.handle(event);
+			
+			
 
 			/*if (editor_details.getNameStatus() == 0)
 			{
@@ -151,15 +159,17 @@ void Editor::handle(sf::Event& event)
 				chat.handle(event);
 			}
 		}*/
+		chat.handle(event);
 	}
 }
 
 void Editor::draw(sf::RenderWindow* &window)
 {
-	editorWindow.draw(window);
+	window->draw(background.get());
 	homebutton.draw(window);
 	levelmenubutton.draw(window);
 	playbutton.draw(window);
+	editorFileManager.draw(window);
 
 	/*tiles_editor.setAdditionalX(editor_details.getAdditionalX());
 	tiles_editor.setAdditionalY(editor_details.getAdditionalY());
@@ -180,7 +190,7 @@ void Editor::draw(sf::RenderWindow* &window)
 	chat.draw(window);
 }
 
-void Editor::mechanics(double elapsedTime)
+void Editor::mechanics(const double &elapsedTime)
 {
 	set();
 
@@ -288,6 +298,14 @@ void Editor::mechanics(double elapsedTime)
 		{
 			chat.isActive() = false;
 			next = true;
+		}
+
+
+		editorFileManager.mechanics(elapsedTime);
+		if (editorFileManager.loadedFile())
+		{
+			// reload everything
+
 		}
 
 		/*tiles_editor.mechanics(elapsedTime);
