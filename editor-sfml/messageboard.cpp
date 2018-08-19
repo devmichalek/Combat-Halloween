@@ -12,6 +12,11 @@ MessageBoard::~MessageBoard()
 
 void MessageBoard::free()
 {
+	reset();
+}
+
+void MessageBoard::reset()
+{
 	active = TYPES::EMPTY;
 	decision = DECISION::NO_DECISION;
 }
@@ -20,6 +25,8 @@ void MessageBoard::free()
 
 void MessageBoard::load(const float &screen_w, const float &screen_h)
 {
+	free();
+
 	float scale_x = screen_w / 1920;	if (scale_x > 1.0f)	scale_x = 1;
 	float scale_y = screen_h / 1080;	if (scale_y > 1.0f)	scale_y = 1;
 
@@ -48,9 +55,9 @@ void MessageBoard::load(const float &screen_w, const float &screen_h)
 	okText.setText("ok");
 
 	float off = screen_w / 200;
-	yesText.setPosition(board.getRight() - yesText.getWidth() - off, board.getBot() - yesText.getHeight() * 2 - off);
+	yesText.setPosition(board.getRight() - yesText.getWidth() - off, board.getBot() - yesText.getHeight() * 1.25 - off);
 	noText.setPosition(board.getLeft() + off, yesText.getTop());
-	okText.setPosition(board.getRight() - okText.getWidth() - off, board.getBot() - okText.getHeight() * 2 - off);
+	okText.setPosition(board.getRight() - okText.getWidth() - off, yesText.getTop());
 
 	yesRect = sf::FloatRect(yesText.getX(), yesText.getY(), yesText.getWidth() * 2, yesText.getHeight() * 2);
 	noRect = sf::FloatRect(noText.getX(), noText.getY(), noText.getWidth() * 2, noText.getHeight() * 2);
@@ -72,6 +79,18 @@ void MessageBoard::handle(const sf::Event &event)
 				decision = active == TYPES::OKACTIVE ? OK : YES;
 			else if (active == TYPES::YESNOACTIVE && noRect.contains(x, y))
 				decision = NO;
+		}
+	}
+
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Return)
+		{
+			decision = active == TYPES::OKACTIVE ? OK : YES;
+		}
+		else if (event.key.code == sf::Keyboard::Escape)
+		{
+			decision = NO;
 		}
 	}
 }
