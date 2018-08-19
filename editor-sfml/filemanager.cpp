@@ -14,6 +14,7 @@ FileManager::~FileManager()
 
 void FileManager::free()
 {
+	loadVersion = 0;
 	saveVersion = 0;
 	status = EMPTY;
 	msg = "";
@@ -42,8 +43,7 @@ void FileManager::clear()
 void FileManager::mechanics()
 {
 	// Delete thread if it done its job.
-	if (thread.ready)
-		thread.free();
+	freeThread();
 }
 
 
@@ -85,7 +85,7 @@ const std::vector<std::string>& FileManager::getDirectories() const
 	return dirVec;
 }
 
-void FileManager::push(std::string line)
+void FileManager::push(const std::string &line)
 {
 	saveVersion = 1;
 	content.push_back(line);
@@ -122,13 +122,46 @@ void FileManager::open()
 	}
 }
 
-void FileManager::create()
+void FileManager::create(std::string newPath)
 {
 	if (!thread.success && !thread.ready && !thread.thread)
 	{
 		status = PROCESSING;
 		msg = "Creating new file...";
-		thread.thread = new std::thread(&FileManager::createPrivate, this);
+		thread.thread = new std::thread(&FileManager::createPrivate, this, newPath);
+		thread.thread->detach();
+	}
+}
+
+void FileManager::copy()
+{
+	if (!thread.success && !thread.ready && !thread.thread)
+	{
+		status = PROCESSING;
+		msg = "Copying selected file...";
+		thread.thread = new std::thread(&FileManager::copyPrivate, this);
+		thread.thread->detach();
+	}
+}
+
+void FileManager::rename(std::string newPath)
+{
+	if (!thread.success && !thread.ready && !thread.thread)
+	{
+		status = PROCESSING;
+		msg = "Renaming selected file...";
+		thread.thread = new std::thread(&FileManager::renamePrivate, this, newPath);
+		thread.thread->detach();
+	}
+}
+
+void FileManager::deletee()
+{
+	if (!thread.success && !thread.ready && !thread.thread)
+	{
+		status = PROCESSING;
+		msg = "Deleting selected file...";
+		thread.thread = new std::thread(&FileManager::deletePrivate, this);
 		thread.thread->detach();
 	}
 }
@@ -147,10 +180,10 @@ void FileManager::refresh()
 
 
 // STATUS ------------------------------------------
-bool FileManager::checkIfFileExists()
+bool FileManager::checkIfFileExists(std::string newPath)
 {
 	bool retCode = false;
-	file.open(filePath, std::ios::in);
+	file.open(dirPath + "/" + newPath, std::ios::in);
 	if (file.good())
 	{
 		retCode = true;
@@ -160,9 +193,20 @@ bool FileManager::checkIfFileExists()
 	return retCode;
 }
 
-bool FileManager::isNewSaveVersion() const
+bool FileManager::isNewSaveVersion()
 {
 	return saveVersion != 0;
+}
+
+bool FileManager::isNewLoadVersion()
+{
+	if (loadVersion != 0)
+	{
+		loadVersion = 0;
+		return true;
+	}
+
+	return false;
 }
 
 bool FileManager::isStatus() const
@@ -234,12 +278,19 @@ std::string FileManager::substr(std::string str)
 	return str.substr(0, 7) + "...";
 }
 
+void FileManager::freeThread()
+{
+	if (thread.ready)
+		thread.free();
+}
+
+
 
 
 // PRIVATE -----------------------------------------
 void FileManager::savePrivate()
 {
-	file.open(filePath, std::ios::in);
+	file.open(dirPath + "/" + filePath, std::ios::in);
 	if (file.bad())
 	{
 		msg = "Can't find file \"" + substr(filePath) + "\", creating remotely...";
@@ -247,12 +298,8 @@ void FileManager::savePrivate()
 	}
 	file.close();
 
-	file.open(filePath, std::ios::out | std::ios::app);
-	if (file.good())
+	if (saveSupport(content, filePath))
 	{
-		for (auto &it : dirVec)
-			file << it;
-
 		saveVersion = 0;
 		msg = "Correctly saved file \"" + substr(filePath) + "\"";
 		status = SUCCESS;
@@ -263,61 +310,52 @@ void FileManager::savePrivate()
 		msg = "Cannot save file \"" + substr(filePath) + "\"!";
 		status = FAILURE;
 	}
-	file.close();
 
 	thread.ready = true;
 }
 
 void FileManager::openPrivate()
 {
-	file.open(dirPath + "/" + filePath, std::ios::in);
-	if (file.good())
+	if (openSupport(content))
 	{
-		if (!dirVec.empty())
-			dirVec.clear();
-
-		std::string line = "";
-
-		while (getline(file, line))
-			dirVec.push_back(line);
-
+		loadVersion = 1;
 		msg = "Correctly loaded file \"" + substr(filePath) + "\"";
 		status = SUCCESS;
 		thread.success = true;
 	}
 	else
 	{
-		msg = "Cannot find file \"" + substr(filePath) + "\"!";
+		msg = "Cannot open file \"" + substr(filePath) + "\"!";
 		status = FAILURE;
 	}
-	file.close();
 
 	thread.ready = true;
 }
 
-void FileManager::createPrivate()
+void FileManager::createPrivate(std::string newPath)
 {
-	file.open(filePath, std::ios::in);
-	if (file.bad())
+	file.open(dirPath + "/" + newPath, std::ios::in);
+	if (file.good())
 	{
-		msg = "File \"" + substr(filePath) + "\" exists,\noverwriting remotely...";
+		msg = "File \"" + substr(newPath) + "\" exists,\noverwriting remotely...";
 		status = WARNING;
 	}
 	file.close();
 
-	file.open(filePath, std::ios::out);
+	file.open(dirPath + "/" + newPath, std::ios::out);
 	if (file.good())
 	{
-		for (auto &it : dirVec)
-			file << it;
+		msg = "Correctly created file \"" + substr(newPath) + "\"";
 
-		msg = "Correctly created file \"" + substr(filePath) + "\"";
+		if (!refreshSupport())	// Not error actually, it is caused by user
+			msg = "Unexpected Error.\nDirectory \"" + dirPath + "\" is empty!";
+
 		status = SUCCESS;
 		thread.success = true;
 	}
 	else
 	{
-		msg = "Cannot create file \"" + substr(filePath) + "\"!";
+		msg = "Cannot create file \"" + substr(newPath) + "\"!";
 		status = FAILURE;
 	}
 	file.close();
@@ -325,7 +363,166 @@ void FileManager::createPrivate()
 	thread.ready = true;
 }
 
+void FileManager::copyPrivate()
+{
+	// Refresh and reload library
+	if (refreshSupport())
+	{
+		std::vector<std::string> temp;
+		if (openSupport(temp))
+		{
+			int nr = 0;
+			std::string buf = filePath;
+			std::string newPath = filePath;
+
+			for (int i = 0; i < dirVec.size(); ++i)
+			{
+				if (dirVec[i] == newPath)
+				{
+					newPath = buf.substr(0, buf.size() - 4) + std::to_string(nr) + buf.substr(buf.size() - 4, buf.size());
+					++nr;
+					i = -1;
+				}
+			}
+
+			if (saveSupport(temp, newPath))
+			{
+				msg = "Correctly saved file \"" + substr(newPath) + "\"";
+				status = SUCCESS;
+
+				if (!refreshSupport())	// Not error actually, it is caused by user
+					msg = "Unexpected Error.\nDirectory \"" + dirPath + "\" is empty!";
+
+				thread.success = true;
+			}
+			else
+			{
+				msg = "Cannot save file \"" + substr(filePath) + "\"!";
+				status = FAILURE;
+			}
+
+			msg = "Correctly copied file \"" + substr(filePath) + "\"";
+			status = SUCCESS;
+		}
+		else
+		{
+			msg = "Cannot copy file \"" + substr(filePath) + "\"!";
+			status = FAILURE;
+		}
+	}
+	else
+	{
+		msg = "Directory \"" + dirPath + "\" is empty!\nThere is nothing to copy...";
+		status = FAILURE;
+	}
+
+	thread.ready = true;
+}
+
+void FileManager::renamePrivate(std::string newPath)
+{
+	std::string oldOne = dirPath + "/" + filePath;
+	std::string newOne = dirPath + "/" + newPath;
+	if (std::rename(oldOne.c_str(), newOne.c_str()) == 0)
+	{
+		msg = "Correctly renamed file \"" + substr(newPath) + "\"";
+
+		if (!refreshSupport())	// Not error actually, it is caused by user
+			msg = "Unexpected Error.\nDirectory \"" + dirPath + "\" is empty!";
+
+		status = SUCCESS;
+		thread.success = true;
+	}
+	else
+	{
+		msg = "Cannot rename file \"" + substr(newPath) + "\"!";
+		status = FAILURE;
+	}
+
+	thread.ready = true;
+}
+
+void FileManager::deletePrivate()
+{
+	if (remove((dirPath + "/" + filePath).c_str()) == 0)
+	{
+		msg = "Correctly deleted file \"" + substr(filePath) + "\"";
+
+		if (!refreshSupport())	// Not error actually, it is caused by user
+			msg = "Unexpected Error.\nDirectory \"" + dirPath + "\" is empty!";
+
+		status = SUCCESS;
+		thread.success = true;
+	}
+	else
+	{
+		msg = "Cannot delete file \"" + substr(filePath) + "\"!";
+		status = FAILURE;
+	}
+
+	thread.ready = true;
+}
+
 void FileManager::refreshPrivate()
+{
+	if (!refreshSupport())
+	{
+		msg = "Directory \"" + dirPath + "\" does not exist\nCreating remotely...";
+		status = WARNING;
+	}
+	else
+	{
+		msg = "Correctly loaded files, from\ndirectory \"" + dirPath + "\"";
+		status = SUCCESS;
+	}
+
+	// There is no way of failure...
+	thread.success = true;
+	thread.ready = true;
+}
+
+bool FileManager::saveSupport(std::vector<std::string>& content, std::string &filePath)
+{
+	file.open(dirPath + "/" + filePath, std::ios::out | std::ios::app);
+	if (file.good())
+	{
+		for (auto &it : content)
+			file << it;
+	}
+	else
+	{
+		file.close();
+		return false;
+	}
+
+	file.close();
+	return true;
+}
+
+bool FileManager::openSupport(std::vector<std::string>& newContent)
+{
+	file.open(dirPath + "/" + filePath, std::ios::in);
+	if (file.good())
+	{
+		if (!newContent.empty())
+			newContent.clear();
+
+		std::string line = "";
+
+		while (getline(file, line))
+			newContent.push_back(line);
+	}
+	else
+	{
+		file.close();
+		return false;
+	}
+
+	file.close();
+	return true;
+}
+
+bool FileManager::refreshSupport()
 {
 	// Wait.
 	// std::unique_lock<std::mutex> lck(mtx);
@@ -344,8 +541,7 @@ void FileManager::refreshPrivate()
 		file.open(dirPath + "/example.chw", std::ios::out | std::ios::app);	// Create example.chw
 		file.close();
 		dirVec.push_back("example.chw");
-		msg = "Directory \"" + dirPath + "\" does not exist\nCreating remotely...";
-		status = WARNING;
+		return false;
 	}
 	else
 	{
@@ -356,12 +552,6 @@ void FileManager::refreshPrivate()
 
 		// Close.
 		closedir(dir);
-
-		msg = "Correctly loaded files, from\ndirectory \"" + dirPath + "\"";
-		status = SUCCESS;
+		return true;
 	}
-
-	// There is no way of failure...
-	thread.success = true;
-	thread.ready = true;
 }

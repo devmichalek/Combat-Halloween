@@ -20,6 +20,7 @@ class FileManager
 	};
 
 	int saveVersion;
+	int loadVersion;
 	int status;
 	std::string msg;
 	
@@ -49,28 +50,40 @@ public:
 	const std::string& getDirectoryPath() const;
 	const std::vector<std::string>& getContent() const;
 	const std::vector<std::string>& getDirectories() const;
-	void push(std::string line);
+	void push(const std::string &line);
 	void pop();
 
 	void save();
 	void open();
-	void create();
+	void create(std::string newPath);
+	void copy();
+	void rename(std::string newPath);
+	void deletee();
 	void refresh();
 	
-	bool checkIfFileExists();
-	bool isNewSaveVersion() const;	// tells if content is different than content inside of file
+	bool checkIfFileExists(std::string newPath);
+	bool isNewSaveVersion();	// tells if content is different than content inside of file
+	bool isNewLoadVersion();	// same but with loading
 	bool isStatus() const;
 	bool isProcessing();
 	bool isSuccess();
 	bool isWarning();
 	bool isFailure();
+	
 	// void notify_one();	// by this you enable thread to continue task after processing status
 	const std::string& getMessage() const;
 	std::string substr(std::string str);
-
+	void freeThread();
 private:
 	void savePrivate();
 	void openPrivate();
-	void createPrivate();
+	void createPrivate(std::string newPath);
+	void copyPrivate();
+	void renamePrivate(std::string newPath);
+	void deletePrivate();
 	void refreshPrivate();
+
+	bool saveSupport(std::vector<std::string>& content, std::string &filePath);
+	bool openSupport(std::vector<std::string>& newContent);
+	bool refreshSupport();
 };
