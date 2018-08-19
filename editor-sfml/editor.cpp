@@ -302,11 +302,17 @@ void Editor::mechanics(const double &elapsedTime)
 
 
 		editorFileManager.mechanics(elapsedTime);
-		if (editorFileManager.loadedFile())
+		if (editorFileManager.isNewContent())
 		{
 			// reload everything
 
 		}
+
+		// ctrl - z
+		// editorFileManager.pop();
+
+		// new content
+		// editorFileManager.push();
 
 		/*tiles_editor.mechanics(elapsedTime);
 		tiles_editor.setRubbish(editor_buttons.isDelete());
