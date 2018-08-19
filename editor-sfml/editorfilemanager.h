@@ -1,62 +1,39 @@
 #pragma once
+#include "efminfo.h"
+#include "efmlibrary.h"
+#include "efmbuttons.h"
 #include "filemanager.h"
 #include "messageboard.h"
-#include "circlebutton.h"
+#include "efmtexteditor.h"
 
 class EditorFileManager
 {
 	int action;
 	enum ACTIONS
 	{
-		REFRESHING = 0,
-		SAVING,
-		CREATING,
+		CREATING = 0,
 		LOADING,
+		SAVING,
+		UPLOADING,
+		COPYING,
+		RENAMING,
+		DELETING,
+		REFRESHING,
 	};
-
-	bool active;
-	bool ableToSave;
-	bool ableToNew;
-	bool ableToOpen;
-	bool ableToUpload;
-	bool ableToGoLeft;
-	bool ableToGoRight;
-
-	int page;
-	int gridSquare;
-	int chosenFile;
-
-	Circlebutton filebutton;
-	cmm::Sprite plank;
-	sf::RectangleShape blackLayer;
-
-	cmm::Sprite refreshButton;
-	cmm::Sprite uploadButton;
-	cmm::Sprite saveFileButton;
-	cmm::Sprite openFileButton;
-	cmm::Sprite newFileButton;
-	cmm::Sprite exitButton;
-	cmm::Sprite leftButton;
-	cmm::Sprite rightButton;
-	cmm::Sprite worldIcon;
-	cmm::Sprite checkedIcon;
-
-	cmm::Text pageText;
-	cmm::Text filenameText;
-	cmm::Text filenameFormText;
-	cmm::Text fileManagerMessage;
-
-	std::vector<std::string> worldNames;
-	std::vector<cmm::Text*> worldNameTexts;
-	std::vector<sf::Vector2f> worldIconPositions;
-
+	
+	EFMInfo info;
+	EFMLibrary library;
+	EFMButtons buttons;
 	FileManager fileManager;
 	MessageBoard messageBoard;
+	EFMTextEditor textEditor;
 
 public:
 	EditorFileManager();
 	~EditorFileManager();
+private:
 	void free();
+public:
 	void reset();
 
 	void load(const float &screen_w, const float &screen_h);
@@ -64,22 +41,21 @@ public:
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
 
-	bool isActive();
-	void setActive();
-	bool loadedFile();	// file was loaded
-	void setFileButtonActive();
+	void push(std::string line);
+	void pop();
+	bool isNewContent();
+	void setActive();	// for chat to open file manager directly
 
 private:
 	bool isFileOpen();
 	bool isFileUnsave();
-	void saveFile();
-	void openFile();
+	
 	void newFile();
-	void refresh();
-
-	void refreshText();
-	void setPageText();
-	void setFileNameText();
-	void setFileManagerMessage();
-	void setButtonsAlpha(float newAlpha);
+	void openFile();
+	void saveFile();
+	// void uploadFile();
+	void copyFile();	// works
+	void renameFile();
+	void deleteFile();	// works
+	void refresh();		// works
 };
