@@ -7,9 +7,6 @@
     <Filter Include="Main">
       <UniqueIdentifier>{fc568578-bd84-4a5b-8c59-a412cbdc10f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main\File Manager">
-      <UniqueIdentifier>{60580df9-e99b-4440-8828-53721a000be8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dependencies\Core">
       <UniqueIdentifier>{1835aa54-90a9-4c31-8d2c-b2ebfd061b88}</UniqueIdentifier>
     </Filter>
@@ -22,8 +19,26 @@
     <Filter Include="Dependencies\Chat">
       <UniqueIdentifier>{d0e9b356-6528-434b-a8a7-034a28e6a098}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Main\Message Board">
+    <Filter Include="Main\Editor File Manager">
+      <UniqueIdentifier>{fa46cd32-61ea-405d-ab73-db7b499f6bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor File Manager\File Manager">
+      <UniqueIdentifier>{60580df9-e99b-4440-8828-53721a000be8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor File Manager\Message Board">
       <UniqueIdentifier>{03cf31aa-ae5d-4099-a779-6f3443cd0944}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor File Manager\File Manager Buttons">
+      <UniqueIdentifier>{9fd54c2d-97a2-4ed6-979b-09010d59aaf9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor File Manager\File Manager Library">
+      <UniqueIdentifier>{3e26fe90-8c37-46b7-90ac-1e721f4d50c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor File Manager\File Manager Info">
+      <UniqueIdentifier>{7143c29b-bbb5-4ec3-9ade-2214379a930d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor File Manager\File Manager Text Editor">
+      <UniqueIdentifier>{ee7e6f58-60ed-4c9d-8373-24c48da2d11d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -36,11 +51,8 @@
     <ClCompile Include="..\menu\state.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
-    <ClCompile Include="editorfilemanager.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
     <ClCompile Include="filemanager.cpp">
-      <Filter>Main\File Manager</Filter>
+      <Filter>Main\Editor File Manager\File Manager</Filter>
     </ClCompile>
     <ClCompile Include="..\menu\button.cpp">
       <Filter>Dependencies\Button</Filter>
@@ -73,7 +85,22 @@
       <Filter>Dependencies\Button</Filter>
     </ClCompile>
     <ClCompile Include="messageboard.cpp">
-      <Filter>Main\Message Board</Filter>
+      <Filter>Main\Editor File Manager\Message Board</Filter>
+    </ClCompile>
+    <ClCompile Include="editorfilemanager.cpp">
+      <Filter>Main\Editor File Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="efmbuttons.cpp">
+      <Filter>Main\Editor File Manager\File Manager Buttons</Filter>
+    </ClCompile>
+    <ClCompile Include="efmlibrary.cpp">
+      <Filter>Main\Editor File Manager\File Manager Library</Filter>
+    </ClCompile>
+    <ClCompile Include="efminfo.cpp">
+      <Filter>Main\Editor File Manager\File Manager Info</Filter>
+    </ClCompile>
+    <ClCompile Include="efmtexteditor.cpp">
+      <Filter>Main\Editor File Manager\File Manager Text Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,11 +110,8 @@
     <ClInclude Include="..\menu\state.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
-    <ClInclude Include="editorfilemanager.h">
-      <Filter>Main</Filter>
-    </ClInclude>
     <ClInclude Include="filemanager.h">
-      <Filter>Main\File Manager</Filter>
+      <Filter>Main\Editor File Manager\File Manager</Filter>
     </ClInclude>
     <ClInclude Include="..\menu\button.h">
       <Filter>Dependencies\Button</Filter>
@@ -120,7 +144,22 @@
       <Filter>Dependencies\Button</Filter>
     </ClInclude>
     <ClInclude Include="messageboard.h">
-      <Filter>Main\Message Board</Filter>
+      <Filter>Main\Editor File Manager\Message Board</Filter>
+    </ClInclude>
+    <ClInclude Include="editorfilemanager.h">
+      <Filter>Main\Editor File Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="efmbuttons.h">
+      <Filter>Main\Editor File Manager\File Manager Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="efmlibrary.h">
+      <Filter>Main\Editor File Manager\File Manager Library</Filter>
+    </ClInclude>
+    <ClInclude Include="efminfo.h">
+      <Filter>Main\Editor File Manager\File Manager Info</Filter>
+    </ClInclude>
+    <ClInclude Include="efmtexteditor.h">
+      <Filter>Main\Editor File Manager\File Manager Text Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

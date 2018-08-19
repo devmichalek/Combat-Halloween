@@ -59,6 +59,10 @@
     <ClCompile Include="..\menu\state.cpp" />
     <ClCompile Include="editor.cpp" />
     <ClCompile Include="editorfilemanager.cpp" />
+    <ClCompile Include="efmbuttons.cpp" />
+    <ClCompile Include="efminfo.cpp" />
+    <ClCompile Include="efmlibrary.cpp" />
+    <ClCompile Include="efmtexteditor.cpp" />
     <ClCompile Include="filemanager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="messageboard.cpp" />
@@ -77,6 +81,10 @@
     <ClInclude Include="..\menu\state.h" />
     <ClInclude Include="editor.h" />
     <ClInclude Include="editorfilemanager.h" />
+    <ClInclude Include="efmbuttons.h" />
+    <ClInclude Include="efminfo.h" />
+    <ClInclude Include="efmlibrary.h" />
+    <ClInclude Include="efmtexteditor.h" />
     <ClInclude Include="filemanager.h" />
     <ClInclude Include="messageboard.h" />
   </ItemGroup>
