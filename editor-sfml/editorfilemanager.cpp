@@ -57,7 +57,7 @@ void EditorFileManager::handle(const sf::Event &event)
 					if (library.isChosen())
 						fileManager.setFilePath(info.setChosenText(library.getChosenStr()));
 					else
-						fileManager.setFilePath(info.setChosenText(""));
+						fileManager.setFilePath(info.setChosenText("-"));
 				}
 			}
 		}
@@ -243,6 +243,10 @@ void EditorFileManager::setActive()
 	buttons.setActive();
 }
 
+const bool& EditorFileManager::isActive() const
+{
+	return buttons.isActive();
+}
 
 
 

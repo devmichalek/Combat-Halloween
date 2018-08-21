@@ -45,6 +45,7 @@ public:
 	void pop();
 	bool isNewContent();
 	void setActive();	// for chat to open file manager directly
+	const bool& isActive() const;
 
 private:
 	bool isFileOpen();
