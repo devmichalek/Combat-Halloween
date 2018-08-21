@@ -2,6 +2,7 @@
 #include "state.h"
 #include "chat.h"
 #include "editorfilemanager.h"
+#include "editoraction.h"
 // #include "editor_flare/editor_buttons.h"
 // #include "editor_flare/editor_information.h"
 // #include "editor_flare/editor_details.h"
@@ -17,6 +18,7 @@ class Editor :public State
 	Circlebutton levelmenubutton;
 	Circlebutton playbutton;
 	EditorFileManager editorFileManager;
+	EditorAction editorAction;
 	// Editor_buttons editor_buttons;
 	// Editor_information editor_information;
 	// Editor_details editor_details;
