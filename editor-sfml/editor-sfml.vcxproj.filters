@@ -40,6 +40,15 @@
     <Filter Include="Main\Editor File Manager\File Manager Text Editor">
       <UniqueIdentifier>{ee7e6f58-60ed-4c9d-8373-24c48da2d11d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Editor Action">
+      <UniqueIdentifier>{0cf9005f-0a3c-408c-9c3a-a1d1acd4598b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor Action\Editor Action Grid">
+      <UniqueIdentifier>{84610a28-9bd7-4ae2-9753-02edc0ac7982}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor Action\Editor Action Factory">
+      <UniqueIdentifier>{ef2d7aad-3af8-4592-9217-c631e69b093b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -102,6 +111,15 @@
     <ClCompile Include="efmtexteditor.cpp">
       <Filter>Main\Editor File Manager\File Manager Text Editor</Filter>
     </ClCompile>
+    <ClCompile Include="editoraction.cpp">
+      <Filter>Main\Editor Action</Filter>
+    </ClCompile>
+    <ClCompile Include="eagrid.cpp">
+      <Filter>Main\Editor Action\Editor Action Grid</Filter>
+    </ClCompile>
+    <ClCompile Include="eafactory.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
@@ -160,6 +178,15 @@
     </ClInclude>
     <ClInclude Include="efmtexteditor.h">
       <Filter>Main\Editor File Manager\File Manager Text Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="editoraction.h">
+      <Filter>Main\Editor Action</Filter>
+    </ClInclude>
+    <ClInclude Include="eagrid.h">
+      <Filter>Main\Editor Action\Editor Action Grid</Filter>
+    </ClInclude>
+    <ClInclude Include="eafactory.h">
+      <Filter>Main\Editor Action\Editor Action Factory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
