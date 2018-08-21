@@ -122,12 +122,12 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 	fileButton.setScale(screen_w / 2560, screen_h / 1440);
 	fileButton.setPosition(screen_w - screen_w / 128 - fileButton.getWidth() * 2, screen_h / 144);
 
-	fileButtonText.setFont(pathToFont);
+	fileButtonText.setFont("fonts/jcandlestickextracond.ttf");
 	fileButtonText.setSize(screen_w / 60);
 	fileButtonText.setAlpha(0xFF);
 	fileButtonText.setFillColor(sf::Color::White);
 	fileButtonText.setText("File");
-	fileButtonText.setPosition(fileButton.getLeft() + fileButton.getWidth() / 2 - fileButtonText.getWidth() / 2, fileButton.getBot() + off);
+	fileButtonText.setPosition(fileButton.getLeft() + fileButton.getWidth() / 2 - fileButtonText.getWidth() / 2, fileButton.getBot() + off / 2);
 
 	for (auto &it : buttons)
 		it->setAlpha(0xFF / 1.5);
