@@ -1,11 +1,13 @@
 #pragma once
 #include "eafactory.h"
 #include "eagrid.h"
+#include "eainfo.h"
 
 class EditorAction
 {
 	EAFactory factory;
 	EAGrid grid;
+	EAInfo info;
 
 public:
 	EditorAction();

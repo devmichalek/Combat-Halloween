@@ -19,9 +19,7 @@ void EditorAction::reset()
 {
 	factory.reset();
 	grid.reset();
-	grid.setGridStr();
-	grid.setChosenStr(factory.getChosenStr());
-	grid.setCategoryStr(factory.getTypeStr());
+	info.reset();
 }
 
 
@@ -34,33 +32,35 @@ void EditorAction::load(const float &screen_w, const float &screen_h)
 
 	factory.load(screen_w, screen_h);
 	grid.load(screen_w, screen_h, width);
+	info.load(screen_w, screen_h, width);
 
 	reset();
 }
 
 void EditorAction::handle(const sf::Event &event)
 {
-	if (factory.handle(event))
-		factory.setPosition(grid.getX(), grid.getY());
-
-	grid.handle(event);
+	if (!grid.handle(event))	// if arrows are in use don't let user to put an entity
+	{
+		if (factory.handle(event, grid.getAddX(), grid.getAddY()))
+			factory.setPosition(grid.getX(), grid.getY());
+	}
 }
 
 void EditorAction::draw(sf::RenderWindow* &window)
 {
-	factory.draw(window);
+	factory.draw(window, grid.getAddX(), grid.getAddY());
 	grid.draw(window);
+	info.draw(window);
 }
 
 void EditorAction::mechanics(const double &elapsedTime)
 {
-	if (factory.isGridChange())
+	if (factory.isChange())
 	{
-		factory.isGridNeeded() ? grid.turnOn() : grid.turnOff();
-		grid.setGridStr();
-		grid.setChosenStr(factory.getChosenStr());
-		grid.setCategoryStr(factory.getTypeStr());
+		info.set(factory.getType(), factory.getChosen());
+		info.isGridNeeded() ? grid.turnOn() : grid.turnOff();
 	}
 
+	grid.mechanics(factory.isDeleteMode());
 	factory.setPosition(grid.getX(), grid.getY());
 }
