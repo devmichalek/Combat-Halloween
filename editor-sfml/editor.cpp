@@ -17,9 +17,6 @@ void Editor::free()
 	exit = false;
 	loaded = false;
 
-	homebutton.free();
-	levelmenubutton.free();
-	playbutton.free();
 	//editor_buttons.free();
 	// editor_information.free();
 	//editor_details.free();
@@ -36,10 +33,8 @@ void Editor::set()
 		// Sound.
 		// bool soundPlayable = cmm::Sound::getGlobalPlayable();
 		float soundVolume = cmm::Sound::getGlobalVolume();
+		navigation.setVolume(soundVolume);
 
-		homebutton.setVolume(soundVolume);
-		levelmenubutton.setVolume(soundVolume);
-		playbutton.setVolume(soundVolume);
 	}
 }
 
@@ -56,12 +51,9 @@ void Editor::reset()
 	loaded = false;
 	
 
-	homebutton.setActive(false);
-	levelmenubutton.setActive(false);
-	playbutton.setActive(false);
+	navigation.reset();
 	editorFileManager.reset();
 	editorAction.reset();
-	//editor_buttons.reset();
 	//tiles_editor.reset();
 	//editor_details.setGrid(tiles_editor.getGrid());
 	// editor_details.setType(tiles_editor.getType());
@@ -75,29 +67,9 @@ void Editor::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
-	float scale_x = screen_w / 2560;
-	float scale_y = screen_h / 1440;
-
-	// BG
-	background.load("images/platform/background/full.png");
-	background.setScale(scale_x, scale_y);
-
-	// Circle buttons.
-	homebutton.load("images/buttons/home.png");
-	levelmenubutton.load("images/buttons/levelmenu.png");
-	playbutton.load("images/buttons/play.png");
-	homebutton.setScale(scale_x, scale_y);
-	levelmenubutton.setScale(scale_x, scale_y);
-	playbutton.setScale(scale_x, scale_y);
-	homebutton.setPosition(screen_w / 256, screen_h / 144);
-	levelmenubutton.setPosition(homebutton.getRight() + screen_w / 256, screen_h / 144);
-	playbutton.setPosition(screen_w - screen_w / 256 - playbutton.getWidth(), screen_h / 144);
-
+	navigation.load(screen_w, screen_h);
 	editorFileManager.load(screen_w, screen_h);
 	editorAction.load(screen_w, screen_h);
-	// Set editor buttons.
-	// editor_buttons.load(screen_w, screen_h);
-
 	// Set editor information.
 	// editor_information.load(screen_w, screen_h);
 
@@ -129,9 +101,7 @@ void Editor::handle(const sf::Event &event)
 				editorAction.handle(event);
 			}
 
-			homebutton.handle(event);
-			levelmenubutton.handle(event);
-			playbutton.handle(event);
+			navigation.handle(event);
 		}
 
 		chat.handle(event);
@@ -140,15 +110,9 @@ void Editor::handle(const sf::Event &event)
 
 void Editor::draw(sf::RenderWindow* &window)
 {
-	window->draw(background.get());
-
-	homebutton.draw(window);
-	levelmenubutton.draw(window);
-	playbutton.draw(window);
-
 	editorAction.draw(window);
 	editorFileManager.draw(window);
-
+	navigation.draw(window);
 	chat.draw(window);
 }
 
@@ -165,28 +129,28 @@ void Editor::mechanics(const double &elapsedTime)
 		{
 			if (chat.findCommand("@menu"))
 			{
-				homebutton.setActive(true);
+				navigation.setHome();
 			}
 			else if (chat.findCommand("@levelmenu"))
 			{
-				levelmenubutton.setActive(true);
+				navigation.setLevelMenu();
 			}
 			else if (chat.findCommand("@play"))
 			{
-				playbutton.setActive(true);
+				navigation.setPlay();
 			}
 		}
 		
 
 		// Back to menu.
-		if (homebutton.isActive())
+		if (navigation.isHome())
 		{
 			chat.isActive() = false;
 			prev = true;
 		}
 
 		// Back to levelmenu.
-		else if (levelmenubutton.isActive())
+		else if (navigation.isLevelMenu())
 		{
 			chat.isActive() = false;
 			prev = true;
@@ -194,7 +158,7 @@ void Editor::mechanics(const double &elapsedTime)
 		}
 
 		// Start test game.
-		else if (playbutton.isActive())
+		else if (navigation.isPlay())
 		{
 			chat.isActive() = false;
 			next = true;

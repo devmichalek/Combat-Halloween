@@ -1,9 +1,9 @@
 #pragma once
 #include "state.h"
 #include "chat.h"
+#include "editornavigation.h"
 #include "editorfilemanager.h"
 #include "editoraction.h"
-// #include "editor_flare/editor_buttons.h"
 // #include "editor_flare/editor_information.h"
 // #include "editor_flare/editor_details.h"
 // #include "editor_flare/editor_options.h"
@@ -13,13 +13,9 @@ class Editor :public State
 {
 	bool loaded;
 	
-	cmm::Sprite background;
-	Circlebutton homebutton;
-	Circlebutton levelmenubutton;
-	Circlebutton playbutton;
+	EditorNavigation navigation;
 	EditorFileManager editorFileManager;
 	EditorAction editorAction;
-	// Editor_buttons editor_buttons;
 	// Editor_information editor_information;
 	// Editor_details editor_details;
 	// Editor_options editor_options;
