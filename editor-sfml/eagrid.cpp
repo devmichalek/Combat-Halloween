@@ -14,33 +14,50 @@ EAGrid::~EAGrid()
 void EAGrid::free()
 {
 	reset();
-	width = 0;
 
-	if (!texts.empty())
+	if (!arrows.empty())
 	{
-		for (auto &it : texts)
+		for (auto &it : arrows)
 		{
 			delete it;
 			it = nullptr;
 		}
 
-		texts.clear();
+		arrows.clear();
 	}
+
+	width = 0;
+	offsetX = offsetY = 0;
+	limitX = limitY = 0;
+	screen_w = screen_h = 0;
 }
 
 void EAGrid::reset()
 {
 	grid = false;
+	change = false;
+	addX = addY = 0;
+	gridX = gridY = -1;
 	mouseX = mouseY = -1;
+
+	if (!arrows.empty())
+		setArrows();
 }
 
 
 
 void EAGrid::load(const float &screen_w, const float &screen_h, const int &width)
 {
+	free();
+
+	this->width = width;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	this->width = width;
+	offsetX = (int)((screen_w / 3) / width) * width;
+	offsetY = (int)((screen_h / 3) / width) * width;
+	limitX = 1500 * width;
+	limitY = 1500 * width;
+	
 	sf::Color color = User::getLockedColor();
 	color.a = 0xFF / 3;
 	lineX.setSize(sf::Vector2f(1, screen_h));
@@ -55,68 +72,70 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	suppX.setFillColor(color);
 	suppY.setFillColor(color);
 
+
+	for (int i = 0; i < ARROWS::COUNT; ++i)
+		arrows.push_back(new Circlebutton);
+	arrows[LEFT]->load("images/buttons/left.png");
+	arrows[RIGHT]->load("images/buttons/right.png");
+	arrows[TOP]->load("images/buttons/top.png");
+	arrows[BOT]->load("images/buttons/bot.png");
+	arrows[CENTER]->load("images/buttons/disagree.png");
+	for (int i = 0; i < ARROWS::COUNT; ++i)
+		arrows[i]->setScale(0.25, 0.25);
+	int space = screen_w / 256;
+	int cirButWidth = arrows[LEFT]->getWidth();
+	arrows[LEFT]->setPosition(screen_w - space * 3 - cirButWidth * 3, screen_h - cirButWidth * 2 - space);
+	arrows[RIGHT]->setPosition(screen_w - space - cirButWidth, screen_h - cirButWidth * 2 - space);
+	arrows[TOP]->setPosition(screen_w - space * 2 - cirButWidth * 2, screen_h - cirButWidth * 3 - space * 3);
+	arrows[BOT]->setPosition(screen_w - space * 2 - cirButWidth * 2, screen_h - cirButWidth - space);
+	arrows[CENTER]->setPosition(screen_w - space * 2 - cirButWidth * 2, screen_h - cirButWidth * 2 - space * 2);
+
 	const char* pathToFont = "fonts/jcandlestickextracond.ttf";
 	xyText.setFont(pathToFont);
 	xyText.setSize(screen_w / 80);
 	xyText.setAlpha(0xFF / 3);
 	xyText.setFillColor(User::getLockedColor());
 
-	for (int i = 0; i < TEXTS::SIZE; ++i)
-	{
-		texts.push_back(new cmm::Text);
-		texts[i]->setFont(pathToFont);
-		texts[i]->setSize(screen_w / 60);
-		texts[i]->setAlpha(0xFF);
-		i % 2 == 0 ? texts[i]->setFillColor(User::getLockedColor()) : texts[i]->setFillColor(User::getLoadingColor());
-	}
-
-	texts[GRIDFORM]->setText("Grid:");
-	texts[CHOSENFORM]->setText("Chosen:");
-	texts[CATEGORYFORM]->setText("Category:");
-	texts[GRIDFORM]->setPosition(screen_w / 8, screen_h / 144);
-	texts[CHOSENFORM]->setPosition(texts[GRIDFORM]->getX(), texts[GRIDFORM]->getBot() + screen_h / 144);
-	texts[CATEGORYFORM]->setPosition(texts[GRIDFORM]->getX(), texts[CHOSENFORM]->getBot() + screen_h / 144);
+	setArrows();
 }
 
-void EAGrid::handle(const sf::Event& event)
+bool EAGrid::handle(const sf::Event& event)
 {
 	if (event.type == sf::Event::MouseMoved)
 	{
-		mouseX = (float)event.mouseMove.x;
-		mouseY = (float)event.mouseMove.y;
-
-		// Calculate grid
-		if (grid)
-		{
-			gridX = mouseX;
-			gridY = mouseY;
-			int halfWidth = width / 2;
-
-			int count = 0;
-			while (gridX >= halfWidth)
-			{
-				gridX -= halfWidth;
-				count++;
-			}
-			gridX = count * halfWidth;
-
-			count = 0;
-			int diff = static_cast <int> (screen_h) % static_cast <int> (halfWidth);
-			while (gridY - diff >= halfWidth)
-			{
-				gridY -= halfWidth;
-				count++;
-			}
-			gridY = count * halfWidth + diff;
-		}
-
-		// Set text.
-		int rX = static_cast<int>(grid ? gridX : mouseX);
-		int rY = static_cast<int>(grid ? gridY : mouseY);
-		std::string result = "x: " + std::to_string(rX);
-		result += " y: " + std::to_string(rY);
-		xyText.setText(result);
+		mouseX = event.mouseMove.x;
+		mouseY = event.mouseMove.y;
+		setText();
 	}
+
+	for (auto &it : arrows)
+		it->handle(event);
+
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			mouseX = event.mouseButton.x;
+			mouseY = event.mouseButton.y;
+			setText();
+		}
+	}
+
+	if (event.type == sf::Event::KeyPressed)
+	{
+		int code = event.key.code;
+
+		if (code == sf::Keyboard::Left && isAbleToGoLeft())			arrows[LEFT]->setActive(true);
+		else if (code == sf::Keyboard::Right && isAbleToGoRight())	arrows[RIGHT]->setActive(true);
+		else if (code == sf::Keyboard::Up && isAbleToGoUp())		arrows[TOP]->setActive(true);
+		else if (code == sf::Keyboard::Down && isAbleToGoDown())	arrows[BOT]->setActive(true);
+	}
+
+	for (auto &it : arrows)
+		if (it->isActive())
+			return true;
+
+	return false;
 }
 
 void EAGrid::draw(sf::RenderWindow* &window)
@@ -153,20 +172,79 @@ void EAGrid::draw(sf::RenderWindow* &window)
 
 	window->draw(xyText.get());
 
-	for (auto & it : texts)
+	for (auto & it : arrows)
 	{
-		window->draw(it->get());
+		it->draw(window);
 	}
+}
+
+void EAGrid::mechanics(bool deleteMode)
+{
+	sf::Color color = deleteMode ? User::getErrorColor() : User::getLockedColor();
+	color.a = 0xFF / 3;
+	lineX.setFillColor(color);
+	lineY.setFillColor(color);
+
+
+	// Calculate grid
+	if (grid)
+	{
+		gridX = mouseX;
+		gridY = mouseY;
+		int halfWidth = width / 2;
+
+		int count = 0;
+		while (gridX >= halfWidth)
+		{
+			gridX -= halfWidth;
+			count++;
+		}
+		gridX = count * halfWidth;
+
+		count = 0;
+		int diff = static_cast <int> (screen_h) % static_cast <int> (halfWidth);
+		while (gridY - diff >= halfWidth)
+		{
+			gridY -= halfWidth;
+			count++;
+		}
+		gridY = count * halfWidth + diff;
+	}
+
+	checkArrows();
+	setArrows();
 }
 
 
 
-float EAGrid::getX() const
+const int& EAGrid::getLimitX() const
+{
+	return limitX;
+}
+
+const int& EAGrid::getLimitY() const
+{
+	return limitY;
+}
+
+const int& EAGrid::getAddX() const
+{
+	return addX;
+}
+
+const int& EAGrid::getAddY() const
+{
+	return addY;
+}
+
+
+
+int EAGrid::getX() const
 {
 	return grid ? gridX : mouseX;
 }
 
-float EAGrid::getY() const
+int EAGrid::getY() const
 {
 	return grid ? gridY : mouseY;
 }
@@ -186,21 +264,82 @@ const bool& EAGrid::isActive() const
 	return grid;
 }
 
-void EAGrid::setGridStr()
+//const bool& EAGrid::isChange() const
+//{
+//	return change;
+//}
+
+
+
+
+void EAGrid::setText()
 {
-	grid ? texts[GRID]->setText("On") : texts[GRID]->setText("Off");
-	grid ? texts[GRID]->setFillColor(User::getGreenColor()) : texts[GRID]->setFillColor(User::getErrorColor());
-	texts[GRID]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[GRIDFORM]->getY());
+	int rx = (grid ? gridX : mouseX) + (addX * -1);
+	int ry = (grid ? gridY : mouseY) + addY;
+	std::string result = "x: " + std::to_string((int)rx);
+	result += " y: " + std::to_string((int)(ry * -1 + screen_h));
+	xyText.setText(result);
 }
 
-void EAGrid::setChosenStr(std::string line)
+void EAGrid::checkArrows()
 {
-	texts[CHOSEN]->setText(line);
-	texts[CHOSEN]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[CHOSENFORM]->getY());
+	for (auto & it : arrows)
+	{
+		if (it->isActive())
+		{
+			change = true;
+			break;
+		}
+	}
+
+	if (change)
+	{
+		if (arrows[LEFT]->isActive())	addX += offsetX;
+		if (arrows[RIGHT]->isActive())	addX -= offsetX;
+		if (arrows[TOP]->isActive())	addY -= offsetY;
+		if (arrows[BOT]->isActive())	addY += offsetY;
+		if (arrows[CENTER]->isActive()) addX = addY = 0;
+	}
 }
 
-void EAGrid::setCategoryStr(std::string line)
+void EAGrid::setArrows()
 {
-	texts[CATEGORY]->setText(line);
-	texts[CATEGORY]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[CATEGORYFORM]->getY());
+	!isAbleToGoLeft() ?	arrows[LEFT]->lock() : arrows[LEFT]->unlock();
+	!isAbleToGoRight() ? arrows[RIGHT]->lock() : arrows[RIGHT]->unlock();
+	!isAbleToGoUp() ? arrows[TOP]->lock() : arrows[TOP]->unlock();
+	!isAbleToGoDown() ? arrows[BOT]->lock() : arrows[BOT]->unlock();
+	!isAbleToCenter() ?arrows[CENTER]->lock() : arrows[CENTER]->unlock();
+
+	for (auto & it : arrows)
+		it->setActive(false);
+}
+
+
+// ARROWS -------------------------------------------------------------------
+bool EAGrid::isAbleToGoLeft()
+{
+	return addX <= -offsetX;
+}
+
+bool EAGrid::isAbleToGoRight()
+{
+	return addX >= -limitX + offsetX;
+}
+
+bool EAGrid::isAbleToGoUp()
+{
+	return addY >= -limitY + offsetY;
+}
+
+bool EAGrid::isAbleToGoDown()
+{
+	int a = addY;
+	int b = -offsetY;
+
+	return addY <= -offsetY;
+}
+
+bool EAGrid::isAbleToCenter()
+{
+	return addX != 0 || addY != 0;
 }

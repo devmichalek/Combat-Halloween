@@ -1,34 +1,39 @@
 #pragma once
+#include "circlebutton.h"
 #include <vector>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "text.h"
+// This object draw lines, display text and arrows
 class EAGrid	// Editor Action Grid
 {
-	bool grid;
-	int width;
-	float mouseX, mouseY;
+	enum ARROWS
+	{
+		LEFT = 0,
+		RIGHT,
+		TOP,
+		BOT,
+		CENTER,
+		COUNT
+	};
+
+	std::vector<Circlebutton*> arrows;
+
+	bool grid, change;		// is grid ON/OFF, is view moved YES/NO
+	int width;				// tile width
+	int offsetX, offsetY;	// values for addX and addY
+	int addX, addY;			// additional x and y (window view x y)
+	int gridX, gridY;		// calculated x y grid
+	int mouseX, mouseY;		// current mouse x and y
+	int limitX, limitY;		// max x and y that can be reached
 	float screen_w, screen_h;
-	float gridX, gridY;
+
 	sf::RectangleShape lineX;
 	sf::RectangleShape lineY;
 	sf::RectangleShape suppX;
 	sf::RectangleShape suppY;
 	cmm::Text xyText;
-
-	enum TEXTS
-	{
-		GRIDFORM = 0,
-		GRID,
-		CHOSENFORM,
-		CHOSEN,
-		CATEGORYFORM,
-		CATEGORY,
-		SIZE
-	};
-
-	std::vector<cmm::Text*> texts;
 
 public:
 	EAGrid();
@@ -39,15 +44,32 @@ public:
 	void reset();
 
 	void load(const float &screen_w, const float &screen_h, const int &width);
-	void handle(const sf::Event& event);
+	bool handle(const sf::Event& event);
 	void draw(sf::RenderWindow* &window);
+	void mechanics(bool deleteMode);
 
-	float getX() const;
-	float getY() const;
+	const int& getLimitX() const;
+	const int& getLimitY() const;
+	const int& getAddX() const;
+	const int& getAddY() const;
+	
+	// Get grid/mouse x,y
+	int getX() const;
+	int getY() const;
+
 	void turnOn();
 	void turnOff();
 	const bool& isActive() const;
-	void setGridStr();
-	void setChosenStr(std::string line);
-	void setCategoryStr(std::string line);
+	// const bool& isChange() const;
+
+private:
+	void setText();
+	void checkArrows();
+	void setArrows();
+
+	bool isAbleToGoLeft();
+	bool isAbleToGoRight();
+	bool isAbleToGoUp();
+	bool isAbleToGoDown();
+	bool isAbleToCenter();
 };
