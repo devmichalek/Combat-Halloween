@@ -35,7 +35,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;..\menu;..\levelmenu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;..\menu;..\levelmenu;..\foe</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnableModules>false</EnableModules>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -57,11 +57,18 @@
     <ClCompile Include="..\menu\button.cpp" />
     <ClCompile Include="..\menu\circlebutton.cpp" />
     <ClCompile Include="..\menu\state.cpp" />
+    <ClCompile Include="eaentitygrid.cpp" />
+    <ClCompile Include="eaentityrect.cpp" />
+    <ClCompile Include="eaentityspecial.cpp" />
     <ClCompile Include="eafactory.cpp" />
     <ClCompile Include="eagrid.cpp" />
+    <ClCompile Include="eahistory.cpp" />
+    <ClCompile Include="eainfo.cpp" />
+    <ClCompile Include="eatools.cpp" />
     <ClCompile Include="editor.cpp" />
     <ClCompile Include="editoraction.cpp" />
     <ClCompile Include="editorfilemanager.cpp" />
+    <ClCompile Include="editornavigation.cpp" />
     <ClCompile Include="efmbuttons.cpp" />
     <ClCompile Include="efminfo.cpp" />
     <ClCompile Include="efmlibrary.cpp" />
@@ -82,11 +89,19 @@
     <ClInclude Include="..\menu\button.h" />
     <ClInclude Include="..\menu\circlebutton.h" />
     <ClInclude Include="..\menu\state.h" />
+    <ClInclude Include="eaentitygrid.h" />
+    <ClInclude Include="eaentityrect.h" />
+    <ClInclude Include="eaentityspecial.h" />
     <ClInclude Include="eafactory.h" />
     <ClInclude Include="eagrid.h" />
+    <ClInclude Include="eahistory.h" />
+    <ClInclude Include="eainfo.h" />
+    <ClInclude Include="eakind.h" />
+    <ClInclude Include="eatools.h" />
     <ClInclude Include="editor.h" />
     <ClInclude Include="editoraction.h" />
     <ClInclude Include="editorfilemanager.h" />
+    <ClInclude Include="editornavigation.h" />
     <ClInclude Include="efmbuttons.h" />
     <ClInclude Include="efminfo.h" />
     <ClInclude Include="efmlibrary.h" />

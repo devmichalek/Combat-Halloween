@@ -49,6 +49,15 @@
     <Filter Include="Main\Editor Action\Editor Action Factory">
       <UniqueIdentifier>{ef2d7aad-3af8-4592-9217-c631e69b093b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Editor Action\Editor Action Factory\Editor Action Entity">
+      <UniqueIdentifier>{799c9bf2-b0e0-418b-a71f-abbecbd452da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor Other">
+      <UniqueIdentifier>{d1c98336-8e03-49cb-8ef8-98e7e0de5a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Editor Action\Editor Action Factory\Editor Action Other">
+      <UniqueIdentifier>{50b6109c-3cf2-4cb6-8a51-70581c66eb03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -120,6 +129,27 @@
     <ClCompile Include="eafactory.cpp">
       <Filter>Main\Editor Action\Editor Action Factory</Filter>
     </ClCompile>
+    <ClCompile Include="editornavigation.cpp">
+      <Filter>Main\Editor Other</Filter>
+    </ClCompile>
+    <ClCompile Include="eaentitygrid.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="eaentityrect.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="eaentityspecial.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="eainfo.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClCompile>
+    <ClCompile Include="eahistory.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClCompile>
+    <ClCompile Include="eatools.cpp">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
@@ -187,6 +217,30 @@
     </ClInclude>
     <ClInclude Include="eafactory.h">
       <Filter>Main\Editor Action\Editor Action Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="editornavigation.h">
+      <Filter>Main\Editor Other</Filter>
+    </ClInclude>
+    <ClInclude Include="eaentitygrid.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="eaentityrect.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="eaentityspecial.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="eainfo.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClInclude>
+    <ClInclude Include="eakind.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClInclude>
+    <ClInclude Include="eahistory.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClInclude>
+    <ClInclude Include="eatools.h">
+      <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
