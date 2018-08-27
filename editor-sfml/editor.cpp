@@ -104,15 +104,17 @@ void Editor::handle(const sf::Event &event)
 			navigation.handle(event);
 		}
 
-		chat.handle(event);
+		if (!editorFileManager.isActive())
+			chat.handle(event);
 	}
 }
 
 void Editor::draw(sf::RenderWindow* &window)
 {
+	navigation.drawBG(window);
 	editorAction.draw(window);
-	editorFileManager.draw(window);
 	navigation.draw(window);
+	editorFileManager.draw(window);
 	chat.draw(window);
 }
 
@@ -166,11 +168,6 @@ void Editor::mechanics(const double &elapsedTime)
 
 
 		editorFileManager.mechanics(elapsedTime);
-		if (editorFileManager.isNewContent())
-		{
-			// reload everything
-
-		}
 
 		if (!editorFileManager.isActive())
 		{
