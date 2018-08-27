@@ -63,4 +63,5 @@ void EditorAction::mechanics(const double &elapsedTime)
 
 	grid.mechanics(factory.isDeleteMode());
 	factory.setPosition(grid.getX(), grid.getY());
+	factory.mechanics();
 }
