@@ -19,6 +19,7 @@ void EAEntityRect::free()
 void EAEntityRect::reset()
 {
 	count = 0;
+	lastID = -1;
 
 	if (tree)
 	{
@@ -29,10 +30,10 @@ void EAEntityRect::reset()
 
 void EAEntityRect::init()
 {
-	tree = new RTree;
+	tree = new ERTree;
 }
 
-const std::vector<BoxID> &EAEntityRect::get(const int &addX, const int &addY, const float &screen_w, const float &screen_h)
+const std::vector<EntityRectID> &EAEntityRect::get(const int &addX, const int &addY, const float &screen_w, const float &screen_h)
 {
 	result.clear();
 	Box queryBox(Point(addX, addY), Point(addX + screen_w, addY + screen_h));
@@ -40,13 +41,14 @@ const std::vector<BoxID> &EAEntityRect::get(const int &addX, const int &addY, co
 	return result;
 }
 
-void EAEntityRect::add(const Box &box, const int &chosen)
+bool EAEntityRect::add(const Box &box, const IDPair &idpair)
 {
 	++count;
-	tree->insert(std::make_pair(box, chosen));
+	tree->insert(std::make_pair(box, idpair));
+	return true;
 }
 
-bool EAEntityRect::remove(const int &mouseX, const int &mouseY)
+bool EAEntityRect::remove(int &mouseX, int &mouseY)
 {
 	result.clear();
 	Box queryBox(Point(mouseX, mouseY), Point(mouseX + 1, mouseY + 1));
@@ -54,9 +56,20 @@ bool EAEntityRect::remove(const int &mouseX, const int &mouseY)
 
 	if (!result.empty())
 	{
+		mouseX = bg::get<0>(result[0].first.min_corner());
+		mouseX = bg::get<1>(result[0].first.min_corner());
 		tree->remove(result[0]);
+		lastID = result[0].second.first;
 		return true;
 	}
 	
 	return false;
+}
+
+int EAEntityRect::getID()
+{
+	int ID = lastID;
+	lastID = -1;
+
+	return ID;
 }
