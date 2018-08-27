@@ -150,6 +150,9 @@
     <ClCompile Include="eatools.cpp">
       <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
     </ClCompile>
+    <ClCompile Include="econtent.cpp">
+      <Filter>Main\Editor File Manager\File Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="editor.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="eatools.h">
       <Filter>Main\Editor Action\Editor Action Factory\Editor Action Other</Filter>
+    </ClInclude>
+    <ClInclude Include="econtent.h">
+      <Filter>Main\Editor File Manager\File Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

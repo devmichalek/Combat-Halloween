@@ -65,6 +65,7 @@
     <ClCompile Include="eahistory.cpp" />
     <ClCompile Include="eainfo.cpp" />
     <ClCompile Include="eatools.cpp" />
+    <ClCompile Include="econtent.cpp" />
     <ClCompile Include="editor.cpp" />
     <ClCompile Include="editoraction.cpp" />
     <ClCompile Include="editorfilemanager.cpp" />
@@ -98,6 +99,7 @@
     <ClInclude Include="eainfo.h" />
     <ClInclude Include="eakind.h" />
     <ClInclude Include="eatools.h" />
+    <ClInclude Include="econtent.h" />
     <ClInclude Include="editor.h" />
     <ClInclude Include="editoraction.h" />
     <ClInclude Include="editorfilemanager.h" />
