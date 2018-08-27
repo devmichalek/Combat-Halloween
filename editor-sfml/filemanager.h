@@ -1,14 +1,14 @@
 #pragma once
 #include "thread.h"
+#include "econtent.h"
 #include <fstream>
 #include <direct.h>
-#include <string>
 // #include <chrono>				// std::chrono::seconds
 // #include <mutex>				// std::mutex, std::unique_lock
 // #include <condition_variable>	// std::condition_variable, std::cv_status
 
 // File Manager do saving, opening, refreshing and creating on another thread.
-class FileManager
+class FileManager : public EContent
 {
 	enum STATUS
 	{
@@ -19,16 +19,14 @@ class FileManager
 		FAILURE
 	};
 
-	int saveVersion;
-	int loadVersion;
+	
 	int status;
 	std::string msg;
-	
 	std::string dirPath;
 	std::vector<std::string> dirVec;
 	std::fstream file;
-	std::vector<std::string> content;
 	std::string filePath;
+	std::string loadedFilePath;
 	cmm::Thread thread;
 
 	// std::mutex mtx;
@@ -44,12 +42,14 @@ public:
 	void mechanics();	// used only to free thread
 
 	void setFilePath(std::string newPath);
+	void setLoadedFilePath(std::string newLoadedPath);
 	void setDirectoryPath(std::string newPath);
-	void setContent(std::vector<std::string> newContent);
-	const std::string& getFilePath() const;
+	void setContent(std::vector<std::string> &newContent);
+	const std::string& getLoadedFilePath() const;
 	const std::string& getDirectoryPath() const;
 	const std::vector<std::string>& getContent() const;
 	const std::vector<std::string>& getDirectories() const;
+	bool openedIsChosen();
 	void push(const std::string &line);
 	void pop();
 
@@ -62,8 +62,6 @@ public:
 	void refresh();
 	
 	bool checkIfFileExists(std::string newPath);
-	bool isNewSaveVersion();	// tells if content is different than content inside of file
-	bool isNewLoadVersion();	// same but with loading
 	bool isStatus() const;
 	bool isProcessing();
 	bool isSuccess();

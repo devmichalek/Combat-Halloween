@@ -14,8 +14,6 @@ FileManager::~FileManager()
 
 void FileManager::free()
 {
-	loadVersion = 0;
-	saveVersion = 0;
 	status = EMPTY;
 	msg = "";
 	
@@ -35,14 +33,18 @@ void FileManager::clear()
 
 	dirPath = "";
 	filePath = "";
+	loadedFilePath = "";
 
 	if (thread.ready)
 		thread.free();
+
+	saveVersion = 0;
+	loadVersion = 0;
 }
 
 void FileManager::mechanics()
 {
-	// Delete thread if it done its job.
+	// Delete thread if the job is done.
 	freeThread();
 }
 
@@ -54,20 +56,25 @@ void FileManager::setFilePath(std::string newPath)
 	filePath = newPath;
 }
 
+void FileManager::setLoadedFilePath(std::string newLoadedPath)
+{
+	loadedFilePath = newLoadedPath;
+}
+
 void FileManager::setDirectoryPath(std::string newPath)
 {
 	dirPath = newPath;
 }
 
-void FileManager::setContent(std::vector<std::string> newContent)
+void FileManager::setContent(std::vector<std::string> &newContent)
 {
 	saveVersion = 1;
 	content = newContent;
 }
 
-const std::string& FileManager::getFilePath() const
+const std::string& FileManager::getLoadedFilePath() const
 {
-	return filePath;
+	return loadedFilePath;
 }
 
 const std::string& FileManager::getDirectoryPath() const
@@ -83,6 +90,11 @@ const std::vector<std::string>& FileManager::getContent() const
 const std::vector<std::string>& FileManager::getDirectories() const
 {
 	return dirVec;
+}
+
+bool FileManager::openedIsChosen()
+{
+	return loadedFilePath == filePath;
 }
 
 void FileManager::push(const std::string &line)
@@ -193,22 +205,6 @@ bool FileManager::checkIfFileExists(std::string newPath)
 	return retCode;
 }
 
-bool FileManager::isNewSaveVersion()
-{
-	return saveVersion != 0;
-}
-
-bool FileManager::isNewLoadVersion()
-{
-	if (loadVersion != 0)
-	{
-		loadVersion = 0;
-		return true;
-	}
-
-	return false;
-}
-
 bool FileManager::isStatus() const
 {
 	return status != EMPTY;
@@ -290,25 +286,42 @@ void FileManager::freeThread()
 // PRIVATE -----------------------------------------
 void FileManager::savePrivate()
 {
-	file.open(dirPath + "/" + filePath, std::ios::in);
+	file.open(dirPath + "/" + loadedFilePath, std::ios::in);
 	if (file.bad())
 	{
-		msg = "Can't find file \"" + substr(filePath) + "\", creating remotely...";
+		msg = "Can't find file \"" + substr(loadedFilePath) + "\", creating remotely...";
 		status = WARNING;
 	}
 	file.close();
 
-	if (saveSupport(content, filePath))
+	if (saveVersion == 0)
 	{
-		saveVersion = 0;
-		msg = "Correctly saved file \"" + substr(filePath) + "\"";
-		status = SUCCESS;
+		msg = "There is nothing new to save!";
+		if(content.empty())	loadedFilePath = "";
+		status = WARNING;
 		thread.success = true;
 	}
 	else
 	{
-		msg = "Cannot save file \"" + substr(filePath) + "\"!";
-		status = FAILURE;
+		if (saveSupport(content, loadedFilePath))
+		{
+			msg = "Correctly saved file \"" + substr(loadedFilePath) + "\"";
+
+			if (!refreshSupport())	// Not error actually, it is caused by user
+			{
+				msg = "Unexpected Error.\nDirectory \"" + dirPath + "\" is empty!";
+			}
+			else
+				saveVersion = 0;
+
+			status = SUCCESS;
+			thread.success = true;
+		}
+		else
+		{
+			msg = "Cannot save file \"" + substr(loadedFilePath) + "\"!";
+			status = FAILURE;
+		}
 	}
 
 	thread.ready = true;
@@ -316,10 +329,17 @@ void FileManager::savePrivate()
 
 void FileManager::openPrivate()
 {
-	if (openSupport(content))
+	if (loadedFilePath == filePath)
+	{
+		msg = "File \"" + substr(filePath) + "\" is already loaded.";
+		status = WARNING;
+		thread.success = true;
+	}
+	else if (openSupport(content))
 	{
 		loadVersion = 1;
 		msg = "Correctly loaded file \"" + substr(filePath) + "\"";
+		loadedFilePath = filePath;
 		status = SUCCESS;
 		thread.success = true;
 	}
@@ -425,6 +445,8 @@ void FileManager::renamePrivate(std::string newPath)
 	std::string newOne = dirPath + "/" + newPath;
 	if (std::rename(oldOne.c_str(), newOne.c_str()) == 0)
 	{
+		if (loadedFilePath == filePath)	loadedFilePath = newPath;
+
 		msg = "Correctly renamed file \"" + substr(newPath) + "\"";
 
 		if (!refreshSupport())	// Not error actually, it is caused by user
@@ -446,6 +468,12 @@ void FileManager::deletePrivate()
 {
 	if (remove((dirPath + "/" + filePath).c_str()) == 0)
 	{
+		if (loadedFilePath == filePath)
+		{
+			saveVersion = 1;
+			loadedFilePath = "";
+		}
+
 		msg = "Correctly deleted file \"" + substr(filePath) + "\"";
 
 		if (!refreshSupport())	// Not error actually, it is caused by user
@@ -483,7 +511,7 @@ void FileManager::refreshPrivate()
 
 bool FileManager::saveSupport(std::vector<std::string>& content, std::string &filePath)
 {
-	file.open(dirPath + "/" + filePath, std::ios::out | std::ios::app);
+	file.open(dirPath + "/" + filePath, std::ios::out);
 	if (file.good())
 	{
 		for (auto &it : content)
@@ -510,7 +538,7 @@ bool FileManager::openSupport(std::vector<std::string>& newContent)
 		std::string line = "";
 
 		while (getline(file, line))
-			newContent.push_back(line);
+			newContent.push_back(line + "\n");
 	}
 	else
 	{
