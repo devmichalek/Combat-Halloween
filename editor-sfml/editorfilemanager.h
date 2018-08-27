@@ -41,9 +41,6 @@ public:
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
 
-	void push(std::string line);
-	void pop();
-	bool isNewContent();
 	void setActive();	// for chat to open file manager directly
 	const bool& isActive() const;
 
@@ -55,8 +52,8 @@ private:
 	void openFile();
 	void saveFile();
 	// void uploadFile();
-	void copyFile();	// works
+	void copyFile();
 	void renameFile();
-	void deleteFile();	// works
-	void refresh();		// works
+	void deleteFile();
+	void refresh();
 };

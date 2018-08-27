@@ -128,18 +128,34 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 					textEditor.clear();
 					textEditor.reset();
 				}
-				else if (temp == LOADING)		fileManager.open();
-				else if (temp == SAVING)		fileManager.save();
+				else if (temp == LOADING)
+				{
+					fileManager.open();
+				}	
+				else if (temp == SAVING)
+				{
+					action = SAVING;
+					fileManager.setLoadedFilePath(textEditor.get());
+					fileManager.save();
+					textEditor.clear();
+					textEditor.reset();
+				}
 				else if (temp == UPLOADING)		{}
 				else if (temp == COPYING)		fileManager.copy();
 				else if (temp == RENAMING)
 				{
 					action = RENAMING;
+					if (fileManager.openedIsChosen())	info.setOpenedText(textEditor.get());
 					fileManager.rename(textEditor.get());
 					textEditor.clear();
 					textEditor.reset();
 				}
-				else if (temp == DELETING)		fileManager.deletee();
+				else if (temp == DELETING)
+				{
+					if (fileManager.openedIsChosen())
+						info.setOpenedText("-");
+					fileManager.deletee();
+				}
 				else if (temp == REFRESHING)	fileManager.refresh();
 			}
 			else if (messageBoard.isOk())	// ok
@@ -171,7 +187,17 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 				else
 				{
 					if (action == CREATING)			fileManager.create(textEditor.get());
-					else if (action == RENAMING)	fileManager.rename(textEditor.get());
+					else if (action == RENAMING)
+					{
+						if (fileManager.openedIsChosen())	info.setOpenedText(textEditor.get());
+						fileManager.rename(textEditor.get());
+					}
+					else if (action == SAVING)
+					{
+						fileManager.setLoadedFilePath(textEditor.get());
+						fileManager.save();
+					}
+
 					textEditor.clear();
 					textEditor.reset();
 				}
@@ -194,6 +220,9 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 			// refresh library
 			if (action != UPLOADING)
 			{
+				if (action == SAVING || action == LOADING)
+					info.setOpenedText(fileManager.getLoadedFilePath());
+
 				library.refresh(fileManager.getDirectories());
 				info.setChosenText();
 				action = -1;
@@ -221,23 +250,6 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 	info.mechanics(elapsedTime);
 }
 
-
-
-void EditorFileManager::push(std::string line)
-{
-	fileManager.push(line);
-}
-
-void EditorFileManager::pop()
-{
-	fileManager.pop();
-}
-
-bool EditorFileManager::isNewContent()
-{
-	return fileManager.isNewLoadVersion();
-}
-
 void EditorFileManager::setActive()
 {
 	buttons.setActive();
@@ -253,7 +265,7 @@ const bool& EditorFileManager::isActive() const
 
 bool EditorFileManager::isFileOpen()
 {
-	return fileManager.getFilePath() != "";
+	return fileManager.getLoadedFilePath() != "";
 }
 
 bool EditorFileManager::isFileUnsave()
@@ -281,15 +293,8 @@ void EditorFileManager::openFile()
 	}
 	else if (isFileUnsave())
 	{
-		if (isFileUnsave())
-		{
-			messageBoard.setActive();
-			messageBoard.setMessage("There is unsaved file.\nDo you want to continue?");
-		}
-		else
-		{
-			fileManager.open();
-		}
+		messageBoard.setActive();
+		messageBoard.setMessage("There is unsaved file.\nDo you want to continue?");
 	}
 	else
 	{
@@ -303,6 +308,12 @@ void EditorFileManager::saveFile()
 	{
 		action = SAVING;
 		fileManager.save();
+	}
+	else
+	{
+		action = SAVING;
+		textEditor.setActive();
+		textEditor.set("New File", "File Name:", "");
 	}
 }
 
