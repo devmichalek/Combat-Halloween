@@ -1,15 +1,1 @@
-In progress... Beta ~ 31.10.2018
-## Combat Halloween Solutions
-### Foe System
-Foe System based on special kind of tree with **4** children for every **quad**. Each quad is a template class based on XYNode template class that can be easily rearrange, also, quad consist of 4 child quads: topLeft, topRight, botLeft, botRight.  XYTree is just a wrapper that provides some basic methods like inserting.
-
-```mermaid
-graph TD
-A(XYNode) --> B(XYQuad)
-B --> C(topLeft XYQuad)
-B --> D(topRight XYQuad)
-B --> E(botLeft XYQuad)
-B --> F(botRight XYQuad)
-G(XYTree) -.-> B
-H(FoeFactory) --> G
-```
+![https://www.youtube.com/watch?v=dE0JvlYSVH4&feature=youtu.be](https://user-images.githubusercontent.com/19840443/44687217-efad0780-aa50-11e8-8946-c69df7984a01.png)
