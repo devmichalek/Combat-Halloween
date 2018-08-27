@@ -67,14 +67,21 @@ char EAEntityGrid::get(const int &x, const int &y)
 	return array[x][y];
 }
 
-void EAEntityGrid::add(const int &mouseX, const int &mouseY, const int &chosen)
+bool EAEntityGrid::add(int &mouseX, int &mouseY, const int &chosen)
 {
 	int x = mouseX / width;
 	int y = mouseY / width;
+
+	if (array[x][y] != -1)
+		return false;
+	
+	mouseX = x * width;
+	mouseY = y * width;
 	array[x][y] = chosen;
+	return true;
 }
 
-bool EAEntityGrid::remove(const int &mouseX, const int &mouseY)
+int EAEntityGrid::remove(int &mouseX, int &mouseY)
 {
 	int x = mouseX / width;
 	int y = mouseY / width;
@@ -82,35 +89,47 @@ bool EAEntityGrid::remove(const int &mouseX, const int &mouseY)
 	// Bot Right
 	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
 	{
+		int c = array[x][y];
 		array[x][y] = -1;
-		return true;
+		mouseX = x * width;
+		mouseY = y * width;
+		return c;
 	}
 
 	// Bot Left
 	--x;
 	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
 	{
+		int c = array[x][y];
 		array[x][y] = -1;
-		return true;
+		mouseX = x * width;
+		mouseY = y * width;
+		return c;
 	}
 
 	// Top Left
 	++y;
 	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
 	{
+		int c = array[x][y];
 		array[x][y] = -1;
-		return true;
+		mouseX = x * width;
+		mouseY = y * width;
+		return c;
 	}
 
 	// Top Right
 	++x;
 	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
 	{
+		int c = array[x][y];
 		array[x][y] = -1;
-		return true;
+		mouseX = x * width;
+		mouseY = y * width;
+		return c;
 	}
 	
-	return false;
+	return -1;
 }
 
 const int& EAEntityGrid::getMax()

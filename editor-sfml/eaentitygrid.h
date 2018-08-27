@@ -17,7 +17,7 @@ public:
 	void init(const int& width);	// allocate
 	bool isCellEmpty(const int &mouseX, const int &mouseY);
 	char get(const int &x, const int &y);
-	void add(const int &mouseX, const int &mouseY, const int &chosen);
-	bool remove(const int &mouseX, const int &mouseY);
+	bool add(int &mouseX, int &mouseY, const int &chosen);
+	int remove(int &mouseX, int &mouseY);
 	const int& getMax();
 };
