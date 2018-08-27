@@ -97,13 +97,16 @@ void EditorNavigation::handle(const sf::Event &event)
 
 void EditorNavigation::draw(sf::RenderWindow* &window)
 {
-	window->draw(background.get());
-
 	for (auto &it : buttons)
 		it->draw(window);
 
 	for (auto &it : labels)
 		window->draw(it->get());
+}
+
+void EditorNavigation::drawBG(sf::RenderWindow* &window)
+{
+	window->draw(background.get());
 }
 
 

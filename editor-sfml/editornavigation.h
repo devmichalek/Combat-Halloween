@@ -27,6 +27,7 @@ public:
 	void load(const float &screen_w, const float &screen_h);
 	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
+	void drawBG(sf::RenderWindow* &window);
 
 	void setVolume(const float &volume);
 
