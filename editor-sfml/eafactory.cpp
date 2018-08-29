@@ -91,12 +91,12 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	}
 
 	// Foes
-	amounts.push_back(3);
+	amounts.push_back(2);
 	factory.push_back(std::vector<cmm::Sprite*>());
 	for (int i = 0; i < amounts[FOE]; ++i)
 	{
 		factory[FOE].push_back(new cmm::Sprite());
-		factory[FOE][i]->load("images/platform/foes/type/" + std::to_string(i) + "/" + std::to_string(i) + ".png");
+		factory[FOE][i]->load("images/platform/foes/type/thumbnails/" + std::to_string(i) + ".png");
 		factory[FOE][i]->setScale(scale, scale);
 	}
 
