@@ -228,6 +228,7 @@ bool Settings::handle(const sf::Event &event)
 						active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
 					}
 
+					sendKeysThread();
 					positionTable();
 				}
 			}
@@ -442,16 +443,10 @@ void Settings::resetKeys()
 	keys[JUMP] = 73;
 	keys[ATTACK] = 23;
 	keys[SHIELD] = 25;
-	for (unsigned i = 0; i < JUMP_ATTACK; i++)
-	{
-		active_texts[i]->setText(getName(keys[i]));
-		active_texts[i]->setFillColor(User::getLoadingColor());
-	}
-	active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
-	active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
 
 	// Overwrite / Send to database.
-	
+	target = -2;
+	sendKeysThread();
 
 	positionTable();
 }
@@ -508,6 +503,70 @@ void Settings::setKeys()
 			active_texts[i]->setText("error");
 			active_texts[i]->setFillColor(User::getErrorColor());
 		}
+	}
+
+	positionTable();
+	thread.ready = true;
+}
+
+void Settings::sendKeysThread()
+{
+	if (!thread.ready && !thread.thread)
+	{
+		if (target == -2)
+		{
+			for (unsigned i = 0; i < PAUSE; i++)
+			{
+				active_texts[i]->setText("sending...");
+				active_texts[i]->setFillColor(User::getLoadingColor());
+			}
+		}
+		else if(target >= 0)
+		{
+			active_texts[target]->setText("sending...");
+			active_texts[target]->setFillColor(User::getLoadingColor());
+		}
+
+		positionTable();
+
+		thread.thread = new std::thread(&Settings::sendKeys, this);
+		thread.thread->detach();
+	}
+}
+
+void Settings::sendKeys()
+{
+	cmm::Request request;
+	std::string msg = "username=" + boost::lexical_cast<std::string>(User::getUsername()) + "&keys=";
+
+	for (unsigned i = 0; i < keys.size(); ++i)
+	{
+		msg += std::to_string(keys[i]);
+		msg.push_back('@');
+	}
+
+	request.setMessage(msg);
+	request.setRequest("/combathalloween/getters/getsettings.php", sf::Http::Request::Post);
+	request.setHttp("http://amichalek.pl/");
+	request.sendRequest();
+
+	if (target == -2)
+	{
+		target = -1;
+
+		
+		for (unsigned i = 0; i < JUMP_ATTACK; i++)
+		{
+			active_texts[i]->setText(getName(keys[i]));
+			active_texts[i]->setFillColor(User::getLoadingColor());
+		}
+		active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
+		active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
+	}
+	else if (target >= 0)
+	{
+		active_texts[target]->setText(getName(keys[target]));
+		active_texts[target]->setFillColor(User::getLoadingColor());
 	}
 
 	positionTable();

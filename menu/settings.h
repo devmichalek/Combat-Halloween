@@ -76,6 +76,8 @@ public:
 private:
 	void resetKeys();
 	void setKeys();
+	void sendKeysThread();
+	void sendKeys();
 	void positionTable();
 	void positionChart();
 	bool isPossibleKey(const int &n);
