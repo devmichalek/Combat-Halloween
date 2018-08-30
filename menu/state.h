@@ -24,6 +24,7 @@ public:
 	static char* username;
 	static char* getUsername() { return username; }
 	static sf::Color getErrorColor() { return sf::Color(0xF2, 0x58, 0x3E); }
+	static sf::Color getWarningColor() { return sf::Color(0x78, 0x28, 0x8C); }
 	static sf::Color getSuccessColor() { return sf::Color(0xFF, 0xDE, 0x00); }
 	static sf::Color getGreenColor() { return sf::Color(0x58, 0x70, 0x58); }
 	static sf::Color getLockedColor() { return sf::Color(0xDD, 0xDD, 0xDD); }
