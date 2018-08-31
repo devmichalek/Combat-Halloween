@@ -1,0 +1,7 @@
+#VAMPIRE TEMPLATE
+#APPEAR/DIE IDLE/WALK ATTACK
+
+type: 2
+states: 3
+offsets: 13 12 8
+path: images/platform/foes/type/vampire/
