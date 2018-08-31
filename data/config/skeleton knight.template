@@ -1,0 +1,7 @@
+#SKELETON KNIGHT TEMPLATE
+#IDLE WALK ATTACK1 ATTACK2 DIE
+
+type: 12
+states: 5
+offsets: 10 10 10 10 7
+path: images/platform/foes/type/skeleton knight/
