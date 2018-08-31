@@ -1,0 +1,7 @@
+#ZOMBIE TEMPLATE
+#APPEAR IDLE WALK ATTACK DIE
+
+type: 1
+states: 5
+offsets: 11 6 10 7 8
+path: images/platform/foes/type/zombie/
