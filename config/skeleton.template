@@ -1,7 +1,0 @@
-#SKELETON TEMPLATE
-#APPEAR IDLE WALK ATTACK DIE
-
-type: 0
-states: 5
-offsets: 10 6 8 8 8
-path: images/platform/foes/type/skeleton/
