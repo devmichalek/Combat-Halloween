@@ -1,0 +1,7 @@
+#ZOMBIE GIRL TEMPLATE
+#IDLE WALK ATTACK DIE
+
+type: 6
+states: 4
+offsets: 15 10 8 12
+path: images/platform/foes/type/zombie girl/
