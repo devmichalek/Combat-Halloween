@@ -1,0 +1,7 @@
+#ORK AXEMAN TEMPLATE
+#IDLE WALK RUN JUMP ATTACK HURT DIE
+
+type: 10
+states: 7
+offsets: 7 7 7 7 7 7 7
+path: images/platform/foes/type/ork axeman/

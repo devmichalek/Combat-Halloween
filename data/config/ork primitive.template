@@ -1,0 +1,7 @@
+#ORK PRIMITIVE TEMPLATE
+#IDLE WALK RUN JUMP ATTACK HURT DIE
+
+type: 8
+states: 7
+offsets: 7 7 7 7 7 7 7
+path: images/platform/foes/type/ork primitive/
