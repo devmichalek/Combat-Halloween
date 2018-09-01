@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Dependencies\Core">
+      <UniqueIdentifier>{14f55bb1-4bf4-410d-a4da-707861281e79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Common">
+      <UniqueIdentifier>{ad4b979e-d6da-4a7a-9eb5-7d414a745efc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Other">
+      <UniqueIdentifier>{1034ba13-94a4-4100-bb34-fa1839836968}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\core\core.cpp">
+      <Filter>Dependencies\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\request.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sound.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\sprite.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\text.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\thread.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="kstates.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="knight.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="kcoxing.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="coxing.cpp">
+      <Filter>Main\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="specs.cpp">
+      <Filter>Main\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="kspecs.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Dependencies\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\request.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sound.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\sprite.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\text.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\thread.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="kstates.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="knight.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="kcoxing.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+    <ClInclude Include="coxing.h">
+      <Filter>Main\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="specs.h">
+      <Filter>Main\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="kspecs.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
