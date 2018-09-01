@@ -25,7 +25,7 @@
 				if($how_many > 0)
 				{	// @ is separator for cpp code
 					$row = $result->fetch_assoc();
-					echo $row['heart points']."@".$row['armour']."@".$row['movement speed']."@".$row['damage']."@".$row['attack speed']."@".$row['luckiness']."@".$row['experience']."@".$row['level']."@";
+					echo $row['heart points']."@".$row['magic points']."@".$row['armour']."@".$row['magic resistant']."@".$row['movement speed']."@".$row['damage']."@".$row['magic damage']."@".$row['luck']."@".$row['experience']."@".$row['level']."@";
 					$result->free_result();
 				}
 				else

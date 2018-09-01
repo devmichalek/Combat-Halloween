@@ -1,17 +1,17 @@
 <?php
-	
-	// Start session.
-	session_start();
+  
+  // Start session.
+  session_start();
 
-	// Just in case.
-	unset($_SESSION['error']);
+  // Just in case.
+  unset($_SESSION['error']);
 
-	require_once("../other/generateCode.php");
+  require_once("../other/generateCode.php");
 
     function backToRegisterForm()
     {
-    	header('Location: registerform.php');
-		exit();
+      header('Location: registerform.php');
+    exit();
     }
 
     // Status.
@@ -35,7 +35,7 @@
       $_SESSION['e_username'] = "This name is unavailable.";
     }
 
-	// PASSWORD
+  // PASSWORD
     $password = $_POST['password'];
     $passwordcon = $_POST['passwordcon'];
     if((strlen($password)) < 8)
@@ -55,7 +55,7 @@
     }
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
-	// EMAIL
+  // EMAIL
     $email = $_POST['email'];
     $email_safe = filter_var($email, FILTER_SANITIZE_EMAIL);
     if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $email)
@@ -79,7 +79,7 @@
     $_SESSION['rem_password'] = $password;
     $_SESSION['rem_passwordcon'] = $passwordcon;
 
-    if(!$success)	backToRegisterForm();
+    if(!$success) backToRegisterForm();
 
     require_once ("../../connect.php");
 
@@ -120,15 +120,26 @@
           $_SESSION['e_username'] = "This username already exists.";
         }
 
-        if(!$success)	backToRegisterForm();
+        if(!$success) backToRegisterForm();
 
         // SUCCESS
         if($success)
         {
           $first_time = date("d.m.Y");
           $activation_code = generateCode();
-            $luckiness = rand(2, 99);
-          if(!$connection->query("INSERT INTO usersfeatures VALUES (NULL, '$username', '71@72@73@23@25@', '100', '10', '0', '1', '2', '3', '$luckiness', '0', '1')"))
+
+          $heart_points = 20;
+          $magic_points = 10;
+          $armour = 50;     // 0 ... 1000
+          $magic_resistant = 25;  // 0 ... 1000
+          $movement_speed = 25; // 0 ... 100
+          $damage = 4;
+          $magic_damage = 2;
+          $luck = rand(2, 49);  // 0 ... 50
+          $experience = 0;    // 0 ... 100
+          $level = 1;
+
+          if(!$connection->query("INSERT INTO usersfeatures VALUES (NULL, '$username', '71@72@73@23@25@', '$heart_points', '$magic_points', '$armour', '$magic_resistant', '$movement_speed', '$damage', '$magic_damage', '$luck', '$experience', '$level')"))
           {
             throw new Exception($connection->error);
           }
