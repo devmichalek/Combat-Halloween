@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{4e9a3b3c-8455-492b-9f06-e97581c5f945}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Core">
+      <UniqueIdentifier>{81dc08b8-6b15-4fe8-9747-3f323490f787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{461361f1-7e5b-4a61-bfa9-3517f530d8f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\core\core.h">
+      <Filter>Dependencies\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="text.h">
+      <Filter>Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\core\core.cpp">
+      <Filter>Dependencies\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="text.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
