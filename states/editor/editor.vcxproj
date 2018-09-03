@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{ED927977-7FD8-4435-80E2-ED71D382DA70}</ProjectGuid>
+    <RootNamespace>editorsfml</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <ProjectName>editor</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common\core;..\..\common\filemanager;..\..\common\music;..\..\common\request;..\..\common\sound;..\..\common\sprite;..\..\common\text;..\..\common\thread;..\..\states\menu;..\..\states\levelmenu;..\..\states\platform\foe</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <EnableModules>false</EnableModules>
+      <TreatWarningAsError>false</TreatWarningAsError>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\SFML\lib</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\common\core\core.cpp" />
+    <ClCompile Include="..\..\common\filemanager\filemanager.cpp" />
+    <ClCompile Include="..\..\common\music\music.cpp" />
+    <ClCompile Include="..\..\common\request\request.cpp" />
+    <ClCompile Include="..\..\common\sound\sound.cpp" />
+    <ClCompile Include="..\..\common\sprite\sprite.cpp" />
+    <ClCompile Include="..\..\common\text\text.cpp" />
+    <ClCompile Include="..\..\common\thread\thread.cpp" />
+    <ClCompile Include="..\levelmenu\chat.cpp" />
+    <ClCompile Include="..\menu\button.cpp" />
+    <ClCompile Include="..\menu\circlebutton.cpp" />
+    <ClCompile Include="..\menu\state.cpp" />
+    <ClCompile Include="eaentitygrid.cpp" />
+    <ClCompile Include="eaentityrect.cpp" />
+    <ClCompile Include="eaentityspecial.cpp" />
+    <ClCompile Include="eafactory.cpp" />
+    <ClCompile Include="eagrid.cpp" />
+    <ClCompile Include="eahistory.cpp" />
+    <ClCompile Include="eainfo.cpp" />
+    <ClCompile Include="eatools.cpp" />
+    <ClCompile Include="econtent.cpp" />
+    <ClCompile Include="editor.cpp" />
+    <ClCompile Include="editoraction.cpp" />
+    <ClCompile Include="editorfilemanager.cpp" />
+    <ClCompile Include="editornavigation.cpp" />
+    <ClCompile Include="efmbuttons.cpp" />
+    <ClCompile Include="efminfo.cpp" />
+    <ClCompile Include="efmlibrary.cpp" />
+    <ClCompile Include="efmtexteditor.cpp" />
+    <ClCompile Include="efilemanager.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="messageboard.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\common\core\core.h" />
+    <ClInclude Include="..\..\common\filemanager\filemanager.h" />
+    <ClInclude Include="..\..\common\music\music.h" />
+    <ClInclude Include="..\..\common\request\request.h" />
+    <ClInclude Include="..\..\common\sound\sound.h" />
+    <ClInclude Include="..\..\common\sprite\sprite.h" />
+    <ClInclude Include="..\..\common\text\text.h" />
+    <ClInclude Include="..\..\common\thread\thread.h" />
+    <ClInclude Include="..\levelmenu\chat.h" />
+    <ClInclude Include="..\menu\button.h" />
+    <ClInclude Include="..\menu\circlebutton.h" />
+    <ClInclude Include="..\menu\state.h" />
+    <ClInclude Include="eaentitygrid.h" />
+    <ClInclude Include="eaentityrect.h" />
+    <ClInclude Include="eaentityspecial.h" />
+    <ClInclude Include="eafactory.h" />
+    <ClInclude Include="eagrid.h" />
+    <ClInclude Include="eahistory.h" />
+    <ClInclude Include="eainfo.h" />
+    <ClInclude Include="eakind.h" />
+    <ClInclude Include="eatools.h" />
+    <ClInclude Include="econtent.h" />
+    <ClInclude Include="editor.h" />
+    <ClInclude Include="editoraction.h" />
+    <ClInclude Include="editorfilemanager.h" />
+    <ClInclude Include="editornavigation.h" />
+    <ClInclude Include="efmbuttons.h" />
+    <ClInclude Include="efminfo.h" />
+    <ClInclude Include="efmlibrary.h" />
+    <ClInclude Include="efmtexteditor.h" />
+    <ClInclude Include="efilemanager.h" />
+    <ClInclude Include="messageboard.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
