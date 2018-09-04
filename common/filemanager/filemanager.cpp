@@ -1,13 +1,13 @@
 #include "filemanager.h"
 #include "dirent.h"
 
-FileManager::FileManager()
+cmm::FileManager::FileManager()
 {
 	status = EMPTY;
 	msg = "";
 }
 
-FileManager::~FileManager()
+cmm::FileManager::~FileManager()
 {
 	status = EMPTY;
 	msg = "";
@@ -18,12 +18,12 @@ FileManager::~FileManager()
 
 
 
-bool FileManager::isStatus() const
+bool cmm::FileManager::isStatus() const
 {
 	return status != EMPTY;
 }
 
-bool FileManager::isProcessing()
+bool cmm::FileManager::isProcessing()
 {
 	if (status == PROCESSING)
 	{
@@ -34,7 +34,7 @@ bool FileManager::isProcessing()
 	return false;
 }
 
-bool FileManager::isSuccess()
+bool cmm::FileManager::isSuccess()
 {
 	if (status == SUCCESS)
 	{
@@ -45,7 +45,7 @@ bool FileManager::isSuccess()
 	return false;
 }
 
-bool FileManager::isWarning()
+bool cmm::FileManager::isWarning()
 {
 	if (status == WARNING)
 	{
@@ -56,7 +56,7 @@ bool FileManager::isWarning()
 	return false;
 }
 
-bool FileManager::isFailure()
+bool cmm::FileManager::isFailure()
 {
 	if (status == FAILURE)
 	{
@@ -67,13 +67,13 @@ bool FileManager::isFailure()
 	return false;
 }
 
-const std::string& FileManager::getMessage() const
+const std::string& cmm::FileManager::getMessage() const
 {
 	return msg;
 }
 
 
-std::string FileManager::substr(std::string &buf)
+std::string cmm::FileManager::substr(std::string &buf)
 {
 	if (buf.size() < 10)
 	{
@@ -88,7 +88,7 @@ std::string FileManager::substr(std::string &buf)
 	return temp;
 }
 
-void FileManager::savePrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir, std::vector<std::string> &dirVec)
+void cmm::FileManager::savePrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	std::string pathToFile = pathToDir + "/" + fileName;
 
@@ -120,7 +120,7 @@ void FileManager::savePrivate(std::string &fileName, std::vector<std::string> &g
 	}
 }
 
-void FileManager::openPrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir)
+void cmm::FileManager::openPrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir)
 {
 	std::string pathToFile = pathToDir + "/" + fileName;
 	if (openSupport(pathToFile, guts))
@@ -135,7 +135,7 @@ void FileManager::openPrivate(std::string &fileName, std::vector<std::string> &g
 	}
 }
 
-void FileManager::createPrivate(std::string &fileName, std::string &pathToDir, std::vector<std::string> &dirVec)
+void cmm::FileManager::createPrivate(std::string &fileName, std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	std::string pathToFile = pathToDir + "/" + fileName;
 
@@ -169,7 +169,7 @@ void FileManager::createPrivate(std::string &fileName, std::string &pathToDir, s
 	file.close();
 }
 
-void FileManager::copyPrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir, std::vector<std::string> &dirVec)
+void cmm::FileManager::copyPrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	// Refresh and reload library
 	if (refreshSupport(pathToDir, dirVec))
@@ -183,7 +183,7 @@ void FileManager::copyPrivate(std::string &fileName, std::vector<std::string> &g
 			std::string buf = fileName;
 			std::string newFileName = fileName;
 
-			for (int i = 0; i < dirVec.size(); ++i)
+			for (unsigned i = 0; i < dirVec.size(); ++i)
 			{
 				if (dirVec[i] == newFileName)
 				{
@@ -226,7 +226,7 @@ void FileManager::copyPrivate(std::string &fileName, std::vector<std::string> &g
 	}
 }
 
-void FileManager::renamePrivate(std::string &oldFileName, std::string &newFileName, std::string &pathToDir, std::vector<std::string> &dirVec)
+void cmm::FileManager::renamePrivate(std::string &oldFileName, std::string &newFileName, std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	std::string oldOne = pathToDir + "/" + oldFileName;
 	std::string newOne = pathToDir + "/" + newFileName;
@@ -251,7 +251,7 @@ void FileManager::renamePrivate(std::string &oldFileName, std::string &newFileNa
 	}
 }
 
-void FileManager::deletePrivate(std::string &fileName, std::string &pathToDir, std::vector<std::string> &dirVec)
+void cmm::FileManager::deletePrivate(std::string &fileName, std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	if (remove((pathToDir + "/" + fileName).c_str()) == 0)
 	{
@@ -273,7 +273,7 @@ void FileManager::deletePrivate(std::string &fileName, std::string &pathToDir, s
 	}
 }
 
-void FileManager::refreshPrivate(std::string &pathToDir, std::vector<std::string> &dirVec)
+void cmm::FileManager::refreshPrivate(std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	if (!refreshSupport(pathToDir, dirVec))
 	{
@@ -287,7 +287,7 @@ void FileManager::refreshPrivate(std::string &pathToDir, std::vector<std::string
 	}
 }
 
-bool FileManager::saveSupport(std::string &pathToFile, std::vector<std::string> &guts)
+bool cmm::FileManager::saveSupport(std::string &pathToFile, std::vector<std::string> &guts)
 {
 	file.open(pathToFile, std::ios::out);
 	if (file.good())
@@ -305,7 +305,7 @@ bool FileManager::saveSupport(std::string &pathToFile, std::vector<std::string> 
 	return true;
 }
 
-bool FileManager::openSupport(std::string &pathToFile, std::vector<std::string> &guts)
+bool cmm::FileManager::openSupport(std::string &pathToFile, std::vector<std::string> &guts)
 {
 	file.open(pathToFile, std::ios::in);
 	if (file.good())
@@ -328,7 +328,7 @@ bool FileManager::openSupport(std::string &pathToFile, std::vector<std::string> 
 	return true;
 }
 
-bool FileManager::refreshSupport(std::string &pathToDir, std::vector<std::string> &dirVec)
+bool cmm::FileManager::refreshSupport(std::string &pathToDir, std::vector<std::string> &dirVec)
 {
 	// Clear vector of file names.
 	if (!dirVec.empty())
