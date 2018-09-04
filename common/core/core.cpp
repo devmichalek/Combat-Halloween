@@ -1,6 +1,6 @@
 #include "core.h"
 
-Core::Core(int state)
+cmm::Core::Core(int state)
 {
 	open = false;
 	this->state = state;
@@ -10,7 +10,7 @@ Core::Core(int state)
 	window = nullptr;
 }
 
-Core::Core(int state, sf::Color color)
+cmm::Core::Core(int state, sf::Color color)
 {
 	open = false;
 	this->state = state;
@@ -20,7 +20,7 @@ Core::Core(int state, sf::Color color)
 	window = nullptr;
 }
 
-Core::Core(int state, sf::Uint8 R, sf::Uint8 G, sf::Uint8 B, sf::Uint8 A)
+cmm::Core::Core(int state, sf::Uint8 R, sf::Uint8 G, sf::Uint8 B, sf::Uint8 A)
 {
 	open = false;
 	this->state = state;
@@ -30,19 +30,19 @@ Core::Core(int state, sf::Uint8 R, sf::Uint8 G, sf::Uint8 B, sf::Uint8 A)
 	window = nullptr;
 }
 
-Core::~Core()
+cmm::Core::~Core()
 {
 	free();
 }
 
-void Core::free()
+void cmm::Core::free()
 {
 	close();
 	state = 0;
 	color = sf::Color::Black;
 }
 
-void Core::close()
+void cmm::Core::close()
 {
 	if (window)
 	{
@@ -58,7 +58,7 @@ void Core::close()
 
 
 
-bool Core::create(const char* title, int style)
+bool cmm::Core::create(const char* title, int style)
 {
 	// Make sure window is destroyed.
 	close();
@@ -82,7 +82,7 @@ bool Core::create(const char* title, int style)
 	return true;
 }
 
-bool Core::setIcon(const char* path)
+bool cmm::Core::setIcon(const char* path)
 {
 	if (window)
 	{
@@ -99,44 +99,44 @@ bool Core::setIcon(const char* path)
 
 
 
-void Core::clear() const
+void cmm::Core::clear() const
 {
 	window->clear(color);
 }
 
-void Core::display() const
+void cmm::Core::display() const
 {
 	window->display();
 }
 
 
 
-bool Core::isEvent()
+bool cmm::Core::isEvent()
 {
 	return window->pollEvent(event);
 }
 
-const sf::Event& Core::getEvent()
+const sf::Event& cmm::Core::getEvent()
 {
 	return event;
 }
 
-sf::RenderWindow*& Core::getWindow()
+sf::RenderWindow*& cmm::Core::getWindow()
 {
 	return window;
 }
 
-const float& Core::getWidth() const
+const float& cmm::Core::getWidth() const
 {
 	return width;
 }
 
-const float& Core::getHeight() const
+const float& cmm::Core::getHeight() const
 {
 	return height;
 }
 
-double Core::getElapsedTime()
+double cmm::Core::getElapsedTime()
 {
 	const double elapsedTime = static_cast <double> (clock.getElapsedTime().asMicroseconds()) / 1000000; // per sec
 	clock.restart();
@@ -144,7 +144,7 @@ double Core::getElapsedTime()
 	return elapsedTime;
 }
 
-const sf::Color& Core::getColor() const
+const sf::Color& cmm::Core::getColor() const
 {
 	return color;
 }

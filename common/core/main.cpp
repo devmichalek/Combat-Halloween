@@ -18,7 +18,7 @@ int main(int argc, char** argv)
 	// printf("Input: state=%d r=%d g=%d b=%d a=%d\n", state, R, G, B, A);
 
 	sf::Color color(R, G, B, A);
-	Core* core = new Core(state, color);
+	cmm::Core* core = new cmm::Core(state, color);
 	core->create("Combat Halloween");
 
 	sf::CircleShape shape(core->getWidth()/4);
