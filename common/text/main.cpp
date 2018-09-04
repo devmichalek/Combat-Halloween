@@ -4,7 +4,7 @@
 
 int main(int argc, char** argv)
 {
-	Core core(0);
+	cmm::Core core(0);
 	core.create("Combat Halloween");
 
 	cmm::Text text;
