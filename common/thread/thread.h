@@ -3,7 +3,6 @@
 
 namespace cmm
 {
-
 	struct Thread
 	{
 		bool ready;		// ready to start next action

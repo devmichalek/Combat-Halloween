@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-	Core core(0, sf::Color::White);
+	cmm::Core core(0, sf::Color::White);
 	core.create("Combat Halloween");
 
 	cmm::Sprite sprite;
@@ -27,8 +27,8 @@ int main(int argc, char** argv)
 
 		if (sprite.getAlpha() == 0xFF)		state = true;
 		else if (sprite.getAlpha() == 0)	state = false;
-		int v = 1;
-		float min = 0.0f, max = 255.0f;
+		float v = 1.0f;
+		int min = 0, max = 255;
 		state ? sprite.fadeout(v, min) : sprite.fadein(v, max);
 		//sprite.setOffset(offset);
 		//offset == limit - 1 ? offset = 0 : ++offset;

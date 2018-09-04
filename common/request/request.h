@@ -18,6 +18,4 @@ namespace cmm
 		void setMessage(std::string message);
 		void setRequest(std::string uri, sf::Http::Request::Method method = sf::Http::Request::Post);
 	};
-
-	
 }
