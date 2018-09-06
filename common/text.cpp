@@ -5,14 +5,18 @@ const sf::Text& cmm::Text::get() const
 	return *text;
 }
 
-void cmm::Text::setFont(const char* path)
+std::string cmm::Text::setFont(const char* path)
 {
 	font = std::make_unique<sf::Font>();
 	if (font->loadFromFile(path))
 	{
 		text = std::make_unique<sf::Text>();
 		text->setFont(*font);
+
+		return "Success: Font \"" + std::string(path) + "\" loaded correctly.";
 	}
+
+	return "Error: Font \"" + std::string(path) + "\" is not loaded correctly.";
 }
 
 void cmm::Text::setText(std::string line)

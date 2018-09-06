@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 	core.create("Combat Halloween");
 
 	cmm::Text text;
-	text.setFont("fonts/Jaapokki-Regular.otf");
+	text.setFont(cmm::JAPOKKI_FONT_PATH);
 	text.setText("dap mm");
 	// text.fadein(5);
 	// text.fadeout(5);
@@ -45,7 +45,7 @@ int main(int argc, char** argv)
 		core.getWindow()->draw(rect);
 		core.getWindow()->draw(text.get());
 
-		core.display();
+		core.getWindow()->display();
 	}
 
 	return 0;

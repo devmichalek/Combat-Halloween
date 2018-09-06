@@ -5,6 +5,9 @@
 
 namespace cmm
 {
+	const char* const JAPOKKI_FONT_PATH = "fonts/Jaapokki-Regular.otf";
+	const char* const JCANDLE_FONT_PATH = "fonts/jcandlestickextracond.ttf";
+
 	class Text
 	{
 		std::unique_ptr<sf::Font> font;
@@ -13,7 +16,7 @@ namespace cmm
 
 	public:
 		const sf::Text& get() const;
-		void setFont(const char* path);
+		std::string setFont(const char* path);
 		void setText(std::string line);
 		void setTextW(std::wstring line);
 
