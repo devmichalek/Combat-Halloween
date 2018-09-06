@@ -1,5 +1,20 @@
 #include "core.h"
 
+cmm::StaticCore::StaticCore()
+{
+
+}
+
+cmm::StaticCore::~StaticCore()
+{
+	if (window)
+	{
+		window->close();
+		delete window;
+		window = nullptr;
+	}
+}
+
 cmm::Core::Core(int state)
 {
 	open = false;
@@ -39,7 +54,7 @@ void cmm::Core::free()
 {
 	close();
 	state = 0;
-	color = sf::Color::Black;
+	color = sf::Color(21, 21, 29, 0xFF);
 }
 
 void cmm::Core::close()

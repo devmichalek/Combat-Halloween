@@ -4,15 +4,23 @@
 
 namespace cmm
 {
-	class Core
+	class StaticCore
+	{
+	protected:
+		inline static sf::RenderWindow* window;
+		inline static sf::Color color = sf::Color(21, 21, 29, 0xFF);
+	public:
+		StaticCore();
+		virtual ~StaticCore();
+	};
+
+	class Core : public StaticCore
 	{
 		float width;	// Screen width.
 		float height;	// Screen height.
 
 		sf::Clock clock;
 		sf::Event event;
-		sf::Color color;
-		sf::RenderWindow* window;
 
 	public:
 		bool open;	// State of the window.
