@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 		state ? sprite.fadeout(v, min) : sprite.fadein(v, max);
 		//sprite.setOffset(offset);
 		//offset == limit - 1 ? offset = 0 : ++offset;
-		core.display();
+		core.getWindow()->display();
 	}
 
 	return 0;

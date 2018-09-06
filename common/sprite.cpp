@@ -6,11 +6,15 @@ const sf::Sprite& cmm::Sprite::get() const
 	return *sprite;
 }
 
-void cmm::Sprite::load(std::string path, int numOfOffsets)
+std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 {
+	std::string out = "Error: Cannot create texture from \"" + path + "\"";
+
 	texture = std::make_unique<sf::Texture>();
 	if (texture->loadFromFile(path))
 	{
+		out = "Success: Correctly loaded \"" + path + "\"";
+
 		texture->setSmooth(true);
 		numOfOffsets = numOfOffsets < 1 ? 1 : numOfOffsets;
 
@@ -30,10 +34,14 @@ void cmm::Sprite::load(std::string path, int numOfOffsets)
 			setOffset(0);
 		}
 	}
+
+	return out;
 }
 
-void cmm::Sprite::loadRepeated(std::string path, float w, float h, bool borders)
+std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool borders)
 {
+	std::string out = "Error: Cannot create image from \"" + path + "\"";
+
 	sf::Image image;
 	if (image.loadFromFile(path))
 	{
@@ -74,9 +82,11 @@ void cmm::Sprite::loadRepeated(std::string path, float w, float h, bool borders)
 			}
 		}
 	}
+
+	return out;
 }
 
-void cmm::Sprite::create(int w, int h)
+std::string cmm::Sprite::create(int w, int h)
 {
 	texture = std::make_unique<sf::Texture>();
 	if (texture->create(w, h))

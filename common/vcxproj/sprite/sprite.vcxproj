@@ -7,13 +7,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\core\core.h" />
-    <ClInclude Include="sprite.h" />
+    <ClCompile Include="..\..\core.cpp" />
+    <ClCompile Include="..\..\sprite.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\core\core.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="sprite.cpp" />
+    <ClInclude Include="..\..\core.h" />
+    <ClInclude Include="..\..\sprite.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -44,12 +44,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\common\core</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

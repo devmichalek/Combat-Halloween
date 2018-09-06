@@ -14,9 +14,9 @@ namespace cmm
 
 	public:
 		const sf::Sprite& get() const;
-		void load(std::string path, int numOfOffsets = 1);
-		void loadRepeated(std::string path, float w, float h, bool borders = false);
-		void create(int w, int h);
+		std::string load(std::string path, int numOfOffsets = 1);
+		std::string loadRepeated(std::string path, float w, float h, bool borders = false);
+		std::string create(int w, int h);
 
 		void setColor(sf::Color color);
 		sf::Color getColor() const;
