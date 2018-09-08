@@ -12,22 +12,22 @@ cmm::State::~State()
 
 
 
-//bool cmm::State::isPrev() const
-//{
-//	return prev && isReady();
-//}
-//
-//bool cmm::State::isNext() const
-//{
-//	return next && isReady();
-//}
-//
-//bool cmm::State::isExit() const
-//{
-//	return exit && isReady();
-//}
-//
-//bool cmm::State::isState() const
-//{
-//	return prev || next || exit;
-//}
+bool cmm::State::isPrev() const
+{
+	return prev && isReady();
+}
+
+bool cmm::State::isNext() const
+{
+	return next && isReady();
+}
+
+bool cmm::State::isExit() const
+{
+	return exit && isReady();
+}
+
+bool cmm::State::isState() const
+{
+	return prev || next || exit;
+}

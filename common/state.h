@@ -7,11 +7,11 @@ namespace cmm
 	{
 		LOADING = 0,
 		INIT,
-		LOGIN,
+		LOGIN = 2,
 		MENU,
-		LEVELMENU,
+		LEVELMENU = 4,
 		PLATFORM,
-		TABLE,
+		TABLE = 6,
 		EDITOR,
 		DEFAULT
 	};
@@ -28,11 +28,11 @@ namespace cmm
 		State();
 		virtual ~State();
 
-	//protected:
-	//	bool isPrev() const;
-	//	bool isNext() const;
-	//	bool isExit() const;
-	//	bool isState() const;
+	protected:
+		bool isPrev() const;
+		bool isNext() const;
+		bool isExit() const;
+		bool isState() const;
 
 	public:
 		virtual void setState(int &state) = 0;
