@@ -26,14 +26,17 @@ void cmm::Sound::pause()
 	sound->pause();
 }
 
-void cmm::Sound::load(const char* path)
+std::string cmm::Sound::load(const char* path)
 {
 	buffer = std::make_unique<sf::SoundBuffer>();
 	if (buffer->loadFromFile(path))
 	{
 		sound = std::make_unique<sf::Sound>();
 		sound->setBuffer(*buffer.get());
+		return "Success: Sound \"" + std::string(path) + "\" loaded correctly.";
 	}
+
+	return "Error: Cannot create sound buffer from\"" + std::string(path) + "\".";
 }
 
 void cmm::Sound::setVolume(const float &newVolume)

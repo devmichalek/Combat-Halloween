@@ -18,7 +18,7 @@ namespace cmm
 		void play();
 		const bool isPlaying() const;
 		void pause();
-		void load(const char* path);
+		std::string load(const char* path);
 		void setVolume(const float &newVolume);
 		float getVolume() const;
 		const bool& isPlayable() const;
