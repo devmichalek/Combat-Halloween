@@ -12,11 +12,10 @@ std::string cmm::Text::setFont(const char* path)
 	{
 		text = std::make_unique<sf::Text>();
 		text->setFont(*font);
-
 		return "Success: Font \"" + std::string(path) + "\" loaded correctly.";
 	}
 
-	return "Error: Font \"" + std::string(path) + "\" is not loaded correctly.";
+	return "Error: Cannot create font face from \"" + std::string(path) + "\".";
 }
 
 void cmm::Text::setText(std::string line)
