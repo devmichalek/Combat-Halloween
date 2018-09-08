@@ -10,6 +10,7 @@ namespace cmm
 		inline static sf::RenderWindow* window;
 		inline static sf::Color color = sf::Color(21, 21, 29, 0xFF);
 	public:
+		inline static bool open = false;	// State of the window.
 		StaticCore();
 		virtual ~StaticCore();
 	};
@@ -23,7 +24,6 @@ namespace cmm
 		sf::Event event;
 
 	public:
-		bool open;	// State of the window.
 		int state;	// State of the game.
 
 		Core(int state = 0);
