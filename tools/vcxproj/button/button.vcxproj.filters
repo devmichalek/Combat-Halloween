@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{13a1ae75-4491-49a7-914a-3525bf5218b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\button.cpp" />
+    <ClCompile Include="..\..\circlebutton.cpp" />
+    <ClCompile Include="..\..\linkbutton.cpp" />
+    <ClCompile Include="..\..\squarebutton.cpp" />
+    <ClCompile Include="..\..\volumebutton.cpp" />
+    <ClCompile Include="..\..\..\common\core.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sound.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sprite.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\rectbutton.cpp" />
+    <ClCompile Include="..\..\..\common\text.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\state.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\loading.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\button.h" />
+    <ClInclude Include="..\..\circlebutton.h" />
+    <ClInclude Include="..\..\linkbutton.h" />
+    <ClInclude Include="..\..\squarebutton.h" />
+    <ClInclude Include="..\..\volumebutton.h" />
+    <ClInclude Include="..\..\..\common\core.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sound.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sprite.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\rectbutton.h" />
+    <ClInclude Include="..\..\..\common\text.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\state.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\loading.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

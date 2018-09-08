@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{008efdb0-25fa-49b1-9319-fd87ce764d48}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\chat.cpp" />
+    <ClCompile Include="..\..\..\common\core.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sound.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sprite.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\text.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\user.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\loading.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\state.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\chat.h" />
+    <ClInclude Include="..\..\..\common\core.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\logconsole.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sound.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sprite.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\text.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\user.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\loading.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\state.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
