@@ -8,15 +8,18 @@ const sf::Sprite& cmm::Sprite::get() const
 
 std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 {
-	std::string out = "Error: Cannot create texture from \"" + path + "\"";
+	std::string out = "Error: Cannot properly create texture from \"" + path + "\".";
 
 	texture = std::make_unique<sf::Texture>();
 	if (texture->loadFromFile(path))
 	{
-		out = "Success: Correctly loaded \"" + path + "\"";
+		out = "Success: Correctly loaded \"" + path + "\".";
 
 		texture->setSmooth(true);
 		numOfOffsets = numOfOffsets < 1 ? 1 : numOfOffsets;
+
+		if (numOfOffsets == 1)
+			out = "Warning: The number of offsets of the sprite \"" + path + "\" is 1.";
 
 		int width = texture->getSize().x;
 		int height = texture->getSize().y;
@@ -33,6 +36,8 @@ std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 			sprite->setTexture(*texture);
 			setOffset(0);
 		}
+		else
+			out = "Error: Cannot create sprite from \"" + path + "\".";
 	}
 
 	return out;
@@ -45,6 +50,8 @@ std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool b
 	sf::Image image;
 	if (image.loadFromFile(path))
 	{
+		out = "Success: Correctly loaded \"" + path + "\".";
+
 		int width = image.getSize().x;
 		int height = image.getSize().y;
 		int realWidth = borders ? static_cast<int>(w) : width;
@@ -80,7 +87,11 @@ std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool b
 				sprite->setTexture(*texture);
 				setOffset(0);
 			}
+			else
+				out = "Error: Cannot create sprite from \"" + path + "\".";
 		}
+		else
+			out = "Error: Cannot properly create texture from \"" + path + "\".";
 	}
 
 	return out;
@@ -88,6 +99,8 @@ std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool b
 
 std::string cmm::Sprite::create(int w, int h)
 {
+	std::string out = "Error: Cannot create texture with width: " + std::to_string(w) + " height: " + std::to_string(h);
+
 	texture = std::make_unique<sf::Texture>();
 	if (texture->create(w, h))
 	{
@@ -113,8 +126,13 @@ std::string cmm::Sprite::create(int w, int h)
 			setOffset(0);
 			alpha = 0xFF;
 			setAlpha(0);
+			out = "Success: Correctly created sprite with width: " + std::to_string(w) + " height: " + std::to_string(h);
 		}
+		else
+			out = "Error: Cannot create sprite with width: " + std::to_string(w) + " height: " + std::to_string(h);
 	}
+
+	return out;
 }
 
 
