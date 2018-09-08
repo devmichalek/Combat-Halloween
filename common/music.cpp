@@ -26,13 +26,16 @@ void cmm::Music::pause()
 	music->pause();
 }
 
-void cmm::Music::load(const char* path)
+std::string cmm::Music::load(const char* path)
 {
 	music = std::make_unique<sf::Music>();
 	if(music->openFromFile(path))
 	{
 		music->setLoop(true);
+		return "Success: Music \"" + std::string(path) + "\" loaded correctly.";
 	}
+
+	return "Error: Cannot create music buffer from\"" + std::string(path) + "\".";
 }
 
 void cmm::Music::setVolume(const float &newVolume)
