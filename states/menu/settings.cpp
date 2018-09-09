@@ -1,6 +1,8 @@
 #include "settings.h"
-#include "state.h"
-#include "boost/lexical_cast.hpp"
+#include "logconsole.h"
+#include "user.h"
+#include "loading.h"
+
 
 Settings::Settings()
 {
@@ -80,11 +82,12 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	this->screen_h = screen_h;
 
 	// Set font for state texts and active texts.
-	const char* text_path = "fonts/jcandlestickextracond.ttf";
+	const char* text_path = cmm::JCANDLE_FONT_PATH;
 	for (unsigned i = 0; i < AMOUNT; i++)
 	{
 		state_texts.push_back(new cmm::Text);
-		state_texts[i]->setFont(text_path);
+		Loading::add(state_texts[i]->setFont(text_path));
+		if (Loading::isError())	return;
 		active_texts.push_back(new cmm::Text);
 		active_texts[i]->setFont(text_path);
 	}
@@ -101,6 +104,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	state_texts[CHAT]->setText("chat");
 
 	// Set active_texts text.
+	keys.clear();
 	for (unsigned i = 0; i < AMOUNT; i++)
 	{
 		text_collisions.push_back(sf::Rect<float>());
@@ -111,30 +115,33 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	active_texts[CHAT]->setText("o");
 
 	// Set size of state texts and active texts.
-	int size = screen_h / 28;
+	int size = static_cast<int>(screen_h / 28);
 	for (unsigned i = 0; i < AMOUNT; i++)
 	{
 		state_texts[i]->setSize(size);
 		active_texts[i]->setSize(size);
-		state_texts[i]->setFillColor(User::getLockedColor());
-		i < JUMP_ATTACK ? active_texts[i]->setFillColor(User::getLoadingColor()) : active_texts[i]->setFillColor(User::getLockedColor());
+		state_texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
+		i < JUMP_ATTACK ? active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor()) : active_texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
 	}
 
 	// Set contact me information.
-	contactme.setFont(text_path);
+	Loading::add(contactme.setFont(text_path));
+	if (Loading::isError())	return;
 	contactme.setText("Contact me: devmichalek@gmail.com");
 	contactme.setSize(size);
-	contactme.setFillColor(User::getLoadingColor());
+	contactme.setFillColor(cmm::LogConsole::getLoadingColor());
 
 	// Set table.
-	table.load("images/other/plank.png");
+	Loading::add(table.load("images/other/plank.png"));
+	if (Loading::isError())	return;
 	table.setScale(screen_w / 2560, screen_h / 1440);
 	x1 = screen_w - screen_w / 128;
 	x2 = screen_w + screen_w / 64 - table.getWidth();
 	table.setPosition(x1, screen_h / 2.6);
 
 	// Set second table.
-	chart.load("images/other/plank2.png");
+	Loading::add(chart.load("images/other/splank.png"));
+	if (Loading::isError())	return;
 	chart.setScale(screen_w / 2560, screen_h / 1440);
 	y1 = screen_h - screen_h / 72;
 	y2 = screen_h + screen_h / 72 - chart.getHeight();
@@ -144,7 +151,8 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	for (unsigned i = 0; i < RIGHT + 1; ++i)
 	{
 		gears.push_back(new cmm::Sprite);
-		gears[i]->load("images/other/gear.png");
+		Loading::add(gears[i]->load("images/other/gear.png"));
+		if (Loading::isError())	return;
 		gears[i]->setOrigin(gears[i]->getWidth() * 0.5, gears[i]->getHeight() * 0.5);
 		gears[i]->setScale(screen_w / 2560, screen_h / 1440);
 	}
@@ -154,12 +162,14 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	gears[RIGHT]->setPosition(chart.getRight(), screen_h);
 
 	// Set reset button.
-	resetbutton.load("images/buttons/resetbutton.png", 3);
+	Loading::add(resetbutton.load("images/buttons/resetbutton.png", 3));
+	if (Loading::isError())	return;
 	resetbutton.setScale(screen_w / 2560, screen_h / 1440);
 
 	// Set info.
-	info.setFont("fonts/jcandlestickextracond.ttf");
-	info.setText("Press button to change\nClick anywhere to save");
+	Loading::add(info.setFont(cmm::JCANDLE_FONT_PATH));
+	if (Loading::isError())	return;
+	info.setText("Press new key to change.\nClick anywhere to save.");
 	info.setSize(size);
 	info.setFillColor(sf::Color(0xDD, 0xDD, 0xDD));
 
@@ -168,11 +178,13 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	positionChart();
 
 	// Load sounds.
-	click.load("sounds/click.wav");
+	Loading::add(click.load("sounds/click.wav"));
+	if (Loading::isError())	return;
 }
 
 bool Settings::handle(const sf::Event &event)
 {
+
 	if (chartMoves == 0 && target != -1)
 	{
 		// Reset.
@@ -180,7 +192,7 @@ bool Settings::handle(const sf::Event &event)
 		{
 			if (event.mouseButton.button == sf::Mouse::Left)
 			{
-				if (resetbutton.checkCollision(event.mouseButton.x, event.mouseButton.y, 0, 0))
+				if (resetbutton.checkCollision(float(event.mouseButton.x), float(event.mouseButton.y), 0.0f, 0.0f))
 				{
 					resetbutton.setOffset(1);
 					resetKeys();
@@ -217,7 +229,7 @@ bool Settings::handle(const sf::Event &event)
 					keys[target] = event.key.code;
 
 					active_texts[target]->setText(getName(event.key.code));
-					active_texts[target]->setFillColor(User::getErrorColor());
+					active_texts[target]->setFillColor(cmm::LogConsole::getErrorColor());
 
 					if (target == ATTACK || target == JUMP)
 					{
@@ -251,7 +263,7 @@ bool Settings::handle(const sf::Event &event)
 				target = -1;
 				for (unsigned i = 0; i < JUMP_ATTACK; i++)
 				{
-					if (text_collisions[i].contains(event.mouseButton.x, event.mouseButton.y))
+					if (text_collisions[i].contains(float(event.mouseButton.x), float(event.mouseButton.y)))
 					{
 						target = i;
 						click.play();
@@ -325,7 +337,7 @@ void Settings::mechanics(const double &elapsedTime)
 
 	if (target != -1)
 	{
-		chart.getY() > y2 ? chartMoves = -elapsedTime * 0xFF : chartMoves = 0;
+		chart.getY() > y2 ? chartMoves = -(float)elapsedTime * 0xFF : chartMoves = 0.0f;
 
 		if (chart.getY() < y2)
 		{
@@ -334,7 +346,7 @@ void Settings::mechanics(const double &elapsedTime)
 	}
 	else
 	{
-		chart.getY() < y1 ? chartMoves = elapsedTime * 0xFF : chartMoves = 0;
+		chart.getY() < y1 ? chartMoves = (float)elapsedTime * 0xFF : chartMoves = 0.0f;
 
 		if (chart.getY() > y1)
 		{
@@ -415,7 +427,7 @@ void Settings::fadeout(const float &v, const int &min)
 
 void Settings::exsertTable(const double &elapsedTime)
 {
-	table.getX() > x2 ? tableMoves = -elapsedTime * 0xFF : tableMoves = 0;
+	table.getX() > x2 ? tableMoves = -(float)elapsedTime * 0xFF : tableMoves = 0.0f;
 
 	if (table.getX() < x2)
 	{
@@ -426,7 +438,7 @@ void Settings::exsertTable(const double &elapsedTime)
 
 void Settings::shovelTable(const double &elapsedTime)
 {
-	table.getX() < x1 ? tableMoves = elapsedTime * 0xFF : tableMoves = 0;
+	table.getX() < x1 ? tableMoves = (float)elapsedTime * 0xFF : tableMoves = 0.0f;
 	
 	if (table.getX() > x1)
 	{
@@ -445,8 +457,7 @@ void Settings::resetKeys()
 	keys[SHIELD] = 25;
 
 	// Overwrite / Send to database.
-	target = -2;
-	sendKeysThread();
+	sendKeysThread(true);
 
 	positionTable();
 }
@@ -454,7 +465,7 @@ void Settings::resetKeys()
 void Settings::setKeys()
 {
 	cmm::Request request;
-	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
+	request.setMessage("username=" +cmm::User::getUsername());
 	request.setRequest("/combathalloween/getters/getsettings.php", sf::Http::Request::Post);
 	request.setHttp("http://amichalek.pl/");
 
@@ -484,12 +495,12 @@ void Settings::setKeys()
 			for (unsigned i = 0; i < JUMP_ATTACK; ++i)
 			{
 				active_texts[i]->setText(getName(keys[i]));
-				active_texts[i]->setFillColor(User::getLoadingColor());
+				active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
 			}
 			active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
 			active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
-			active_texts[JUMP_ATTACK]->setFillColor(User::getLockedColor());
-			active_texts[JUMP_SHIELD]->setFillColor(User::getLockedColor());
+			active_texts[JUMP_ATTACK]->setFillColor(cmm::LogConsole::getLockedColor());
+			active_texts[JUMP_SHIELD]->setFillColor(cmm::LogConsole::getLockedColor());
 
 			thread.success = true;
 		}
@@ -501,7 +512,7 @@ void Settings::setKeys()
 		for (unsigned i = 0; i < PAUSE; ++i)
 		{
 			active_texts[i]->setText("error");
-			active_texts[i]->setFillColor(User::getErrorColor());
+			active_texts[i]->setFillColor(cmm::LogConsole::getErrorColor());
 		}
 	}
 
@@ -509,35 +520,35 @@ void Settings::setKeys()
 	thread.ready = true;
 }
 
-void Settings::sendKeysThread()
+void Settings::sendKeysThread(bool all)
 {
 	if (!thread.ready && !thread.thread)
 	{
-		if (target == -2)
+		if (all)
 		{
 			for (unsigned i = 0; i < PAUSE; i++)
 			{
 				active_texts[i]->setText("sending...");
-				active_texts[i]->setFillColor(User::getLoadingColor());
+				active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
 			}
 		}
-		else if(target >= 0)
+		else
 		{
 			active_texts[target]->setText("sending...");
-			active_texts[target]->setFillColor(User::getLoadingColor());
+			active_texts[target]->setFillColor(cmm::LogConsole::getLoadingColor());
 		}
 
 		positionTable();
 
-		thread.thread = new std::thread(&Settings::sendKeys, this);
+		thread.thread = new std::thread(&Settings::sendKeys, this, all);
 		thread.thread->detach();
 	}
 }
 
-void Settings::sendKeys()
+void Settings::sendKeys(bool all)
 {
 	cmm::Request request;
-	std::string msg = "username=" + boost::lexical_cast<std::string>(User::getUsername()) + "&keys=";
+	std::string msg = "username=" + cmm::User::getUsername() + "&keys=";
 
 	for (unsigned i = 0; i < keys.size(); ++i)
 	{
@@ -545,29 +556,20 @@ void Settings::sendKeys()
 		msg.push_back('@');
 	}
 
+	msg += "&pass=udreka2018"; // SECRET, DO NOT SHOW ANYBODY
+
 	request.setMessage(msg);
 	request.setRequest("/combathalloween/getters/getsettings.php", sf::Http::Request::Post);
 	request.setHttp("http://amichalek.pl/");
 	request.sendRequest();
 
-	if (target == -2)
+	for (unsigned i = 0; i < JUMP_ATTACK; i++)
 	{
-		target = -1;
-
-		
-		for (unsigned i = 0; i < JUMP_ATTACK; i++)
-		{
-			active_texts[i]->setText(getName(keys[i]));
-			active_texts[i]->setFillColor(User::getLoadingColor());
-		}
-		active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
-		active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
+		active_texts[i]->setText(getName(keys[i]));
+		active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
 	}
-	else if (target >= 0)
-	{
-		active_texts[target]->setText(getName(keys[target]));
-		active_texts[target]->setFillColor(User::getLoadingColor());
-	}
+	active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
+	active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
 
 	positionTable();
 	thread.ready = true;
@@ -588,7 +590,7 @@ void Settings::positionTable()
 		if (i < JUMP_ATTACK)
 		{
 			text_collisions[i].width = table.getWidth();
-			text_collisions[i].height = active_texts[i]->getHeight() *1.5;
+			text_collisions[i].height = active_texts[i]->getHeight() *1.5f;
 			text_collisions[i].left = table.getX();
 			text_collisions[i].top = active_texts[i]->getY();
 		}
@@ -688,8 +690,8 @@ void Settings::setThread()
 			for (unsigned i = 0; i < PAUSE; ++i)
 			{
 				active_texts[i]->setText("loading...");
-				active_texts[i]->setFillColor(User::getLoadingColor());
-				i < JUMP_ATTACK ? active_texts[i]->setFillColor(User::getLoadingColor()) : active_texts[i]->setFillColor(User::getLockedColor());
+				active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
+				i < JUMP_ATTACK ? active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor()) : active_texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
 			}
 
 			positionTable();

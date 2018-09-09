@@ -1,13 +1,13 @@
 #pragma once
+#include "coxing.h"
 #include "text.h"
 #include "sound.h"
 #include "sprite.h"
 #include "thread.h"
 #include "request.h"
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include "eventwindow.h"
 
-class Settings
+class Settings : public Coxing
 {
 	float screen_w;
 	float screen_h;
@@ -25,7 +25,6 @@ class Settings
 		CHAT,
 		AMOUNT
 	};
-	std::vector<int> keys;
 
 	enum GEAR_POS
 	{
@@ -76,8 +75,8 @@ public:
 private:
 	void resetKeys();
 	void setKeys();
-	void sendKeysThread();
-	void sendKeys();
+	void sendKeysThread(bool all = false);
+	void sendKeys(bool all);
 	void positionTable();
 	void positionChart();
 	bool isPossibleKey(const int &n);

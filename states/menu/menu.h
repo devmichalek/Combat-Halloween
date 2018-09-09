@@ -11,7 +11,7 @@
 #include "pausesystem.h"
 #include "music.h"
 
-class Menu :public State
+class Menu :public cmm::State
 {
 	bool loaded;
 	Knightspecs knightspecs;
@@ -21,17 +21,17 @@ class Menu :public State
 	SquareButton singleplayerbutton;
 	SquareButton multiplayerbutton;
 	SquareButton exitbutton;
-	Circlebutton soundbutton;
-	Circlebutton musicbutton;
-	Circlebutton updatebutton;
-	Circlebutton reloadbutton;
-	Circlebutton settingsbutton;
+	CircleButton soundbutton;
+	CircleButton musicbutton;
+	CircleButton updatebutton;
+	CircleButton reloadbutton;
+	CircleButton settingsbutton;
 	Settings settings;
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
 	MenuInformation information;
 	Chat chat;
-	Pausesystem pausesystem;
+	PauseSystem pausesystem;
 	cmm::Music music;
 
 public:
@@ -48,6 +48,7 @@ public:
 	void handle(const sf::Event& event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
+	void setState(int &state);
 private:
 	void fades(const float &elapsedTime);
 	void fadein(const float &value, const int &max);

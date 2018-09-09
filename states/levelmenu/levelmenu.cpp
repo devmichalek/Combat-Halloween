@@ -1,5 +1,5 @@
 #include "levelmenu.h"
-#include "boost/lexical_cast.hpp"
+#include "loading.h"
 
 LevelMenu::LevelMenu()
 {
@@ -81,6 +81,7 @@ void LevelMenu::reset()
 	homebutton.setActive(false);
 	playbutton.setActive(false);
 	chat.reset();
+	chat.setStyleBlackish();
 	music.stop();
 }
 
@@ -99,6 +100,7 @@ void LevelMenu::load(const float &screen_w, const float &screen_h)
 	playbutton.load		("images/buttons/play.png");
 	soundbutton.load	("images/buttons/sound.png");
 	musicbutton.load	("images/buttons/music.png");
+	if (Loading::isError())	return;
 	homebutton.setScale		(scale_x, scale_y);
 	updatebutton.setScale	(scale_x, scale_y);
 	playbutton.setScale		(scale_x, scale_y);
@@ -114,17 +116,18 @@ void LevelMenu::load(const float &screen_w, const float &screen_h)
 	// Set volume buttons.
 	sound_volumebutton.load(screen_w, screen_h);
 	music_volumebutton.load(screen_w, screen_h);
+	if (Loading::isError())	return;
 	sound_volumebutton.setPosition(soundbutton.getLeft(), soundbutton.getRight(), soundbutton.getBot());
 	music_volumebutton.setPosition(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
 	information.load(screen_w, screen_h);
 
 	chat.load(screen_w, screen_h);
-	chat.setCommandColor(sf::Color(0, 0, 0));
-	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));
+	chat.setStyleBlackish();
 	
 	pausesystem.load(screen_w, screen_h);
 	music.load("music/levelmenu.ogg");
+	if (Loading::isError())	return;
 }
 
 void LevelMenu::handle(const sf::Event &event)
@@ -175,26 +178,18 @@ void LevelMenu::mechanics(const double &elapsedTime)
 
 	fades(elapsedTime);
 
-	// FPS.
-	/*FPS::mechanics(elapsedTime);
-	if (FPS::timePassed())
-	{
-	printf("%d\n", FPS::getFPS());
-	}*/
-
 	// Mechanics.
 	if (!pausesystem.isActive() && !isState())
 	{
 		chat.mechanics(elapsedTime);
 		if (chat.isCommand())
 		{
-			// Someone clicked backtomenu button.
-			if (chat.findCommand("@menu") || chat.findCommand("@back"))
+			if (chat.compCommand("@menu") || chat.compCommand("@back"))	// Same as someone clicked backtomenu button.
 			{
 				homebutton.setActive(true);
 			}
 
-			// Someone clicked play.
+			// Same as someone clicked play.
 			/*else if (chat.findCommand("@play") || chat.findCommand("@start"))
 			{
 				if (worldtable.isChosen())
@@ -212,26 +207,48 @@ void LevelMenu::mechanics(const double &elapsedTime)
 					worldtable.setThread();
 				}
 			}*/
+			
+			else if (chat.compCommand("@editor"))	// Editor.
+			{
+				prev = true;
+				chat.isActive() = false;
+			}
 
 			// Update data.
-			else if (chat.findCommand("@update"))
+			else if (chat.compCommand("@update"))
 			{
 				updatebutton.setChanged(true);
 			}
 
-			// Turn on/off all chunks.
-			else if (chat.findCommand("@sound"))
+			// Turn on/off all sounds.
+			else if (chat.compCommand("@sound"))
 			{
 				soundbutton.setChanged(true);
 				soundbutton.setActive(!soundbutton.isActive());
 			}
 
 			// Turn on/off music.
-			else if (chat.findCommand("@music"))
+			else if (chat.compCommand("@music"))
 			{
 				musicbutton.setChanged(true);
 				musicbutton.setActive(!musicbutton.isActive());
 			}
+
+			// Volume
+			else if (chat.isNewMusicVolume())
+			{
+				float value = chat.getNewVolume();
+				if (value != -1)
+					music_volumebutton.setChanged(value);
+			}
+			else if (chat.isNewSoundVolume())
+			{
+				float value = chat.getNewVolume();
+				if (value != -1)
+					sound_volumebutton.setChanged(value);
+			}
+
+			// Else
 			else
 				chat.setError();
 		}
@@ -292,28 +309,48 @@ void LevelMenu::mechanics(const double &elapsedTime)
 	}
 }
 
+void LevelMenu::setState(int &state)
+{
+	if (isPrev() && isNext())
+	{
+		reset();
+		state = cmm::STATES::EDITOR;
+	}
+	else if (isPrev())
+	{
+		reset();
+		state = cmm::STATES::MENU;
+	}
+	else if (isNext())
+	{
+		reset();
+		state = cmm::STATES::PLATFORM;
+	}
+}
+
 void LevelMenu::fades(const double &elapsedTime)
 {
 	if (pausesystem.isActive())
 	{
-		float value = elapsedTime * 0xFF * 2, min = 0xFF * 3 / 4;
+		const float value = (float)elapsedTime * 0xFF * 2;
+		const int min = 0xFF * 3 / 4;
 		fadeout(value, min);
 		pausesystem.fadein(value * 3, min);
-		music.fadeout(elapsedTime * 100, music_volumebutton.getGlobalVolume() *0.2);
+		music.fadeout((float)elapsedTime * 100, (int)(music_volumebutton.getGlobalVolume() * 0.2));
 	}
 	else if (isState())
 	{
-		int min = 0;
-		fadeout(elapsedTime * 0xFF, min);
-		music.fadeout(elapsedTime * 100, min);
+		const int min = 0;
+		fadeout((float)elapsedTime * 0xFF, min);
+		music.fadeout((float)elapsedTime * 100, min);
 	}
 	else
 	{
-		float value = elapsedTime * 0xFF * 2;
-		int max = 0xFF;
+		const float value = (float)elapsedTime * 0xFF * 2;
+		const int max = 0xFF, min = 0;
 		fadein(value, max);
-		pausesystem.fadeout(value, max);
-		music.fadein(elapsedTime * 100, music_volumebutton.getGlobalVolume());
+		pausesystem.fadeout(value, min);
+		music.fadein((float)elapsedTime * 100, (int)music_volumebutton.getGlobalVolume());
 	}
 }
 

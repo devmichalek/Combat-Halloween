@@ -1,4 +1,6 @@
 #include "menu.h"
+#include "core.h"		// cmm::StaticCore::open
+#include "loading.h"	// cmm::Music
 
 Menu::Menu()
 {
@@ -52,7 +54,7 @@ void Menu::set()
 		bool soundPlayable = cmm::Sound::getGlobalPlayable();
 		float soundVolume = cmm::Sound::getGlobalVolume();
 
-		knightspecs.setVolume				(soundVolume);
+		// knightspecs.setVolume				(soundVolume);
 		github.setVolume					(soundVolume);
 		scores.setVolume					(soundVolume);
 		website.setVolume					(soundVolume);
@@ -98,6 +100,7 @@ void Menu::reset()
 	settingsbutton.setActive(false);
 	settings.reset();
 	chat.reset();
+	chat.setStyleBlackish();
 	music.stop();
 }
 
@@ -116,6 +119,7 @@ void Menu::load(const float &screen_w, const float &screen_h)
 	github.load			("images/buttons/github.png");
 	scores.load			("images/buttons/scores.png");
 	website.load		("images/buttons/website.png");
+	if (Loading::isError())	return;
 	github.setScale		(scale_x, scale_y);
 	scores.setScale		(scale_x, scale_y);
 	website.setScale	(scale_x, scale_y);
@@ -130,6 +134,7 @@ void Menu::load(const float &screen_w, const float &screen_h)
 	singleplayerbutton.load			("images/buttons/singleplayer.png");
 	multiplayerbutton.load			("images/buttons/multiplayer.png", true);
 	exitbutton.load					("images/buttons/exit.png");
+	if (Loading::isError())			return;
 	singleplayerbutton.setScale		(scale_x, scale_y);
 	multiplayerbutton.setScale		(scale_x, scale_y);
 	exitbutton.setScale				(scale_x, scale_y);
@@ -143,6 +148,7 @@ void Menu::load(const float &screen_w, const float &screen_h)
 	updatebutton.load			("images/buttons/update.png");
 	reloadbutton.load			("images/buttons/reload.png");
 	settingsbutton.load			("images/buttons/settings.png");
+	if (Loading::isError())		return;
 	soundbutton.setScale		(scale_x, scale_y);
 	musicbutton.setScale		(scale_x, scale_y);
 	updatebutton.setScale		(scale_x, scale_y);
@@ -158,18 +164,19 @@ void Menu::load(const float &screen_w, const float &screen_h)
 	// Set volume buttons.
 	sound_volumebutton.load			(screen_w, screen_h);
 	music_volumebutton.load			(screen_w, screen_h);
+	if (Loading::isError())			return;
 	sound_volumebutton.setPosition	(soundbutton.getLeft(), soundbutton.getRight(), soundbutton.getBot());
 	music_volumebutton.setPosition	(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
 	// Set chat.
 	chat.load(screen_w, screen_h);
-	chat.setCommandColor(sf::Color(0, 0, 0));
-	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));
+	chat.setStyleBlackish();
 
 	information.load	(screen_w, screen_h);
 	settings.load		(screen_w, screen_h);
 	pausesystem.load	(screen_w, screen_h);
-	music.load("music/menu.ogg");
+	Loading::add(music.load("music/menu.ogg"));
+	if (Loading::isError())	return;
 }
 
 void Menu::handle(const sf::Event &event)
@@ -232,13 +239,6 @@ void Menu::mechanics(const double &elapsedTime)
 
 	fades(static_cast<float>(elapsedTime));
 
-	// FPS.
-	/*FPS::mechanics(elapsedTime);
-	if (FPS::timePassed())
-	{
-		printf("%d\n", FPS::getFPS());
-	}*/
-
 	// Mechanics.
 	if (!pausesystem.isActive() && !isState())
 	{
@@ -246,13 +246,13 @@ void Menu::mechanics(const double &elapsedTime)
 		if (chat.isCommand())
 		{
 			// Close application.
-			if (chat.findCommand("@close") || chat.findCommand("@exit"))
+			if (chat.compCommand("@close") || chat.compCommand("@exit"))
 			{
 				exitbutton.setPressed();
 			}
 
 			// Someone clicked singleplayer.
-			else if (chat.findCommand("@start") || chat.findCommand("@play"))
+			else if (chat.compCommand("@start") || chat.compCommand("@play"))
 			{
 				if (knightspecs.isReady() && information.isReady() && settings.isReady())
 				{
@@ -261,27 +261,27 @@ void Menu::mechanics(const double &elapsedTime)
 			}
 
 			// Exsert / shovel settings.
-			else if (chat.findCommand("@settings") || chat.findCommand("@keyboard") ||
-				chat.findCommand("@keys") || chat.findCommand("@sets"))
+			else if (chat.compCommand("@settings") || chat.compCommand("@keyboard") ||
+				chat.compCommand("@keys") || chat.compCommand("@sets"))
 			{
 				settingsbutton.setActive(!settingsbutton.isActive());
 			}
 
 			// Reload data.
 			else if ((!knightspecs.isReady() || !information.isReady() || !settings.isReady()) &&
-				(chat.findCommand("@reload") || chat.findCommand("@rel")))
+				(chat.compCommand("@reload") || chat.compCommand("@rel")))
 			{
 				reloadbutton.setActive(true);
 			}
 
 			// Update data - works if reload data done its job.
-			else if (chat.findCommand("@reload") || chat.findCommand("@rel"))
+			else if (chat.compCommand("@reload") || chat.compCommand("@rel"))
 			{
 				updatebutton.setActive(true);
 			}
 
 			// Turn on/off all sounds.
-			else if (chat.findCommand("@sound"))
+			else if (chat.compCommand("@sound"))
 			{
 				cmm::Sound::setGlobalPlayable(!cmm::Sound::getGlobalPlayable());
 				soundbutton.setChanged(true);
@@ -289,30 +289,42 @@ void Menu::mechanics(const double &elapsedTime)
 			}
 
 			// Turn on/off music.
-			else if (chat.findCommand("@music"))
+			else if (chat.compCommand("@music"))
 			{
 				cmm::Music::setGlobalPlayable(!cmm::Music::getGlobalPlayable());
 				musicbutton.setChanged(true);
 				musicbutton.setActive(!musicbutton.isActive());
 			}
 
-		//	// Map editor.
-		//	else if (chat.findCommand("@mapeditor"))
-		//	{
-		//		editor = true;
-		//		chat.isOpen() = false;
-		//	}
+			// Editor.
+			else if (chat.compCommand("@editor"))
+			{
+				prev = true;
+				chat.isActive() = false;
+			}
 
 			// Link buttons in addition.
-			else if (chat.findCommand("@github"))		github.openWebsite();
-			else if (chat.findCommand("@scores"))		scores.openWebsite();
-			else if (chat.findCommand("@website"))		website.openWebsite();
+			else if (chat.compCommand("@github"))		github.openWebsite();
+			else if (chat.compCommand("@scores"))		scores.openWebsite();
+			else if (chat.compCommand("@website"))		website.openWebsite();
 
-			// Command doesn't exist.
-			else
+			// Volume
+			else if (chat.isNewMusicVolume())
 			{
-				chat.setError();
+				float value = chat.getNewVolume();
+				if (value != -1)
+					music_volumebutton.setChanged(value);
 			}
+			else if (chat.isNewSoundVolume())
+			{
+				float value = chat.getNewVolume();
+				if (value != -1)
+					sound_volumebutton.setChanged(value);
+			}
+
+			// Else
+			else
+				chat.setError();
 		}
 
 		knightspecs.mechanics(elapsedTime);
@@ -374,7 +386,7 @@ void Menu::mechanics(const double &elapsedTime)
 		{
 			float value = sound_volumebutton.getGlobalVolume();
 			cmm::Sound::setGlobalVolume		(value);
-			knightspecs.setVolume			(value);
+			// knightspecs.setVolume			(value);
 			github.setVolume				(value);
 			scores.setVolume				(value);
 			website.setVolume				(value);
@@ -407,6 +419,25 @@ void Menu::mechanics(const double &elapsedTime)
 	}
 }
 
+void Menu::setState(int &state)
+{
+	if (isPrev())
+	{
+		reset();
+		state = cmm::STATES::EDITOR;
+	}
+	else if (isNext())
+	{
+		reset();
+		state = cmm::STATES::LEVELMENU;
+	}
+	else if (isExit())
+	{
+		reset();
+		cmm::StaticCore::open = false;
+	}
+}
+
 void Menu::fades(const float &elapsedTime)
 {
 	if (pausesystem.isActive())
@@ -426,9 +457,9 @@ void Menu::fades(const float &elapsedTime)
 	else
 	{
 		float value = elapsedTime * 0xFF * 2;
-		int max = 0xFF;
+		int max = 0xFF, min = 0;
 		fadein(value, max);
-		pausesystem.fadeout(value, max);
+		pausesystem.fadeout(value, min);
 		music.fadein(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume()));
 	}
 }

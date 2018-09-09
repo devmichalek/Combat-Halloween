@@ -1,5 +1,6 @@
 #include "levelmenuinformation.h"
-#include "state.h"
+#include "logconsole.h"
+#include "loading.h"
 
 LevelMenuInformation::LevelMenuInformation()
 {
@@ -29,21 +30,25 @@ void LevelMenuInformation::load(const float &screen_w, const float &screen_h)
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	plank.load("images/other/plank2.png");
+	Loading::add(plank.load("images/other/splank.png"));
+	if (Loading::isError())	return;
 	plank.setScale(screen_w / 5120, screen_h / 2880);
 
-	background.loadRepeated("images/other/sayagata.png", screen_w * 1.5f, screen_h * 1.5f, true);
+	Loading::add(background.loadRepeated("images/other/sayagata.png", screen_w * 1.5f, screen_h * 1.5f, true));
+	if (Loading::isError())	return;
 	background.setScale(0.75, 0.75);
 
-	plankbar.loadRepeated("images/other/plankbar.png", screen_w * 1.5f, screen_h / 18.0f, true);
+	Loading::add(plankbar.loadRepeated("images/other/plankbar.png", screen_w * 1.5f, screen_h / 18.0f, true));
+	if (Loading::isError())	return;
 	plankbar.setScale(0.75, 0.5);
 
 	for (unsigned i = 0; i < SIZE; ++i)
 	{
 		texts.push_back(new cmm::Text);
-		texts[i]->setFont("fonts/jcandlestickextracond.ttf");
+		Loading::add(texts[i]->setFont(cmm::JCANDLE_FONT_PATH));
+		if (Loading::isError())	return;
 		texts[i]->setSize(screen_h / 16);
-		texts[i]->setFillColor(User::getLockedColor());
+		texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
 	}
 
 	chosen = 0;
@@ -56,7 +61,8 @@ void LevelMenuInformation::load(const float &screen_w, const float &screen_h)
 
 	plankbar.setPosition(0, texts[MINE]->getBot() + screen_h / 72);
 
-	sound.load("sounds/click.wav");
+	Loading::add(sound.load("sounds/click.wav"));
+	if (Loading::isError())	return;
 
 	prepareChosen();
 }
@@ -127,11 +133,11 @@ void LevelMenuInformation::prepareChosen()
 {
 	for (auto &it : texts)
 	{
-		it->setFillColor(User::getLockedColor());
+		it->setFillColor(cmm::LogConsole::getLockedColor());
 		it->setPosition(it->getX(), screen_h / 7);
 	}
 
-	texts[chosen]->setFillColor(User::getLoadingColor());
+	texts[chosen]->setFillColor(cmm::LogConsole::getLoadingColor());
 	texts[chosen]->move(0, -screen_h / 144);
 }
 

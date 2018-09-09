@@ -1,125 +1,117 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Dependencies">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Dependencies\Core">
-      <UniqueIdentifier>{1e9a72fa-fa1c-4337-93a2-08b54eef7954}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main\Chat">
-      <UniqueIdentifier>{587684bf-7028-4137-80d3-7981a5312ce5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dependencies\Pause System">
-      <UniqueIdentifier>{55306622-163c-448e-b2b8-680a70a6baf6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dependencies\Common">
-      <UniqueIdentifier>{0c110fc7-41c5-4a64-b97a-8e17d0e9a7b1}</UniqueIdentifier>
+      <UniqueIdentifier>{e498272a-50c5-4fe1-a4ec-56ac5304e0e8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\Button">
-      <UniqueIdentifier>{b33f77e8-2856-4808-8003-850300a1441f}</UniqueIdentifier>
+    <Filter Include="Dependencies\Tools">
+      <UniqueIdentifier>{99776b68-e921-43b5-85a1-94ba78419bed}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="levelmenu.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\state.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="levelmenuinformation.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="..\core\core.cpp">
-      <Filter>Dependencies\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\button.cpp">
-      <Filter>Dependencies\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\circlebutton.cpp">
-      <Filter>Dependencies\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\volumebutton.cpp">
-      <Filter>Dependencies\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\music.cpp">
+    <ClCompile Include="..\..\common\user.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\request.cpp">
+    <ClCompile Include="..\..\common\thread.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sound.cpp">
+    <ClCompile Include="..\..\common\text.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sprite.cpp">
+    <ClCompile Include="..\..\common\state.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\text.cpp">
+    <ClCompile Include="..\..\common\sprite.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="chat.cpp">
-      <Filter>Main\Chat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\pausesystem.cpp">
-      <Filter>Dependencies\Pause System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\thread.cpp">
+    <ClCompile Include="..\..\common\sound.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\request.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\core.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\music.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\button.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\circlebutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\chat.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\pausesystem.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\loading.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\volumebutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="levelmenuinformation.cpp" />
+    <ClCompile Include="levelmenu.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="levelmenu.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\state.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="levelmenuinformation.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Dependencies\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\button.h">
-      <Filter>Dependencies\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\circlebutton.h">
-      <Filter>Dependencies\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\volumebutton.h">
-      <Filter>Dependencies\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\music.h">
+    <ClInclude Include="..\..\common\user.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\request.h">
+    <ClInclude Include="..\..\common\thread.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sound.h">
+    <ClInclude Include="..\..\common\text.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sprite.h">
+    <ClInclude Include="..\..\common\state.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\text.h">
+    <ClInclude Include="..\..\common\sprite.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="chat.h">
-      <Filter>Main\Chat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\pausesystem.h">
-      <Filter>Dependencies\Pause System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\thread.h">
+    <ClInclude Include="..\..\common\sound.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\request.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\logconsole.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\core.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\music.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\button.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\circlebutton.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\chat.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\pausesystem.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\loading.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\volumebutton.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="levelmenuinformation.h" />
+    <ClInclude Include="levelmenu.h" />
   </ItemGroup>
 </Project>

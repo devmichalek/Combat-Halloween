@@ -7,47 +7,56 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\music.cpp" />
-    <ClCompile Include="..\common\request.cpp" />
-    <ClCompile Include="..\common\sound.cpp" />
-    <ClCompile Include="..\common\sprite.cpp" />
-    <ClCompile Include="..\common\text.cpp" />
-    <ClCompile Include="..\common\thread.cpp" />
-    <ClCompile Include="..\core\core.cpp" />
-    <ClCompile Include="..\levelmenu\chat.cpp" />
-    <ClCompile Include="button.cpp" />
-    <ClCompile Include="circlebutton.cpp" />
-    <ClCompile Include="linkbutton.cpp" />
+    <ClCompile Include="..\..\common\core.cpp" />
+    <ClCompile Include="..\..\common\music.cpp" />
+    <ClCompile Include="..\..\common\request.cpp" />
+    <ClCompile Include="..\..\common\sound.cpp" />
+    <ClCompile Include="..\..\common\sprite.cpp" />
+    <ClCompile Include="..\..\common\state.cpp" />
+    <ClCompile Include="..\..\common\text.cpp" />
+    <ClCompile Include="..\..\common\thread.cpp" />
+    <ClCompile Include="..\..\common\user.cpp" />
+    <ClCompile Include="..\..\tools\button.cpp" />
+    <ClCompile Include="..\..\tools\chat.cpp" />
+    <ClCompile Include="..\..\tools\circlebutton.cpp" />
+    <ClCompile Include="..\..\tools\linkbutton.cpp" />
+    <ClCompile Include="..\..\tools\loading.cpp" />
+    <ClCompile Include="..\..\tools\pausesystem.cpp" />
+    <ClCompile Include="..\..\tools\squarebutton.cpp" />
+    <ClCompile Include="..\..\tools\volumebutton.cpp" />
+    <ClCompile Include="..\platform\knight\coxing.cpp" />
+    <ClCompile Include="..\platform\knight\specs.cpp" />
     <ClCompile Include="menuinformation.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
-    <ClCompile Include="pausesystem.cpp" />
     <ClCompile Include="knightspecs.cpp" />
     <ClCompile Include="settings.cpp" />
-    <ClCompile Include="squarebutton.cpp" />
-    <ClCompile Include="state.cpp" />
-    <ClCompile Include="volumebutton.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\music.h" />
-    <ClInclude Include="..\common\request.h" />
-    <ClInclude Include="..\common\sound.h" />
-    <ClInclude Include="..\common\sprite.h" />
-    <ClInclude Include="..\common\text.h" />
-    <ClInclude Include="..\common\thread.h" />
-    <ClInclude Include="..\core\core.h" />
-    <ClInclude Include="..\levelmenu\chat.h" />
-    <ClInclude Include="button.h" />
-    <ClInclude Include="circlebutton.h" />
-    <ClInclude Include="linkbutton.h" />
+    <ClInclude Include="..\..\common\core.h" />
+    <ClInclude Include="..\..\common\logconsole.h" />
+    <ClInclude Include="..\..\common\music.h" />
+    <ClInclude Include="..\..\common\request.h" />
+    <ClInclude Include="..\..\common\sound.h" />
+    <ClInclude Include="..\..\common\sprite.h" />
+    <ClInclude Include="..\..\common\state.h" />
+    <ClInclude Include="..\..\common\text.h" />
+    <ClInclude Include="..\..\common\thread.h" />
+    <ClInclude Include="..\..\common\user.h" />
+    <ClInclude Include="..\..\tools\button.h" />
+    <ClInclude Include="..\..\tools\chat.h" />
+    <ClInclude Include="..\..\tools\circlebutton.h" />
+    <ClInclude Include="..\..\tools\linkbutton.h" />
+    <ClInclude Include="..\..\tools\loading.h" />
+    <ClInclude Include="..\..\tools\pausesystem.h" />
+    <ClInclude Include="..\..\tools\squarebutton.h" />
+    <ClInclude Include="..\..\tools\volumebutton.h" />
+    <ClInclude Include="..\platform\knight\coxing.h" />
+    <ClInclude Include="..\platform\knight\specs.h" />
     <ClInclude Include="menuinformation.h" />
     <ClInclude Include="menu.h" />
-    <ClInclude Include="pausesystem.h" />
     <ClInclude Include="knightspecs.h" />
     <ClInclude Include="settings.h" />
-    <ClInclude Include="squarebutton.h" />
-    <ClInclude Include="state.h" />
-    <ClInclude Include="volumebutton.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -78,12 +87,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\\boost;..\core;..\common;..\levelmenu;..\menu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\platform\knight</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

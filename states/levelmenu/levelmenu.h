@@ -7,19 +7,19 @@
 #include "pausesystem.h"
 #include "music.h"
 
-class LevelMenu :public State
+class LevelMenu :public cmm::State
 {
 	bool loaded;
-	Circlebutton homebutton;
-	Circlebutton updatebutton;
-	Circlebutton playbutton;
-	Circlebutton soundbutton;
-	Circlebutton musicbutton;
+	CircleButton homebutton;
+	CircleButton updatebutton;
+	CircleButton playbutton;
+	CircleButton soundbutton;
+	CircleButton musicbutton;
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
 	LevelMenuInformation information;
 	Chat chat;
-	Pausesystem pausesystem;
+	PauseSystem pausesystem;
 	cmm::Music music;
 
 public:
@@ -36,6 +36,7 @@ public:
 	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
+	void setState(int &state);
 private:
 	void fades(const double &elapsedTime);
 	void fadein(const float &value, const int &max);

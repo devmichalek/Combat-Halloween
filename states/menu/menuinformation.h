@@ -3,8 +3,7 @@
 #include "sprite.h"
 #include "thread.h"
 #include "request.h"
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include "eventwindow.h"
 
 class MenuInformation
 {

@@ -1,6 +1,7 @@
 #include "menuinformation.h"
-#include "state.h"
-#include "boost/lexical_cast.hpp"
+#include "logconsole.h"
+#include "user.h"
+#include "loading.h"
 #include <ctime>
 
 MenuInformation::MenuInformation()
@@ -29,23 +30,24 @@ void MenuInformation::load(float screen_w, float screen_h)
 	this->screen_h = screen_h;
 
 	// Set font.
-	const char* path = "fonts/jcandlestickextracond.ttf";
-	money.setFont(path);
-	money_form.setFont(path);
-	username.setFont(path);
-	username_form.setFont(path);
+	const char* path = cmm::JCANDLE_FONT_PATH;
+	Loading::add(money.setFont(path));
+	Loading::add(money_form.setFont(path));
+	Loading::add(username.setFont(path));
+	Loading::add(username_form.setFont(path));
+	if (Loading::isError())	return;
 
 	// Set text.
 	money.setText("error");
 	money_form.setText("Money: ");
-	username.setText(User::getUsername());
+	username.setText(cmm::User::getUsername());
 	username_form.setText("Logged as ");
 
 	// Set color.
-	money.setFillColor(User::getErrorColor());
-	money_form.setFillColor(User::getLockedColor());
-	username.setFillColor(User::getSuccessColor());
-	username_form.setFillColor(User::getLockedColor());
+	money.setFillColor(cmm::LogConsole::getErrorColor());
+	money_form.setFillColor(cmm::LogConsole::getLockedColor());
+	username.setFillColor(cmm::LogConsole::getSuccessColor());
+	username_form.setFillColor(cmm::LogConsole::getLockedColor());
 
 	// Set size.
 	float size = screen_h / 32;
@@ -54,7 +56,8 @@ void MenuInformation::load(float screen_w, float screen_h)
 	username.setSize(size);
 	username_form.setSize(size);
 
-	plank.load("images/other/title.png");
+	Loading::add(plank.load("images/other/title.png"));
+	if (Loading::isError())	return;
 	plank.setScale(screen_w / 2560, screen_h / 1440);
 	plank.setPosition(screen_w / 3, 0);
 
@@ -64,10 +67,12 @@ void MenuInformation::load(float screen_w, float screen_h)
 	money_form.setPosition(username_form.getX(), username.getBot() + screen_h / 144);
 	money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
 
-	scene.load("images/other/scene.png");
+	Loading::add(scene.load("images/other/scene.png"));
+	if (Loading::isError())	return;
 	scene.setScale(screen_w / 2560, screen_h / 1440);
 	scene.setPosition(screen_w / 9, screen_h - scene.getHeight());
-	background.loadRepeated("images/other/sayagata.png", screen_w*1.5, screen_h*1.5, true);
+	Loading::add(background.loadRepeated("images/other/sayagata.png", screen_w*1.5f, screen_h*1.5f, true));
+	if (Loading::isError())	return;
 	background.setScale(0.75, 0.75);
 }
 
@@ -127,7 +132,7 @@ void MenuInformation::setThread()
 		{
 			// Money.
 			money.setText("loading...");
-			money.setFillColor(User::getLoadingColor());
+			money.setFillColor(cmm::LogConsole::getLoadingColor());
 			money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
 
 			thread.thread = new std::thread(&MenuInformation::setMoney, this);
@@ -144,7 +149,7 @@ void MenuInformation::reloadThread()
 void MenuInformation::setMoney()
 {
 	cmm::Request request;
-	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
+	request.setMessage("username=" + cmm::User::getUsername());
 	request.setRequest("/combathalloween/getters/getmoney.php", sf::Http::Request::Post);
 	request.setHttp("http://amichalek.pl/");
 
@@ -158,7 +163,7 @@ void MenuInformation::setMoney()
 		else
 		{
 			money.setText(request.getResult());
-			money.setFillColor(User::getSuccessColor());
+			money.setFillColor(cmm::LogConsole::getSuccessColor());
 			thread.success = true;
 		}
 	}
@@ -167,11 +172,11 @@ void MenuInformation::setMoney()
 	if (!success)
 	{
 		money.setText("error");
-		money.setFillColor(User::getErrorColor());
+		money.setFillColor(cmm::LogConsole::getErrorColor());
 	}
 
 	// Set username and position again.
-	username.setText(User::getUsername());
+	username.setText(cmm::User::getUsername());
 	username_form.setPosition(plank.getRight() - (username_form.getWidth() + username.getWidth() + screen_h / 64), screen_h / 144);
 	username.setPosition(username_form.getRight() + screen_h / 128, username_form.getTop());
 	money_form.setPosition(username_form.getX(), username.getBot() + screen_h / 144);

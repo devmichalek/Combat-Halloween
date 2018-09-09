@@ -1,24 +1,53 @@
 #include "core.h"
+#include "loading.h"
 #include "menu.h"
 
-Core* core = new Core(0, sf::Color(21, 21, 29, 0xFF));
-Menu* menu = new Menu;
+cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
+std::vector<cmm::State*> states;
 
-enum STATES
+// Load function.
+void loading_loop()
 {
-	LOGIN = 2,
-	MENU,
-	LEVEL,
-};
-
-int main(int argc, char** argv)
-{
-	core->create("Combat Halloween");
-	core->state = MENU;
-	menu->load(static_cast<float>(core->getWidth()), static_cast<float>(core->getHeight()));
+	float screen_w = (float)core->getWidth();
+	float screen_h = (float)core->getHeight();
 
 	while (core->open)
 	{
+		while (core->isEvent())
+		{
+			if (core->getEvent().type == sf::Event::Closed)
+				core->open = false;
+		}
+
+		states[core->state]->draw(core->getWindow());
+		states[core->state]->mechanics(core->getElapsedTime());
+
+		switch (LoadingState::getState())
+		{
+		case 50:
+			states.push_back(new Menu);
+			states[cmm::MENU]->load(screen_w, screen_h);
+			break;
+		}
+
+		states[core->state]->setState(core->state);
+		if (core->state != cmm::LOADING)// game starts from here
+			break;
+	}
+
+	//delete states[cmm::LOADING];
+	//states[cmm::LOADING] = nullptr;
+	states.shrink_to_fit();
+}
+
+void main_loop()
+{
+	core->state = cmm::MENU;
+	while (core->open)
+	{
+		if (core->state != cmm::MENU)
+			break;
+
 		// clear
 		core->clear();
 
@@ -26,42 +55,46 @@ int main(int argc, char** argv)
 		while (core->isEvent())
 		{
 			if (core->getEvent().type == sf::Event::Closed)
-			{
 				core->open = false;
-			}
 
-			switch (core->state)
-			{
-			case MENU: menu->handle(core->getEvent()); 	break;
-			}
+			states[core->state]->handle(core->getEvent());
 		}
 
-		if (core->state == MENU)
-		{
-			menu->mechanics(core->getElapsedTime());
-			menu->draw(core->getWindow());
+		states[core->state]->mechanics(core->getElapsedTime());
+		states[core->state]->draw(core->getWindow());
+		states[core->state]->setState(core->state);
 
-			if (menu->isPrev())
-			{
-				menu->reset();
-				-- core->state;
-			}
-			else if (menu->isNext())
-			{
-				menu->reset();
-				++ core->state;
-			}
-			else if (menu->isExit())
-			{
-				menu->reset();
-				core->open = false;
-			}
-		}
-
+		// display
 		core->display();
 	}
+}
 
+int main(int argc, char** argv)
+{
+	// Init only loading state.
+	states.push_back(new Loading);
+	if (Loading::isError())
+		return -1;
+
+	// Create window.
+	core->create("Combat Halloween");
+	states[cmm::LOADING]->load(core->getWidth(), core->getHeight());
+
+	// menu is 4th state so we can artificial add some
+	states.push_back(nullptr);
+	states.push_back(nullptr);
+
+	// Loops.
+	loading_loop();
+	main_loop();
+
+	// Free states.
+	for (auto &it : states)
+	{
+		delete it;
+		it = nullptr;
+	}
+	states.clear();
 	delete core;
-	delete menu;
 	return 0;
 }
