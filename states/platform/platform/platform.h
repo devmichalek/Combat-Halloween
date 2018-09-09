@@ -1,7 +1,9 @@
 #pragma once
 #include "state.h"
-#include "button.h"
-// #include "level/chat.h"
+#include "circlebutton.h"
+#include "volumebutton.h"
+#include "background/moving_bg.h"
+#include "chat.h"
 #include "pausesystem.h"
 #include "music.h"
 
@@ -14,7 +16,8 @@ class Platform :public State
 	Circlebutton musicbutton;
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
-	// Chat chat;
+	MovingBG movingBG;
+	Chat chat;
 	Pausesystem pausesystem;
 	cmm::Music music;
 	
@@ -26,12 +29,12 @@ public:
 	~Platform();
 	void reset();
 
-	void load(float screen_w, float screen_h);
-	void handle(sf::Event& event);
+	void load(const float& screen_w, const float& screen_h);
+	void handle(const sf::Event& event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(double elapsedTime);
 private:
-	void fades(double elapsedTime);
-	void fadein(float value = 1, int max = 0xFF);
-	void fadeout(float value = 1, int min = 0);
+	void fades(const float &elapsedTime);
+	void fadein(const float &value, const int &max);
+	void fadeout(const float &value, const int &min);
 };

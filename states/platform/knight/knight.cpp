@@ -104,11 +104,13 @@ void Knight::mechanics(const double &elapsedTime)
 	{
 		align = ALIGN::LEFT;
 		walk(elapsedTime);
+		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 	}
 	else if (coxing.isMovingRight())
 	{
 		align = ALIGN::RIGHT;
 		walk(elapsedTime);
+		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 	}
 	else
 	{

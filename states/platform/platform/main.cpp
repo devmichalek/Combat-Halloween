@@ -1,4 +1,3 @@
-// Test of objects: 
 #include "core.h"
 #include "platform.h"
 

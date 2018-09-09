@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{E6025A42-39B8-4F0A-BB45-BEA68368CE63}</ProjectGuid>
+    <RootNamespace>knight</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\\boost;..\core;..\common</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\common\request.cpp" />
+    <ClCompile Include="..\common\sound.cpp" />
+    <ClCompile Include="..\common\sprite.cpp" />
+    <ClCompile Include="..\common\text.cpp" />
+    <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="..\core\core.cpp" />
+    <ClCompile Include="coxing.cpp" />
+    <ClCompile Include="kcoxing.cpp" />
+    <ClCompile Include="knight.cpp" />
+    <ClCompile Include="kspecs.cpp" />
+    <ClCompile Include="kstates.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="specs.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\request.h" />
+    <ClInclude Include="..\common\sound.h" />
+    <ClInclude Include="..\common\sprite.h" />
+    <ClInclude Include="..\common\text.h" />
+    <ClInclude Include="..\common\thread.h" />
+    <ClInclude Include="..\core\core.h" />
+    <ClInclude Include="coxing.h" />
+    <ClInclude Include="kcoxing.h" />
+    <ClInclude Include="knight.h" />
+    <ClInclude Include="kspecs.h" />
+    <ClInclude Include="kstates.h" />
+    <ClInclude Include="specs.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

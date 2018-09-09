@@ -57,8 +57,8 @@ void Tiles::reset()
 		alphas.clear();
 	}
 
-	error = "";
-	thread.free();
+	// error = "";
+	// thread.free();
 }
 
 void Tiles::load(float screen_w, float screen_h)

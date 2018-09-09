@@ -12,9 +12,7 @@ public:
 private:
 	// Real box and attack box
 	float getRealX();
-	float getRealY();
 	float getAttackX();
-	float getAttackY();
 public:
 	// Text x, y
 	float getMouthY();

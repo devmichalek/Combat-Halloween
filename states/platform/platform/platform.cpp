@@ -25,7 +25,8 @@ void Platform::free()
 	musicbutton.free();
 	sound_volumebutton.free();
 	music_volumebutton.free();
-	// chat.free();
+	movingBG.free();
+	chat.free();
 	pausesystem.free();
 }
 
@@ -39,7 +40,9 @@ void Platform::set()
 		// ...
 
 		// Sound.
-		float soundVolume = 50;
+		bool soundPlayable = cmm::Sound::getGlobalPlayable();
+		float soundVolume = cmm::Sound::getGlobalVolume();
+
 		homebutton.setVolume(soundVolume);
 		levelbutton.setVolume(soundVolume);
 		soundbutton.setVolume(soundVolume);
@@ -48,16 +51,16 @@ void Platform::set()
 		sound_volumebutton.setGlobalVolume(soundVolume);
 		music_volumebutton.setVolume(soundVolume);
 		pausesystem.setVolume(soundVolume);
-		cmm::Sound::setPlayable(true);
-		soundbutton.setActive(true);
+		soundbutton.setActive(soundPlayable);
 
 		// Music.
-		float musicVolume = 60;
+		bool musicPlayable = cmm::Music::getGlobalPlayable();
+		float musicVolume = cmm::Music::getGlobalVolume();
+
 		music.setVolume(musicVolume);
 		music_volumebutton.setGlobalVolume(musicVolume);
-		cmm::Music::setPlayable(true);
-		musicbutton.setActive(true);
-		music.play();
+		musicbutton.setActive(musicPlayable);
+		musicbutton.isActive() ? music.play() : music.pause();
 	}
 }
 
@@ -76,13 +79,11 @@ void Platform::reset()
 	
 	homebutton.setActive(false);
 	levelbutton.setActive(false);
-	// chat.reset();
+	chat.reset();
 	music.stop();
 }
 
-
-
-void Platform::load(float screen_w, float screen_h)
+void Platform::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -94,8 +95,12 @@ void Platform::load(float screen_w, float screen_h)
 	levelbutton.load("images/buttons/levelmenu.png");
 	soundbutton.load("images/buttons/sound.png");
 	musicbutton.load("images/buttons/music.png");
+	homebutton.setScale(scale_x, scale_y);
+	levelbutton.setScale(scale_x, scale_y);
 	soundbutton.setScale(scale_x, scale_y);
 	musicbutton.setScale(scale_x, scale_y);
+	homebutton.setPosition(screen_w / 256, screen_h / 144);
+	levelbutton.setPosition(homebutton.getRight() + screen_w / 256, homebutton.getTop());
 	soundbutton.setPosition(screen_w - screen_w / 256 - soundbutton.getWidth(), screen_h - screen_h / 144 - soundbutton.getHeight());
 	musicbutton.setPosition(soundbutton.getLeft() - screen_w / 256 - musicbutton.getWidth(), soundbutton.getTop());
 
@@ -105,24 +110,27 @@ void Platform::load(float screen_w, float screen_h)
 	sound_volumebutton.setPosition(soundbutton.getLeft(), soundbutton.getRight(), soundbutton.getBot());
 	music_volumebutton.setPosition(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
+	// BG
+	movingBG.load(screen_w, screen_h);
+
 	// Set chat.
-	/*chat.load(screen_w, screen_h);
+	chat.load(screen_w, screen_h);
 	chat.setCommandColor(sf::Color(0, 0, 0));
-	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));*/
+	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));
 
 	pausesystem.load(screen_w, screen_h);
-	music.load("music/platform.ogg");
+	music.load("music/platform/common.ogg");
 }
 
-void Platform::handle(sf::Event& event)
+void Platform::handle(const sf::Event &event)
 {
 	if (!isState())
 	{
 		if (!pausesystem.isActive() && pausesystem.getAlpha() == 0)
 		{
-			// chat.handle(event);
+			chat.handle(event);
 
-			// if (!chat.isOpen())
+			if (!chat.isActive())
 			{
 				homebutton.handle(event);
 				levelbutton.handle(event);
@@ -132,23 +140,24 @@ void Platform::handle(sf::Event& event)
 			}
 		}
 
-		// if (!chat.isOpen())
-		// {
-		pausesystem.handle(event);
-		// }
+		if (!chat.isActive())
+		{
+			pausesystem.handle(event);
+		}
 	}
 }
 
 void Platform::draw(sf::RenderWindow* &window)
 {
-	homebutton.draw(window);
-	levelbutton.draw(window);
-	soundbutton.draw(window);
-	musicbutton.draw(window);
-	sound_volumebutton.draw(window);
-	music_volumebutton.draw(window);
-	// chat.draw			(window);
-	pausesystem.draw(window);
+	movingBG.draw			(window);
+	homebutton.draw			(window);
+	levelbutton.draw		(window);
+	soundbutton.draw		(window);
+	musicbutton.draw		(window);
+	sound_volumebutton.draw	(window);
+	music_volumebutton.draw	(window);
+	chat.draw				(window);
+	pausesystem.draw		(window);
 }
 
 void Platform::mechanics(double elapsedTime)
@@ -167,101 +176,32 @@ void Platform::mechanics(double elapsedTime)
 	// Mechanics.
 	if (!pausesystem.isActive() && !isState())
 	{
-		//chat.mechanics(elapsedTime);
-		//if (chat.isCommand())
-		//{
-		//	// Knight specs.
-		//	if (chat.findCommand("@clear"))			knight_specs.setChosen(-1);
-		//	else if (chat.findCommand("@helmet"))	knight_specs.setChosen(0);
-		//	else if (chat.findCommand("@body"))		knight_specs.setChosen(1);
-		//	else if (chat.findCommand("@shield"))	knight_specs.setChosen(2);
-		//	else if (chat.findCommand("@sword"))		knight_specs.setChosen(3);
-		//	else if (chat.findCommand("@boots"))		knight_specs.setChosen(4);
+		chat.mechanics(elapsedTime);
+		if (chat.isCommand())
+		{
+			// Close application.
+			/*if (chat.findCommand("@close") || chat.findCommand("@exit"))
+			{
+				exitbutton.setPressed();
+			}*/
+		}
 
-		//	// Close application.
-		//	else if (chat.findCommand("@close") || chat.findCommand("@exit"))
-		//	{
-		//		exit.setPressed();
-		//	}
-
-		//	// Someone clicked singleplayer.
-		//	else if (chat.findCommand("@start") || chat.findCommand("@play"))
-		//	{
-		//		if (knight_specs.isReady() && information.isReady())
-		//		{
-		//			singleplayer.setPressed();
-		//		}
-		//	}
-
-		//	// Exsert / shovel settings.
-		//	else if (chat.findCommand("@settings") || chat.findCommand("@keyboard") ||
-		//		chat.findCommand("@keys") || chat.findCommand("@sets"))
-		//	{
-		//		settingsbutton.setActive(!settingsbutton.isActive());
-		//	}
-
-		//	// Reload data.
-		//	else if (chat.findCommand("@reload") || chat.findCommand("@connect") ||
-		//		chat.findCommand("@rel") || chat.findCommand("@con"))
-		//	{
-		//		reloadbutton.setActive(true);
-		//	}
-
-		//	// Update data.
-		//	else if (chat.findCommand("@update"))
-		//	{
-		//		updatebutton.setActive(true);
-		//	}
-
-		//	// Turn on/off all chunks.
-		//	else if (chat.findCommand("@chunk"))
-		//	{
-		//		chunkbutton.setChanged(true);
-		//		chunkbutton.setActive(!chunkbutton.isActive());
-		//	}
-
-		//	// Turn on/off music.
-		//	else if (chat.findCommand("@music"))
-		//	{
-		//		musicbutton.setChanged(true);
-		//		musicbutton.setActive(!musicbutton.isActive());
-		//	}
-
-		//	// Turn on/off all sounds.
-		//	else if (chat.findCommand("@sound"))
-		//	{
-		//		chunkbutton.setChanged(true);
-		//		chunkbutton.setActive(!chunkbutton.isActive());
-		//		musicbutton.setChanged(true);
-		//		musicbutton.setActive(!musicbutton.isActive());
-		//	}
-
-		//	// Map editor.
-		//	else if (chat.findCommand("@editor") || chat.findCommand("@edit"))
-		//	{
-		//		editor = true;
-		//		chat.isOpen() = false;
-		//	}
-
-		//	// Link buttons in addition.
-		//	else if (chat.findCommand("@github"))		github.openWebsite();
-		//	else if (chat.findCommand("@scores"))		scores.openWebsite();
-		//	else if (chat.findCommand("@website"))	website.openWebsite();
-
-		//	// Tell that command doesn't exist.
-		//	else
-		//	{
-		//		chat.setError();
-		//	}
-		//}
-
+		float direction = 0;
+		movingBG.mechanics(elapsedTime, direction);
+		
 		if (homebutton.isActive())
 		{
+			chat.isActive() = false;
 			prev = true;
 			next = true;
 		}
 		
-		if (levelbutton.isActive())	prev = true;
+		if (levelbutton.isActive())
+		{
+			chat.isActive() = false;
+			prev = true;
+		}
+			
 
 		sound_volumebutton.mechanics(elapsedTime);
 		music_volumebutton.mechanics(elapsedTime);
@@ -269,7 +209,7 @@ void Platform::mechanics(double elapsedTime)
 		// Turn on/off all sounds.
 		if (soundbutton.hasChanged())
 		{
-			cmm::Sound::setPlayable(soundbutton.isActive());
+			cmm::Sound::setGlobalPlayable(soundbutton.isActive());
 		}
 
 		// Volume of sounds is changed.
@@ -288,7 +228,7 @@ void Platform::mechanics(double elapsedTime)
 		// Turn on/off music.
 		if (musicbutton.hasChanged())
 		{
-			cmm::Music::setPlayable(musicbutton.isActive());
+			cmm::Music::setGlobalPlayable(musicbutton.isActive());
 			musicbutton.isActive() ? music.play() : music.pause();
 		}
 
@@ -300,30 +240,33 @@ void Platform::mechanics(double elapsedTime)
 	}
 }
 
-void Platform::fades(double elapsedTime)
+void Platform::fades(const float &elapsedTime)
 {
 	if (pausesystem.isActive())
 	{
-		float value = elapsedTime * 0xFF * 2, min = 0xFF * 3 / 4;
+		float value = elapsedTime * 0xFF * 2;
+		int min = 0xFF * 3 / 4;
 		fadeout(value, min);
 		pausesystem.fadein(value * 3, min);
-		music.fadeout(elapsedTime * 100, music_volumebutton.getGlobalVolume() *0.2);
+		music.fadeout(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume() * 0.2));
 	}
 	else if (isState())
 	{
-		fadeout(elapsedTime * 0xFF);
-		music.fadeout(elapsedTime * 100);
+		int min = 0;
+		fadeout(elapsedTime * 0xFF, min);
+		music.fadeout(elapsedTime * 100, min);
 	}
 	else
 	{
 		float value = elapsedTime * 0xFF * 2;
-		fadein(value);
-		pausesystem.fadeout(value);
-		music.fadein(elapsedTime * 100, music_volumebutton.getGlobalVolume());
+		int max = 0xFF;
+		fadein(value, max);
+		pausesystem.fadeout(value, max);
+		music.fadein(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume()));
 	}
 }
 
-void Platform::fadein(float value, int max)
+void Platform::fadein(const float &value, const int &max)
 {
 	homebutton.fadein(value, max);
 	levelbutton.fadein(value, max);
@@ -333,7 +276,7 @@ void Platform::fadein(float value, int max)
 	music_volumebutton.fadein(value, max);
 }
 
-void Platform::fadeout(float value, int min)
+void Platform::fadeout(const float &value, const int &min)
 {
 	homebutton.fadeout(value, min);
 	levelbutton.fadeout(value, min);

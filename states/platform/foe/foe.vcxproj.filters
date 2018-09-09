@@ -22,6 +22,9 @@
     <Filter Include="Dependencies\Common">
       <UniqueIdentifier>{296ef33c-c0d0-490d-b6cf-db07590edf99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Main\Foes\Kind">
+      <UniqueIdentifier>{5b2f8ac2-41fb-473c-99cf-bb88f1bbc0ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -29,12 +32,6 @@
     </ClCompile>
     <ClCompile Include="foefactory.cpp">
       <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="skeleton.cpp">
-      <Filter>Main\Foes</Filter>
-    </ClCompile>
-    <ClCompile Include="zombie.cpp">
-      <Filter>Main\Foes</Filter>
     </ClCompile>
     <ClCompile Include="foeanimation.cpp">
       <Filter>Main\Foes\Other</Filter>
@@ -66,14 +63,14 @@
     <ClCompile Include="foewrapper.cpp">
       <Filter>Main\Foes\Tree</Filter>
     </ClCompile>
+    <ClCompile Include="skeleton.cpp">
+      <Filter>Main\Foes\Kind</Filter>
+    </ClCompile>
+    <ClCompile Include="zombie.cpp">
+      <Filter>Main\Foes\Kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="skeleton.h">
-      <Filter>Main\Foes</Filter>
-    </ClInclude>
-    <ClInclude Include="zombie.h">
-      <Filter>Main\Foes</Filter>
-    </ClInclude>
     <ClInclude Include="foefactory.h">
       <Filter>Main</Filter>
     </ClInclude>
@@ -112,6 +109,12 @@
     </ClInclude>
     <ClInclude Include="foewrapper.h">
       <Filter>Main\Foes\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="skeleton.h">
+      <Filter>Main\Foes\Kind</Filter>
+    </ClInclude>
+    <ClInclude Include="zombie.h">
+      <Filter>Main\Foes\Kind</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 #pragma once
 #include "coxing.h"
+#include <SFML/Network/Packet.hpp>
 
 class KCoxing : public Coxing
 {

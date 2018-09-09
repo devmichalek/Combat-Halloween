@@ -9,6 +9,7 @@ public:
 	float armour;
 	float mresistant;
 	float velocity;
+	float hvelocity;	// half velocity
 	float damage;
 	float mdamage;
 	float luck;

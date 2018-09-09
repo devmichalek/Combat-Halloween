@@ -48,7 +48,7 @@ float Zombie::getSpriteY()
 	float yOffset = width * 0.01;
 	if(state == ATTACK)
 	{
-		yOffset += width * 0.032;
+		yOffset -= width * 0.032;
 	}
 		
 	

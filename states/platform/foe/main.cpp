@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	charAttackRect.setSize(sf::Vector2f(characterAttack->width, characterAttack->height));
 
 	cmm::Text fpsText;
-	fpsText.setFont("fonts/Jaapokki-Regular.otf");
+	fpsText.setFont(cmm::JAPOKKI_FONT_PATH);
 	fpsText.setFillColor(sf::Color::White);
 	fpsText.setPosition(0, 0);
 	fpsText.setSize(22);

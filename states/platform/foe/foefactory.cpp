@@ -1,5 +1,6 @@
 #include "foefactory.h"
 #include "skeleton.h"
+#include "zombie.h"
 
 FoeFactory::FoeFactory()
 {
@@ -49,30 +50,39 @@ void FoeFactory::load(const float &screen_w, const float &screen_h)
 	std::vector<int> offsets;	// 10, 12, 8
 	std::vector<std::string> paths;	// skeleton, zombie, vampire etc.
 
-	// skeleton test
 	states.push_back(5);
-	offsets.push_back(10);
+
+	// Skeleton
+	/*offsets.push_back(10);
 	offsets.push_back(6);
 	offsets.push_back(8);
 	offsets.push_back(8);
 	offsets.push_back(8);
-	paths.push_back("images/deleteme/foes/skeleton/");
+	paths.push_back("images/deleteme/foes/skeleton/");*/
+
+	// Zombie
+	offsets.push_back(11);
+	offsets.push_back(6);
+	offsets.push_back(10);
+	offsets.push_back(7);
+	offsets.push_back(8);
+	paths.push_back("images/deleteme/foes/zombie/");
+
 	wrapper->load(paths, states, offsets);
 
 	Foe* foe = nullptr;
 
 	int counter = 0;
 
-	foe = new Skeleton;
+	foe = new Zombie;
 	foe->setSpriteType(0);
 	foe->setSpriteLines(offsets);
 	foe->setScale(0.5);
-	foe->setWidth(78);
+	foe->setWidth(66);
 	foe->setPosition(200, screen_h - 500);
 	foe->setLeft(0);
 	foe->setRight(screen_w);
-	std::vector<std::string> a = { "10", "10", "100", "100", "4", "2" };
-	foe->setFeatures(a);
+	foe->setFeatures({ "10", "10", "100", "100", "4", "2" });
 	foe->marshial();
 	wrapper->insert(foe);
 }
