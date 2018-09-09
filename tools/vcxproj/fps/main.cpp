@@ -6,7 +6,7 @@ cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
 std::vector<cmm::State*> states;
 FPS fps;
 
-
+// Note: FPS is built into chat class, so it can be easily turn on by command "@fps".
 // Load function.
 void loading_loop()
 {

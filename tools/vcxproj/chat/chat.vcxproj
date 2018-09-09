@@ -45,17 +45,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\common\core.cpp" />
+    <ClCompile Include="..\..\..\common\fpsconsole.cpp" />
     <ClCompile Include="..\..\..\common\sound.cpp" />
     <ClCompile Include="..\..\..\common\sprite.cpp" />
     <ClCompile Include="..\..\..\common\state.cpp" />
     <ClCompile Include="..\..\..\common\text.cpp" />
     <ClCompile Include="..\..\..\common\user.cpp" />
     <ClCompile Include="..\..\chat.cpp" />
+    <ClCompile Include="..\..\fps.cpp" />
     <ClCompile Include="..\..\loading.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\common\core.h" />
+    <ClInclude Include="..\..\..\common\fpsconsole.h" />
     <ClInclude Include="..\..\..\common\logconsole.h" />
     <ClInclude Include="..\..\..\common\sound.h" />
     <ClInclude Include="..\..\..\common\sprite.h" />
@@ -63,6 +66,7 @@
     <ClInclude Include="..\..\..\common\text.h" />
     <ClInclude Include="..\..\..\common\user.h" />
     <ClInclude Include="..\..\chat.h" />
+    <ClInclude Include="..\..\fps.h" />
     <ClInclude Include="..\..\loading.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

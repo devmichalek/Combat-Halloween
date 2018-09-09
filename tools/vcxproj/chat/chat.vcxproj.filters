@@ -29,6 +29,12 @@
     <ClCompile Include="..\..\..\common\state.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\fps.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\fpsconsole.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chat.h" />
@@ -54,6 +60,12 @@
       <Filter>Dependencies</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\common\state.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\fps.h">
+      <Filter>Dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\fpsconsole.h">
       <Filter>Dependencies</Filter>
     </ClInclude>
   </ItemGroup>

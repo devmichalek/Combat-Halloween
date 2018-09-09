@@ -28,6 +28,7 @@ void loading_loop()
 		{
 		case 50:
 			chat.load(core->getWidth(), core->getHeight());
+			chat.setStyleWhitish();
 			break;
 		}
 
@@ -59,6 +60,13 @@ void main_loop()
 
 		chat.mechanics(core->getElapsedTime());
 		chat.draw(core->getWindow());
+		if (chat.isCommand())
+		{
+			if (chat.compCommand("@blah"))
+			{
+				printf("blah!\n");
+			}
+		}
 
 		// display
 		core->display();
