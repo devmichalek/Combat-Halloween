@@ -35,43 +35,46 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\\boost;..\core;..\common;..\menu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions />
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\request.cpp" />
-    <ClCompile Include="..\common\sound.cpp" />
-    <ClCompile Include="..\common\sprite.cpp" />
-    <ClCompile Include="..\common\text.cpp" />
-    <ClCompile Include="..\common\thread.cpp" />
-    <ClCompile Include="..\core\core.cpp" />
-    <ClCompile Include="..\menu\state.cpp" />
+    <ClCompile Include="..\..\common\core.cpp" />
+    <ClCompile Include="..\..\common\request.cpp" />
+    <ClCompile Include="..\..\common\sound.cpp" />
+    <ClCompile Include="..\..\common\sprite.cpp" />
+    <ClCompile Include="..\..\common\state.cpp" />
+    <ClCompile Include="..\..\common\text.cpp" />
+    <ClCompile Include="..\..\common\thread.cpp" />
+    <ClCompile Include="..\..\common\user.cpp" />
+    <ClCompile Include="..\..\tools\loading.cpp" />
+    <ClCompile Include="..\..\tools\rectbutton.cpp" />
     <ClCompile Include="initialization.cpp" />
-    <ClCompile Include="loading.cpp" />
     <ClCompile Include="login.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="rectbutton.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\request.h" />
-    <ClInclude Include="..\common\sound.h" />
-    <ClInclude Include="..\common\sprite.h" />
-    <ClInclude Include="..\common\text.h" />
-    <ClInclude Include="..\common\thread.h" />
-    <ClInclude Include="..\core\core.h" />
-    <ClInclude Include="..\menu\state.h" />
+    <ClInclude Include="..\..\common\core.h" />
+    <ClInclude Include="..\..\common\logconsole.h" />
+    <ClInclude Include="..\..\common\request.h" />
+    <ClInclude Include="..\..\common\sound.h" />
+    <ClInclude Include="..\..\common\sprite.h" />
+    <ClInclude Include="..\..\common\state.h" />
+    <ClInclude Include="..\..\common\text.h" />
+    <ClInclude Include="..\..\common\thread.h" />
+    <ClInclude Include="..\..\common\user.h" />
+    <ClInclude Include="..\..\tools\loading.h" />
+    <ClInclude Include="..\..\tools\rectbutton.h" />
     <ClInclude Include="initialization.h" />
-    <ClInclude Include="loading.h" />
     <ClInclude Include="login.h" />
-    <ClInclude Include="rectbutton.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

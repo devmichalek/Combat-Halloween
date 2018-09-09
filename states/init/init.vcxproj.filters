@@ -1,90 +1,86 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Main">
-      <UniqueIdentifier>{e05e99fa-19cd-4df3-b81f-b6022f8c33af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dependencies">
       <UniqueIdentifier>{35dc8132-5732-470d-9935-e67585d0fce2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\Core">
-      <UniqueIdentifier>{93a919ab-51dc-4139-9806-14da95a020bf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dependencies\Common">
-      <UniqueIdentifier>{e9f2b75d-f468-40ba-929c-51c2b819e3ce}</UniqueIdentifier>
+      <UniqueIdentifier>{faf3269d-03a1-4f6a-8ced-f175046097b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Tools">
+      <UniqueIdentifier>{42ebdb0f-06db-4f3a-a550-9cef1bb9700d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="rectbutton.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="login.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="loading.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="initialization.cpp">
-      <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\state.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
-    <ClCompile Include="..\core\core.cpp">
-      <Filter>Dependencies\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\request.cpp">
+    <ClCompile Include="..\..\common\core.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sound.cpp">
+    <ClCompile Include="..\..\common\request.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sprite.cpp">
+    <ClCompile Include="..\..\common\sound.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\text.cpp">
+    <ClCompile Include="..\..\common\sprite.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\thread.cpp">
+    <ClCompile Include="..\..\common\state.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\text.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\thread.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\user.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\loading.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\rectbutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="login.cpp" />
+    <ClCompile Include="initialization.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="initialization.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="loading.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="login.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="rectbutton.h">
-      <Filter>Main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\state.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Dependencies\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\request.h">
+    <ClInclude Include="..\..\common\core.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sound.h">
+    <ClInclude Include="..\..\common\logconsole.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sprite.h">
+    <ClInclude Include="..\..\common\request.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\text.h">
+    <ClInclude Include="..\..\common\sound.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\thread.h">
+    <ClInclude Include="..\..\common\sprite.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\state.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\text.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\thread.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\user.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\loading.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\rectbutton.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="login.h" />
+    <ClInclude Include="initialization.h" />
   </ItemGroup>
 </Project>

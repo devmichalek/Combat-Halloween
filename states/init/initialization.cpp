@@ -1,4 +1,6 @@
 #include "initialization.h"
+#include "logconsole.h"
+#include "loading.h"
 
 Initialization::Initialization()
 {
@@ -12,7 +14,6 @@ Initialization::~Initialization()
 
 void Initialization::free()
 {
-	ready = false;
 	state = 0;
 
 	if (!texts.empty())
@@ -24,6 +25,8 @@ void Initialization::free()
 
 		texts.clear();
 	}
+
+	prev = next = exit = false;
 }
 
 
@@ -33,16 +36,15 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	free();
 
 	for (unsigned i = 0; i < AMOUNT; i++)
-	{
 		texts.push_back(new cmm::Text);
-	}
 
 	// Set font.
-	const char* path = "fonts/Jaapokki-Regular.otf";
-	texts[AUTHOR]->setFont(path);
-	texts[PRESENTS]->setFont(path);
-	texts[HALLOWEEN]->setFont(path);
-	texts[COMBAT]->setFont(path);
+	const char* path = cmm::JAPOKKI_FONT_PATH;
+	Loading::add(texts[AUTHOR]->setFont(path));
+	Loading::add(texts[PRESENTS]->setFont(path));
+	Loading::add(texts[HALLOWEEN]->setFont(path));
+	Loading::add(texts[COMBAT]->setFont(path));
+	if (Loading::isError()) return;
 
 	// Set text.
 	texts[AUTHOR]->setTextW(L"Adrian Micha\u0142ek");
@@ -59,13 +61,12 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	texts[COMBAT]->setSize(screen_h / 10);
 
 	// Set color.
-	texts[AUTHOR]->setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
-	texts[PRESENTS]->setFillColor(sf::Color(0xB0, 0xC4, 0xDE));
+	texts[AUTHOR]->setFillColor(cmm::LogConsole::getWhiteColor());
+	texts[PRESENTS]->setFillColor(cmm::LogConsole::getCyanColor());
 	texts[HALLOWEEN]->setFillColor(sf::Color(21, 21, 29));
-	texts[HALLOWEEN]->setOutlineColor(sf::Color(0xF2, 0x58, 0x3E));
+	texts[HALLOWEEN]->setOutlineColor(cmm::LogConsole::getRedColor());
 	texts[COMBAT]->setFillColor(sf::Color(21, 21, 29));
 	texts[COMBAT]->setOutlineColor(sf::Color(0xD5, 0xE1, 0xDD));
-
 
 	// Set position.
 	texts[AUTHOR]->center(screen_w / 2, screen_h / 2 - screen_h / 20);
@@ -76,7 +77,7 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 
 void Initialization::draw(sf::RenderWindow* &window)
 {
-	if (!ready)
+	if (!next)
 	{
 		window->draw(texts[AUTHOR]->get());
 		window->draw(texts[PRESENTS]->get());
@@ -87,7 +88,7 @@ void Initialization::draw(sf::RenderWindow* &window)
 
 void Initialization::mechanics(const double &elapsedTime)
 {
-	if (!ready)
+	if (!next)
 	{
 		int min = 0, max = 0xFF;
 
@@ -144,14 +145,22 @@ void Initialization::mechanics(const double &elapsedTime)
 		}
 		else if (texts[HALLOWEEN]->getAlpha() == 0 && state == 5)
 		{
-			ready = true;
+			next = true;
 		}
 	}
 }
 
 
 
-const bool& Initialization::isNext() const
+bool Initialization::isReady() const
 {
-	return ready;
+	return next;
+}
+
+void Initialization::setState(int &state)
+{
+	if (isReady())
+	{
+		state = cmm::LOGIN;
+	}
 }
