@@ -2,8 +2,7 @@
 #include "sound.h"
 #include "sprite.h"
 #include "text.h"
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include "eventwindow.h"
 
 class PauseSystem
 {

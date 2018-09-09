@@ -1,8 +1,7 @@
 #pragma once
 #include "text.h"
+#include "eventwindow.h"
 #include <SFML/Graphics/Rectangleshape.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
 #include <vector>
 
 
