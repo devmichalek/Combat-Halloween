@@ -15,6 +15,7 @@ void VolumeButton::free()
 {
 	volume = 0;
 	locked = false;
+	changed = false;
 	plus_pressed = false;
 	minus_pressed = false;
 }
@@ -170,9 +171,17 @@ void VolumeButton::setLocked(bool locked)
 	}
 }
 
-const bool VolumeButton::hasChanged() const
+const bool VolumeButton::hasChanged()
 {
-	return plus_pressed || minus_pressed;
+	bool status = plus_pressed || minus_pressed || changed;
+	changed = false;
+	return status;
+}
+
+void VolumeButton::setChanged(float newVolume)
+{
+	volume = newVolume;
+	changed = true;
 }
 
 void VolumeButton::setVolume(const float &volume)

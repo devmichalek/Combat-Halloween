@@ -10,7 +10,7 @@ class VolumeButton
 	float volume;
 	const float min, max;
 
-	bool locked;
+	bool locked, changed;
 	bool plus_pressed;
 	bool minus_pressed;
 
@@ -31,6 +31,7 @@ public:
 	void setGlobalVolume(float volume);
 	const float& getGlobalVolume() const;
 	void setLocked(bool locked);
-	const bool hasChanged() const; // Whenever minus button is pressed or plus button is pressed.
+	const bool hasChanged();			// Whenever minus button is pressed or plus button is pressed.
+	void setChanged(float newVolume);	// It is caused by chat command.
 	void setVolume(const float &volume);
 };
