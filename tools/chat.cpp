@@ -2,6 +2,11 @@
 #include "logconsole.h"
 #include "user.h"
 #include "loading.h"
+#include "boost/lexical_cast.hpp"
+
+FPS Chat::fps;
+std::vector <cmm::Text*> Chat::writtens;
+std::vector <std::string> Chat::writtenStrs;
 
 Chat::Chat()
 {
@@ -15,15 +20,13 @@ Chat::~Chat()
 
 void Chat::free()
 {
-	commandColor = sf::Color(0xFF, 0xFF, 0xFF);
-	typicalColor = sf::Color(0, 0, 0);
+	setStyleBlackish();
+	screen_w = screen_h = 0;
+	scale_x = scale_y = 0;
+	max_text_length = 0xFF;
+
 	globalYScale = 0;
 	globalYLine = 2;
-
-	screen_w = 0;
-	screen_h = 0;
-	scale_x = 0;
-	scale_y = 0;
 
 	active = false;
 	used = false;
@@ -40,11 +43,9 @@ void Chat::free()
 	}
 
 	if (!writtenStrs.empty())
-	{
 		writtenStrs.clear();
-	}
 	
-	line = 1;
+	line = 0.5;
 	counter = 0;
 }
 
@@ -52,17 +53,13 @@ void Chat::reset()
 {
 	globalYScale = 0;
 
-	for (auto &it : writtenStrs)
-	{
-		it = "";
-	}
-
-	setWritten();
+	//active = false;
+	//used = false;
+	//fps.reset();
+	//setWritten();
 
 	for (auto &it : writtens)
-	{
 		it->setAlpha(0);
-	}
 
 	background.setAlpha(0);
 	username.setAlpha(0);
@@ -86,42 +83,41 @@ void Chat::load(const float &screen_w, const float &screen_h)
 	for (int i = 0; i < 6; i++)
 	{
 		writtens.push_back(new cmm::Text);
-		Loading::add(writtens[i]->setFont("fonts/Jaapokki-Regular.otf"));
+		Loading::add(writtens[i]->setFont(cmm::JAPOKKI_FONT_PATH));
 		if (Loading::isError())	return;
-		writtens[i]->setText(" ");
+		writtens[i]->setText("");
 		writtens[i]->setSize(fontSize);
 		writtens[i]->setAlpha(0);
 		writtenStrs.push_back("");
 	}
 
+	fps.load(screen_w, screen_h);
+	if (Loading::isError())	return;
+	fps.setRightTop();
 	Loading::add(background.load("images/other/chat.png"));
 	if (Loading::isError())	return;
 	background.setScale(scale_x, scale_y);
 	background.setPosition(0, screen_h - background.getHeight());
 	background.setAlpha(0);
 
-	arrow.setFont("fonts/Jaapokki-Regular.otf");
+	arrow.setFont(cmm::JAPOKKI_FONT_PATH);
 	arrow.setText("|");
 	arrow.setSize(fontSize);
 	arrow.setAlpha(0);
 
-	Loading::add(username.setFont("fonts/Jaapokki-Regular.otf"));
+	Loading::add(username.setFont(cmm::JAPOKKI_FONT_PATH));
 	if (Loading::isError())	return;
 	username.setSize(fontSize);
 	username.setFillColor(cmm::LogConsole::getRedColor());
-	username.setFillColor(sf::Color::Yellow);
 	username.setAlpha(0);
-	username.setText((std::string(cmm::User::username) + ": "));
-	username.setText("zmientopotem: ");
+	username.setText(cmm::User::getUsername() + ":");
 	setWritten();
 
 	background.setScale(scale_x, scale_y *globalYScale / globalYLine);
 	username.setScale(1, 1 * globalYScale / globalYLine);
 
 	for (auto &it : writtens)
-	{
 		it->setScale(1, 1 * globalYScale / globalYLine);
-	}
 }
 
 void Chat::handle(const sf::Event &event)
@@ -154,87 +150,47 @@ void Chat::handle(const sf::Event &event)
 				}
 
 				// Enter, return.
-				else if (event.key.code == sf::Keyboard::Return && !writtenStrs[0].empty())
+				else if (event.key.code == sf::Keyboard::Enter && !writtenStrs[0].empty())
 				{
-					for (unsigned i = 0; i < writtenStrs[0].size(); i++)
+					int i = 0;	// remove space from the beggining
+					while (writtenStrs[0][i] == ' ')
 					{
-						// printf( "1. ->%s<-\n", writtenStrs[ 0 ].c_str() );
-						if (writtenStrs[0][i] == ' ')
+						writtenStrs[0].erase(i, 1);
+						++i;
+					}
+
+					// remove space from the end
+					if (!writtenStrs[0].empty())
+					{
+						i = writtenStrs[0].size() - 1;
+						while (writtenStrs[0][i] == ' ')
 						{
 							writtenStrs[0].erase(i, 1);
-							i--;
-						}
-						else
-						{
-							break;
+							--i;
 						}
 					}
 
 					if (!writtenStrs[0].empty())
 					{
-						for (int i = writtenStrs[0].size() - 1; i >= 0; i--)
-						{
-							// printf( "2. ->%s<-\n", writtenStrs[ 0 ].c_str() );
-							if (writtenStrs[0][i] == ' ')
-							{
-								writtenStrs[0].erase(i, 1);
-							}
-							else
-							{
-								break;
-							}
-						}
-					}
-
-					if (!writtenStrs[0].empty())
-					{
-						// Add \n if needed.
-						std::string tempStr = "";
-						for (unsigned i = 0; i < writtenStrs[0].size(); i++)
-						{
-							tempStr += writtenStrs[0][i];
-							writtens[0]->setText(tempStr);
-
-							if (writtens[0]->getWidth() + username.getWidth() + screen_w / 64 >= background.getRight())
-							{
-								std::string newNextStr = "";
-								for (unsigned j = 0; j < newNextStr.size() - 1; j++)
-								{
-									newNextStr += tempStr[j];
-								}
-								newNextStr += "\n";
-								newNextStr += tempStr[tempStr.size() - 1];
-								tempStr = newNextStr;
-							}
-						}
-
-						writtenStrs[0] = tempStr;
+						prepareWritten(0, 0);
 
 						for (unsigned i = writtenStrs.size() - 1; i >= 1; i--)
-						{
 							writtenStrs[i] = writtenStrs[i - 1];
-						}
 
-						writtenStrs[0] = "";
+						writtenStrs[0].clear();
 
 						setWritten();
 
 						if (writtenStrs[1][0] == '@')
-						{
 							used = true;
-						}
 					}
 					else
-					{
 						setWritten();
-					}
 				}
 
 				// Esc.
 				else if (event.key.code == sf::Keyboard::Escape)
-				{
 					active = false;
-				}
 			}
 		}
 	}
@@ -260,7 +216,7 @@ void Chat::draw(sf::RenderWindow* &window)
 	{
 		if (writtens[i]->getY() >= background.getY())
 		{
-			if (writtenStrs[i] != "" && i != 0)
+			if (!writtenStrs[i].empty() && i != 0)
 			{
 				username.setPosition(screen_w / 256, writtens[i]->getY());
 				window->draw(username.get());
@@ -275,6 +231,8 @@ void Chat::draw(sf::RenderWindow* &window)
 	{
 		window->draw(arrow.get());
 	}
+
+	fps.draw(window);
 }
 
 void Chat::mechanics(const double &elapsedTime)
@@ -341,10 +299,13 @@ void Chat::mechanics(const double &elapsedTime)
 			it->setScale(1, 1 * globalYScale / globalYLine);
 		}
 	}
+
+	fps.mechanics(elapsedTime);
 }
 
 void Chat::fadeout(const float &v, const int &min)
 {
+	fps.fadeout(v, min);
 	background.fadeout(v, min);
 	username.fadeout(v, min);
 	for (auto &it : writtens)
@@ -365,16 +326,105 @@ bool Chat::isCommand()
 	if (active && used)
 	{
 		used = false;
+
+		if (compCommand("@fps"))
+		{
+			fps.setActive(!fps.isActive());
+			return false;
+		}
+
 		return true;
 	}
 
 	return false;
 }
 
-bool Chat::findCommand(std::string line)
+bool Chat::compCommand(std::string line)
 {
 	return writtenStrs[1] == line;
 }
+
+bool Chat::isNewMusicVolume()
+{
+	size_t pos = writtenStrs[1].find("@music volume ");
+	if (pos == std::string::npos)
+	{
+		pos = writtenStrs[1].find("@music ");	// do not delete this space!
+		if (pos != std::string::npos && pos == 0 && writtenStrs[1].size() > 7)
+			return true;
+	}
+	else if (pos == 0 && writtenStrs[1].size() > 14)
+		return true;
+
+	return false;
+}
+
+bool Chat::isNewSoundVolume()
+{
+	size_t pos = writtenStrs[1].find("@sound volume ");
+	if (pos == std::string::npos)
+	{
+		pos = writtenStrs[1].find("@sound ");	// do not delete this space!
+		if (pos != std::string::npos && pos == 0 && writtenStrs[1].size() > 7)
+			return true;
+	}
+	else if (pos == 0 && writtenStrs[1].size() > 14)
+		return true;
+
+	return false;
+}
+
+float Chat::getNewVolume()
+{
+	int s = 7;
+	size_t pos = writtenStrs[1].find("volume ");
+	if (pos != std::string::npos)
+	{
+		if (pos == 7)
+			s = 14;
+		else
+		{
+			setError(" - command is written incorrectly.");
+			return -1; // error, this command may look like this: @music blah blah volume 12
+		}
+	}
+		
+	std::string buf = writtenStrs[1].substr(s, writtenStrs[1].size() - 1);
+	size_t size = buf.size();
+	if (size <= 3 && size >= 1)
+	{
+		if (buf == "min")
+			return 0.0f;
+		else if (buf == "max")
+			return 100.0f;
+		else
+		{
+			// check if string contains only numbers
+			for (unsigned i = 0; i <buf.size(); ++i)
+			{
+				if (buf[i] < '0' || buf[i] > '9')
+				{
+					setError(" - volume contains non-decimal characters.");
+					return -1; // no decimal number detected - error
+				}
+			}
+
+			if (s == 3 && (writtenStrs[1][0] != '1' && writtenStrs[1][0] != '0'))
+			{
+				setError(" - volume's range is from 0 to 100.");
+				return -1; // it may look like this: @music volume 855, max is 100
+			}
+			
+			// is ok
+			return boost::lexical_cast<float>(buf);
+		}
+	}
+
+	setError(" - volume is written incorrectly.");
+	return -1;	// error
+}
+
+
 
 
 void Chat::setWritten()
@@ -384,8 +434,8 @@ void Chat::setWritten()
 	writtens[0]->setPosition(screen_w / 256, y0);
 	if (!writtenStrs[0].empty())
 	{
-		if (writtenStrs[0][0] == '@')	writtens[0]->setFillColor(commandColor);
-		else							writtens[0]->setFillColor(typicalColor);
+		if (writtenStrs[0][0] == '@')	writtens[0]->setFillColor(ccolor);
+		else							writtens[0]->setFillColor(color);
 	}
 
 	for (unsigned i = 1; i < writtens.size(); i++)
@@ -405,8 +455,8 @@ void Chat::setWritten()
 
 		if (!writtenStrs[i].empty())
 		{
-			if (writtenStrs[i][0] == '@')		writtens[i]->setFillColor(commandColor);
-			else								writtens[i]->setFillColor(typicalColor);
+			if (writtenStrs[i][0] == '@')		writtens[i]->setFillColor(ccolor);
+			else								writtens[i]->setFillColor(color);
 		}
 	}
 
@@ -419,43 +469,38 @@ void Chat::setWritten()
 	else	arrow.setPosition(writtens[0]->getRight(), y0);
 }
 
-void Chat::setError()
+void Chat::prepareWritten(int n, int k)
 {
-	writtenStrs[1] = writtenStrs[1] + " - command doesn't exist.";
-
 	// Add \n if needed.
-	std::string tempStr = "";
-	for (unsigned i = 0; i < writtenStrs[1].size(); i++)
+	std::string buf = "";
+	for (unsigned i = 0; i < writtenStrs[k].size(); i++)
 	{
-		tempStr += writtenStrs[1][i];
-		writtens[0]->setText(tempStr);
+		buf += writtenStrs[k][i];
+		writtens[n]->setText(buf);
 
-		if (writtens[0]->getWidth() + username.getWidth() + screen_w / 64 >= background.getRight())
-		{
-			std::string newNextString = "";
-			for (unsigned j = 0; j < tempStr.size() - 1; ++j)
-			{
-				newNextString += tempStr[j];
-			}
-			newNextString += "\n";
-			newNextString += tempStr[tempStr.size() - 1];
-			tempStr = newNextString;
-		}
+		if (writtens[n]->getWidth() + username.getWidth() + screen_w / 64 >= background.getRight())
+			buf = buf.substr(0, buf.size() - 1) + "\n" + buf[buf.size() - 1];
 	}
 
-	writtenStrs[1] = tempStr;
+	writtenStrs[k] = buf;
+}
 
+void Chat::setError(std::string msg)
+{
+	writtenStrs[1] += msg;
+	prepareWritten(0, 1);
 	setWritten();
 }
 
 
-
-void Chat::setCommandColor(sf::Color newColor)
+void Chat::setStyleBlackish()
 {
-	commandColor = newColor;
+	color = sf::Color(0x68, 0x68, 0x68);
+	ccolor = sf::Color(0, 0, 0);
 }
 
-void Chat::setTypicalColor(sf::Color newColor)
+void Chat::setStyleWhitish()
 {
-	typicalColor = newColor;
+	color = sf::Color(0xBA, 0xBA, 0xBA);
+	ccolor = sf::Color(0xFF, 0xFF, 0xFF);
 }

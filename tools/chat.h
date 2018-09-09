@@ -1,31 +1,33 @@
 #pragma once
 #include "sprite.h"
 #include "text.h"
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include "fps.h"
+#include "eventwindow.h"
 
 class Chat
 {
-	sf::Color commandColor;
-	sf::Color typicalColor;
-	float globalYScale;
-	float globalYLine;
+	sf::Color color;	// typical text color
+	sf::Color ccolor;	// command color
 
 	float screen_w;
 	float screen_h;
 	float scale_x;
 	float scale_y;
+	int max_text_length;
+	
+	float globalYScale;
+	float globalYLine;
 
-	// The rest basics.
 	bool active;
 	bool used;
 
+	static FPS fps;
 	cmm::Sprite background;
 
 	// Text written.
 	cmm::Text username;
-	std::vector <cmm::Text*> writtens;
-	std::vector <std::string> writtenStrs;
+	static std::vector <cmm::Text*> writtens;
+	static std::vector <std::string> writtenStrs;
 
 	// Arrow.
 	float line;
@@ -47,12 +49,20 @@ public:
 	// Getters.
 	bool& isActive();
 	bool isCommand();
-	bool findCommand(std::string line);
-	
-	void setWritten();
-	void setError();	// Can't find command.
+	bool compCommand(std::string line);
 
-	// Set Colors.
-	void setCommandColor(sf::Color newColor);
-	void setTypicalColor(sf::Color newColor);
+	// Special.
+	bool isNewMusicVolume();
+	bool isNewSoundVolume();
+	float getNewVolume();
+
+private:
+	void setWritten();
+	void prepareWritten(int n, int k);	// n = nr of text, k nr of str
+public:
+	void setError(std::string msg = " - command doesn't exist.");	// adds string to incorrect text
+
+	// Set style.
+	void setStyleBlackish();	// For light background.
+	void setStyleWhitish();		// For dark background.
 };
