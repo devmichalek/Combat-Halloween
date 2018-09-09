@@ -1,5 +1,7 @@
 #include "knightspecs.h"
-#include "state.h"
+#include "logconsole.h"
+#include "user.h"
+#include "loading.h"
 #include "boost/lexical_cast.hpp"
 
 Knightspecs::Knightspecs()
@@ -27,10 +29,15 @@ void Knightspecs::free()
 		for (auto &it : values)
 		{
 			delete it;
-			it = NULL;
+			it = nullptr;
 		}
 
 		values.clear();
+	}
+
+	if (!features.empty())
+	{
+		features.clear();
 	}
 }
 
@@ -43,13 +50,15 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	plank.load("images/other/plank.png");
+	Loading::add(plank.load("images/other/plank.png"));
+	if (Loading::isError())	return;
 	plank.setScale(screen_w / 2560, screen_h / 1440);
 	plank.setPosition(-screen_h / 256, screen_h / 5.5);
 	plank.setColor(sf::Color(0xE0, 0xE0, 0xE0));
 
-	topgear.load("images/other/gear.png");
-	botgear.load("images/other/gear.png");
+	Loading::add(topgear.load("images/other/gear.png"));
+	Loading::add(botgear.load("images/other/gear.png"));
+	if (Loading::isError())	return;
 	topgear.setOrigin(topgear.getWidth() * 0.5, topgear.getHeight() * 0.5);
 	botgear.setOrigin(botgear.getWidth() * 0.5, botgear.getHeight() * 0.5);
 	topgear.setScale(screen_w / 2560, screen_h / 1440);
@@ -58,25 +67,30 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 	botgear.setPosition(0, plank.getBot());
 
 	max_offset = 10;
-	knight.load("images/other/menuknight.png", max_offset);
+	Loading::add(knight.load("images/other/menuknight.png", max_offset));
+	if (Loading::isError())	return;
 	knight.setScale(screen_w / 2560, screen_h / 1440);
 	knight.setPosition(screen_w / 7.6, screen_h - screen_h / 72 - knight.getHeight());
 
-	click.load("sounds/click.wav");
+	// click.load("sounds/click.wav");
 
-	categories.setFont("fonts/jcandlestickextracond.ttf");
-	categories.setText("Heart Points:\nArmour:\nMovement Speed:\nDamage:\nAttack Speed:\nLuckiness:\nExperience:\nLevel:");
-	categories.setFillColor(User::getLockedColor());
+	Loading::add(categories.setFont("fonts/jcandlestickextracond.ttf"));
+	if (Loading::isError())	return;
+	categories.setText("Heart Points:\nMagic Points:\nArmour:\nMagic Resistant:\nMovement Speed:\nDamage:\nMagic Damage:\nLuck:\nExperience:\nLevel:");
+	categories.setFillColor(cmm::LogConsole::getLockedColor());
 	categories.setSize(screen_h / 28);
-	categories.setPosition(screen_h / 128, plank.getTop() + screen_h / 24);
+	categories.setPosition(screen_h / 128, plank.getTop() + screen_h / 72);
 
-	for (unsigned i = 0; i < AMOUNT; ++i)
+	features.clear();
+	for (unsigned i = 0; i < FEATURES::SIZE; ++i)
 	{
 		values.push_back(new cmm::Text);
-		values[i]->setFont("fonts/jcandlestickextracond.ttf");
+		Loading::add(values[i]->setFont("fonts/jcandlestickextracond.ttf"));
+		if (Loading::isError())	return;
 		values[i]->setText("loading...");
-		values[i]->setFillColor(User::getLoadingColor());
+		values[i]->setFillColor(cmm::LogConsole::getLoadingColor());
 		values[i]->setSize(screen_h / 28);
+		features.push_back(0);
 	}
 
 	position();
@@ -150,7 +164,7 @@ void Knightspecs::setThread()
 			for (auto &it : values)
 			{
 				it->setText("loading...");
-				it->setFillColor(User::getLoadingColor());
+				it->setFillColor(cmm::LogConsole::getLoadingColor());
 			}
 
 			position();
@@ -169,7 +183,7 @@ void Knightspecs::reloadThread()
 void Knightspecs::setValues()
 {
 	cmm::Request request;
-	request.setMessage("username=" + boost::lexical_cast<std::string>(User::getUsername()));
+	request.setMessage("username=" + cmm::User::getUsername());
 	request.setRequest("/combathalloween/getters/getfeatures.php", sf::Http::Request::Post);
 	request.setHttp("http://amichalek.pl/");
 
@@ -182,12 +196,14 @@ void Knightspecs::setValues()
 		}
 		else
 		{
+			features.clear();
 			std::string result = request.getResult(), buf = "";
 			std::vector<std::string> strs;
 			for (unsigned i = 0; i < result.size(); ++i)
 			{
 				if (result[i] == '@')
 				{
+					features.push_back(boost::lexical_cast<int>(buf));
 					strs.push_back(buf);
 					buf = "";
 					continue;
@@ -197,23 +213,27 @@ void Knightspecs::setValues()
 			}
 
 			values[HEART_POINTS]->setText(strs[HEART_POINTS] + " hp");
-			values[ARMOUR]->setText(strs[ARMOUR] + " %");
+			values[MAGIC_POINTS]->setText(strs[MAGIC_POINTS] + " mp");
+			values[ARMOUR]->setText(std::to_string(boost::lexical_cast<float>(strs[ARMOUR])/100) + " %");
+			values[MAGIC_RESISTANT]->setText(std::to_string(boost::lexical_cast<float>(strs[MAGIC_RESISTANT]) / 100) + " %");
 			values[MOVEMENT_SPEED]->setText(strs[MOVEMENT_SPEED] + " %");
 			values[DAMAGE]->setText(strs[DAMAGE] + " dmg");
-			values[ATTACK_SPEED]->setText(strs[ATTACK_SPEED] + " %");
-			values[LUCKINESS]->setText(strs[LUCKINESS] + " %");
+			values[MAGIC_DAMAGE]->setText(strs[MAGIC_DAMAGE] + " mdmg");
+			values[LUCK]->setText(strs[LUCK] + " %");
 			values[EXPERIENCE]->setText(strs[EXPERIENCE] + " %");
 			values[LEVEL]->setText(strs[LEVEL] + " lv");
 			strs.clear();
 
-			values[HEART_POINTS]->setFillColor(User::getErrorColor());
-			values[ARMOUR]->setFillColor(User::getLockedColor());
-			values[MOVEMENT_SPEED]->setFillColor(User::getGreenColor());
-			values[DAMAGE]->setFillColor(User::getErrorColor());
-			values[ATTACK_SPEED]->setFillColor(User::getGreenColor());
-			values[LUCKINESS]->setFillColor(User::getSuccessColor());
-			values[EXPERIENCE]->setFillColor(User::getSuccessColor());
-			values[LEVEL]->setFillColor(User::getSuccessColor());
+			values[HEART_POINTS]->setFillColor(cmm::LogConsole::getRedColor());
+			values[MAGIC_POINTS]->setFillColor(cmm::LogConsole::getBlueColor());
+			values[ARMOUR]->setFillColor(cmm::LogConsole::getLockedColor());
+			values[MAGIC_RESISTANT]->setFillColor(cmm::LogConsole::getLockedColor());
+			values[MOVEMENT_SPEED]->setFillColor(cmm::LogConsole::getGreenColor());
+			values[DAMAGE]->setFillColor(cmm::LogConsole::getRedColor());
+			values[MAGIC_DAMAGE]->setFillColor(cmm::LogConsole::getBlueColor());
+			values[LUCK]->setFillColor(cmm::LogConsole::getSuccessColor());
+			values[EXPERIENCE]->setFillColor(cmm::LogConsole::getSuccessColor());
+			values[LEVEL]->setFillColor(cmm::LogConsole::getSuccessColor());
 
 			thread.success = true;
 		}
@@ -225,7 +245,7 @@ void Knightspecs::setValues()
 		for (auto &it : values)
 		{
 			it->setText("error");
-			it->setFillColor(User::getErrorColor());
+			it->setFillColor(cmm::LogConsole::getErrorColor());
 		}
 	}
 
@@ -248,7 +268,7 @@ void Knightspecs::position()
 	}
 }
 
-void Knightspecs::setVolume(const float &volume)
-{
-	click.setVolume(volume);
-}
+//void Knightspecs::setVolume(const float &volume)
+//{
+//	click.setVolume(volume);
+//}

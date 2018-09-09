@@ -1,30 +1,18 @@
 #pragma once
+#include "specs.h"
 #include "text.h"
 #include "sound.h"
 #include "thread.h"
 #include "sprite.h"
 #include "request.h"
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Window/Event.hpp>
+#include "eventwindow.h"
 #include <vector>
 
-class Knightspecs
+
+class Knightspecs : public Specs
 {
 	float screen_w;
 	float screen_h;
-
-	enum FEATURES
-	{
-		HEART_POINTS = 0,
-		ARMOUR,
-		MOVEMENT_SPEED,
-		DAMAGE,
-		ATTACK_SPEED,
-		LUCKINESS,
-		EXPERIENCE,
-		LEVEL,
-		AMOUNT
-	};
 
 	cmm::Sprite plank;
 	cmm::Sprite topgear, botgear;
@@ -34,7 +22,7 @@ class Knightspecs
 	float max_offset;
 	cmm::Sprite knight;
 
-	cmm::Sound click;
+	// cmm::Sound click;
 	cmm::Thread thread;
 
 	// View, specs
@@ -55,7 +43,7 @@ public:
 	void setThread();
 	void reloadThread();
 	const bool& isReady() const;	// values are loaded correctly from database
-	void setVolume(const float &volume);
+	// void setVolume(const float &volume);
 private:
 	void setValues();
 	void position();
