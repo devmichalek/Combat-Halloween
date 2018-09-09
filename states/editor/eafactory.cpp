@@ -1,5 +1,6 @@
 #include "eafactory.h"
-#include "state.h"
+#include "logconsole.h"
+#include "loading.h"
 
 EAFactory::EAFactory()
 {
@@ -63,7 +64,8 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	amounts.push_back(1);
 	factory.push_back(std::vector<cmm::Sprite*>());
 	factory[KNIGHT].push_back(new cmm::Sprite());
-	factory[KNIGHT][0]->load("images/platform/knight/0.png", 10);
+	Loading::add(factory[KNIGHT][0]->load("images/platform/knight/0.png", 10));
+	if (Loading::isError())	return;
 	factory[KNIGHT][0]->setScale(scale, scale);
 
 	// Tile
@@ -72,7 +74,8 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	for (int i = 0; i < amounts[TILE]; ++i)
 	{
 		factory[TILE].push_back(new cmm::Sprite());
-		factory[TILE][i]->load("images/platform/tiles/" + std::to_string(i) + ".png");
+		Loading::add(factory[TILE][i]->load("images/platform/tiles/" + std::to_string(i) + ".png"));
+		if (Loading::isError())	return;
 		factory[TILE][i]->setScale(scale, scale);
 	}
 
@@ -86,7 +89,8 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	for (int i = 0; i < amounts[LANDSCAPE]; ++i)
 	{
 		factory[LANDSCAPE].push_back(new cmm::Sprite());
-		factory[LANDSCAPE][i]->load("images/platform/landscape/" + std::to_string(i) + ".png");
+		Loading::add(factory[LANDSCAPE][i]->load("images/platform/landscape/" + std::to_string(i) + ".png"));
+		if (Loading::isError())	return;
 		factory[LANDSCAPE][i]->setScale(scale, scale);
 	}
 
@@ -96,7 +100,8 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	for (int i = 0; i < amounts[FOE]; ++i)
 	{
 		factory[FOE].push_back(new cmm::Sprite());
-		factory[FOE][i]->load("images/platform/foes/type/thumbnails/" + std::to_string(i) + ".png");
+		Loading::add(factory[FOE][i]->load("images/platform/foes/type/thumbnails/" + std::to_string(i) + ".png"));
+		if (Loading::isError())	return;
 		factory[FOE][i]->setScale(scale, scale);
 	}
 
@@ -240,7 +245,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 
 	if (type != VOID)
 	{
-		redBacklight ? factory[t][chosen]->setColor(User::getErrorColor()) : factory[t][chosen]->setColor(sf::Color::White);
+		redBacklight ? factory[t][chosen]->setColor(cmm::LogConsole::getErrorColor()) : factory[t][chosen]->setColor(sf::Color::White);
 		type == UNVISIBLE_TILE ? factory[t][chosen]->setAlpha(0xFF / 2) : factory[t][chosen]->setAlpha(0xFF);
 		factory[t][chosen]->setPosition(tempX, tempY);
 		window->draw(factory[t][chosen]->get());

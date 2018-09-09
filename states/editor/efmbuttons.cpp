@@ -1,4 +1,5 @@
 #include "efmbuttons.h"
+#include "loading.h"
 
 EFMButtons::EFMButtons()
 {
@@ -66,15 +67,16 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 
 	// Buttons
 	
-	buttons[NEW]->load("images/icons/newfileicon.png");
-	buttons[OPEN]->load("images/icons/openfileicon.png");
-	buttons[SAVE]->load("images/icons/savefileicon.png");
-	buttons[UPLOAD]->load("images/icons/uploadicon.png");
-	buttons[COPY]->load("images/icons/copyicon.png");
-	buttons[RENAME]->load("images/icons/renameicon.png");
-	buttons[DELETE]->load("images/icons/erasericon.png");
-	buttons[REFRESH]->load("images/icons/refreshicon.png");
-	buttons[EXIT]->load("images/icons/exiticon.png");
+	Loading::add(buttons[NEW]->load("images/icons/newfileicon.png"));
+	Loading::add(buttons[OPEN]->load("images/icons/openfileicon.png"));
+	Loading::add(buttons[SAVE]->load("images/icons/savefileicon.png"));
+	Loading::add(buttons[UPLOAD]->load("images/icons/uploadicon.png"));
+	Loading::add(buttons[COPY]->load("images/icons/copyicon.png"));
+	Loading::add(buttons[RENAME]->load("images/icons/renameicon.png"));
+	Loading::add(buttons[DELETE]->load("images/icons/erasericon.png"));
+	Loading::add(buttons[REFRESH]->load("images/icons/refreshicon.png"));
+	Loading::add(buttons[EXIT]->load("images/icons/exiticon.png"));
+	if (Loading::isError())	return;
 
 	float factor = 0.9f;
 	for (auto &it : buttons)
@@ -94,10 +96,11 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 
 
 	// Labels
-	const char* pathToFont = "fonts/Jaapokki-Regular.otf";
+	const char* pathToFont = cmm::JAPOKKI_FONT_PATH;
 	for (auto &it : labels)
 	{
-		it->setFont(pathToFont);
+		Loading::add(it->setFont(pathToFont));
+		if (Loading::isError())	return;
 		it->setSize(screen_w / 120);
 		it->setAlpha(0xFF);
 		it->setFillColor(sf::Color::White);
@@ -119,10 +122,12 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 
 	// The Rest
 	fileButton.load("images/buttons/save.png");
+	if (Loading::isError())	return;
 	fileButton.setScale(screen_w / 2560, screen_h / 1440);
 	fileButton.setPosition(screen_w - screen_w / 128 - fileButton.getWidth() * 2, screen_h / 144);
 
-	fileButtonText.setFont("fonts/jcandlestickextracond.ttf");
+	Loading::add(fileButtonText.setFont(cmm::JCANDLE_FONT_PATH));
+	if (Loading::isError())	return;
 	fileButtonText.setSize(screen_w / 60);
 	fileButtonText.setAlpha(0xFF);
 	fileButtonText.setFillColor(sf::Color::White);

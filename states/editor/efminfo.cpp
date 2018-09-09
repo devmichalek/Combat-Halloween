@@ -1,4 +1,5 @@
 #include "efminfo.h"
+#include "loading.h"
 
 EFMInfo::EFMInfo()
 {
@@ -29,7 +30,8 @@ void EFMInfo::load(const float &screen_w, const float &screen_h)
 	float scale_x = screen_w / 1920;	if (scale_x > 1.0f)	scale_x = 1;
 	float scale_y = screen_h / 1080;	if (scale_y > 1.0f)	scale_y = 1;
 
-	plank.load("images/other/plank.png");
+	Loading::add(plank.load("images/other/plank.png"));
+	if (Loading::isError())	return;
 	plank.setScale(scale_x, scale_y);
 	plank.center(screen_w / 2, screen_h / 2);
 
@@ -37,12 +39,13 @@ void EFMInfo::load(const float &screen_w, const float &screen_h)
 	blackLayer.setSize(sf::Vector2f(screen_w, screen_h));
 	blackLayer.setPosition(0, 0);
 
-	const char* pathToFont = "fonts/Jaapokki-Regular.otf";
-	openedText.setFont(pathToFont);
-	openedFormText.setFont(pathToFont);
-	chosenText.setFont(pathToFont);
-	chosenFormText.setFont(pathToFont);
-	msgText.setFont(pathToFont);
+	const char* pathToFont = cmm::JAPOKKI_FONT_PATH;
+	Loading::add(openedText.setFont(pathToFont));
+	Loading::add(openedFormText.setFont(pathToFont));
+	Loading::add(chosenText.setFont(pathToFont));
+	Loading::add(chosenFormText.setFont(pathToFont));
+	Loading::add(msgText.setFont(pathToFont));
+	if (Loading::isError())	return;
 
 	openedText.setSize(plank.getWidth() / 30);
 	openedFormText.setSize(plank.getWidth() / 30);

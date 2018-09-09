@@ -9,7 +9,7 @@
 // #include "editor_flare/editor_options.h"
 // #include "tiles_editor.h"
 
-class Editor :public State
+class Editor :public cmm::State
 {
 	bool loaded;
 	
@@ -36,6 +36,7 @@ public:
 	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
+	void setState(int &state);
 private:
 	// void fades(double elapsedTime);
 	// void fadein(float value = 1, int max = 0xFF);

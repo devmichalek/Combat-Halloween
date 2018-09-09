@@ -1,4 +1,5 @@
 #include "efmtexteditor.h"
+#include "loading.h"
 
 EFMTextEditor::EFMTextEditor()
 {
@@ -46,18 +47,20 @@ void EFMTextEditor::load(const float &screen_w, const float &screen_h)
 	float scale_x = screen_w / 1920;	if (scale_x > 1.0f)	scale_x = 1;
 	float scale_y = screen_h / 1080;	if (scale_y > 1.0f)	scale_y = 1;
 
-	board.load("images/other/plank2.png");
+	Loading::add(board.load("images/other/plank2.png"));
+	if (Loading::isError())	return;
 	board.setScale(scale_x, scale_y);
 	board.center(screen_w / 2, screen_h / 2);
 
-	const char* pathToFont = "fonts/Jaapokki-Regular.otf";
-	infoText.setFont(pathToFont);
-	formText.setFont(pathToFont);
-	writtenText.setFont(pathToFont);
-	arrowText.setFont(pathToFont);
-	cancelText.setFont(pathToFont);
-	proceedText.setFont(pathToFont);
-	
+	const char* pathToFont = cmm::JAPOKKI_FONT_PATH;
+	Loading::add(infoText.setFont(pathToFont));
+	Loading::add(formText.setFont(pathToFont));
+	Loading::add(writtenText.setFont(pathToFont));
+	Loading::add(arrowText.setFont(pathToFont));
+	Loading::add(cancelText.setFont(pathToFont));
+	Loading::add(proceedText.setFont(pathToFont));
+	if (Loading::isError())	return;
+
 	infoText.setSize(screen_w / 50);
 	formText.setSize(screen_w / 60);
 	writtenText.setSize(screen_w / 60);

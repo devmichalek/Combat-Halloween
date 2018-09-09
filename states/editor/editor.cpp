@@ -59,6 +59,7 @@ void Editor::reset()
 	// editor_details.setType(tiles_editor.getType());
 	// editor_details.setChosen(tiles_editor.getChosen());
 	chat.reset();
+	chat.setStyleWhitish();
 }
 
 
@@ -84,8 +85,7 @@ void Editor::load(const float &screen_w, const float &screen_h)
 
 	// Set chat.
 	chat.load(screen_w, screen_h);
-	chat.setCommandColor(sf::Color(0xFF, 0xFF, 0xFF));
-	chat.setTypicalColor(sf::Color(0xBA, 0xBA, 0xBA));
+	chat.setStyleWhitish();
 }
 
 void Editor::handle(const sf::Event &event)
@@ -129,15 +129,15 @@ void Editor::mechanics(const double &elapsedTime)
 		chat.mechanics(elapsedTime);
 		if (chat.isCommand())
 		{
-			if (chat.findCommand("@menu"))
+			if (chat.compCommand("@menu"))
 			{
 				navigation.setHome();
 			}
-			else if (chat.findCommand("@levelmenu"))
+			else if (chat.compCommand("@levelmenu"))
 			{
 				navigation.setLevelMenu();
 			}
-			else if (chat.findCommand("@play"))
+			else if (chat.compCommand("@play"))
 			{
 				navigation.setPlay();
 			}
@@ -259,5 +259,24 @@ void Editor::mechanics(const double &elapsedTime)
 		//}
 
 		//editor_details.mechanics(elapsedTime);
+	}
+}
+
+void Editor::setState(int &state)
+{
+	if (isPrev() && isNext())
+	{
+		reset();
+		state = cmm::STATES::MENU;
+	}
+	else if (isPrev())
+	{
+		reset();
+		state = cmm::STATES::LEVELMENU;
+	}
+	else if (isNext())
+	{
+		reset();
+		state = cmm::STATES::PLATFORM;
 	}
 }

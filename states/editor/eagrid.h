@@ -1,10 +1,10 @@
 #pragma once
+#include "text.h"
 #include "circlebutton.h"
+#include "eventwindow.h"
 #include <vector>
 #include <SFML/Graphics/RectangleShape.hpp>
-#include <SFML/Window/Event.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include "text.h"
+
 // This object draw lines, display text and arrows
 class EAGrid	// Editor Action Grid
 {
@@ -18,7 +18,7 @@ class EAGrid	// Editor Action Grid
 		COUNT
 	};
 
-	std::vector<Circlebutton*> arrows;
+	std::vector<CircleButton*> arrows;
 
 	bool grid, change;		// is grid ON/OFF, is view moved YES/NO
 	int width;				// tile width

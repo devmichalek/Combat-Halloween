@@ -49,7 +49,7 @@ bool EAEntitySpecial::remove(int& x, int& y)
 
 sf::Vector2f EAEntitySpecial::get()
 {
-	return sf::Vector2f(rect.left, rect.top);
+	return sf::Vector2f(static_cast<float>(rect.left), static_cast<float>(rect.top));
 }
 
 bool EAEntitySpecial::isSet()

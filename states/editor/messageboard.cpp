@@ -1,4 +1,5 @@
 #include "messageboard.h"
+#include "loading.h"
 
 MessageBoard::MessageBoard()
 {
@@ -30,15 +31,17 @@ void MessageBoard::load(const float &screen_w, const float &screen_h)
 	float scale_x = screen_w / 1920;	if (scale_x > 1.0f)	scale_x = 1;
 	float scale_y = screen_h / 1080;	if (scale_y > 1.0f)	scale_y = 1;
 
-	board.load("images/other/plank2.png");
+	Loading::add(board.load("images/other/plank2.png"));
+	if (Loading::isError())	return;
 	board.setScale(scale_x, scale_y);
 	board.center(screen_w / 2, screen_h / 2);
 
-	const char* pathToFont = "fonts/Jaapokki-Regular.otf";
-	infoText.setFont(pathToFont);
-	yesText.setFont(pathToFont);
-	noText.setFont(pathToFont);
-	okText.setFont(pathToFont);
+	const char* pathToFont = cmm::JAPOKKI_FONT_PATH;
+	Loading::add(infoText.setFont(pathToFont));
+	Loading::add(yesText.setFont(pathToFont));
+	Loading::add(noText.setFont(pathToFont));
+	Loading::add(okText.setFont(pathToFont));
+	if (Loading::isError())	return;
 
 	infoText.setSize(screen_w / 50);
 	yesText.setSize(screen_w / 60);

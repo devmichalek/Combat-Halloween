@@ -7,7 +7,7 @@ using IDPair = std::pair<int, int>;	// chosen + ID
 using EntityRectID = std::pair<Box, IDPair>;
 typedef bgi::rtree<EntityRectID, bgi::quadratic<16>> ERTree;
 
-class EAEntityRect	// like trees, bushes (stuff with different rect shape)
+class EAEntityRect	// like trees, bushes (stuff with different rectlike shape)
 {
 	int count;
 	int lastID;

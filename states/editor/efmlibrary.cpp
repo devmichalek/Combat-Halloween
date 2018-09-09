@@ -1,4 +1,5 @@
 #include "efmlibrary.h"
+#include "loading.h"
 
 EFMLibrary::EFMLibrary()
 {
@@ -69,10 +70,11 @@ void EFMLibrary::load(const float &screen_w, const float &screen_h, sf::FloatRec
 	for (int i = 0; i < SIZE; ++i)
 		icons.push_back(new cmm::Sprite);
 
-	icons[LEFT]->load("images/icons/lefticon.png");
-	icons[RIGHT]->load("images/icons/righticon.png");
-	icons[WORLD]->load("images/icons/fileicon.png");
-	icons[CHECKED]->load("images/icons/checkedicon.png");
+	Loading::add(icons[LEFT]->load("images/icons/lefticon.png"));
+	Loading::add(icons[RIGHT]->load("images/icons/righticon.png"));
+	Loading::add(icons[WORLD]->load("images/icons/fileicon.png"));
+	Loading::add(icons[CHECKED]->load("images/icons/checkedicon.png"));
+	if (Loading::isError())	return;
 
 	float factor = 0.9f;
 	float off = screen_w / 200.0f;
@@ -85,8 +87,8 @@ void EFMLibrary::load(const float &screen_w, const float &screen_h, sf::FloatRec
 	icons[RIGHT]->setAlpha(0xFF / 1.5);
 
 	// The Rest
-	const char* pathToFont = "fonts/Jaapokki-Regular.otf";
-	pageText.setFont(pathToFont);
+	Loading::add(pageText.setFont(cmm::JAPOKKI_FONT_PATH));
+	if (Loading::isError())	return;
 	pageText.setSize(plank.width / 20);
 	pageText.setAlpha(0xFF);
 	setPageText();
@@ -226,7 +228,7 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 	if (!iconPos.empty())
 		iconPos.clear();
 
-	const char* pathToFont = "fonts/Jaapokki-Regular.otf";
+	const char* pathToFont = cmm::JAPOKKI_FONT_PATH;
 	for (auto &it : copy)
 	{
 		textLabels.push_back(new cmm::Text);
@@ -253,7 +255,7 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 	{
 		iconPos.push_back(sf::Vector2f());
 		iconPos[i].x = startX + off + (w + off) * xc;
-		iconPos[i].y = (plank.top + plank.height / 4.5) + off * 2 + w * yc;
+		iconPos[i].y = static_cast<float>((plank.top + plank.height / 4.5) + off * 2 + w * yc);
 
 		textLabels[i]->setPosition(iconPos[i].x + icons[WORLD]->getWidth() / 2 - textLabels[i]->getWidth() / 2, iconPos[i].y + icons[WORLD]->getHeight());
 

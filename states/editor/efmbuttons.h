@@ -20,7 +20,7 @@ class EFMButtons	// Editor File Manager Buttons
 	};
 
 	bool active;
-	Circlebutton fileButton;
+	CircleButton fileButton;
 	cmm::Text fileButtonText;
 	std::vector<bool> states;
 	std::vector<cmm::Text*> labels;

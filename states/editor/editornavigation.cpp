@@ -1,4 +1,5 @@
 #include "editornavigation.h"
+#include "loading.h"
 
 EditorNavigation::EditorNavigation()
 {
@@ -50,18 +51,20 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 	float scale_y = screen_h / 1440;
 
 	// BG
-	background.load("images/platform/background/full.png");
+	Loading::add(background.load("images/platform/background/full.png"));
+	if (Loading::isError())	return;
 	background.setScale(scale_x, scale_y);
 
 	for (int i = 0; i < KIND::SIZE; ++i)
 	{
-		buttons.push_back(new Circlebutton);
+		buttons.push_back(new CircleButton);
 		labels.push_back(new cmm::Text);
 	}
 	
 	buttons[MENU]->load("images/buttons/home.png");
 	buttons[LEVELMENU]->load("images/buttons/levelmenu.png");
 	buttons[PLAY]->load("images/buttons/play.png");
+	if (Loading::isError())	return;
 
 	for(auto &it : buttons)
 		it->setScale(scale_x, scale_y);
@@ -70,7 +73,7 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 	buttons[LEVELMENU]->setPosition(buttons[MENU]->getRight() + screen_w / 256, screen_h / 144);
 	buttons[PLAY]->setPosition(screen_w - screen_w / 256 - buttons[PLAY]->getWidth(), screen_h / 144);
 
-	std::string pathToFont = "fonts/jcandlestickextracond.ttf";
+	std::string pathToFont = cmm::JCANDLE_FONT_PATH;
 	for (auto &it : labels)
 	{
 		it->setFont(pathToFont.c_str());

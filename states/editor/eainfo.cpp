@@ -1,5 +1,6 @@
 #include "eainfo.h"
-#include "state.h"
+#include "logconsole.h"
+#include "loading.h"
 
 EAInfo::EAInfo()
 {
@@ -45,14 +46,14 @@ void EAInfo::load(const float &screen_w, const float &screen_h, const int &width
 
 	this->width = width;
 
-	const char* pathToFont = "fonts/jcandlestickextracond.ttf";
 	for (int i = 0; i < TEXTS::SIZE; ++i)
 	{
 		texts.push_back(new cmm::Text);
-		texts[i]->setFont(pathToFont);
+		Loading::add(texts[i]->setFont(cmm::JCANDLE_FONT_PATH));
+		if (Loading::isError())	return;
 		texts[i]->setSize(screen_w / 60);
 		texts[i]->setAlpha(0xFF);
-		i % 2 == 0 ? texts[i]->setFillColor(User::getLockedColor()) : texts[i]->setFillColor(User::getLoadingColor());
+		i % 2 == 0 ? texts[i]->setFillColor(cmm::LogConsole::getLockedColor()) : texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
 	}
 	texts[GRIDFORM]->setText("Grid:");
 	texts[CHOSENFORM]->setText("Chosen:");
@@ -111,14 +112,14 @@ void EAInfo::setDescriptionText(std::string line)
 void EAInfo::setOptionsText(bool getable)
 {
 	getable ? texts[OPTIONS]->setText("Available") : texts[OPTIONS]->setText("Unsupported");
-	getable ? texts[OPTIONS]->setFillColor(User::getGreenColor()) : texts[OPTIONS]->setFillColor(User::getErrorColor());
+	getable ? texts[OPTIONS]->setFillColor(cmm::LogConsole::getGreenColor()) : texts[OPTIONS]->setFillColor(cmm::LogConsole::getErrorColor());
 	texts[OPTIONS]->setPosition(texts[OPTIONSFORM]->getRight() + width / 4, texts[OPTIONSFORM]->getY());
 }
 
 void EAInfo::setGridText(bool grid)
 {
 	grid ? texts[GRID]->setText("On") : texts[GRID]->setText("Off");
-	grid ? texts[GRID]->setFillColor(User::getGreenColor()) : texts[GRID]->setFillColor(User::getErrorColor());
+	grid ? texts[GRID]->setFillColor(cmm::LogConsole::getGreenColor()) : texts[GRID]->setFillColor(cmm::LogConsole::getErrorColor());
 	texts[GRID]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[GRIDFORM]->getY());
 }
 

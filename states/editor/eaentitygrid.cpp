@@ -19,7 +19,7 @@ void EAEntityGrid::free()
 
 	if (array)
 	{
-		for (unsigned i = 0; i < max; ++i)
+		for (int i = 0; i < max; ++i)
 		{
 			delete array[i];
 			array[i] = nullptr;
@@ -35,8 +35,8 @@ void EAEntityGrid::free()
 void EAEntityGrid::reset()
 {
 	if (array)
-		for (unsigned i = 0; i < max; ++i)
-			for (unsigned j = 0; j < max; ++j)
+		for (int i = 0; i < max; ++i)
+			for (int j = 0; j < max; ++j)
 				array[i][j] = -1;
 }
 

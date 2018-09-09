@@ -11,7 +11,7 @@ class EATools
 	// Deleting Mode
 	char deleteMode;	// 0 = no delete mode, 1 - temporary (ctrl), 2 - pernament (button)
 	bool keyPressed;
-	Circlebutton deleteButton;
+	CircleButton deleteButton;
 	cmm::Text deleteText;
 
 public:

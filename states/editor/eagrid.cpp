@@ -1,5 +1,6 @@
 #include "eagrid.h"
-#include "state.h"
+#include "logconsole.h"
+#include "loading.h"
 
 EAGrid::EAGrid()
 {
@@ -58,7 +59,7 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	limitX = 1500 * width;
 	limitY = 1500 * width;
 	
-	sf::Color color = User::getLockedColor();
+	sf::Color color = cmm::LogConsole::getLockedColor();
 	color.a = 0xFF / 3;
 	lineX.setSize(sf::Vector2f(1, screen_h));
 	lineX.setPosition(0, 0);
@@ -67,34 +68,34 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	lineY.setPosition(0, 0);
 	lineY.setFillColor(color);
 
-	suppX.setSize(sf::Vector2f(1, width / 2));
-	suppY.setSize(sf::Vector2f(width / 2, 1));
+	suppX.setSize(sf::Vector2f(1, static_cast<float>(width) / 2));
+	suppY.setSize(sf::Vector2f(static_cast<float>(width) / 2, 1));
 	suppX.setFillColor(color);
 	suppY.setFillColor(color);
 
 
 	for (int i = 0; i < ARROWS::COUNT; ++i)
-		arrows.push_back(new Circlebutton);
+		arrows.push_back(new CircleButton);
 	arrows[LEFT]->load("images/buttons/left.png");
 	arrows[RIGHT]->load("images/buttons/right.png");
 	arrows[TOP]->load("images/buttons/top.png");
 	arrows[BOT]->load("images/buttons/bot.png");
 	arrows[CENTER]->load("images/buttons/disagree.png");
+	if (Loading::isError())	return;
 	for (int i = 0; i < ARROWS::COUNT; ++i)
 		arrows[i]->setScale(0.25, 0.25);
-	int space = screen_w / 256;
-	int cirButWidth = arrows[LEFT]->getWidth();
+	int space = static_cast<int>(screen_w / 256);
+	int cirButWidth = static_cast<int>(arrows[LEFT]->getWidth());
 	arrows[LEFT]->setPosition(screen_w - space * 3 - cirButWidth * 3, screen_h - cirButWidth * 2 - space);
 	arrows[RIGHT]->setPosition(screen_w - space - cirButWidth, screen_h - cirButWidth * 2 - space);
 	arrows[TOP]->setPosition(screen_w - space * 2 - cirButWidth * 2, screen_h - cirButWidth * 3 - space * 3);
 	arrows[BOT]->setPosition(screen_w - space * 2 - cirButWidth * 2, screen_h - cirButWidth - space);
 	arrows[CENTER]->setPosition(screen_w - space * 2 - cirButWidth * 2, screen_h - cirButWidth * 2 - space * 2);
 
-	const char* pathToFont = "fonts/jcandlestickextracond.ttf";
-	xyText.setFont(pathToFont);
+	xyText.setFont(cmm::JCANDLE_FONT_PATH);
 	xyText.setSize(screen_w / 80);
 	xyText.setAlpha(0xFF / 3);
-	xyText.setFillColor(User::getLockedColor());
+	xyText.setFillColor(cmm::LogConsole::getLockedColor());
 
 	setArrows();
 }
@@ -142,8 +143,8 @@ void EAGrid::draw(sf::RenderWindow* &window)
 {
 	if (!grid)
 	{
-		lineX.setPosition(mouseX, 0);
-		lineY.setPosition(0, mouseY);
+		lineX.setPosition(static_cast<float>(mouseX), 0.0f);
+		lineY.setPosition(0.0f, static_cast<float>(mouseY));
 
 		window->draw(lineX);
 		window->draw(lineY);
@@ -152,18 +153,18 @@ void EAGrid::draw(sf::RenderWindow* &window)
 	}
 	else
 	{
-		lineX.setPosition(gridX, 0);
-		lineY.setPosition(0, gridY);
+		lineX.setPosition(static_cast<float>(gridX), 0.0f);
+		lineY.setPosition(0.0f, static_cast<float>(gridY));
 		window->draw(lineX);
 		window->draw(lineY);
 
-		lineX.setPosition(gridX + width, 0);
-		lineY.setPosition(0, gridY + width);
+		lineX.setPosition(static_cast<float>(gridX + width), 0.0f);
+		lineY.setPosition(0.0f, static_cast<float>(gridY + width));
 		window->draw(lineX);
 		window->draw(lineY);
 
-		suppX.setPosition(gridX + width / 2, gridY - width / 4);
-		suppY.setPosition(gridX - width / 4, gridY + width / 2);
+		suppX.setPosition(static_cast<float>(gridX + width / 2), static_cast<float>(gridY - width / 4));
+		suppY.setPosition(static_cast<float>(gridX - width / 4), static_cast<float>(gridY + width / 2));
 		window->draw(suppX);
 		window->draw(suppY);
 
@@ -180,7 +181,7 @@ void EAGrid::draw(sf::RenderWindow* &window)
 
 void EAGrid::mechanics(bool deleteMode)
 {
-	sf::Color color = deleteMode ? User::getErrorColor() : User::getLockedColor();
+	sf::Color color = deleteMode ? cmm::LogConsole::getErrorColor() : cmm::LogConsole::getLockedColor();
 	color.a = 0xFF / 3;
 	lineX.setFillColor(color);
 	lineY.setFillColor(color);

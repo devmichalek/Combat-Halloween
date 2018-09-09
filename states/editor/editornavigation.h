@@ -13,7 +13,7 @@ class EditorNavigation
 	};
 
 	cmm::Sprite background;
-	std::vector<Circlebutton*> buttons;
+	std::vector<CircleButton*> buttons;
 	std::vector<cmm::Text*> labels;
 
 public:

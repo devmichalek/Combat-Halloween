@@ -28,8 +28,8 @@ void EATools::load(const float& screen_w, const float& screen_h)
 {
 	free();
 
-	this->screen_w = screen_w;
-	this->screen_h = screen_h;
+	this->screen_w = static_cast<int>(screen_w);
+	this->screen_h = static_cast<int>(screen_h);
 
 	checkedIcon.load("images/icons/checkedicon.png");
 	checkedIcon.setScale(0.3, 0.3);
@@ -39,7 +39,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	deleteButton.setScale(screen_w / 2560, screen_h / 1440);
 	deleteButton.setPosition(screen_w - screen_w / 85 - deleteButton.getWidth() * 3, screen_h / 144);
 
-	deleteText.setFont("fonts/jcandlestickextracond.ttf");
+	deleteText.setFont(cmm::JCANDLE_FONT_PATH);
 	deleteText.setSize(screen_w / 60);
 	deleteText.setAlpha(0xFF);
 	deleteText.setFillColor(sf::Color::White);
@@ -113,7 +113,7 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 			factory[i]->setPosition(startX, screen_h / 6);
 
 		if (factory[i]->getWidth() > largestWidth)
-			largestWidth = factory[i]->getWidth();
+			largestWidth = static_cast<int>(factory[i]->getWidth());
 
 		if (factory[i]->getBot() > screen_h / 8 * 7)
 		{
