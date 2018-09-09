@@ -1,17 +1,18 @@
 #include "engine.h"
-#include "boost/lexical_cast.hpp"
+#include "loading.h"
 
 int main(int argc, char** argv)
 {
 	std::unique_ptr<Engine> engine;
 
-	if (argc > 1)
-	{
-		engine = std::make_unique<Engine>(boost::lexical_cast <int> (argv[1]), boost::lexical_cast <int> (argv[2]));
-	}
-	else
-		engine = std::make_unique<Engine>();
+	engine = std::make_unique<Engine>();
+
+	if (Loading::isError())
+		return EXIT_FAILURE;
 	
-	engine->loop();
+	engine->loading_loop();
+
+	engine->main_loop();
+
 	return EXIT_SUCCESS;
 }

@@ -54,7 +54,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;..\init;..\menu;..\levelmenu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -63,7 +63,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;sfml-main.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\SFML\lib</AdditionalLibraryDirectories>
       <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -82,61 +82,115 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\music.cpp" />
-    <ClCompile Include="..\common\request.cpp" />
-    <ClCompile Include="..\common\sound.cpp" />
-    <ClCompile Include="..\common\sprite.cpp" />
-    <ClCompile Include="..\common\text.cpp" />
-    <ClCompile Include="..\common\thread.cpp" />
-    <ClCompile Include="..\core\core.cpp" />
-    <ClCompile Include="..\core\engine.cpp" />
+    <ClCompile Include="..\..\common\core.cpp" />
+    <ClCompile Include="..\..\common\coxing.cpp" />
+    <ClCompile Include="..\..\common\filemanager.cpp" />
+    <ClCompile Include="..\..\common\fpsconsole.cpp" />
+    <ClCompile Include="..\..\common\music.cpp" />
+    <ClCompile Include="..\..\common\request.cpp" />
+    <ClCompile Include="..\..\common\sound.cpp" />
+    <ClCompile Include="..\..\common\specs.cpp" />
+    <ClCompile Include="..\..\common\sprite.cpp" />
+    <ClCompile Include="..\..\common\state.cpp" />
+    <ClCompile Include="..\..\common\text.cpp" />
+    <ClCompile Include="..\..\common\thread.cpp" />
+    <ClCompile Include="..\..\common\user.cpp" />
+    <ClCompile Include="..\..\tools\button.cpp" />
+    <ClCompile Include="..\..\tools\chat.cpp" />
+    <ClCompile Include="..\..\tools\circlebutton.cpp" />
+    <ClCompile Include="..\..\tools\fps.cpp" />
+    <ClCompile Include="..\..\tools\linkbutton.cpp" />
+    <ClCompile Include="..\..\tools\loading.cpp" />
+    <ClCompile Include="..\..\tools\pausesystem.cpp" />
+    <ClCompile Include="..\..\tools\rectbutton.cpp" />
+    <ClCompile Include="..\..\tools\squarebutton.cpp" />
+    <ClCompile Include="..\..\tools\volumebutton.cpp" />
+    <ClCompile Include="..\editor\eaentitygrid.cpp" />
+    <ClCompile Include="..\editor\eaentityrect.cpp" />
+    <ClCompile Include="..\editor\eaentityspecial.cpp" />
+    <ClCompile Include="..\editor\eafactory.cpp" />
+    <ClCompile Include="..\editor\eagrid.cpp" />
+    <ClCompile Include="..\editor\eahistory.cpp" />
+    <ClCompile Include="..\editor\eainfo.cpp" />
+    <ClCompile Include="..\editor\eatools.cpp" />
+    <ClCompile Include="..\editor\econtent.cpp" />
+    <ClCompile Include="..\editor\editor.cpp" />
+    <ClCompile Include="..\editor\editoraction.cpp" />
+    <ClCompile Include="..\editor\editorfilemanager.cpp" />
+    <ClCompile Include="..\editor\editornavigation.cpp" />
+    <ClCompile Include="..\editor\efilemanager.cpp" />
+    <ClCompile Include="..\editor\efmbuttons.cpp" />
+    <ClCompile Include="..\editor\efminfo.cpp" />
+    <ClCompile Include="..\editor\efmlibrary.cpp" />
+    <ClCompile Include="..\editor\efmtexteditor.cpp" />
+    <ClCompile Include="..\editor\messageboard.cpp" />
     <ClCompile Include="..\init\initialization.cpp" />
-    <ClCompile Include="..\init\loading.cpp" />
     <ClCompile Include="..\init\login.cpp" />
-    <ClCompile Include="..\init\rectbutton.cpp" />
-    <ClCompile Include="..\levelmenu\chat.cpp" />
     <ClCompile Include="..\levelmenu\levelmenu.cpp" />
     <ClCompile Include="..\levelmenu\levelmenuinformation.cpp" />
-    <ClCompile Include="..\menu\button.cpp" />
-    <ClCompile Include="..\menu\circlebutton.cpp" />
     <ClCompile Include="..\menu\knightspecs.cpp" />
-    <ClCompile Include="..\menu\linkbutton.cpp" />
     <ClCompile Include="..\menu\menu.cpp" />
     <ClCompile Include="..\menu\menuinformation.cpp" />
-    <ClCompile Include="..\menu\pausesystem.cpp" />
     <ClCompile Include="..\menu\settings.cpp" />
-    <ClCompile Include="..\menu\squarebutton.cpp" />
-    <ClCompile Include="..\menu\state.cpp" />
-    <ClCompile Include="..\menu\volumebutton.cpp" />
+    <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\music.h" />
-    <ClInclude Include="..\common\request.h" />
-    <ClInclude Include="..\common\sound.h" />
-    <ClInclude Include="..\common\sprite.h" />
-    <ClInclude Include="..\common\text.h" />
-    <ClInclude Include="..\common\thread.h" />
-    <ClInclude Include="..\core\core.h" />
-    <ClInclude Include="..\core\engine.h" />
+    <ClInclude Include="..\..\common\core.h" />
+    <ClInclude Include="..\..\common\coxing.h" />
+    <ClInclude Include="..\..\common\dirent.h" />
+    <ClInclude Include="..\..\common\filemanager.h" />
+    <ClInclude Include="..\..\common\fpsconsole.h" />
+    <ClInclude Include="..\..\common\logconsole.h" />
+    <ClInclude Include="..\..\common\music.h" />
+    <ClInclude Include="..\..\common\request.h" />
+    <ClInclude Include="..\..\common\sound.h" />
+    <ClInclude Include="..\..\common\specs.h" />
+    <ClInclude Include="..\..\common\sprite.h" />
+    <ClInclude Include="..\..\common\state.h" />
+    <ClInclude Include="..\..\common\text.h" />
+    <ClInclude Include="..\..\common\thread.h" />
+    <ClInclude Include="..\..\common\treedefinitions.h" />
+    <ClInclude Include="..\..\common\user.h" />
+    <ClInclude Include="..\..\tools\button.h" />
+    <ClInclude Include="..\..\tools\chat.h" />
+    <ClInclude Include="..\..\tools\circlebutton.h" />
+    <ClInclude Include="..\..\tools\fps.h" />
+    <ClInclude Include="..\..\tools\linkbutton.h" />
+    <ClInclude Include="..\..\tools\loading.h" />
+    <ClInclude Include="..\..\tools\pausesystem.h" />
+    <ClInclude Include="..\..\tools\rectbutton.h" />
+    <ClInclude Include="..\..\tools\squarebutton.h" />
+    <ClInclude Include="..\..\tools\volumebutton.h" />
+    <ClInclude Include="..\editor\eaentitygrid.h" />
+    <ClInclude Include="..\editor\eaentityrect.h" />
+    <ClInclude Include="..\editor\eaentityspecial.h" />
+    <ClInclude Include="..\editor\eafactory.h" />
+    <ClInclude Include="..\editor\eagrid.h" />
+    <ClInclude Include="..\editor\eahistory.h" />
+    <ClInclude Include="..\editor\eainfo.h" />
+    <ClInclude Include="..\editor\eakind.h" />
+    <ClInclude Include="..\editor\eatools.h" />
+    <ClInclude Include="..\editor\econtent.h" />
+    <ClInclude Include="..\editor\editor.h" />
+    <ClInclude Include="..\editor\editoraction.h" />
+    <ClInclude Include="..\editor\editorfilemanager.h" />
+    <ClInclude Include="..\editor\editornavigation.h" />
+    <ClInclude Include="..\editor\efilemanager.h" />
+    <ClInclude Include="..\editor\efmbuttons.h" />
+    <ClInclude Include="..\editor\efminfo.h" />
+    <ClInclude Include="..\editor\efmlibrary.h" />
+    <ClInclude Include="..\editor\efmtexteditor.h" />
+    <ClInclude Include="..\editor\messageboard.h" />
     <ClInclude Include="..\init\initialization.h" />
-    <ClInclude Include="..\init\loading.h" />
     <ClInclude Include="..\init\login.h" />
-    <ClInclude Include="..\init\rectbutton.h" />
-    <ClInclude Include="..\levelmenu\chat.h" />
     <ClInclude Include="..\levelmenu\levelmenu.h" />
     <ClInclude Include="..\levelmenu\levelmenuinformation.h" />
-    <ClInclude Include="..\menu\button.h" />
-    <ClInclude Include="..\menu\circlebutton.h" />
     <ClInclude Include="..\menu\knightspecs.h" />
-    <ClInclude Include="..\menu\linkbutton.h" />
     <ClInclude Include="..\menu\menu.h" />
     <ClInclude Include="..\menu\menuinformation.h" />
-    <ClInclude Include="..\menu\pausesystem.h" />
     <ClInclude Include="..\menu\settings.h" />
-    <ClInclude Include="..\menu\squarebutton.h" />
-    <ClInclude Include="..\menu\state.h" />
-    <ClInclude Include="..\menu\volumebutton.h" />
+    <ClInclude Include="engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

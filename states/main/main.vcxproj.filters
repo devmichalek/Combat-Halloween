@@ -1,206 +1,345 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Headers">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Sources">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Sources\Common">
-      <UniqueIdentifier>{0d3a7076-cff7-45a3-aaae-ea39bb08fe82}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Core">
-      <UniqueIdentifier>{89176e81-8834-47f4-b8ce-057ee51e21b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Init">
-      <UniqueIdentifier>{814225ae-7779-4a57-ab0f-ecd250c7d55f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Levelmenu">
-      <UniqueIdentifier>{0e96c174-1a78-453c-a18c-146856eacfd9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\Menu">
-      <UniqueIdentifier>{088ac38b-a401-41e5-a20e-8b8743d91fac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Common">
-      <UniqueIdentifier>{0e3d35a1-09d9-46be-8b9e-576138c9d82d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Core">
-      <UniqueIdentifier>{2feae285-8eea-480d-96a9-f2b3df3b581c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Init">
-      <UniqueIdentifier>{df943093-105c-4f76-b19d-b67efe59183c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Levelmenu">
-      <UniqueIdentifier>{05ae9496-7de9-4324-a5d5-f1cc82b4d0b5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headers\Menu">
-      <UniqueIdentifier>{01a11bf7-5ae1-4ddb-bcc7-f66bffea19d4}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\common\core.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\core.cpp">
-      <Filter>Sources\Core</Filter>
+    <ClCompile Include="..\..\common\filemanager.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\engine.cpp">
-      <Filter>Sources\Core</Filter>
+    <ClCompile Include="..\..\common\fpsconsole.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\music.cpp">
-      <Filter>Sources\Common</Filter>
+    <ClCompile Include="..\..\common\music.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\request.cpp">
-      <Filter>Sources\Common</Filter>
+    <ClCompile Include="..\..\common\request.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sound.cpp">
-      <Filter>Sources\Common</Filter>
+    <ClCompile Include="..\..\common\sound.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sprite.cpp">
-      <Filter>Sources\Common</Filter>
+    <ClCompile Include="..\..\common\sprite.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\text.cpp">
-      <Filter>Sources\Common</Filter>
+    <ClCompile Include="..\..\common\state.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\text.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\thread.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\user.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\button.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\chat.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\circlebutton.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\fps.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\linkbutton.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\loading.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\pausesystem.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\rectbutton.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\squarebutton.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\volumebutton.cpp">
+      <Filter>Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="engine.cpp" />
     <ClCompile Include="..\init\initialization.cpp">
-      <Filter>Sources\Init</Filter>
-    </ClCompile>
-    <ClCompile Include="..\init\loading.cpp">
-      <Filter>Sources\Init</Filter>
+      <Filter>States\Init &amp; Login</Filter>
     </ClCompile>
     <ClCompile Include="..\init\login.cpp">
-      <Filter>Sources\Init</Filter>
-    </ClCompile>
-    <ClCompile Include="..\init\rectbutton.cpp">
-      <Filter>Sources\Init</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\button.cpp">
-      <Filter>Sources\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\menu.cpp">
-      <Filter>Sources\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\menuinformation.cpp">
-      <Filter>Sources\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\pausesystem.cpp">
-      <Filter>Sources\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\settings.cpp">
-      <Filter>Sources\Menu</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\state.cpp">
-      <Filter>Sources\Menu</Filter>
+      <Filter>States\Init &amp; Login</Filter>
     </ClCompile>
     <ClCompile Include="..\menu\knightspecs.cpp">
-      <Filter>Sources\Menu</Filter>
+      <Filter>States\Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\levelmenu\chat.cpp">
-      <Filter>Sources\Levelmenu</Filter>
+    <ClCompile Include="..\menu\menu.cpp">
+      <Filter>States\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\menuinformation.cpp">
+      <Filter>States\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\menu\settings.cpp">
+      <Filter>States\Menu</Filter>
     </ClCompile>
     <ClCompile Include="..\levelmenu\levelmenu.cpp">
-      <Filter>Sources\Levelmenu</Filter>
+      <Filter>States\Level Menu</Filter>
     </ClCompile>
     <ClCompile Include="..\levelmenu\levelmenuinformation.cpp">
-      <Filter>Sources\Levelmenu</Filter>
+      <Filter>States\Level Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\circlebutton.cpp">
-      <Filter>Sources\Menu</Filter>
+    <ClCompile Include="..\editor\eaentitygrid.cpp">
+      <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\linkbutton.cpp">
-      <Filter>Sources\Menu</Filter>
+    <ClCompile Include="..\editor\eaentityrect.cpp">
+      <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\squarebutton.cpp">
-      <Filter>Sources\Menu</Filter>
+    <ClCompile Include="..\editor\eaentityspecial.cpp">
+      <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\volumebutton.cpp">
-      <Filter>Sources\Menu</Filter>
+    <ClCompile Include="..\editor\eafactory.cpp">
+      <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\thread.cpp">
-      <Filter>Sources\Common</Filter>
+    <ClCompile Include="..\editor\eagrid.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\eahistory.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\eainfo.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\eatools.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\econtent.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\editor.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\editoraction.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\editorfilemanager.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\editornavigation.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\efilemanager.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\efmbuttons.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\efminfo.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\efmlibrary.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\efmtexteditor.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\messageboard.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coxing.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\specs.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Headers\Core</Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{6d574f6e-791b-46ff-8b4f-e6184a4f763c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{0010951b-3d98-423c-b28e-4be69f6751bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{3f0328be-558d-4a4b-9b1c-79703a002475}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Menu">
+      <UniqueIdentifier>{5c9ebcde-5732-4f93-be15-c2afc403f039}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Level Menu">
+      <UniqueIdentifier>{9e0b0d91-bc35-4ea6-ad15-9cf9d76d7323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Editor">
+      <UniqueIdentifier>{db20272b-c1c3-4955-9cbe-2f09f0c8ed39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Init &amp; Login">
+      <UniqueIdentifier>{d1b80366-42d8-49d7-a0a4-999c4b6b6d3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\common\core.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\core\engine.h">
-      <Filter>Headers\Core</Filter>
+    <ClInclude Include="..\..\common\dirent.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\music.h">
-      <Filter>Headers\Common</Filter>
+    <ClInclude Include="..\..\common\filemanager.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\request.h">
-      <Filter>Headers\Common</Filter>
+    <ClInclude Include="..\..\common\fpsconsole.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sound.h">
-      <Filter>Headers\Common</Filter>
+    <ClInclude Include="..\..\common\logconsole.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sprite.h">
-      <Filter>Headers\Common</Filter>
+    <ClInclude Include="..\..\common\music.h">
+      <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\text.h">
-      <Filter>Headers\Common</Filter>
+    <ClInclude Include="..\..\common\request.h">
+      <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\common\sound.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\sprite.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\state.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\text.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\thread.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\user.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\button.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\chat.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\circlebutton.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\fps.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\linkbutton.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\loading.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\pausesystem.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\rectbutton.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\squarebutton.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\tools\volumebutton.h">
+      <Filter>Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="engine.h" />
     <ClInclude Include="..\init\initialization.h">
-      <Filter>Headers\Init</Filter>
-    </ClInclude>
-    <ClInclude Include="..\init\loading.h">
-      <Filter>Headers\Init</Filter>
+      <Filter>States\Init &amp; Login</Filter>
     </ClInclude>
     <ClInclude Include="..\init\login.h">
-      <Filter>Headers\Init</Filter>
-    </ClInclude>
-    <ClInclude Include="..\init\rectbutton.h">
-      <Filter>Headers\Init</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\button.h">
-      <Filter>Headers\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\menu.h">
-      <Filter>Headers\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\menuinformation.h">
-      <Filter>Headers\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\pausesystem.h">
-      <Filter>Headers\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\settings.h">
-      <Filter>Headers\Menu</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\state.h">
-      <Filter>Headers\Menu</Filter>
+      <Filter>States\Init &amp; Login</Filter>
     </ClInclude>
     <ClInclude Include="..\menu\knightspecs.h">
-      <Filter>Headers\Menu</Filter>
+      <Filter>States\Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\levelmenu\chat.h">
-      <Filter>Headers\Levelmenu</Filter>
+    <ClInclude Include="..\menu\menu.h">
+      <Filter>States\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\menuinformation.h">
+      <Filter>States\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\menu\settings.h">
+      <Filter>States\Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\levelmenu\levelmenu.h">
-      <Filter>Headers\Levelmenu</Filter>
+      <Filter>States\Level Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\levelmenu\levelmenuinformation.h">
-      <Filter>Headers\Levelmenu</Filter>
+      <Filter>States\Level Menu</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\circlebutton.h">
-      <Filter>Headers\Menu</Filter>
+    <ClInclude Include="..\editor\eaentitygrid.h">
+      <Filter>States\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\linkbutton.h">
-      <Filter>Headers\Menu</Filter>
+    <ClInclude Include="..\editor\eaentityrect.h">
+      <Filter>States\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\squarebutton.h">
-      <Filter>Headers\Menu</Filter>
+    <ClInclude Include="..\editor\eaentityspecial.h">
+      <Filter>States\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\volumebutton.h">
-      <Filter>Headers\Menu</Filter>
+    <ClInclude Include="..\editor\eafactory.h">
+      <Filter>States\Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\thread.h">
-      <Filter>Headers\Common</Filter>
+    <ClInclude Include="..\editor\eagrid.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\eahistory.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\eainfo.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\eakind.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\eatools.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\econtent.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\editor.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\editoraction.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\editorfilemanager.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\editornavigation.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\efilemanager.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\efmbuttons.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\efminfo.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\efmlibrary.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\efmtexteditor.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\messageboard.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\coxing.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\specs.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\common\treedefinitions.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
