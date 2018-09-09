@@ -1,10 +1,11 @@
 #pragma once
+#include "state.h"
 #include "thread.h"
 #include "sprite.h"
 #include "request.h"
 #include "rectbutton.h"
 
-class Login
+class Login : public cmm::State
 {
 	// Basics.
 	float screen_w;
@@ -34,6 +35,7 @@ class Login
 
 	// Information
 	cmm::Text info;
+	std::string info_str;
 
 	// Support.
 	int state;	// 0 - setting login, 1 - setting password, 2 - entered.
@@ -59,7 +61,6 @@ public:
 	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
-	bool isNext() const;
 
 private:	// Support.
 	void setArrow();
@@ -69,4 +70,7 @@ private:	// Support.
 	bool isPossibleKey(const sf::Uint8 &code) const;
 	void move(float y_add, float x_add);
 	void position(float x_add = 0, float y_add = 0);
+
+	bool isReady() const; public:
+	void setState(int &state);
 };

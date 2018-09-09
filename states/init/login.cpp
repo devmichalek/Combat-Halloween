@@ -1,6 +1,7 @@
 #include "login.h"
-#include "state.h"
-#include <string>
+#include "user.h"
+#include "logconsole.h"
+#include "loading.h"
 
 Login::Login()
 {
@@ -20,6 +21,8 @@ void Login::free()
 	counter = 0;
 	arrow_counter = 0;
 	arrow_line = 0;
+
+	info_str = "";
 
 	loginbutton.free();
 	signupbutton.free();
@@ -54,18 +57,20 @@ void Login::load(const float &screen_w, const float &screen_h)
 
 
 	// Background.
-	loginbg.create(static_cast<int>(screen_w / 2), static_cast<int>(screen_h));
-	signupbg.create(static_cast<int>(screen_w / 2), static_cast<int>(screen_h));
+	Loading::add(loginbg.create(static_cast<int>(screen_w / 2), static_cast<int>(screen_h)));
+	Loading::add(signupbg.create(static_cast<int>(screen_w / 2), static_cast<int>(screen_h)));
+	if (Loading::isError()) return;
 	signupbg.setColor(sf::Color(0xF2, 0x58, 0x3E));
 	signupbg.move(screen_w / 2, 0);
 
 
-	const char* path = "fonts/Jaapokki-Regular.otf";
+	const char* path = cmm::JAPOKKI_FONT_PATH;
 	loginbutton.setFont(path);
 	signupbutton.setFont(path);
 	gobutton.setFont(path);
 	backbutton.setFont(path);
 	forgetbutton.setFont(path);
+	if (Loading::isError()) return;
 
 	int size = static_cast<int>(screen_h / 18);
 	loginbutton.create("LOG IN", size, static_cast<float>(size) / 30 + 2);
@@ -88,13 +93,14 @@ void Login::load(const float &screen_w, const float &screen_h)
 	forgetbutton.setColorText(color);
 
 	// Set font.
-	title.setFont(path);
-	arrow.setFont(path);
-	username_form.setFont(path);
-	password_form.setFont(path);
-	username_written.setFont(path);
-	password_written.setFont(path);
-	info.setFont(path);
+	Loading::add(title.setFont(path));
+	Loading::add(arrow.setFont(path));
+	Loading::add(username_form.setFont(path));
+	Loading::add(password_form.setFont(path));
+	Loading::add(username_written.setFont(path));
+	Loading::add(password_written.setFont(path));
+	Loading::add(info.setFont(path));
+	if (Loading::isError()) return;
 
 	// Set text.
 	title.setText("LOGGING");
@@ -229,7 +235,6 @@ void Login::draw(sf::RenderWindow* &window)
 	window->draw(signupbg.get());
 	signupbutton.draw(window);
 
-
 	// Second scene.
 	backbutton.draw(window);
 	window->draw(title.get());
@@ -238,6 +243,7 @@ void Login::draw(sf::RenderWindow* &window)
 	window->draw(username_written.get());
 	window->draw(password_written.get());
 	window->draw(info.get());
+
 	if (forget_counter > 2)	forgetbutton.draw(window);
 
 	// Draw gobutton.
@@ -267,6 +273,15 @@ void Login::mechanics(const double &elapsedTime)
 	if (thread.ready)
 	{
 		thread.reset();
+	}
+
+	if (!info_str.empty())
+	{
+		info.setText(info_str);
+		info_str = "";
+		// Set alpha and position of info.
+		info.setAlpha(0xFF);
+		info.setPosition(screen_w / 2 - info.getWidth() / 2, password_form.getBot() + screen_h / 20);
 	}
 
 	// Arrow.
@@ -310,7 +325,7 @@ void Login::mechanics(const double &elapsedTime)
 		signupbg.fadeout(value * 4, 0);
 	}
 
-	int max = 0xFF;
+	int max = 0xFF, min = 0;
 	loginbutton.fadeinGlobal(value, max);
 	signupbutton.fadeinGlobal(value, max);
 	backbutton.fadeinGlobal(value, max);
@@ -321,7 +336,7 @@ void Login::mechanics(const double &elapsedTime)
 	password_written.fadein(value, max);
 	arrow.fadein(value, max);
 	gobutton.fadeinGlobal(value, max);
-	info.fadeout(value / 2, max);
+	info.fadeout(value / 2, min);
 	forgetbutton.fadeinGlobal(value, max);
 
 	if (signupbutton.getClicked())
@@ -394,11 +409,6 @@ void Login::mechanics(const double &elapsedTime)
 	}
 }
 
-bool Login::isNext() const
-{
-	return thread.success && info.getAlpha() == 0;
-}
-
 
 
 void Login::setArrow()
@@ -424,28 +434,23 @@ void Login::setThread()
 	
 	if (!request.sendRequest())
 	{
-		info.setText("Cannot connect to database.");
-		info.setFillColor(User::getErrorColor());
+		info_str = "Cannot connect to database.";
+		info.setFillColor(cmm::LogConsole::getErrorColor());
 	}
 	else if (request.getResult() == "success")
 	{
-		info.setText("You are logged!");
-		info.setFillColor(User::getGreenColor());
-		User user;
-		user.username = const_cast<char*>(username.c_str());
+		info_str = "You are logged!";
+		info.setFillColor(cmm::LogConsole::getGreenColor());
+		cmm::User::setUsername(username);
 		thread.success = true;
 	}
 	else
 	{
 		forget_counter++;
-		if(request.getResult() == "-1")		info.setText("Unexpected Error.");
-		else if(request.getResult() == "0")	info.setText("Wrong username or password.");
-		info.setFillColor(User::getErrorColor());
+		if(request.getResult() == "-1")		info_str = "Unexpected Error.";
+		else if(request.getResult() == "0")	info_str = "Wrong username or password.";
+		info.setFillColor(cmm::LogConsole::getErrorColor());
 	}
-
-	// Set alpha and position of info.
-	info.setAlpha(0xFF);
-	info.setPosition(screen_w / 2 - info.getWidth() / 2, password_form.getBot() + screen_h / 20);
 
 	// Set Arrow - state.
 	state = 1;
@@ -521,4 +526,17 @@ void Login::position(float x_add, float y_add)
 	gobutton.setPosition(screen_w / 2 - gobutton.getWidth() / 2, info.getBot() + screen_h / 9 + y_add - screen_h / 4 * 3);
 	forgetbutton.setPosition(screen_w - forgetbutton.getWidth() - screen_w / 128 + x_add, screen_h / 72 + y_add - screen_h / 4 * 3);
 	organizeWritten();
+}
+
+bool Login::isReady() const
+{
+	return thread.success && info.getAlpha() == 0;
+}
+
+void Login::setState(int &state)
+{
+	if (isReady())
+	{
+		state = cmm::MENU;
+	}
 }
