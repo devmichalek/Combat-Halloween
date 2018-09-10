@@ -16,14 +16,11 @@
     <Filter Include="Main\Foes\Tree">
       <UniqueIdentifier>{28989261-a7da-4f76-bfaf-a84369d3ebb2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\Core">
-      <UniqueIdentifier>{b9ef42b4-18bf-4ccb-837a-4247b27058c9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dependencies\Common">
-      <UniqueIdentifier>{296ef33c-c0d0-490d-b6cf-db07590edf99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Main\Foes\Kind">
       <UniqueIdentifier>{5b2f8ac2-41fb-473c-99cf-bb88f1bbc0ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Common">
+      <UniqueIdentifier>{c35b91be-381c-4929-af30-699916baa333}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,24 +39,6 @@
     <ClCompile Include="foefeatures.cpp">
       <Filter>Main\Foes\Other</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\core.cpp">
-      <Filter>Dependencies\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\music.cpp">
-      <Filter>Dependencies\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\request.cpp">
-      <Filter>Dependencies\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\sound.cpp">
-      <Filter>Dependencies\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\sprite.cpp">
-      <Filter>Dependencies\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\text.cpp">
-      <Filter>Dependencies\Common</Filter>
-    </ClCompile>
     <ClCompile Include="foewrapper.cpp">
       <Filter>Main\Foes\Tree</Filter>
     </ClCompile>
@@ -68,6 +47,27 @@
     </ClCompile>
     <ClCompile Include="zombie.cpp">
       <Filter>Main\Foes\Kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\thread.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\text.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sprite.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sound.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\request.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\core.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\music.cpp">
+      <Filter>Dependencies\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,27 +83,6 @@
     <ClInclude Include="foefeatures.h">
       <Filter>Main\Foes\Other</Filter>
     </ClInclude>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Dependencies\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\music.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\request.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\sound.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\sprite.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\text.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="treedefinitions.h">
-      <Filter>Main\Foes\Tree</Filter>
-    </ClInclude>
     <ClInclude Include="foe.h">
       <Filter>Main\Foes\Tree</Filter>
     </ClInclude>
@@ -115,6 +94,33 @@
     </ClInclude>
     <ClInclude Include="zombie.h">
       <Filter>Main\Foes\Kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\thread.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\text.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sprite.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sound.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\request.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\logconsole.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\core.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\music.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\treedefinitions.h">
+      <Filter>Dependencies\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

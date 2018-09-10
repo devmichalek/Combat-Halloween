@@ -35,22 +35,23 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\boost;..\core;..\common;foes;foes\other;foes\tree;tree;..\menu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\music.cpp" />
-    <ClCompile Include="..\common\request.cpp" />
-    <ClCompile Include="..\common\sound.cpp" />
-    <ClCompile Include="..\common\sprite.cpp" />
-    <ClCompile Include="..\common\text.cpp" />
-    <ClCompile Include="..\core\core.cpp" />
+    <ClCompile Include="..\..\..\common\core.cpp" />
+    <ClCompile Include="..\..\..\common\music.cpp" />
+    <ClCompile Include="..\..\..\common\request.cpp" />
+    <ClCompile Include="..\..\..\common\sound.cpp" />
+    <ClCompile Include="..\..\..\common\sprite.cpp" />
+    <ClCompile Include="..\..\..\common\text.cpp" />
+    <ClCompile Include="..\..\..\common\thread.cpp" />
     <ClCompile Include="foeanimation.cpp" />
     <ClCompile Include="foefactory.cpp" />
     <ClCompile Include="foefeatures.cpp" />
@@ -61,12 +62,15 @@
     <ClCompile Include="zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\music.h" />
-    <ClInclude Include="..\common\request.h" />
-    <ClInclude Include="..\common\sound.h" />
-    <ClInclude Include="..\common\sprite.h" />
-    <ClInclude Include="..\common\text.h" />
-    <ClInclude Include="..\core\core.h" />
+    <ClInclude Include="..\..\..\common\core.h" />
+    <ClInclude Include="..\..\..\common\logconsole.h" />
+    <ClInclude Include="..\..\..\common\music.h" />
+    <ClInclude Include="..\..\..\common\request.h" />
+    <ClInclude Include="..\..\..\common\sound.h" />
+    <ClInclude Include="..\..\..\common\sprite.h" />
+    <ClInclude Include="..\..\..\common\text.h" />
+    <ClInclude Include="..\..\..\common\thread.h" />
+    <ClInclude Include="..\..\..\common\treedefinitions.h" />
     <ClInclude Include="foeanimation.h" />
     <ClInclude Include="foefactory.h" />
     <ClInclude Include="foefeatures.h" />
@@ -74,7 +78,6 @@
     <ClInclude Include="foetext.h" />
     <ClInclude Include="foewrapper.h" />
     <ClInclude Include="skeleton.h" />
-    <ClInclude Include="treedefinitions.h" />
     <ClInclude Include="zombie.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -2,7 +2,7 @@
 #include "foefactory.h"
 #include "text.h"
 
-Core* core = new Core(0, sf::Color(21, 21, 29, 0xFF));
+cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
 FoeFactory* foeFactory = new FoeFactory;
 
 enum STATES
