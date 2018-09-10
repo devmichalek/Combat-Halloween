@@ -95,8 +95,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "h", "h", "{35E7F257-D1D8-46
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "foe", "states\platform\foe\foe.vcxproj", "{45525F0D-E95F-4582-BA92-905CB69B3B99}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "kutas", "tools\vcxproj\kutas\kutas.vcxproj", "{7FC271A3-F1A3-495F-AF78-039CDAA4F095}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -223,11 +221,6 @@ Global
 		{45525F0D-E95F-4582-BA92-905CB69B3B99}.Release|x64.Build.0 = Debug|Win32
 		{45525F0D-E95F-4582-BA92-905CB69B3B99}.Release|x86.ActiveCfg = Debug|Win32
 		{45525F0D-E95F-4582-BA92-905CB69B3B99}.Release|x86.Build.0 = Debug|Win32
-		{7FC271A3-F1A3-495F-AF78-039CDAA4F095}.Debug|x64.ActiveCfg = Debug|Win32
-		{7FC271A3-F1A3-495F-AF78-039CDAA4F095}.Debug|x86.ActiveCfg = Debug|Win32
-		{7FC271A3-F1A3-495F-AF78-039CDAA4F095}.Debug|x86.Build.0 = Debug|Win32
-		{7FC271A3-F1A3-495F-AF78-039CDAA4F095}.Release|x64.ActiveCfg = Debug|Win32
-		{7FC271A3-F1A3-495F-AF78-039CDAA4F095}.Release|x86.ActiveCfg = Debug|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,7 +252,6 @@ Global
 		{7776C15C-FF4C-46E3-A2E1-6487690B50C6} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{35E7F257-D1D8-463F-A8A4-F5AF952BA7A8} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{45525F0D-E95F-4582-BA92-905CB69B3B99} = {032C2A88-13A5-441B-B54F-85FFD421C9FE}
-		{7FC271A3-F1A3-495F-AF78-039CDAA4F095} = {8BD48AED-E610-41EC-A3EF-9944271EBF90}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A902BF8F-F072-4EE3-B7A9-52A877CD0DEF}
