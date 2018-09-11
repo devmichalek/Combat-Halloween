@@ -2,23 +2,23 @@
 #include "state.h"
 #include "circlebutton.h"
 #include "volumebutton.h"
-#include "background/moving_bg.h"
+#include "moving_bg.h"
 #include "chat.h"
 #include "pausesystem.h"
 #include "music.h"
 
-class Platform :public State
+class Platform :public cmm::State
 {
 	bool loaded;
-	Circlebutton homebutton;
-	Circlebutton levelbutton;
-	Circlebutton soundbutton;
-	Circlebutton musicbutton;
+	CircleButton homebutton;
+	CircleButton levelbutton;
+	CircleButton soundbutton;
+	CircleButton musicbutton;
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
 	MovingBG movingBG;
 	Chat chat;
-	Pausesystem pausesystem;
+	PauseSystem pausesystem;
 	cmm::Music music;
 	
 	void free();

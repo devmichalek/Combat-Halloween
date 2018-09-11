@@ -5,126 +5,156 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Main">
-      <UniqueIdentifier>{0fc54341-0ae0-487c-a01e-a063cdeed8cf}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main\Still Life">
-      <UniqueIdentifier>{726c3c29-c900-4b03-ab5d-72e96cd256d5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Main\Background">
-      <UniqueIdentifier>{fc820547-6434-48ee-9cdf-a26ed3298497}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dependencies\Chat">
-      <UniqueIdentifier>{f6da8a21-215c-49f5-908f-cce93e955887}</UniqueIdentifier>
+    <Filter Include="Dependencies\Tools">
+      <UniqueIdentifier>{8da544b2-fb12-44a1-afb3-e977bbfbca20}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Common">
-      <UniqueIdentifier>{afd50507-7780-42ed-a7aa-cdd89b8b8d65}</UniqueIdentifier>
+      <UniqueIdentifier>{d5607503-a1c9-4219-bb9c-2f78f45e43e2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\Core">
-      <UniqueIdentifier>{2c4ab483-93e9-49bb-b0c9-c109ea56b180}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dependencies\Button">
-      <UniqueIdentifier>{563199f1-552c-4bef-8a3c-1a75efde41f5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dependencies\Pause System">
-      <UniqueIdentifier>{4e620cde-b03b-4a22-b9f2-23185eae1417}</UniqueIdentifier>
+    <Filter Include="Other">
+      <UniqueIdentifier>{fecbc6bb-4c22-4c87-a378-f4a6e865e9e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="slife\tiles.cpp">
-      <Filter>Main\Still Life</Filter>
+    <ClCompile Include="..\..\..\tools\button.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Main</Filter>
+    <ClCompile Include="..\..\..\tools\chat.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="platform.cpp">
-      <Filter>Main</Filter>
+    <ClCompile Include="..\..\..\tools\circlebutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\state.cpp">
-      <Filter>Dependencies</Filter>
+    <ClCompile Include="..\..\..\tools\fps.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="background\moving_bg.cpp">
-      <Filter>Main\Background</Filter>
+    <ClCompile Include="..\..\..\tools\loading.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\levelmenu\chat.cpp">
-      <Filter>Dependencies\Chat</Filter>
+    <ClCompile Include="..\..\..\tools\pausesystem.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\button.cpp">
-      <Filter>Dependencies\Button</Filter>
+    <ClCompile Include="..\..\..\tools\volumebutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\menu\circlebutton.cpp">
-      <Filter>Dependencies\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\volumebutton.cpp">
-      <Filter>Dependencies\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="..\menu\pausesystem.cpp">
-      <Filter>Dependencies\Pause System</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\music.cpp">
+    <ClCompile Include="..\..\..\common\core.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\request.cpp">
+    <ClCompile Include="..\..\..\common\coxing.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sound.cpp">
+    <ClCompile Include="..\..\..\common\fpsconsole.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\sprite.cpp">
+    <ClCompile Include="..\..\..\common\music.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\text.cpp">
+    <ClCompile Include="..\..\..\common\request.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\core\core.cpp">
-      <Filter>Dependencies\Core</Filter>
+    <ClCompile Include="..\..\..\common\sound.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\specs.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sprite.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\state.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\text.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\thread.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\user.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="platform.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="moving_bg.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="tiles.cpp">
+      <Filter>Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="slife\tiles.h">
-      <Filter>Main\Still Life</Filter>
+    <ClInclude Include="..\..\..\tools\button.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="platform.h">
-      <Filter>Main</Filter>
+    <ClInclude Include="..\..\..\tools\chat.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\state.h">
-      <Filter>Dependencies</Filter>
+    <ClInclude Include="..\..\..\tools\circlebutton.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="background\moving_bg.h">
-      <Filter>Main\Background</Filter>
+    <ClInclude Include="..\..\..\tools\fps.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\levelmenu\chat.h">
-      <Filter>Dependencies\Chat</Filter>
+    <ClInclude Include="..\..\..\tools\loading.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\button.h">
-      <Filter>Dependencies\Button</Filter>
+    <ClInclude Include="..\..\..\tools\pausesystem.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\circlebutton.h">
-      <Filter>Dependencies\Button</Filter>
+    <ClInclude Include="..\..\..\tools\volumebutton.h">
+      <Filter>Dependencies\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="..\menu\volumebutton.h">
-      <Filter>Dependencies\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="..\menu\pausesystem.h">
-      <Filter>Dependencies\Pause System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\music.h">
+    <ClInclude Include="..\..\..\common\core.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\request.h">
+    <ClInclude Include="..\..\..\common\coxing.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sound.h">
+    <ClInclude Include="..\..\..\common\eventwindow.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\sprite.h">
+    <ClInclude Include="..\..\..\common\fpsconsole.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\text.h">
+    <ClInclude Include="..\..\..\common\logconsole.h">
       <Filter>Dependencies\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\core\core.h">
-      <Filter>Dependencies\Core</Filter>
+    <ClInclude Include="..\..\..\common\music.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\request.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sound.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\specs.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sprite.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\state.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\text.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\thread.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\treedefinitions.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\user.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="platform.h" />
+    <ClInclude Include="moving_bg.h">
+      <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="tiles.h">
+      <Filter>Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -115,8 +115,7 @@ void Platform::load(const float &screen_w, const float &screen_h)
 
 	// Set chat.
 	chat.load(screen_w, screen_h);
-	chat.setCommandColor(sf::Color(0, 0, 0));
-	chat.setTypicalColor(sf::Color(0x68, 0x68, 0x68));
+	chat.setStyleWhitish();
 
 	pausesystem.load(screen_w, screen_h);
 	music.load("music/platform/common.ogg");

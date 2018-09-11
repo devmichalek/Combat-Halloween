@@ -35,48 +35,66 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\SFML\include;..\..\\boost;..\core;..\common;..\menu;..\levelmenu</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\music.cpp" />
-    <ClCompile Include="..\common\request.cpp" />
-    <ClCompile Include="..\common\sound.cpp" />
-    <ClCompile Include="..\common\sprite.cpp" />
-    <ClCompile Include="..\common\text.cpp" />
-    <ClCompile Include="..\core\core.cpp" />
-    <ClCompile Include="..\levelmenu\chat.cpp" />
-    <ClCompile Include="..\menu\button.cpp" />
-    <ClCompile Include="..\menu\circlebutton.cpp" />
-    <ClCompile Include="..\menu\pausesystem.cpp" />
-    <ClCompile Include="..\menu\state.cpp" />
-    <ClCompile Include="..\menu\volumebutton.cpp" />
-    <ClCompile Include="background\moving_bg.cpp" />
+    <ClCompile Include="..\..\..\common\core.cpp" />
+    <ClCompile Include="..\..\..\common\coxing.cpp" />
+    <ClCompile Include="..\..\..\common\fpsconsole.cpp" />
+    <ClCompile Include="..\..\..\common\music.cpp" />
+    <ClCompile Include="..\..\..\common\request.cpp" />
+    <ClCompile Include="..\..\..\common\sound.cpp" />
+    <ClCompile Include="..\..\..\common\specs.cpp" />
+    <ClCompile Include="..\..\..\common\sprite.cpp" />
+    <ClCompile Include="..\..\..\common\state.cpp" />
+    <ClCompile Include="..\..\..\common\text.cpp" />
+    <ClCompile Include="..\..\..\common\thread.cpp" />
+    <ClCompile Include="..\..\..\common\user.cpp" />
+    <ClCompile Include="..\..\..\tools\button.cpp" />
+    <ClCompile Include="..\..\..\tools\chat.cpp" />
+    <ClCompile Include="..\..\..\tools\circlebutton.cpp" />
+    <ClCompile Include="..\..\..\tools\fps.cpp" />
+    <ClCompile Include="..\..\..\tools\loading.cpp" />
+    <ClCompile Include="..\..\..\tools\pausesystem.cpp" />
+    <ClCompile Include="..\..\..\tools\volumebutton.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="moving_bg.cpp" />
     <ClCompile Include="platform.cpp" />
-    <ClCompile Include="slife\tiles.cpp" />
+    <ClCompile Include="tiles.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\music.h" />
-    <ClInclude Include="..\common\request.h" />
-    <ClInclude Include="..\common\sound.h" />
-    <ClInclude Include="..\common\sprite.h" />
-    <ClInclude Include="..\common\text.h" />
-    <ClInclude Include="..\core\core.h" />
-    <ClInclude Include="..\levelmenu\chat.h" />
-    <ClInclude Include="..\menu\button.h" />
-    <ClInclude Include="..\menu\circlebutton.h" />
-    <ClInclude Include="..\menu\pausesystem.h" />
-    <ClInclude Include="..\menu\state.h" />
-    <ClInclude Include="..\menu\volumebutton.h" />
-    <ClInclude Include="background\moving_bg.h" />
+    <ClInclude Include="..\..\..\common\core.h" />
+    <ClInclude Include="..\..\..\common\coxing.h" />
+    <ClInclude Include="..\..\..\common\eventwindow.h" />
+    <ClInclude Include="..\..\..\common\fpsconsole.h" />
+    <ClInclude Include="..\..\..\common\logconsole.h" />
+    <ClInclude Include="..\..\..\common\music.h" />
+    <ClInclude Include="..\..\..\common\request.h" />
+    <ClInclude Include="..\..\..\common\sound.h" />
+    <ClInclude Include="..\..\..\common\specs.h" />
+    <ClInclude Include="..\..\..\common\sprite.h" />
+    <ClInclude Include="..\..\..\common\state.h" />
+    <ClInclude Include="..\..\..\common\text.h" />
+    <ClInclude Include="..\..\..\common\thread.h" />
+    <ClInclude Include="..\..\..\common\treedefinitions.h" />
+    <ClInclude Include="..\..\..\common\user.h" />
+    <ClInclude Include="..\..\..\tools\button.h" />
+    <ClInclude Include="..\..\..\tools\chat.h" />
+    <ClInclude Include="..\..\..\tools\circlebutton.h" />
+    <ClInclude Include="..\..\..\tools\fps.h" />
+    <ClInclude Include="..\..\..\tools\loading.h" />
+    <ClInclude Include="..\..\..\tools\pausesystem.h" />
+    <ClInclude Include="..\..\..\tools\volumebutton.h" />
+    <ClInclude Include="moving_bg.h" />
     <ClInclude Include="platform.h" />
-    <ClInclude Include="slife\tiles.h" />
+    <ClInclude Include="tiles.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
