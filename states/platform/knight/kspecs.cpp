@@ -18,12 +18,13 @@ void KSpecs::freeSpecs()
 	mresistant = 0;
 	velocity = 0;
 	hvelocity = 0;
+	gravity = 0;
 	damage = 0;
 	mdamage = 0;
 	luck = 0;
 	experience = 0;
 	level = 0;
-	scale = 0.45;
+	scale = 0.45f;
 }
 
 void KSpecs::setSpecs()
@@ -48,6 +49,7 @@ void KSpecs::setSpecs()
 	mresistant = static_cast<float>(features[MAGIC_RESISTANT]);
 	velocity = 0xFF + 0xFF * static_cast<float>(features[MOVEMENT_SPEED]) / 100;
 	hvelocity = velocity / 2;
+	gravity = 0.5;	// change later
 	damage = static_cast<float>(features[DAMAGE]);
 	mdamage = static_cast<float>(features[MAGIC_DAMAGE]);
 	luck = static_cast<float>(features[LUCK]);

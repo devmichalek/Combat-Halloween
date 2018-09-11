@@ -10,6 +10,7 @@ public:
 	float mresistant;
 	float velocity;
 	float hvelocity;	// half velocity
+	float gravity;
 	float damage;
 	float mdamage;
 	float luck;

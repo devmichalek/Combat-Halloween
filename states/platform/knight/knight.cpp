@@ -1,4 +1,5 @@
 #include "knight.h"
+#include "loading.h"
 
 Knight::Knight()
 {
@@ -54,22 +55,28 @@ void Knight::load(const float &screen_w, const float &screen_h)
 	for (int i = 0; i < STATES::SIZE; ++i)
 	{
 		sprites.push_back(new cmm::Sprite);
-		sprites[i]->load("images/platform/knight/" + std::to_string(i) + ".png", offset_max);
+		Loading::add(sprites[i]->load("images/platform/knight/" + std::to_string(i) + ".png", offset_max));
+		if (Loading::isError())	return;
 		sprites[i]->setScale(specs.scale, specs.scale);
 	}
 
 	// Set rects size
-	rect.width = sprites[IDLE]->getWidth() * 0.9;
-	rect.height = sprites[IDLE]->getHeight() * 0.9;
-	attackRect.width = sprites[IDLE]->getWidth() * 0.4;
-	attackRect.height = sprites[IDLE]->getHeight() * 0.4;
+	rect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.9);
+	rect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.9);
+	attackRect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.4);
+	attackRect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.4);
 
 	// --- TEST ---
 	shape.setFillColor(sf::Color(0xFF, 0xFA, 0xCD, 0xFF / 3));
-	shape.setSize(sf::Vector2f(rect.width, rect.height));
+	shape.setSize(sf::Vector2f(static_cast<float>(rect.width), static_cast<float>(rect.height)));
 	attackShape.setFillColor(sf::Color(0xFF, 0x00, 0x00, 0xFF / 3));
-	attackShape.setSize(sf::Vector2f(attackRect.width, attackRect.height));
+	attackShape.setSize(sf::Vector2f(static_cast<float>(attackRect.width), static_cast<float>(attackRect.height)));
 	// ---      ---
+}
+
+void Knight::handle(const sf::Event &event)
+{
+
 }
 
 void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
@@ -94,7 +101,7 @@ void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 
 void Knight::mechanics(const double &elapsedTime)
 {
-	offset += elapsedTime * OPS;
+	offset += static_cast<float>(elapsedTime * OPS);
 	if (static_cast<int>(offset) >= offset_max)
 	{
 		offset = 0;
@@ -104,19 +111,19 @@ void Knight::mechanics(const double &elapsedTime)
 	{
 		align = ALIGN::LEFT;
 		walk(elapsedTime);
-		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
+		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
 	}
 	else if (coxing.isMovingRight())
 	{
 		align = ALIGN::RIGHT;
 		walk(elapsedTime);
-		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
+		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
 	}
 	else
 	{
 		state = STATES::IDLE;
 		if (coxing.walkTimer > 0)
-			coxing.walkTimer -= elapsedTime;
+			coxing.walkTimer -= static_cast<float>(elapsedTime);
 	}
 
 	if (coxing.isJumping())
@@ -164,6 +171,16 @@ bool Knight::isAttack()
 	return false;
 }
 
+void Knight::gravity()
+{
+	xy.y += specs.gravity;
+}
+
+void Knight::undoGravity()
+{
+	xy.y -= specs.gravity;
+}
+
 
 
 
@@ -175,7 +192,7 @@ void Knight::walk(const double &elapsedTime)
 	{
 		if (coxing.walkTimer < coxing.walkLine)
 		{
-			coxing.walkTimer += elapsedTime;
+			coxing.walkTimer += static_cast<float>(elapsedTime);
 			state = STATES::WALK;
 
 		}
@@ -223,13 +240,13 @@ void Knight::setAlign()
 
 void Knight::setRect()
 {
-	rect.left = xy.x - rect.width / 2;
-	rect.top = xy.y - rect.height;
+	rect.left = static_cast<int>(xy.x - rect.width / 2);
+	rect.top = static_cast<int>(xy.y - rect.height);
 
 	// --- TEST ---
 	if (collisionMode)
 	{
-		shape.setPosition(rect.left, rect.top);
+		shape.setPosition(static_cast<float>(rect.left), static_cast<float>(rect.top));
 	}
 	// ---      ---
 }
@@ -243,7 +260,7 @@ void Knight::setAttackRect()
 	{
 		if (isAttack())
 		{
-			attackShape.setPosition(attackRect.left, attackRect.top);
+			attackShape.setPosition(static_cast<float>(attackRect.left), static_cast<float>(attackRect.top));
 		}
 	}
 	// ---      ---

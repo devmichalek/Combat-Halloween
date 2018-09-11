@@ -30,15 +30,19 @@ public:
 
 	void set(const float &x, const float &y);	// set xy start position
 	void load(const float &screen_w, const float &screen_h);
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
 
 	void mechanics(const double &elapsedTime);
-	void switchCollision();	// turn on/off collision drawing
+	void switchCollision();	// turn on/off drawing collision
 
 	const sf::IntRect& getRect();
 	const sf::IntRect& getAttackRect();
 	bool isAlive();
 	bool isAttack();
+
+	void gravity();
+	void undoGravity();
 
 private:
 	void walk(const double &elapsedTime);
