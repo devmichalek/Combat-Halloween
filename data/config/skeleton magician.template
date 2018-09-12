@@ -1,7 +1,7 @@
 #SKELETON MAGICIAN TEMPLATE
 #IDLE1 IDLE2 WALK1 WALK2 ATTACK1 ATTACK2 DIE
 
-type: 14
+type: 15
 states: 6
 offsets: 10 10 10 10 7
 path: images/platform/foes/type/skeleton magician/

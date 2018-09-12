@@ -1,7 +1,7 @@
 #TROLL LIGNEOUS TEMPLATE
 #IDLE WALK RUN JUMP ATTACK HURT DIE
 
-type: 4
+type: 5
 states: 7
 offsets: 7 7 7 7 7
 path: images/platform/foes/type/troll ligneous/

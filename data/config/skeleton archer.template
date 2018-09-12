@@ -1,7 +1,7 @@
 #SKELETON ARCHER TEMPLATE
 #IDLE WALK EVASSION ATTACK DIE
 
-type: 13
+type: 14
 states: 5
 offsets: 10 10 10 10 6
 path: images/platform/foes/type/skeleton archer/

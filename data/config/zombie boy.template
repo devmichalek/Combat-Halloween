@@ -1,7 +1,7 @@
 #ZOMBIE BOY TEMPLATE
 #IDLE WALK ATTACK DIE
 
-type: 7
+type: 8
 states: 4
 offsets: 15 10 8 12
 path: images/platform/foes/type/zombie boy/
