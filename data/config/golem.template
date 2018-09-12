@@ -1,0 +1,7 @@
+#VAMPIRE TEMPLATE
+#APPEAR IDLE/WALK ATTACK DIE
+
+type: 3
+states: 4
+offsets: 15 6 6 7
+path: images/platform/foes/type/golem/
