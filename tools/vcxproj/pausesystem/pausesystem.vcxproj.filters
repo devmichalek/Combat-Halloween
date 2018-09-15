@@ -6,9 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\common\core.cpp">
-      <Filter>Dependencies</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\common\sound.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
@@ -19,33 +16,18 @@
       <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\..\pausesystem.cpp" />
-    <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\loading.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\common\state.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\core.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sound.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sprite.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\text.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\pausesystem.h" />
-    <ClInclude Include="..\..\loading.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\state.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

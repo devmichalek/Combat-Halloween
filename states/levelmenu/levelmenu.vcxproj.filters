@@ -5,11 +5,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Dependencies\Common">
-      <UniqueIdentifier>{e498272a-50c5-4fe1-a4ec-56ac5304e0e8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dependencies\Tools">
       <UniqueIdentifier>{99776b68-e921-43b5-85a1-94ba78419bed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Common">
+      <UniqueIdentifier>{e498272a-50c5-4fe1-a4ec-56ac5304e0e8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -61,56 +61,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="levelmenuinformation.cpp" />
     <ClCompile Include="levelmenu.cpp" />
+    <ClCompile Include="..\..\common\fpsconsole.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\fps.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\user.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\thread.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\text.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\state.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sprite.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sound.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\request.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\logconsole.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\core.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\music.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\button.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\circlebutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\chat.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\pausesystem.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\loading.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\volumebutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="levelmenuinformation.h" />
     <ClInclude Include="levelmenu.h" />
   </ItemGroup>

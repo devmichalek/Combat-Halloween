@@ -38,35 +38,5 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chat.h" />
-    <ClInclude Include="..\..\..\common\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\logconsole.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sound.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sprite.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\text.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\user.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\loading.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\state.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\fps.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\fpsconsole.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

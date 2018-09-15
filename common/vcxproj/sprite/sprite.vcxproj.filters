@@ -13,9 +13,6 @@
     <ClCompile Include="..\..\sprite.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\sprite.h" />
   </ItemGroup>
 </Project>

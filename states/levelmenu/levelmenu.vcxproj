@@ -46,6 +46,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\core.cpp" />
+    <ClCompile Include="..\..\common\fpsconsole.cpp" />
     <ClCompile Include="..\..\common\music.cpp" />
     <ClCompile Include="..\..\common\request.cpp" />
     <ClCompile Include="..\..\common\sound.cpp" />
@@ -57,6 +58,7 @@
     <ClCompile Include="..\..\tools\button.cpp" />
     <ClCompile Include="..\..\tools\chat.cpp" />
     <ClCompile Include="..\..\tools\circlebutton.cpp" />
+    <ClCompile Include="..\..\tools\fps.cpp" />
     <ClCompile Include="..\..\tools\loading.cpp" />
     <ClCompile Include="..\..\tools\pausesystem.cpp" />
     <ClCompile Include="..\..\tools\volumebutton.cpp" />
@@ -65,22 +67,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\core.h" />
-    <ClInclude Include="..\..\common\logconsole.h" />
-    <ClInclude Include="..\..\common\music.h" />
-    <ClInclude Include="..\..\common\request.h" />
-    <ClInclude Include="..\..\common\sound.h" />
-    <ClInclude Include="..\..\common\sprite.h" />
-    <ClInclude Include="..\..\common\state.h" />
-    <ClInclude Include="..\..\common\text.h" />
-    <ClInclude Include="..\..\common\thread.h" />
-    <ClInclude Include="..\..\common\user.h" />
-    <ClInclude Include="..\..\tools\button.h" />
-    <ClInclude Include="..\..\tools\chat.h" />
-    <ClInclude Include="..\..\tools\circlebutton.h" />
-    <ClInclude Include="..\..\tools\loading.h" />
-    <ClInclude Include="..\..\tools\pausesystem.h" />
-    <ClInclude Include="..\..\tools\volumebutton.h" />
     <ClInclude Include="levelmenu.h" />
     <ClInclude Include="levelmenuinformation.h" />
   </ItemGroup>

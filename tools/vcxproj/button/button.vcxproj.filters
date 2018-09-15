@@ -38,24 +38,6 @@
     <ClInclude Include="..\..\linkbutton.h" />
     <ClInclude Include="..\..\squarebutton.h" />
     <ClInclude Include="..\..\volumebutton.h" />
-    <ClInclude Include="..\..\..\common\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sound.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sprite.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\rectbutton.h" />
-    <ClInclude Include="..\..\..\common\text.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\state.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\loading.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

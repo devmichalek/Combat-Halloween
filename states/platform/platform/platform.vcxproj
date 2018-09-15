@@ -70,28 +70,6 @@
     <ClCompile Include="tiles.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\core.h" />
-    <ClInclude Include="..\..\..\common\coxing.h" />
-    <ClInclude Include="..\..\..\common\eventwindow.h" />
-    <ClInclude Include="..\..\..\common\fpsconsole.h" />
-    <ClInclude Include="..\..\..\common\logconsole.h" />
-    <ClInclude Include="..\..\..\common\music.h" />
-    <ClInclude Include="..\..\..\common\request.h" />
-    <ClInclude Include="..\..\..\common\sound.h" />
-    <ClInclude Include="..\..\..\common\specs.h" />
-    <ClInclude Include="..\..\..\common\sprite.h" />
-    <ClInclude Include="..\..\..\common\state.h" />
-    <ClInclude Include="..\..\..\common\text.h" />
-    <ClInclude Include="..\..\..\common\thread.h" />
-    <ClInclude Include="..\..\..\common\treedefinitions.h" />
-    <ClInclude Include="..\..\..\common\user.h" />
-    <ClInclude Include="..\..\..\tools\button.h" />
-    <ClInclude Include="..\..\..\tools\chat.h" />
-    <ClInclude Include="..\..\..\tools\circlebutton.h" />
-    <ClInclude Include="..\..\..\tools\fps.h" />
-    <ClInclude Include="..\..\..\tools\loading.h" />
-    <ClInclude Include="..\..\..\tools\pausesystem.h" />
-    <ClInclude Include="..\..\..\tools\volumebutton.h" />
     <ClInclude Include="moving_bg.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="tiles.h" />

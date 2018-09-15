@@ -57,17 +57,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\core.h" />
-    <ClInclude Include="..\..\..\common\fpsconsole.h" />
-    <ClInclude Include="..\..\..\common\logconsole.h" />
-    <ClInclude Include="..\..\..\common\sound.h" />
-    <ClInclude Include="..\..\..\common\sprite.h" />
-    <ClInclude Include="..\..\..\common\state.h" />
-    <ClInclude Include="..\..\..\common\text.h" />
-    <ClInclude Include="..\..\..\common\user.h" />
     <ClInclude Include="..\..\chat.h" />
-    <ClInclude Include="..\..\fps.h" />
-    <ClInclude Include="..\..\loading.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

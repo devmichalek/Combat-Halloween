@@ -62,15 +62,6 @@
     <ClCompile Include="zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\core.h" />
-    <ClInclude Include="..\..\..\common\logconsole.h" />
-    <ClInclude Include="..\..\..\common\music.h" />
-    <ClInclude Include="..\..\..\common\request.h" />
-    <ClInclude Include="..\..\..\common\sound.h" />
-    <ClInclude Include="..\..\..\common\sprite.h" />
-    <ClInclude Include="..\..\..\common\text.h" />
-    <ClInclude Include="..\..\..\common\thread.h" />
-    <ClInclude Include="..\..\..\common\treedefinitions.h" />
     <ClInclude Include="foeanimation.h" />
     <ClInclude Include="foefactory.h" />
     <ClInclude Include="foefeatures.h" />

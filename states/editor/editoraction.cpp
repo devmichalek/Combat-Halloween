@@ -1,4 +1,5 @@
 #include "editoraction.h"
+#include "loading.h"
 
 EditorAction::EditorAction()
 {
@@ -33,7 +34,7 @@ void EditorAction::load(const float &screen_w, const float &screen_h)
 	factory.load(screen_w, screen_h);
 	grid.load(screen_w, screen_h, width);
 	info.load(screen_w, screen_h, width);
-
+	if (Loading::isError())	return;
 	reset();
 }
 

@@ -35,7 +35,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools;..\..\editor</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
@@ -59,16 +59,6 @@
     <ClCompile Include="wsim.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\content.h" />
-    <ClInclude Include="..\..\..\common\core.h" />
-    <ClInclude Include="..\..\..\common\eventwindow.h" />
-    <ClInclude Include="..\..\..\common\request.h" />
-    <ClInclude Include="..\..\..\common\sprite.h" />
-    <ClInclude Include="..\..\..\common\state.h" />
-    <ClInclude Include="..\..\..\common\text.h" />
-    <ClInclude Include="..\..\..\common\thread.h" />
-    <ClInclude Include="..\..\..\tools\loading.h" />
-    <ClInclude Include="..\..\..\tools\rectbutton.h" />
     <ClInclude Include="wcontent.h" />
     <ClInclude Include="wsim.h" />
   </ItemGroup>

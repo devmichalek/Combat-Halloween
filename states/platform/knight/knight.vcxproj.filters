@@ -51,56 +51,14 @@
     <ClCompile Include="..\..\..\tools\loading.cpp">
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\common\state.cpp">
-      <Filter>Dependencies\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\platform\tiles.cpp">
       <Filter>Dependencies\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\core.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\coxing.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\eventwindow.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\request.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sound.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\specs.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\sprite.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\text.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\thread.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\user.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
     <ClInclude Include="kcoxing.h" />
     <ClInclude Include="knight.h" />
     <ClInclude Include="kspecs.h" />
     <ClInclude Include="kstates.h" />
-    <ClInclude Include="..\..\..\tools\loading.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\common\state.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform\tiles.h">
-      <Filter>Dependencies\Other</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

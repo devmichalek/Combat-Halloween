@@ -13,9 +13,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\fpsconsole.h" />
   </ItemGroup>
 </Project>

@@ -54,7 +54,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\knight;..\platform\wsim</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\content.cpp" />
     <ClCompile Include="..\..\common\core.cpp" />
     <ClCompile Include="..\..\common\coxing.cpp" />
     <ClCompile Include="..\..\common\filemanager.cpp" />
@@ -132,64 +133,12 @@
     <ClCompile Include="..\menu\menu.cpp" />
     <ClCompile Include="..\menu\menuinformation.cpp" />
     <ClCompile Include="..\menu\settings.cpp" />
+    <ClCompile Include="..\platform\wsim\wcontent.cpp" />
+    <ClCompile Include="..\platform\wsim\wsim.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\core.h" />
-    <ClInclude Include="..\..\common\coxing.h" />
-    <ClInclude Include="..\..\common\dirent.h" />
-    <ClInclude Include="..\..\common\filemanager.h" />
-    <ClInclude Include="..\..\common\fpsconsole.h" />
-    <ClInclude Include="..\..\common\logconsole.h" />
-    <ClInclude Include="..\..\common\music.h" />
-    <ClInclude Include="..\..\common\request.h" />
-    <ClInclude Include="..\..\common\sound.h" />
-    <ClInclude Include="..\..\common\specs.h" />
-    <ClInclude Include="..\..\common\sprite.h" />
-    <ClInclude Include="..\..\common\state.h" />
-    <ClInclude Include="..\..\common\text.h" />
-    <ClInclude Include="..\..\common\thread.h" />
-    <ClInclude Include="..\..\common\treedefinitions.h" />
-    <ClInclude Include="..\..\common\user.h" />
-    <ClInclude Include="..\..\tools\button.h" />
-    <ClInclude Include="..\..\tools\chat.h" />
-    <ClInclude Include="..\..\tools\circlebutton.h" />
-    <ClInclude Include="..\..\tools\fps.h" />
-    <ClInclude Include="..\..\tools\linkbutton.h" />
-    <ClInclude Include="..\..\tools\loading.h" />
-    <ClInclude Include="..\..\tools\pausesystem.h" />
-    <ClInclude Include="..\..\tools\rectbutton.h" />
-    <ClInclude Include="..\..\tools\squarebutton.h" />
-    <ClInclude Include="..\..\tools\volumebutton.h" />
-    <ClInclude Include="..\editor\eaentitygrid.h" />
-    <ClInclude Include="..\editor\eaentityrect.h" />
-    <ClInclude Include="..\editor\eaentityspecial.h" />
-    <ClInclude Include="..\editor\eafactory.h" />
-    <ClInclude Include="..\editor\eagrid.h" />
-    <ClInclude Include="..\editor\eahistory.h" />
-    <ClInclude Include="..\editor\eainfo.h" />
-    <ClInclude Include="..\editor\eakind.h" />
-    <ClInclude Include="..\editor\eatools.h" />
-    <ClInclude Include="..\editor\econtent.h" />
-    <ClInclude Include="..\editor\editor.h" />
-    <ClInclude Include="..\editor\editoraction.h" />
-    <ClInclude Include="..\editor\editorfilemanager.h" />
-    <ClInclude Include="..\editor\editornavigation.h" />
-    <ClInclude Include="..\editor\efilemanager.h" />
-    <ClInclude Include="..\editor\efmbuttons.h" />
-    <ClInclude Include="..\editor\efminfo.h" />
-    <ClInclude Include="..\editor\efmlibrary.h" />
-    <ClInclude Include="..\editor\efmtexteditor.h" />
-    <ClInclude Include="..\editor\messageboard.h" />
-    <ClInclude Include="..\init\initialization.h" />
-    <ClInclude Include="..\init\login.h" />
-    <ClInclude Include="..\levelmenu\levelmenu.h" />
-    <ClInclude Include="..\levelmenu\levelmenuinformation.h" />
-    <ClInclude Include="..\menu\knightspecs.h" />
-    <ClInclude Include="..\menu\menu.h" />
-    <ClInclude Include="..\menu\menuinformation.h" />
-    <ClInclude Include="..\menu\settings.h" />
     <ClInclude Include="engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

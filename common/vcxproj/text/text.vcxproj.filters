@@ -7,9 +7,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\text.h" />
-    <ClInclude Include="..\..\core.h">
-      <Filter>Dependencies</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

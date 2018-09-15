@@ -7,7 +7,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core.h" />
     <ClInclude Include="..\..\text.h" />
   </ItemGroup>
   <ItemGroup>

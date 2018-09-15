@@ -51,7 +51,6 @@
     <ClCompile Include="..\..\..\common\sound.cpp" />
     <ClCompile Include="..\..\..\common\specs.cpp" />
     <ClCompile Include="..\..\..\common\sprite.cpp" />
-    <ClCompile Include="..\..\..\common\state.cpp" />
     <ClCompile Include="..\..\..\common\text.cpp" />
     <ClCompile Include="..\..\..\common\thread.cpp" />
     <ClCompile Include="..\..\..\common\user.cpp" />
@@ -64,19 +63,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\common\core.h" />
-    <ClInclude Include="..\..\..\common\coxing.h" />
-    <ClInclude Include="..\..\..\common\eventwindow.h" />
-    <ClInclude Include="..\..\..\common\request.h" />
-    <ClInclude Include="..\..\..\common\sound.h" />
-    <ClInclude Include="..\..\..\common\specs.h" />
-    <ClInclude Include="..\..\..\common\sprite.h" />
-    <ClInclude Include="..\..\..\common\state.h" />
-    <ClInclude Include="..\..\..\common\text.h" />
-    <ClInclude Include="..\..\..\common\thread.h" />
-    <ClInclude Include="..\..\..\common\user.h" />
-    <ClInclude Include="..\..\..\tools\loading.h" />
-    <ClInclude Include="..\platform\tiles.h" />
     <ClInclude Include="kcoxing.h" />
     <ClInclude Include="knight.h" />
     <ClInclude Include="kspecs.h" />

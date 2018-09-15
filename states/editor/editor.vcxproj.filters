@@ -49,6 +49,9 @@
     <Filter Include="Other">
       <UniqueIdentifier>{d1c98336-8e03-49cb-8ef8-98e7e0de5a48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies\Other">
+      <UniqueIdentifier>{73a9a4ae-d673-47c6-83cf-ff6e197bfcd1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="messageboard.cpp">
@@ -152,6 +155,18 @@
     <ClCompile Include="..\..\common\filemanager.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\tools\fps.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\fpsconsole.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\content.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\wsim\wcontent.cpp">
+      <Filter>Dependencies\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="messageboard.h">
@@ -211,57 +226,6 @@
     <ClInclude Include="efilemanager.h">
       <Filter>Editor File Manager\File Manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\common\user.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\thread.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\text.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\state.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sprite.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sound.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\request.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\logconsole.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\core.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\music.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\circlebutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\chat.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\button.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\loading.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\pausesystem.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="editor.h" />
-    <ClInclude Include="..\..\common\dirent.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\filemanager.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,4 +1,3 @@
-// Test of objects: core
 #include "core.h"
 #include <assert.h>
 #include <stdio.h>

@@ -10,9 +10,6 @@
     <Filter Include="Dependencies\Tools">
       <UniqueIdentifier>{d0e9b4ee-2e02-4ab0-9291-b31e64f066fe}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dependencies\Other">
-      <UniqueIdentifier>{ab7fe9a7-517b-47ec-94b9-1f936ae3daee}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\common\user.cpp">
@@ -68,80 +65,26 @@
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="knightspecs.cpp" />
-    <ClCompile Include="..\platform\knight\coxing.cpp">
-      <Filter>Dependencies\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\knight\specs.cpp">
-      <Filter>Dependencies\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\music.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coxing.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\specs.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\tools\fps.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\fpsconsole.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\common\user.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\thread.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\text.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\state.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sprite.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\sound.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\request.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\logconsole.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\core.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\loading.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\chat.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\button.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\circlebutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\linkbutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\pausesystem.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\squarebutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\tools\volumebutton.h">
-      <Filter>Dependencies\Tools</Filter>
-    </ClInclude>
     <ClInclude Include="settings.h" />
     <ClInclude Include="menuinformation.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="knightspecs.h" />
-    <ClInclude Include="..\platform\knight\coxing.h">
-      <Filter>Dependencies\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="..\platform\knight\specs.h">
-      <Filter>Dependencies\Other</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\common\music.h">
-      <Filter>Dependencies\Common</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

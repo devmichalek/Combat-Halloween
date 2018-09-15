@@ -12,7 +12,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\core.h" />
     <ClInclude Include="..\..\sprite.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
