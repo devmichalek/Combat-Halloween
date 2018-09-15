@@ -48,6 +48,8 @@ namespace cmm
 		float getRight() const;
 		const float& getTop() const;
 		const float getBot() const;
+		const float& getScaleX() const;
+		const float& getScaleY() const;
 		
 		bool checkCollision(float x, float y, float w = 0, float h = 0) const;
 		bool checkCollisionRect(sf::Rect <float> rect) const;

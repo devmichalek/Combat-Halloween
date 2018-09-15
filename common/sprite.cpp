@@ -289,6 +289,16 @@ const float cmm::Sprite::getBot() const
 	return sprite->getPosition().y + getHeight();
 }
 
+const float& cmm::Sprite::getScaleX() const
+{
+	return sprite.get()->getScale().x;
+}
+
+const float& cmm::Sprite::getScaleY() const
+{
+	return sprite.get()->getScale().y;
+}
+
 
 
 bool cmm::Sprite::checkCollision(float x, float y, float w, float h) const
