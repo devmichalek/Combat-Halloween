@@ -118,9 +118,6 @@ void main_loop()
 
 int main(int argc, char** argv)
 {
-	int x = 10;
-	x = ++x + x++;
-
 	// Init only loading state.
 	states.push_back(new Loading);
 	if (Loading::isError())
