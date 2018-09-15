@@ -46,7 +46,7 @@ void main_loop()
 {
 	sf::RectangleShape shape;
 	shape.setSize(sf::Vector2f(core->getWidth() / 10, core->getHeight() / 10));
-	shape.setFillColor(sf::Color::Black);
+	shape.setFillColor(sf::Color::White);
 
 	float velocity = 120;
 	sf::Vector2f pos(0, 0);
@@ -77,30 +77,30 @@ void main_loop()
 
 		if (pauseSystem.isActive())
 		{
-			float value = elapsedTime * 0xFF * 2;
+			float value = static_cast<float>(elapsedTime) * 0xFF * 2;
 			int min = 0xFF * 3 / 4;
 			pauseSystem.fadein(value * 3, min);
 		}
 		else
 		{
-			float value = elapsedTime * 0xFF * 2;
+			float value = static_cast<float>(elapsedTime) * 0xFF * 2;
 			int max = 0xFF, min = 0;
 			pauseSystem.fadeout(value, min);
 
 			if (pos.x < dest.x)
-				pos.x += elapsedTime * velocity;
+				pos.x += static_cast<float>(elapsedTime) * velocity;
 			else
-				pos.x -= elapsedTime * velocity;
+				pos.x -= static_cast<float>(elapsedTime) * velocity;
 
 			if (pos.y < dest.y)
-				pos.y += elapsedTime * velocity;
+				pos.y += static_cast<float>(elapsedTime) * velocity;
 			else
-				pos.y -= elapsedTime * velocity;
+				pos.y -= static_cast<float>(elapsedTime) * velocity;
 
 			shape.setPosition(pos);
 		}
 
-		counter += elapsedTime;
+		counter += static_cast<float>(elapsedTime);
 		if (counter > counter_line)
 		{
 			counter = 0;
