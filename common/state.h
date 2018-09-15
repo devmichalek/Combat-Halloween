@@ -13,8 +13,31 @@ namespace cmm
 		PLATFORM,
 		TABLE = 6,
 		EDITOR,
+		SIMULATOR = 8,
 		DEFAULT
 	};
+
+	// The Look Of States - It shows where you can go from particular state.
+	// LOADING -> INIT -> LOGIN -> MENU
+
+	// MENU -> LEVELMENU
+	//		-> EDITOR
+
+	// LEVELMENU -> MENU
+	//			 -> EDITOR
+	//			 -> SIMULATOR
+
+	// SIMULATOR -> PLATFORM -> MENU
+	//			 -> PLATFORM -> LEVELMENU
+	//			 -> PLATFORM -> EDITOR
+	//			 -> PLATFORM -> TABLE
+
+	// EDITOR -> MENU
+	//		  -> LEVELMENU
+	//		  -> SIMULATOR
+
+	// TABLE -> ?
+
 
 	class State
 	{
