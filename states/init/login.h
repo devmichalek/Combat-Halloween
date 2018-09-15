@@ -18,12 +18,12 @@ class Login : public cmm::State
 	// First scene.
 	cmm::Sprite loginbg;
 	cmm::Sprite signupbg;
-	Rectbutton loginbutton;
-	Rectbutton signupbutton;
+	RectButton loginbutton;
+	RectButton signupbutton;
 
 	// Second scene.
-	Rectbutton gobutton;
-	Rectbutton backbutton;
+	RectButton gobutton;
+	RectButton backbutton;
 	sf::Rect<float> usernameCollision;
 	sf::Rect<float> passwordCollision;
 	cmm::Text title;
@@ -51,7 +51,7 @@ class Login : public cmm::State
 
 	// "I forgot password" stuff below.
 	int forget_counter;
-	Rectbutton forgetbutton;
+	RectButton forgetbutton;
 
 public:
 	Login();
