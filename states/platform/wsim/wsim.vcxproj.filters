@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\..\common\core.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\request.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\sprite.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\text.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\thread.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tools\loading.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="wsim.cpp" />
+    <ClCompile Include="..\..\..\common\state.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\content.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="wcontent.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\..\tools\rectbutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{c2ec4f4e-b77b-4533-b862-90b38a634284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Common">
+      <UniqueIdentifier>{282a9434-5e8c-412d-b1cb-cf272c384de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dependencies\Tools">
+      <UniqueIdentifier>{25bb26a9-cb7c-4fee-b85a-000817e6c16b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\common\core.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\eventwindow.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\request.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\sprite.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\text.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\thread.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\tools\loading.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="wsim.h" />
+    <ClInclude Include="..\..\..\common\state.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\content.h">
+      <Filter>Dependencies\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="wcontent.h" />
+    <ClInclude Include="..\..\..\tools\rectbutton.h">
+      <Filter>Dependencies\Tools</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
