@@ -47,7 +47,7 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError()) return;
 
 	// Set text.
-	texts[AUTHOR]->setTextW(L"Adrian Micha\u0142ek\nSebastian Bialucha");
+	texts[AUTHOR]->setTextW(L"Adrian Micha\u0142ek");
 	texts[PRESENTS]->setText("presents");
 	texts[HALLOWEEN]->setText("Halloween");
 	texts[HALLOWEEN]->setOutlineThickness(3);
