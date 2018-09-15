@@ -18,4 +18,6 @@ protected:
 	int type;
 	int chosen;
 public:
+
+	const int getKindSize() { return KIND::AMOUNT; }
 };

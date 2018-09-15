@@ -2,7 +2,6 @@
 
 int EContent::loadVersion = 0;
 int EContent::saveVersion = 0;
-std::vector<std::string> EContent::content;
 
 EContent::~EContent()
 {

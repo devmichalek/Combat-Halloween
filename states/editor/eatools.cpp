@@ -88,7 +88,7 @@ void EATools::drawTools(sf::RenderWindow* &window)
 	window->draw(deleteText.get());
 }
 
-void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory, const int& chosen)
+void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory, const int& chosen)	// Draws thumbnails
 {
 	// Save current position.
 	float tempX, tempY;
@@ -99,15 +99,19 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 	int space = screen_h / 288;
 	int startX = space * 3;
 	int largestWidth = 0;
+	float scaleX = factory[0]->getScaleX(), scaleY = factory[0]->getScaleY();
+
 	for (unsigned i = 0; i < factory.size(); ++i)
 	{
 		if (i != chosen)	factory[i]->setAlpha(0xFF / 1.5);
-
+		
 		factory[i]->setScale(0.3, 0.3); // 30% of oryginal
 		if (i != 0)
 		{
 			factory[i]->setPosition(startX, factory[i - 1]->getBot() + space);
-			factory[i - 1]->setScale(0.51, 0.51); // set back 50% of oryginal
+			factory[i - 1]->setScale(scaleX, scaleY);
+			scaleX = factory[i - 1]->getScaleX();
+			scaleY = factory[i - 1]->getScaleY();
 		}
 		else
 			factory[i]->setPosition(startX, screen_h / 6);
@@ -126,18 +130,18 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 		factory[i]->setAlpha(0xFF); // set back
 	}
 
-	factory[factory.size() - 1]->setScale(0.51, 0.51); // set back 50% of oryginal for the first one
+	factory[factory.size() - 1]->setScale(scaleX, scaleY); // set back 50% of oryginal for the first one
 
+	// Set chosen icon
+	scaleX = factory[chosen]->getScaleX();
+	scaleY = factory[chosen]->getScaleY();
 	factory[chosen]->setScale(0.3, 0.3);
 	float x = factory[chosen]->getX() + factory[chosen]->getWidth() / 2 - checkedIcon.getWidth() / 2;
 	float y = factory[chosen]->getY() + factory[chosen]->getHeight() / 2 - checkedIcon.getHeight() / 2;
 	checkedIcon.setPosition(x, y);
-	factory[chosen]->setScale(0.51, 0.51);
-
+	factory[chosen]->setScale(scaleX, scaleY);
 	window->draw(checkedIcon.get());
-
-	// Set back current position.
-	factory[chosen]->setPosition(tempX, tempY);
+	factory[chosen]->setPosition(tempX, tempY);	// Set back current position.
 }
 
 

@@ -1,4 +1,5 @@
 #include "editor.h"
+#include "wcontent.h"
 
 Editor::Editor()
 {
@@ -71,17 +72,6 @@ void Editor::load(const float &screen_w, const float &screen_h)
 	navigation.load(screen_w, screen_h);
 	editorFileManager.load(screen_w, screen_h);
 	editorAction.load(screen_w, screen_h);
-	// Set editor information.
-	// editor_information.load(screen_w, screen_h);
-
-	// Set editor details.
-	// editor_details.load(screen_w, screen_h);
-
-	// Set editor options.
-	// editor_options.load(screen_w, screen_h);
-
-	// Set tiles editor.
-	// tiles_editor.load(screen_w, screen_h);
 
 	// Set chat.
 	chat.load(screen_w, screen_h);
@@ -276,6 +266,8 @@ void Editor::setState(int &state)
 	}
 	else if (isNext())
 	{
+		WContent::type = WContent::TYPE::EDITOR;
+		WContent::path = "";
 		reset();
 		state = cmm::STATES::PLATFORM;
 	}

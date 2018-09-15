@@ -1,4 +1,5 @@
 #include "editorfilemanager.h"
+#include "loading.h"
 
 EditorFileManager::EditorFileManager()
 {

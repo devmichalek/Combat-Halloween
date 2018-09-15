@@ -1,13 +1,12 @@
 #pragma once
-#include <vector>
-#include <string>
+#include "content.h"
 
-class EContent
+class EContent : public cmm::Content
 {
 protected:
 	static int saveVersion;
 	static int loadVersion;
-	static std::vector<std::string> content;
+	
 public:
 	virtual ~EContent();
 	bool isNewSaveVersion();	// tells if content is different than content inside of file

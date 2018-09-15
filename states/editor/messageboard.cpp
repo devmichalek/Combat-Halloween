@@ -31,7 +31,7 @@ void MessageBoard::load(const float &screen_w, const float &screen_h)
 	float scale_x = screen_w / 1920;	if (scale_x > 1.0f)	scale_x = 1;
 	float scale_y = screen_h / 1080;	if (scale_y > 1.0f)	scale_y = 1;
 
-	Loading::add(board.load("images/other/plank2.png"));
+	Loading::add(board.load("images/other/splank.png"));
 	if (Loading::isError())	return;
 	board.setScale(scale_x, scale_y);
 	board.center(screen_w / 2, screen_h / 2);

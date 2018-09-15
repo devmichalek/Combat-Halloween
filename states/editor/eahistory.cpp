@@ -55,6 +55,20 @@ void EAHistory::clear_local()
 
 void EAHistory::fill_local()
 {
+	// After content is loaded correctly we have to ascribe new ids.
+	int id_counter = 0;
+	for (size_t i = 0; i < content.size(); ++i)
+	{
+		size_t pos = content[i].find("id:-1");	// Find id different than -1
+		if (pos == std::string::npos)
+		{
+			pos = content[i].find("id:") + 3;
+			size_t length = content[i].find(" ai:") - pos;
+			content[i].replace(pos, length, std::to_string(id_counter));
+			++id_counter;
+		}
+	}
+
 	int counter = 0;
 	int id, x, y;
 	char t, c;

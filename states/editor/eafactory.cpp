@@ -66,7 +66,7 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	factory[KNIGHT].push_back(new cmm::Sprite());
 	Loading::add(factory[KNIGHT][0]->load("images/platform/knight/0.png", 10));
 	if (Loading::isError())	return;
-	factory[KNIGHT][0]->setScale(scale, scale);
+	factory[KNIGHT][0]->setScale(0.45f, 0.45f);
 
 	// Tile
 	amounts.push_back(21);
@@ -407,6 +407,7 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 	{
 		if(id == -1)	newID = history.getNewID();
 		if(!con)	y -= factory[KNIGHT][0]->getHeight();
+		history.removeByID(entityKnight.getID());	// check if knight was added before if yes then delete him
 		success = entityKnight.add(x, y, newID);
 	}
 	else if (t == TILE)				success = entityTiles.add(x, y, c);
@@ -429,9 +430,9 @@ void EAFactory::remove(int& x, int& y)
 {
 	int c = 0;
 	if (entityKnight.remove(x, y))					history.removeByID(entityKnight.getID());
-	else if (c = entityTiles.remove(x, y) != -1)	history.remove(TILE, c, x, y);
-	else if (c = entityUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
 	else if (entityLandscape.remove(x, y))			history.removeByID(entityLandscape.getID());
 	else if (type == FOE) {}
 	else if (type == LIGHTPOINT) {}
+	else if (c = entityTiles.remove(x, y) != -1)	history.remove(TILE, c, x, y);
+	else if (c = entityUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
 }
