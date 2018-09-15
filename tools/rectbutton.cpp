@@ -1,17 +1,17 @@
 #include "rectbutton.h"
 #include "loading.h"
 
-Rectbutton::Rectbutton()
+RectButton::RectButton()
 {
 	free();
 }
 
-Rectbutton::~Rectbutton()
+RectButton::~RectButton()
 {
 	free();
 }
 
-void Rectbutton::free()
+void RectButton::free()
 {
 	alpha = 0;
 	alphaBorders = 0;
@@ -28,13 +28,13 @@ void Rectbutton::free()
 
 
 
-void Rectbutton::setFont(const char* path)
+void RectButton::setFont(const char* path)
 {
 	Loading::add(text_one.setFont(path));
 	Loading::add(text_two.setFont(path));
 }
 
-void Rectbutton::create(std::string line, int size, float ply)
+void RectButton::create(std::string line, int size, float ply)
 {
 	// Set text.
 	text_one.setText(line);
@@ -71,7 +71,7 @@ void Rectbutton::create(std::string line, int size, float ply)
 	}
 }
 
-void Rectbutton::handle(const sf::Event &event)
+void RectButton::handle(const sf::Event &event)
 {
 	if (state == 1 && !clicked)
 	{
@@ -101,7 +101,7 @@ void Rectbutton::handle(const sf::Event &event)
 	}
 }
 
-void Rectbutton::draw(sf::RenderWindow* &window)
+void RectButton::draw(sf::RenderWindow* &window)
 {
 	// Background.
 	window->draw(text_two.get());
@@ -116,7 +116,7 @@ void Rectbutton::draw(sf::RenderWindow* &window)
 	window->draw(text_one.get());
 }
 
-void Rectbutton::mechanics(const double &elapsedTime)
+void RectButton::mechanics(const double &elapsedTime)
 {
 	if (state == 1)
 	{
@@ -142,7 +142,7 @@ void Rectbutton::mechanics(const double &elapsedTime)
 
 
 
-void Rectbutton::fadein(const float &v, const int &max)
+void RectButton::fadein(const float &v, const int &max)
 {
 	if (alpha < max)
 	{
@@ -159,7 +159,7 @@ void Rectbutton::fadein(const float &v, const int &max)
 	}
 }
 
-void Rectbutton::fadeinBorders(const float &v, const int &max)
+void RectButton::fadeinBorders(const float &v, const int &max)
 {
 	if (alphaBorders < max)
 	{
@@ -179,7 +179,7 @@ void Rectbutton::fadeinBorders(const float &v, const int &max)
 	}
 }
 
-void Rectbutton::fadeinGlobal(const float &v, const int &max)
+void RectButton::fadeinGlobal(const float &v, const int &max)
 {
 	if (state == 0)
 	{
@@ -192,7 +192,7 @@ void Rectbutton::fadeinGlobal(const float &v, const int &max)
 	}
 }
 
-void Rectbutton::fadeout(const float &v, const int &min)
+void RectButton::fadeout(const float &v, const int &min)
 {
 	if (alpha > min)
 	{
@@ -209,7 +209,7 @@ void Rectbutton::fadeout(const float &v, const int &min)
 	}
 }
 
-void Rectbutton::fadeoutBorders(const float &v, const int &min)
+void RectButton::fadeoutBorders(const float &v, const int &min)
 {
 	if (alphaBorders > min)
 	{
@@ -229,7 +229,7 @@ void Rectbutton::fadeoutBorders(const float &v, const int &min)
 	}
 }
 
-void Rectbutton::fadeoutGlobal(const float &v, const int &min)
+void RectButton::fadeoutGlobal(const float &v, const int &min)
 {
 	if (state == 1)
 	{
@@ -247,7 +247,7 @@ void Rectbutton::fadeoutGlobal(const float &v, const int &min)
 
 
 
-void Rectbutton::move(float x, float y)
+void RectButton::move(float x, float y)
 {
 	text_one.move(x, y);
 	text_two.move(x, y);
@@ -257,7 +257,7 @@ void Rectbutton::move(float x, float y)
 	}
 }
 
-void Rectbutton::setPosition(float x, float y)
+void RectButton::setPosition(float x, float y)
 {
 	rects[0].setPosition(x, y);
 	rects[1].setPosition(x + rects[0].getSize().x - rects[0].getSize().y, y + rects[0].getSize().y);
@@ -268,13 +268,13 @@ void Rectbutton::setPosition(float x, float y)
 	text_two.center(rects[4].getPosition().x + rects[4].getSize().x / 2, rects[4].getPosition().y + rects[4].getSize().y / 3);
 }
 
-void Rectbutton::center(float x, float y, int w, int h)
+void RectButton::center(float x, float y, int w, int h)
 {
 	// Two times x.
 	setPosition(x + w / 2 - rects[0].getSize().x / 2, y + h / 2 - rects[0].getSize().x / 2);
 }
 
-void Rectbutton::setColor(sf::Color color)
+void RectButton::setColor(sf::Color color)
 {
 	sf::Color newColor(rects[0].getFillColor());
 	newColor.r = color.r;
@@ -293,12 +293,12 @@ void Rectbutton::setColor(sf::Color color)
 	rects[rects.size() - 1].setFillColor(newColor);
 }
 
-void Rectbutton::setColorText(sf::Color color)
+void RectButton::setColorText(sf::Color color)
 {
 	text_one.setFillColor(color);
 }
 
-void Rectbutton::setAlpha(float alpha)
+void RectButton::setAlpha(float alpha)
 {
 	if (this->alpha != alpha)
 	{
@@ -309,7 +309,7 @@ void Rectbutton::setAlpha(float alpha)
 	}
 }
 
-void Rectbutton::setAlphaBorders(float alpha)
+void RectButton::setAlphaBorders(float alpha)
 {
 	if (this->alphaBorders != alpha)
 	{
@@ -326,27 +326,27 @@ void Rectbutton::setAlphaBorders(float alpha)
 
 
 
-float Rectbutton::getAlpha()
+float RectButton::getAlpha()
 {
 	return alpha;
 }
 
-float Rectbutton::getAlphaBorders()
+float RectButton::getAlphaBorders()
 {
 	return alphaBorders;
 }
 
-sf::Uint8& Rectbutton::getState()
+sf::Uint8& RectButton::getState()
 {
 	return state;
 }
 
-bool& Rectbutton::getFocus()
+bool& RectButton::getFocus()
 {
 	return focus;
 }
 
-bool& Rectbutton::getClicked()
+bool& RectButton::getClicked()
 {
 	return clicked;
 }
@@ -354,42 +354,42 @@ bool& Rectbutton::getClicked()
 
 
 
-const float& Rectbutton::getX() const
+const float& RectButton::getX() const
 {
 	return rects[0].getPosition().x;
 }
 
-const float& Rectbutton::getY() const
+const float& RectButton::getY() const
 {
 	return rects[0].getPosition().y;
 }
 
-const float& Rectbutton::getWidth() const
+const float& RectButton::getWidth() const
 {
 	return rects[0].getSize().x;
 }
 
-float Rectbutton::getHeight() const
+float RectButton::getHeight() const
 {
 	return rects[0].getSize().y * 2 + rects[rects.size() - 1].getSize().y;
 }
 
-const float& Rectbutton::getLeft() const
+const float& RectButton::getLeft() const
 {
 	return rects[0].getPosition().x;
 }
 
-float Rectbutton::getRight() const
+float RectButton::getRight() const
 {
 	return rects[0].getPosition().x + rects[0].getSize().x;
 }
 
-const float& Rectbutton::getTop() const
+const float& RectButton::getTop() const
 {
 	return rects[0].getPosition().y;
 }
 
-float Rectbutton::getBot() const
+float RectButton::getBot() const
 {
 	return rects[0].getPosition().y + rects[rects.size() - 1].getSize().y + (rects[0].getSize().y * 2);
 }
@@ -397,7 +397,7 @@ float Rectbutton::getBot() const
 
 
 
-bool Rectbutton::checkCollision(float x, float y, float w, float h) const
+bool RectButton::checkCollision(float x, float y, float w, float h) const
 {
 	if (y + h <= getTop())
 		return false;

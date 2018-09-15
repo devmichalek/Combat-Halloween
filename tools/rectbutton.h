@@ -5,7 +5,7 @@
 #include <vector>
 
 
-class Rectbutton
+class RectButton
 {
 	float alpha;
 	float alphaBorders;
@@ -19,8 +19,8 @@ class Rectbutton
 	std::vector <sf::RectangleShape> rects;
 
 public:
-	Rectbutton();
-	~Rectbutton();
+	RectButton();
+	~RectButton();
 	void free();
 
 	void setFont(const char* path);
