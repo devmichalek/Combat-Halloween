@@ -67,7 +67,7 @@ void Engine::loading_loop()
 		}
 
 		this->states[core->state]->setState(core->state);
-		if (core->state != cmm::LOADING)	// Fame starts here.
+		if (core->state != cmm::LOADING)	// Game starts here.
 			break;
 	}
 
