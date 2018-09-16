@@ -18,5 +18,6 @@ public:
 	void free();
 	void load(const float &screen_w, const float &screen_h);
 	void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
-	void mechanics(const double &elapsedTime, const float &direction);
+	void mechanics(const float &elapsedTime, const float &direction);
+	const float& getAlpha() const;
 };

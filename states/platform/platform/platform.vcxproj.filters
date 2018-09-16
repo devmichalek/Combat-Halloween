@@ -14,6 +14,12 @@
     <Filter Include="Other">
       <UniqueIdentifier>{fecbc6bb-4c22-4c87-a378-f4a6e865e9e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Simulator">
+      <UniqueIdentifier>{1bdeebf7-2a25-4c54-912c-6e7cc3d4bd3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Knight">
+      <UniqueIdentifier>{247d96dc-48f8-49ae-b699-312aa5571fb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\tools\button.cpp">
@@ -81,6 +87,33 @@
     <ClCompile Include="tiles.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="kcoxing.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="knight.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="kspecs.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="kstates.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tools\rectbutton.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\content.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="simulator.cpp">
+      <Filter>Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="scontent.cpp">
+      <Filter>Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\audio.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="platform.h" />
@@ -89,6 +122,24 @@
     </ClInclude>
     <ClInclude Include="tiles.h">
       <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="kcoxing.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="knight.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="kspecs.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="kstates.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="simulator.h">
+      <Filter>Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="scontent.h">
+      <Filter>Simulator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

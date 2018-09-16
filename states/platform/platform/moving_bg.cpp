@@ -1,4 +1,5 @@
 #include "moving_bg.h"
+#include "loading.h"
 
 MovingBG::MovingBG()
 {
@@ -52,7 +53,8 @@ void MovingBG::load(const float &screen_w, const float &screen_h)
 	for (unsigned i = 0; i < 3; i++)
 	{
 		sprites.push_back(new cmm::Sprite());
-		sprites[i]->load(("images/platform/background/" + std::to_string(i) + ".png").c_str());
+		Loading::add(sprites[i]->load(("images/platform/background/" + std::to_string(i) + ".png").c_str()));
+		if (Loading::isError()) return;
 		sprites[i]->setScale(screen_w / 2500, screen_h / 1440);
 	}
 
@@ -82,7 +84,7 @@ void MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	}
 }
 
-void MovingBG::mechanics(const double &elapsedTime, const float &direction)
+void MovingBG::mechanics(const float &elapsedTime, const float &direction)
 {
 	for (unsigned i = 1; i < 3; i++)
 	{
@@ -103,4 +105,9 @@ void MovingBG::mechanics(const double &elapsedTime, const float &direction)
 			fs[i].x = -screen_w;
 		}
 	}
+}
+
+const float& MovingBG::getAlpha() const
+{
+	return sprites[0]->getAlpha();
 }

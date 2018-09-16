@@ -2,7 +2,7 @@
 #include "coxing.h"
 #include <SFML/Network/Packet.hpp>
 
-class KCoxing : public Coxing
+class KCoxing : public cmm::Coxing
 {
 public:
 	float walkTimer;
@@ -21,11 +21,3 @@ public:
 	bool isAttacking();
 	bool isDefensing();	// using shield
 };
-
-/*
-MOVE_LEFT = 0,
-MOVE_RIGHT,
-JUMP,
-ATTACK,
-SHIELD,
-*/

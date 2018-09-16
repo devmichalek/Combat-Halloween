@@ -22,25 +22,25 @@ void KCoxing::reset()
 
 bool KCoxing::isMovingLeft()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[0]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::MOVE_LEFT]));
 }
 
 bool KCoxing::isMovingRight()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[1]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::MOVE_RIGHT]));
 }
 
 bool KCoxing::isJumping()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[2]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::JUMP]));
 }
 
 bool KCoxing::isAttacking()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[3]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::ATTACK]));
 }
 
 bool KCoxing::isDefensing()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[4]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::SHIELD]));
 }

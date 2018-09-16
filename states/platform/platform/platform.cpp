@@ -1,6 +1,6 @@
 #include "platform.h"
-#include "boost/lexical_cast.hpp"
-#include <fstream>
+#include "core.h"	// StaticCore
+#include "scontent.h"
 
 Platform::Platform()
 {
@@ -66,8 +66,7 @@ void Platform::set()
 
 bool Platform::isReady() const
 {
-	// return information.getBackgroundAlpha() == 0;
-	return 0;
+	return movingBG.getAlpha() == 0.0f;
 }
 
 void Platform::reset()
@@ -159,18 +158,11 @@ void Platform::draw(sf::RenderWindow* &window)
 	pausesystem.draw		(window);
 }
 
-void Platform::mechanics(double elapsedTime)
+void Platform::mechanics(const double &elapsedTime)
 {
 	set();
 
-	fades(elapsedTime);
-
-	// FPS.
-	/*FPS::mechanics(elapsedTime);
-	if (FPS::timePassed())
-	{
-	printf("%d\n", FPS::getFPS());
-	}*/
+	fades(static_cast<float>(elapsedTime));
 
 	// Mechanics.
 	if (!pausesystem.isActive() && !isState())
@@ -178,15 +170,58 @@ void Platform::mechanics(double elapsedTime)
 		chat.mechanics(elapsedTime);
 		if (chat.isCommand())
 		{
-			// Close application.
-			/*if (chat.findCommand("@close") || chat.findCommand("@exit"))
+			if (chat.compCommand("@close") || chat.compCommand("@exit"))
 			{
-				exitbutton.setPressed();
-			}*/
+				chat.isActive() = false;
+				exit = true;
+			}
+			else if (chat.compCommand("@menu") || chat.compCommand("@home"))
+				homebutton.setActive(true);
+			else if (chat.compCommand("@levelmenu"))
+				levelbutton.setActive(true);
+
+			else if (chat.isNewCoxing())
+			{
+				if (chat.checkCoxing())
+				{
+					// ...?
+				}
+			}
+
+			// Turn on/off all sounds.
+			else if (chat.compCommand("@sound"))
+			{
+				cmm::Sound::setGlobalPlayable(!cmm::Sound::getGlobalPlayable());
+				soundbutton.setChanged(true);
+				soundbutton.setActive(!soundbutton.isActive());
+			}
+			// Turn on/off music.
+			else if (chat.compCommand("@music"))
+			{
+				cmm::Music::setGlobalPlayable(!cmm::Music::getGlobalPlayable());
+				musicbutton.setChanged(true);
+				musicbutton.setActive(!musicbutton.isActive());
+			}
+
+			// Volume
+			else if (chat.isNewMusicVolume())
+			{
+				float value = chat.getNewVolume();
+				if (value != -1)
+					music_volumebutton.setChanged(value);
+			}
+			else if (chat.isNewSoundVolume())
+			{
+				float value = chat.getNewVolume();
+				if (value != -1)
+					sound_volumebutton.setChanged(value);
+			}
+			else
+				chat.setError();
 		}
 
 		float direction = 0;
-		movingBG.mechanics(elapsedTime, direction);
+		movingBG.mechanics(static_cast<float>(elapsedTime), direction);
 		
 		if (homebutton.isActive())
 		{
@@ -236,6 +271,32 @@ void Platform::mechanics(double elapsedTime)
 		{
 			music.setVolume(music_volumebutton.getGlobalVolume());
 		}
+	}
+}
+
+void Platform::setState(int &state)
+{
+	if (isPrev() && isNext())
+	{
+		reset();
+		state = cmm::MENU;
+	}
+	else if (isPrev())
+	{
+		reset();
+		if (SContent::type == SContent::TYPE::EDITOR)
+			state = cmm::STATES::EDITOR;
+		else
+			state = cmm::STATES::LEVELMENU;
+	}
+	else if (isNext())
+	{
+
+	}
+	else if (isExit())
+	{
+		reset();
+		cmm::StaticCore::open = false;
 	}
 }
 

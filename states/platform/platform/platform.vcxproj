@@ -35,7 +35,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools;..\..\editor</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
@@ -45,6 +45,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\common\audio.cpp" />
+    <ClCompile Include="..\..\..\common\content.cpp" />
     <ClCompile Include="..\..\..\common\core.cpp" />
     <ClCompile Include="..\..\..\common\coxing.cpp" />
     <ClCompile Include="..\..\..\common\fpsconsole.cpp" />
@@ -63,16 +65,29 @@
     <ClCompile Include="..\..\..\tools\fps.cpp" />
     <ClCompile Include="..\..\..\tools\loading.cpp" />
     <ClCompile Include="..\..\..\tools\pausesystem.cpp" />
+    <ClCompile Include="..\..\..\tools\rectbutton.cpp" />
     <ClCompile Include="..\..\..\tools\volumebutton.cpp" />
+    <ClCompile Include="kcoxing.cpp" />
+    <ClCompile Include="knight.cpp" />
+    <ClCompile Include="kspecs.cpp" />
+    <ClCompile Include="kstates.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moving_bg.cpp" />
     <ClCompile Include="platform.cpp" />
     <ClCompile Include="tiles.cpp" />
+    <ClCompile Include="scontent.cpp" />
+    <ClCompile Include="simulator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="kcoxing.h" />
+    <ClInclude Include="knight.h" />
+    <ClInclude Include="kspecs.h" />
+    <ClInclude Include="kstates.h" />
     <ClInclude Include="moving_bg.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="tiles.h" />
+    <ClInclude Include="scontent.h" />
+    <ClInclude Include="simulator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
