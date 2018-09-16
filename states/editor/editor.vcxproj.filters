@@ -50,7 +50,7 @@
       <UniqueIdentifier>{d1c98336-8e03-49cb-8ef8-98e7e0de5a48}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Other">
-      <UniqueIdentifier>{73a9a4ae-d673-47c6-83cf-ff6e197bfcd1}</UniqueIdentifier>
+      <UniqueIdentifier>{98539d6d-d035-4a99-bd8c-717ef2f75b70}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -164,8 +164,14 @@
     <ClCompile Include="..\..\common\content.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\wsim\wcontent.cpp">
+    <ClCompile Include="..\platform\platform\scontent.cpp">
       <Filter>Dependencies\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\audio.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coxing.cpp">
+      <Filter>Dependencies\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

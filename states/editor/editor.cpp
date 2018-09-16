@@ -1,5 +1,6 @@
 #include "editor.h"
-#include "wcontent.h"
+#include "scontent.h"
+#include "core.h" // StaticCore
 
 Editor::Editor()
 {
@@ -18,11 +19,6 @@ void Editor::free()
 	exit = false;
 	loaded = false;
 
-	//editor_buttons.free();
-	// editor_information.free();
-	//editor_details.free();
-	// editor_options.free();
-	// tiles_editor.free();
 	chat.free();
 }
 
@@ -55,10 +51,6 @@ void Editor::reset()
 	navigation.reset();
 	editorFileManager.reset();
 	editorAction.reset();
-	//tiles_editor.reset();
-	//editor_details.setGrid(tiles_editor.getGrid());
-	// editor_details.setType(tiles_editor.getType());
-	// editor_details.setChosen(tiles_editor.getChosen());
 	chat.reset();
 	chat.setStyleWhitish();
 }
@@ -119,7 +111,11 @@ void Editor::mechanics(const double &elapsedTime)
 		chat.mechanics(elapsedTime);
 		if (chat.isCommand())
 		{
-			if (chat.compCommand("@menu"))
+			if (chat.compCommand("@close") || chat.compCommand("@exit"))
+			{
+				exit = true;
+			}
+			else if (chat.compCommand("@menu") || chat.compCommand("@home"))
 			{
 				navigation.setHome();
 			}
@@ -164,91 +160,6 @@ void Editor::mechanics(const double &elapsedTime)
 			editorAction.mechanics(elapsedTime);
 		}
 
-		// ctrl - z
-		// editorFileManager.pop();
-
-		// new content
-		// editorFileManager.push();
-
-		/*tiles_editor.mechanics(elapsedTime);
-		tiles_editor.setRubbish(editor_buttons.isDelete());
-
-		if (!editor_information.isActive())
-		{
-			if (editor_buttons.isAnything())
-			{
-				if (editor_buttons.getInfo() != " ")
-				{
-					editor_information.setInfo(editor_buttons.getInfo());
-					editor_information.setWorldname(editor_buttons.getWorldname(editor_details.getName()));
-					editor_information.setAsVisible();
-				}
-			}
-		}*/
-
-		//if (editor_buttons.isOptions())	// Show options.
-		//{
-		//	if (editor_options.getStatus() == 0)
-		//	{
-		//		editor_options.setStatus(1);
-		//	}
-		//}
-		//else if (editor_buttons.isName())	// Name.
-		//{
-		//	if (editor_details.getNameStatus() == 0)
-		//	{
-		//		editor_details.setNameStatus(1);
-		//	}
-		//}
-		//else if (editor_buttons.isDelete())	// Delete mode.
-		//{
-		//	tiles_editor.reset();
-		//}
-
-		//// Reset by action.
-		//if (editor_options.getStatus() == 2)
-		//{
-		//	editor_buttons.reset();
-		//	editor_options.setStatus(0);
-		//}
-		//else if (editor_details.getNameStatus() == 2)
-		//{
-		//	editor_buttons.reset();
-		//	editor_details.setNameStatus(0);
-		//}
-
-		//// Answers.
-		//if (editor_information.answerYes())
-		//{
-		//	if (editor_buttons.isHome())	// Back to menu.
-		//	{
-		//		back = true;
-		//		chat.isOpen() = false;
-		//	}
-		//	else if (editor_buttons.isSave())	// Save.
-		//	{
-		//		tiles_editor.save(editor_details.getName());
-		//	}
-		//	else if (editor_buttons.isLoad())	// Load.
-		//	{
-		//		tiles_editor.load(editor_details.getName());
-		//	}
-		//	else if (editor_buttons.isPlay())	// Test playing.
-		//	{
-		//		play = true;
-		//		chat.isOpen() = false;
-		//	}
-		//	else if (editor_buttons.isUpload())	// Upload world.
-		//	{
-
-		//	}
-		//}
-		//else if (editor_information.answerNo())
-		//{
-		//	editor_buttons.reset();
-		//}
-
-		//editor_details.mechanics(elapsedTime);
 	}
 }
 
@@ -266,9 +177,14 @@ void Editor::setState(int &state)
 	}
 	else if (isNext())
 	{
-		WContent::type = WContent::TYPE::EDITOR;
-		WContent::path = "";
+		SContent::type = SContent::TYPE::EDITOR;
+		SContent::path = "";
 		reset();
 		state = cmm::STATES::PLATFORM;
+	}
+	else if (isExit())
+	{
+		reset();
+		cmm::StaticCore::open = false;
 	}
 }

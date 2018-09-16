@@ -19,5 +19,5 @@ protected:
 	int chosen;
 public:
 
-	const int getKindSize() { return KIND::AMOUNT; }
+	const int amount() { return KIND::AMOUNT; }
 };
