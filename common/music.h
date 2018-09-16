@@ -1,13 +1,12 @@
 #pragma once
 #include <memory>
 #include <SFML/Audio/Music.hpp>
+#include "audio.h"
 
 namespace cmm
 {
-	class Music
+	class Music : public MusicData
 	{
-		static bool playable;
-		static float volume;
 	protected:
 		std::unique_ptr<sf::Music> music;
 

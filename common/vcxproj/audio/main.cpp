@@ -1,7 +1,25 @@
+#include "sound.h"
 #include "music.h"
+#include <iostream>
 
 int main(int argc, char** argv)
 {
+	cmm::Audio audio;
+	audio.loadAudio();
+
+	cmm::Sound sound;
+	sound.load("sounds/click.wav");
+	cmm::Sound::setGlobalPlayable();
+	sound.setVolume(100);
+	sound.play();
+
+	while (sound.isPlaying()) {}
+
+	// Coontinue
+	std::cout << "Press Enter to Continue...\n";
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+
 	cmm::Music music;
 	music.load("music/menu.ogg");
 	cmm::Music::setGlobalPlayable();

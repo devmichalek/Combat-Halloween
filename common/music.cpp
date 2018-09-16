@@ -1,8 +1,5 @@
 #include "music.h"
 
-bool cmm::Music::playable = true;
-float cmm::Music::volume = 60.0;
-
 void cmm::Music::stop()
 {
 	music->stop();
@@ -10,7 +7,7 @@ void cmm::Music::stop()
 
 void cmm::Music::play()
 {
-	if (playable && !isPlaying())
+	if (music_playable && !isPlaying())
 	{
 		music->play();
 	}
@@ -80,25 +77,25 @@ void cmm::Music::fadeout(const float &v, const int &min)
 
 const bool& cmm::Music::isPlayable() const
 {
-	return playable;
+	return music_playable;
 }
 
 void cmm::Music::setGlobalPlayable(bool newPlayable)
 {
-	playable = newPlayable;
+	music_playable = newPlayable;
 }
 
 bool cmm::Music::getGlobalPlayable()
 {
-	return playable;
+	return music_playable;
 }
 
 void cmm::Music::setGlobalVolume(const float &newVolume)
 {
-	volume = newVolume;
+	music_volume = newVolume;
 }
 
 float cmm::Music::getGlobalVolume()
 {
-	return volume;
+	return music_volume;
 }

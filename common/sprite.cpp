@@ -231,10 +231,10 @@ float cmm::Sprite::getRotation() const
 
 void cmm::Sprite::setOffset(int n)
 {
-	if (n > -1 && n < static_cast <int> (rects.size()))
-	{
+	//if (n > -1 && n < static_cast <int> (rects.size()))
+	//{
 		sprite->setTextureRect(rects[n]);
-	}
+	//}
 }
 
 unsigned cmm::Sprite::getNumOfOffsets() const

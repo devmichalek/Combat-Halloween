@@ -3,8 +3,12 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\music.cpp" />
+    <ClCompile Include="..\..\sound.cpp" />
+    <ClCompile Include="..\..\audio.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\music.h" />
+    <ClInclude Include="..\..\sound.h" />
+    <ClInclude Include="..\..\audio.h" />
   </ItemGroup>
 </Project>

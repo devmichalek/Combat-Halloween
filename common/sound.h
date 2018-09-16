@@ -2,13 +2,12 @@
 #include <memory>
 #include <SFML/Audio/Sound.hpp>
 #include <SFML/Audio/SoundBuffer.hpp>
+#include "audio.h"
 
 namespace cmm
 {
-	class Sound
+	class Sound : public SoundData
 	{
-		static bool playable;
-		static float volume;
 	protected:
 		std::unique_ptr<sf::Sound> sound;
 		std::unique_ptr<sf::SoundBuffer> buffer;
