@@ -2,7 +2,8 @@
 #include "logconsole.h"
 #include "user.h"
 #include "loading.h"
-#include "boost/lexical_cast.hpp"
+#include <boost/lexical_cast.hpp>
+#include <boost/algorithm/string.hpp>
 
 FPS Chat::fps;
 std::vector <cmm::Text*> Chat::writtens;
@@ -344,6 +345,61 @@ bool Chat::compCommand(std::string line)
 	return writtenStrs[1] == line;
 }
 
+bool Chat::isNewCoxing()
+{
+	size_t pos = writtenStrs[1].find("@set ");
+	if (pos != std::string::npos)
+		return true;
+
+	return false;
+}
+
+bool Chat::checkCoxing()
+{
+	std::string line = writtenStrs[1].substr(5, writtenStrs[1].size() - 5);
+	size_t pos = line.find(" ");
+	if (pos == std::string::npos || pos == line.size() - 1) // error
+	{
+		setError(" - error while processing this command.");
+		return false;
+	}
+	else
+	{
+		std::string activity = line.substr(0, pos);
+		std::string newKey = line.substr(pos + 1, line.size() - pos);
+
+		int activity_result = recognizeActivity(activity);
+		int newKey_result = recognizeKey(newKey);
+
+		if (activity_result == -1)
+		{
+			setError(" - cannot recognize activity \"" + activity + "\".");
+			return false;
+		}
+		else if (newKey_result == -1)
+		{
+			setError(" - cannot recognize key \"" + newKey + "\".");
+			return false;
+		}
+		else
+		{
+			cmm::Keys keys;
+			for (int i = 0; i < keys.getActiveKeysAmount(); ++i)
+			{
+				if (keys.getKey(i) == newKey_result)
+				{
+					setError(" - key \"" + newKey + "\" is already in use.");
+					return false;
+				}
+			}
+
+			keys.setKey(activity_result, newKey_result);
+			keys.saveKeys();
+			return true;	// success
+		}
+	}
+}
+
 bool Chat::isNewMusicVolume()
 {
 	size_t pos = writtenStrs[1].find("@music volume ");
@@ -376,6 +432,25 @@ bool Chat::isNewSoundVolume()
 
 float Chat::getNewVolume()
 {
+	cmm::Audio audio;
+
+	if (writtenStrs[1].find("@music") != std::string::npos)
+	{
+		if (!audio.isMusicPlayable())
+		{
+			setError(" - cannot set volume, music is muted.");
+			return -1;
+		}
+	}
+	else
+	{
+		if (!audio.isSoundPlayable())
+		{
+			setError(" - cannot set volume, sound is muted.");
+			return -1;
+		}
+	}
+	
 	int s = 7;
 	size_t pos = writtenStrs[1].find("volume ");
 	if (pos != std::string::npos)
@@ -483,6 +558,54 @@ void Chat::prepareWritten(int n, int k)
 	}
 
 	writtenStrs[k] = buf;
+}
+
+int Chat::recognizeKey(std::string str)
+{
+	boost::to_lower(str);
+
+	if (str == "left")			return 71;
+	else if (str == "right")	return 72;
+	else if (str == "up")		return 73;
+	else if (str == "down")		return 74;
+	else if (str == "space")	return 57;
+
+	else if (str == "lctrl" || str == "left ctrl" || str == "left control" || str == "l control")	return 37;
+	else if (str == "lshift" || str == "left shift" || str == "left shift" || str == "l shift")		return 38;
+	else if (str == "lalt" || str == "left alt" || str == "left alt" || str == "l alt")				return 39;
+
+	else if (str == "rctrl" || str == "right ctrl" || str == "right control" || str == "r control")	return 41;
+	else if (str == "rshift" || str == "right shift" || str == "right shift" || str == "r shift")	return 42;
+	else if (str == "ralt" || str == "right alt" || str == "right alt" || str == "r alt")			return 43;
+
+	else if(str.size() == 1)
+	{
+		
+		int n = boost::lexical_cast<int>(str[0]);
+		if (n >= 97 &&  n <= 122)	// letters?
+		{
+			return n - 97;
+		}
+		else if (n >= 48 && n <= 57)	// numbers?
+		{
+			return n - 22;
+		}
+	}
+	
+	return -1;	// error
+}
+
+int Chat::recognizeActivity(std::string str)
+{
+	boost::to_lower(str);
+
+	if (str == "move_left")			return 0;
+	else if (str == "move_right")	return 1;
+	else if (str == "jump")			return 2;
+	else if (str == "attack")		return 3;
+	else if (str == "shield")		return 4;
+
+	return -1; // error
 }
 
 void Chat::setError(std::string msg)

@@ -44,7 +44,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\common\audio.cpp" />
     <ClCompile Include="..\..\..\common\core.cpp" />
+    <ClCompile Include="..\..\..\common\coxing.cpp" />
     <ClCompile Include="..\..\..\common\fpsconsole.cpp" />
     <ClCompile Include="..\..\..\common\sound.cpp" />
     <ClCompile Include="..\..\..\common\sprite.cpp" />

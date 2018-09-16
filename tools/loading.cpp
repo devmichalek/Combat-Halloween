@@ -21,7 +21,7 @@ Loading::Loading()
 {
 	free();
 
-	// Here below is the list of all files that Loading object need to have to initialize.
+	// Here below is the list of all files that "Loading" object need to have to initialize.
 	printf("Checking files to initialize game...\n");
 	isFileExist("openal32.dll");
 	isFileExist("sfml-audio-2.dll");

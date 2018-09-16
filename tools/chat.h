@@ -2,6 +2,8 @@
 #include "sprite.h"
 #include "text.h"
 #include "fps.h"
+#include "audio.h"
+#include "coxing.h"
 #include "eventwindow.h"
 
 class Chat
@@ -52,6 +54,8 @@ public:
 	bool compCommand(std::string line);
 
 	// Special.
+	bool isNewCoxing();	// only for menu state
+	bool checkCoxing();
 	bool isNewMusicVolume();
 	bool isNewSoundVolume();
 	float getNewVolume();
@@ -59,6 +63,8 @@ public:
 private:
 	void setWritten();
 	void prepareWritten(int n, int k);	// n = nr of text, k nr of str
+	int recognizeKey(std::string str);
+	int recognizeActivity(std::string str);
 public:
 	void setError(std::string msg = " - command doesn't exist.");	// adds string to incorrect text
 

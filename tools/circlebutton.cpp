@@ -47,7 +47,7 @@ const bool& CircleButton::isActive() const
 void CircleButton::setActive(bool active)
 {
 	this->active = active;
-	if(!locked)
+	if(!locked && button.getNumOfOffsets() > 0)
 		active ? button.setOffset(1) : button.setOffset(0);
 }
 
