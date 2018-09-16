@@ -1,6 +1,5 @@
 #include "settings.h"
 #include "logconsole.h"
-#include "user.h"
 #include "loading.h"
 
 
@@ -69,7 +68,6 @@ void Settings::free()
 	y1 = y2 = 0;
 
 	target = -1;
-	thread.free();
 }
 
 
@@ -180,11 +178,12 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	// Load sounds.
 	Loading::add(click.load("sounds/click.wav"));
 	if (Loading::isError())	return;
+
+	setCoxing();
 }
 
 bool Settings::handle(const sf::Event &event)
 {
-
 	if (chartMoves == 0 && target != -1)
 	{
 		// Reset.
@@ -195,7 +194,7 @@ bool Settings::handle(const sf::Event &event)
 				if (resetbutton.checkCollision(float(event.mouseButton.x), float(event.mouseButton.y), 0.0f, 0.0f))
 				{
 					resetbutton.setOffset(1);
-					resetKeys();
+					resetCoxing();
 					return true;
 				}
 			}
@@ -227,6 +226,7 @@ bool Settings::handle(const sf::Event &event)
 					click.play();
 
 					keys[target] = event.key.code;
+					saveKeys();
 
 					active_texts[target]->setText(getName(event.key.code));
 					active_texts[target]->setFillColor(cmm::LogConsole::getErrorColor());
@@ -240,7 +240,6 @@ bool Settings::handle(const sf::Event &event)
 						active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
 					}
 
-					sendKeysThread();
 					positionTable();
 				}
 			}
@@ -310,12 +309,6 @@ void Settings::draw(sf::RenderWindow* &window)
 
 void Settings::mechanics(const double &elapsedTime)
 {
-	// Delete thread if is ready
-	if (thread.ready)
-	{
-		thread.reset();
-	}
-
 	if (tableMoves != 0)	// is moving
 	{
 		table.move(tableMoves, 0);
@@ -447,132 +440,31 @@ void Settings::shovelTable(const double &elapsedTime)
 	}
 }
 
-void Settings::resetKeys()
+void Settings::resetCoxing()
 {
-	// Reset values.
-	keys[MOVE_LEFT] = 71;
-	keys[MOVE_RIGHT] = 72;
-	keys[JUMP] = 73;
-	keys[ATTACK] = 23;
-	keys[SHIELD] = 25;
-
-	// Overwrite / Send to database.
-	sendKeysThread(true);
-
-	positionTable();
+	resetKeys();
+	reloadCoxing();
 }
 
-void Settings::setKeys()
+void Settings::setCoxing()
 {
-	cmm::Request request;
-	request.setMessage("username=" +cmm::User::getUsername());
-	request.setRequest("/combathalloween/getters/getsettings.php", sf::Http::Request::Post);
-	request.setHttp("http://amichalek.pl/");
-
-	bool success = request.sendRequest();
-	if (success)
-	{
-		if (request.getResult() == "0")	// error
-		{
-			success = false;
-		}
-		else
-		{
-			keys.clear();
-			std::string result = request.getResult(), buf = "";
-			for (unsigned i = 0; i < result.size(); ++i)
-			{
-				if (result[i] == '@')
-				{
-					keys.push_back(std::stoi(buf));
-					buf = "";
-					continue;
-				}
-
-				buf += result[i];
-			}
-
-			for (unsigned i = 0; i < JUMP_ATTACK; ++i)
-			{
-				active_texts[i]->setText(getName(keys[i]));
-				active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
-			}
-			active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
-			active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
-			active_texts[JUMP_ATTACK]->setFillColor(cmm::LogConsole::getLockedColor());
-			active_texts[JUMP_SHIELD]->setFillColor(cmm::LogConsole::getLockedColor());
-
-			thread.success = true;
-		}
-	}
-
-	// Error.
-	if (!success)
-	{
-		for (unsigned i = 0; i < PAUSE; ++i)
-		{
-			active_texts[i]->setText("error");
-			active_texts[i]->setFillColor(cmm::LogConsole::getErrorColor());
-		}
-	}
-
-	positionTable();
-	thread.ready = true;
+	loadKeys();
+	reloadCoxing();
 }
 
-void Settings::sendKeysThread(bool all)
+void Settings::reloadCoxing()
 {
-	if (!thread.ready && !thread.thread)
-	{
-		if (all)
-		{
-			for (unsigned i = 0; i < PAUSE; i++)
-			{
-				active_texts[i]->setText("sending...");
-				active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
-			}
-		}
-		else
-		{
-			active_texts[target]->setText("sending...");
-			active_texts[target]->setFillColor(cmm::LogConsole::getLoadingColor());
-		}
-
-		positionTable();
-
-		thread.thread = new std::thread(&Settings::sendKeys, this, all);
-		thread.thread->detach();
-	}
-}
-
-void Settings::sendKeys(bool all)
-{
-	cmm::Request request;
-	std::string msg = "username=" + cmm::User::getUsername() + "&keys=";
-
-	for (unsigned i = 0; i < keys.size(); ++i)
-	{
-		msg += std::to_string(keys[i]);
-		msg.push_back('@');
-	}
-
-	msg += "&pass=udreka2018"; // SECRET, DO NOT SHOW ANYBODY
-
-	request.setMessage(msg);
-	request.setRequest("/combathalloween/getters/getsettings.php", sf::Http::Request::Post);
-	request.setHttp("http://amichalek.pl/");
-	request.sendRequest();
-
-	for (unsigned i = 0; i < JUMP_ATTACK; i++)
+	for (unsigned i = 0; i < JUMP_ATTACK; ++i)
 	{
 		active_texts[i]->setText(getName(keys[i]));
 		active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
 	}
 	active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
 	active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
+	active_texts[JUMP_ATTACK]->setFillColor(cmm::LogConsole::getLockedColor());
+	active_texts[JUMP_SHIELD]->setFillColor(cmm::LogConsole::getLockedColor());
 
 	positionTable();
-	thread.ready = true;
 }
 
 void Settings::positionTable()
@@ -606,32 +498,6 @@ void Settings::positionChart()
 	resetbutton.setPosition(chart.getRight() - resetbutton.getWidth(), chart.getBot() - resetbutton.getHeight());
 }
 
-bool Settings::isPossibleKey(const int &code)
-{
-	if (code == 14 || code == 15)	// pause key or chat key
-	{
-		return false;
-	}
-	if (code > -1 && code <= 35)	// a .. z and numbers
-	{
-		return true;
-	}
-	if (code >= 75 && code <= 84)	// numbers
-	{
-		return true;
-	}
-	if (code >= 71 && code <= 74)	// arrows
-	{
-		return true;
-	}
-	if (code == 57)					// space
-	{
-		return true;
-	}
-
-	return false;
-}
-
 const std::string Settings::getName(const int &n)
 {
 	std::string name = "";
@@ -662,6 +528,12 @@ const std::string Settings::getName(const int &n)
 		case 73: name = "Up";		break;
 		case 74: name = "Down";		break;
 		case 57: name = "Space";	break;
+		case 37: name = "Left Control";		break;
+		case 38: name = "Left Shift";		break;
+		case 39: name = "Left Alt";			break;
+		case 41: name = "Right Control";	break;
+		case 42: name = "Right Shift";		break;
+		case 43: name = "Right Alt";		break;
 		}
 	}
 
@@ -675,41 +547,6 @@ void Settings::reset()
 	chart.setPosition(chart.getX(), y1);
 	positionTable();
 	positionChart();
-}
-
-
-
-
-void Settings::setThread()
-{
-	if (!thread.success)
-	{
-		if (!thread.ready && !thread.thread)
-		{
-			// Values.
-			for (unsigned i = 0; i < PAUSE; ++i)
-			{
-				active_texts[i]->setText("loading...");
-				active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
-				i < JUMP_ATTACK ? active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor()) : active_texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
-			}
-
-			positionTable();
-
-			thread.thread = new std::thread(&Settings::setKeys, this);
-			thread.thread->detach();
-		}
-	}
-}
-
-void Settings::reloadThread()
-{
-	thread.success = false;
-}
-
-const bool& Settings::isReady() const
-{
-	return thread.success;
 }
 
 void Settings::setVolume(const float &volume)

@@ -48,7 +48,6 @@ void Menu::set()
 		// Set threads.
 		knightspecs.setThread();
 		information.setThread();
-		settings.setThread();
 
 		// Sound.
 		bool soundPlayable = cmm::Sound::getGlobalPlayable();
@@ -198,10 +197,10 @@ void Menu::handle(const sf::Event &event)
 
 				if (!sound_volumebutton.handle(event))	soundbutton.handle(event);
 				if (!music_volumebutton.handle(event))	musicbutton.handle(event);
-				!knightspecs.isReady() || !information.isReady() || !settings.isReady() ? reloadbutton.handle(event) : updatebutton.handle(event);
+				!knightspecs.isReady() || !information.isReady() ? reloadbutton.handle(event) : updatebutton.handle(event);
 
 				settingsbutton.handle		(event);
-				if(settings.isReady())		settings.handle(event);
+				settings.handle(event);
 			}
 		}
 
@@ -224,7 +223,7 @@ void Menu::draw(sf::RenderWindow* &window)
 	exitbutton.draw			(window);
 	soundbutton.draw		(window);
 	musicbutton.draw		(window);
-	!knightspecs.isReady() || !information.isReady() || !settings.isReady() ? reloadbutton.draw(window) : updatebutton.draw(window);
+	!knightspecs.isReady() || !information.isReady() ? reloadbutton.draw(window) : updatebutton.draw(window);
 	settingsbutton.draw		(window);
 	settings.draw			(window);
 	sound_volumebutton.draw	(window);
@@ -254,28 +253,35 @@ void Menu::mechanics(const double &elapsedTime)
 			// Someone clicked singleplayer.
 			else if (chat.compCommand("@start") || chat.compCommand("@play"))
 			{
-				if (knightspecs.isReady() && information.isReady() && settings.isReady())
+				if (knightspecs.isReady() && information.isReady())
 				{
 					singleplayerbutton.setPressed();
 				}
 			}
 
 			// Exsert / shovel settings.
-			else if (chat.compCommand("@settings") || chat.compCommand("@keyboard") ||
-				chat.compCommand("@keys") || chat.compCommand("@sets"))
+			else if (chat.compCommand("@settings") || chat.compCommand("@keyboard"))
 			{
 				settingsbutton.setActive(!settingsbutton.isActive());
 			}
 
+			// Chat changed keys settings so we reload texts
+			else if (chat.isNewCoxing())
+			{
+				if (chat.checkCoxing())
+				{
+					settings.reloadCoxing();
+				}
+			}
+
 			// Reload data.
-			else if ((!knightspecs.isReady() || !information.isReady() || !settings.isReady()) &&
-				(chat.compCommand("@reload") || chat.compCommand("@rel")))
+			else if ((!knightspecs.isReady() || !information.isReady()) && (chat.compCommand("@reload")))
 			{
 				reloadbutton.setActive(true);
 			}
 
 			// Update data - works if reload data done its job.
-			else if (chat.compCommand("@reload") || chat.compCommand("@rel"))
+			else if (chat.compCommand("@reload"))
 			{
 				updatebutton.setActive(true);
 			}
@@ -287,7 +293,6 @@ void Menu::mechanics(const double &elapsedTime)
 				soundbutton.setChanged(true);
 				soundbutton.setActive(!soundbutton.isActive());
 			}
-
 			// Turn on/off music.
 			else if (chat.compCommand("@music"))
 			{
@@ -347,7 +352,7 @@ void Menu::mechanics(const double &elapsedTime)
 		settingsbutton.isActive() ? settings.exsertTable(elapsedTime) : settings.shovelTable(elapsedTime);
 
 		// If we dont have answer from database
-		!knightspecs.isReady() || !information.isReady() || !settings.isReady() ? singleplayerbutton.lock() : singleplayerbutton.unlock();
+		!knightspecs.isReady() || !information.isReady() ? singleplayerbutton.lock() : singleplayerbutton.unlock();
 
 		// Update data.
 		if (updatebutton.isActive())
@@ -355,10 +360,8 @@ void Menu::mechanics(const double &elapsedTime)
 			updatebutton.setActive(false);
 			knightspecs.reloadThread();
 			information.reloadThread();
-			settings.reloadThread();
 			knightspecs.setThread();
 			information.setThread();
-			settings.setThread();
 		}
 
 		// Reload data.
@@ -367,7 +370,6 @@ void Menu::mechanics(const double &elapsedTime)
 			reloadbutton.setActive(false);
 			if (!knightspecs.isReady())	knightspecs.setThread();
 			if (!information.isReady())	information.setThread();
-			if (!settings.isReady())	settings.setThread();
 		}
 
 		settings.mechanics(elapsedTime);

@@ -3,28 +3,12 @@
 #include "text.h"
 #include "sound.h"
 #include "sprite.h"
-#include "thread.h"
-#include "request.h"
 #include "eventwindow.h"
 
-class Settings : public Coxing
+class Settings : public cmm::Keys
 {
 	float screen_w;
 	float screen_h;
-
-	enum Activities
-	{
-		MOVE_LEFT = 0,
-		MOVE_RIGHT,
-		JUMP,
-		ATTACK,
-		SHIELD,
-		JUMP_ATTACK,
-		JUMP_SHIELD,
-		PAUSE,
-		CHAT,
-		AMOUNT
-	};
 
 	enum GEAR_POS
 	{
@@ -53,9 +37,7 @@ class Settings : public Coxing
 
 	int target;
 
-	// Sound.
 	cmm::Sound click;
-	cmm::Thread thread;
 
 public:
 	Settings();
@@ -73,127 +55,13 @@ public:
 	void exsertTable(const double &elapsedTime);
 	void shovelTable(const double &elapsedTime);
 private:
-	void resetKeys();
-	void setKeys();
-	void sendKeysThread(bool all = false);
-	void sendKeys(bool all);
+	void resetCoxing();
+	void setCoxing();
+public: void reloadCoxing(); private:
 	void positionTable();
 	void positionChart();
-	bool isPossibleKey(const int &n);
 	const std::string getName(const int &n);
 public:
 	void reset();
-
-	void setThread();
-	void reloadThread();
-	const bool& isReady() const;	// values are loaded correctly from database
 	void setVolume(const float &volume);
 };
-
-/*
-enum  	Key {
-Unknown = -1,
-A = 0,
-B,
-C,
-D, // 3
-E,
-F,
-G,
-H,
-I,
-J,
-K, // 10
-L,
-M,
-N,
-O,
-P, // 15
-Q,
-R,
-S,
-T,
-U, // 20
-V,
-W,
-X,
-Y,
-Z, // 25
-Num0,
-Num1,
-Num2,
-Num3,
-Num4, // 30
-Num5,
-Num6,
-Num7,
-Num8,
-Num9, // 35
-Escape,
-LControl,
-LShift,
-LAlt,
-LSystem, // 40
-RControl,
-RShift,
-RAlt,
-RSystem,
-Menu, // 45
-LBracket,
-RBracket,
-SemiColon,
-Comma,
-Period,  // 50
-Quote,
-Slash,
-BackSlash,
-Tilde,
-Equal, // 55
-Dash,
-Space, // 57
-Return,
-BackSpace,
-Tab, // 60
-PageUp,
-PageDown,
-End,
-Home,
-Insert, // 65
-Delete,
-Add,
-Subtract,
-Multiply,
-Divide, // 70
-Left, // 71
-Right, // 72
-Up, // 73
-Down, // 74
-Numpad0, // 75
-Numpad1,
-Numpad2,
-Numpad3,
-Numpad4,
-Numpad5,
-Numpad6,
-Numpad7,
-Numpad8,
-Numpad9, // 84
-F1,
-F2,
-F3,
-F4,
-F5,
-F6,
-F7,
-F8,
-F9,
-F10,
-F11,
-F12,
-F13,
-F14,
-F15,
-Pause,
-KeyCount
-}
-*/

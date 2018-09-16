@@ -184,7 +184,12 @@ void LevelMenu::mechanics(const double &elapsedTime)
 		chat.mechanics(elapsedTime);
 		if (chat.isCommand())
 		{
-			if (chat.compCommand("@menu") || chat.compCommand("@back"))	// Same as someone clicked backtomenu button.
+			if (chat.compCommand("@close") || chat.compCommand("@exit"))
+			{
+				chat.isActive() = false;
+				exit = true;
+			}
+			else if (chat.compCommand("@menu") || chat.compCommand("@back") || chat.compCommand("@home"))
 			{
 				homebutton.setActive(true);
 			}
@@ -207,15 +212,17 @@ void LevelMenu::mechanics(const double &elapsedTime)
 					worldtable.setThread();
 				}
 			}*/
-			
-			else if (chat.compCommand("@editor"))	// Editor.
+			// Chat changed keys settings so we reload texts
+			else if (chat.isNewCoxing())
 			{
-				prev = true;
-				chat.isActive() = false;
+				if (chat.checkCoxing())
+				{
+					// ...?
+				}
 			}
 
 			// Update data.
-			else if (chat.compCommand("@update"))
+			else if (chat.compCommand("@reload"))
 			{
 				updatebutton.setChanged(true);
 			}
@@ -232,6 +239,13 @@ void LevelMenu::mechanics(const double &elapsedTime)
 			{
 				musicbutton.setChanged(true);
 				musicbutton.setActive(!musicbutton.isActive());
+			}
+
+			// Editor.
+			else if (chat.compCommand("@editor"))
+			{
+				prev = true;
+				chat.isActive() = false;
 			}
 
 			// Volume
@@ -325,6 +339,11 @@ void LevelMenu::setState(int &state)
 	{
 		reset();
 		state = cmm::STATES::PLATFORM;
+	}
+	else if (isExit())
+	{
+		reset();
+		cmm::StaticCore::open = false;
 	}
 }
 

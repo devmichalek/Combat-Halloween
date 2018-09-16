@@ -67,6 +67,12 @@
     <ClCompile Include="..\..\tools\fps.cpp">
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\audio.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\coxing.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="levelmenuinformation.h" />

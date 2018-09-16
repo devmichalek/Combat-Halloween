@@ -53,8 +53,8 @@ void LevelMenuInformation::load(const float &screen_w, const float &screen_h)
 
 	chosen = 0;
 	texts[MAIN]->setText("Main");
-	texts[MINE]->setText("Mine");
-	texts[BYUSERS]->setText("By Users");
+	texts[MINE]->setText("Local");
+	texts[BYUSERS]->setText("Online");
 	texts[MAIN]->setPosition(screen_w / 8, screen_h / 7);
 	texts[MINE]->setPosition(texts[MAIN]->getRight() + screen_w / 20, texts[MAIN]->getTop());
 	texts[BYUSERS]->setPosition(texts[MINE]->getRight() + screen_w / 20, texts[MAIN]->getTop());
