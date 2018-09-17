@@ -6,6 +6,8 @@
 
 class Knight : public KStates
 {
+	float screen_w;
+	float screen_h;
 	KCoxing coxing;
 	KSpecs specs;
 	std::vector<cmm::Sprite*> sprites;
@@ -28,7 +30,6 @@ private:
 public:
 	void reset();
 
-	void set(const float &x, const float &y);	// set xy start position
 	void load(const float &screen_w, const float &screen_h);
 	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
@@ -36,13 +37,19 @@ public:
 	void mechanics(const double &elapsedTime);
 	void switchCollision();	// turn on/off drawing collision
 
-	const sf::IntRect& getRect();
+	sf::IntRect& getRect();
 	const sf::IntRect& getAttackRect();
 	bool isAlive();
 	bool isAttack();
 
+	bool moveLeft(const double &elapsedTime);	void undoMoveLeft(const double &elapsedTime);
+	bool moveRight(const double &elapsedTime);	void undoMoveRight(const double &elapsedTime);
+	void idle(const double &elapsedTime);
+	void rest(const double &elapsedTime);
 	void gravity();
 	void undoGravity();
+	void read(std::string &str);
+	void setVolume(float volume);
 
 private:
 	void walk(const double &elapsedTime);

@@ -1,5 +1,6 @@
 #include "knight.h"
 #include "loading.h"
+#include <boost/lexical_cast.hpp>
 
 Knight::Knight()
 {
@@ -13,6 +14,8 @@ Knight::~Knight()
 
 void Knight::free()
 {
+	screen_w = screen_h = 0;
+
 	if (!sprites.empty())
 	{
 		for (auto &it : sprites)
@@ -39,17 +42,12 @@ void Knight::reset()
 
 
 
-void Knight::set(const float &x, const float &y)
-{
-	xy = sf::Vector2f(x, y);
-	specs.setSpecs();
-	setAlign();
-	setPosition();
-}
-
 void Knight::load(const float &screen_w, const float &screen_h)
 {
 	free();
+
+	this->screen_w = screen_w;
+	this->screen_h = screen_h;
 
 	// Load Sprites.
 	for (int i = 0; i < STATES::SIZE; ++i)
@@ -106,44 +104,6 @@ void Knight::mechanics(const double &elapsedTime)
 	{
 		offset = 0;
 	}
-
-	if (coxing.isMovingLeft())
-	{
-		align = ALIGN::LEFT;
-		walk(elapsedTime);
-		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
-	}
-	else if (coxing.isMovingRight())
-	{
-		align = ALIGN::RIGHT;
-		walk(elapsedTime);
-		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
-	}
-	else
-	{
-		state = STATES::IDLE;
-		if (coxing.walkTimer > 0)
-			coxing.walkTimer -= static_cast<float>(elapsedTime);
-	}
-
-	if (coxing.isJumping())
-	{
-
-	}
-
-	if (coxing.isAttacking())
-	{
-		state = STATES::ATTACK;
-		if (state == STATES::JUMP && static_cast<int>(offset) < 4)
-			state = STATES::JUMP_ATTACK;
-	}
-
-
-
-	setAlign();
-	setPosition();
-	setRect();
-	setAttackRect();
 }
 
 void Knight::switchCollision()
@@ -151,7 +111,7 @@ void Knight::switchCollision()
 	collisionMode = !collisionMode;
 }
 
-const sf::IntRect& Knight::getRect()
+sf::IntRect& Knight::getRect()
 {
 	return rect;
 }
@@ -171,6 +131,73 @@ bool Knight::isAttack()
 	return false;
 }
 
+bool Knight::moveLeft(const double &elapsedTime)
+{
+	if (coxing.isMovingLeft())
+	{
+		align = ALIGN::LEFT;
+		walk(elapsedTime);
+		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+		return true;
+	}
+
+	return false;
+}
+
+void Knight::undoMoveLeft(const double &elapsedTime)
+{
+	xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+}
+
+bool Knight::moveRight(const double &elapsedTime)
+{
+	if (coxing.isMovingRight())
+	{
+		align = ALIGN::RIGHT;
+		walk(elapsedTime);
+		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+		return true;
+	}
+
+	return false;
+}
+
+void Knight::undoMoveRight(const double &elapsedTime)
+{
+	xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+}
+
+void Knight::idle(const double &elapsedTime)
+{
+	state = STATES::IDLE;
+	if (coxing.walkTimer > 0)
+	{
+		coxing.walkTimer -= static_cast<float>(elapsedTime);
+		if (coxing.walkTimer < 0)
+			coxing.walkTimer = 0;
+	}
+}
+
+void Knight::rest(const double &elapsedTime)
+{
+	if (coxing.isJumping())
+	{
+
+	}
+
+	if (coxing.isAttacking())
+	{
+		state = STATES::ATTACK;
+		if (state == STATES::JUMP && static_cast<int>(offset) < 4)
+			state = STATES::JUMP_ATTACK;
+	}
+
+	setAlign();
+	setPosition();
+	setRect();
+	setAttackRect();
+}
+
 void Knight::gravity()
 {
 	xy.y += specs.gravity;
@@ -179,6 +206,18 @@ void Knight::gravity()
 void Knight::undoGravity()
 {
 	xy.y -= specs.gravity;
+}
+
+void Knight::read(std::string &str)
+{
+	int tempX = boost::lexical_cast<int>(str.substr(str.find("x:") + 2, str.find(" y:") - (str.find("x:") + 2)));
+	int tempY = boost::lexical_cast<int>(str.substr(str.find("y:") + 2, str.find(" id:") - (str.find("y:") + 2)));
+	xy.x = tempX + sprites[IDLE]->getWidth() / 2;
+	xy.y = ((tempY - sprites[IDLE]->getHeight()) * -1) + screen_h;
+
+	specs.setSpecs();
+	setAlign();
+	setPosition();
 }
 
 
