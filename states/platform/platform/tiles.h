@@ -1,6 +1,5 @@
 #pragma once
 #include "sprite.h"
-//#include "request.h"
 #include "eventwindow.h"
 #include <vector>
 
@@ -19,7 +18,7 @@ class Tiles
 
 	int max;
 	char** tiles;
-	char** untiles;
+	char** untiles;	// unvisible tiles
 	std::vector <cmm::Sprite*> sprites;
 
 public:
@@ -31,9 +30,7 @@ public:
 	void reset();
 	void load(const float &screen_w, const float &screen_h);
 	void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
-
-	void fill(char** newTiles, char** newUntiles);	// visible tiles, unvisible tiles
-
+	void read(std::vector<std::string> &vec);
 
 	void setBorderX(float& x);
 	void setBorderY(float& y);
@@ -43,5 +40,5 @@ public:
 	const float& getScreenHeight() const;
 
 	void switchCollision(bool collision = true);
-	bool checkCollision(const sf::Rect<int> &rect);
+	bool checkCollision(sf::Rect<int> &rect, const int add = 0);
 };

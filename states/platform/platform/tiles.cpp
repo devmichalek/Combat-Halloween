@@ -1,5 +1,6 @@
 #include "tiles.h"
 #include "loading.h"
+#include <boost/lexical_cast.hpp>
 
 Tiles::Tiles()
 {
@@ -135,16 +136,23 @@ void Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	}
 }
 
-
-
-void Tiles::fill(char** newTiles, char** newUntiles)
+void Tiles::read(std::vector<std::string> &vec)
 {
-	for (int i = 0; i < max; ++i)
+	int x = -1, y = -1, c = -1;
+	if (!vec.empty())
 	{
-		for (int j = 0; j < max; ++j)
+		char** pointer = NULL;
+		if (vec[0].find("t:1") != std::string::npos)
+			pointer = tiles;
+		else
+			pointer = untiles;
+
+		for (auto &it : vec)
 		{
-			tiles[i][j] = newTiles[i][j];
-			untiles[i][j] = newUntiles[i][j];
+			c = boost::lexical_cast<int>(it.substr(it.find("c:") + 2, it.find(" x:") - (it.find("c:") + 2)));
+			x = boost::lexical_cast<int>(it.substr(it.find("x:") + 2, it.find(" y:") - (it.find("x:") + 2))) / width;
+			y = boost::lexical_cast<int>(it.substr(it.find("y:") + 2, it.find(" id:") - (it.find("y:") + 2))) / width;
+			pointer[x][y] = c;
 		}
 	}
 }
@@ -188,13 +196,14 @@ void Tiles::switchCollision(bool collision)
 	this->collision = collision;
 }
 
-bool Tiles::checkCollision(const sf::Rect<int> &rect)
+bool Tiles::checkCollision(sf::Rect<int> &rect, const int add)
 {
 	sf::Rect<int> tile(sf::Vector2i(0, 0), sf::Vector2i(width, width));
 	int l = static_cast<int> (border_x / width);
 	int r = static_cast<int> (border_x + screen_w) / width;
 	int b = static_cast<int> (border_y / width);
 	int t = static_cast<int> ((border_y + screen_h) / width);
+	rect.top -= add;
 
 	for (int i = l; i < r; ++i)
 	{
@@ -207,6 +216,7 @@ bool Tiles::checkCollision(const sf::Rect<int> &rect)
 				if (tile.intersects(rect))
 				{
 					if(collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					rect.top += add;
 					return true;
 				}
 			}
@@ -217,11 +227,13 @@ bool Tiles::checkCollision(const sf::Rect<int> &rect)
 				if (tile.intersects(rect))
 				{
 					if (collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					rect.top += add;
 					return true;
 				}
 			}
 		}
 	}
 
+	rect.top += add;
 	return false;
 }
