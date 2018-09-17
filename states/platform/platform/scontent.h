@@ -1,7 +1,8 @@
 #pragma once
 #include "content.h"
+#include "kind.h"
 
-struct SContent : public cmm::Content	// World Data
+struct SContent : public cmm::Content
 {
 	enum TYPE
 	{
@@ -11,9 +12,15 @@ struct SContent : public cmm::Content	// World Data
 		EDITOR		// World will be loaded from editor data.
 	};
 
+	static cmm::Kind kind;
 	static int type;
 	static std::string path;	// path to file / url to server (+options)
 	static std::vector<std::string> content_sorted;
+	static std::vector<std::string> buffer;
 public:
 	SContent();
+	~SContent();
+	static const int amount();
+	static cmm::Kind category();
+	static std::vector<std::string> &get(int category);
 };
