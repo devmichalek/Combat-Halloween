@@ -1,23 +1,9 @@
 #pragma once
+#include "kind.h"
 
-class EAKind
+class EAKind : public cmm::Kind
 {
 protected:
-	enum KIND
-	{
-		VOID = -1,
-		KNIGHT,
-		TILE,
-		UNVISIBLE_TILE,
-		LANDSCAPE,
-		FOE,
-		LIGHTPOINT,
-		AMOUNT
-	};
-
 	int type;
 	int chosen;
-public:
-
-	const int amount() { return KIND::AMOUNT; }
 };
