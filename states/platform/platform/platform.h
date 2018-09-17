@@ -44,4 +44,5 @@ private:
 	void fades(const float &elapsedTime);
 	void fadein(const float &value, const int &max);
 	void fadeout(const float &value, const int &min);
+	void prepare();
 };

@@ -61,6 +61,8 @@ void Platform::set()
 		music_volumebutton.setGlobalVolume(musicVolume);
 		musicbutton.setActive(musicPlayable);
 		musicbutton.isActive() ? music.play() : music.pause();
+
+		prepare();
 	}
 }
 
@@ -109,8 +111,11 @@ void Platform::load(const float &screen_w, const float &screen_h)
 	sound_volumebutton.setPosition(soundbutton.getLeft(), soundbutton.getRight(), soundbutton.getBot());
 	music_volumebutton.setPosition(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
-	// BG
+	// Action ---
 	movingBG.load(screen_w, screen_h);
+	knight.load(screen_w, screen_h);
+	tiles.load(screen_w, screen_h);
+	// ----------
 
 	// Set chat.
 	chat.load(screen_w, screen_h);
@@ -148,6 +153,9 @@ void Platform::handle(const sf::Event &event)
 void Platform::draw(sf::RenderWindow* &window)
 {
 	movingBG.draw			(window);
+	knight.draw				(window);
+	tiles.draw				(window);
+
 	homebutton.draw			(window);
 	levelbutton.draw		(window);
 	soundbutton.draw		(window);
@@ -187,6 +195,12 @@ void Platform::mechanics(const double &elapsedTime)
 					// ...?
 				}
 			}
+			
+			else if (chat.compCommand("@collision"))
+			{
+				knight.switchCollision();
+				tiles.switchCollision();
+			}
 
 			// Turn on/off all sounds.
 			else if (chat.compCommand("@sound"))
@@ -219,6 +233,25 @@ void Platform::mechanics(const double &elapsedTime)
 			else
 				chat.setError();
 		}
+
+		
+		knight.gravity();
+		if (tiles.checkCollision(knight.getRect()))
+			knight.undoGravity();
+		knight.mechanics(elapsedTime);
+		if (knight.moveLeft(elapsedTime))
+		{
+			if (tiles.checkCollision(knight.getRect(), 2))
+				knight.undoMoveLeft(elapsedTime);
+		}
+		else if (knight.moveRight(elapsedTime))
+		{
+			if (tiles.checkCollision(knight.getRect(), 2))
+				knight.undoMoveRight(elapsedTime);
+		}
+		else
+			knight.idle(elapsedTime);
+		knight.rest(elapsedTime);
 
 		float direction = 0;
 		movingBG.mechanics(static_cast<float>(elapsedTime), direction);
@@ -345,4 +378,15 @@ void Platform::fadeout(const float &value, const int &min)
 	sound_volumebutton.fadeout(value, min);
 	music_volumebutton.fadeout(value, min);
 	// chat.fadeout				(value, min);
+}
+
+void Platform::prepare()
+{
+	// Load modules here...
+	// The data has been simulated, so here we do not check it.
+	knight.read(SContent::get(SContent::category().KNIGHT)[0]);
+	tiles.read(SContent::get(SContent::category().TILE));
+	tiles.read(SContent::get(SContent::category().UNVISIBLE_TILE));
+
+
 }
