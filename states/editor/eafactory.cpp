@@ -340,7 +340,7 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 	// Draw knight
 	if (entityKnight.isSet())
 	{
-		factory[KNIGHT][0]->setPosition(entityKnight.get().x + addX, (entityKnight.get().y + addY + factory[KNIGHT][0]->getHeight()) * -1 + screen_h);
+		factory[KNIGHT][0]->setPosition(entityKnight.get().x + addX, (entityKnight.get().y + addY) * -1 + screen_h);
 		window->draw(factory[KNIGHT][0]->get());
 	}
 	
@@ -406,7 +406,7 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 	if (t == KNIGHT)
 	{
 		if(id == -1)	newID = history.getNewID();
-		if(!con)	y -= factory[KNIGHT][0]->getHeight();
+		if(!con)
 		history.removeByID(entityKnight.getID());	// check if knight was added before if yes then delete him
 		success = entityKnight.add(x, y, newID);
 	}
@@ -429,10 +429,16 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 void EAFactory::remove(int& x, int& y)
 {
 	int c = 0;
-	if (entityKnight.remove(x, y))					history.removeByID(entityKnight.getID());
-	else if (entityLandscape.remove(x, y))			history.removeByID(entityLandscape.getID());
-	else if (type == FOE) {}
-	else if (type == LIGHTPOINT) {}
-	else if (c = entityTiles.remove(x, y) != -1)	history.remove(TILE, c, x, y);
-	else if (c = entityUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
+	y += factory[KNIGHT][0]->getHeight();
+	if (entityKnight.remove(x, y))
+		history.removeByID(entityKnight.getID());
+	else
+	{
+		y -= factory[KNIGHT][0]->getHeight();
+		if (entityLandscape.remove(x, y))				history.removeByID(entityLandscape.getID());
+		else if (type == FOE) {}
+		else if (type == LIGHTPOINT) {}
+		else if (c = entityTiles.remove(x, y) != -1)	history.remove(TILE, c, x, y);
+		else if (c = entityUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
+	}
 }
