@@ -2,7 +2,6 @@
 #include "loading.h"
 #include <fstream>
 #include "request.h"
-#include "eakind.h"	// amount()
 #include <boost/lexical_cast.hpp>
 #include "logconsole.h"
 
@@ -291,9 +290,8 @@ bool Simulator::prepare()
 bool Simulator::sort()
 {
 	// Sort by type...
-	EAKind eakind;
 	SContent::content_sorted.clear();
-	for (int c = 0; c < eakind.amount(); ++c)
+	for (int c = 0; c < SContent::amount(); ++c)
 	{
 		for (auto &it : SContent::content)
 		{
@@ -326,9 +324,17 @@ bool Simulator::simulate()
 		return false;
 	}
 
-	if (SContent::content_sorted[1].find("t:1") == std::string::npos)	// There is no any tile.
+	// There is no any tile.
+	if (SContent::content_sorted.size() > 1 && SContent::content_sorted[1].find("t:1") == std::string::npos)
 	{
 		setWarningMsg("Recommended amount of tiles is at least 1.");
+	}
+
+	// Check if there is more than 1 knight.
+	if (SContent::content_sorted.size() > 1 && SContent::content_sorted[1].find("t:0") != std::string::npos)
+	{
+		setErrorMsg("Cannot start game, there is more than 1 knight's position.");
+		return false;
 	}
 
 	return true;
