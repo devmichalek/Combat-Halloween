@@ -18,6 +18,12 @@ void KCoxing::reset()
 
 	jumpCounter = 0;
 	jumpLine = 2;	 // max 2 jumps in a row
+
+	if (keys.empty()) // happens while testing
+	{
+		cmm::Keys k;
+		k.loadKeys();
+	}
 }
 
 bool KCoxing::isMovingLeft()
