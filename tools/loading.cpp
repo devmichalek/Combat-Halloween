@@ -110,7 +110,7 @@ void Loading::mechanics(const double &elapsedTime)
 	else if(!error_occured)
 	{
 		setText();
-		state++;
+		++state;
 		progress_bar.setOffset(state%7);
 
 		if (state >= 101) // 100%

@@ -50,7 +50,7 @@ void RectButton::create(std::string line, int size, float ply)
 	if (h < 1)	h = 1;
 	if (ply < 1)	ply = 1;
 
-	for (unsigned i = 0; i < 5; i++)
+	for (unsigned i = 0; i < 5; ++i)
 	{
 		sf::RectangleShape shape;
 		rects.push_back(shape);
@@ -172,7 +172,7 @@ void RectButton::fadeinBorders(const float &v, const int &max)
 
 		sf::Color newColor(rects[0].getFillColor());
 		newColor.a = static_cast<sf::Uint8>(alphaBorders);
-		for (unsigned i = 0; i < rects.size() - 1; i++)
+		for (unsigned i = 0; i < rects.size() - 1; ++i)
 		{
 			rects[i].setFillColor(newColor);
 		}
@@ -222,7 +222,7 @@ void RectButton::fadeoutBorders(const float &v, const int &min)
 
 		sf::Color newColor(rects[0].getFillColor());
 		newColor.a = static_cast<sf::Uint8>(alphaBorders);
-		for (unsigned i = 0; i < rects.size() - 1; i++)
+		for (unsigned i = 0; i < rects.size() - 1; ++i)
 		{
 			rects[i].setFillColor(newColor);
 		}
@@ -280,7 +280,7 @@ void RectButton::setColor(sf::Color color)
 	newColor.r = color.r;
 	newColor.g = color.g;
 	newColor.b = color.b;
-	for (unsigned i = 0; i < rects.size() - 1; i++)
+	for (unsigned i = 0; i < rects.size() - 1; ++i)
 	{
 		rects[i].setFillColor(newColor);
 	}
@@ -316,7 +316,7 @@ void RectButton::setAlphaBorders(float alpha)
 		this->alphaBorders = alpha;
 		sf::Color newColor(rects[0].getFillColor());
 		newColor.a = static_cast<sf::Uint8>(this->alphaBorders);
-		for (unsigned i = 0; i < rects.size() - 1; i++)
+		for (unsigned i = 0; i < rects.size() - 1; ++i)
 		{
 			rects[i].setFillColor(newColor);
 		}
