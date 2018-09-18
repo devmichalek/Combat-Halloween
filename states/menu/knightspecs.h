@@ -47,4 +47,5 @@ public:
 private:
 	void setValues();
 	void position();
+	std::string floatToStr(float value);
 };

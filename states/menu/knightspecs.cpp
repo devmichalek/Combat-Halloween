@@ -214,8 +214,8 @@ void Knightspecs::setValues()
 
 			values[HEART_POINTS]->setText(strs[HEART_POINTS] + " hp");
 			values[MAGIC_POINTS]->setText(strs[MAGIC_POINTS] + " mp");
-			values[ARMOUR]->setText(std::to_string(boost::lexical_cast<float>(strs[ARMOUR])/100) + " %");
-			values[MAGIC_RESISTANT]->setText(std::to_string(boost::lexical_cast<float>(strs[MAGIC_RESISTANT]) / 100) + " %");
+			values[ARMOUR]->setText(floatToStr(boost::lexical_cast<float>(strs[ARMOUR]) / 100) + " %");
+			values[MAGIC_RESISTANT]->setText(floatToStr(boost::lexical_cast<float>(strs[MAGIC_RESISTANT]) / 100) + " %");
 			values[MOVEMENT_SPEED]->setText(strs[MOVEMENT_SPEED] + " %");
 			values[DAMAGE]->setText(strs[DAMAGE] + " dmg");
 			values[MAGIC_DAMAGE]->setText(strs[MAGIC_DAMAGE] + " mdmg");
@@ -266,6 +266,20 @@ void Knightspecs::position()
 	{
 		values[i]->setPosition(x, y + screen_h / 27 * i);
 	}
+}
+
+std::string Knightspecs::floatToStr(float value)
+{
+	std::string buf = std::to_string(value);
+	for (size_t i = buf.size() - 1; i >= 0; --i)
+	{
+		if (buf[i] == '0')
+			buf.erase(i);
+		else
+			break;
+	}
+
+	return buf;
 }
 
 //void Knightspecs::setVolume(const float &volume)
