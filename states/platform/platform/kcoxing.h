@@ -11,6 +11,8 @@ public:
 	sf::Int8 jumpCounter;
 	sf::Int8 jumpLine;
 
+	bool attack;
+
 	KCoxing();
 	~KCoxing();
 	void reset();

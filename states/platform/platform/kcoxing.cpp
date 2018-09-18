@@ -19,6 +19,8 @@ void KCoxing::reset()
 	jumpCounter = 0;
 	jumpLine = 2;	 // max 2 jumps in a row
 
+	attack = false;
+
 	if (keys.empty()) // happens while testing
 	{
 		cmm::Keys k;
