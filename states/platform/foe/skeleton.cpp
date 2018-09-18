@@ -276,12 +276,12 @@ bool Skeleton::isAttacking()
 	{
 		if (static_cast <int> (offset) == 3 && attackNum == 0)
 		{
-			attackNum++;
+			++attackNum;
 			return true;
 		}
 		else if (static_cast <int> (offset) == 6 && attackNum == 1)
 		{
-			attackNum++;
+			++attackNum;
 			return true;
 		}
 	}

@@ -50,7 +50,7 @@ void Simulator::load(const float &screen_w, const float &screen_h)
 	this->screen_h = screen_h;
 
 	// Set info.
-	msg = "Loading...";
+	msg = "Launching thread...";
 	Loading::add(info.setFont(cmm::JAPOKKI_FONT_PATH));
 	if (Loading::isError())	return;
 	info.setSize(screen_h / 26);

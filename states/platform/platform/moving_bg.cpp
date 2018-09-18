@@ -50,7 +50,7 @@ void MovingBG::load(const float &screen_w, const float &screen_h)
 
 	velocity = 30; // 30 px per sec and 15 px per sec for sec bg
 
-	for (unsigned i = 0; i < 3; i++)
+	for (unsigned i = 0; i < 3; ++i)
 	{
 		sprites.push_back(new cmm::Sprite());
 		Loading::add(sprites[i]->load(("images/platform/background/" + std::to_string(i) + ".png").c_str()));
@@ -77,7 +77,7 @@ void MovingBG::load(const float &screen_w, const float &screen_h)
 
 void MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 {
-	for (unsigned i = 0; i < fs.size(); i++)
+	for (unsigned i = 0; i < fs.size(); ++i)
 	{
 		sprites[types[i]]->setPosition(fs[i].x, fs[i].y);
 		window->draw(sprites[types[i]]->get()/*, &shader*/);
@@ -86,7 +86,7 @@ void MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 
 void MovingBG::mechanics(const float &elapsedTime, const float &direction)
 {
-	for (unsigned i = 1; i < 3; i++)
+	for (unsigned i = 1; i < 3; ++i)
 	{
 		fs[i].x += -velocity / 2 * elapsedTime * direction;
 
@@ -96,7 +96,7 @@ void MovingBG::mechanics(const float &elapsedTime, const float &direction)
 		}
 	}
 
-	for (unsigned i = 3; i < fs.size(); i++)
+	for (unsigned i = 3; i < fs.size(); ++i)
 	{
 		fs[i].x += velocity * elapsedTime * direction;
 
