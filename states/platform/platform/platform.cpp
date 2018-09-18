@@ -196,7 +196,7 @@ void Platform::mechanics(const double &elapsedTime)
 				}
 			}
 			
-			else if (chat.compCommand("@collision"))
+			else if (SContent::type != SContent::TYPE::SERVER && chat.compCommand("@collision"))
 			{
 				knight.switchCollision();
 				tiles.switchCollision();
@@ -234,11 +234,13 @@ void Platform::mechanics(const double &elapsedTime)
 				chat.setError();
 		}
 
-		
-		knight.gravity();
-		if (tiles.checkCollision(knight.getRect()))
-			knight.undoGravity();
 		knight.mechanics(elapsedTime);
+		if (knight.gravity())
+		{
+			if (tiles.checkCollision(knight.getRect()))
+				knight.undoGravity();
+		}
+		
 		if (knight.moveLeft(elapsedTime))
 		{
 			if (tiles.checkCollision(knight.getRect(), 2))
@@ -251,6 +253,12 @@ void Platform::mechanics(const double &elapsedTime)
 		}
 		else
 			knight.idle(elapsedTime);
+		if (knight.jump(elapsedTime))
+		{
+			if (tiles.checkCollision(knight.getRect()))
+				knight.undoJump(elapsedTime);
+		}
+		knight.attack();
 		knight.rest(elapsedTime);
 
 		float direction = 0;
@@ -352,9 +360,9 @@ void Platform::fades(const float &elapsedTime)
 	else
 	{
 		float value = elapsedTime * 0xFF * 2;
-		int max = 0xFF;
+		int max = 0xFF, min = 0;
 		fadein(value, max);
-		pausesystem.fadeout(value, max);
+		pausesystem.fadeout(value, min);
 		music.fadein(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume()));
 	}
 }
