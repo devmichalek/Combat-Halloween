@@ -9,6 +9,9 @@ class Initialization : public cmm::State
 	enum	// Enum with states of texts.
 	{
 		AUTHOR = 0,
+		ASSOCIATION,
+		SEBASTIAN,
+		KAMIL,
 		PRESENTS,
 		HALLOWEEN,
 		COMBAT,

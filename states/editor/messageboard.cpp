@@ -87,7 +87,7 @@ void MessageBoard::handle(const sf::Event &event)
 
 	if (event.type == sf::Event::KeyPressed)
 	{
-		if (event.key.code == sf::Keyboard::Return)
+		if (event.key.code == sf::Keyboard::Enter)
 		{
 			decision = active == TYPES::OKACTIVE ? OK : YES;
 		}

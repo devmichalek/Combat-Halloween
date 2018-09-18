@@ -45,6 +45,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="login.cpp" />
     <ClCompile Include="initialization.cpp" />
+    <ClCompile Include="..\..\common\audio.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="login.h" />

@@ -128,7 +128,7 @@ void EFMTextEditor::handle(const sf::Event &event)
 				setWrittenText();
 			}
 		}
-		else if (event.key.code == sf::Keyboard::Return)
+		else if (event.key.code == sf::Keyboard::Enter)
 		{
 			decision = PROCEED;
 		}

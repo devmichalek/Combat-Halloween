@@ -81,7 +81,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 
 	// Set font for state texts and active texts.
 	const char* text_path = cmm::JCANDLE_FONT_PATH;
-	for (unsigned i = 0; i < AMOUNT; i++)
+	for (unsigned i = 0; i < AMOUNT; ++i)
 	{
 		state_texts.push_back(new cmm::Text);
 		Loading::add(state_texts[i]->setFont(text_path));
@@ -103,7 +103,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 
 	// Set active_texts text.
 	keys.clear();
-	for (unsigned i = 0; i < AMOUNT; i++)
+	for (unsigned i = 0; i < AMOUNT; ++i)
 	{
 		text_collisions.push_back(sf::Rect<float>());
 		keys.push_back(-1);
@@ -114,7 +114,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 
 	// Set size of state texts and active texts.
 	int size = static_cast<int>(screen_h / 28);
-	for (unsigned i = 0; i < AMOUNT; i++)
+	for (unsigned i = 0; i < AMOUNT; ++i)
 	{
 		state_texts[i]->setSize(size);
 		active_texts[i]->setSize(size);
@@ -260,7 +260,7 @@ bool Settings::handle(const sf::Event &event)
 
 				// Check if it is collide.
 				target = -1;
-				for (unsigned i = 0; i < JUMP_ATTACK; i++)
+				for (unsigned i = 0; i < JUMP_ATTACK; ++i)
 				{
 					if (text_collisions[i].contains(float(event.mouseButton.x), float(event.mouseButton.y)))
 					{
@@ -470,13 +470,13 @@ void Settings::reloadCoxing()
 void Settings::positionTable()
 {
 	// Position state texts.
-	for (unsigned i = 0; i < state_texts.size(); i++)
+	for (unsigned i = 0; i < state_texts.size(); ++i)
 	{
 		state_texts[i]->setPosition(table.getX() + screen_w / 80, table.getY() + screen_h / 56 + (screen_h / 28 * i) + screen_h / 256);
 	}
 
 	// Position active texts.
-	for (unsigned i = 0; i < active_texts.size(); i++)
+	for (unsigned i = 0; i < active_texts.size(); ++i)
 	{
 		active_texts[i]->setPosition(table.getX() + table.getWidth() / 2, state_texts[i]->getY());
 		if (i < JUMP_ATTACK)

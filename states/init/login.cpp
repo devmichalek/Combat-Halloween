@@ -206,7 +206,7 @@ void Login::handle(const sf::Event &event)
 						organizeWritten();
 					}
 				}
-				else if (event.key.code == sf::Keyboard::Return)
+				else if (event.key.code == sf::Keyboard::Enter)
 				{
 					if (state == 0)
 					{
@@ -446,7 +446,7 @@ void Login::setThread()
 	}
 	else
 	{
-		forget_counter++;
+		++forget_counter;
 		if(request.getResult() == "-1")		info_str = "Unexpected Error.";
 		else if(request.getResult() == "0")	info_str = "Wrong username or password.";
 		info.setFillColor(cmm::LogConsole::getErrorColor());

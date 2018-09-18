@@ -198,7 +198,7 @@ void EAGrid::mechanics(bool deleteMode)
 		while (gridX >= halfWidth)
 		{
 			gridX -= halfWidth;
-			count++;
+			++count;
 		}
 		gridX = count * halfWidth;
 
@@ -207,7 +207,7 @@ void EAGrid::mechanics(bool deleteMode)
 		while (gridY - diff >= halfWidth)
 		{
 			gridY -= halfWidth;
-			count++;
+			++count;
 		}
 		gridY = count * halfWidth + diff;
 	}
