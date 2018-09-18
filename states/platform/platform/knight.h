@@ -45,9 +45,10 @@ public:
 	bool moveLeft(const double &elapsedTime);	void undoMoveLeft(const double &elapsedTime);
 	bool moveRight(const double &elapsedTime);	void undoMoveRight(const double &elapsedTime);
 	void idle(const double &elapsedTime);
+	bool jump(const double &elapsedTime);		void undoJump(const double &elapsedTime);
+	void attack();
 	void rest(const double &elapsedTime);
-	void gravity();
-	void undoGravity();
+	bool gravity();								void undoGravity();
 	void read(std::string &str);
 	void setVolume(float volume);
 

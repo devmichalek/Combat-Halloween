@@ -59,10 +59,10 @@ void Knight::load(const float &screen_w, const float &screen_h)
 	}
 
 	// Set rects size
-	rect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.9);
+	rect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.75);
 	rect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.9);
-	attackRect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.4);
-	attackRect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.4);
+	attackRect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.7);
+	attackRect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.6);
 
 	// --- TEST ---
 	shape.setFillColor(sf::Color(0xFF, 0xFA, 0xCD, 0xFF / 3));
@@ -103,6 +103,7 @@ void Knight::mechanics(const double &elapsedTime)
 	if (static_cast<int>(offset) >= offset_max)
 	{
 		offset = 0;
+		coxing.attack = false;
 	}
 }
 
@@ -128,13 +129,14 @@ bool Knight::isAlive()
 
 bool Knight::isAttack()
 {
-	return false;
+	return coxing.attack && offset > 3 && offset < 8;
 }
 
 bool Knight::moveLeft(const double &elapsedTime)
 {
-	if (coxing.isMovingLeft())
+	if (coxing.isMovingLeft() && !coxing.attack)
 	{
+		coxing.attack = false;
 		align = ALIGN::LEFT;
 		walk(elapsedTime);
 		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
@@ -151,7 +153,7 @@ void Knight::undoMoveLeft(const double &elapsedTime)
 
 bool Knight::moveRight(const double &elapsedTime)
 {
-	if (coxing.isMovingRight())
+	if (coxing.isMovingRight() && !coxing.attack)
 	{
 		align = ALIGN::RIGHT;
 		walk(elapsedTime);
@@ -169,7 +171,9 @@ void Knight::undoMoveRight(const double &elapsedTime)
 
 void Knight::idle(const double &elapsedTime)
 {
-	state = STATES::IDLE;
+	if(!coxing.attack && coxing.jumpLine == 0)
+		state = STATES::IDLE;
+
 	if (coxing.walkTimer > 0)
 	{
 		coxing.walkTimer -= static_cast<float>(elapsedTime);
@@ -178,33 +182,67 @@ void Knight::idle(const double &elapsedTime)
 	}
 }
 
-void Knight::rest(const double &elapsedTime)
+bool Knight::jump(const double &elapsedTime)
 {
-	if (coxing.isJumping())
+	if (coxing.isJumping() && coxing.jumpCounter < coxing.jumpLine - 1)
 	{
-
+		++coxing.jumpCounter;
+		state = STATES::JUMP;
+		offset = 0;
 	}
 
+	if ((state == STATES::JUMP || state == STATES::JUMP_ATTACK) && offset < 5) // go up
+	{
+		xy.y -= specs.gravity;
+		return true;
+	}
+
+	return false;
+}
+
+void Knight::undoJump(const double &elapsedTime)
+{
+	xy.y += specs.gravity;
+}
+
+void Knight::attack()
+{
 	if (coxing.isAttacking())
 	{
 		state = STATES::ATTACK;
 		if (state == STATES::JUMP && static_cast<int>(offset) < 4)
 			state = STATES::JUMP_ATTACK;
+		else
+		{
+			if (!coxing.attack)
+			{
+				coxing.attack = true;
+				offset = 0;
+			}
+		}
 	}
+}
 
+void Knight::rest(const double &elapsedTime)
+{
 	setAlign();
 	setPosition();
 	setRect();
 	setAttackRect();
 }
 
-void Knight::gravity()
+bool Knight::gravity()
 {
+	if (state == STATES::JUMP || state == STATES::JUMP_ATTACK)
+		return false;
+
 	xy.y += specs.gravity;
+	return true;
 }
 
 void Knight::undoGravity()
 {
+	coxing.jumpCounter = 0;
 	xy.y -= specs.gravity;
 }
 
@@ -251,18 +289,20 @@ void Knight::setPosition()
 	{
 		switch (state)
 		{
-		case STATES::IDLE: newX -= cw / 2; break;
-		case STATES::WALK: newX -= cw / 2; break;
+		case STATES::IDLE:
+		case STATES::WALK:
 		case STATES::RUN: newX -= cw / 2; break;
+		case STATES::ATTACK: newX -= cw / 2.18; break;
 		}
 	}
 	else
 	{
 		switch (state)
 		{
-		case STATES::IDLE: newX += cw / 2; break;
-		case STATES::WALK: newX += cw / 2; break;
+		case STATES::IDLE:
+		case STATES::WALK:
 		case STATES::RUN: newX += cw / 2; break;
+		case STATES::ATTACK: newX += cw / 2.18; break;
 		}
 	}
 
@@ -292,7 +332,11 @@ void Knight::setRect()
 
 void Knight::setAttackRect()
 {
-
+	if (align == ALIGN::RIGHT)
+		attackRect.left = xy.x;
+	else
+		attackRect.left = xy.x - attackRect.width;
+	attackRect.top = xy.y - rect.height / 1.8;
 
 	// --- TEST ---
 	if (collisionMode)
