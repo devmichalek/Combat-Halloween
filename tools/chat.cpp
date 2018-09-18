@@ -81,7 +81,7 @@ void Chat::load(const float &screen_w, const float &screen_h)
 	scale_y = screen_h / 1440;
 
 	// Set writtens.
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i < 6; ++i)
 	{
 		writtens.push_back(new cmm::Text);
 		Loading::add(writtens[i]->setFont(cmm::JAPOKKI_FONT_PATH));
@@ -175,7 +175,7 @@ void Chat::handle(const sf::Event &event)
 					{
 						prepareWritten(0, 0);
 
-						for (unsigned i = writtenStrs.size() - 1; i >= 1; i--)
+						for (unsigned i = writtenStrs.size() - 1; i >= 1; --i)
 							writtenStrs[i] = writtenStrs[i - 1];
 
 						writtenStrs[0].clear();
@@ -199,8 +199,7 @@ void Chat::handle(const sf::Event &event)
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
-			// 'o'
-			if (event.key.code == 14)
+			if (event.key.code == sf::Keyboard::O)
 			{
 				active = true;
 				globalYScale = 0.1f;
@@ -211,9 +210,12 @@ void Chat::handle(const sf::Event &event)
 
 void Chat::draw(sf::RenderWindow* &window)
 {
+	if (!active && globalYScale == 0)
+		return;
+
 	window->draw(background.get());
 
-	for (unsigned i = 0; i < writtens.size(); i++)
+	for (unsigned i = 0; i < writtens.size(); ++i)
 	{
 		if (writtens[i]->getY() >= background.getY())
 		{
@@ -227,11 +229,8 @@ void Chat::draw(sf::RenderWindow* &window)
 		}
 	}
 
-	// draw arrow.
 	if (counter < line / 2)
-	{
 		window->draw(arrow.get());
-	}
 
 	fps.draw(window);
 }
@@ -294,6 +293,7 @@ void Chat::mechanics(const double &elapsedTime)
 
 		background.setScale(scale_x, scale_y *globalYScale / globalYLine);
 		username.setScale(1, 1 * globalYScale / globalYLine);
+		arrow.setScale(1, 1 * globalYScale / globalYLine);
 
 		for (auto &it : writtens)
 		{
@@ -309,6 +309,7 @@ void Chat::fadeout(const float &v, const int &min)
 	fps.fadeout(v, min);
 	background.fadeout(v, min);
 	username.fadeout(v, min);
+	arrow.fadeout(v, min);
 	for (auto &it : writtens)
 	{
 		it->fadeout(v, min);
@@ -490,7 +491,7 @@ float Chat::getNewVolume()
 				return -1; // it may look like this: @music volume 855, max is 100
 			}
 			
-			// is ok
+			// success
 			return boost::lexical_cast<float>(buf);
 		}
 	}
@@ -504,21 +505,21 @@ float Chat::getNewVolume()
 
 void Chat::setWritten()
 {
-	float y0 = screen_h - screen_h / 28;
+	float y = screen_h - screen_h / 28;
 
-	writtens[0]->setPosition(screen_w / 256, y0);
+	writtens[0]->setPosition(screen_w / 256, y);
 	if (!writtenStrs[0].empty())
 	{
 		if (writtenStrs[0][0] == '@')	writtens[0]->setFillColor(ccolor);
 		else							writtens[0]->setFillColor(color);
 	}
 
-	for (unsigned i = 1; i < writtens.size(); i++)
+	for (unsigned i = 1; i < writtens.size(); ++i)
 	{
 		writtens[i]->setText(writtenStrs[i]);
 
 		float y_adder = screen_h / 26;
-		for (unsigned j = 0; j < writtenStrs[i].size(); j++)
+		for (unsigned j = 0; j < writtenStrs[i].size(); ++j)
 		{
 			if (static_cast <int> (writtenStrs[i][j]) == 10)
 			{
@@ -526,8 +527,7 @@ void Chat::setWritten()
 			}
 		}
 
-		writtens[i]->setPosition(username.getRight() + screen_w / 256, writtens[i - 1]->getY() - y_adder);
-
+		writtens[i]->setPosition(username.getWidth() + screen_w / 128, writtens[i - 1]->getY() - y_adder);
 		if (!writtenStrs[i].empty())
 		{
 			if (writtenStrs[i][0] == '@')		writtens[i]->setFillColor(ccolor);
@@ -537,18 +537,18 @@ void Chat::setWritten()
 
 	writtens[0]->setText(writtenStrs[0]);
 
-	if (writtens[0]->getRight() < background.getRight())	writtens[0]->setPosition(screen_w / 256, y0);
-	else	writtens[0]->setPosition((background.getRight() - writtens[0]->getWidth()) - screen_w / 256, y0);
+	if (writtens[0]->getRight() < background.getRight())	writtens[0]->setPosition(screen_w / 256, y);
+	else	writtens[0]->setPosition((background.getRight() - writtens[0]->getWidth()) - screen_w / 256, y);
 
-	if (writtenStrs[0].empty())	arrow.setPosition(0, y0);
-	else	arrow.setPosition(writtens[0]->getRight(), y0);
+	if (writtenStrs[0].empty())	arrow.setPosition(0, y);
+	else	arrow.setPosition(writtens[0]->getRight(), y);
 }
 
 void Chat::prepareWritten(int n, int k)
 {
 	// Add \n if needed.
 	std::string buf = "";
-	for (unsigned i = 0; i < writtenStrs[k].size(); i++)
+	for (unsigned i = 0; i < writtenStrs[k].size(); ++i)
 	{
 		buf += writtenStrs[k][i];
 		writtens[n]->setText(buf);
@@ -580,7 +580,6 @@ int Chat::recognizeKey(std::string str)
 
 	else if(str.size() == 1)
 	{
-		
 		int n = boost::lexical_cast<int>(str[0]);
 		if (n >= 97 &&  n <= 122)	// letters?
 		{
@@ -619,11 +618,11 @@ void Chat::setError(std::string msg)
 void Chat::setStyleBlackish()
 {
 	color = sf::Color(0x68, 0x68, 0x68);
-	ccolor = sf::Color(0, 0, 0);
+	ccolor = sf::Color(21, 21, 29);
 }
 
 void Chat::setStyleWhitish()
 {
 	color = sf::Color(0xBA, 0xBA, 0xBA);
-	ccolor = sf::Color(0xFF, 0xFF, 0xFF);
+	ccolor = sf::Color(0xD5, 0xE1, 0xDD);
 }
