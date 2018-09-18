@@ -22,6 +22,9 @@
     <Filter Include="Dependencies\Common">
       <UniqueIdentifier>{c35b91be-381c-4929-af30-699916baa333}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dependencies\Tools">
+      <UniqueIdentifier>{1125d9fc-e27e-4f23-9e39-99c856b5f39a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,6 +70,15 @@
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\common\music.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\audio.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\tools\loading.cpp">
+      <Filter>Dependencies\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\state.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
   </ItemGroup>
