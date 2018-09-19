@@ -1,22 +1,22 @@
-#include "eaentityrect.h"
+#include "eelandscape.h"
 
-EAEntityRect::EAEntityRect()
+ee::Landscape::Landscape()
 {
 	tree = nullptr;
 	free();
 }
 
-EAEntityRect::~EAEntityRect()
+ee::Landscape::~Landscape()
 {
 	free();
 }
 
-void EAEntityRect::free()
+void ee::Landscape::free()
 {
 	reset();
 }
 
-void EAEntityRect::reset()
+void ee::Landscape::reset()
 {
 	count = 0;
 	lastID = -1;
@@ -28,12 +28,12 @@ void EAEntityRect::reset()
 	}
 }
 
-void EAEntityRect::init()
+void ee::Landscape::init()
 {
-	tree = new ERTree;
+	tree = new LandscapeTree;
 }
 
-const std::vector<EntityRectID> &EAEntityRect::get(const int &addX, const int &addY, const float &screen_w, const float &screen_h)
+const std::vector<ee::LandscapeBox> &ee::Landscape::get(const int &addX, const int &addY, const float &screen_w, const float &screen_h)
 {
 	result.clear();
 	Box queryBox(Point(addX, addY), Point(addX + screen_w, addY + screen_h));
@@ -41,14 +41,14 @@ const std::vector<EntityRectID> &EAEntityRect::get(const int &addX, const int &a
 	return result;
 }
 
-bool EAEntityRect::add(const Box &box, const IDPair &idpair)
+bool ee::Landscape::add(const Box &box, const LandscapeEntity &le)
 {
 	++count;
-	tree->insert(std::make_pair(box, idpair));
+	tree->insert(std::make_pair(box, le));
 	return true;
 }
 
-bool EAEntityRect::remove(int &mouseX, int &mouseY)
+bool ee::Landscape::remove(int &mouseX, int &mouseY)
 {
 	result.clear();
 	Box queryBox(Point(mouseX, mouseY), Point(mouseX + 1, mouseY + 1));
@@ -56,17 +56,17 @@ bool EAEntityRect::remove(int &mouseX, int &mouseY)
 
 	if (!result.empty())
 	{
-		mouseX = bg::get<0>(result[0].first.min_corner());
-		mouseX = bg::get<1>(result[0].first.min_corner());
+		//mouseX = bg::get<0>(result[0].first.min_corner());
+		//mouseX = bg::get<1>(result[0].first.min_corner());
 		tree->remove(result[0]);
-		lastID = result[0].second.first;
+		lastID = result[0].second.id;
 		return true;
 	}
 	
 	return false;
 }
 
-int EAEntityRect::getID()
+int ee::Landscape::getID()
 {
 	int ID = lastID;
 	lastID = -1;
