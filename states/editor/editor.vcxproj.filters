@@ -84,15 +84,6 @@
     <ClCompile Include="editornavigation.cpp">
       <Filter>Other</Filter>
     </ClCompile>
-    <ClCompile Include="eaentitygrid.cpp">
-      <Filter>Editor Action\Action\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="eaentityrect.cpp">
-      <Filter>Editor Action\Action\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="eaentityspecial.cpp">
-      <Filter>Editor Action\Action\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="eainfo.cpp">
       <Filter>Editor Action\Action\Other</Filter>
     </ClCompile>
@@ -173,6 +164,15 @@
     <ClCompile Include="..\..\common\coxing.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="eelandscape.cpp">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="eeknight.cpp">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="eetile.cpp">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="messageboard.h">
@@ -205,15 +205,6 @@
     <ClInclude Include="editornavigation.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="eaentitygrid.h">
-      <Filter>Editor Action\Action\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="eaentityrect.h">
-      <Filter>Editor Action\Action\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="eaentityspecial.h">
-      <Filter>Editor Action\Action\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="eainfo.h">
       <Filter>Editor Action\Action\Other</Filter>
     </ClInclude>
@@ -233,5 +224,14 @@
       <Filter>Editor File Manager\File Manager</Filter>
     </ClInclude>
     <ClInclude Include="editor.h" />
+    <ClInclude Include="eelandscape.h">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="eeknight.h">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="eetile.h">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

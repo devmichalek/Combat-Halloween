@@ -71,9 +71,9 @@
     <ClCompile Include="..\..\tools\loading.cpp" />
     <ClCompile Include="..\..\tools\pausesystem.cpp" />
     <ClCompile Include="..\platform\platform\scontent.cpp" />
-    <ClCompile Include="eaentitygrid.cpp" />
-    <ClCompile Include="eaentityrect.cpp" />
-    <ClCompile Include="eaentityspecial.cpp" />
+    <ClCompile Include="eetile.cpp" />
+    <ClCompile Include="eelandscape.cpp" />
+    <ClCompile Include="eeknight.cpp" />
     <ClCompile Include="eafactory.cpp" />
     <ClCompile Include="eagrid.cpp" />
     <ClCompile Include="eahistory.cpp" />
@@ -93,9 +93,9 @@
     <ClCompile Include="messageboard.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eaentitygrid.h" />
-    <ClInclude Include="eaentityrect.h" />
-    <ClInclude Include="eaentityspecial.h" />
+    <ClInclude Include="eetile.h" />
+    <ClInclude Include="eelandscape.h" />
+    <ClInclude Include="eeknight.h" />
     <ClInclude Include="eafactory.h" />
     <ClInclude Include="eagrid.h" />
     <ClInclude Include="eahistory.h" />
