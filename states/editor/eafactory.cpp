@@ -108,10 +108,10 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	tools.load(screen_w, screen_h);
 
 	width = 32;	// 64 is the width of a single tile but we divide it
-	entityKnight.init(factory[KNIGHT][0]->getWidth(), factory[KNIGHT][0]->getHeight());
-	entityTiles.init(width);
-	entityUnTiles.init(width);
-	entityLandscape.init();
+	eKnight.init(factory[KNIGHT][0]->getWidth(), factory[KNIGHT][0]->getHeight());
+	eTiles.init(width);
+	eUnTiles.init(width);
+	eLandscape.init();
 }
 
 bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
@@ -262,10 +262,10 @@ void EAFactory::mechanics()
 	int t, x, y;
 	if (history.undo(t, x, y))
 	{
-		if (t == KNIGHT)					entityKnight.remove(x, y);
-		else if (t == TILE)					entityTiles.remove(x, y);
-		else if (t == UNVISIBLE_TILE)		entityUnTiles.remove(x, y);
-		else if (t == LANDSCAPE)			entityLandscape.remove(x, y);
+		if (t == KNIGHT)					eKnight.remove(x, y);
+		else if (t == TILE)					eTiles.remove(x, y);
+		else if (t == UNVISIBLE_TILE)		eUnTiles.remove(x, y);
+		else if (t == LANDSCAPE)			eLandscape.remove(x, y);
 		else if (t == FOE) {}
 		else if (t == LIGHTPOINT) {}
 	}
@@ -275,10 +275,11 @@ void EAFactory::mechanics()
 		history.clear_local();
 		history.fill_local();
 
-		entityKnight.reset();
-		entityTiles.reset();
-		entityUnTiles.reset();
-		entityLandscape.reset();	entityLandscape.init();
+		eKnight.reset();
+		eTiles.reset();
+		eUnTiles.reset();
+		eLandscape.reset();
+		eLandscape.init();
 
 		char t, c;
 		int x, y, id;
@@ -338,9 +339,9 @@ const int& EAFactory::getChosen() const
 void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const int &addY)
 {
 	// Draw knight
-	if (entityKnight.isSet())
+	if (eKnight.isSet())
 	{
-		factory[KNIGHT][0]->setPosition(entityKnight.get().x + addX, (entityKnight.get().y + addY) * -1 + screen_h);
+		factory[KNIGHT][0]->setPosition(eKnight.get().x + addX, (eKnight.get().y + addY) * -1 + screen_h);
 		window->draw(factory[KNIGHT][0]->get());
 	}
 	
@@ -354,14 +355,14 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 	{
 		for (int j = startY; j < endY; ++j)
 		{
-			c = entityTiles.get(i, j);		// Draw tiles
+			c = eTiles.get(i, j);		// Draw tiles
 			if (c != VOID)
 			{
 				factory[TILE][c]->setPosition(i * width + addX, ((j * width + addY) * -1) + screen_h - width);
 				window->draw(factory[TILE][c]->get());
 			}
 
-			c = entityUnTiles.get(i, j);	// Draw Unvisible Tiles
+			c = eUnTiles.get(i, j);	// Draw Unvisible Tiles
 			if (c != VOID)
 			{
 				factory[TILE][c]->setAlpha(0xFF / 2);
@@ -374,12 +375,13 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 
 	// Draw Landscape
 	float x = 0, y = 0;
-	std::vector<EntityRectID> result = entityLandscape.get(-addX, -addY, screen_w, screen_h);
-	BOOST_FOREACH(EntityRectID const& item, result)
+	std::vector<ee::LandscapeBox> result = eLandscape.get(-addX, -addY, screen_w, screen_h);
+	BOOST_FOREACH(ee::LandscapeBox const& item, result)
 	{
-		c = char(item.second.second);
+		c = char(item.second.chosen);
 		x = bg::get<0>(item.first.min_corner()) + addX;
 		y = (bg::get<1>(item.first.min_corner()) + addY + factory[LANDSCAPE][c]->getHeight()) * -1 + screen_h;
+		factory[LANDSCAPE][c]->setScale(item.second.scale.x, item.second.scale.y);
 		factory[LANDSCAPE][c]->setPosition(x, y);
 		window->draw(factory[LANDSCAPE][c]->get());
 	}
@@ -389,7 +391,7 @@ bool EAFactory::isCellEmpty(const int& x, const int& y)
 {
 	if (type == TILE || type == UNVISIBLE_TILE)
 	{
-		if (!entityTiles.isCellEmpty(x, y))
+		if (!eTiles.isCellEmpty(x, y) && !eUnTiles.isCellEmpty(x, y))
 			return false;
 	}
 
@@ -407,17 +409,17 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 	{
 		if(id == -1)	newID = history.getNewID();
 		if(!con)
-		history.removeByID(entityKnight.getID());	// check if knight was added before if yes then delete him
-		success = entityKnight.add(x, y, newID);
+		history.removeByID(eKnight.getID());	// check if knight was added before if yes then delete him
+		success = eKnight.add(x, y, newID);
 	}
-	else if (t == TILE)				success = entityTiles.add(x, y, c);
-	else if (t == UNVISIBLE_TILE)	success = entityUnTiles.add(x, y, c);
+	else if (t == TILE)				success = eTiles.add(x, y, c);
+	else if (t == UNVISIBLE_TILE)	success = eUnTiles.add(x, y, c);
 	else if (t == LANDSCAPE)
 	{
 		if (id == -1)	newID = history.getNewID();
 		Box box(Point(x, y - factory[LANDSCAPE][c]->getHeight()), Point(x + factory[LANDSCAPE][c]->getWidth(), y));
-		IDPair idpair = std::make_pair(newID, c);
-		success = entityLandscape.add(box, idpair);
+		ee::LandscapeEntity le(newID, c, sf::Vector2f(0.5f, 0.5f));
+		success = eLandscape.add(box, le);
 	}
 	else if (t == FOE) {}
 	else if (t == LIGHTPOINT) {}
@@ -430,15 +432,15 @@ void EAFactory::remove(int& x, int& y)
 {
 	int c = 0;
 	y += factory[KNIGHT][0]->getHeight();
-	if (entityKnight.remove(x, y))
-		history.removeByID(entityKnight.getID());
+	if (eKnight.remove(x, y))
+		history.removeByID(eKnight.getID());
 	else
 	{
 		y -= factory[KNIGHT][0]->getHeight();
-		if (entityLandscape.remove(x, y))				history.removeByID(entityLandscape.getID());
+		if (eLandscape.remove(x, y))				history.removeByID(eLandscape.getID());
 		else if (type == FOE) {}
 		else if (type == LIGHTPOINT) {}
-		else if (c = entityTiles.remove(x, y) != -1)	history.remove(TILE, c, x, y);
-		else if (c = entityUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
+		else if (c = eTiles.remove(x, y) != -1)		history.remove(TILE, c, x, y);
+		else if (c = eUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
 	}
 }

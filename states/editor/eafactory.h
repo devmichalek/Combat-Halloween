@@ -1,8 +1,10 @@
 #pragma once
 #include "sprite.h"
-#include "eaentityspecial.h"
-#include "eaentitygrid.h"
-#include "eaentityrect.h"
+
+#include "eetile.h"
+#include "eeknight.h"
+#include "eelandscape.h"
+
 #include "eakind.h"
 #include "eahistory.h"
 #include "eatools.h"
@@ -22,10 +24,10 @@ class EAFactory	: public EAKind
 	EAHistory history;
 
 	// Entities
-	EAEntitySpecial entityKnight;
-	EAEntityGrid entityTiles;
-	EAEntityGrid entityUnTiles;	// Unvisible Tiles
-	EAEntityRect entityLandscape;
+	ee::Knight eKnight;
+	ee::Tile eTiles;
+	ee::Tile eUnTiles;	// Unvisible Tiles
+	ee::Landscape eLandscape;
 
 public:
 	EAFactory();
