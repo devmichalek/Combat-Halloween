@@ -1,32 +1,32 @@
-#include "eaentityspecial.h"
+#include "eeknight.h"
 
-EAEntitySpecial::EAEntitySpecial()
+ee::Knight::Knight()
 {
 	free();
 }
 
-EAEntitySpecial::~EAEntitySpecial()
+ee::Knight::~Knight()
 {
 	free();
 }
 
-void EAEntitySpecial::free()
+void ee::Knight::free()
 {
 	reset();
 }
 
-void EAEntitySpecial::reset()
+void ee::Knight::reset()
 {
 	rect.left = rect.top = -1;
 }
 
-void EAEntitySpecial::init(const int& w, const int& h)
+void ee::Knight::init(const int& w, const int& h)
 {
 	rect.width = w;
 	rect.height = h;
 }
 
-bool EAEntitySpecial::add(const int& x, const int& y, const int& newID)
+bool ee::Knight::add(const int& x, const int& y, const int& newID)
 {
 	rect.left = x;
 	rect.top = y;
@@ -34,7 +34,7 @@ bool EAEntitySpecial::add(const int& x, const int& y, const int& newID)
 	return true;
 }
 
-bool EAEntitySpecial::remove(int& x, int& y)
+bool ee::Knight::remove(int& x, int& y)
 {
 	if (rect.contains(x, y))
 	{
@@ -47,17 +47,17 @@ bool EAEntitySpecial::remove(int& x, int& y)
 	return false;
 }
 
-sf::Vector2f EAEntitySpecial::get()
+sf::Vector2f ee::Knight::get()
 {
 	return sf::Vector2f(static_cast<float>(rect.left), static_cast<float>(rect.top));
 }
 
-bool EAEntitySpecial::isSet()
+bool ee::Knight::isSet()
 {
 	return rect.left != -1 && rect.top != -1;
 }
 
-const int& EAEntitySpecial::getID() const
+const int& ee::Knight::getID() const
 {
 	return ID;
 }
