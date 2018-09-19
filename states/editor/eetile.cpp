@@ -1,18 +1,17 @@
-#include "eaentitygrid.h"
+#include "eetile.h"
 
-
-EAEntityGrid::EAEntityGrid()
+ee::Tile::Tile()
 {
 	array = nullptr;
 	free();
 }
 
-EAEntityGrid::~EAEntityGrid()
+ee::Tile::~Tile()
 {
 	free();
 }
 
-void EAEntityGrid::free()
+void ee::Tile::free()
 {
 	width = 0;
 	max = 0;
@@ -32,7 +31,7 @@ void EAEntityGrid::free()
 	reset();
 }
 
-void EAEntityGrid::reset()
+void ee::Tile::reset()
 {
 	if (array)
 		for (int i = 0; i < max; ++i)
@@ -40,7 +39,7 @@ void EAEntityGrid::reset()
 				array[i][j] = -1;
 }
 
-void EAEntityGrid::init(const int& width)
+void ee::Tile::init(const int& width)
 {
 	free();
 
@@ -57,17 +56,17 @@ void EAEntityGrid::init(const int& width)
 	reset();
 }
 
-bool EAEntityGrid::isCellEmpty(const int &mouseX, const int &mouseY)
+bool ee::Tile::isCellEmpty(const int &mouseX, const int &mouseY)
 {
 	return array[mouseX / width][mouseY / width] == -1;
 }
 
-char EAEntityGrid::get(const int &x, const int &y)
+char ee::Tile::get(const int &x, const int &y)
 {
 	return array[x][y];
 }
 
-bool EAEntityGrid::add(int &mouseX, int &mouseY, const int &chosen)
+bool ee::Tile::add(int &mouseX, int &mouseY, const int &chosen)
 {
 	int x = mouseX / width;
 	int y = mouseY / width;
@@ -81,7 +80,7 @@ bool EAEntityGrid::add(int &mouseX, int &mouseY, const int &chosen)
 	return true;
 }
 
-int EAEntityGrid::remove(int &mouseX, int &mouseY)
+int ee::Tile::remove(int &mouseX, int &mouseY)
 {
 	int x = mouseX / width;
 	int y = mouseY / width;
@@ -132,7 +131,7 @@ int EAEntityGrid::remove(int &mouseX, int &mouseY)
 	return -1;
 }
 
-const int& EAEntityGrid::getMax()
+const int& ee::Tile::getMax()
 {
 	return max;
 }
