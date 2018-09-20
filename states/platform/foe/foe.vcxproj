@@ -47,6 +47,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\common\audio.cpp" />
     <ClCompile Include="..\..\..\common\core.cpp" />
+    <ClCompile Include="..\..\..\common\fpsconsole.cpp" />
     <ClCompile Include="..\..\..\common\music.cpp" />
     <ClCompile Include="..\..\..\common\request.cpp" />
     <ClCompile Include="..\..\..\common\sound.cpp" />
@@ -54,6 +55,7 @@
     <ClCompile Include="..\..\..\common\state.cpp" />
     <ClCompile Include="..\..\..\common\text.cpp" />
     <ClCompile Include="..\..\..\common\thread.cpp" />
+    <ClCompile Include="..\..\..\tools\fps.cpp" />
     <ClCompile Include="..\..\..\tools\loading.cpp" />
     <ClCompile Include="foeanimation.cpp" />
     <ClCompile Include="foefactory.cpp" />
