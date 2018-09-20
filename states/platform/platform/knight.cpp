@@ -171,7 +171,7 @@ void Knight::undoMoveRight(const double &elapsedTime)
 
 void Knight::idle(const double &elapsedTime)
 {
-	if(!coxing.attack && coxing.jumpLine == 0)
+	if(!coxing.attack)
 		state = STATES::IDLE;
 
 	if (coxing.walkTimer > 0)
