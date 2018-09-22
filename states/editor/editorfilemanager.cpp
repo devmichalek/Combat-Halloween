@@ -110,7 +110,11 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 	else if (buttons.isRenameFile())	renameFile();
 	else if (buttons.isDeleteFile())	deleteFile();
 	else if (buttons.isRefresh())		refresh();
-	else if (buttons.isExit())			library.reset();
+	else if (buttons.isExit())
+	{
+		info.setMsgTextActive(false);
+		library.reset();
+	}
 
 
 	if (messageBoard.isActive())

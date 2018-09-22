@@ -105,6 +105,11 @@ bool EFMInfo::isMsgTextActive()
 	return msgText.getAlpha() > 0;
 }
 
+void EFMInfo::setMsgTextActive(bool active)
+{
+	active ? msgText.setAlpha(0xFF) : msgText.setAlpha(0.0f);
+}
+
 void EFMInfo::setOpenedText(std::string msg)
 {
 	openedText.setText(msg);

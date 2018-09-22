@@ -28,6 +28,7 @@ public:
 	void mechanics(const double &elapsedTime);
 
 	bool isMsgTextActive();
+	void setMsgTextActive(bool active = true);
 	void setOpenedText(std::string msg = "-");
 	std::string setChosenText(std::string msg = "-");
 	void setMsgText(std::string msg);

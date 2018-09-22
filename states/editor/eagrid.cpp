@@ -82,6 +82,10 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	arrows[BOT]->load("images/buttons/bot.png");
 	arrows[CENTER]->load("images/buttons/disagree.png");
 	if (Loading::isError())	return;
+
+	for (int i = 0; i < ARROWS::COUNT; ++i)
+		arrows[i]->setVolume(0.0f); // muted
+
 	for (int i = 0; i < ARROWS::COUNT; ++i)
 		arrows[i]->setScale(0.25, 0.25);
 	int space = static_cast<int>(screen_w / 256);
