@@ -24,5 +24,6 @@ namespace cmm
 
 		static sf::Color getLockedColor()	{ return sf::Color(0xDD, 0xDD, 0xDD); }
 		static sf::Color getLoadingColor()	{ return sf::Color(0xFF, 0xFF, 0xFF); }
+		static std::string floatToStr(const float &value);
 	};
 }
