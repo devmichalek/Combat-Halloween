@@ -17,7 +17,7 @@ namespace ee // Editor Entity
 
 		void init(const int& w, const int& h);
 		bool add(const int& x, const int& y, const int& newID);
-		bool remove(int& x, int& y);
+		bool remove(int& x, int y);
 		sf::Vector2f get();	// pos x y
 		bool isSet();
 		const int& getID() const;

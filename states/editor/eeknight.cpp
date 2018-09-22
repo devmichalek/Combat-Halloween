@@ -34,12 +34,12 @@ bool ee::Knight::add(const int& x, const int& y, const int& newID)
 	return true;
 }
 
-bool ee::Knight::remove(int& x, int& y)
+bool ee::Knight::remove(int& x, int y)
 {
 	if (rect.contains(x, y))
 	{
-		x = rect.left;
-		y = rect.top;
+		//x = rect.left;
+		//y = rect.top;
 		add(-1, -1, ID);	// same ID
 		return true;
 	}
