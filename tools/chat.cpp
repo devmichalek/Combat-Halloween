@@ -210,6 +210,8 @@ void Chat::handle(const sf::Event &event)
 
 void Chat::draw(sf::RenderWindow* &window)
 {
+	fps.draw(window);
+
 	if (!active && globalYScale == 0)
 		return;
 
@@ -231,8 +233,6 @@ void Chat::draw(sf::RenderWindow* &window)
 
 	if (counter < line / 2)
 		window->draw(arrow.get());
-
-	fps.draw(window);
 }
 
 void Chat::mechanics(const double &elapsedTime)
@@ -329,7 +329,27 @@ bool Chat::isCommand()
 	{
 		used = false;
 
-		if (compCommand("@fps"))
+		if (compCommand("@help"))
+		{
+			system("start local/help.html");
+			return false;
+		}
+		else if (compCommand("@github"))
+		{
+			system("start https://github.com/devmichalek/Combat-Halloween");
+			return false;
+		}
+		else if (compCommand("@scores"))
+		{
+			system("start empty");
+			return false;
+		}
+		else if (compCommand("@website"))
+		{
+			system("start http://amichalek.pl/combathalloween/");
+			return false;
+		}
+		else if (compCommand("@fps"))
 		{
 			fps.setActive(!fps.isActive());
 			return false;
