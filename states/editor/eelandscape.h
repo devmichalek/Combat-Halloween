@@ -7,29 +7,58 @@
 
 namespace ee // Editor Entity
 {
-	struct LandscapeEntity
+	struct LandscapeEntity // represents a single element
 	{
 		int id;
 		int chosen;
-		sf::Vector2f scale;
-		LandscapeEntity(int newID, int newChosen, sf::Vector2f newScale) : id(newID), chosen(newChosen), scale(newScale) {}
-		bool operator==(const LandscapeEntity &le) const
-		{
-			return id == le.id;
-		}
+		float scale;
+
+		LandscapeEntity(int newID = -1, int newChosen = 1, float newScale = 1.0f);
+		~LandscapeEntity();
+		bool operator==(const LandscapeEntity&) const;
 	};
 
-	//using LandscapePair = std::pair<int, int>;	// chosen + ID
 	using LandscapeBox = std::pair<Box, LandscapeEntity>;
 	
 	class Landscape
 	{
-		typedef bgi::rtree<LandscapeBox, bgi::quadratic<16>> LandscapeTree;
+		float screen_w;
+		float screen_h;
 
-		int count;
-		int lastID;
+		typedef bgi::rtree<LandscapeBox, bgi::quadratic<16>> LandscapeTree;
 		LandscapeTree* tree;
+
 		std::vector<LandscapeBox> result;
+		LandscapeBox last;	// last removed/added LandscapeBox
+
+		enum TEXTS
+		{
+			SCALE = 0,
+			SCALE_EDIT,
+			GLOBAL,
+			GLOBAL_EDIT,
+			SIZE
+		};
+		std::vector<cmm::Text*> texts;
+
+		enum RECTS
+		{
+			TOP_MINUS = 0,
+			BOT_MINUS,
+			TOP_PLUS,
+			BOT_PLUS
+		};
+		std::vector<bool> rect_states;
+		std::vector<sf::Rect<int>> rects;
+
+		cmm::Sprite board;
+		cmm::Sprite plus;
+		cmm::Sprite minus;
+
+		float globalScale;
+		bool active;
+		std::string str;
+		float min, max;
 
 	public:
 		Landscape();
@@ -40,41 +69,25 @@ namespace ee // Editor Entity
 		void reset();	// empty the tree
 
 		void init();	// builds tree
-		const std::vector<LandscapeBox>& get(const int &addX, const int &addY, const float &screen_w, const float &screen_h);
-		bool add(const Box &box, const LandscapeEntity &le);
-		bool remove(int &mouseX, int &mouseY);
-		int getID();
-	};
-}
-
-namespace ed // Editor Deck
-{
-	class Landscape
-	{
-		cmm::Sprite board;
-		cmm::Sprite plus;
-		cmm::Sprite minus;
-		cmm::Text scaleTextForm;
-		cmm::Text scaleText;
-
-		bool active;
-		int target;
-		float min, max;
-
-		std::vector<int> ids;
-	public:
-		Landscape();
-		~Landscape();
-	private:
-		void free();
-	public:
-		void reset();
-
 		void load(const float &screen_w, const float &screen_h);
-		void handle(const sf::Event &event);
-		void draw(sf::RenderWindow* &window);
+		bool handle(const sf::Event &event);	// returns true if it was open
+		void draw(sf::RenderWindow* &window, cmm::Sprite* &object, const int &addX, const int &addY);
+		void mechanics(const double &elapsedTime);
 
-		int getTarget(); // returns id
-		std::string getNewString();
+		const std::vector<LandscapeBox>& get(const int &addX, const int &addY, const float &screen_w, const float &screen_h);
+		bool add(const Box &box, LandscapeEntity &le);
+		bool remove(int &mouseX, int &mouseY);
+		const int& getLastID();			// get last deleted LandscapeBox's id
+		LandscapeBox getLast();
+
+		void setActive(bool newActive = true);
+		const bool& isActive() const;
+		const int& getChosen();
+		void setAI(std::string &ai);
+
+	private:
+		void setPosition(const int addX = 0, const int addY = 0);	// x y for board
+		void setTexts();
+		void setRects();
 	};
 }
