@@ -249,7 +249,7 @@ bool EAInfo::areOptionsGetable()
 {
 	if (type == VOID)			return false;
 	else if (type == TILE)		return false;
-	else if (type == LANDSCAPE)	return false;
+	//else if (type == LANDSCAPE)	return false;
 
 	return true;
 }
