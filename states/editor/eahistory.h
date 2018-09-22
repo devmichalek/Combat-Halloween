@@ -37,7 +37,7 @@ public:
 	bool undo(int &t, int &x, int &y);
 	void remove(int t, const int &c, const int &x, const int &y);
 	void removeByID(const int &ID);
-	void modify(const int &t, const int &c, const int &x, const int &y, const std::string &ai);
-	void modifyByID(const int &ID, const std::string &ai);
+	//void modify(const int &t, const int &c, const int &x, const int &y, const std::string &ai);
+	//void modifyByID(const int &ID, const std::string &ai);
 	const int getNewID();
 };

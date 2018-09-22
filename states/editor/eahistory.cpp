@@ -248,15 +248,15 @@ void EAHistory::removeByID(const int &ID)
 	}
 }
 
-void EAHistory::modify(const int &t, const int &c, const int &x, const int &y, const std::string &ai)	// we promise that the one we modify has no ID (ID = -1)
-{
-	saveVersion = 1;
-}
-
-void EAHistory::modifyByID(const int &ID, const std::string &ai)
-{
-	saveVersion = 1;
-}
+//void EAHistory::modify(const int &t, const int &c, const int &x, const int &y, const std::string &ai)	// we promise that the one we modify has no ID (ID = -1)
+//{
+//	saveVersion = 1;
+//}
+//
+//void EAHistory::modifyByID(const int &ID, const std::string &ai)
+//{
+//	saveVersion = 1;
+//}
 
 const int EAHistory::getNewID()
 {
