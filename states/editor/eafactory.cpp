@@ -1,6 +1,7 @@
 #include "eafactory.h"
 #include "logconsole.h"
 #include "loading.h"
+#include "boost/scope_exit.hpp"
 
 EAFactory::EAFactory()
 {
@@ -49,6 +50,7 @@ void EAFactory::reset()
 	change = false;
 	redBacklight = false;
 	tools.reset();
+	history.reset();
 }
 
 
@@ -91,7 +93,7 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 		factory[LANDSCAPE].push_back(new cmm::Sprite());
 		Loading::add(factory[LANDSCAPE][i]->load("images/platform/landscape/" + std::to_string(i) + ".png"));
 		if (Loading::isError())	return;
-		factory[LANDSCAPE][i]->setScale(scale, scale);
+		factory[LANDSCAPE][i]->setScale(0.65, 0.65); // change it later
 	}
 
 	// Foes
@@ -111,18 +113,24 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	eKnight.init(factory[KNIGHT][0]->getWidth(), factory[KNIGHT][0]->getHeight());
 	eTiles.init(width);
 	eUnTiles.init(width);
-	eLandscape.init();
+	eLandscape.load(screen_w, screen_h);
 }
 
 bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 {
+	// Delete button
 	if (tools.handle(event))
 	{
 		type = VOID;
 		chosen = 0;
 		change = true;
 	}
+	
+	// if one deck is active then return false
+	if(handle_deck(event))
+		return false;
 
+	// scroll
 	if (type != VOID)
 	{
 		if (event.type == sf::Event::MouseWheelMoved)
@@ -165,7 +173,7 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 			if (!redBacklight)	// remove/add
 				tools.isDeleteMode() ? remove(mouseX, mouseY) : add(mouseX, mouseY, type, chosen);
 		}
-		else if (event.mouseButton.button == sf::Mouse::Right)
+		if (event.mouseButton.button == sf::Mouse::Right)
 		{
 			int mouseX = event.mouseButton.x + (addX * -1);
 			int mouseY = event.mouseButton.y * -1 + screen_h + (addY * -1);
@@ -173,7 +181,7 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 			redBacklight = !isCellEmpty(mouseX, mouseY);
 			if (!redBacklight)	// add
 			{
-				// showInfo(mouseX, mouseY);
+				unfold(mouseX, mouseY);
 			}
 		}
 	}
@@ -240,7 +248,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 		tempX = factory[t][chosen]->getX();
 		tempY = factory[t][chosen]->getY();
 	}
-
+	
 	drawPrivate(window, addX, addY);
 
 	if (type != VOID)
@@ -257,7 +265,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 	tools.drawTools(window);
 }
 
-void EAFactory::mechanics()
+void EAFactory::mechanics(const double &elapsedTime)
 {
 	int t, x, y;
 	if (history.undo(t, x, y))
@@ -278,7 +286,6 @@ void EAFactory::mechanics()
 		eKnight.reset();
 		eTiles.reset();
 		eUnTiles.reset();
-		eLandscape.reset();
 		eLandscape.init();
 
 		char t, c;
@@ -294,6 +301,8 @@ void EAFactory::mechanics()
 			add(x, y, t, c, id, ai, true);
 		}
 	}
+
+	mechanics_deck(elapsedTime);
 }
 
 
@@ -338,6 +347,9 @@ const int& EAFactory::getChosen() const
 
 void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const int &addY)
 {
+	// Draw decks
+	eLandscape.draw(window, factory[LANDSCAPE][eLandscape.getChosen()], addX, addY);
+
 	// Draw knight
 	if (eKnight.isSet())
 	{
@@ -381,7 +393,7 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 		c = char(item.second.chosen);
 		x = bg::get<0>(item.first.min_corner()) + addX;
 		y = (bg::get<1>(item.first.min_corner()) + addY + factory[LANDSCAPE][c]->getHeight()) * -1 + screen_h;
-		factory[LANDSCAPE][c]->setScale(item.second.scale.x, item.second.scale.y);
+		factory[LANDSCAPE][c]->setScale(item.second.scale, item.second.scale);
 		factory[LANDSCAPE][c]->setPosition(x, y);
 		window->draw(factory[LANDSCAPE][c]->get());
 	}
@@ -418,8 +430,9 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 	{
 		if (id == -1)	newID = history.getNewID();
 		Box box(Point(x, y - factory[LANDSCAPE][c]->getHeight()), Point(x + factory[LANDSCAPE][c]->getWidth(), y));
-		ee::LandscapeEntity le(newID, c, sf::Vector2f(0.5f, 0.5f));
+		ee::LandscapeEntity le(newID, c);
 		success = eLandscape.add(box, le);
+		eLandscape.setAI(ai);
 	}
 	else if (t == FOE) {}
 	else if (t == LIGHTPOINT) {}
@@ -430,17 +443,65 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 
 void EAFactory::remove(int& x, int& y)
 {
-	int c = 0;
-	y += factory[KNIGHT][0]->getHeight();
-	if (eKnight.remove(x, y))
-		history.removeByID(eKnight.getID());
+	
+	if (eKnight.remove(x, y + factory[KNIGHT][0]->getHeight()))	history.removeByID(eKnight.getID());
+	else if (eLandscape.remove(x, y))							history.removeByID(eLandscape.getLastID());
+	else if (type == FOE) {}
+	else if (type == LIGHTPOINT) {}
 	else
 	{
-		y -= factory[KNIGHT][0]->getHeight();
-		if (eLandscape.remove(x, y))				history.removeByID(eLandscape.getID());
-		else if (type == FOE) {}
-		else if (type == LIGHTPOINT) {}
-		else if (c = eTiles.remove(x, y) != -1)		history.remove(TILE, c, x, y);
+		int c = 0;	// chosen
+		if (c = eTiles.remove(x, y) != -1)			history.remove(TILE, c, x, y);
 		else if (c = eUnTiles.remove(x, y) != -1)	history.remove(UNVISIBLE_TILE, c, x, y);
 	}
+}
+
+void EAFactory::unfold(int& x, int& y)
+{
+	std::string newAI = "";
+
+	if (eLandscape.isActive())
+	{
+		ee::LandscapeBox box = eLandscape.getLast();
+		eLandscape.add(box.first, box.second);
+		eLandscape.setAI(newAI);
+		history.add(LANDSCAPE, box.second.chosen, bg::get<0>(box.first.min_corner()), bg::get<1>(box.first.min_corner()), newAI, box.second.id);
+	}
+
+	if (eLandscape.remove(x, y))
+	{
+		eLandscape.setActive();
+		history.removeByID(eLandscape.getLastID());
+	}
+}
+
+bool EAFactory::handle_deck(const sf::Event &event)
+{
+	bool ret_code = false;
+	BOOST_SCOPE_EXIT(&ret_code, &type, &chosen)
+	{
+		if (ret_code)
+		{
+			type = VOID;
+			chosen = 0;
+		}
+	} BOOST_SCOPE_EXIT_END;
+
+	if (eLandscape.handle(event))
+	{
+		ee::LandscapeBox box = eLandscape.getLast();
+		std::string newAI = "";
+		eLandscape.setAI(newAI);
+		history.add(LANDSCAPE, box.second.chosen, bg::get<0>(box.first.min_corner()), bg::get<1>(box.first.min_corner()), newAI, box.second.id);
+	}
+
+	if (eLandscape.isActive())
+		ret_code = true;
+
+	return ret_code;
+}
+
+void EAFactory::mechanics_deck(const double &elapsedTime)
+{
+	eLandscape.mechanics(elapsedTime);
 }

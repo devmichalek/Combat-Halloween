@@ -9,7 +9,6 @@
 #include "eahistory.h"
 #include "eatools.h"
 
-// This objects only draws things and collect them.
 class EAFactory	: public EAKind
 {
 	int width;
@@ -40,7 +39,7 @@ public:
 	void load(const float& screen_w, const float& screen_h);
 	bool handle(const sf::Event &event, const int &addX, const int &addY);
 	void draw(sf::RenderWindow* &window, const int &addX, const int &addY);
-	void mechanics();
+	void mechanics(const double &elapsedTime);
 
 	void setPosition(float x, float y);
 	bool isChange();
@@ -54,5 +53,8 @@ private:
 	bool isCellEmpty(const int& x, const int& y);
 	void add(int& x, int& y, int t, int c, int id = -1, std::string ai = "", bool con = false);
 	void remove(int& x, int& y);
-	//void unfold(const int& x, const int& y);	// show options (if they are)
+	void unfold(int& x, int& y);	// show options (if they are)
+
+	bool handle_deck(const sf::Event &event);
+	void mechanics_deck(const double &elapsedTime);
 };
