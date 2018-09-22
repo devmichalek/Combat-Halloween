@@ -83,6 +83,9 @@
     <ClCompile Include="..\..\common\audio.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\logconsole.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="settings.h" />

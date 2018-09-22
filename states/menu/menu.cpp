@@ -308,11 +308,6 @@ void Menu::mechanics(const double &elapsedTime)
 				chat.isActive() = false;
 			}
 
-			// Link buttons in addition.
-			else if (chat.compCommand("@github"))		github.openWebsite();
-			else if (chat.compCommand("@scores"))		scores.openWebsite();
-			else if (chat.compCommand("@website"))		website.openWebsite();
-
 			// Volume
 			else if (chat.isNewMusicVolume())
 			{
