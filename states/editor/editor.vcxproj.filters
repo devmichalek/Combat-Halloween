@@ -173,6 +173,9 @@
     <ClCompile Include="eetile.cpp">
       <Filter>Editor Action\Action\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\common\logconsole.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="messageboard.h">
