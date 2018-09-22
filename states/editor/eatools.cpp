@@ -1,4 +1,5 @@
 #include "eatools.h"
+#include "loading.h"
 
 EATools::EATools()
 {
@@ -31,15 +32,19 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	this->screen_w = static_cast<int>(screen_w);
 	this->screen_h = static_cast<int>(screen_h);
 
-	checkedIcon.load("images/icons/checkedicon.png");
+	Loading::add(checkedIcon.load("images/icons/checkedicon.png"));
+	if (Loading::isError()) return;
 	checkedIcon.setScale(0.3, 0.3);
 	checkedIcon.setAlpha(0xFF / 1.5);
 
 	deleteButton.load("images/buttons/rubbish.png");
+	if (Loading::isError()) return;
+	deleteButton.setVolume(0.0f); // muted
 	deleteButton.setScale(screen_w / 2560, screen_h / 1440);
 	deleteButton.setPosition(screen_w - screen_w / 85 - deleteButton.getWidth() * 3, screen_h / 144);
 
-	deleteText.setFont(cmm::JCANDLE_FONT_PATH);
+	Loading::add(deleteText.setFont(cmm::JCANDLE_FONT_PATH));
+	if (Loading::isError()) return;
 	deleteText.setSize(screen_w / 60);
 	deleteText.setAlpha(0xFF);
 	deleteText.setFillColor(sf::Color::White);

@@ -73,6 +73,8 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 	buttons[LEVELMENU]->setPosition(buttons[MENU]->getRight() + screen_w / 256, screen_h / 144);
 	buttons[PLAY]->setPosition(screen_w - screen_w / 256 - buttons[PLAY]->getWidth(), screen_h / 144);
 
+	setVolume(0.0f); // muted
+
 	std::string pathToFont = cmm::JCANDLE_FONT_PATH;
 	for (auto &it : labels)
 	{

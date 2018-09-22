@@ -123,6 +123,7 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 	// The Rest
 	fileButton.load("images/buttons/save.png");
 	if (Loading::isError())	return;
+	fileButton.setVolume(0.0f); // muted
 	fileButton.setScale(screen_w / 2560, screen_h / 1440);
 	fileButton.setPosition(screen_w - screen_w / 128 - fileButton.getWidth() * 2, screen_h / 144);
 

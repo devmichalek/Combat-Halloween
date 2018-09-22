@@ -26,12 +26,7 @@ void Editor::set()
 {
 	if (!loaded)
 	{
-
-		// Sound.
-		// bool soundPlayable = cmm::Sound::getGlobalPlayable();
-		float soundVolume = cmm::Sound::getGlobalVolume();
-		navigation.setVolume(soundVolume);
-
+		// ...
 	}
 }
 
@@ -46,7 +41,6 @@ void Editor::reset()
 	next = false;
 	exit = false;
 	loaded = false;
-	
 
 	navigation.reset();
 	editorFileManager.reset();
