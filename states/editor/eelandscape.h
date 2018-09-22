@@ -29,7 +29,7 @@ namespace ee // Editor Entity
 		LandscapeTree* tree;
 
 		std::vector<LandscapeBox> result;
-		LandscapeBox last;	// last removed/added LandscapeBox
+		LandscapeBox last;
 
 		enum TEXTS
 		{
@@ -55,10 +55,11 @@ namespace ee // Editor Entity
 		cmm::Sprite plus;
 		cmm::Sprite minus;
 
-		float globalScale;
+		inline static float globalScale = 0.65f;
 		bool active;
 		std::string str;
 		float min, max;
+		float w, h;
 
 	public:
 		Landscape();
@@ -75,7 +76,7 @@ namespace ee // Editor Entity
 		void mechanics(const double &elapsedTime);
 
 		const std::vector<LandscapeBox>& get(const int &addX, const int &addY, const float &screen_w, const float &screen_h);
-		bool add(const Box &box, LandscapeEntity &le);
+		bool add(const Box &box, const LandscapeEntity &le);
 		bool remove(int &mouseX, int &mouseY);
 		const int& getLastID();			// get last deleted LandscapeBox's id
 		LandscapeBox getLast();
@@ -84,6 +85,7 @@ namespace ee // Editor Entity
 		const bool& isActive() const;
 		const int& getChosen();
 		void setAI(std::string &ai);
+		static float getGlobalScale() { return globalScale; }
 
 	private:
 		void setPosition(const int addX = 0, const int addY = 0);	// x y for board

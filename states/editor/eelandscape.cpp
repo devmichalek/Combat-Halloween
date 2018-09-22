@@ -1,5 +1,6 @@
 #include "eelandscape.h"
 #include "logconsole.h"
+#include "loading.h"
 
 ee::LandscapeEntity::LandscapeEntity(int newID, int newChosen, float newScale)
 : id(newID), chosen(newChosen), scale(newScale)
@@ -49,8 +50,6 @@ void ee::Landscape::free()
 	if (!rects.empty())
 		rects.clear();
 
-	globalScale = 0.65f;
-	last.second.scale = globalScale;
 	min = 0.4f; // 40%
 	max = 1.0f; // 100%
 
@@ -63,6 +62,7 @@ void ee::Landscape::reset()
 
 	active = false;
 	str = "";
+	w = h = 0;
 
 	if (tree)
 	{
@@ -85,13 +85,15 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	board.load("images/other/splank.png");
+	Loading::add(board.load("images/other/splank.png"));
+	if (Loading::isError())	return;
 	board.setScale(screen_w / 5120, screen_h / 2880);
 
 	for (int i = 0; i < SIZE; ++i)
 	{
 		texts.push_back(new cmm::Text);
-		texts[i]->setFont(cmm::JAPOKKI_FONT_PATH);
+		Loading::add(texts[i]->setFont(cmm::JAPOKKI_FONT_PATH));
+		if (Loading::isError())	return;
 		texts[i]->setSize(screen_h / 35);
 		texts[i]->setAlpha(0xFF);
 	}
@@ -102,9 +104,10 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 	texts[SCALE]->setFillColor(cmm::LogConsole::getLockedColor());
 	texts[GLOBAL]->setFillColor(cmm::LogConsole::getLockedColor());
 
-	plus.load("images/buttons/plus.png", 3);
+	Loading::add(plus.load("images/buttons/plus.png", 3));
+	Loading::add(minus.load("images/buttons/minus.png", 3));
+	if (Loading::isError())	return;
 	plus.setScale(screen_w / 3840, screen_h / 2160);
-	minus.load("images/buttons/minus.png", 3);
 	minus.setScale(screen_w / 3840, screen_h / 2160);
 
 	for (int i = 0; i < SIZE; ++i)
@@ -142,7 +145,7 @@ bool ee::Landscape::handle(const sf::Event &event)
 				for (auto it : rect_states)
 					it = false;
 
-				add(last.first, last.second);
+				tree->insert(last);
 				active = false;
 				return true;
 			}
@@ -154,6 +157,16 @@ bool ee::Landscape::handle(const sf::Event &event)
 		{
 			for (auto it : rect_states)
 				it = false;
+		}
+	}
+
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			tree->insert(last);
+			active = false;
+			return true;
 		}
 	}
 
@@ -190,7 +203,9 @@ void ee::Landscape::draw(sf::RenderWindow* &window, cmm::Sprite* &object, const 
 	float tX = bg::get<0>(last.first.min_corner()) + addX;
 	float tY = (bg::get<1>(last.first.min_corner()) + addY + object->getHeight()) * -1 + screen_h;
 	object->setPosition(tX, tY);
+	object->setColor(sf::Color::Yellow);
 	window->draw(object->get());
+	object->setColor(sf::Color::White);	// set back
 }
 
 void ee::Landscape::mechanics(const double &elapsedTime)
@@ -230,6 +245,10 @@ void ee::Landscape::mechanics(const double &elapsedTime)
 
 	if (change)
 	{
+		int tX = bg::get<0>(last.first.min_corner());
+		int tY = bg::get<1>(last.first.min_corner());
+		Box newBox(Point(tX, tY), Point(tX + w * last.second.scale, tY + h * last.second.scale));
+		last.first = newBox;
 		setTexts();
 	}
 }
@@ -244,10 +263,9 @@ const std::vector<ee::LandscapeBox> &ee::Landscape::get(const int &addX, const i
 	return result;
 }
 
-bool ee::Landscape::add(const Box &box, LandscapeEntity &le)
+bool ee::Landscape::add(const Box &box, const LandscapeEntity &le)
 {
 	last = std::make_pair(box, le);
-	last.second.scale = globalScale;
 	tree->insert(last);
 	return true;
 }
@@ -260,21 +278,21 @@ bool ee::Landscape::remove(int &mouseX, int &mouseY)
 	
 	if (!result.empty())
 	{
-		//mouseX = bg::get<0>(result[0].first.min_corner());
-		//mouseX = bg::get<1>(result[0].first.min_corner());
+		mouseX = bg::get<0>(result[0].first.min_corner());
+		mouseY = bg::get<1>(result[0].first.min_corner());
 		tree->remove(result[0]);
 		last = result[0];
+
+		// set oryginal 100% width and height
+		w = (bg::get<0>(last.first.max_corner()) - bg::get<0>(last.first.min_corner())) / last.second.scale;
+		h = (bg::get<1>(last.first.max_corner()) - bg::get<1>(last.first.min_corner())) / last.second.scale;
 		return true;
 	}
 	
 	return false;
 }
 
-//void ee::Landscape::removeByID(const int &ID)
-//{
-//	lastRemoved.second.id = ID;
-//	tree->remove(lastRemoved);
-//}
+
 
 const int& ee::Landscape::getLastID()
 {
@@ -288,7 +306,7 @@ ee::LandscapeBox ee::Landscape::getLast()
 
 void ee::Landscape::setPosition(const int addX, const int addY)
 {
-	board.setPosition(bg::get<0>(last.first.min_corner()) + addX, bg::get<1>(last.first.max_corner()) - addY);
+	board.setPosition(bg::get<0>(last.first.min_corner()) + addX, (bg::get<1>(last.first.min_corner()) + addY) * -1 + screen_h);
 	setTexts();
 	setRects();
 }
@@ -318,24 +336,6 @@ void ee::Landscape::setRects()
 
 
 
-
-
-
-
-
-
-
-
-
-//
-//void ed::Landscape::set(ee::LandscapeBox newBox)
-//{
-//	box = newBox;
-//	active = true;
-//	setPosition(bg::get<0>(box.first.min_corner()), bg::get<1>(box.first.max_corner()));
-//}
-
-
 void ee::Landscape::setActive(bool newActive)
 {
 	active = newActive;
@@ -350,33 +350,10 @@ const bool& ee::Landscape::isActive() const
 	return active;
 }
 
-//bool ed::Landscape::hasClosed()
-//{
-//	return !active && box.second.id != -1;
-//}
-//
-//void ed::Landscape::resetID()
-//{
-//	box.second.id = -1;
-//}
-
-
-
-//const int& ed::Landscape::getID()
-//{
-//	return box.second.id;
-//}
-
 const int& ee::Landscape::getChosen()
 {
 	return last.second.chosen;
 }
-
-//const std::string& ee::Landscape::getNewString()
-//{
-//	str = "ai:
-//	return str;
-//}
 
 void ee::Landscape::setAI(std::string &ai)
 {
@@ -385,14 +362,3 @@ void ee::Landscape::setAI(std::string &ai)
 		ai = "(scale:" + cmm::LogConsole::floatToStr(last.second.scale) + ")";
 	}
 }
-
-//
-//const ee::LandscapeBox& ed::Landscape::getNewBox() const
-//{
-//	return box;
-//}
-//
-//const float& ed::Landscape::getNewGlobalScale() const
-//{
-//	return globalScale;
-//}

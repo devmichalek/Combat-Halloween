@@ -93,7 +93,7 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 		factory[LANDSCAPE].push_back(new cmm::Sprite());
 		Loading::add(factory[LANDSCAPE][i]->load("images/platform/landscape/" + std::to_string(i) + ".png"));
 		if (Loading::isError())	return;
-		factory[LANDSCAPE][i]->setScale(0.65, 0.65); // change it later
+		factory[LANDSCAPE][i]->setScale(ee::Landscape::getGlobalScale(), ee::Landscape::getGlobalScale());
 	}
 
 	// Foes
@@ -256,9 +256,15 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 		redBacklight ? factory[t][chosen]->setColor(cmm::LogConsole::getErrorColor()) : factory[t][chosen]->setColor(sf::Color::White);
 		type == UNVISIBLE_TILE ? factory[t][chosen]->setAlpha(0xFF / 2) : factory[t][chosen]->setAlpha(0xFF);
 		factory[t][chosen]->setPosition(tempX, tempY);
+
+		if(t == LANDSCAPE) // set current global scale for landscape
+			factory[t][chosen]->setScale(ee::Landscape::getGlobalScale(), ee::Landscape::getGlobalScale());
+
 		window->draw(factory[t][chosen]->get());
+
 		if (redBacklight)			factory[t][chosen]->setColor(sf::Color::White);	// set back
 		if(type == UNVISIBLE_TILE)	factory[t][chosen]->setAlpha(0xFF);				// set back
+
 		tools.draw(window, factory[t], chosen);
 	}
 
@@ -347,9 +353,6 @@ const int& EAFactory::getChosen() const
 
 void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const int &addY)
 {
-	// Draw decks
-	eLandscape.draw(window, factory[LANDSCAPE][eLandscape.getChosen()], addX, addY);
-
 	// Draw knight
 	if (eKnight.isSet())
 	{
@@ -391,19 +394,22 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 	BOOST_FOREACH(ee::LandscapeBox const& item, result)
 	{
 		c = char(item.second.chosen);
+		factory[LANDSCAPE][c]->setScale(item.second.scale, item.second.scale);
 		x = bg::get<0>(item.first.min_corner()) + addX;
 		y = (bg::get<1>(item.first.min_corner()) + addY + factory[LANDSCAPE][c]->getHeight()) * -1 + screen_h;
-		factory[LANDSCAPE][c]->setScale(item.second.scale, item.second.scale);
 		factory[LANDSCAPE][c]->setPosition(x, y);
 		window->draw(factory[LANDSCAPE][c]->get());
 	}
+
+	// Draw decks
+	eLandscape.draw(window, factory[LANDSCAPE][eLandscape.getChosen()], addX, addY);
 }
 
 bool EAFactory::isCellEmpty(const int& x, const int& y)
 {
 	if (type == TILE || type == UNVISIBLE_TILE)
 	{
-		if (!eTiles.isCellEmpty(x, y) && !eUnTiles.isCellEmpty(x, y))
+		if (!eTiles.isCellEmpty(x, y) || !eUnTiles.isCellEmpty(x, y))
 			return false;
 	}
 
@@ -429,8 +435,12 @@ void EAFactory::add(int& x, int& y, int t, int c, int id, std::string ai, bool c
 	else if (t == LANDSCAPE)
 	{
 		if (id == -1)	newID = history.getNewID();
+		float scale = ee::Landscape::getGlobalScale();
+		if(!ai.empty())
+			scale = boost::lexical_cast<float>(ai.substr(ai.find("scale:") + 6, ai.find(")") - (ai.find("scale:") + 6)));
+		factory[LANDSCAPE][c]->setScale(scale, scale);
 		Box box(Point(x, y - factory[LANDSCAPE][c]->getHeight()), Point(x + factory[LANDSCAPE][c]->getWidth(), y));
-		ee::LandscapeEntity le(newID, c);
+		ee::LandscapeEntity le(newID, c, scale);
 		success = eLandscape.add(box, le);
 		eLandscape.setAI(ai);
 	}
