@@ -196,7 +196,7 @@ void Tiles::switchCollision(bool collision)
 	this->collision = collision;
 }
 
-bool Tiles::checkCollision(sf::Rect<int> &rect, const int add)
+bool Tiles::checkCollisionV(sf::Rect<int> &rect, const int add)
 {
 	sf::Rect<int> tile(sf::Vector2i(0, 0), sf::Vector2i(width, width));
 	int l = static_cast<int> (border_x / width);
@@ -215,7 +215,7 @@ bool Tiles::checkCollision(sf::Rect<int> &rect, const int add)
 				tile.top = static_cast<int>(-(j * width) + screen_h - width);
 				if (tile.intersects(rect))
 				{
-					if(collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					if (collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
 					rect.top += add;
 					return true;
 				}
@@ -235,5 +235,47 @@ bool Tiles::checkCollision(sf::Rect<int> &rect, const int add)
 	}
 
 	rect.top += add;
+	return false;
+}
+
+bool Tiles::checkCollisionH(sf::Rect<int> &rect, const int add)
+{
+	sf::Rect<int> tile(sf::Vector2i(0, 0), sf::Vector2i(width, width));
+	int l = static_cast<int> (border_x / width);
+	int r = static_cast<int> (border_x + screen_w) / width;
+	int b = static_cast<int> (border_y / width);
+	int t = static_cast<int> ((border_y + screen_h) / width);
+	rect.left -= add;
+
+	for (int i = l; i < r; ++i)
+	{
+		for (int j = b; j < t; ++j)
+		{
+			if (tiles[i][j] != -1)
+			{
+				tile.left = i * width;
+				tile.top = static_cast<int>(-(j * width) + screen_h - width);
+				if (tile.intersects(rect))
+				{
+					if(collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					rect.left += add;
+					return true;
+				}
+			}
+			else if (untiles[i][j] != -1)
+			{
+				tile.left = i * width;
+				tile.top = static_cast<int>(-(j * width) + screen_h - width);
+				if (tile.intersects(rect))
+				{
+					if (collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					rect.left += add;
+					return true;
+				}
+			}
+		}
+	}
+
+	rect.left += add;
 	return false;
 }

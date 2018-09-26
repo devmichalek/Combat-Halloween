@@ -234,32 +234,31 @@ void Platform::mechanics(const double &elapsedTime)
 				chat.setError();
 		}
 
-		knight.mechanics(elapsedTime);
-		if (knight.gravity())
-		{
-			if (tiles.checkCollision(knight.getRect()))
-				knight.undoGravity();
-		}
+		const float floatElapsedTime = static_cast<float>(elapsedTime);
+		knight.mechanics(floatElapsedTime);
+		knight.gravity();
+		if (tiles.checkCollisionV(knight.getRect(), -1))
+			knight.undoGravity();
 		
-		if (knight.moveLeft(elapsedTime))
+		if (knight.moveLeft(floatElapsedTime))
 		{
-			if (tiles.checkCollision(knight.getRect(), 2))
-				knight.undoMoveLeft(elapsedTime);
+			if (tiles.checkCollisionH(knight.getRect(), 1))
+				knight.undoMoveLeft(floatElapsedTime);
 		}
-		else if (knight.moveRight(elapsedTime))
+		else if (knight.moveRight(floatElapsedTime))
 		{
-			if (tiles.checkCollision(knight.getRect(), 2))
-				knight.undoMoveRight(elapsedTime);
+			if (tiles.checkCollisionH(knight.getRect(), -1))
+				knight.undoMoveRight(floatElapsedTime);
 		}
 		else
-			knight.idle(elapsedTime);
-		if (knight.jump(elapsedTime))
+			knight.idle(floatElapsedTime);
+		if (knight.jump(floatElapsedTime))
 		{
-			if (tiles.checkCollision(knight.getRect()))
-				knight.undoJump(elapsedTime);
+			if (tiles.checkCollisionV(knight.getRect(), 1))
+				knight.undoJump(floatElapsedTime);
 		}
 		knight.attack();
-		knight.rest(elapsedTime);
+		knight.rest();
 
 		float direction = 0;
 		movingBG.mechanics(static_cast<float>(elapsedTime), direction);

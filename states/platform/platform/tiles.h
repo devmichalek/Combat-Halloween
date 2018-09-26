@@ -40,5 +40,6 @@ public:
 	const float& getScreenHeight() const;
 
 	void switchCollision(bool collision = true);
-	bool checkCollision(sf::Rect<int> &rect, const int add = 0);
+	bool checkCollisionV(sf::Rect<int> &rect, const int add = 0); // vertical
+	bool checkCollisionH(sf::Rect<int> &rect, const int add = 0); // horizontal
 };
