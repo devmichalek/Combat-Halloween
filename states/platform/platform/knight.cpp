@@ -97,13 +97,14 @@ void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	// ---      ---
 }
 
-void Knight::mechanics(const double &elapsedTime)
+void Knight::mechanics(const float &elapsedTime)
 {
-	offset += static_cast<float>(elapsedTime * OPS);
+	offset += elapsedTime * OPS;
 	if (static_cast<int>(offset) >= offset_max)
 	{
 		offset = 0;
 		coxing.attack = false;
+		coxing.jump = false;
 	}
 }
 
@@ -124,7 +125,7 @@ const sf::IntRect& Knight::getAttackRect()
 
 bool Knight::isAlive()
 {
-	return false;
+	return !coxing.die && static_cast<int>(offset) == offset_max;
 }
 
 bool Knight::isAttack()
@@ -132,88 +133,92 @@ bool Knight::isAttack()
 	return coxing.attack && offset > 3 && offset < 8;
 }
 
-bool Knight::moveLeft(const double &elapsedTime)
+bool Knight::moveLeft(const float &elapsedTime)
 {
-	if (coxing.isMovingLeft() && !coxing.attack)
+	if (coxing.isMovingLeft() && (!coxing.attack || coxing.jump))
 	{
 		coxing.attack = false;
 		align = ALIGN::LEFT;
 		walk(elapsedTime);
-		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 		return true;
 	}
 
 	return false;
 }
 
-void Knight::undoMoveLeft(const double &elapsedTime)
+void Knight::undoMoveLeft(const float &elapsedTime)
 {
-	xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+	xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 }
 
-bool Knight::moveRight(const double &elapsedTime)
+bool Knight::moveRight(const float &elapsedTime)
 {
-	if (coxing.isMovingRight() && !coxing.attack)
+	if (coxing.isMovingRight() && (!coxing.attack || coxing.jump))
 	{
 		align = ALIGN::RIGHT;
 		walk(elapsedTime);
-		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 		return true;
 	}
 
 	return false;
 }
 
-void Knight::undoMoveRight(const double &elapsedTime)
+void Knight::undoMoveRight(const float &elapsedTime)
 {
-	xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * static_cast<float>(elapsedTime);
+	xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 }
 
-void Knight::idle(const double &elapsedTime)
+void Knight::idle(const float &elapsedTime)
 {
-	if(!coxing.attack)
+	if(!coxing.attack && !coxing.jump)
 		state = STATES::IDLE;
 
 	if (coxing.walkTimer > 0)
 	{
-		coxing.walkTimer -= static_cast<float>(elapsedTime);
+		coxing.walkTimer -= elapsedTime;
 		if (coxing.walkTimer < 0)
 			coxing.walkTimer = 0;
 	}
 }
 
-bool Knight::jump(const double &elapsedTime)
+bool Knight::jump(const float &elapsedTime)
 {
 	if (coxing.isJumping() && coxing.jumpCounter < coxing.jumpLine - 1)
 	{
 		++coxing.jumpCounter;
 		state = STATES::JUMP;
 		offset = 0;
+		coxing.jump = true;
 	}
 
 	if ((state == STATES::JUMP || state == STATES::JUMP_ATTACK) && offset < 5) // go up
 	{
-		xy.y -= specs.gravity;
+		xy.y -= specs.gravity * 2;
 		return true;
 	}
 
 	return false;
 }
 
-void Knight::undoJump(const double &elapsedTime)
+void Knight::undoJump(const float &elapsedTime)
 {
-	xy.y += specs.gravity;
+	xy.y += specs.gravity * 2;
 }
 
 void Knight::attack()
 {
 	if (coxing.isAttacking())
 	{
-		state = STATES::ATTACK;
-		if (state == STATES::JUMP && static_cast<int>(offset) < 4)
-			state = STATES::JUMP_ATTACK;
-		else
+		if (coxing.jump && static_cast<int>(offset) < 5)
 		{
+			state = STATES::JUMP_ATTACK;
+			coxing.attack = true;
+		}
+		else if(state != STATES::JUMP_ATTACK)
+		{
+			state = STATES::ATTACK;
 			if (!coxing.attack)
 			{
 				coxing.attack = true;
@@ -223,21 +228,26 @@ void Knight::attack()
 	}
 }
 
-void Knight::rest(const double &elapsedTime)
+void Knight::rest()
 {
+	// die
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) // test
+	{
+		state = STATES::DIE;
+		offset = 0;
+		coxing.die = true;
+	}
+	// ---
+
 	setAlign();
 	setPosition();
 	setRect();
 	setAttackRect();
 }
 
-bool Knight::gravity()
+void Knight::gravity()
 {
-	if (state == STATES::JUMP || state == STATES::JUMP_ATTACK)
-		return false;
-
 	xy.y += specs.gravity;
-	return true;
 }
 
 void Knight::undoGravity()
@@ -265,7 +275,7 @@ void Knight::read(std::string &str)
 
 void Knight::walk(const double &elapsedTime)
 {
-	if (state != STATES::JUMP /*&& state != STATES::ATTACK*/ && state != STATES::JUMP_ATTACK)
+	if (!coxing.jump /*&& state != STATES::ATTACK*/)
 	{
 		if (coxing.walkTimer < coxing.walkLine)
 		{
@@ -292,7 +302,9 @@ void Knight::setPosition()
 		case STATES::IDLE:
 		case STATES::WALK:
 		case STATES::RUN: newX -= cw / 2; break;
+		case STATES::JUMP: newX -= cw / 1.9; break;
 		case STATES::ATTACK: newX -= cw / 2.18; break;
+		case STATES::JUMP_ATTACK: newX -= cw / 2.2; break;
 		}
 	}
 	else
@@ -302,7 +314,9 @@ void Knight::setPosition()
 		case STATES::IDLE:
 		case STATES::WALK:
 		case STATES::RUN: newX += cw / 2; break;
+		case STATES::JUMP: newX += cw / 1.9; break;
 		case STATES::ATTACK: newX += cw / 2.18; break;
+		case STATES::JUMP_ATTACK: newX += cw / 2.2; break;
 		}
 	}
 

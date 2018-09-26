@@ -48,8 +48,8 @@ void KSpecs::setSpecs()
 	armour = static_cast<float>(features[ARMOUR]);
 	mresistant = static_cast<float>(features[MAGIC_RESISTANT]);
 	velocity = 0xFF + 0xFF * static_cast<float>(features[MOVEMENT_SPEED]) / 100;
-	hvelocity = velocity / 2;
-	gravity = 0.5;	// change later
+	hvelocity = velocity;
+	gravity = 1;	// change later
 	damage = static_cast<float>(features[DAMAGE]);
 	mdamage = static_cast<float>(features[MAGIC_DAMAGE]);
 	luck = static_cast<float>(features[LUCK]);

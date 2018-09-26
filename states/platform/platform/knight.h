@@ -34,7 +34,7 @@ public:
 	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
 
-	void mechanics(const double &elapsedTime);
+	void mechanics(const float &elapsedTime);
 	void switchCollision();	// turn on/off drawing collision
 
 	sf::IntRect& getRect();
@@ -42,13 +42,13 @@ public:
 	bool isAlive();
 	bool isAttack();
 
-	bool moveLeft(const double &elapsedTime);	void undoMoveLeft(const double &elapsedTime);
-	bool moveRight(const double &elapsedTime);	void undoMoveRight(const double &elapsedTime);
-	void idle(const double &elapsedTime);
-	bool jump(const double &elapsedTime);		void undoJump(const double &elapsedTime);
+	bool moveLeft(const float &elapsedTime);	void undoMoveLeft(const float &elapsedTime);
+	bool moveRight(const float &elapsedTime);	void undoMoveRight(const float &elapsedTime);
+	void idle(const float &elapsedTime);
+	bool jump(const float &elapsedTime);		void undoJump(const float &elapsedTime);
 	void attack();
-	void rest(const double &elapsedTime);
-	bool gravity();								void undoGravity();
+	void rest();
+	void gravity();								void undoGravity();
 	void read(std::string &str);
 	void setVolume(float volume);
 

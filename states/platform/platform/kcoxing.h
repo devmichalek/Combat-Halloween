@@ -12,6 +12,8 @@ public:
 	sf::Int8 jumpLine;
 
 	bool attack;
+	bool jump;
+	bool die;
 
 	KCoxing();
 	~KCoxing();

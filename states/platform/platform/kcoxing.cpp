@@ -20,6 +20,8 @@ void KCoxing::reset()
 	jumpLine = 2;	 // max 2 jumps in a row
 
 	attack = false;
+	jump = false;
+	die = false;
 
 	if (keys.empty()) // happens while testing
 	{
