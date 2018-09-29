@@ -125,7 +125,22 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 		chosen = 0;
 		change = true;
 	}
-	
+
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Right)
+		{
+			int mouseX = event.mouseButton.x + (addX * -1);
+			int mouseY = event.mouseButton.y * -1 + screen_h + (addY * -1);
+
+			redBacklight = !isCellEmpty(mouseX, mouseY);
+			if (!redBacklight)	// add
+			{
+				unfold(mouseX, mouseY);
+			}
+		}
+	}
+
 	// if one deck is active then return false
 	if(handle_deck(event))
 		return false;
@@ -172,17 +187,6 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 			redBacklight = !isCellEmpty(mouseX, mouseY);
 			if (!redBacklight)	// remove/add
 				tools.isDeleteMode() ? remove(mouseX, mouseY) : add(mouseX, mouseY, type, chosen);
-		}
-		if (event.mouseButton.button == sf::Mouse::Right)
-		{
-			int mouseX = event.mouseButton.x + (addX * -1);
-			int mouseY = event.mouseButton.y * -1 + screen_h + (addY * -1);
-
-			redBacklight = !isCellEmpty(mouseX, mouseY);
-			if (!redBacklight)	// add
-			{
-				unfold(mouseX, mouseY);
-			}
 		}
 	}
 
