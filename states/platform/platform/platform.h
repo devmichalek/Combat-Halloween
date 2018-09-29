@@ -4,6 +4,7 @@
 #include "volumebutton.h"
 #include "moving_bg.h"
 #include "knight.h"
+#include "eye.h"
 #include "tiles.h"
 #include "chat.h"
 #include "pausesystem.h"
@@ -21,6 +22,7 @@ class Platform :public cmm::State
 	// Action ---
 	MovingBG movingBG;
 	Knight knight;
+	Eye eye;
 	Tiles tiles;
 	// ----------
 	Chat chat;

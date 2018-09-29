@@ -80,6 +80,13 @@ void Platform::reset()
 	
 	homebutton.setActive(false);
 	levelbutton.setActive(false);
+
+	// Action
+	knight.reset();
+	eye.reset(knight.getRect());
+	tiles.reset();
+	// ---
+
 	chat.reset();
 	music.stop();
 }
@@ -114,6 +121,7 @@ void Platform::load(const float &screen_w, const float &screen_h)
 	// Action ---
 	movingBG.load(screen_w, screen_h);
 	knight.load(screen_w, screen_h);
+	eye.load(screen_w, screen_h);
 	tiles.load(screen_w, screen_h);
 	// ----------
 
@@ -138,6 +146,8 @@ void Platform::handle(const sf::Event &event)
 				homebutton.handle(event);
 				levelbutton.handle(event);
 
+				knight.handle(event);
+
 				if (!sound_volumebutton.handle(event))	soundbutton.handle(event);
 				if (!music_volumebutton.handle(event))	musicbutton.handle(event);
 			}
@@ -153,8 +163,11 @@ void Platform::handle(const sf::Event &event)
 void Platform::draw(sf::RenderWindow* &window)
 {
 	movingBG.draw			(window);
+	window->setView(eye.getView());				// ---------------
 	knight.draw				(window);
+	eye.draw				(window);
 	tiles.draw				(window);
+	window->setView(window->getDefaultView());	// ---------------
 
 	homebutton.draw			(window);
 	levelbutton.draw		(window);
@@ -242,12 +255,12 @@ void Platform::mechanics(const double &elapsedTime)
 		
 		if (knight.moveLeft(floatElapsedTime))
 		{
-			if (tiles.checkCollisionH(knight.getRect(), 1))
+			if (tiles.checkCollisionH(knight.getRect(), 2))
 				knight.undoMoveLeft(floatElapsedTime);
 		}
 		else if (knight.moveRight(floatElapsedTime))
 		{
-			if (tiles.checkCollisionH(knight.getRect(), -1))
+			if (tiles.checkCollisionH(knight.getRect(), -2))
 				knight.undoMoveRight(floatElapsedTime);
 		}
 		else
@@ -259,6 +272,7 @@ void Platform::mechanics(const double &elapsedTime)
 		}
 		knight.attack();
 		knight.rest();
+		eye.mechanics(floatElapsedTime, knight.getRect(), knight.isLeftAligned());
 
 		float direction = 0;
 		movingBG.mechanics(static_cast<float>(elapsedTime), direction);
@@ -384,7 +398,7 @@ void Platform::fadeout(const float &value, const int &min)
 	musicbutton.fadeout(value, min);
 	sound_volumebutton.fadeout(value, min);
 	music_volumebutton.fadeout(value, min);
-	// chat.fadeout				(value, min);
+	chat.fadeout(value, min);
 }
 
 void Platform::prepare()
@@ -392,8 +406,7 @@ void Platform::prepare()
 	// Load modules here...
 	// The data has been simulated, so here we do not check it.
 	knight.read(SContent::get(SContent::category().KNIGHT)[0]);
+	eye.reset(knight.getRect());
 	tiles.read(SContent::get(SContent::category().TILE));
 	tiles.read(SContent::get(SContent::category().UNVISIBLE_TILE));
-
-
 }
