@@ -32,7 +32,7 @@ void MovingBG::free()
 		for (auto &it : sprites)
 		{
 			delete it;
-			it = NULL;
+			it = nullptr;
 		}
 
 		sprites.clear();
