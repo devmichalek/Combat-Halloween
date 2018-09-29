@@ -67,6 +67,7 @@
     <ClCompile Include="..\..\..\tools\pausesystem.cpp" />
     <ClCompile Include="..\..\..\tools\rectbutton.cpp" />
     <ClCompile Include="..\..\..\tools\volumebutton.cpp" />
+    <ClCompile Include="eye.cpp" />
     <ClCompile Include="kcoxing.cpp" />
     <ClCompile Include="knight.cpp" />
     <ClCompile Include="kspecs.cpp" />
@@ -79,6 +80,7 @@
     <ClCompile Include="simulator.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="eye.h" />
     <ClInclude Include="kcoxing.h" />
     <ClInclude Include="knight.h" />
     <ClInclude Include="kspecs.h" />

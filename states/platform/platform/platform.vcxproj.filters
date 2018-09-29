@@ -114,6 +114,9 @@
     <ClCompile Include="..\..\..\common\audio.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="eye.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="platform.h" />
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="scontent.h">
       <Filter>Simulator</Filter>
+    </ClInclude>
+    <ClInclude Include="eye.h">
+      <Filter>Knight</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
