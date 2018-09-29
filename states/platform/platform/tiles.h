@@ -19,6 +19,7 @@ class Tiles
 	int max;
 	char** tiles;
 	char** untiles;	// unvisible tiles
+	sf::Rect<int> singleTile;
 	std::vector <cmm::Sprite*> sprites;
 
 public:
@@ -40,6 +41,6 @@ public:
 	const float& getScreenHeight() const;
 
 	void switchCollision(bool collision = true);
-	bool checkCollisionV(sf::Rect<int> &rect, const int add = 0); // vertical
-	bool checkCollisionH(sf::Rect<int> &rect, const int add = 0); // horizontal
+	bool checkCollisionV(sf::Rect<int> &rect, const char add = 0); // vertical
+	bool checkCollisionH(sf::Rect<int> &rect, const char add = 0); // horizontal
 };

@@ -71,7 +71,9 @@ void Tiles::load(const float &screen_w, const float &screen_h)
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	rect.setSize(sf::Vector2f(static_cast<float>(width * 2), static_cast<float>(width)));
+	singleTile.width = width * 2;
+	singleTile.height = width * 2;
+	rect.setSize(sf::Vector2f(static_cast<float>(singleTile.width), static_cast<float>(singleTile.height)));
 	rect.setFillColor(sf::Color(0x99, 0x99, 0x00, 0x99));
 
 	for (unsigned i = 0; i < 17; ++i)
@@ -141,7 +143,7 @@ void Tiles::read(std::vector<std::string> &vec)
 	int x = -1, y = -1, c = -1;
 	if (!vec.empty())
 	{
-		char** pointer = NULL;
+		char** pointer = nullptr;
 		if (vec[0].find("t:1") != std::string::npos)
 			pointer = tiles;
 		else
@@ -196,9 +198,8 @@ void Tiles::switchCollision(bool collision)
 	this->collision = collision;
 }
 
-bool Tiles::checkCollisionV(sf::Rect<int> &rect, const int add)
+bool Tiles::checkCollisionV(sf::Rect<int> &rect, const char add)
 {
-	sf::Rect<int> tile(sf::Vector2i(0, 0), sf::Vector2i(width, width));
 	int l = static_cast<int> (border_x / width);
 	int r = static_cast<int> (border_x + screen_w) / width;
 	int b = static_cast<int> (border_y / width);
@@ -211,22 +212,30 @@ bool Tiles::checkCollisionV(sf::Rect<int> &rect, const int add)
 		{
 			if (tiles[i][j] != -1)
 			{
-				tile.left = i * width;
-				tile.top = static_cast<int>(-(j * width) + screen_h - width);
-				if (tile.intersects(rect))
+				sprites[tiles[i][j]]->setPosition(i * width, -(j * width) + screen_h - width);
+				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
-					if (collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					if (collision)
+					{
+						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
+						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
+					}
+
 					rect.top += add;
 					return true;
 				}
 			}
 			else if (untiles[i][j] != -1)
 			{
-				tile.left = i * width;
-				tile.top = static_cast<int>(-(j * width) + screen_h - width);
-				if (tile.intersects(rect))
+				sprites[tiles[i][j]]->setPosition(i * width, -(j * width) + screen_h - width);
+				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
-					if (collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					if (collision)
+					{
+						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
+						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
+					}
+
 					rect.top += add;
 					return true;
 				}
@@ -238,9 +247,8 @@ bool Tiles::checkCollisionV(sf::Rect<int> &rect, const int add)
 	return false;
 }
 
-bool Tiles::checkCollisionH(sf::Rect<int> &rect, const int add)
+bool Tiles::checkCollisionH(sf::Rect<int> &rect, const char add)
 {
-	sf::Rect<int> tile(sf::Vector2i(0, 0), sf::Vector2i(width, width));
 	int l = static_cast<int> (border_x / width);
 	int r = static_cast<int> (border_x + screen_w) / width;
 	int b = static_cast<int> (border_y / width);
@@ -253,22 +261,30 @@ bool Tiles::checkCollisionH(sf::Rect<int> &rect, const int add)
 		{
 			if (tiles[i][j] != -1)
 			{
-				tile.left = i * width;
-				tile.top = static_cast<int>(-(j * width) + screen_h - width);
-				if (tile.intersects(rect))
+				sprites[tiles[i][j]]->setPosition(i * width, -(j * width) + screen_h - width);
+				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
-					if(collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					if (collision)
+					{
+						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
+						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
+					}
+						
 					rect.left += add;
 					return true;
 				}
 			}
 			else if (untiles[i][j] != -1)
 			{
-				tile.left = i * width;
-				tile.top = static_cast<int>(-(j * width) + screen_h - width);
-				if (tile.intersects(rect))
+				sprites[tiles[i][j]]->setPosition(i * width, -(j * width) + screen_h - width);
+				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
-					if (collision)	this->rect.setPosition(static_cast<float>(tile.left), static_cast<float>(tile.top));
+					if (collision)
+					{
+						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
+						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
+					}
+
 					rect.left += add;
 					return true;
 				}
