@@ -1,6 +1,6 @@
 #pragma once
 #include "coxing.h"
-#include <SFML/Network/Packet.hpp>
+#include <SFML/Window/Event.hpp>
 
 class KCoxing : public cmm::Coxing
 {
@@ -8,8 +8,9 @@ public:
 	float walkTimer;
 	float walkLine;
 
-	sf::Int8 jumpCounter;
-	sf::Int8 jumpLine;
+	char jumpCounter;
+	char jumpLine;
+	bool jumpReleased;
 
 	bool attack;
 	bool jump;
@@ -22,6 +23,7 @@ public:
 	bool isMovingLeft();
 	bool isMovingRight();
 	bool isJumping();
+	void releaseJumping(const sf::Event &event);
 	bool isAttacking();
 	bool isDefensing();	// using shield
 };

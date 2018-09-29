@@ -14,10 +14,11 @@ KCoxing::~KCoxing()
 void KCoxing::reset()
 {
 	walkTimer = 0;
-	walkLine = 1.5;
+	walkLine = 1.0f;
 
 	jumpCounter = 0;
 	jumpLine = 2;	 // max 2 jumps in a row
+	jumpReleased = true;
 
 	attack = false;
 	jump = false;
@@ -42,7 +43,21 @@ bool KCoxing::isMovingRight()
 
 bool KCoxing::isJumping()
 {
-	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::JUMP]));
+	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::JUMP])) && (jumpCounter < jumpLine) && jumpReleased;
+}
+
+void KCoxing::releaseJumping(const sf::Event &event)
+{
+	if (event.type == sf::Event::KeyReleased)
+	{
+		if (event.key.code == sf::Keyboard::Key(keys[KEY_ACTION::JUMP]))
+		{
+			if (jumpCounter > 0)
+			{
+				jumpReleased = true;
+			}
+		}
+	}
 }
 
 bool KCoxing::isAttacking()

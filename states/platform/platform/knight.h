@@ -39,8 +39,12 @@ public:
 
 	sf::IntRect& getRect();
 	const sf::IntRect& getAttackRect();
+	//const int& getX() const;
+	//const int& getY() const;
 	bool isAlive();
 	bool isAttack();
+	bool isLeftAligned() const;
+	const bool &isRightAligned() const;
 
 	bool moveLeft(const float &elapsedTime);	void undoMoveLeft(const float &elapsedTime);
 	bool moveRight(const float &elapsedTime);	void undoMoveRight(const float &elapsedTime);

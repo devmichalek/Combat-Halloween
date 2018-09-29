@@ -74,7 +74,7 @@ void Knight::load(const float &screen_w, const float &screen_h)
 
 void Knight::handle(const sf::Event &event)
 {
-
+	coxing.releaseJumping(event);
 }
 
 void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
@@ -123,6 +123,16 @@ const sf::IntRect& Knight::getAttackRect()
 	return attackRect;
 }
 
+//const int& Knight::getX() const
+//{
+//	return rect.left;
+//}
+//
+//const int& Knight::getY() const
+//{
+//	return rect.top;
+//}
+
 bool Knight::isAlive()
 {
 	return !coxing.die && static_cast<int>(offset) == offset_max;
@@ -133,6 +143,16 @@ bool Knight::isAttack()
 	return coxing.attack && offset > 3 && offset < 8;
 }
 
+bool Knight::isLeftAligned() const
+{
+	return !align;
+}
+
+const bool &Knight::isRightAligned() const
+{
+	return align;
+}
+
 bool Knight::moveLeft(const float &elapsedTime)
 {
 	if (coxing.isMovingLeft() && (!coxing.attack || coxing.jump))
@@ -140,7 +160,7 @@ bool Knight::moveLeft(const float &elapsedTime)
 		coxing.attack = false;
 		align = ALIGN::LEFT;
 		walk(elapsedTime);
-		xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
+		xy.x -= (coxing.walkTimer > coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 		return true;
 	}
 
@@ -158,7 +178,7 @@ bool Knight::moveRight(const float &elapsedTime)
 	{
 		align = ALIGN::RIGHT;
 		walk(elapsedTime);
-		xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
+		xy.x += (coxing.walkTimer > coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 		return true;
 	}
 
@@ -185,15 +205,21 @@ void Knight::idle(const float &elapsedTime)
 
 bool Knight::jump(const float &elapsedTime)
 {
-	if (coxing.isJumping() && coxing.jumpCounter < coxing.jumpLine - 1)
+	if (coxing.isJumping())
 	{
 		++coxing.jumpCounter;
 		state = STATES::JUMP;
 		offset = 0;
 		coxing.jump = true;
+		coxing.jumpReleased = false;
 	}
 
-	if ((state == STATES::JUMP || state == STATES::JUMP_ATTACK) && offset < 5) // go up
+	if (state == STATES::JUMP_ATTACK)
+	{
+		xy.y -= specs.gravity; // keep the level
+		return false;
+	}
+	else if ((state == STATES::JUMP) && offset < 5) // go up
 	{
 		xy.y -= specs.gravity * 2;
 		return true;
@@ -216,7 +242,7 @@ void Knight::attack()
 			state = STATES::JUMP_ATTACK;
 			coxing.attack = true;
 		}
-		else if(state != STATES::JUMP_ATTACK)
+		else if(state != STATES::JUMP_ATTACK && coxing.jumpCounter == 0) // able to attack only if knight is on the ground
 		{
 			state = STATES::ATTACK;
 			if (!coxing.attack)
@@ -253,6 +279,7 @@ void Knight::gravity()
 void Knight::undoGravity()
 {
 	coxing.jumpCounter = 0;
+	coxing.jumpReleased = true;
 	xy.y -= specs.gravity;
 }
 
@@ -266,6 +293,8 @@ void Knight::read(std::string &str)
 	specs.setSpecs();
 	setAlign();
 	setPosition();
+	setRect();
+	setAttackRect();
 }
 
 
@@ -277,14 +306,12 @@ void Knight::walk(const double &elapsedTime)
 {
 	if (!coxing.jump /*&& state != STATES::ATTACK*/)
 	{
-		if (coxing.walkTimer < coxing.walkLine)
-		{
-			coxing.walkTimer += static_cast<float>(elapsedTime);
-			state = STATES::WALK;
+		coxing.walkTimer < coxing.walkLine ? state = STATES::WALK : state = STATES::RUN;
+	}
 
-		}
-		else
-			state = STATES::RUN;
+	if (coxing.walkTimer < coxing.walkLine * 3)
+	{
+		coxing.walkTimer += static_cast<float>(elapsedTime);
 	}
 }
 
