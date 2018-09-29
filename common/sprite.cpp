@@ -318,7 +318,7 @@ bool cmm::Sprite::checkCollision(float x, float y, float w, float h) const
 	return true;
 }
 
-bool cmm::Sprite::checkCollisionRect(sf::Rect <float> rect) const
+bool cmm::Sprite::checkCollisionRect(sf::Rect<int>& rect) const
 {
 	if (rect.top + rect.height <= getTop())
 		return false;
