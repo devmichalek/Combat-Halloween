@@ -12,7 +12,7 @@ void Zombie::marshial()
 	realBox->height = width * 1.26f;
 
 	attackBox = new Rect;
-	attackBox->width = width * 0.5;
+	attackBox->width = width * 0.5f;
 	attackBox->height = width * 0.6f;
 
 	borderBox = new Rect;
@@ -45,10 +45,10 @@ float Zombie::getSpriteX()
 
 float Zombie::getSpriteY()
 {
-	float yOffset = width * 0.01;
+	float yOffset = width * 0.01f;
 	if(state == ATTACK)
 	{
-		yOffset -= width * 0.032;
+		yOffset -= width * 0.032f;
 	}
 		
 	
@@ -57,7 +57,7 @@ float Zombie::getSpriteY()
 
 float Zombie::getRealX()
 {
-	return x + (width * 0.22);
+	return x + (width * 0.22f);
 }
 
 float Zombie::getAttackX()
@@ -74,7 +74,7 @@ float Zombie::getAttackX()
 
 float Zombie::getMouthY()
 {
-	return getRealY() + width * 0.37;
+	return getRealY() + width * 0.37f;
 }
 
 bool Zombie::isAttacking()
