@@ -2,39 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\..\common\core.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\filemanager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\fpsconsole.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\music.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\request.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\sound.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\sprite.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\state.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\text.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\thread.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\common\user.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\tools\button.cpp">
       <Filter>Tools</Filter>
     </ClCompile>
@@ -90,15 +57,6 @@
     <ClCompile Include="..\levelmenu\levelmenuinformation.cpp">
       <Filter>States\Level Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\editor\eaentitygrid.cpp">
-      <Filter>States\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\editor\eaentityrect.cpp">
-      <Filter>States\Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\editor\eaentityspecial.cpp">
-      <Filter>States\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\editor\eafactory.cpp">
       <Filter>States\Editor</Filter>
     </ClCompile>
@@ -147,20 +105,113 @@
     <ClCompile Include="..\editor\messageboard.cpp">
       <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\coxing.cpp">
-      <Filter>Common</Filter>
+    <ClCompile Include="..\editor\eeknight.cpp">
+      <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\specs.cpp">
+    <ClCompile Include="..\editor\eelandscape.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\editor\eetile.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\foeanimation.cpp">
+      <Filter>States\Platform\Foe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\foefactory.cpp">
+      <Filter>States\Platform\Foe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\foefeatures.cpp">
+      <Filter>States\Platform\Foe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\foetext.cpp">
+      <Filter>States\Platform\Foe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\foewrapper.cpp">
+      <Filter>States\Platform\Foe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\kcoxing.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\knight.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\kspecs.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\kstates.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\eye.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\simulator.cpp">
+      <Filter>States\Platform\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\scontent.cpp">
+      <Filter>States\Platform\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\zombie.cpp">
+      <Filter>States\Platform\Foe\Kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\foe\skeleton.cpp">
+      <Filter>States\Platform\Foe\Kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\tiles.cpp">
+      <Filter>States\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\platform.cpp">
+      <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\moving_bg.cpp">
+      <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\audio.cpp">
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\content.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\wsim\wcontent.cpp">
-      <Filter>States\Platform</Filter>
+    <ClCompile Include="..\..\common\core.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\wsim\wsim.cpp">
-      <Filter>States\Platform</Filter>
+    <ClCompile Include="..\..\common\coxing.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\filemanager.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\fpsconsole.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\logconsole.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\music.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\request.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\sound.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\specs.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\sprite.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\state.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\text.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\thread.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\user.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -188,8 +239,32 @@
     <Filter Include="States\Platform">
       <UniqueIdentifier>{093664c2-5c50-47b2-b252-277b14d0b4b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States\Platform\Foe">
+      <UniqueIdentifier>{56e4a66c-f968-4d03-a044-7650850e9ee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Platform\Knight">
+      <UniqueIdentifier>{4e9c16e2-e445-4919-a2e9-6b3747577bda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Platform\Simulator">
+      <UniqueIdentifier>{132546be-6398-4ffd-b955-beed44849b0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Platform\Foe\Kind">
+      <UniqueIdentifier>{d6e07bce-7035-4756-8add-e76a0d0864cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States\Platform\Other">
+      <UniqueIdentifier>{b5af4066-f8e5-4ff9-94c1-f6a7b060b969}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h" />
+    <ClInclude Include="..\editor\eeknight.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\eelandscape.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\editor\eetile.h">
+      <Filter>States\Editor</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,7 +44,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <TargetName>combathalloween</TargetName>
+    <TargetName>$(ProjectName)</TargetName>
+    <IntDir>$(SolutionDir)$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -54,10 +55,10 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\knight;..\platform\wsim</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\platform;..\platform\foe</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <TreatWarningAsError>true</TreatWarningAsError>
+      <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -82,11 +83,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\common\audio.cpp" />
     <ClCompile Include="..\..\common\content.cpp" />
     <ClCompile Include="..\..\common\core.cpp" />
     <ClCompile Include="..\..\common\coxing.cpp" />
     <ClCompile Include="..\..\common\filemanager.cpp" />
     <ClCompile Include="..\..\common\fpsconsole.cpp" />
+    <ClCompile Include="..\..\common\logconsole.cpp" />
     <ClCompile Include="..\..\common\music.cpp" />
     <ClCompile Include="..\..\common\request.cpp" />
     <ClCompile Include="..\..\common\sound.cpp" />
@@ -106,9 +109,6 @@
     <ClCompile Include="..\..\tools\rectbutton.cpp" />
     <ClCompile Include="..\..\tools\squarebutton.cpp" />
     <ClCompile Include="..\..\tools\volumebutton.cpp" />
-    <ClCompile Include="..\editor\eaentitygrid.cpp" />
-    <ClCompile Include="..\editor\eaentityrect.cpp" />
-    <ClCompile Include="..\editor\eaentityspecial.cpp" />
     <ClCompile Include="..\editor\eafactory.cpp" />
     <ClCompile Include="..\editor\eagrid.cpp" />
     <ClCompile Include="..\editor\eahistory.cpp" />
@@ -119,6 +119,9 @@
     <ClCompile Include="..\editor\editoraction.cpp" />
     <ClCompile Include="..\editor\editorfilemanager.cpp" />
     <ClCompile Include="..\editor\editornavigation.cpp" />
+    <ClCompile Include="..\editor\eeknight.cpp" />
+    <ClCompile Include="..\editor\eelandscape.cpp" />
+    <ClCompile Include="..\editor\eetile.cpp" />
     <ClCompile Include="..\editor\efilemanager.cpp" />
     <ClCompile Include="..\editor\efmbuttons.cpp" />
     <ClCompile Include="..\editor\efminfo.cpp" />
@@ -133,12 +136,30 @@
     <ClCompile Include="..\menu\menu.cpp" />
     <ClCompile Include="..\menu\menuinformation.cpp" />
     <ClCompile Include="..\menu\settings.cpp" />
-    <ClCompile Include="..\platform\wsim\wcontent.cpp" />
-    <ClCompile Include="..\platform\wsim\wsim.cpp" />
+    <ClCompile Include="..\platform\foe\foeanimation.cpp" />
+    <ClCompile Include="..\platform\foe\foefactory.cpp" />
+    <ClCompile Include="..\platform\foe\foefeatures.cpp" />
+    <ClCompile Include="..\platform\foe\foetext.cpp" />
+    <ClCompile Include="..\platform\foe\foewrapper.cpp" />
+    <ClCompile Include="..\platform\foe\skeleton.cpp" />
+    <ClCompile Include="..\platform\foe\zombie.cpp" />
+    <ClCompile Include="..\platform\platform\eye.cpp" />
+    <ClCompile Include="..\platform\platform\kcoxing.cpp" />
+    <ClCompile Include="..\platform\platform\knight.cpp" />
+    <ClCompile Include="..\platform\platform\kspecs.cpp" />
+    <ClCompile Include="..\platform\platform\kstates.cpp" />
+    <ClCompile Include="..\platform\platform\moving_bg.cpp" />
+    <ClCompile Include="..\platform\platform\platform.cpp" />
+    <ClCompile Include="..\platform\platform\scontent.cpp" />
+    <ClCompile Include="..\platform\platform\simulator.cpp" />
+    <ClCompile Include="..\platform\platform\tiles.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\editor\eeknight.h" />
+    <ClInclude Include="..\editor\eelandscape.h" />
+    <ClInclude Include="..\editor\eetile.h" />
     <ClInclude Include="engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

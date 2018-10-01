@@ -69,20 +69,20 @@ void LevelMenuInformation::load(const float &screen_w, const float &screen_h)
 
 void LevelMenuInformation::draw(sf::RenderWindow* &window)
 {
-	window->draw(background.get());
+	window->draw(background);
 	for (int i = texts.size() - 1; i >= 0 ; --i)
 	{
 		if (chosen == i) continue;
 		plank.setPosition(texts[i]->getX() + texts[i]->getWidth()/2 - plank.getWidth()/2, texts[i]->getY());
-		window->draw(plank.get());
-		window->draw(texts[i]->get());
+		window->draw(plank);
+		window->draw(*texts[i]);
 	}
 
 	plank.setPosition(texts[chosen]->getX() + texts[chosen]->getWidth() / 2 - plank.getWidth() / 2, texts[chosen]->getY());
-	window->draw(plank.get());
-	window->draw(texts[chosen]->get());
+	window->draw(plank);
+	window->draw(*texts[chosen]);
 
-	window->draw(plankbar.get());
+	window->draw(plankbar);
 }
 
 void LevelMenuInformation::handle(const sf::Event &event)

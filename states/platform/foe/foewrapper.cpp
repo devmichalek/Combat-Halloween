@@ -153,6 +153,6 @@ void FoeWrapper::process()
 		sprites[t][s]->setOffset(foe->getSpriteOffset());
 		sprites[t][s]->setPosition(foe->getSpriteX(), foe->getSpriteY());
 
-		window->draw(sprites[t][s]->get()/*, &shader*/);
+		window->draw(*sprites[t][s]/*, &shader*/);
 	}
 }

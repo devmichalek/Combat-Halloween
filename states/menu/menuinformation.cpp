@@ -78,13 +78,13 @@ void MenuInformation::load(float screen_w, float screen_h)
 
 void MenuInformation::draw(sf::RenderWindow* &window)
 {
-	window->draw(background.get());
-	window->draw(plank.get());
-	window->draw(scene.get());
-	window->draw(money.get());
-	window->draw(money_form.get());
-	window->draw(username.get());
-	window->draw(username_form.get());
+	window->draw(background);
+	window->draw(plank);
+	window->draw(scene);
+	window->draw(money);
+	window->draw(money_form);
+	window->draw(username);
+	window->draw(username_form);
 }
 
 void MenuInformation::mechanics()
