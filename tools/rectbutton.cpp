@@ -104,7 +104,7 @@ void RectButton::handle(const sf::Event &event)
 void RectButton::draw(sf::RenderWindow* &window)
 {
 	// Background.
-	window->draw(text_two.get());
+	window->draw(text_two);
 
 	// Frame.
 	for (auto &it : rects)
@@ -113,7 +113,7 @@ void RectButton::draw(sf::RenderWindow* &window)
 	}
 
 	// Front.
-	window->draw(text_one.get());
+	window->draw(text_one);
 }
 
 void RectButton::mechanics(const double &elapsedTime)

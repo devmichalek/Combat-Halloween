@@ -37,6 +37,7 @@ Loading::Loading()
 	isDirExist("sounds");
 	isFileExist(cmm::JAPOKKI_FONT_PATH);
 	isFileExist("images/other/progress_bar.png");
+	isFileExist("images/icons/icon.png");
 
 	// If error occured we cannot start window app because of lack of missing files.
 	if (error_occured)
@@ -93,9 +94,9 @@ void Loading::load(const float &screen_w, const float &screen_h)
 void Loading::draw(sf::RenderWindow* &window)
 {
 	window->clear(color);
-	window->draw(text.get());
-	window->draw(info.get());
-	window->draw(progress_bar.get());
+	window->draw(text);
+	window->draw(info);
+	window->draw(progress_bar);
 	window->display();
 }
 
@@ -210,8 +211,8 @@ void Loading::setInfo(std::string n)
 void Loading::drawPrivate()
 {
 	window->clear(color);
-	window->draw(text.get());
-	window->draw(info.get());
-	window->draw(progress_bar.get());
+	window->draw(text);
+	window->draw(info);
+	window->draw(progress_bar);
 	window->display();
 }
