@@ -1,6 +1,7 @@
 #include "core.h"
 #include "loading.h"
 #include "pausesystem.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
 std::vector<cmm::State*> states;

@@ -106,9 +106,9 @@ void EFMTextEditor::handle(const sf::Event &event)
 	{
 		if (isPossibleKey(event.text.unicode))
 		{
-			if (writtenText.get().getString().getSize() < 19)
+			if (writtenText.getString().size() < 19)
 			{
-				std::string temp = writtenText.get().getString();
+				std::string temp = writtenText.getString();
 				temp += event.text.unicode;
 				writtenText.setText(temp);
 				setWrittenText();
@@ -120,9 +120,9 @@ void EFMTextEditor::handle(const sf::Event &event)
 	{
 		if (event.key.code == sf::Keyboard::BackSpace)	// Delete last one.
 		{
-			if (writtenText.get().getString().getSize() >= 1)
+			if (writtenText.getString().size() >= 1)
 			{
-				std::string temp = writtenText.get().getString();
+				std::string temp = writtenText.getString();
 				temp.pop_back();
 				writtenText.setText(temp);
 				setWrittenText();
@@ -143,16 +143,16 @@ void EFMTextEditor::draw(sf::RenderWindow* &window)
 {
 	if (active)
 	{
-		window->draw(board.get());
-		window->draw(infoText.get());
-		window->draw(formText.get());
-		window->draw(writtenText.get());
+		window->draw(board);
+		window->draw(infoText);
+		window->draw(formText);
+		window->draw(writtenText);
 
 		if (arrow_counter < arrow_line)
-			window->draw(arrowText.get());
+			window->draw(arrowText);
 
-		window->draw(cancelText.get());
-		window->draw(proceedText.get());
+		window->draw(cancelText);
+		window->draw(proceedText);
 	}
 }
 
@@ -219,12 +219,12 @@ void EFMTextEditor::set(std::string info, std::string form, std::string written)
 
 std::string EFMTextEditor::get()
 {
-	return writtenText.get().getString() + ".chw";
+	return writtenText.getString() + ".chw";
 }
 
 bool EFMTextEditor::isMistake()
 {
-	std::string temp = writtenText.get().getString();
+	std::string temp = writtenText.getString();
 
 	if (temp.size() == 0)
 	{

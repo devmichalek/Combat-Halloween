@@ -90,7 +90,7 @@ bool EATools::handle(const sf::Event &event)
 void EATools::drawTools(sf::RenderWindow* &window)
 {
 	deleteButton.draw(window);
-	window->draw(deleteText.get());
+	window->draw(deleteText);
 }
 
 void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory, const int& chosen)	// Draws thumbnails
@@ -131,7 +131,7 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 			largestWidth = 0;
 		}
 
-		window->draw(factory[i]->get());
+		window->draw(*factory[i]);
 		factory[i]->setAlpha(0xFF); // set back
 	}
 
@@ -145,7 +145,7 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 	float y = factory[chosen]->getY() + factory[chosen]->getHeight() / 2 - checkedIcon.getHeight() / 2;
 	checkedIcon.setPosition(x, y);
 	factory[chosen]->setScale(scaleX, scaleY);
-	window->draw(checkedIcon.get());
+	window->draw(checkedIcon);
 	factory[chosen]->setPosition(tempX, tempY);	// Set back current position.
 }
 

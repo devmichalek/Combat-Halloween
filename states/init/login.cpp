@@ -230,19 +230,19 @@ void Login::handle(const sf::Event &event)
 void Login::draw(sf::RenderWindow* &window)
 {
 	// First scene.
-	window->draw(loginbg.get());
+	window->draw(loginbg);
 	loginbutton.draw(window);
-	window->draw(signupbg.get());
+	window->draw(signupbg);
 	signupbutton.draw(window);
 
 	// Second scene.
 	backbutton.draw(window);
-	window->draw(title.get());
-	window->draw(username_form.get());
-	window->draw(password_form.get());
-	window->draw(username_written.get());
-	window->draw(password_written.get());
-	window->draw(info.get());
+	window->draw(title);
+	window->draw(username_form);
+	window->draw(password_form);
+	window->draw(username_written);
+	window->draw(password_written);
+	window->draw(info);
 
 	if (forget_counter > 2)	forgetbutton.draw(window);
 
@@ -256,7 +256,7 @@ void Login::draw(sf::RenderWindow* &window)
 	// Draw arrow.
 	if (arrow_counter < arrow_line && state < 2)
 	{
-		window->draw(arrow.get());
+		window->draw(arrow);
 	}
 }
 

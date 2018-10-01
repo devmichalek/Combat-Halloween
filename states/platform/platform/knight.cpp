@@ -83,7 +83,7 @@ void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 		return;
 	
 	sprites[state]->setOffset(static_cast<int>(offset));
-	window->draw(sprites[state]->get());
+	window->draw(*sprites[state]);
 
 	// --- TEST ---
 	if (collisionMode)

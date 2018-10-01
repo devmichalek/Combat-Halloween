@@ -175,7 +175,7 @@ void EAGrid::draw(sf::RenderWindow* &window)
 		xyText.setPosition(gridX + width + 1, gridY - 1);
 	}
 
-	window->draw(xyText.get());
+	window->draw(xyText);
 
 	for (auto & it : arrows)
 	{

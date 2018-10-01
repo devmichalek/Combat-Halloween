@@ -49,7 +49,7 @@ void FPS::draw(sf::RenderWindow* &window)
 	if (!active)
 		return;
 
-	window->draw(text.get());
+	window->draw(text);
 }
 
 void FPS::mechanics(const double &elapsedTime)

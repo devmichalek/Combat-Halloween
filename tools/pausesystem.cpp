@@ -59,8 +59,8 @@ void PauseSystem::handle(const sf::Event &event)
 
 void PauseSystem::draw(sf::RenderWindow* &window)
 {
-	window->draw(blackout.get());
-	window->draw(text.get());
+	window->draw(blackout);
+	window->draw(text);
 }
 
 void PauseSystem::fadein(const float &v, const int &max)

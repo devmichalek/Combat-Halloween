@@ -1,6 +1,8 @@
 #pragma once
 #include "sprite.h"
 #include "text.h"
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 class EFMInfo
 {

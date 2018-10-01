@@ -12,6 +12,9 @@ int main(int argc, char** argv)
 	sprite.setPosition(100, 100);
 	sprite.setColor(sf::Color::Red);
 
+	sf::Rect<int> intRect(100, 100, 100, 100);
+	sprite.checkCollisionRect(intRect);
+
 	bool state = true;
 	// int offset = 0;
 	// int limit = boost::lexical_cast<int>(argv[3]);
@@ -23,7 +26,7 @@ int main(int argc, char** argv)
 			if (core.getEvent().type == sf::Event::Closed)
 				core.open = false;
 
-		core.getWindow()->draw(sprite.get());
+		core.getWindow()->draw(sprite);
 
 		if (sprite.getAlpha() == 0xFF)		state = true;
 		else if (sprite.getAlpha() == 0)	state = false;

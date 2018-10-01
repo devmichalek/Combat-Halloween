@@ -106,12 +106,12 @@ void EditorNavigation::draw(sf::RenderWindow* &window)
 		it->draw(window);
 
 	for (auto &it : labels)
-		window->draw(it->get());
+		window->draw(*it);
 }
 
 void EditorNavigation::drawBG(sf::RenderWindow* &window)
 {
-	window->draw(background.get());
+	window->draw(background);
 }
 
 

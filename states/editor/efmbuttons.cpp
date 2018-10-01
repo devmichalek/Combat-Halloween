@@ -202,16 +202,16 @@ bool EFMButtons::handle(const sf::Event &event)
 void EFMButtons::draw(sf::RenderWindow* &window)
 {
 	for (auto &it : labels)
-		window->draw(it->get());
+		window->draw(*it);
 
 	for (auto &it : buttons)
-		window->draw(it->get());
+		window->draw(*it);
 }
 
 void EFMButtons::drawButton(sf::RenderWindow* &window)
 {
 	fileButton.draw(window);
-	window->draw(fileButtonText.get());
+	window->draw(fileButtonText);
 }
 
 void EFMButtons::mechanics(/*const double &elapsedTime*/)

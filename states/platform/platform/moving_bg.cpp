@@ -80,7 +80,7 @@ void MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	for (unsigned i = 0; i < fs.size(); ++i)
 	{
 		sprites[types[i]]->setPosition(fs[i].x, fs[i].y);
-		window->draw(sprites[types[i]]->get()/*, &shader*/);
+		window->draw(*sprites[types[i]]/*, &shader*/);
 	}
 }
 

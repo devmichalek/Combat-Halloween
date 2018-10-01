@@ -29,7 +29,7 @@ std::string cmm::Sound::load(const char* path)
 	if (buffer->loadFromFile(path))
 	{
 		sound = std::make_unique<sf::Sound>();
-		sound->setBuffer(*buffer.get());
+		sound->setBuffer(*buffer);
 		return "Success: Sound \"" + std::string(path) + "\" loaded correctly.";
 	}
 

@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Clock.hpp>
 
 namespace cmm

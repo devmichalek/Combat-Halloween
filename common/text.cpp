@@ -1,8 +1,8 @@
 #include "text.h"
 
-const sf::Text& cmm::Text::get() const
+const std::string cmm::Text::getString() const
 {
-	return *text;
+	return text->getString();
 }
 
 std::string cmm::Text::setFont(const char* path)
@@ -34,6 +34,11 @@ void cmm::Text::setTextW(std::wstring line)
 		text->setString(line);
 		setRawAlpha();
 	}
+}
+
+void cmm::Text::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+	target.draw(*text, states);
 }
 
 

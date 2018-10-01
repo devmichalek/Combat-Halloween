@@ -3,7 +3,7 @@
 Engine::Engine()
 {
 	// Set seed.
-	srand(static_cast<int>(time(NULL)));
+	srand(static_cast<int>(time(nullptr)));
 
 	// Init only loading state. It launches the console and checks basic files.
 	this->states.push_back(new Loading);
@@ -48,22 +48,33 @@ void Engine::loading_loop()
 
 		switch (LoadingState::getState())
 		{
-		case 5:
-			this->states.push_back(new Initialization);
-			this->states[cmm::INIT]->load(screen_w, screen_h);
-			break;
-		case 15:
-			this->states.push_back(new Login);
-			this->states[cmm::LOGIN]->load(screen_w, screen_h);
-			break;
-		case 28:
-			this->states.push_back(new Menu);
-			this->states[cmm::MENU]->load(screen_w, screen_h);
-			break;
-		case 36:
-			this->states.push_back(new LevelMenu);
-			this->states[cmm::LEVELMENU]->load(screen_w, screen_h);
-			break;
+		case 5:		this->states.push_back(new Initialization);
+					this->states[cmm::INIT]->load(screen_w, screen_h);
+					break;
+
+		case 15:	this->states.push_back(new Login);
+					this->states[cmm::LOGIN]->load(screen_w, screen_h);
+					break;
+
+		case 28:	this->states.push_back(new Menu);
+					this->states[cmm::MENU]->load(screen_w, screen_h);
+					break;
+
+		case 36:	this->states.push_back(new LevelMenu);
+					this->states[cmm::LEVELMENU]->load(screen_w, screen_h);
+					break;
+
+		case 52:	this->states.push_back(new Platform);
+					this->states[cmm::PLATFORM]->load(screen_w, screen_h);
+					break;
+
+		case 60:	this->states.push_back(nullptr);
+					//this->states[cmm::TABLE]->load(screen_w, screen_h);
+					break;
+
+		case 78:	this->states.push_back(new Editor);
+					this->states[cmm::EDITOR]->load(screen_w, screen_h);
+					break;
 		}
 
 		this->states[core->state]->setState(core->state);

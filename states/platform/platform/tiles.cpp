@@ -71,9 +71,7 @@ void Tiles::load(const float &screen_w, const float &screen_h)
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
 
-	singleTile.width = width * 2;
-	singleTile.height = width * 2;
-	rect.setSize(sf::Vector2f(static_cast<float>(singleTile.width), static_cast<float>(singleTile.height)));
+	rect.setSize(sf::Vector2f(static_cast<float>(width * 2), static_cast<float>(width * 2)));
 	rect.setFillColor(sf::Color(0x99, 0x99, 0x00, 0x99));
 
 	for (unsigned i = 0; i < 17; ++i)
@@ -118,13 +116,13 @@ void Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 			{
 				sprites[tiles[i][j]]->setPosition(i * width, -(j * width) + screen_h - width);
 				// shader.setUniform("addAlpha", alphas[i][j] / 0xFF);
-				window->draw(sprites[tiles[i][j]]->get()/*, &shader*/);
+				window->draw(*sprites[tiles[i][j]]/*, &shader*/);
 			}
 			else if (untiles[i][j] != -1)
 			{
 				sprites[untiles[i][j]]->setPosition(i * width, -(j * width) + screen_h - width);
 				// shader.setUniform("addAlpha", alphas[i][j] / 0xFF);
-				window->draw(sprites[untiles[i][j]]->get()/*, &shader*/);
+				window->draw(*sprites[untiles[i][j]]/*, &shader*/);
 			}
 		}
 	}

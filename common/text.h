@@ -1,25 +1,28 @@
 #pragma once
 #include <memory>
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/Text.hpp"
+#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/Text.hpp>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 namespace cmm
 {
 	const char* const JAPOKKI_FONT_PATH = "fonts/Jaapokki-Regular.otf";
 	const char* const JCANDLE_FONT_PATH = "fonts/jcandlestickextracond.ttf";
 
-	class Text
+	class Text : public sf::Drawable
 	{
 		std::unique_ptr<sf::Font> font;
 		std::unique_ptr<sf::Text> text;
 		float alpha;
 
 	public:
-		const sf::Text& get() const;
+		const std::string getString() const; // cannot return with &
 		std::string setFont(const char* path);
 		void setText(std::string line);
 		void setTextW(std::wstring line);
-
+	private:
+		void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+	public:
 		void fadein(const float &v, const int &max);
 		void fadeout(const float &v, const int &min);
 

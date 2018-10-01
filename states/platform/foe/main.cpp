@@ -2,6 +2,7 @@
 #include "loading.h"
 #include "foefactory.h"
 #include "fps.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
 FoeFactory* foeFactory = new FoeFactory;

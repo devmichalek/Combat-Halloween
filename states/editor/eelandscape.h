@@ -1,6 +1,7 @@
 #pragma once
-#define _SCL_SECURE_NO_WARNINGS
+#pragma warning(disable:4996) //#define _SCL_SECURE_NO_WARNINGS
 #include <vector>
+#include "eventwindow.h"
 #include "treedefinitions.h"
 #include "sprite.h"
 #include "text.h"

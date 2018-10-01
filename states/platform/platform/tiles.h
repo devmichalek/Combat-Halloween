@@ -1,7 +1,7 @@
 #pragma once
 #include "sprite.h"
 #include "eventwindow.h"
-#include <vector>
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class Tiles
 {
@@ -19,7 +19,6 @@ class Tiles
 	int max;
 	char** tiles;
 	char** untiles;	// unvisible tiles
-	sf::Rect<int> singleTile;
 	std::vector <cmm::Sprite*> sprites;
 
 public:

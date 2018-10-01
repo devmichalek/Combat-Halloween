@@ -57,7 +57,7 @@ void Chat::reset()
 	//active = false;
 	//used = false;
 	//fps.reset();
-	//setWritten();
+	setWritten();
 
 	for (auto &it : writtens)
 		it->setAlpha(0);
@@ -215,7 +215,7 @@ void Chat::draw(sf::RenderWindow* &window)
 	if (!active && globalYScale == 0)
 		return;
 
-	window->draw(background.get());
+	window->draw(background);
 
 	for (unsigned i = 0; i < writtens.size(); ++i)
 	{
@@ -224,15 +224,15 @@ void Chat::draw(sf::RenderWindow* &window)
 			if (!writtenStrs[i].empty() && i != 0)
 			{
 				username.setPosition(screen_w / 256, writtens[i]->getY());
-				window->draw(username.get());
+				window->draw(username);
 			}
 
-			window->draw(writtens[i]->get());
+			window->draw(*writtens[i]);
 		}
 	}
 
 	if (counter < line / 2)
-		window->draw(arrow.get());
+		window->draw(arrow);
 }
 
 void Chat::mechanics(const double &elapsedTime)

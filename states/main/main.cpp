@@ -12,6 +12,9 @@ int main(int argc, char** argv)
 	
 	engine->loading_loop();
 
+	if (Loading::isError())
+		return EXIT_FAILURE;
+
 	engine->main_loop();
 
 	return EXIT_SUCCESS;

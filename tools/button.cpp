@@ -40,7 +40,7 @@ void Button::setVolume(const float &volume)
 
 void Button::draw(sf::RenderWindow* &window)
 {
-	window->draw(button.get());
+	window->draw(button);
 }
 
 void Button::fadein(const float &v, const int &max)

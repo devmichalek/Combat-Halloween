@@ -284,26 +284,26 @@ bool Settings::handle(const sf::Event &event)
 
 void Settings::draw(sf::RenderWindow* &window)
 {
-	window->draw(table.get());
-	window->draw(chart.get());
+	window->draw(table);
+	window->draw(chart);
 
 	for (auto &it : state_texts)
 	{
-		window->draw(it->get());
+		window->draw(*it);
 	}
 
 	for (auto &it : active_texts)
 	{
-		window->draw(it->get());
+		window->draw(*it);
 	}
 
-	window->draw(contactme.get());
-	window->draw(info.get());
-	window->draw(resetbutton.get());
+	window->draw(contactme);
+	window->draw(info);
+	window->draw(resetbutton);
 
 	for (auto &it : gears)
 	{
-		window->draw(it->get());
+		window->draw(*it);
 	}
 }
 

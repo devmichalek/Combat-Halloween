@@ -264,7 +264,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 		if(t == LANDSCAPE) // set current global scale for landscape
 			factory[t][chosen]->setScale(ee::Landscape::getGlobalScale(), ee::Landscape::getGlobalScale());
 
-		window->draw(factory[t][chosen]->get());
+		window->draw(*factory[t][chosen]);
 
 		if (redBacklight)			factory[t][chosen]->setColor(sf::Color::White);	// set back
 		if(type == UNVISIBLE_TILE)	factory[t][chosen]->setAlpha(0xFF);				// set back
@@ -361,7 +361,7 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 	if (eKnight.isSet())
 	{
 		factory[KNIGHT][0]->setPosition(eKnight.get().x + addX, (eKnight.get().y + addY) * -1 + screen_h);
-		window->draw(factory[KNIGHT][0]->get());
+		window->draw(*factory[KNIGHT][0]);
 	}
 	
 	// log(1) time
@@ -378,7 +378,7 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 			if (c != VOID)
 			{
 				factory[TILE][c]->setPosition(i * width + addX, ((j * width + addY) * -1) + screen_h - width);
-				window->draw(factory[TILE][c]->get());
+				window->draw(*factory[TILE][c]);
 			}
 
 			c = eUnTiles.get(i, j);	// Draw Unvisible Tiles
@@ -386,7 +386,7 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 			{
 				factory[TILE][c]->setAlpha(0xFF / 2);
 				factory[TILE][c]->setPosition(i * width, (j * width * -1) + screen_h - width);
-				window->draw(factory[TILE][c]->get());
+				window->draw(*factory[TILE][c]);
 				factory[TILE][c]->setAlpha(0xFF);	// set back
 			}
 		}
@@ -402,7 +402,7 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 		x = bg::get<0>(item.first.min_corner()) + addX;
 		y = (bg::get<1>(item.first.min_corner()) + addY + factory[LANDSCAPE][c]->getHeight()) * -1 + screen_h;
 		factory[LANDSCAPE][c]->setPosition(x, y);
-		window->draw(factory[LANDSCAPE][c]->get());
+		window->draw(*factory[LANDSCAPE][c]);
 	}
 
 	// Draw decks

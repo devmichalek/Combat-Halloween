@@ -80,9 +80,9 @@ void LevelMenu::reset()
 	
 	homebutton.setActive(false);
 	playbutton.setActive(false);
+	music.stop();
 	chat.reset();
 	chat.setStyleBlackish();
-	music.stop();
 }
 
 

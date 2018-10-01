@@ -102,17 +102,17 @@ void MessageBoard::draw(sf::RenderWindow* &window)
 {
 	if (isActive())
 	{
-		window->draw(board.get());
-		window->draw(infoText.get());
+		window->draw(board);
+		window->draw(infoText);
 
 		if (active == OKACTIVE)
 		{
-			window->draw(okText.get());
+			window->draw(okText);
 		}
 		else if (active == YESNOACTIVE)
 		{
-			window->draw(yesText.get());
-			window->draw(noText.get());
+			window->draw(yesText);
+			window->draw(noText);
 		}
 	}
 }

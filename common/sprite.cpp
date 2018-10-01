@@ -1,11 +1,6 @@
 #include "sprite.h"
 #include <math.h>
 
-const sf::Sprite& cmm::Sprite::get() const
-{
-	return *sprite;
-}
-
 std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 {
 	std::string out = "Error: Cannot properly create texture from \"" + path + "\".";
@@ -133,6 +128,11 @@ std::string cmm::Sprite::create(int w, int h)
 	}
 
 	return out;
+}
+
+void cmm::Sprite::draw(sf::RenderTarget &target, sf::RenderStates states) const
+{
+	target.draw(*sprite, states);
 }
 
 
@@ -291,12 +291,12 @@ const float cmm::Sprite::getBot() const
 
 const float& cmm::Sprite::getScaleX() const
 {
-	return sprite.get()->getScale().x;
+	return sprite->getScale().x;
 }
 
 const float& cmm::Sprite::getScaleY() const
 {
-	return sprite.get()->getScale().y;
+	return sprite->getScale().y;
 }
 
 
@@ -318,7 +318,8 @@ bool cmm::Sprite::checkCollision(float x, float y, float w, float h) const
 	return true;
 }
 
-bool cmm::Sprite::checkCollisionRect(sf::Rect<int>& rect) const
+template<typename Type>
+bool cmm::Sprite::checkCollisionRect(sf::Rect<Type>& rect)
 {
 	if (rect.top + rect.height <= getTop())
 		return false;
@@ -354,3 +355,7 @@ bool cmm::Sprite::checkCollisionCircle(float x, float y) const
 
 	return false;
 }
+
+template bool cmm::Sprite::checkCollisionRect(sf::Rect<int>& rect);
+template bool cmm::Sprite::checkCollisionRect(sf::Rect<float>& rect);
+template bool cmm::Sprite::checkCollisionRect(sf::Rect<double>& rect);

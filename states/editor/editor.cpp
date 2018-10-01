@@ -45,8 +45,8 @@ void Editor::reset()
 	navigation.reset();
 	editorFileManager.reset();
 	editorAction.reset();
-	chat.reset();
 	chat.setStyleWhitish();
+	chat.reset();
 }
 
 
@@ -162,12 +162,12 @@ void Editor::setState(int &state)
 	if (isPrev() && isNext())
 	{
 		reset();
-		state = cmm::STATES::MENU;
+		state = cmm::STATES::LEVELMENU;
 	}
 	else if (isPrev())
 	{
 		reset();
-		state = cmm::STATES::LEVELMENU;
+		state = cmm::STATES::MENU;
 	}
 	else if (isNext())
 	{

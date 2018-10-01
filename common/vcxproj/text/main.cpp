@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 				core.open = false;
 
 		core.getWindow()->draw(rect);
-		core.getWindow()->draw(text.get());
+		core.getWindow()->draw(text);
 
 		core.getWindow()->display();
 	}

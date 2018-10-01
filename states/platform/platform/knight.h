@@ -3,6 +3,8 @@
 #include "kstates.h"
 #include "kcoxing.h"
 #include "kspecs.h"
+#include "eventwindow.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class Knight : public KStates
 {

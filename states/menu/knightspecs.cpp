@@ -98,15 +98,15 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 
 void Knightspecs::draw(sf::RenderWindow* &window)
 {
-	window->draw(plank.get());
-	window->draw(topgear.get());
-	window->draw(botgear.get());
-	window->draw(knight.get());
-	window->draw(categories.get());
+	window->draw(plank);
+	window->draw(topgear);
+	window->draw(botgear);
+	window->draw(knight);
+	window->draw(categories);
 	
 	for (auto &it : values)
 	{
-		window->draw(it->get());
+		window->draw(*it);
 	}
 }
 

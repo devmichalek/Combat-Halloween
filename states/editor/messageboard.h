@@ -1,4 +1,5 @@
 #pragma once
+#include "eventwindow.h"
 #include "sprite.h"
 #include "text.h"
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "sprite.h"
+#include <SFML/Graphics/RenderWindow.hpp>
 //#include "play/game/foe/balloonchat.h"
 
 class Eye

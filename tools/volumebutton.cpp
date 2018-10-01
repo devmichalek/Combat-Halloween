@@ -101,8 +101,8 @@ bool VolumeButton::handle(const sf::Event &event)
 
 void VolumeButton::draw(sf::RenderWindow* &window)
 {
-	window->draw(plus.get());
-	window->draw(minus.get());
+	window->draw(plus);
+	window->draw(minus);
 }
 
 void VolumeButton::mechanics(double elapsedTime)

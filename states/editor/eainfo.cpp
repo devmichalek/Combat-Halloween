@@ -71,8 +71,8 @@ void EAInfo::load(const float &screen_w, const float &screen_h, const int &width
 
 void EAInfo::draw(sf::RenderWindow* &window)
 {
-	for (auto & it : texts)
-		window->draw(it->get());
+	for (auto &it : texts)
+		window->draw(*it);
 }
 
 

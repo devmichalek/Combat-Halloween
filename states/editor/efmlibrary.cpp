@@ -161,23 +161,23 @@ bool EFMLibrary::handle(const sf::Event &event, const bool &status)
 
 void EFMLibrary::draw(sf::RenderWindow* &window)
 {
-	if (ableToGoLeft)	window->draw(icons[LEFT]->get());
-	if (ableToGoRight)	window->draw(icons[RIGHT]->get());
+	if (ableToGoLeft)	window->draw(*icons[LEFT]);
+	if (ableToGoRight)	window->draw(*icons[RIGHT]);
 
 	int start, end;
 	getPositions(start, end);
 	for (int i = start; i < end; ++i)
 	{
 		icons[WORLD]->setPosition(iconPos[i].x, iconPos[i].y);
-		window->draw(icons[WORLD]->get());
-		window->draw(textLabels[i]->get());
+		window->draw(*icons[WORLD]);
+		window->draw(*textLabels[i]);
 	}
 
-	window->draw(pageText.get());
+	window->draw(pageText);
 
 	if (chosen >= start && chosen < end)
 	{
-		window->draw(icons[CHECKED]->get());
+		window->draw(*icons[CHECKED]);
 	}
 }
 

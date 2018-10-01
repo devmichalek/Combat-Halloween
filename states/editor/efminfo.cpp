@@ -74,16 +74,16 @@ void EFMInfo::load(const float &screen_w, const float &screen_h)
 
 void EFMInfo::drawPlank(sf::RenderWindow* &window)
 {
-	window->draw(plank.get());
-	if(isMsgTextActive())	window->draw(msgText.get());
+	window->draw(plank);
+	if(isMsgTextActive())	window->draw(msgText);
 }
 
 void EFMInfo::draw(sf::RenderWindow* &window)
 {
-	window->draw(openedText.get());
-	window->draw(openedFormText.get());
-	window->draw(chosenText.get());
-	window->draw(chosenFormText.get());
+	window->draw(openedText);
+	window->draw(openedFormText);
+	window->draw(chosenText);
+	window->draw(chosenFormText);
 }
 
 void EFMInfo::drawLayer(sf::RenderWindow* &window)

@@ -180,23 +180,23 @@ void ee::Landscape::draw(sf::RenderWindow* &window, cmm::Sprite* &object, const 
 
 	setPosition(addX, addY);
 
-	window->draw(board.get());
+	window->draw(board);
 
 	for (auto &it : texts)
-		window->draw(it->get());
+		window->draw(*it);
 
 	for (int i = 0; i < TOP_PLUS; ++i)
 	{
 		rect_states[i] ? minus.setOffset(1) : minus.setOffset(0);
 		minus.setPosition(rects[i].left, rects[i].top);
-		window->draw(minus.get());
+		window->draw(minus);
 	}
 
 	for (int i = TOP_PLUS; i < SIZE; ++i)
 	{
 		rect_states[i] ? plus.setOffset(1) : plus.setOffset(0);
 		plus.setPosition(rects[i].left, rects[i].top);
-		window->draw(plus.get());
+		window->draw(plus);
 	}
 
 	object->setScale(last.second.scale, last.second.scale);
@@ -204,7 +204,7 @@ void ee::Landscape::draw(sf::RenderWindow* &window, cmm::Sprite* &object, const 
 	float tY = (bg::get<1>(last.first.min_corner()) + addY + object->getHeight()) * -1 + screen_h;
 	object->setPosition(tX, tY);
 	object->setColor(sf::Color::Yellow);
-	window->draw(object->get());
+	window->draw(*object);
 	object->setColor(sf::Color::White);	// set back
 }
 

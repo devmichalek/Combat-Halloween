@@ -66,12 +66,12 @@ void Eye::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	{
 		float x = sprite.getX();
 		sprite.setPosition(sprite.getX() + sprite.getWidth(), sprite.getY());
-		window->draw(sprite.get()/*, &shader*/);
+		window->draw(sprite/*, &shader*/);
 		sprite.setPosition(x, sprite.getY());
 	}
 	else
 	{
-		window->draw(sprite.get()/*, &shader*/);
+		window->draw(sprite/*, &shader*/);
 	}
 
 	if (textCounter > 0)

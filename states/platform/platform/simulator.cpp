@@ -94,8 +94,8 @@ void Simulator::handle(const sf::Event &event)
 
 void Simulator::draw(sf::RenderWindow* &window)
 {
-	window->draw(info.get());
-	window->draw(progress_bar.get());
+	window->draw(info);
+	window->draw(progress_bar);
 
 	if (status == STATUS::FAILURE)
 	{

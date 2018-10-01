@@ -5,7 +5,7 @@
 #include "login.h"
 #include "menu.h"
 #include "levelmenu.h"
-//#include "play/play.h"
+#include "platform.h"
 //#include "table/table.h"
 #include "editor.h"
 
