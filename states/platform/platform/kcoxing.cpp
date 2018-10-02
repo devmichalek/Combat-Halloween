@@ -19,6 +19,7 @@ void KCoxing::reset()
 	jumpCounter = 0;
 	jumpLine = 2;	 // max 2 jumps in a row
 	jumpReleased = true;
+	falling = false;
 
 	attack = false;
 	jump = false;

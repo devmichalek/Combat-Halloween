@@ -7,6 +7,7 @@ protected:
 	{
 		VOID = -1,
 		IDLE = 0,
+		FALL,
 		WALK,
 		RUN,
 		JUMP,

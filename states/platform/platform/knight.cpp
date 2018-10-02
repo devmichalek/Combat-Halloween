@@ -192,8 +192,10 @@ void Knight::undoMoveRight(const float &elapsedTime)
 
 void Knight::idle(const float &elapsedTime)
 {
-	if(!coxing.attack && !coxing.jump)
-		state = STATES::IDLE;
+	if (!coxing.attack && !coxing.jump)
+	{
+		state = coxing.falling ? STATES::FALL : STATES::IDLE;
+	}
 
 	if (coxing.walkTimer > 0)
 	{
@@ -273,6 +275,7 @@ void Knight::rest()
 
 void Knight::gravity()
 {
+	coxing.falling = true;
 	xy.y += specs.gravity;
 }
 
@@ -280,6 +283,7 @@ void Knight::undoGravity()
 {
 	coxing.jumpCounter = 0;
 	coxing.jumpReleased = true;
+	coxing.falling = false;
 	xy.y -= specs.gravity;
 }
 
@@ -327,6 +331,7 @@ void Knight::setPosition()
 		switch (state)
 		{
 		case STATES::IDLE:
+		case STATES::FALL:
 		case STATES::WALK:
 		case STATES::RUN: newX -= cw / 2; break;
 		case STATES::JUMP: newX -= cw / 1.9; break;
@@ -339,6 +344,7 @@ void Knight::setPosition()
 		switch (state)
 		{
 		case STATES::IDLE:
+		case STATES::FALL:
 		case STATES::WALK:
 		case STATES::RUN: newX += cw / 2; break;
 		case STATES::JUMP: newX += cw / 1.9; break;

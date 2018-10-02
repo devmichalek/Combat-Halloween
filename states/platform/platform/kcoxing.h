@@ -11,6 +11,7 @@ public:
 	char jumpCounter;
 	char jumpLine;
 	bool jumpReleased;
+	bool falling;
 
 	bool attack;
 	bool jump;
