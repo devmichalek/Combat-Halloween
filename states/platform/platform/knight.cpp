@@ -333,10 +333,10 @@ void Knight::setPosition()
 		case STATES::IDLE:
 		case STATES::FALL:
 		case STATES::WALK:
-		case STATES::RUN: newX -= cw / 2; break;
-		case STATES::JUMP: newX -= cw / 1.9; break;
-		case STATES::ATTACK: newX -= cw / 2.18; break;
-		case STATES::JUMP_ATTACK: newX -= cw / 2.2; break;
+		case STATES::RUN: newX -= cw / 2.0f; break;
+		case STATES::JUMP: newX -= cw / 1.9f; break;
+		case STATES::ATTACK: newX -= cw / 2.18f; break;
+		case STATES::JUMP_ATTACK: newX -= cw / 2.2f; break;
 		}
 	}
 	else
@@ -346,10 +346,10 @@ void Knight::setPosition()
 		case STATES::IDLE:
 		case STATES::FALL:
 		case STATES::WALK:
-		case STATES::RUN: newX += cw / 2; break;
-		case STATES::JUMP: newX += cw / 1.9; break;
-		case STATES::ATTACK: newX += cw / 2.18; break;
-		case STATES::JUMP_ATTACK: newX += cw / 2.2; break;
+		case STATES::RUN: newX += cw / 2.0f; break;
+		case STATES::JUMP: newX += cw / 1.9f; break;
+		case STATES::ATTACK: newX += cw / 2.18f; break;
+		case STATES::JUMP_ATTACK: newX += cw / 2.2f; break;
 		}
 	}
 
@@ -380,10 +380,10 @@ void Knight::setRect()
 void Knight::setAttackRect()
 {
 	if (align == ALIGN::RIGHT)
-		attackRect.left = xy.x;
+		attackRect.left = static_cast<int>(xy.x);
 	else
-		attackRect.left = xy.x - attackRect.width;
-	attackRect.top = xy.y - rect.height / 1.8;
+		attackRect.left = static_cast<int>(xy.x) - attackRect.width;
+	attackRect.top = static_cast<int>(xy.y) -static_cast<int>(rect.height / 1.8f);
 
 	// --- TEST ---
 	if (collisionMode)

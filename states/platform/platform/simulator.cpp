@@ -113,7 +113,7 @@ void Simulator::mechanics(const double &elapsedTime)
 
 	if (status != STATUS::FAILURE)
 	{
-		offset += elapsedTime * 0xFF / 5;
+		offset += static_cast<float>(elapsedTime) * 0xFF / 5.0f;
 		if (offset >= max)
 			offset = 0.0f;
 		progress_bar.setOffset(static_cast<int>(offset));
@@ -121,7 +121,7 @@ void Simulator::mechanics(const double &elapsedTime)
 
 	if (status == STATUS::NONE)	// Launch Thread
 	{
-		float value = 0xFF / 4 * 3 * elapsedTime;
+		float value = 0xFF / 4 * 3 * static_cast<float>(elapsedTime);
 		int max = 0xFF;
 		info.fadein(value, max);
 		progress_bar.fadein(value, max);
@@ -154,7 +154,7 @@ void Simulator::mechanics(const double &elapsedTime)
 	
 	if (isState())
 	{
-		float value = 0xFF / 4 * 3 * elapsedTime;
+		float value = 0xFF / 4 * 3 * static_cast<float>(elapsedTime);
 		int min = 0;
 		info.fadeout(value, min);
 		progress_bar.fadeout(value, min);
