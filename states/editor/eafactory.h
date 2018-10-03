@@ -50,7 +50,7 @@ public:
 
 private:
 	void drawPrivate(sf::RenderWindow* &window, const int &addX, const int &addY);	// draw
-	bool isCellEmpty(const int& x, const int& y);
+	bool checkCollision(const int& x, const int& y);
 	void add(int& x, int& y, int t, int c, int id = -1, std::string ai = "", bool con = false);
 	void remove(int& x, int& y);
 	void unfold(int& x, int& y);	// show options (if they are)

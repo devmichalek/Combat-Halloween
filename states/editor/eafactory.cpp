@@ -2,6 +2,7 @@
 #include "logconsole.h"
 #include "loading.h"
 #include "boost/scope_exit.hpp"
+#include "core.h" // static core
 
 EAFactory::EAFactory()
 {
@@ -133,7 +134,7 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 			int mouseX = event.mouseButton.x + (addX * -1);
 			int mouseY = event.mouseButton.y * -1 + screen_h + (addY * -1);
 
-			redBacklight = !isCellEmpty(mouseX, mouseY);
+			redBacklight = !checkCollision(mouseX, mouseY);
 			if (!redBacklight)	// add
 			{
 				unfold(mouseX, mouseY);
@@ -146,6 +147,8 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 		return false;
 
 	// scroll
+	int mouseX = -1;
+	int mouseY = -1;
 	if (type != VOID)
 	{
 		if (event.type == sf::Event::MouseWheelMoved)
@@ -171,23 +174,38 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 
 		if (event.type == sf::Event::MouseMoved)
 		{
-			int mouseX = event.mouseMove.x + (addX * -1);
-			int mouseY = event.mouseMove.y * -1 + screen_h + (addY * -1);
-			redBacklight = !isCellEmpty(mouseX, mouseY);
+			mouseX = event.mouseMove.x + (addX * -1);
+			mouseY = event.mouseMove.y * -1 + screen_h + (addY * -1);
+			redBacklight = !checkCollision(mouseX, mouseY);
 		}
 	}
 
-	if (event.type == sf::Event::MouseButtonPressed)
+	bool pressed = false;
+	if (tools.isHotKeyPressed())
+	{
+		if (type == TILE || type == UNVISIBLE_TILE || tools.isDeleteMode())
+			pressed = true;
+		else if (tools.isHotKeyElapsed())
+			pressed = true;
+
+	}
+	else if (event.type == sf::Event::MouseButtonPressed)
 	{
 		if (event.mouseButton.button == sf::Mouse::Left)
 		{
-			int mouseX = event.mouseButton.x + (addX * -1);
-			int mouseY = event.mouseButton.y * -1 + screen_h + (addY * -1);
-
-			redBacklight = !isCellEmpty(mouseX, mouseY);
-			if (!redBacklight)	// remove/add
-				tools.isDeleteMode() ? remove(mouseX, mouseY) : add(mouseX, mouseY, type, chosen);
+			pressed = true;
 		}
+	}
+
+	if (pressed)
+	{
+		sf::Vector2i mouse = cmm::StaticCore::getMousePosition();
+		mouseX = mouse.x + (addX * -1);
+		mouseY = mouse.y * -1 + screen_h + (addY * -1);
+
+		redBacklight = !checkCollision(mouseX, mouseY);
+		if (!redBacklight)	// remove/add
+			tools.isDeleteMode() ? remove(mouseX, mouseY) : add(mouseX, mouseY, type, chosen);
 	}
 
 	if (event.type == sf::Event::KeyPressed)
@@ -196,7 +214,7 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 
 		change = true;
 
-		if (tools.isKeyPressed())
+		if (tools.isDeleteKeyPressed())
 		{
 			type = VOID;
 			chosen = 0;
@@ -312,6 +330,7 @@ void EAFactory::mechanics(const double &elapsedTime)
 		}
 	}
 
+	tools.mechanics(elapsedTime);
 	mechanics_deck(elapsedTime);
 }
 
@@ -409,11 +428,15 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 	eLandscape.draw(window, factory[LANDSCAPE][eLandscape.getChosen()], addX, addY);
 }
 
-bool EAFactory::isCellEmpty(const int& x, const int& y)
+bool EAFactory::checkCollision(const int& x, const int& y)
 {
+	sf::Rect<int> rect(x, y, 0, 0);
+
 	if (type == TILE || type == UNVISIBLE_TILE)
 	{
-		if (!eTiles.isCellEmpty(x, y) || !eUnTiles.isCellEmpty(x, y))
+		rect.width = factory[TILE][0]->getWidth();
+		rect.height = rect.width;
+		if (eTiles.checkCollision(rect) || eUnTiles.checkCollision(rect))
 			return false;
 	}
 
