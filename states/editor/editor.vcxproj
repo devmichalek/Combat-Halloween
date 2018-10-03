@@ -110,6 +110,7 @@
     <ClInclude Include="editoraction.h" />
     <ClInclude Include="editorfilemanager.h" />
     <ClInclude Include="editornavigation.h" />
+    <ClInclude Include="eecollision.h" />
     <ClInclude Include="efmbuttons.h" />
     <ClInclude Include="efminfo.h" />
     <ClInclude Include="efmlibrary.h" />

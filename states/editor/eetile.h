@@ -1,8 +1,9 @@
 #pragma once
+#include "eecollision.h"
 
 namespace ee // Editor Entity
 {
-	class Tile
+	class Tile : public Collision
 	{
 		int max;
 		int width;
@@ -17,10 +18,10 @@ namespace ee // Editor Entity
 		void reset();	// empty the array
 
 		void init(const int& width);	// allocate
-		bool isCellEmpty(const int &mouseX, const int &mouseY);
 		char get(const int &x, const int &y);
 		bool add(int &mouseX, int &mouseY, const int &chosen);
 		int remove(int &mouseX, int &mouseY);
 		const int& getMax();
+		bool checkCollision(sf::Rect<int> rect);
 	};
 }

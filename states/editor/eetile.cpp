@@ -56,11 +56,6 @@ void ee::Tile::init(const int& width)
 	reset();
 }
 
-bool ee::Tile::isCellEmpty(const int &mouseX, const int &mouseY)
-{
-	return array[mouseX / width][mouseY / width] == -1;
-}
-
 char ee::Tile::get(const int &x, const int &y)
 {
 	return array[x][y];
@@ -134,4 +129,36 @@ int ee::Tile::remove(int &mouseX, int &mouseY)
 const int& ee::Tile::getMax()
 {
 	return max;
+}
+
+bool ee::Tile::checkCollision(sf::Rect<int> rect)
+{
+	int x = rect.left / width;
+	int y = rect.top / width;
+
+	if (x < 0 || x >= max || y < 0 || y >= max)
+		return false;
+
+	bool currentCell = array[x][y] != -1;
+	if ((!collision && currentCell) || currentCell)
+	{
+		return true; // this cell is occupied
+	}
+	else if(collision)
+	{
+		// check surrounding
+		++x;
+		currentCell = array[x][y] != -1;
+		if (currentCell)	return true;
+
+		++y;
+		currentCell = array[x][y] != -1;
+		if (currentCell)	return true;
+
+		--x;
+		currentCell = array[x][y] != -1;
+		if (currentCell)	return true;
+	}
+	
+	return false;
 }

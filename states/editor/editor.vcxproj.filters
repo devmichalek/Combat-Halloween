@@ -236,5 +236,8 @@
     <ClInclude Include="eetile.h">
       <Filter>Editor Action\Action\Entities</Filter>
     </ClInclude>
+    <ClInclude Include="eecollision.h">
+      <Filter>Editor Action\Action\Entities</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
