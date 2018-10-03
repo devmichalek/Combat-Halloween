@@ -12,6 +12,7 @@ namespace cmm
 		inline static bool open = false;	// State of the window.
 		StaticCore();
 		virtual ~StaticCore();
+		static sf::Vector2i getMousePosition();
 	};
 
 	class Core : public StaticCore

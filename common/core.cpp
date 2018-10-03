@@ -15,6 +15,12 @@ cmm::StaticCore::~StaticCore()
 	}
 }
 
+sf::Vector2i cmm::StaticCore::getMousePosition()
+{
+	sf::Vector2i mouse = sf::Mouse::getPosition(*window);
+	return mouse;
+}
+
 cmm::Core::Core(int state)
 {
 	open = false;
