@@ -1,5 +1,6 @@
 #include "eatools.h"
 #include "loading.h"
+#include "eecollision.h"
 
 EATools::EATools()
 {
@@ -15,12 +16,16 @@ void EATools::free()
 {
 	screen_w = 0;
 	screen_h = 0;
+	reset();
 }
 
 void EATools::reset()
 {
 	deleteMode = false;
-	keyPressed = false;
+	deleteKeyPressed = false;
+	hotKeyPressed = false;
+	hotKeyCounter = 0.0f;
+	hotKeyState = 0.25f;
 }
 
 
@@ -68,9 +73,13 @@ bool EATools::handle(const sf::Event &event)
 	{
 		if (event.key.code == sf::Keyboard::LControl)	// temporary delete mode
 		{
-			keyPressed = true;
+			deleteKeyPressed = true;
 			if (deleteMode != 2)
 				deleteMode = 1;
+		}
+		else if (event.key.code == sf::Keyboard::Space)	// temporary collision mode
+		{
+			hotKeyPressed = true;
 		}
 	}
 
@@ -78,9 +87,14 @@ bool EATools::handle(const sf::Event &event)
 	{
 		if (event.key.code == sf::Keyboard::LControl)
 		{
-			keyPressed = false;
+			deleteKeyPressed = false;
 			if (deleteMode != 2)
 				deleteMode = 0;
+		}
+		else if (event.key.code == sf::Keyboard::Space)
+		{
+			hotKeyPressed = false;
+			hotKeyCounter = 0.0f;
 		}
 	}
 
@@ -149,11 +163,35 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 	factory[chosen]->setPosition(tempX, tempY);	// Set back current position.
 }
 
-
-
-const bool& EATools::isKeyPressed() const
+void EATools::mechanics(const float &elapsedTime)
 {
-	return keyPressed;
+	if (hotKeyPressed)
+	{
+		hotKeyCounter += elapsedTime;
+	}
+}
+
+
+
+const bool& EATools::isDeleteKeyPressed() const
+{
+	return deleteKeyPressed;
+}
+
+const bool& EATools::isHotKeyPressed() const
+{
+	return hotKeyPressed;
+}
+
+bool EATools::isHotKeyElapsed()
+{
+	if (hotKeyCounter > hotKeyState)
+	{
+		hotKeyCounter = 0.0f;
+		return true;
+	}
+		
+	return false;
 }
 
 bool EATools::isDeleteMode() const
