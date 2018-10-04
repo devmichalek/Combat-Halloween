@@ -85,7 +85,7 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 	}
 
 	labels[MENU]->setText("Menu");
-	labels[LEVELMENU]->setText("Level Menu");
+	labels[LEVELMENU]->setText("Level\nMenu");
 	labels[PLAY]->setText("Test");
 
 	for (int i = 0; i < KIND::SIZE; ++i)

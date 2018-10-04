@@ -68,11 +68,8 @@
     <ClCompile Include="..\..\common\thread.cpp" />
     <ClCompile Include="..\..\common\user.cpp" />
     <ClCompile Include="..\..\tools\button.cpp" />
-    <ClCompile Include="..\..\tools\chat.cpp" />
     <ClCompile Include="..\..\tools\circlebutton.cpp" />
-    <ClCompile Include="..\..\tools\fps.cpp" />
     <ClCompile Include="..\..\tools\loading.cpp" />
-    <ClCompile Include="..\..\tools\pausesystem.cpp" />
     <ClCompile Include="..\platform\platform\scontent.cpp" />
     <ClCompile Include="eetile.cpp" />
     <ClCompile Include="eelandscape.cpp" />

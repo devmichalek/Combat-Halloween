@@ -129,25 +129,16 @@
     <ClCompile Include="..\..\tools\circlebutton.cpp">
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tools\chat.cpp">
-      <Filter>Dependencies\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\tools\button.cpp">
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\tools\loading.cpp">
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\tools\pausesystem.cpp">
-      <Filter>Dependencies\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="editor.cpp" />
     <ClCompile Include="..\..\common\filemanager.cpp">
       <Filter>Dependencies\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\tools\fps.cpp">
-      <Filter>Dependencies\Tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\fpsconsole.cpp">
       <Filter>Dependencies\Common</Filter>
