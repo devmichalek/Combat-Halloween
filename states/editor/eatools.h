@@ -4,16 +4,24 @@
 
 class EATools
 {
-	int screen_w, screen_h;
+	int screen_w;
+	int screen_h;
+
+	enum TYPES
+	{
+		DELETEKEY = 0,
+		HOTKEY,
+		COLLISIONKEY,
+		COUNT
+	};
+
+	std::vector<CircleButton*> buttons;
+	std::vector<cmm::Text*> texts;
+	std::vector<bool> pressed;
+	std::vector<int> states;
+	std::vector<int> keys;
 
 	cmm::Sprite checkedIcon;
-
-	// Deleting Mode
-	char deleteMode;	// 0 = no delete mode, 1 - temporary (ctrl), 2 - pernament (button)
-	bool deleteKeyPressed;
-	bool hotKeyPressed;
-	CircleButton deleteButton;
-	cmm::Text deleteText;
 
 	float hotKeyCounter;
 	float hotKeyState;
@@ -25,6 +33,7 @@ private:
 	void free();
 public:
 	void reset();
+	void resetButtons();
 
 	void load(const float& screen_w, const float& screen_h);
 	bool handle(const sf::Event &event);
@@ -32,9 +41,10 @@ public:
 	void draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &sprites, const int& chosen);
 	void mechanics(const float &elapsedTime);
 
-	const bool& isDeleteKeyPressed() const;
-	const bool& isHotKeyPressed() const;
+	bool isDeleteKeyPressed();
+	bool isHotKeyPressed();
+	bool isCollisionKeyPressed();
+
 	bool isHotKeyElapsed();
 	bool isDeleteMode() const;
-	void resetDeleteMode();
 };

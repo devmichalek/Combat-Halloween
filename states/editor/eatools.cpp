@@ -16,16 +16,65 @@ void EATools::free()
 {
 	screen_w = 0;
 	screen_h = 0;
+
+	if (!buttons.empty())
+	{
+		for (auto &it : buttons)
+		{
+			delete it;
+			it = nullptr;
+		}
+	}
+	
+	if (!texts.empty())
+	{
+		for (auto &it : texts)
+		{
+			delete it;
+			it = nullptr;
+		}
+	}
+	
+	if (!pressed.empty())
+		pressed.clear();
+	
+	if (!states.empty())
+		states.clear();
+
+	if (!keys.empty())
+		keys.clear();
+
 	reset();
 }
 
 void EATools::reset()
 {
-	deleteMode = false;
-	deleteKeyPressed = false;
-	hotKeyPressed = false;
+	if (!pressed.empty())
+	{
+		for (auto it : pressed)
+			it = false;
+	}
+
+	if (!states.empty())
+	{
+		for (auto it : states)
+			it = 0;
+	}
+
 	hotKeyCounter = 0.0f;
 	hotKeyState = 0.25f;
+}
+
+void EATools::resetButtons()
+{
+	for (auto &it : buttons)
+		it->setActive(false);
+
+	for (auto it : pressed)
+		it = false;
+
+	for (auto it : states)
+		it = 0;
 }
 
 
@@ -37,64 +86,85 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	this->screen_w = static_cast<int>(screen_w);
 	this->screen_h = static_cast<int>(screen_h);
 
+	for (int i = 0; i < COUNT; ++i)
+	{
+		buttons.push_back(new CircleButton);
+		texts.push_back(new cmm::Text);
+		pressed.push_back(false);
+		states.push_back(0);
+
+		Loading::add(texts[i]->setFont(cmm::JCANDLE_FONT_PATH));
+		if (Loading::isError()) return;
+		texts[i]->setSize(screen_w / 60);
+		texts[i]->setAlpha(0xFF);
+		texts[i]->setFillColor(sf::Color::White);
+	}
+
+	keys.push_back(sf::Keyboard::LControl);
+	keys.push_back(sf::Keyboard::Space);
+	keys.push_back(sf::Keyboard::LShift);
+	
+	buttons[DELETEKEY]->load("images/buttons/rubbish.png");
+	buttons[HOTKEY]->load("images/buttons/hotkey.png");
+	buttons[COLLISIONKEY]->load("images/buttons/wholecollision.png");
+	if (Loading::isError()) return;
+	
+	for (auto &it : buttons)
+	{
+		it->setVolume(0.0f); // muted
+		it->setScale(screen_w / 2560, screen_h / 1440);
+	}
+	
+	buttons[DELETEKEY]->setPosition(screen_w - screen_w / 85 - buttons[DELETEKEY]->getWidth() * 3, screen_h / 144);
+	buttons[HOTKEY]->setPosition(buttons[DELETEKEY]->getLeft() - screen_w / 256 - buttons[HOTKEY]->getWidth(), buttons[DELETEKEY]->getTop());
+	buttons[COLLISIONKEY]->setPosition(buttons[HOTKEY]->getLeft() - screen_w / 256 - buttons[COLLISIONKEY]->getWidth(), buttons[DELETEKEY]->getTop());
+
+	texts[DELETEKEY]->setText("Delete\nMode");
+	texts[HOTKEY]->setText("Quick\nMode");
+	texts[COLLISIONKEY]->setText("  Whole\nCollision");
+
+	for (int i = 0; i < COUNT; ++i)
+		texts[i]->setPosition(buttons[i]->getLeft() + buttons[i]->getWidth() / 2 - texts[i]->getWidth() / 2, buttons[i]->getBot() + screen_w / 300.0f);
+
 	Loading::add(checkedIcon.load("images/icons/checkedicon.png"));
 	if (Loading::isError()) return;
 	checkedIcon.setScale(0.3, 0.3);
 	checkedIcon.setAlpha(0xFF / 1.5);
-
-	deleteButton.load("images/buttons/rubbish.png");
-	if (Loading::isError()) return;
-	deleteButton.setVolume(0.0f); // muted
-	deleteButton.setScale(screen_w / 2560, screen_h / 1440);
-	deleteButton.setPosition(screen_w - screen_w / 85 - deleteButton.getWidth() * 3, screen_h / 144);
-
-	Loading::add(deleteText.setFont(cmm::JCANDLE_FONT_PATH));
-	if (Loading::isError()) return;
-	deleteText.setSize(screen_w / 60);
-	deleteText.setAlpha(0xFF);
-	deleteText.setFillColor(sf::Color::White);
-	deleteText.setText("Delete Mode");
-	deleteText.setPosition(deleteButton.getLeft() + deleteButton.getWidth() / 2 - deleteText.getWidth() / 2, deleteButton.getBot() + screen_w / 300.0f);
 }
 
 bool EATools::handle(const sf::Event &event)
 {
-	deleteButton.handle(event);
-	if (deleteButton.hasChanged())
+	for (int i = 0; i < COUNT; ++i)
 	{
-		if (deleteButton.isActive())
-			deleteMode = 2;
-		else if (deleteMode == 2)
-			deleteMode = 0;
-		return true;
-	}
+		buttons[i]->handle(event);
+		if (buttons[i]->hasChanged())
+		{
+			if (states[i] != 2)				states[i] = 2;
+			else if (states[i] == 2)		states[i] = pressed[i] ? 1 : 0;
+			return true;
+		}
 
-	if (event.type == sf::Event::KeyPressed)
-	{
-		if (event.key.code == sf::Keyboard::LControl)	// temporary delete mode
+		if (event.type == sf::Event::KeyPressed)
 		{
-			deleteKeyPressed = true;
-			if (deleteMode != 2)
-				deleteMode = 1;
+			if (event.key.code == keys[i])
+			{
+				pressed[i] = true;
+				if (states[i] != 2)
+					states[i] = 1;
+			}
 		}
-		else if (event.key.code == sf::Keyboard::Space)	// temporary collision mode
-		{
-			hotKeyPressed = true;
-		}
-	}
 
-	if (event.type == sf::Event::KeyReleased)
-	{
-		if (event.key.code == sf::Keyboard::LControl)
+		if (event.type == sf::Event::KeyReleased)
 		{
-			deleteKeyPressed = false;
-			if (deleteMode != 2)
-				deleteMode = 0;
-		}
-		else if (event.key.code == sf::Keyboard::Space)
-		{
-			hotKeyPressed = false;
-			hotKeyCounter = 0.0f;
+			if (event.key.code == keys[i])
+			{
+				pressed[i] = false;
+				if (states[i] != 2)
+					states[i] = 0;
+
+				if(i == HOTKEY)
+					hotKeyCounter = 0.0f;
+			}
 		}
 	}
 
@@ -103,8 +173,17 @@ bool EATools::handle(const sf::Event &event)
 
 void EATools::drawTools(sf::RenderWindow* &window)
 {
-	deleteButton.draw(window);
-	window->draw(deleteText);
+	for (int i = 0; i < COUNT; ++i)
+	{
+		if (states[i] != 0)
+			buttons[i]->setActive(true);
+
+		buttons[i]->draw(window);
+		buttons[i]->setActive(false);
+	}
+
+	for (auto &it : texts)
+		window->draw(*it);
 }
 
 void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory, const int& chosen)	// Draws thumbnails
@@ -165,22 +244,29 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 
 void EATools::mechanics(const float &elapsedTime)
 {
-	if (hotKeyPressed)
+	if (pressed[HOTKEY])
 	{
 		hotKeyCounter += elapsedTime;
 	}
+
+	ee::Collision::getCollision() = states[COLLISIONKEY] != 0 ? true : false;
 }
 
 
 
-const bool& EATools::isDeleteKeyPressed() const
+bool EATools::isDeleteKeyPressed()
 {
-	return deleteKeyPressed;
+	return pressed[DELETEKEY];
 }
 
-const bool& EATools::isHotKeyPressed() const
+bool EATools::isHotKeyPressed()
 {
-	return hotKeyPressed;
+	return pressed[HOTKEY];
+}
+
+bool EATools::isCollisionKeyPressed()
+{
+	return pressed[COLLISIONKEY];
 }
 
 bool EATools::isHotKeyElapsed()
@@ -196,11 +282,5 @@ bool EATools::isHotKeyElapsed()
 
 bool EATools::isDeleteMode() const
 {
-	return deleteMode != 0;
-}
-
-void EATools::resetDeleteMode()
-{
-	deleteButton.setActive(false);
-	deleteMode = 0;
+	return states[DELETEKEY] != 0;
 }
