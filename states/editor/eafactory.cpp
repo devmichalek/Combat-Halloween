@@ -147,8 +147,6 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 		return false;
 
 	// scroll
-	int mouseX = -1;
-	int mouseY = -1;
 	if (type != VOID)
 	{
 		if (event.type == sf::Event::MouseWheelMoved)
@@ -171,13 +169,6 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 				}
 			}
 		}
-
-		if (event.type == sf::Event::MouseMoved)
-		{
-			mouseX = event.mouseMove.x + (addX * -1);
-			mouseY = event.mouseMove.y * -1 + screen_h + (addY * -1);
-			redBacklight = !checkCollision(mouseX, mouseY);
-		}
 	}
 
 	bool pressed = false;
@@ -197,15 +188,14 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 		}
 	}
 
-	if (pressed)
-	{
-		sf::Vector2i mouse = cmm::StaticCore::getMousePosition();
-		mouseX = mouse.x + (addX * -1);
-		mouseY = mouse.y * -1 + screen_h + (addY * -1);
+	sf::Vector2i mouse = cmm::StaticCore::getMousePosition();
+	int mouseX = mouse.x + (addX * -1);
+	int mouseY = mouse.y * -1 + screen_h + (addY * -1);
 
-		redBacklight = !checkCollision(mouseX, mouseY);
-		if (!redBacklight)	// remove/add
-			tools.isDeleteMode() ? remove(mouseX, mouseY) : add(mouseX, mouseY, type, chosen);
+	redBacklight = !checkCollision(mouseX, mouseY);
+	if (pressed && !redBacklight)	// remove/add
+	{
+		tools.isDeleteMode() ? remove(mouseX, mouseY) : add(mouseX, mouseY, type, chosen);
 	}
 
 	if (event.type == sf::Event::KeyPressed)
@@ -223,7 +213,7 @@ bool EAFactory::handle(const sf::Event &event, const int &addX, const int &addY)
 		{
 			reset();
 			change = true;
-			tools.resetDeleteMode();
+			tools.resetButtons();
 		}
 		else if (!tools.isDeleteMode())
 		{
