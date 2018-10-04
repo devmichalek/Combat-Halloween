@@ -1,6 +1,5 @@
 #pragma once
 #include "state.h"
-#include "chat.h"
 #include "editornavigation.h"
 #include "editorfilemanager.h"
 #include "editoraction.h"
@@ -20,7 +19,6 @@ class Editor :public cmm::State
 	// Editor_details editor_details;
 	// Editor_options editor_options;
 	// Tiles_editor tiles_editor;
-	Chat chat;
 	
 public:
 	Editor();
