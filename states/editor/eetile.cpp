@@ -66,6 +66,9 @@ bool ee::Tile::add(int &mouseX, int &mouseY, const int &chosen)
 	int x = mouseX / width;
 	int y = mouseY / width;
 
+	if (x < 0 || x >= max || y < 0 || y >= max)
+		return false;
+
 	if (array[x][y] != -1)
 		return false;
 	
@@ -147,17 +150,27 @@ bool ee::Tile::checkCollision(sf::Rect<int> rect)
 	else if(collision)
 	{
 		// check surrounding
+		// 9x9 box
+		//	 y
+		// x|a|a|a|
+		//	|a|b|b|
+		//  |a|b|b|
 		++x;
-		currentCell = array[x][y] != -1;
-		if (currentCell)	return true;
+		--y;
+		for (int i = y; i < y + 3; ++i)
+		{
+			if (i >= max)
+				continue;
 
-		++y;
-		currentCell = array[x][y] != -1;
-		if (currentCell)	return true;
+			for (int j = x; j > x - 3; --j)
+			{
+				if (j < 0)
+					break;
 
-		--x;
-		currentCell = array[x][y] != -1;
-		if (currentCell)	return true;
+				if (array[j][i] != -1)
+					return true;
+			}
+		}
 	}
 	
 	return false;
