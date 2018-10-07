@@ -492,7 +492,7 @@ void EAFactory::unfold(int& x, int& y)
 		ee::LandscapeBox box = eLandscape.getLast();
 		eLandscape.add(box.first, box.second);
 		eLandscape.setAI(newAI);
-		history.add(LANDSCAPE, box.second.chosen, bg::get<0>(box.first.min_corner()), bg::get<1>(box.first.min_corner()), newAI, box.second.id);
+		history.add(LANDSCAPE, box.second.chosen, bg::get<0>(box.first.min_corner()), bg::get<1>(box.first.max_corner()), newAI, box.second.id);
 	}
 
 	if (eLandscape.remove(x, y))
