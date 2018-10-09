@@ -69,7 +69,7 @@ void EAHistory::fill_local()
 		}
 	}
 
-	int counter = 0;
+	counterID = 0;
 	int id, x, y;
 	char t, c;
 	int s2 = 2, s3 = 3;
@@ -87,6 +87,7 @@ void EAHistory::fill_local()
 		xy.push_back(std::make_pair(x, y));
 		ids.push_back(id);
 		this->ai.push_back(ai);
+		++counterID;
 	}
 }
 
