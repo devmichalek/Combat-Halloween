@@ -1,17 +1,17 @@
 #include "moving_bg.h"
 #include "loading.h"
 
-MovingBG::MovingBG()
+pla::MovingBG::MovingBG()
 {
 	free();
 }
 
-MovingBG::~MovingBG()
+pla::MovingBG::~MovingBG()
 {
 	free();
 }
 
-void MovingBG::free()
+void pla::MovingBG::free()
 {
 	screen_w = 0;
 	screen_h = 0;
@@ -41,7 +41,7 @@ void MovingBG::free()
 
 
 
-void MovingBG::load(const float &screen_w, const float &screen_h)
+void pla::MovingBG::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -75,7 +75,7 @@ void MovingBG::load(const float &screen_w, const float &screen_h)
 	types.push_back(2);
 }
 
-void MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 {
 	for (unsigned i = 0; i < fs.size(); ++i)
 	{
@@ -84,7 +84,7 @@ void MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	}
 }
 
-void MovingBG::mechanics(const float &elapsedTime, const float &direction)
+void pla::MovingBG::mechanics(const float &elapsedTime, const char &direction)
 {
 	for (unsigned i = 1; i < 3; ++i)
 	{
@@ -107,7 +107,7 @@ void MovingBG::mechanics(const float &elapsedTime, const float &direction)
 	}
 }
 
-const float& MovingBG::getAlpha() const
+const float& pla::MovingBG::getAlpha() const
 {
 	return sprites[0]->getAlpha();
 }

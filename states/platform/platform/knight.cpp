@@ -2,17 +2,17 @@
 #include "loading.h"
 #include <boost/lexical_cast.hpp>
 
-Knight::Knight()
+pla::Knight::Knight()
 {
 	free();
 }
 
-Knight::~Knight()
+pla::Knight::~Knight()
 {
 	free();
 }
 
-void Knight::free()
+void pla::Knight::free()
 {
 	screen_w = screen_h = 0;
 
@@ -30,7 +30,7 @@ void Knight::free()
 	reset();
 }
 
-void Knight::reset()
+void pla::Knight::reset()
 {
 	resetState();
 	coxing.reset();
@@ -42,7 +42,7 @@ void Knight::reset()
 
 
 
-void Knight::load(const float &screen_w, const float &screen_h)
+void pla::Knight::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -72,12 +72,12 @@ void Knight::load(const float &screen_w, const float &screen_h)
 	// ---      ---
 }
 
-void Knight::handle(const sf::Event &event)
+void pla::Knight::handle(const sf::Event &event)
 {
 	coxing.releaseJumping(event);
 }
 
-void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 {
 	if (state == STATES::VOID)
 		return;
@@ -97,7 +97,7 @@ void Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	// ---      ---
 }
 
-void Knight::mechanics(const float &elapsedTime)
+void pla::Knight::mechanics(const float &elapsedTime)
 {
 	offset += elapsedTime * OPS;
 	if (static_cast<int>(offset) >= offset_max)
@@ -108,17 +108,17 @@ void Knight::mechanics(const float &elapsedTime)
 	}
 }
 
-void Knight::switchCollision()
+void pla::Knight::switchCollision()
 {
 	collisionMode = !collisionMode;
 }
 
-sf::IntRect& Knight::getRect()
+sf::IntRect& pla::Knight::getRect()
 {
 	return rect;
 }
 
-const sf::IntRect& Knight::getAttackRect()
+const sf::IntRect& pla::Knight::getAttackRect()
 {
 	return attackRect;
 }
@@ -133,27 +133,27 @@ const sf::IntRect& Knight::getAttackRect()
 //	return rect.top;
 //}
 
-bool Knight::isAlive()
+bool pla::Knight::isAlive()
 {
 	return !coxing.die && static_cast<int>(offset) == offset_max;
 }
 
-bool Knight::isAttack()
+bool pla::Knight::isAttack()
 {
 	return coxing.attack && offset > 3 && offset < 8;
 }
 
-bool Knight::isLeftAligned() const
+bool pla::Knight::isLeftAligned() const
 {
 	return !align;
 }
 
-const bool &Knight::isRightAligned() const
+const bool &pla::Knight::isRightAligned() const
 {
 	return align;
 }
 
-bool Knight::moveLeft(const float &elapsedTime)
+bool pla::Knight::moveLeft(const float &elapsedTime)
 {
 	if (coxing.isMovingLeft() && (!coxing.attack || coxing.jump))
 	{
@@ -167,12 +167,12 @@ bool Knight::moveLeft(const float &elapsedTime)
 	return false;
 }
 
-void Knight::undoMoveLeft(const float &elapsedTime)
+void pla::Knight::undoMoveLeft(const float &elapsedTime)
 {
 	xy.x += (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 }
 
-bool Knight::moveRight(const float &elapsedTime)
+bool pla::Knight::moveRight(const float &elapsedTime)
 {
 	if (coxing.isMovingRight() && (!coxing.attack || coxing.jump))
 	{
@@ -185,12 +185,12 @@ bool Knight::moveRight(const float &elapsedTime)
 	return false;
 }
 
-void Knight::undoMoveRight(const float &elapsedTime)
+void pla::Knight::undoMoveRight(const float &elapsedTime)
 {
 	xy.x -= (coxing.walkTimer >= coxing.walkLine ? specs.velocity : specs.hvelocity) * elapsedTime;
 }
 
-void Knight::idle(const float &elapsedTime)
+void pla::Knight::idle(const float &elapsedTime)
 {
 	if (!coxing.attack && !coxing.jump)
 	{
@@ -205,7 +205,7 @@ void Knight::idle(const float &elapsedTime)
 	}
 }
 
-bool Knight::jump(const float &elapsedTime)
+bool pla::Knight::jump(const float &elapsedTime)
 {
 	if (coxing.isJumping())
 	{
@@ -230,12 +230,12 @@ bool Knight::jump(const float &elapsedTime)
 	return false;
 }
 
-void Knight::undoJump(const float &elapsedTime)
+void pla::Knight::undoJump(const float &elapsedTime)
 {
 	xy.y += specs.gravity * 2;
 }
 
-void Knight::attack()
+void pla::Knight::attack()
 {
 	if (coxing.isAttacking())
 	{
@@ -256,7 +256,7 @@ void Knight::attack()
 	}
 }
 
-void Knight::rest()
+void pla::Knight::rest()
 {
 	// die
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) // test
@@ -273,13 +273,13 @@ void Knight::rest()
 	setAttackRect();
 }
 
-void Knight::gravity()
+void pla::Knight::gravity()
 {
 	coxing.falling = true;
 	xy.y += specs.gravity;
 }
 
-void Knight::undoGravity()
+void pla::Knight::undoGravity()
 {
 	coxing.jumpCounter = 0;
 	coxing.jumpReleased = true;
@@ -287,7 +287,7 @@ void Knight::undoGravity()
 	xy.y -= specs.gravity;
 }
 
-void Knight::read(std::string &str)
+void pla::Knight::read(std::string &str)
 {
 	int tempX = boost::lexical_cast<int>(str.substr(str.find("x:") + 2, str.find(" y:") - (str.find("x:") + 2)));
 	int tempY = boost::lexical_cast<int>(str.substr(str.find("y:") + 2, str.find(" id:") - (str.find("y:") + 2)));
@@ -306,7 +306,7 @@ void Knight::read(std::string &str)
 
 
 
-void Knight::walk(const double &elapsedTime)
+void pla::Knight::walk(const double &elapsedTime)
 {
 	if (!coxing.jump /*&& state != STATES::ATTACK*/)
 	{
@@ -319,7 +319,7 @@ void Knight::walk(const double &elapsedTime)
 	}
 }
 
-void Knight::setPosition()
+void pla::Knight::setPosition()
 {
 	// set y
 	float newX = xy.x;
@@ -356,7 +356,7 @@ void Knight::setPosition()
 	sprites[state]->setPosition(newX, newY);
 }
 
-void Knight::setAlign()
+void pla::Knight::setAlign()
 {
 	if (align == ALIGN::LEFT)
 		sprites[state]->setScale(-specs.scale, specs.scale);
@@ -364,7 +364,7 @@ void Knight::setAlign()
 		sprites[state]->setScale(specs.scale, specs.scale);
 }
 
-void Knight::setRect()
+void pla::Knight::setRect()
 {
 	rect.left = static_cast<int>(xy.x - rect.width / 2);
 	rect.top = static_cast<int>(xy.y - rect.height);
@@ -377,7 +377,7 @@ void Knight::setRect()
 	// ---      ---
 }
 
-void Knight::setAttackRect()
+void pla::Knight::setAttackRect()
 {
 	if (align == ALIGN::RIGHT)
 		attackRect.left = static_cast<int>(xy.x);

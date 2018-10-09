@@ -1,29 +1,32 @@
 #pragma once
 #include "specs.h"
 
-class KSpecs : public Specs// Knight Specs
+namespace pla
 {
-public:
-	float hp;
-	float mp;
-	float armour;
-	float mresistant;
-	float velocity;
-	float hvelocity;	// half velocity
-	float gravity;
-	float damage;
-	float mdamage;
-	float luck;
-	float experience;
-	int level;
+	class KSpecs : public Specs// Knight Specs
+	{
+	public:
+		float hp;
+		float mp;
+		float armour;
+		float mresistant;
+		float velocity;
+		float hvelocity;	// half velocity
+		float gravity;
+		float damage;
+		float mdamage;
+		float luck;
+		float experience;
+		int level;
 
-	// other
-	float scale;
+		// other
+		float scale;
 
-	KSpecs();
-	~KSpecs();
-private:
-	void freeSpecs();
-public:
-	void setSpecs();	// also reset
-};
+		KSpecs();
+		~KSpecs();
+	private:
+		void freeSpecs();
+	public:
+		void setSpecs();	// also reset
+	};
+}

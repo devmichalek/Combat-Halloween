@@ -1,17 +1,17 @@
 #include "kcoxing.h"
 #include <SFML/Window/Keyboard.hpp>
 
-KCoxing::KCoxing()
+pla::KCoxing::KCoxing()
 {
 	reset();
 }
 
-KCoxing::~KCoxing()
+pla::KCoxing::~KCoxing()
 {
 	reset();
 }
 
-void KCoxing::reset()
+void pla::KCoxing::reset()
 {
 	walkTimer = 0;
 	walkLine = 1.0f;
@@ -32,22 +32,22 @@ void KCoxing::reset()
 	}
 }
 
-bool KCoxing::isMovingLeft()
+bool pla::KCoxing::isMovingLeft()
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::MOVE_LEFT]));
 }
 
-bool KCoxing::isMovingRight()
+bool pla::KCoxing::isMovingRight()
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::MOVE_RIGHT]));
 }
 
-bool KCoxing::isJumping()
+bool pla::KCoxing::isJumping()
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::JUMP])) && (jumpCounter < jumpLine) && jumpReleased;
 }
 
-void KCoxing::releaseJumping(const sf::Event &event)
+void pla::KCoxing::releaseJumping(const sf::Event &event)
 {
 	if (event.type == sf::Event::KeyReleased)
 	{
@@ -61,12 +61,12 @@ void KCoxing::releaseJumping(const sf::Event &event)
 	}
 }
 
-bool KCoxing::isAttacking()
+bool pla::KCoxing::isAttacking()
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::ATTACK]));
 }
 
-bool KCoxing::isDefensing()
+bool pla::KCoxing::isDefensing()
 {
 	return sf::Keyboard::isKeyPressed(sf::Keyboard::Key(keys[KEY_ACTION::SHIELD]));
 }

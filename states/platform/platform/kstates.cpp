@@ -1,16 +1,16 @@
 #include "kstates.h"
 
-KStates::KStates()
+pla::KStates::KStates()
 {
 	resetState();
 }
 
-KStates::~KStates()
+pla::KStates::~KStates()
 {
 	resetState();
 }
 
-void KStates::resetState()
+void pla::KStates::resetState()
 {
 	state = STATES::IDLE;
 	offset = 0;

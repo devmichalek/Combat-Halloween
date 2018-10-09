@@ -1,16 +1,16 @@
 #include "kspecs.h"
 
-KSpecs::KSpecs()
+pla::KSpecs::KSpecs()
 {
 	freeSpecs();
 }
 
-KSpecs::~KSpecs()
+pla::KSpecs::~KSpecs()
 {
 	freeSpecs();
 }
 
-void KSpecs::freeSpecs()
+void pla::KSpecs::freeSpecs()
 {
 	hp = 0;
 	mp = 0;
@@ -27,7 +27,7 @@ void KSpecs::freeSpecs()
 	scale = 0.45f;
 }
 
-void KSpecs::setSpecs()
+void pla::KSpecs::setSpecs()
 {
 	if (features.empty())	// happens while testing
 	{

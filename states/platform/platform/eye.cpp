@@ -1,17 +1,17 @@
 #include "eye.h"
 #include "loading.h"
 
-Eye::Eye()
+pla::Eye::Eye()
 {
 	free();
 }
 
-Eye::~Eye()
+pla::Eye::~Eye()
 {
 	free();
 }
 
-void Eye::free()
+void pla::Eye::free()
 {
 	line_y = 0;
 	distance_y = 0;
@@ -29,7 +29,7 @@ void Eye::free()
 	viewX = viewY = 0;
 }
 
-void Eye::reset(const sf::Rect<int> &rect)
+void pla::Eye::reset(const sf::Rect<int> &rect)
 {
 	distance_y = 0;
 
@@ -45,7 +45,7 @@ void Eye::reset(const sf::Rect<int> &rect)
 
 
 
-void Eye::load(const float &screen_w, const float &screen_h)
+void pla::Eye::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
@@ -60,7 +60,7 @@ void Eye::load(const float &screen_w, const float &screen_h)
 	//balloonchat.load(screen_w, screen_h);
 }
 
-void Eye::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::Eye::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 {
 	if (scale_x < 0)
 	{
@@ -84,7 +84,7 @@ void Eye::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	}
 }
 
-void Eye::mechanics(const float &elapsedTime, const sf::Rect<int> &rect, const bool &align)
+void pla::Eye::mechanics(const float &elapsedTime, const sf::Rect<int> &rect, const bool &align)
 {
 	if (textCounter > 0 && textCounter < textLine)
 	{
@@ -155,17 +155,19 @@ void Eye::mechanics(const float &elapsedTime, const sf::Rect<int> &rect, const b
 
 
 
-const sf::View& Eye::getView() const
+const sf::View& pla::Eye::getView() const
 {
 	return view;
 }
 
-float Eye::getViewX()
+float pla::Eye::getViewX()
 {
-	return view.getCenter().x - view.getSize().x / 2;
+	float x = (view.getCenter().x - view.getSize().x / 2);
+	return x < 0 ? 0 : x;
 }
 
-float Eye::getViewY()
+float pla::Eye::getViewY()
 {
-	return view.getCenter().y - view.getSize().y / 2;
+	float y = view.getCenter().y - view.getSize().y / 2;
+	return y < 0 ? 0 : y;
 }
