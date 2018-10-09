@@ -2,21 +2,22 @@
 #include "loading.h"
 #include <boost/lexical_cast.hpp>
 
-Tiles::Tiles()
+pla::Tiles::Tiles()
 {
 	free();
 }
 
-Tiles::~Tiles()
+pla::Tiles::~Tiles()
 {
 	free();
 }
 
-void Tiles::free()
+void pla::Tiles::free()
 {
 	width = 32;
 	screen_w = 0;
 	screen_h = 0;
+	wPad = hPad = 0;
 
 	if (tiles)
 	{
@@ -56,20 +57,19 @@ void Tiles::free()
 	reset();
 }
 
-void Tiles::reset()
+void pla::Tiles::reset()
 {
-	border_x = 0;
-	border_y = 0;
-
 	collision = false;
 }
 
-void Tiles::load(const float &screen_w, const float &screen_h)
+void pla::Tiles::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
+	wPad = static_cast<int>(((screen_w / (width*2)) - 3) / 2);
+	hPad = static_cast<int>(((screen_h / (width*2)) - 3) / 2);
 
 	rect.setSize(sf::Vector2f(static_cast<float>(width * 2), static_cast<float>(width * 2)));
 	rect.setFillColor(sf::Color(0x99, 0x99, 0x00, 0x99));
@@ -101,12 +101,18 @@ void Tiles::load(const float &screen_w, const float &screen_h)
 	}
 }
 
-void Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y)
 {
-	int l = static_cast <int> (border_x / width);
-	int r = static_cast <int> ((border_x + screen_w) / width);
-	int b = static_cast <int> (border_y / width);
-	int t = static_cast <int> (border_y + screen_h) / width;
+	int l = static_cast <int> (x / width) - 1;
+	int r = static_cast <int> ((x + screen_w) / width) + 1;
+	int b = static_cast <int> (y / width);
+	int t = static_cast <int> (y + screen_h) / width;
+
+	if (l < 0)
+		l = 0;
+
+	if (r >= max / width)
+		r = max / width;
 
 	for (int i = l; i < r; ++i)
 	{
@@ -136,7 +142,7 @@ void Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	}
 }
 
-void Tiles::read(std::vector<std::string> &vec)
+void pla::Tiles::read(std::vector<std::string> &vec)
 {
 	int x = -1, y = -1, c = -1;
 	if (!vec.empty())
@@ -159,50 +165,24 @@ void Tiles::read(std::vector<std::string> &vec)
 
 
 
-void Tiles::setBorderX(float& x)
-{
-	border_x = x;
-}
-
-void Tiles::setBorderY(float& y)
-{
-	border_y = y;
-}
-
-const float& Tiles::getBorderX() const
-{
-	return border_x;
-}
-
-const float& Tiles::getBorderY() const
-{
-	return border_y;
-}
-
-const float& Tiles::getScreenWidth() const
-{
-	return screen_w;
-}
-
-const float& Tiles::getScreenHeight() const
-{
-	return screen_h;
-}
-
-
-
-void Tiles::switchCollision(bool collision)
+void pla::Tiles::switchCollision(bool collision)
 {
 	this->collision = collision;
 }
 
-bool Tiles::checkCollisionV(sf::Rect<int> &rect, const char add)
+bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const float &y, const char add)
 {
-	int l = static_cast<int> (border_x / width);
-	int r = static_cast<int> (border_x + screen_w) / width;
-	int b = static_cast<int> (border_y / width);
-	int t = static_cast<int> ((border_y + screen_h) / width);
+	int l = static_cast<int> (x / width);
+	int r = static_cast<int> ((x + screen_w) / width);
+	int b = static_cast<int> (y / width);
+	int t = static_cast<int> ((y + screen_h) / width);
 	rect.top -= add;
+
+	// Optimisation
+	if (l != 0)	l += wPad;
+	if (r != max - 1) r -= wPad;
+	if (b != 0)	l += hPad;
+	if (t != max - 1) r -= hPad;
 
 	for (int i = l; i < r; ++i)
 	{
@@ -245,13 +225,19 @@ bool Tiles::checkCollisionV(sf::Rect<int> &rect, const char add)
 	return false;
 }
 
-bool Tiles::checkCollisionH(sf::Rect<int> &rect, const char add)
+bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const float &y, const char add)
 {
-	int l = static_cast<int> (border_x / width);
-	int r = static_cast<int> (border_x + screen_w) / width;
-	int b = static_cast<int> (border_y / width);
-	int t = static_cast<int> ((border_y + screen_h) / width);
+	int l = static_cast<int> (x / width);
+	int r = static_cast<int> ((x + screen_w) / width);
+	int b = static_cast<int> (y / width);
+	int t = static_cast<int> ((y + screen_h) / width);
 	rect.left -= add;
+
+	// Optimisation
+	if (l != 0)	l += wPad;
+	if (r != max - 1) r -= wPad;
+	if (b != 0)	l += hPad;
+	if (t != max - 1) r -= hPad;
 
 	for (int i = l; i < r; ++i)
 	{

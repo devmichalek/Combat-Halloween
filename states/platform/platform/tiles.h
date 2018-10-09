@@ -3,43 +3,39 @@
 #include "eventwindow.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
-class Tiles
+namespace pla
 {
-	int width;
-	float screen_w;
-	float screen_h;
-	float border_x;
-	float border_y;
 
-	// --- Test.
-	bool collision;
-	sf::RectangleShape rect;
-	// ---
+	class Tiles
+	{
+		int width;
+		char wPad, hPad;
+		float screen_w;
+		float screen_h;
 
-	int max;
-	char** tiles;
-	char** untiles;	// unvisible tiles
-	std::vector <cmm::Sprite*> sprites;
+		// --- Test.
+		bool collision;
+		sf::RectangleShape rect;
+		// ---
 
-public:
-	Tiles();
-	~Tiles();
-private:
-	void free();
-public:
-	void reset();
-	void load(const float &screen_w, const float &screen_h);
-	void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
-	void read(std::vector<std::string> &vec);
+		int max;
+		char** tiles;
+		char** untiles;	// unvisible tiles
+		std::vector <cmm::Sprite*> sprites;
 
-	void setBorderX(float& x);
-	void setBorderY(float& y);
-	const float& getBorderX() const;
-	const float& getBorderY() const;
-	const float& getScreenWidth() const;
-	const float& getScreenHeight() const;
+	public:
+		Tiles();
+		~Tiles();
+	private:
+		void free();
+	public:
+		void reset();
+		void load(const float &screen_w, const float &screen_h);
+		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y);
+		void read(std::vector<std::string> &vec);
 
-	void switchCollision(bool collision = true);
-	bool checkCollisionV(sf::Rect<int> &rect, const char add = 0); // vertical
-	bool checkCollisionH(sf::Rect<int> &rect, const char add = 0); // horizontal
-};
+		void switchCollision(bool collision = true);
+		bool checkCollisionV(sf::Rect<int> &rect, const float &x, const float &y, const char add = 0); // vertical
+		bool checkCollisionH(sf::Rect<int> &rect, const float &x, const float &y, const char add = 0); // horizontal
+	};
+}
