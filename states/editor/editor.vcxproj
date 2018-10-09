@@ -70,6 +70,7 @@
     <ClCompile Include="..\..\tools\button.cpp" />
     <ClCompile Include="..\..\tools\circlebutton.cpp" />
     <ClCompile Include="..\..\tools\loading.cpp" />
+    <ClCompile Include="..\platform\platform\landscape.cpp" />
     <ClCompile Include="..\platform\platform\scontent.cpp" />
     <ClCompile Include="eetile.cpp" />
     <ClCompile Include="eelandscape.cpp" />

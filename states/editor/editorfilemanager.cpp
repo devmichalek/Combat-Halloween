@@ -45,13 +45,13 @@ void EditorFileManager::handle(const sf::Event &event)
 {
 	bool status = !messageBoard.isActive() && !textEditor.isActive() ? buttons.handle(event) : false;
 
-	if (buttons.isActive())
+	//if (buttons.isActive())
 	{
 		if (!messageBoard.isActive())
 		{
 			textEditor.handle(event);
 
-			if (!textEditor.isActive())
+			if (!textEditor.isActive() && buttons.isActive())
 			{
 				if (library.handle(event, status))
 				{
@@ -71,20 +71,21 @@ void EditorFileManager::draw(sf::RenderWindow* &window)
 {
 	buttons.drawButton(window);
 
-	if (!buttons.isActive()) return;
-
-	// Draw Black Layer
-	if (!messageBoard.isActive() && !textEditor.isActive())
-		info.drawLayer(window);
-
-	info.drawPlank(window);
-	buttons.draw(window);
-	
-	// Draw files only if there is no message
-	if (!info.isMsgTextActive())
+	if (buttons.isActive())
 	{
-		library.draw(window);
-		info.draw(window);
+		// Draw Black Layer
+		if (!messageBoard.isActive() && !textEditor.isActive())
+			info.drawLayer(window);
+
+		info.drawPlank(window);
+		buttons.draw(window);
+
+		// Draw files only if there is no message
+		if (!info.isMsgTextActive())
+		{
+			library.draw(window);
+			info.draw(window);
+		}
 	}
 
 	// Draw Black Layer
@@ -97,25 +98,25 @@ void EditorFileManager::draw(sf::RenderWindow* &window)
 
 void EditorFileManager::mechanics(const double &elapsedTime)
 {
-	if (!buttons.isActive()) return;
-
-	if (buttons.isNewFile())		newFile();
-	else if (buttons.isOpenFile())	openFile();
-	else if (buttons.isSaveFile())	saveFile();
-	else if (buttons.isUploadFile())
+	if (buttons.isActive())
 	{
-		// there is no upload available
+		if (buttons.isNewFile())		newFile();
+		else if (buttons.isOpenFile())	openFile();
+		else if (buttons.isSaveFile())	saveFile();
+		else if (buttons.isUploadFile())
+		{
+			// there is no upload available
+		}
+		else if (buttons.isCopyFile())		copyFile();
+		else if (buttons.isRenameFile())	renameFile();
+		else if (buttons.isDeleteFile())	deleteFile();
+		else if (buttons.isRefresh())		refresh();
+		else if (buttons.isExit())
+		{
+			info.setMsgTextActive(false);
+			library.reset();
+		}
 	}
-	else if (buttons.isCopyFile())		copyFile();
-	else if (buttons.isRenameFile())	renameFile();
-	else if (buttons.isDeleteFile())	deleteFile();
-	else if (buttons.isRefresh())		refresh();
-	else if (buttons.isExit())
-	{
-		info.setMsgTextActive(false);
-		library.reset();
-	}
-
 
 	if (messageBoard.isActive())
 	{
@@ -276,6 +277,36 @@ bool EditorFileManager::isFileOpen()
 bool EditorFileManager::isFileUnsave()
 {
 	return fileManager.isNewSaveVersion();
+}
+
+bool EditorFileManager::isNo()
+{
+	bool ret = messageBoard.isNo();
+	if(ret)
+	{
+		messageBoard.reset();
+		return true;
+	}
+
+	return false;
+}
+
+bool EditorFileManager::isYes()
+{
+	bool ret = messageBoard.isYes();
+	if (ret)
+	{
+		messageBoard.reset();
+		return true;
+	}
+
+	return false;
+}
+
+void EditorFileManager::openMessageBoard()
+{
+	messageBoard.setActive();
+	messageBoard.setMessage("There is unsaved file.\nDo you want to continue?");
 }
 
 

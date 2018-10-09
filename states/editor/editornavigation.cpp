@@ -39,9 +39,7 @@ void EditorNavigation::free()
 void EditorNavigation::reset()
 {
 	for (auto &it : buttons)
-	{
 		it->setActive(false);
-	}
 }
 
 
@@ -60,7 +58,7 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 		buttons.push_back(new CircleButton);
 		labels.push_back(new cmm::Text);
 	}
-	
+
 	buttons[MENU]->load("images/buttons/home.png");
 	buttons[LEVELMENU]->load("images/buttons/levelmenu.png");
 	buttons[PLAY]->load("images/buttons/play.png");
@@ -115,6 +113,33 @@ void EditorNavigation::drawBG(sf::RenderWindow* &window)
 }
 
 
+void EditorNavigation::disablePlay(bool status)
+{
+	if(!status)
+		buttons[PLAY]->setActive(false);
+
+	status ? buttons[PLAY]->unlock() : buttons[PLAY]->lock();
+}
+
+void EditorNavigation::disableHome(bool status)
+{
+	buttons[MENU]->setActive(status);
+}
+
+void EditorNavigation::disableLevelMenu(bool status)
+{
+	buttons[LEVELMENU]->setActive(status);
+}
+
+bool EditorNavigation::homeHasChanged()
+{
+	return buttons[MENU]->hasChanged();
+}
+
+bool EditorNavigation::levelMenuHasChanged()
+{
+	return buttons[LEVELMENU]->hasChanged();
+}
 
 void EditorNavigation::setVolume(const float &volume)
 {

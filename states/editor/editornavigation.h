@@ -29,6 +29,11 @@ public:
 	void draw(sf::RenderWindow* &window);
 	void drawBG(sf::RenderWindow* &window);
 
+	void disablePlay(bool status);
+	void disableHome(bool status);
+	void disableLevelMenu(bool status);
+	bool homeHasChanged();
+	bool levelMenuHasChanged();
 	void setVolume(const float &volume);
 
 	// Enabling states directly.

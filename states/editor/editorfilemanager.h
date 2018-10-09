@@ -44,10 +44,16 @@ public:
 	void setActive();	// for chat to open file manager directly
 	const bool& isActive() const;
 
-private:
 	bool isFileOpen();
 	bool isFileUnsave();
-	
+
+	// Editor Navigation Buttons Support
+	bool isNo();
+	bool isYes();
+	void openMessageBoard();
+	// ---
+
+private:
 	void newFile();
 	void openFile();
 	void saveFile();

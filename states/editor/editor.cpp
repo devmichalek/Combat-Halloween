@@ -87,17 +87,51 @@ void Editor::mechanics(const double &elapsedTime)
 
 	if (!isState())
 	{
+		navigation.disablePlay(editorFileManager.isFileOpen());
+
+		if (editorFileManager.isFileUnsave())
+		{
+			navigation.disablePlay(false);
+		}
+
 		// Back to menu.
 		if (navigation.isHome())
 		{
-			prev = true;
+			if (editorFileManager.isFileUnsave())
+			{
+				if (navigation.homeHasChanged())
+					editorFileManager.openMessageBoard();
+
+				if (editorFileManager.isYes())
+					prev = true;
+				else if (editorFileManager.isNo())
+					navigation.disableHome(false);
+			}
+			else
+				prev = true;
 		}
 
 		// Back to levelmenu.
 		else if (navigation.isLevelMenu())
 		{
-			prev = true;
-			next = true;
+			if (editorFileManager.isFileUnsave())
+			{
+				if (navigation.levelMenuHasChanged())
+					editorFileManager.openMessageBoard();
+
+				if (editorFileManager.isYes())
+				{
+					prev = true;
+					next = true;
+				}
+				else if (editorFileManager.isNo())
+					navigation.disableLevelMenu(false);
+			}
+			else
+			{
+				prev = true;
+				next = true;
+			}
 		}
 
 		// Start test game.
@@ -134,7 +168,7 @@ void Editor::setState(int &state)
 		SContent::type = SContent::TYPE::EDITOR;
 		SContent::path = "";
 		reset();
-		state = cmm::STATES::PLATFORM;
+		state = cmm::STATES::SIMULATOR;
 	}
 	else if (isExit())
 	{
