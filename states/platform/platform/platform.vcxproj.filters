@@ -117,6 +117,9 @@
     <ClCompile Include="eye.cpp">
       <Filter>Knight</Filter>
     </ClCompile>
+    <ClCompile Include="landscape.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="platform.h" />
@@ -146,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="eye.h">
       <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="landscape.h">
+      <Filter>Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -123,6 +123,7 @@ void Platform::load(const float &screen_w, const float &screen_h)
 	knight.load(screen_w, screen_h);
 	eye.load(screen_w, screen_h);
 	tiles.load(screen_w, screen_h);
+	landscape.load(screen_w, screen_h);
 	// ----------
 
 	// Set chat.
@@ -166,7 +167,8 @@ void Platform::draw(sf::RenderWindow* &window)
 	window->setView(eye.getView());				// ---------------
 	knight.draw				(window);
 	eye.draw				(window);
-	tiles.draw				(window);
+	tiles.draw				(window, eye.getViewX(), eye.getViewY());
+	landscape.draw			(window, eye.getViewX(), eye.getViewY());
 	window->setView(window->getDefaultView());	// ---------------
 
 	homebutton.draw			(window);
@@ -247,34 +249,37 @@ void Platform::mechanics(const double &elapsedTime)
 				chat.setError();
 		}
 
+		char direction = 0;
 		const float floatElapsedTime = static_cast<float>(elapsedTime);
 		knight.mechanics(floatElapsedTime);
 		knight.gravity();
-		if (tiles.checkCollisionV(knight.getRect(), -1))
+		if (tiles.checkCollisionV(knight.getRect(), eye.getViewX(), eye.getViewY(), -1))
 			knight.undoGravity();
 		
 		if (knight.moveLeft(floatElapsedTime))
 		{
-			if (tiles.checkCollisionH(knight.getRect(), 2))
+			if (tiles.checkCollisionH(knight.getRect(), eye.getViewX(), eye.getViewY(), 2))
 				knight.undoMoveLeft(floatElapsedTime);
+			else
+				direction = 1;
 		}
 		else if (knight.moveRight(floatElapsedTime))
 		{
-			if (tiles.checkCollisionH(knight.getRect(), -2))
+			if (tiles.checkCollisionH(knight.getRect(), eye.getViewX(), eye.getViewY(), -2))
 				knight.undoMoveRight(floatElapsedTime);
+			else
+				direction = -1;
 		}
 		else
 			knight.idle(floatElapsedTime);
 		if (knight.jump(floatElapsedTime))
 		{
-			if (tiles.checkCollisionV(knight.getRect(), 1))
+			if (tiles.checkCollisionV(knight.getRect(), eye.getViewX(), eye.getViewY(), 1))
 				knight.undoJump(floatElapsedTime);
 		}
 		knight.attack();
 		knight.rest();
 		eye.mechanics(floatElapsedTime, knight.getRect(), knight.isLeftAligned());
-
-		float direction = 0;
 		movingBG.mechanics(static_cast<float>(elapsedTime), direction);
 		
 		if (homebutton.isActive())
@@ -409,4 +414,5 @@ void Platform::prepare()
 	eye.reset(knight.getRect());
 	tiles.read(SContent::get(SContent::category().TILE));
 	tiles.read(SContent::get(SContent::category().UNVISIBLE_TILE));
+	landscape.read(SContent::get(SContent::category().LANDSCAPE));
 }

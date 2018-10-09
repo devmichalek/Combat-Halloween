@@ -74,6 +74,7 @@
     <ClCompile Include="knight.cpp" />
     <ClCompile Include="kspecs.cpp" />
     <ClCompile Include="kstates.cpp" />
+    <ClCompile Include="landscape.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moving_bg.cpp" />
     <ClCompile Include="platform.cpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="knight.h" />
     <ClInclude Include="kspecs.h" />
     <ClInclude Include="kstates.h" />
+    <ClInclude Include="landscape.h" />
     <ClInclude Include="moving_bg.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="tiles.h" />

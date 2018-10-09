@@ -6,6 +6,7 @@
 #include "knight.h"
 #include "eye.h"
 #include "tiles.h"
+#include "landscape.h"
 #include "chat.h"
 #include "pausesystem.h"
 #include "music.h"
@@ -20,10 +21,11 @@ class Platform :public cmm::State
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
 	// Action ---
-	MovingBG movingBG;
-	Knight knight;
-	Eye eye;
-	Tiles tiles;
+	pla::MovingBG movingBG;
+	pla::Knight knight;
+	pla::Eye eye;
+	pla::Tiles tiles;
+	pla::Landscape landscape;
 	// ----------
 	Chat chat;
 	PauseSystem pausesystem;
