@@ -2,10 +2,11 @@
 #include "logconsole.h"
 #include "loading.h"
 
-ee::LandscapeEntity::LandscapeEntity(int newID, int newChosen, float newScale)
-: id(newID), chosen(newChosen), scale(newScale)
+ee::LandscapeEntity::LandscapeEntity(int newID, char newChosen, float newScale)
 {
-	// ...
+	id = newID;
+	chosen = newChosen;
+	scale = newScale;
 }
 
 ee::LandscapeEntity::~LandscapeEntity()
@@ -350,7 +351,7 @@ const bool& ee::Landscape::isActive() const
 	return active;
 }
 
-const int& ee::Landscape::getChosen()
+const char& ee::Landscape::getChosen()
 {
 	return last.second.chosen;
 }

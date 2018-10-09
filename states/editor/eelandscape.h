@@ -1,20 +1,15 @@
 #pragma once
-#pragma warning(disable:4996) //#define _SCL_SECURE_NO_WARNINGS
-#include <vector>
-#include "eventwindow.h"
-#include "treedefinitions.h"
-#include "sprite.h"
+#define _SCL_SECURE_NO_WARNINGS
+#include "landscape.h"
 #include "text.h"
 
 namespace ee // Editor Entity
 {
-	struct LandscapeEntity // represents a single element
+	struct LandscapeEntity : public pla::LandscapeUnit
 	{
 		int id;
-		int chosen;
-		float scale;
 
-		LandscapeEntity(int newID = -1, int newChosen = 1, float newScale = 1.0f);
+		LandscapeEntity(int newID = -1, char newChosen = 1, float newScale = 1.0f);
 		~LandscapeEntity();
 		bool operator==(const LandscapeEntity&) const;
 	};
@@ -84,7 +79,7 @@ namespace ee // Editor Entity
 
 		void setActive(bool newActive = true);
 		const bool& isActive() const;
-		const int& getChosen();
+		const char& getChosen();
 		void setAI(std::string &ai);
 		static float getGlobalScale() { return globalScale; }
 
