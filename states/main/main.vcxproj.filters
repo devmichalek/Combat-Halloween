@@ -156,9 +156,6 @@
     <ClCompile Include="..\platform\foe\skeleton.cpp">
       <Filter>States\Platform\Foe\Kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\platform\tiles.cpp">
-      <Filter>States\Platform</Filter>
-    </ClCompile>
     <ClCompile Include="..\platform\platform\platform.cpp">
       <Filter>States\Platform\Other</Filter>
     </ClCompile>
@@ -212,6 +209,12 @@
     </ClCompile>
     <ClCompile Include="..\..\common\user.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\landscape.cpp">
+      <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\tiles.cpp">
+      <Filter>States\Platform\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

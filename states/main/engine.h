@@ -8,6 +8,7 @@
 #include "platform.h"
 //#include "table/table.h"
 #include "editor.h"
+#include "simulator.h"
 
 class Engine
 {	

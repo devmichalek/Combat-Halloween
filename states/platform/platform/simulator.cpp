@@ -197,7 +197,7 @@ void Simulator::disunite()
 			setSuccessMsg("Simulating data...");
 			if (simulate())
 			{
-				setSuccessMsg("Finishing thread...");
+				setSuccessMsg("Killing thread...");
 				thread.success = true;
 				next = true;
 			}
@@ -337,6 +337,9 @@ bool Simulator::simulate()
 		return false;
 	}
 
+	// Check if knight is not inside tile.
+
+
 	return true;
 }
 
@@ -371,7 +374,7 @@ bool Simulator::checkContent(std::string str)
 
 void Simulator::condition()
 {
-	while (!msg.empty()){}
+	//while (!msg.empty()){}
 }
 
 void Simulator::setProcessingMsg(std::string str)

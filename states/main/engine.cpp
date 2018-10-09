@@ -75,6 +75,10 @@ void Engine::loading_loop()
 		case 78:	this->states.push_back(new Editor);
 					this->states[cmm::EDITOR]->load(screen_w, screen_h);
 					break;
+
+		case 80:	this->states.push_back(new Simulator);
+					this->states[cmm::SIMULATOR]->load(screen_w, screen_h);
+					break;
 		}
 
 		this->states[core->state]->setState(core->state);

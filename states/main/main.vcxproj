@@ -148,6 +148,7 @@
     <ClCompile Include="..\platform\platform\knight.cpp" />
     <ClCompile Include="..\platform\platform\kspecs.cpp" />
     <ClCompile Include="..\platform\platform\kstates.cpp" />
+    <ClCompile Include="..\platform\platform\landscape.cpp" />
     <ClCompile Include="..\platform\platform\moving_bg.cpp" />
     <ClCompile Include="..\platform\platform\platform.cpp" />
     <ClCompile Include="..\platform\platform\scontent.cpp" />
