@@ -1,8 +1,7 @@
 #include "knightspecs.h"
-#include "logconsole.h"
 #include "user.h"
 #include "loading.h"
-#include "boost/lexical_cast.hpp"
+#include "converter.h"
 
 Knightspecs::Knightspecs()
 {
@@ -54,7 +53,7 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError())	return;
 	plank.setScale(screen_w / 2560, screen_h / 1440);
 	plank.setPosition(-screen_h / 256, screen_h / 5.5);
-	plank.setColor(sf::Color(0xE0, 0xE0, 0xE0));
+	plank.setColor(cmm::DULL_IRON_COLOR);
 
 	Loading::add(topgear.load("images/other/gear.png"));
 	Loading::add(botgear.load("images/other/gear.png"));
@@ -77,7 +76,7 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 	Loading::add(categories.setFont("fonts/jcandlestickextracond.ttf"));
 	if (Loading::isError())	return;
 	categories.setText("Heart Points:\nMagic Points:\nArmour:\nMagic Resistant:\nMovement Speed:\nDamage:\nMagic Damage:\nLuck:\nExperience:\nLevel:");
-	categories.setFillColor(cmm::LogConsole::getLockedColor());
+	categories.setFillColor(cmm::LOCKED_COLOR);
 	categories.setSize(screen_h / 28);
 	categories.setPosition(screen_h / 128, plank.getTop() + screen_h / 72);
 
@@ -88,7 +87,7 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 		Loading::add(values[i]->setFont("fonts/jcandlestickextracond.ttf"));
 		if (Loading::isError())	return;
 		values[i]->setText("loading...");
-		values[i]->setFillColor(cmm::LogConsole::getLoadingColor());
+		values[i]->setFillColor(cmm::LOADING_COLOR);
 		values[i]->setSize(screen_h / 28);
 		features.push_back(0);
 	}
@@ -164,7 +163,7 @@ void Knightspecs::setThread()
 			for (auto &it : values)
 			{
 				it->setText("loading...");
-				it->setFillColor(cmm::LogConsole::getLoadingColor());
+				it->setFillColor(cmm::LOADING_COLOR);
 			}
 
 			position();
@@ -214,8 +213,8 @@ void Knightspecs::setValues()
 
 			values[HEART_POINTS]->setText(strs[HEART_POINTS] + " hp");
 			values[MAGIC_POINTS]->setText(strs[MAGIC_POINTS] + " mp");
-			values[ARMOUR]->setText(cmm::LogConsole::floatToStr(boost::lexical_cast<float>(strs[ARMOUR]) / 100) + " %");
-			values[MAGIC_RESISTANT]->setText(cmm::LogConsole::floatToStr(boost::lexical_cast<float>(strs[MAGIC_RESISTANT]) / 100) + " %");
+			values[ARMOUR]->setText(cmm::floatToStr(boost::lexical_cast<float>(strs[ARMOUR]) / 100) + " %");
+			values[MAGIC_RESISTANT]->setText(cmm::floatToStr(boost::lexical_cast<float>(strs[MAGIC_RESISTANT]) / 100) + " %");
 			values[MOVEMENT_SPEED]->setText(strs[MOVEMENT_SPEED] + " %");
 			values[DAMAGE]->setText(strs[DAMAGE] + " dmg");
 			values[MAGIC_DAMAGE]->setText(strs[MAGIC_DAMAGE] + " mdmg");
@@ -224,16 +223,16 @@ void Knightspecs::setValues()
 			values[LEVEL]->setText(strs[LEVEL] + " lv");
 			strs.clear();
 
-			values[HEART_POINTS]->setFillColor(cmm::LogConsole::getRedColor());
-			values[MAGIC_POINTS]->setFillColor(cmm::LogConsole::getBlueColor());
-			values[ARMOUR]->setFillColor(cmm::LogConsole::getLockedColor());
-			values[MAGIC_RESISTANT]->setFillColor(cmm::LogConsole::getLockedColor());
-			values[MOVEMENT_SPEED]->setFillColor(cmm::LogConsole::getGreenColor());
-			values[DAMAGE]->setFillColor(cmm::LogConsole::getRedColor());
-			values[MAGIC_DAMAGE]->setFillColor(cmm::LogConsole::getBlueColor());
-			values[LUCK]->setFillColor(cmm::LogConsole::getSuccessColor());
-			values[EXPERIENCE]->setFillColor(cmm::LogConsole::getSuccessColor());
-			values[LEVEL]->setFillColor(cmm::LogConsole::getSuccessColor());
+			values[HEART_POINTS]->setFillColor(cmm::RED_COLOR);
+			values[MAGIC_POINTS]->setFillColor(cmm::BLUE_COLOR);
+			values[ARMOUR]->setFillColor(cmm::LOCKED_COLOR);
+			values[MAGIC_RESISTANT]->setFillColor(cmm::LOCKED_COLOR);
+			values[MOVEMENT_SPEED]->setFillColor(cmm::GREEN_COLOR);
+			values[DAMAGE]->setFillColor(cmm::RED_COLOR);
+			values[MAGIC_DAMAGE]->setFillColor(cmm::BLUE_COLOR);
+			values[LUCK]->setFillColor(cmm::SUCCESS_COLOR);
+			values[EXPERIENCE]->setFillColor(cmm::SUCCESS_COLOR);
+			values[LEVEL]->setFillColor(cmm::SUCCESS_COLOR);
 
 			thread.success = true;
 		}
@@ -245,7 +244,7 @@ void Knightspecs::setValues()
 		for (auto &it : values)
 		{
 			it->setText("error");
-			it->setFillColor(cmm::LogConsole::getErrorColor());
+			it->setFillColor(cmm::ERROR_COLOR);
 		}
 	}
 

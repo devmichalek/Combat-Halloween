@@ -65,8 +65,8 @@ void EFMInfo::load(const float &screen_w, const float &screen_h)
 	chosenFormText.setPosition(openedFormText.getX(), openedFormText.getBot() + chosenFormText.getHeight() / 2);
 
 	msgText.setOutlineThickness(1);
-	msgText.setFillColor(sf::Color::White);
-	msgText.setOutlineColor(sf::Color::Black);
+	msgText.setFillColor(cmm::LOADING_COLOR);
+	msgText.setOutlineColor(cmm::BACKGROUND_COLOR);
 
 	setOpenedText();
 	setChosenText();

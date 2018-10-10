@@ -72,7 +72,7 @@ void pla::Tiles::load(const float &screen_w, const float &screen_h)
 	hPad = static_cast<int>(((screen_h / (width*2)) - 3) / 2);
 
 	rect.setSize(sf::Vector2f(static_cast<float>(width * 2), static_cast<float>(width * 2)));
-	rect.setFillColor(sf::Color(0x99, 0x99, 0x00, 0x99));
+	rect.setFillColor(cmm::GREEN_COLOR);
 
 	for (unsigned i = 0; i < 17; ++i)
 	{

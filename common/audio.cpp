@@ -1,14 +1,14 @@
-#include  "audio.h"
+#include "audio.h"
 #include "dirent.h"
+#include "definitions.h"
 #include <direct.h>
 #include <fstream>
-#include <string>
-#include <boost/lexical_cast.hpp>
+#include "converter.h"
 
 bool cmm::SoundData::sound_playable = true;
-float cmm::SoundData::sound_volume = 50.0;
+float cmm::SoundData::sound_volume = START_SOUND_VOLUME;
 bool cmm::MusicData::music_playable = true;
-float cmm::MusicData::music_volume = 60.0;
+float cmm::MusicData::music_volume = START_MUSIC_VOLUME;
 
 const bool& cmm::Audio::isSoundPlayable()
 {
@@ -33,9 +33,9 @@ const float& cmm::Audio::getMusicVolume()
 void cmm::Audio::resetAudio()
 {
 	sound_playable = true;
-	sound_volume = 50.0;
+	sound_volume = START_SOUND_VOLUME;
 	music_playable = true;
-	music_volume = 60.0;
+	music_volume = START_MUSIC_VOLUME;
 	saveAudio();
 }
 
@@ -77,7 +77,7 @@ void cmm::Audio::loadAudio()
 				break;
 			}
 
-			if ((line[0] != '0' && line[0] != '1') || line.size() > 5) // file is broken
+			if ((line[0] != '0' && line[0] != '1') || line.size() < 3 || line.size() > 5) // file is broken
 			{
 				file.close();
 				resetAudio();
@@ -86,7 +86,7 @@ void cmm::Audio::loadAudio()
 			else
 			{
 				size_t size = line.size();
-				if (size == 5 && (line[2] != '1' || (line[4] < '0' || line[4] > '9'))) // volume could look like 300
+				if (size == 5 && (line[2] != '1' || line[3] != '0' || line[4] != '0')) // max is 100
 				{
 					file.close();
 					resetAudio();

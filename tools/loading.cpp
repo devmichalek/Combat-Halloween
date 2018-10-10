@@ -1,5 +1,5 @@
 #include "loading.h"
-#include "logconsole.h"
+#include "colors.h"
 #include <fstream>
 #include <iostream>
 #ifdef _WIN32
@@ -126,13 +126,13 @@ void Loading::add(std::string str)
 	if (error_occured)
 		return;
 
-	if (str[0] == 'S')		info.setFillColor(cmm::LogConsole::getGreenColor());
-	else if(str[0] == 'W')	info.setFillColor(cmm::LogConsole::getWarningColor());
+	if (str[0] == 'S')		info.setFillColor(cmm::GREEN_COLOR);
+	else if(str[0] == 'W')	info.setFillColor(cmm::WARNING_COLOR);
 	else if (str[0] == 'E')
 	{
 		error_occured = true;
 		state = 101;
-		info.setFillColor(cmm::LogConsole::getErrorColor());
+		info.setFillColor(cmm::ERROR_COLOR);
 	}
 	
 	setInfo(str);

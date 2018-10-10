@@ -4,7 +4,7 @@
 
 namespace cmm
 {
-	struct Content // Platform Content
+	struct Content
 	{
 		static std::vector<std::string> content;
 	};

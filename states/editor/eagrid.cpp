@@ -1,5 +1,4 @@
 #include "eagrid.h"
-#include "logconsole.h"
 #include "loading.h"
 
 EAGrid::EAGrid()
@@ -59,7 +58,7 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	limitX = 1500 * width;
 	limitY = 1500 * width;
 	
-	sf::Color color = cmm::LogConsole::getLockedColor();
+	sf::Color color = cmm::LOCKED_COLOR;
 	color.a = 0xFF / 3;
 	lineX.setSize(sf::Vector2f(1, screen_h));
 	lineX.setPosition(0, 0);
@@ -99,7 +98,7 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	xyText.setFont(cmm::JCANDLE_FONT_PATH);
 	xyText.setSize(screen_w / 80);
 	xyText.setAlpha(0xFF / 3);
-	xyText.setFillColor(cmm::LogConsole::getLockedColor());
+	xyText.setFillColor(cmm::LOCKED_COLOR);
 
 	setArrows();
 }
@@ -185,7 +184,7 @@ void EAGrid::draw(sf::RenderWindow* &window)
 
 void EAGrid::mechanics(bool deleteMode)
 {
-	sf::Color color = deleteMode ? cmm::LogConsole::getErrorColor() : cmm::LogConsole::getLockedColor();
+	sf::Color color = deleteMode ? cmm::ERROR_COLOR : cmm::LOCKED_COLOR;
 	color.a = 0xFF / 3;
 	lineX.setFillColor(color);
 	lineY.setFillColor(color);

@@ -1,5 +1,6 @@
 #pragma once
 #include "eventwindow.h"
+#include "colors.h"
 
 namespace cmm
 {
@@ -7,7 +8,7 @@ namespace cmm
 	{
 	protected:
 		inline static sf::RenderWindow* window;
-		inline static sf::Color color = sf::Color(21, 21, 29, 0xFF);
+		inline static sf::Color color = BACKGROUND_COLOR;
 	public:
 		inline static bool open = false;	// State of the window.
 		StaticCore();

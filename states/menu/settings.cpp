@@ -1,5 +1,4 @@
 #include "settings.h"
-#include "logconsole.h"
 #include "loading.h"
 
 
@@ -118,8 +117,8 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	{
 		state_texts[i]->setSize(size);
 		active_texts[i]->setSize(size);
-		state_texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
-		i < JUMP_ATTACK ? active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor()) : active_texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
+		state_texts[i]->setFillColor(cmm::LOCKED_COLOR);
+		i < JUMP_ATTACK ? active_texts[i]->setFillColor(cmm::LOADING_COLOR) : active_texts[i]->setFillColor(cmm::LOCKED_COLOR);
 	}
 
 	// Set contact me information.
@@ -127,7 +126,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError())	return;
 	contactme.setText("Contact me: devmichalek@gmail.com");
 	contactme.setSize(size);
-	contactme.setFillColor(cmm::LogConsole::getLoadingColor());
+	contactme.setFillColor(cmm::LOADING_COLOR);
 
 	// Set table.
 	Loading::add(table.load("images/other/plank.png"));
@@ -169,7 +168,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError())	return;
 	info.setText("Press new key to change.\nClick anywhere to save.");
 	info.setSize(size);
-	info.setFillColor(sf::Color(0xDD, 0xDD, 0xDD));
+	info.setFillColor(cmm::LOCKED_COLOR);
 
 	// Position.
 	positionTable();
@@ -229,7 +228,7 @@ bool Settings::handle(const sf::Event &event)
 					saveKeys();
 
 					active_texts[target]->setText(getName(event.key.code));
-					active_texts[target]->setFillColor(cmm::LogConsole::getErrorColor());
+					active_texts[target]->setFillColor(cmm::ERROR_COLOR);
 
 					if (target == ATTACK || target == JUMP)
 					{
@@ -255,7 +254,7 @@ bool Settings::handle(const sf::Event &event)
 				// Set default color if target is set.
 				if (target != -1)
 				{
-					active_texts[target]->setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+					active_texts[target]->setFillColor(cmm::LOADING_COLOR);
 				}
 
 				// Check if it is collide.
@@ -266,7 +265,7 @@ bool Settings::handle(const sf::Event &event)
 					{
 						target = i;
 						click.play();
-						active_texts[i]->setFillColor(sf::Color(0xF2, 0x58, 0x3E));
+						active_texts[i]->setFillColor(cmm::ERROR_COLOR);
 						break;
 					}
 				}
@@ -457,12 +456,12 @@ void Settings::reloadCoxing()
 	for (unsigned i = 0; i < JUMP_ATTACK; ++i)
 	{
 		active_texts[i]->setText(getName(keys[i]));
-		active_texts[i]->setFillColor(cmm::LogConsole::getLoadingColor());
+		active_texts[i]->setFillColor(cmm::LOADING_COLOR);
 	}
 	active_texts[JUMP_ATTACK]->setText(getName(keys[JUMP]) + " + " + getName(keys[ATTACK]));
 	active_texts[JUMP_SHIELD]->setText(getName(keys[JUMP]) + " + " + getName(keys[SHIELD]));
-	active_texts[JUMP_ATTACK]->setFillColor(cmm::LogConsole::getLockedColor());
-	active_texts[JUMP_SHIELD]->setFillColor(cmm::LogConsole::getLockedColor());
+	active_texts[JUMP_ATTACK]->setFillColor(cmm::LOCKED_COLOR);
+	active_texts[JUMP_SHIELD]->setFillColor(cmm::LOCKED_COLOR);
 
 	positionTable();
 }

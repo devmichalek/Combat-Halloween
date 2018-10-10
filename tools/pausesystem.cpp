@@ -27,7 +27,7 @@ void PauseSystem::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError())	return;
 	text.setText("GAME PAUSED");
 	text.setSize(screen_h / 10);
-	text.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
+	text.setFillColor(cmm::WHITISH_COLOR);
 	text.center(screen_w / 2, screen_h / 2);
 
 	Loading::add(click.load("sounds/click.wav"));
@@ -35,7 +35,7 @@ void PauseSystem::load(const float &screen_w, const float &screen_h)
 
 	Loading::add(blackout.create(static_cast<int>(screen_w), static_cast<int>(screen_h)));
 	if (Loading::isError())	return;
-	blackout.setColor(sf::Color(0, 0, 0));
+	blackout.setColor(cmm::BACKGROUND_COLOR);
 }
 
 void PauseSystem::handle(const sf::Event &event)

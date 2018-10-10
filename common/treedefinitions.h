@@ -15,9 +15,3 @@ typedef bgm::point<float, 2, bg::cs::cartesian> Point;
 
 // Box
 typedef bgm::box<Point> Box;
-
-// Box + ID
-typedef std::pair<Box, int> BoxID;
-
-// Region Tree
-typedef bgi::rtree<BoxID, bgi::quadratic<16>> RTree;

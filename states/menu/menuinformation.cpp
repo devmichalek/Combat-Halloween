@@ -1,5 +1,4 @@
 #include "menuinformation.h"
-#include "logconsole.h"
 #include "user.h"
 #include "loading.h"
 #include <ctime>
@@ -44,10 +43,10 @@ void MenuInformation::load(float screen_w, float screen_h)
 	username_form.setText("Logged as ");
 
 	// Set color.
-	money.setFillColor(cmm::LogConsole::getErrorColor());
-	money_form.setFillColor(cmm::LogConsole::getLockedColor());
-	username.setFillColor(cmm::LogConsole::getSuccessColor());
-	username_form.setFillColor(cmm::LogConsole::getLockedColor());
+	money.setFillColor(cmm::ERROR_COLOR);
+	money_form.setFillColor(cmm::LOCKED_COLOR);
+	username.setFillColor(cmm::SUCCESS_COLOR);
+	username_form.setFillColor(cmm::LOCKED_COLOR);
 
 	// Set size.
 	float size = screen_h / 32;
@@ -132,7 +131,7 @@ void MenuInformation::setThread()
 		{
 			// Money.
 			money.setText("loading...");
-			money.setFillColor(cmm::LogConsole::getLoadingColor());
+			money.setFillColor(cmm::LOADING_COLOR);
 			money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
 
 			thread.thread = new std::thread(&MenuInformation::setMoney, this);
@@ -163,7 +162,7 @@ void MenuInformation::setMoney()
 		else
 		{
 			money.setText(request.getResult());
-			money.setFillColor(cmm::LogConsole::getSuccessColor());
+			money.setFillColor(cmm::SUCCESS_COLOR);
 			thread.success = true;
 		}
 	}
@@ -172,7 +171,7 @@ void MenuInformation::setMoney()
 	if (!success)
 	{
 		money.setText("error");
-		money.setFillColor(cmm::LogConsole::getErrorColor());
+		money.setFillColor(cmm::ERROR_COLOR);
 	}
 
 	// Set username and position again.

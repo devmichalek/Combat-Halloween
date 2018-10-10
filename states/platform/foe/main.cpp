@@ -4,7 +4,7 @@
 #include "fps.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
-cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
+cmm::Core* core = new cmm::Core(0, cmm::BACKGROUND_COLOR);
 FoeFactory* foeFactory = new FoeFactory;
 std::vector<cmm::State*> states;
 sf::Rect<float>* character = new sf::Rect<float>;

@@ -83,7 +83,7 @@
     <ClCompile Include="..\..\common\audio.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\logconsole.cpp">
+    <ClCompile Include="..\..\common\converter.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
   </ItemGroup>

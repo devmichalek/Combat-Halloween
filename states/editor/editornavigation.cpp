@@ -79,7 +79,7 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 		it->setFont(pathToFont.c_str());
 		it->setSize(screen_w / 60);
 		it->setAlpha(0xFF);
-		it->setFillColor(sf::Color::White);
+		it->setFillColor(cmm::LOADING_COLOR);
 	}
 
 	labels[MENU]->setText("Menu");

@@ -1,6 +1,6 @@
 #include "eelandscape.h"
-#include "logconsole.h"
 #include "loading.h"
+#include "converter.h"
 
 ee::LandscapeEntity::LandscapeEntity(int newID, char newChosen, float newScale)
 {
@@ -102,8 +102,8 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 	texts[SCALE_EDIT]->setText("");
 	texts[GLOBAL]->setText("Global Scale:");
 	texts[GLOBAL_EDIT]->setText("");
-	texts[SCALE]->setFillColor(cmm::LogConsole::getLockedColor());
-	texts[GLOBAL]->setFillColor(cmm::LogConsole::getLockedColor());
+	texts[SCALE]->setFillColor(cmm::LOCKED_COLOR);
+	texts[GLOBAL]->setFillColor(cmm::LOCKED_COLOR);
 
 	Loading::add(plus.load("images/buttons/plus.png", 3));
 	Loading::add(minus.load("images/buttons/minus.png", 3));
@@ -204,9 +204,9 @@ void ee::Landscape::draw(sf::RenderWindow* &window, cmm::Sprite* &object, const 
 	float tX = bg::get<0>(last.first.min_corner()) + addX;
 	float tY = (bg::get<1>(last.first.min_corner()) + addY + object->getHeight()) * -1 + screen_h;
 	object->setPosition(tX, tY);
-	object->setColor(sf::Color::Yellow);
+	object->setColor(cmm::GREEN_COLOR);
 	window->draw(*object);
-	object->setColor(sf::Color::White);	// set back
+	object->setColor(cmm::LOADING_COLOR);	// set back
 }
 
 void ee::Landscape::mechanics(const double &elapsedTime)
@@ -360,6 +360,6 @@ void ee::Landscape::setAI(std::string &ai)
 {
 	if (ai.empty())
 	{
-		ai = "(scale:" + cmm::LogConsole::floatToStr(last.second.scale) + ")";
+		ai = "(scale:" + cmm::floatToStr(last.second.scale) + ")";
 	}
 }

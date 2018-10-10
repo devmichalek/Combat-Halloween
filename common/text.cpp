@@ -193,23 +193,3 @@ float cmm::Text::getFixedHeight() const
 		scale = -scale;
 	return text->getLocalBounds().height * scale;
 }
-
-
-/*
-bool cmm::Text::checkCollision(float x, float y, float w, float h) const
-{
-	if(y + h <= getTop())
-        return false;
-
-    if(y >= getBot())
-        return false;
-
-    if(x + w <= getLeft())
-        return false;
-
-    if(x >= getRight())
-        return false;
-
-    return true;
-}
-*/

@@ -3,7 +3,7 @@
 #include "initialization.h"
 #include "login.h"
 
-cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
+cmm::Core* core = new cmm::Core(0, cmm::BACKGROUND_COLOR);
 std::vector<cmm::State*> states;
 
 // Load function.

@@ -6,7 +6,6 @@
 #include "sprite.h"
 #include "request.h"
 #include "eventwindow.h"
-#include <vector>
 
 
 class Knightspecs : public Specs

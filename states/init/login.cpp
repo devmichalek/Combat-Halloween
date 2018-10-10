@@ -1,6 +1,5 @@
 #include "login.h"
 #include "user.h"
-#include "logconsole.h"
 #include "loading.h"
 
 Login::Login()
@@ -60,7 +59,7 @@ void Login::load(const float &screen_w, const float &screen_h)
 	Loading::add(loginbg.create(static_cast<int>(screen_w / 2), static_cast<int>(screen_h)));
 	Loading::add(signupbg.create(static_cast<int>(screen_w / 2), static_cast<int>(screen_h)));
 	if (Loading::isError()) return;
-	signupbg.setColor(sf::Color(0xF2, 0x58, 0x3E));
+	signupbg.setColor(cmm::ERROR_COLOR);
 	signupbg.move(screen_w / 2, 0);
 
 
@@ -79,18 +78,17 @@ void Login::load(const float &screen_w, const float &screen_h)
 	backbutton.create("BACK", static_cast<int>(static_cast<float>(size) / 1.5), static_cast<float>(size) / 30 + 2);
 	forgetbutton.create("FORGOT PASSWORD", static_cast<int>(static_cast<float>(size) / 1.5), static_cast<float>(size) / 30 + 2);
 
-	loginbutton.setColor(sf::Color(0xFF, 0xFF, 0xFF));
-	signupbutton.setColor(sf::Color(0xF2, 0x58, 0x3E));
-	gobutton.setColor(sf::Color(0xD5, 0xE1, 0xDD));
-	backbutton.setColor(sf::Color(0xD5, 0xE1, 0xDD));
-	forgetbutton.setColor(sf::Color(0xFF, 0xD8, 0x00));
+	loginbutton.setColor(cmm::LOADING_COLOR);
+	signupbutton.setColor(cmm::ERROR_COLOR);
+	gobutton.setColor(cmm::DULL_IRON_COLOR);
+	backbutton.setColor(cmm::DULL_IRON_COLOR);
+	forgetbutton.setColor(cmm::SUCCESS_COLOR);
 
-	sf::Color color(0x21, 0x21, 0x29);
-	signupbutton.setColorText(color);
-	loginbutton.setColorText(color);
-	gobutton.setColorText(color);
-	backbutton.setColorText(color);
-	forgetbutton.setColorText(color);
+	signupbutton.setColorText(cmm::BACKGROUND_COLOR);
+	loginbutton.setColorText(cmm::BACKGROUND_COLOR);
+	gobutton.setColorText(cmm::BACKGROUND_COLOR);
+	backbutton.setColorText(cmm::BACKGROUND_COLOR);
+	forgetbutton.setColorText(cmm::BACKGROUND_COLOR);
 
 	// Set font.
 	Loading::add(title.setFont(path));
@@ -122,11 +120,11 @@ void Login::load(const float &screen_w, const float &screen_h)
 	info.setSize(screen_h / 28);
 
 	// Set color.
-	title.setFillColor(sf::Color(0xF7, 0xF3, 0xE8));
-	arrow.setFillColor(sf::Color(0xFF, 0xFF, 0xFF));
-	username_form.setFillColor(sf::Color(0xD5, 0xE1, 0xDD));
-	password_form.setFillColor(sf::Color(0xD5, 0xE1, 0xDD));
-	info.setFillColor(sf::Color(0xF2, 0x58, 0x3E));
+	title.setFillColor(cmm::IRON_COLOR);
+	arrow.setFillColor(cmm::LOADING_COLOR);
+	username_form.setFillColor(cmm::DULL_IRON_COLOR);
+	password_form.setFillColor(cmm::DULL_IRON_COLOR);
+	info.setFillColor(cmm::ERROR_COLOR);
 
 	position();
 
@@ -374,7 +372,7 @@ void Login::mechanics(const double &elapsedTime)
 			state = 2;
 
 			info.setText("Loading data...");
-			info.setFillColor(sf::Color(0xF7, 0xF3, 0xE8));
+			info.setFillColor(cmm::IRON_COLOR);
 			info.setPosition(screen_w / 2 - info.getWidth() / 2, password_form.getBot() + screen_h / 20);
 			info.setAlpha(0xFF);
 
@@ -435,12 +433,12 @@ void Login::setThread()
 	if (!request.sendRequest())
 	{
 		info_str = "Cannot connect to database.";
-		info.setFillColor(cmm::LogConsole::getErrorColor());
+		info.setFillColor(cmm::ERROR_COLOR);
 	}
 	else if (request.getResult() == "success")
 	{
 		info_str = "You are logged!";
-		info.setFillColor(cmm::LogConsole::getGreenColor());
+		info.setFillColor(cmm::GREEN_COLOR);
 		cmm::User::setUsername(username);
 		thread.success = true;
 	}
@@ -449,7 +447,7 @@ void Login::setThread()
 		++forget_counter;
 		if(request.getResult() == "-1")		info_str = "Unexpected Error.";
 		else if(request.getResult() == "0")	info_str = "Wrong username or password.";
-		info.setFillColor(cmm::LogConsole::getErrorColor());
+		info.setFillColor(cmm::ERROR_COLOR);
 	}
 
 	// Set Arrow - state.

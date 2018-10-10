@@ -54,11 +54,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\common\audio.cpp" />
     <ClCompile Include="..\..\common\content.cpp" />
+    <ClCompile Include="..\..\common\converter.cpp" />
     <ClCompile Include="..\..\common\core.cpp" />
     <ClCompile Include="..\..\common\coxing.cpp" />
     <ClCompile Include="..\..\common\filemanager.cpp" />
     <ClCompile Include="..\..\common\fpsconsole.cpp" />
-    <ClCompile Include="..\..\common\logconsole.cpp" />
     <ClCompile Include="..\..\common\music.cpp" />
     <ClCompile Include="..\..\common\request.cpp" />
     <ClCompile Include="..\..\common\sound.cpp" />

@@ -2,8 +2,7 @@
 #include "loading.h"
 #include <fstream>
 #include "request.h"
-#include <boost/lexical_cast.hpp>
-#include "logconsole.h"
+#include "converter.h"
 
 Simulator::Simulator()
 {
@@ -73,11 +72,11 @@ void Simulator::load(const float &screen_w, const float &screen_h)
 	backbutton.create("BACK", size, static_cast<float>(size) / 20 + 2);
 	reloadbutton.create("RELOAD", size, static_cast<float>(size) / 20 + 2);
 
-	backbutton.setColor(sf::Color(0xD5, 0xE1, 0xDD));
-	reloadbutton.setColor(sf::Color(0xD5, 0xE1, 0xDD));
+	backbutton.setColor(cmm::DULL_IRON_COLOR);
+	reloadbutton.setColor(cmm::DULL_IRON_COLOR);
 
-	backbutton.setColorText(sf::Color(0x21, 0x21, 0x29));
-	reloadbutton.setColorText(sf::Color(0x21, 0x21, 0x29));
+	backbutton.setColorText(cmm::BACKGROUND_COLOR);
+	reloadbutton.setColorText(cmm::BACKGROUND_COLOR);
 
 	backbutton.setPosition(screen_w / 256, screen_h / 144);
 	reloadbutton.setPosition(screen_w / 2 - reloadbutton.getWidth() / 2, screen_h / 5 * 4);
@@ -348,11 +347,11 @@ void Simulator::setInfo()
 	if (!msg.empty())
 	{	
 		if (status == STATUS::WARNING)
-			info.setFillColor(cmm::LogConsole::getWarningColor());
+			info.setFillColor(cmm::WARNING_COLOR);
 		else if (status == STATUS::FAILURE)
-			info.setFillColor(cmm::LogConsole::getErrorColor());
+			info.setFillColor(cmm::ERROR_COLOR);
 		else
-			info.setFillColor(cmm::LogConsole::getLoadingColor());
+			info.setFillColor(cmm::LOADING_COLOR);
 			
 		info.setText(msg);
 		info.setPosition(screen_w / 2 - info.getWidth() / 2 + screen_w / 160, screen_h / 2 - info.getHeight() / 2 - screen_h / 72);

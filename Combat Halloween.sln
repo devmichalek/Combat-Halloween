@@ -19,8 +19,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "filemanager", "common\vcxpr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fpsconsole", "common\vcxproj\fpsconsole\fpsconsole.vcxproj", "{6B00BA41-BFAF-4A66-BA2D-539C11B66149}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "logconsole", "common\vcxproj\logconsole\logconsole.vcxproj", "{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "request", "common\vcxproj\request\request.vcxproj", "{BC222A34-C309-43F6-9CD0-4BE0EE174A7C}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "sprite", "common\vcxproj\sprite\sprite.vcxproj", "{1025456B-DB99-4E8E-99A6-2F30EF4B7846}"
@@ -58,6 +56,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7776C15C-FF4
 	ProjectSection(SolutionItems) = preProject
 		common\audio.cpp = common\audio.cpp
 		common\content.cpp = common\content.cpp
+		common\converter.cpp = common\converter.cpp
 		common\core.cpp = common\core.cpp
 		common\coxing.cpp = common\coxing.cpp
 		common\filemanager.cpp = common\filemanager.cpp
@@ -77,15 +76,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "h", "h", "{35E7F257-D1D8-463F-A8A4-F5AF952BA7A8}"
 	ProjectSection(SolutionItems) = preProject
 		common\audio.h = common\audio.h
+		common\colors.h = common\colors.h
 		common\content.h = common\content.h
+		common\converter.h = common\converter.h
 		common\core.h = common\core.h
 		common\coxing.h = common\coxing.h
+		common\definitions.h = common\definitions.h
 		common\dirent.h = common\dirent.h
 		common\eventwindow.h = common\eventwindow.h
 		common\filemanager.h = common\filemanager.h
 		common\fpsconsole.h = common\fpsconsole.h
 		common\kind.h = common\kind.h
-		common\logconsole.h = common\logconsole.h
 		common\music.h = common\music.h
 		common\request.h = common\request.h
 		common\sound.h = common\sound.h
@@ -132,11 +133,6 @@ Global
 		{6B00BA41-BFAF-4A66-BA2D-539C11B66149}.Debug|x86.Build.0 = Debug|Win32
 		{6B00BA41-BFAF-4A66-BA2D-539C11B66149}.Release|x64.ActiveCfg = Debug|Win32
 		{6B00BA41-BFAF-4A66-BA2D-539C11B66149}.Release|x86.ActiveCfg = Debug|Win32
-		{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8}.Debug|x64.ActiveCfg = Debug|Win32
-		{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8}.Debug|x86.ActiveCfg = Debug|Win32
-		{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8}.Debug|x86.Build.0 = Debug|Win32
-		{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8}.Release|x64.ActiveCfg = Debug|Win32
-		{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8}.Release|x86.ActiveCfg = Debug|Win32
 		{BC222A34-C309-43F6-9CD0-4BE0EE174A7C}.Debug|x64.ActiveCfg = Debug|Win32
 		{BC222A34-C309-43F6-9CD0-4BE0EE174A7C}.Debug|x86.ActiveCfg = Debug|Win32
 		{BC222A34-C309-43F6-9CD0-4BE0EE174A7C}.Debug|x86.Build.0 = Debug|Win32
@@ -238,7 +234,6 @@ Global
 		{E1679690-F570-481C-A4FE-24F7B3042019} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{4496B398-D1BF-48C4-9078-5DA5AA2CAD36} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{6B00BA41-BFAF-4A66-BA2D-539C11B66149} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
-		{8C54B6BB-2165-4298-B044-2E2C0D1A0AE8} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{BC222A34-C309-43F6-9CD0-4BE0EE174A7C} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{1025456B-DB99-4E8E-99A6-2F30EF4B7846} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}
 		{F3089065-D4F0-497D-97A3-95096F450189} = {5864DB42-DD85-4DE1-A2DC-06B975FBF06D}

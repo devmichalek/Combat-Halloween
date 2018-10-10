@@ -1,5 +1,5 @@
 #include "chat.h"
-#include "logconsole.h"
+#include "colors.h"
 #include "user.h"
 #include "loading.h"
 #include <boost/lexical_cast.hpp>
@@ -109,7 +109,7 @@ void Chat::load(const float &screen_w, const float &screen_h)
 	Loading::add(username.setFont(cmm::JAPOKKI_FONT_PATH));
 	if (Loading::isError())	return;
 	username.setSize(fontSize);
-	username.setFillColor(cmm::LogConsole::getRedColor());
+	username.setFillColor(cmm::RED_COLOR);
 	username.setAlpha(0);
 	username.setText(cmm::User::getUsername() + ":");
 	setWritten();
@@ -637,12 +637,12 @@ void Chat::setError(std::string msg)
 
 void Chat::setStyleBlackish()
 {
-	color = sf::Color(0x68, 0x68, 0x68);
-	ccolor = sf::Color(21, 21, 29);
+	color = cmm::GRAYISH_COLOR;
+	ccolor = cmm::BACKGROUND_COLOR;
 }
 
 void Chat::setStyleWhitish()
 {
-	color = sf::Color(0xBA, 0xBA, 0xBA);
-	ccolor = sf::Color(0xD5, 0xE1, 0xDD);
+	color = cmm::IRON_COLOR;
+	ccolor = cmm::DULL_IRON_COLOR;
 }

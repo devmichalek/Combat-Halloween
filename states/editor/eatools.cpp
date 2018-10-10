@@ -97,7 +97,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 		if (Loading::isError()) return;
 		texts[i]->setSize(screen_w / 60);
 		texts[i]->setAlpha(0xFF);
-		texts[i]->setFillColor(sf::Color::White);
+		texts[i]->setFillColor(cmm::LOADING_COLOR);
 	}
 
 	keys.push_back(sf::Keyboard::LControl);

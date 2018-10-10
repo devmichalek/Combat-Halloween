@@ -1,5 +1,4 @@
 #include "eafactory.h"
-#include "logconsole.h"
 #include "loading.h"
 #include "boost/scope_exit.hpp"
 #include "core.h" // static core
@@ -265,7 +264,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 
 	if (type != VOID)
 	{
-		redBacklight ? factory[t][chosen]->setColor(cmm::LogConsole::getErrorColor()) : factory[t][chosen]->setColor(sf::Color::White);
+		redBacklight ? factory[t][chosen]->setColor(cmm::ERROR_COLOR) : factory[t][chosen]->setColor(cmm::LOADING_COLOR);
 		type == UNVISIBLE_TILE ? factory[t][chosen]->setAlpha(0xFF / 2) : factory[t][chosen]->setAlpha(0xFF);
 		factory[t][chosen]->setPosition(tempX, tempY);
 
@@ -274,7 +273,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 
 		window->draw(*factory[t][chosen]);
 
-		if (redBacklight)			factory[t][chosen]->setColor(sf::Color::White);	// set back
+		if (redBacklight)			factory[t][chosen]->setColor(cmm::LOADING_COLOR);	// set back
 		if(type == UNVISIBLE_TILE)	factory[t][chosen]->setAlpha(0xFF);				// set back
 
 		tools.draw(window, factory[t], chosen);

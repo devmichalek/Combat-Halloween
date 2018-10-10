@@ -1,5 +1,4 @@
 #include "initialization.h"
-#include "logconsole.h"
 #include "loading.h"
 
 Initialization::Initialization()
@@ -62,12 +61,12 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	texts[COMBAT]->setSize(screen_h / 10);
 
 	// Set color.
-	texts[AUTHOR]->setFillColor(sf::Color(0xD5, 0xE1, 0xDD));
-	texts[PRESENTS]->setFillColor(cmm::LogConsole::getCyanColor());
-	texts[HALLOWEEN]->setFillColor(sf::Color(21, 21, 29));
-	texts[HALLOWEEN]->setOutlineColor(cmm::LogConsole::getRedColor());
-	texts[COMBAT]->setFillColor(sf::Color(21, 21, 29));
-	texts[COMBAT]->setOutlineColor(sf::Color(0xD5, 0xE1, 0xDD));
+	texts[AUTHOR]->setFillColor(cmm::DULL_IRON_COLOR);
+	texts[PRESENTS]->setFillColor(cmm::CYAN_COLOR);
+	texts[HALLOWEEN]->setFillColor(cmm::BACKGROUND_COLOR);
+	texts[HALLOWEEN]->setOutlineColor(cmm::RED_COLOR);
+	texts[COMBAT]->setFillColor(cmm::BACKGROUND_COLOR);
+	texts[COMBAT]->setOutlineColor(cmm::DULL_IRON_COLOR);
 
 	// Set position.
 	texts[AUTHOR]->center(screen_w / 2, screen_h / 2 - screen_h / 20);

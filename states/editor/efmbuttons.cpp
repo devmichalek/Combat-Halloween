@@ -103,7 +103,7 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 		if (Loading::isError())	return;
 		it->setSize(screen_w / 120);
 		it->setAlpha(0xFF);
-		it->setFillColor(sf::Color::White);
+		it->setFillColor(cmm::LOADING_COLOR);
 	}
 
 	labels[NEW]->setText("New");
@@ -131,7 +131,7 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 	if (Loading::isError())	return;
 	fileButtonText.setSize(screen_w / 60);
 	fileButtonText.setAlpha(0xFF);
-	fileButtonText.setFillColor(sf::Color::White);
+	fileButtonText.setFillColor(cmm::LOADING_COLOR);
 	fileButtonText.setText("File");
 	fileButtonText.setPosition(fileButton.getLeft() + fileButton.getWidth() / 2 - fileButtonText.getWidth() / 2, fileButton.getBot() + off / 2);
 

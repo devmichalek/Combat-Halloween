@@ -1,4 +1,5 @@
 #include "core.h"
+#include "definitions.h"
 
 cmm::StaticCore::StaticCore()
 {
@@ -27,7 +28,7 @@ cmm::Core::Core(int state)
 	this->state = state;
 	width = 0;
 	height = 0;
-	color = sf::Color::Black;
+	color = BACKGROUND_COLOR;
 	window = nullptr;
 }
 
@@ -60,7 +61,7 @@ void cmm::Core::free()
 {
 	close();
 	state = 0;
-	color = sf::Color(21, 21, 29, 0xFF);
+	color = BACKGROUND_COLOR;
 }
 
 void cmm::Core::close()
@@ -86,11 +87,11 @@ bool cmm::Core::create(const char* title, int style)
 
 	// Find correct window size.
 	width = sf::VideoMode::getDesktopMode().width / 1.2f;
-	if (width > 2560)
-		width = 2560;
-	else if (width < 900)
+	if (width > MAX_SCREEN_WIDTH)
+		width = MAX_SCREEN_WIDTH;
+	else if (width < MIN_SCREEN_WIDTH)
 		return false;
-	height = width * 0.5625f;
+	height = width * SCREEN_RATIO;
 
 	// Create window.
 	window = new sf::RenderWindow(sf::VideoMode((int)width, (int)height), title, style);

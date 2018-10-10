@@ -5,6 +5,12 @@
 #include "sprite.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
+// Box + ID
+typedef std::pair<Box, int> BoxID;
+
+// Region Tree
+typedef bgi::rtree<BoxID, bgi::quadratic<16>> RTree;
+
 class FoeWrapper
 {
 	RTree* tree;

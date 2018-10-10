@@ -1,5 +1,4 @@
 #include "levelmenuinformation.h"
-#include "logconsole.h"
 #include "loading.h"
 
 LevelMenuInformation::LevelMenuInformation()
@@ -48,7 +47,7 @@ void LevelMenuInformation::load(const float &screen_w, const float &screen_h)
 		Loading::add(texts[i]->setFont(cmm::JCANDLE_FONT_PATH));
 		if (Loading::isError())	return;
 		texts[i]->setSize(screen_h / 16);
-		texts[i]->setFillColor(cmm::LogConsole::getLockedColor());
+		texts[i]->setFillColor(cmm::LOCKED_COLOR);
 	}
 
 	chosen = 0;
@@ -133,11 +132,11 @@ void LevelMenuInformation::prepareChosen()
 {
 	for (auto &it : texts)
 	{
-		it->setFillColor(cmm::LogConsole::getLockedColor());
+		it->setFillColor(cmm::LOCKED_COLOR);
 		it->setPosition(it->getX(), screen_h / 7);
 	}
 
-	texts[chosen]->setFillColor(cmm::LogConsole::getLoadingColor());
+	texts[chosen]->setFillColor(cmm::LOADING_COLOR);
 	texts[chosen]->move(0, -screen_h / 144);
 }
 

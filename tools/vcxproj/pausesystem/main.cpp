@@ -3,7 +3,7 @@
 #include "pausesystem.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
-cmm::Core* core = new cmm::Core(0, sf::Color(21, 21, 29, 0xFF));
+cmm::Core* core = new cmm::Core(0, cmm::BACKGROUND_COLOR);
 std::vector<cmm::State*> states;
 PauseSystem pauseSystem;
 
@@ -47,7 +47,7 @@ void main_loop()
 {
 	sf::RectangleShape shape;
 	shape.setSize(sf::Vector2f(core->getWidth() / 10, core->getHeight() / 10));
-	shape.setFillColor(sf::Color::White);
+	shape.setFillColor(cmm::LOADING_COLOR);
 
 	float velocity = 120;
 	sf::Vector2f pos(0, 0);

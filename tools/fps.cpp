@@ -38,8 +38,8 @@ void FPS::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError())	return;
 	text.setSize(screen_w / 60);
 	text.setOutlineThickness(1);
-	text.setOutlineColor(sf::Color::Black);
-	text.setFillColor(sf::Color::White);
+	text.setOutlineColor(cmm::BACKGROUND_COLOR);
+	text.setFillColor(cmm::LOADING_COLOR);
 	text.setAlpha(0xFF);
 	text.setText("-");
 }
