@@ -20,7 +20,6 @@ class EAInfo : public EAKind
 		SIZE
 	};
 
-	int width;
 	std::vector<cmm::Text*> texts;
 
 public:
@@ -31,7 +30,7 @@ private:
 public:
 	void reset();
 
-	void load(const float &screen_w, const float &screen_h, const int &width);
+	void load(const float &screen_w, const float &screen_h);
 	void draw(sf::RenderWindow* &window);
 	void set(const int &newType, const int &newChosen);
 

@@ -1,6 +1,7 @@
 #include "eatools.h"
 #include "loading.h"
 #include "eecollision.h"
+#include "definitions.h"
 
 EATools::EATools()
 {
@@ -96,7 +97,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 		Loading::add(texts[i]->setFont(cmm::JCANDLE_FONT_PATH));
 		if (Loading::isError()) return;
 		texts[i]->setSize(screen_w / 60);
-		texts[i]->setAlpha(0xFF);
+		texts[i]->setAlpha(MAX_ALPHA);
 		texts[i]->setFillColor(cmm::LOADING_COLOR);
 	}
 
@@ -111,7 +112,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	
 	for (auto &it : buttons)
 	{
-		it->setVolume(0.0f); // muted
+		it->setVolume(MIN_SOUND_VOLUME); // muted
 		it->setScale(screen_w / 2560, screen_h / 1440);
 	}
 	
@@ -129,7 +130,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	Loading::add(checkedIcon.load("images/icons/checkedicon.png"));
 	if (Loading::isError()) return;
 	checkedIcon.setScale(0.3, 0.3);
-	checkedIcon.setAlpha(0xFF / 1.5);
+	checkedIcon.setAlpha(MAX_ALPHA / 1.5);
 }
 
 bool EATools::handle(const sf::Event &event)
@@ -201,7 +202,7 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 
 	for (unsigned i = 0; i < factory.size(); ++i)
 	{
-		if (i != chosen)	factory[i]->setAlpha(0xFF / 1.5);
+		if (i != chosen)	factory[i]->setAlpha(MAX_ALPHA / 1.5);
 		
 		factory[i]->setScale(0.3, 0.3); // 30% of oryginal
 		if (i != 0)
@@ -225,7 +226,7 @@ void EATools::draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory
 		}
 
 		window->draw(*factory[i]);
-		factory[i]->setAlpha(0xFF); // set back
+		factory[i]->setAlpha(MAX_ALPHA); // set back
 	}
 
 	factory[factory.size() - 1]->setScale(scaleX, scaleY); // set back 50% of oryginal for the first one

@@ -75,19 +75,19 @@ void Loading::load(const float &screen_w, const float &screen_h)
 	// Set text.
 	text.setFont(cmm::JAPOKKI_FONT_PATH);
 	text.setSize(screen_h / 24);
-	text.setAlpha(0xFF);
+	text.setAlpha(MAX_ALPHA);
 	setText();
 
 	// Set info.
 	info.setFont(cmm::JAPOKKI_FONT_PATH);
 	info.setSize(screen_h / 48);
-	info.setAlpha(0xFF);
+	info.setAlpha(MAX_ALPHA);
 	setInfo(" ");
 
 	// Set progress bar.
 	progress_bar.load("images/other/progress_bar.png", 7);
 	progress_bar.setScale(screen_w / 1707, screen_h / 960);
-	progress_bar.setAlpha(0xFF);
+	progress_bar.setAlpha(MAX_ALPHA);
 	progress_bar.setPosition(screen_w / 2 - progress_bar.getWidth() / 2, screen_h / 2 + screen_h / 36);
 }
 
@@ -105,8 +105,8 @@ void Loading::mechanics(const double &elapsedTime)
 	if (next)
 	{
 		int min = 0;
-		text.fadeout((float)elapsedTime * 0xFF * 2, min);
-		progress_bar.fadeout((float)elapsedTime * 0xFF * 2, min);
+		text.fadeout((float)elapsedTime * MAX_ALPHA * 2, min);
+		progress_bar.fadeout((float)elapsedTime * MAX_ALPHA * 2, min);
 	}
 	else if(!error_occured)
 	{

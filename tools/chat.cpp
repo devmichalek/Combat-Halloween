@@ -2,6 +2,7 @@
 #include "colors.h"
 #include "user.h"
 #include "loading.h"
+#include "definitions.h"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
 
@@ -24,7 +25,7 @@ void Chat::free()
 	setStyleBlackish();
 	screen_w = screen_h = 0;
 	scale_x = scale_y = 0;
-	max_text_length = 0xFF;
+	max_text_length = MAX_ALPHA;
 
 	globalYScale = 0;
 	globalYLine = 2;
@@ -243,7 +244,7 @@ void Chat::mechanics(const double &elapsedTime)
 		counter = 0;
 	}
 
-	int max = 0xFF;
+	int max = MAX_ALPHA;
 	if (active)
 	{
 		float value = static_cast<float>(elapsedTime) * 255.0f * 2.0f;
@@ -490,9 +491,9 @@ float Chat::getNewVolume()
 	if (size <= 3 && size >= 1)
 	{
 		if (buf == "min")
-			return 0.0f;
+			return MIN_MUSIC_VOLUME;
 		else if (buf == "max")
-			return 100.0f;
+			return MAX_MUSIC_VOLUME;
 		else
 		{
 			// check if string contains only numbers

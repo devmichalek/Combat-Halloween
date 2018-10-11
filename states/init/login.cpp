@@ -278,7 +278,7 @@ void Login::mechanics(const double &elapsedTime)
 		info.setText(info_str);
 		info_str = "";
 		// Set alpha and position of info.
-		info.setAlpha(0xFF);
+		info.setAlpha(MAX_ALPHA);
 		info.setPosition(screen_w / 2 - info.getWidth() / 2, password_form.getBot() + screen_h / 20);
 	}
 
@@ -305,10 +305,10 @@ void Login::mechanics(const double &elapsedTime)
 
 
 	// Background
-	float value = static_cast<float>(elapsedTime) * 0xFF;
+	float value = static_cast<float>(elapsedTime) * MAX_ALPHA;
 	if (loginbutton.getFocus() && loginbutton.getState() == 1 && counter == 0)
 	{
-			loginbg.fadein(value * 3, 0xFF);
+			loginbg.fadein(value * 3, (int)MAX_ALPHA);
 	}
 	else
 	{
@@ -316,14 +316,14 @@ void Login::mechanics(const double &elapsedTime)
 	}
 	if (signupbutton.getFocus() && signupbutton.getState() == 1 && counter == 0)
 	{
-		signupbg.fadein(value * 3, 0xFF);
+		signupbg.fadein(value * 3, (int)MAX_ALPHA);
 	}
 	else
 	{
-		signupbg.fadeout(value * 4, 0);
+		signupbg.fadeout(value * 4, (int)MIN_ALPHA);
 	}
 
-	int max = 0xFF, min = 0;
+	int max = (int)MAX_ALPHA, min = (int)MIN_ALPHA;
 	loginbutton.fadeinGlobal(value, max);
 	signupbutton.fadeinGlobal(value, max);
 	backbutton.fadeinGlobal(value, max);
@@ -374,7 +374,7 @@ void Login::mechanics(const double &elapsedTime)
 			info.setText("Loading data...");
 			info.setFillColor(cmm::IRON_COLOR);
 			info.setPosition(screen_w / 2 - info.getWidth() / 2, password_form.getBot() + screen_h / 20);
-			info.setAlpha(0xFF);
+			info.setAlpha(MAX_ALPHA);
 
 			thread.thread = new std::thread(&Login::setThread, this);
 			thread.thread->detach();

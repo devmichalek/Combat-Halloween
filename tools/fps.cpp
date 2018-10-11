@@ -22,7 +22,7 @@ void FPS::reset()
 {
 	active = false;
 	text.setText("-");
-	text.setAlpha(0xFF);
+	text.setAlpha(MAX_ALPHA);
 }
 
 
@@ -40,7 +40,7 @@ void FPS::load(const float &screen_w, const float &screen_h)
 	text.setOutlineThickness(1);
 	text.setOutlineColor(cmm::BACKGROUND_COLOR);
 	text.setFillColor(cmm::LOADING_COLOR);
-	text.setAlpha(0xFF);
+	text.setAlpha(MAX_ALPHA);
 	text.setText("-");
 }
 

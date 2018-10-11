@@ -180,9 +180,6 @@
     <ClCompile Include="..\..\common\fpsconsole.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\common\logconsole.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\music.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -215,6 +212,9 @@
     </ClCompile>
     <ClCompile Include="..\platform\platform\tiles.cpp">
       <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\converter.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

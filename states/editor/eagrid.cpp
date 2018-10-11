@@ -1,5 +1,6 @@
 #include "eagrid.h"
 #include "loading.h"
+#include "definitions.h"
 
 EAGrid::EAGrid()
 {
@@ -26,9 +27,7 @@ void EAGrid::free()
 		arrows.clear();
 	}
 
-	width = 0;
 	offsetX = offsetY = 0;
-	limitX = limitY = 0;
 	screen_w = screen_h = 0;
 }
 
@@ -46,20 +45,17 @@ void EAGrid::reset()
 
 
 
-void EAGrid::load(const float &screen_w, const float &screen_h, const int &width)
+void EAGrid::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
-	this->width = width;
 	this->screen_w = screen_w;
 	this->screen_h = screen_h;
-	offsetX = (int)((screen_w / 3) / width) * width;
-	offsetY = (int)((screen_h / 3) / width) * width;
-	limitX = 1500 * width;
-	limitY = 1500 * width;
+	offsetX = (int)((screen_w / 3) / TILE_FULL_WIDTH) * TILE_FULL_WIDTH;
+	offsetY = (int)((screen_h / 3) / TILE_FULL_WIDTH) * TILE_FULL_WIDTH;
 	
 	sf::Color color = cmm::LOCKED_COLOR;
-	color.a = 0xFF / 3;
+	color.a = (int)MAX_ALPHA / 3;
 	lineX.setSize(sf::Vector2f(1, screen_h));
 	lineX.setPosition(0, 0);
 	lineX.setFillColor(color);
@@ -67,8 +63,8 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	lineY.setPosition(0, 0);
 	lineY.setFillColor(color);
 
-	suppX.setSize(sf::Vector2f(1, static_cast<float>(width) / 2));
-	suppY.setSize(sf::Vector2f(static_cast<float>(width) / 2, 1));
+	suppX.setSize(sf::Vector2f(1, static_cast<float>(TILE_WIDTH)));
+	suppY.setSize(sf::Vector2f(static_cast<float>(TILE_WIDTH), 1));
 	suppX.setFillColor(color);
 	suppY.setFillColor(color);
 
@@ -83,7 +79,7 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 	if (Loading::isError())	return;
 
 	for (int i = 0; i < ARROWS::COUNT; ++i)
-		arrows[i]->setVolume(0.0f); // muted
+		arrows[i]->setVolume(MIN_SOUND_VOLUME); // muted
 
 	for (int i = 0; i < ARROWS::COUNT; ++i)
 		arrows[i]->setScale(0.25, 0.25);
@@ -97,7 +93,7 @@ void EAGrid::load(const float &screen_w, const float &screen_h, const int &width
 
 	xyText.setFont(cmm::JCANDLE_FONT_PATH);
 	xyText.setSize(screen_w / 80);
-	xyText.setAlpha(0xFF / 3);
+	xyText.setAlpha(MAX_ALPHA / 3);
 	xyText.setFillColor(cmm::LOCKED_COLOR);
 
 	setArrows();
@@ -152,7 +148,7 @@ void EAGrid::draw(sf::RenderWindow* &window)
 		window->draw(lineX);
 		window->draw(lineY);
 
-		xyText.setPosition(mouseX + width / 16, mouseY - width / 8 - xyText.getHeight());
+		xyText.setPosition(mouseX + TILE_WIDTH / 8, mouseY - TILE_WIDTH / 4 - xyText.getHeight());
 	}
 	else
 	{
@@ -161,17 +157,17 @@ void EAGrid::draw(sf::RenderWindow* &window)
 		window->draw(lineX);
 		window->draw(lineY);
 
-		lineX.setPosition(static_cast<float>(gridX + width), 0.0f);
-		lineY.setPosition(0.0f, static_cast<float>(gridY + width));
+		lineX.setPosition(static_cast<float>(gridX + TILE_FULL_WIDTH), 0.0f);
+		lineY.setPosition(0.0f, static_cast<float>(gridY + TILE_FULL_WIDTH));
 		window->draw(lineX);
 		window->draw(lineY);
 
-		suppX.setPosition(static_cast<float>(gridX + width / 2), static_cast<float>(gridY - width / 4));
-		suppY.setPosition(static_cast<float>(gridX - width / 4), static_cast<float>(gridY + width / 2));
+		suppX.setPosition(static_cast<float>(gridX + TILE_WIDTH), static_cast<float>(gridY - TILE_WIDTH / 2));
+		suppY.setPosition(static_cast<float>(gridX - TILE_WIDTH / 2), static_cast<float>(gridY + TILE_WIDTH));
 		window->draw(suppX);
 		window->draw(suppY);
 
-		xyText.setPosition(gridX + width + 1, gridY - 1);
+		xyText.setPosition(gridX + TILE_FULL_WIDTH + 1, gridY - 1);
 	}
 
 	window->draw(xyText);
@@ -185,7 +181,7 @@ void EAGrid::draw(sf::RenderWindow* &window)
 void EAGrid::mechanics(bool deleteMode)
 {
 	sf::Color color = deleteMode ? cmm::ERROR_COLOR : cmm::LOCKED_COLOR;
-	color.a = 0xFF / 3;
+	color.a = (int)MAX_ALPHA / 3;
 	lineX.setFillColor(color);
 	lineY.setFillColor(color);
 
@@ -195,24 +191,23 @@ void EAGrid::mechanics(bool deleteMode)
 	{
 		gridX = mouseX;
 		gridY = mouseY;
-		int halfWidth = width / 2;
 
 		int count = 0;
-		while (gridX >= halfWidth)
+		while (gridX >= TILE_WIDTH)
 		{
-			gridX -= halfWidth;
+			gridX -= TILE_WIDTH;
 			++count;
 		}
-		gridX = count * halfWidth;
+		gridX = count * TILE_WIDTH;
 
 		count = 0;
-		int diff = static_cast <int> (screen_h) % static_cast <int> (halfWidth);
-		while (gridY - diff >= halfWidth)
+		int diff = static_cast <int> (screen_h) % static_cast <int> (TILE_WIDTH);
+		while (gridY - diff >= TILE_WIDTH)
 		{
-			gridY -= halfWidth;
+			gridY -= TILE_WIDTH;
 			++count;
 		}
-		gridY = count * halfWidth + diff;
+		gridY = count * TILE_WIDTH + diff;
 	}
 
 	checkArrows();
@@ -220,16 +215,6 @@ void EAGrid::mechanics(bool deleteMode)
 }
 
 
-
-const int& EAGrid::getLimitX() const
-{
-	return limitX;
-}
-
-const int& EAGrid::getLimitY() const
-{
-	return limitY;
-}
 
 const int& EAGrid::getAddX() const
 {
@@ -327,12 +312,12 @@ bool EAGrid::isAbleToGoLeft()
 
 bool EAGrid::isAbleToGoRight()
 {
-	return addX >= -limitX + offsetX;
+	return addX >= -MAX_MAP_WIDTH + offsetX;
 }
 
 bool EAGrid::isAbleToGoUp()
 {
-	return addY >= -limitY + offsetY;
+	return addY >= -MAX_MAP_HEIGHT + offsetY;
 }
 
 bool EAGrid::isAbleToGoDown()

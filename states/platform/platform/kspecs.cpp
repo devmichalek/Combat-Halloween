@@ -1,4 +1,5 @@
 #include "kspecs.h"
+#include "colors.h"
 
 pla::KSpecs::KSpecs()
 {
@@ -48,7 +49,7 @@ void pla::KSpecs::setSpecs()
 	mp = static_cast<float>(features[MAGIC_POINTS]);
 	armour = static_cast<float>(features[ARMOUR]);
 	mresistant = static_cast<float>(features[MAGIC_RESISTANT]);
-	velocity = 0xFF + 0xFF * static_cast<float>(features[MOVEMENT_SPEED]) / 100;
+	velocity = MAX_ALPHA + MAX_ALPHA * static_cast<float>(features[MOVEMENT_SPEED]) / 100;
 	hvelocity = velocity / 2;
 	gravity = 1;	// change later
 	damage = static_cast<float>(features[DAMAGE]);

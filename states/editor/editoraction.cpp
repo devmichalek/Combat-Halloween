@@ -29,11 +29,9 @@ void EditorAction::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
-	int width = 64;
-
 	factory.load(screen_w, screen_h);
-	grid.load(screen_w, screen_h, width);
-	info.load(screen_w, screen_h, width);
+	grid.load(screen_w, screen_h);
+	info.load(screen_w, screen_h);
 	if (Loading::isError())	return;
 	reset();
 }

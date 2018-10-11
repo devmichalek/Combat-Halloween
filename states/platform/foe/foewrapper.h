@@ -1,5 +1,5 @@
-#define _SCL_SECURE_NO_WARNINGS
 #pragma once
+#define _SCL_SECURE_NO_WARNINGS
 #include "treedefinitions.h"
 #include "foe.h"
 #include "sprite.h"

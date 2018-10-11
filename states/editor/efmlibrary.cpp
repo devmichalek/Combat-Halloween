@@ -83,14 +83,14 @@ void EFMLibrary::load(const float &screen_w, const float &screen_h, sf::FloatRec
 
 	icons[LEFT]->setPosition(plank.left + off, plank.top + plank.height / 2 - icons[LEFT]->getHeight() / 2);
 	icons[RIGHT]->setPosition(plank.left + plank.width - off - icons[RIGHT]->getWidth(), icons[LEFT]->getTop());
-	icons[LEFT]->setAlpha(0xFF / 1.5);
-	icons[RIGHT]->setAlpha(0xFF / 1.5);
+	icons[LEFT]->setAlpha(MAX_ALPHA / 1.5);
+	icons[RIGHT]->setAlpha(MAX_ALPHA / 1.5);
 
 	// The Rest
 	Loading::add(pageText.setFont(cmm::JAPOKKI_FONT_PATH));
 	if (Loading::isError())	return;
 	pageText.setSize(plank.width / 20);
-	pageText.setAlpha(0xFF);
+	pageText.setAlpha(MAX_ALPHA);
 	setPageText();
 }
 
@@ -144,16 +144,16 @@ bool EFMLibrary::handle(const sf::Event &event, const bool &status)
 	// hovering...
 	if (event.type == sf::Event::MouseMoved)
 	{
-		icons[LEFT]->setAlpha(0xFF / 1.5);
-		icons[RIGHT]->setAlpha(0xFF / 1.5);
+		icons[LEFT]->setAlpha(MAX_ALPHA / 1.5);
+		icons[RIGHT]->setAlpha(MAX_ALPHA / 1.5);
 
 		float x = (float)event.mouseMove.x;
 		float y = (float)event.mouseMove.y;
 
 		if (icons[LEFT]->checkCollision(x, y) && ableToGoLeft)
-			icons[LEFT]->setAlpha(0xFF);
+			icons[LEFT]->setAlpha(MAX_ALPHA);
 		else if (icons[RIGHT]->checkCollision(x, y) && ableToGoRight)
-			icons[RIGHT]->setAlpha(0xFF);
+			icons[RIGHT]->setAlpha(MAX_ALPHA);
 	}
 
 	return false;
@@ -242,7 +242,7 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 		else if (it.size() > 12)	outStr = it.substr(0, 8) + "..."; // 11 c
 		textLabels[n]->setText(outStr);
 
-		textLabels[n]->setAlpha(0xFF);
+		textLabels[n]->setAlpha(MAX_ALPHA);
 	}
 
 	// Positioning.

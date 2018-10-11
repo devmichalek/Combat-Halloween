@@ -68,7 +68,7 @@ void Platform::set()
 
 bool Platform::isReady() const
 {
-	return movingBG.getAlpha() == 0.0f;
+	return movingBG.getAlpha() == MIN_ALPHA;
 }
 
 void Platform::reset()
@@ -363,22 +363,22 @@ void Platform::fades(const float &elapsedTime)
 {
 	if (pausesystem.isActive())
 	{
-		float value = elapsedTime * 0xFF * 2;
-		int min = 0xFF * 3 / 4;
+		float value = elapsedTime * MAX_ALPHA * 2;
+		int min = MAX_ALPHA * 3 / 4;
 		fadeout(value, min);
 		pausesystem.fadein(value * 3, min);
 		music.fadeout(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume() * 0.2));
 	}
 	else if (isState())
 	{
-		int min = 0;
-		fadeout(elapsedTime * 0xFF, min);
+		int min = (int)MIN_ALPHA;
+		fadeout(elapsedTime * MAX_ALPHA, min);
 		music.fadeout(elapsedTime * 100, min);
 	}
 	else
 	{
-		float value = elapsedTime * 0xFF * 2;
-		int max = 0xFF, min = 0;
+		float value = elapsedTime * MAX_ALPHA * 2;
+		int max = (int)MAX_ALPHA, min = (int)MIN_ALPHA;
 		fadein(value, max);
 		pausesystem.fadeout(value, min);
 		music.fadein(elapsedTime * 100, static_cast<int>(music_volumebutton.getGlobalVolume()));

@@ -8,7 +8,6 @@ namespace pla
 
 	class Tiles
 	{
-		int width;
 		char wPad, hPad;
 		float screen_w;
 		float screen_h;
@@ -18,7 +17,6 @@ namespace pla
 		sf::RectangleShape rect;
 		// ---
 
-		int max;
 		char** tiles;
 		char** untiles;	// unvisible tiles
 		std::vector <cmm::Sprite*> sprites;

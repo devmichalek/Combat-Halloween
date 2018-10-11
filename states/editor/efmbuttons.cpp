@@ -1,5 +1,6 @@
 #include "efmbuttons.h"
 #include "loading.h"
+#include "definitions.h"
 
 EFMButtons::EFMButtons()
 {
@@ -102,7 +103,7 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 		Loading::add(it->setFont(pathToFont));
 		if (Loading::isError())	return;
 		it->setSize(screen_w / 120);
-		it->setAlpha(0xFF);
+		it->setAlpha(MAX_ALPHA);
 		it->setFillColor(cmm::LOADING_COLOR);
 	}
 
@@ -123,20 +124,20 @@ void EFMButtons::load(const float &screen_w, const float &screen_h, const float 
 	// The Rest
 	fileButton.load("images/buttons/save.png");
 	if (Loading::isError())	return;
-	fileButton.setVolume(0.0f); // muted
+	fileButton.setVolume(MIN_SOUND_VOLUME); // muted
 	fileButton.setScale(screen_w / 2560, screen_h / 1440);
 	fileButton.setPosition(screen_w - screen_w / 128 - fileButton.getWidth() * 2, screen_h / 144);
 
 	Loading::add(fileButtonText.setFont(cmm::JCANDLE_FONT_PATH));
 	if (Loading::isError())	return;
 	fileButtonText.setSize(screen_w / 60);
-	fileButtonText.setAlpha(0xFF);
+	fileButtonText.setAlpha(MAX_ALPHA);
 	fileButtonText.setFillColor(cmm::LOADING_COLOR);
 	fileButtonText.setText("File");
 	fileButtonText.setPosition(fileButton.getLeft() + fileButton.getWidth() / 2 - fileButtonText.getWidth() / 2, fileButton.getBot() + off / 2);
 
 	for (auto &it : buttons)
-		it->setAlpha(0xFF / 1.5);
+		it->setAlpha(MAX_ALPHA / 1.5);
 }
 
 bool EFMButtons::handle(const sf::Event &event)
@@ -175,14 +176,14 @@ bool EFMButtons::handle(const sf::Event &event)
 		if (event.type == sf::Event::MouseMoved)
 		{
 			for (auto &it : buttons)
-				it->setAlpha(0xFF / 1.5);
+				it->setAlpha(MAX_ALPHA / 1.5);
 
 			float x = (float)event.mouseMove.x;
 			float y = (float)event.mouseMove.y;
 
 			for (auto &it : buttons)
 				if (it->checkCollision(x, y))
-					it->setAlpha(0xFF);
+					it->setAlpha(MAX_ALPHA);
 		}
 	}
 	else
@@ -192,7 +193,7 @@ bool EFMButtons::handle(const sf::Event &event)
 		if (active)
 		{
 			for (auto &it : buttons)
-				it->setAlpha(0xFF / 1.5);
+				it->setAlpha(MAX_ALPHA / 1.5);
 		}
 	}
 

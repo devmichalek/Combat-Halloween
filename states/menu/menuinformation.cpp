@@ -1,6 +1,7 @@
 #include "menuinformation.h"
 #include "user.h"
 #include "loading.h"
+#include "definitions.h"
 #include <ctime>
 
 MenuInformation::MenuInformation()
@@ -49,7 +50,7 @@ void MenuInformation::load(float screen_w, float screen_h)
 	username_form.setFillColor(cmm::LOCKED_COLOR);
 
 	// Set size.
-	float size = screen_h / 32;
+	float size = screen_h / TILE_HEIGHT;
 	money.setSize(size);
 	money_form.setSize(size);
 	username.setSize(size);
@@ -61,7 +62,7 @@ void MenuInformation::load(float screen_w, float screen_h)
 	plank.setPosition(screen_w / 3, 0);
 
 	// Set position.
-	username_form.setPosition(plank.getRight() -(username_form.getWidth() + username.getWidth() + screen_h / 64), screen_h / 144);
+	username_form.setPosition(plank.getRight() -(username_form.getWidth() + username.getWidth() + screen_h / TILE_FULL_WIDTH), screen_h / 144);
 	username.setPosition(username_form.getRight() + screen_h / 128, username_form.getTop());
 	money_form.setPosition(username_form.getX(), username.getBot() + screen_h / 144);
 	money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());
@@ -176,7 +177,7 @@ void MenuInformation::setMoney()
 
 	// Set username and position again.
 	username.setText(cmm::User::getUsername());
-	username_form.setPosition(plank.getRight() - (username_form.getWidth() + username.getWidth() + screen_h / 64), screen_h / 144);
+	username_form.setPosition(plank.getRight() - (username_form.getWidth() + username.getWidth() + screen_h / TILE_FULL_WIDTH), screen_h / 144);
 	username.setPosition(username_form.getRight() + screen_h / 128, username_form.getTop());
 	money_form.setPosition(username_form.getX(), username.getBot() + screen_h / 144);
 	money.setPosition(money_form.getRight() + screen_w / 128, money_form.getY());

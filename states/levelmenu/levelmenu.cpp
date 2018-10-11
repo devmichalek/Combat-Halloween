@@ -351,22 +351,22 @@ void LevelMenu::fades(const double &elapsedTime)
 {
 	if (pausesystem.isActive())
 	{
-		const float value = (float)elapsedTime * 0xFF * 2;
-		const int min = 0xFF * 3 / 4;
+		const float value = (float)elapsedTime * MAX_ALPHA * 2;
+		const int min = (int)MAX_ALPHA * 3 / 4;
 		fadeout(value, min);
 		pausesystem.fadein(value * 3, min);
 		music.fadeout((float)elapsedTime * 100, (int)(music_volumebutton.getGlobalVolume() * 0.2));
 	}
 	else if (isState())
 	{
-		const int min = 0;
-		fadeout((float)elapsedTime * 0xFF, min);
+		const int min = (int)MIN_ALPHA;
+		fadeout((float)elapsedTime * MAX_ALPHA, min);
 		music.fadeout((float)elapsedTime * 100, min);
 	}
 	else
 	{
-		const float value = (float)elapsedTime * 0xFF * 2;
-		const int max = 0xFF, min = 0;
+		const float value = (float)elapsedTime * MAX_ALPHA * 2;
+		const int max = (int)MAX_ALPHA, min = (int)MIN_ALPHA;
 		fadein(value, max);
 		pausesystem.fadeout(value, min);
 		music.fadein((float)elapsedTime * 100, (int)music_volumebutton.getGlobalVolume());

@@ -1,4 +1,5 @@
 #include "sprite.h"
+#include "colors.h"
 #include <math.h>
 
 std::string cmm::Sprite::load(std::string path, int numOfOffsets)
@@ -110,7 +111,7 @@ std::string cmm::Sprite::create(int w, int h)
 			sf::Uint8* pixels = new sf::Uint8[w * h * 4];
 			for (int i = 0; i < w * h * 4; ++i)
 			{
-				pixels[i] = 0xFF;
+				pixels[i] = (int)MAX_ALPHA;
 			}
 
 			texture->update(pixels);
@@ -119,7 +120,7 @@ std::string cmm::Sprite::create(int w, int h)
 
 			sprite->setTexture(*texture);
 			setOffset(0);
-			alpha = 0xFF;
+			alpha = MAX_ALPHA;
 			setAlpha(0);
 			out = "Success: Correctly created sprite with width: " + std::to_string(w) + " height: " + std::to_string(h);
 		}

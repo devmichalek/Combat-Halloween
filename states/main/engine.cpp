@@ -11,7 +11,7 @@ Engine::Engine()
 		return;
 
 	// Set core.
-	core = std::make_unique<cmm::Core>(cmm::LOADING, 21, 21, 29, 0xFF);
+	core = std::make_unique<cmm::Core>(cmm::LOADING, cmm::BACKGROUND_COLOR);
 	core->create("Combat Halloween");
 	core->setIcon("images/icons/icon.png");
 

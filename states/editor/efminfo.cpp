@@ -53,11 +53,11 @@ void EFMInfo::load(const float &screen_w, const float &screen_h)
 	chosenFormText.setSize(plank.getWidth() / 30);
 	msgText.setSize(plank.getWidth() / 20);
 
-	openedText.setAlpha(0xFF);
-	openedFormText.setAlpha(0xFF);
-	chosenText.setAlpha(0xFF);
-	chosenFormText.setAlpha(0xFF);
-	msgText.setAlpha(0xFF);
+	openedText.setAlpha(MAX_ALPHA);
+	openedFormText.setAlpha(MAX_ALPHA);
+	chosenText.setAlpha(MAX_ALPHA);
+	chosenFormText.setAlpha(MAX_ALPHA);
+	msgText.setAlpha(MAX_ALPHA);
 
 	openedFormText.setText("Loaded File: ");
 	openedFormText.setPosition(plank.getLeft() + screen_w / 75.0f, plank.getTop() + screen_w / 18);
@@ -107,7 +107,7 @@ bool EFMInfo::isMsgTextActive()
 
 void EFMInfo::setMsgTextActive(bool active)
 {
-	active ? msgText.setAlpha(0xFF) : msgText.setAlpha(0.0f);
+	active ? msgText.setAlpha(MAX_ALPHA) : msgText.setAlpha(MIN_ALPHA);
 }
 
 void EFMInfo::setOpenedText(std::string msg)
@@ -135,7 +135,7 @@ void EFMInfo::setMsgText(std::string msg)
 {
 	msgText.setText(msg);
 	msgText.setPosition(plank.getX() + plank.getWidth() / 2 - msgText.getWidth() / 2, plank.getY() + plank.getHeight() / 2 - msgText.getHeight() / 2);
-	msgText.setAlpha(0xFF);
+	msgText.setAlpha(MAX_ALPHA);
 }
 
 

@@ -112,7 +112,7 @@ void Simulator::mechanics(const double &elapsedTime)
 
 	if (status != STATUS::FAILURE)
 	{
-		offset += static_cast<float>(elapsedTime) * 0xFF / 5.0f;
+		offset += static_cast<float>(elapsedTime) * MAX_ALPHA / 5.0f;
 		if (offset >= max)
 			offset = 0.0f;
 		progress_bar.setOffset(static_cast<int>(offset));
@@ -120,14 +120,14 @@ void Simulator::mechanics(const double &elapsedTime)
 
 	if (status == STATUS::NONE)	// Launch Thread
 	{
-		float value = 0xFF / 4 * 3 * static_cast<float>(elapsedTime);
-		int max = 0xFF;
+		float value = MAX_ALPHA / 4 * 3 * static_cast<float>(elapsedTime);
+		int max = MAX_ALPHA;
 		info.fadein(value, max);
 		progress_bar.fadein(value, max);
 		backbutton.fadeinGlobal(value, max);
 		reloadbutton.fadeinGlobal(value, max);
 
-		if (info.getAlpha() == 0xFF)
+		if (info.getAlpha() == MAX_ALPHA)
 		{
 			thread.thread = new std::thread(&Simulator::disunite, this);
 			thread.thread->detach();
@@ -153,7 +153,7 @@ void Simulator::mechanics(const double &elapsedTime)
 	
 	if (isState())
 	{
-		float value = 0xFF / 4 * 3 * static_cast<float>(elapsedTime);
+		float value = MAX_ALPHA / 4 * 3 * static_cast<float>(elapsedTime);
 		int min = 0;
 		info.fadeout(value, min);
 		progress_bar.fadeout(value, min);

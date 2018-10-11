@@ -1,4 +1,5 @@
 #include "eetile.h"
+#include "definitions.h"
 
 ee::Tile::Tile()
 {
@@ -13,18 +14,15 @@ ee::Tile::~Tile()
 
 void ee::Tile::free()
 {
-	width = 0;
-	max = 0;
-
 	if (array)
 	{
-		for (int i = 0; i < max; ++i)
+		for (int i = 0; i < MAX_TILE_MAP_WIDTH; ++i)
 		{
-			delete array[i];
+			delete[] array[i];
 			array[i] = nullptr;
 		}
 
-		delete array;
+		delete[] array;
 		array = nullptr;
 	}
 
@@ -34,23 +32,20 @@ void ee::Tile::free()
 void ee::Tile::reset()
 {
 	if (array)
-		for (int i = 0; i < max; ++i)
-			for (int j = 0; j < max; ++j)
+		for (int i = 0; i < MAX_TILE_MAP_WIDTH; ++i)
+			for (int j = 0; j < MAX_TILE_MAP_HEIGHT; ++j)
 				array[i][j] = -1;
 }
 
-void ee::Tile::init(const int& width)
+void ee::Tile::init()
 {
 	free();
 
-	max = 3000;	// 3000 x 3000 = 9 000 000 possible cells
-	this->width = width;
-
 	if (!array)
 	{
-		array = new char*[max];
-		for (int i = 0; i < max; ++i)
-			array[i] = new char[max];
+		array = new char*[MAX_TILE_MAP_WIDTH];
+		for (int i = 0; i < MAX_TILE_MAP_WIDTH; ++i)
+			array[i] = new char[MAX_TILE_MAP_HEIGHT];
 	}
 
 	reset();
@@ -63,83 +58,78 @@ char ee::Tile::get(const int &x, const int &y)
 
 bool ee::Tile::add(int &mouseX, int &mouseY, const int &chosen)
 {
-	int x = mouseX / width;
-	int y = mouseY / width;
+	int x = mouseX / TILE_WIDTH;
+	int y = mouseY / TILE_HEIGHT;
 
-	if (x < 0 || x >= max || y < 0 || y >= max)
+	if (x < MIN_TILE_MAP_WIDTH || x >= MAX_TILE_MAP_WIDTH || y < MIN_TILE_MAP_HEIGHT || y >= MAX_TILE_MAP_HEIGHT)
 		return false;
 
 	if (array[x][y] != -1)
 		return false;
 	
-	mouseX = x * width;
-	mouseY = y * width;
+	mouseX = x * TILE_WIDTH;
+	mouseY = y * TILE_HEIGHT;
 	array[x][y] = chosen;
 	return true;
 }
 
 int ee::Tile::remove(int &mouseX, int &mouseY)
 {
-	int x = mouseX / width;
-	int y = mouseY / width;
+	int x = mouseX / TILE_WIDTH;
+	int y = mouseY / TILE_HEIGHT;
 
 	// Bot Right
-	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
+	if (x < MAX_TILE_MAP_WIDTH && x >= MIN_TILE_MAP_WIDTH && y < MAX_TILE_MAP_HEIGHT && y >= MIN_TILE_MAP_HEIGHT && array[x][y] != -1)
 	{
 		int c = array[x][y];
 		array[x][y] = -1;
-		mouseX = x * width;
-		mouseY = y * width;
+		mouseX = x * TILE_WIDTH;
+		mouseY = y * TILE_HEIGHT;
 		return c;
 	}
 
 	// Bot Left
 	--x;
-	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
+	if (x < MAX_TILE_MAP_WIDTH && x >= MIN_TILE_MAP_WIDTH && y < MAX_TILE_MAP_HEIGHT && y >= MIN_TILE_MAP_HEIGHT && array[x][y] != -1)
 	{
 		int c = array[x][y];
 		array[x][y] = -1;
-		mouseX = x * width;
-		mouseY = y * width;
+		mouseX = x * TILE_WIDTH;
+		mouseY = y * TILE_HEIGHT;
 		return c;
 	}
 
 	// Top Left
 	++y;
-	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
+	if (x < MAX_TILE_MAP_WIDTH && x >= MIN_TILE_MAP_WIDTH && y < MAX_TILE_MAP_HEIGHT && y >= MIN_TILE_MAP_HEIGHT && array[x][y] != -1)
 	{
 		int c = array[x][y];
 		array[x][y] = -1;
-		mouseX = x * width;
-		mouseY = y * width;
+		mouseX = x * TILE_WIDTH;
+		mouseY = y * TILE_HEIGHT;
 		return c;
 	}
 
 	// Top Right
 	++x;
-	if (x < max && x >= 0 && y < max && y >= 0 && array[x][y] != -1)
+	if (x < MAX_TILE_MAP_WIDTH && x >= MIN_TILE_MAP_WIDTH && y < MAX_TILE_MAP_HEIGHT && y >= MIN_TILE_MAP_HEIGHT && array[x][y] != -1)
 	{
 		int c = array[x][y];
 		array[x][y] = -1;
-		mouseX = x * width;
-		mouseY = y * width;
+		mouseX = x * TILE_WIDTH;
+		mouseY = y * TILE_HEIGHT;
 		return c;
 	}
 	
 	return -1;
 }
 
-const int& ee::Tile::getMax()
-{
-	return max;
-}
-
 bool ee::Tile::checkCollision(sf::Rect<int> rect)
 {
-	int x = rect.left / width;
-	int y = rect.top / width;
+	int x = rect.left / TILE_WIDTH;
+	int y = rect.top / TILE_HEIGHT;
 
-	if (x < 0 || x >= max || y < 0 || y >= max)
+	if (x < MIN_TILE_MAP_WIDTH || x >= MAX_TILE_MAP_WIDTH || y < MIN_TILE_MAP_HEIGHT || y >= MAX_TILE_MAP_HEIGHT)
 		return false;
 
 	bool currentCell = array[x][y] != -1;
@@ -159,7 +149,7 @@ bool ee::Tile::checkCollision(sf::Rect<int> rect)
 		--y;
 		for (int i = y; i < y + 3; ++i)
 		{
-			if (i >= max)
+			if (i >= MAX_TILE_MAP_WIDTH)
 				continue;
 
 			for (int j = x; j > x - 3; --j)

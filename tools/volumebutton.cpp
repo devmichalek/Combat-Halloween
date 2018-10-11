@@ -109,7 +109,7 @@ void VolumeButton::mechanics(double elapsedTime)
 {
 	if (plus_pressed && volume < max)
 	{
-		volume += static_cast<float>(elapsedTime) * 0xFF / 4;
+		volume += static_cast<float>(elapsedTime) * MAX_ALPHA / 4;
 		if (volume > max)
 		{
 			volume = max;
@@ -119,7 +119,7 @@ void VolumeButton::mechanics(double elapsedTime)
 	}
 	else if (minus_pressed && volume > min)
 	{
-		volume -= static_cast<float>(elapsedTime) * 0xFF / 4;
+		volume -= static_cast<float>(elapsedTime) * MAX_ALPHA / 4;
 		if (volume < min)
 		{
 			volume = min;

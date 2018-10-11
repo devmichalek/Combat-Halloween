@@ -37,6 +37,6 @@ public:
 	void setState(int &state);
 private:
 	// void fades(double elapsedTime);
-	// void fadein(float value = 1, int max = 0xFF);
+	// void fadein(float value = 1, int max = MAX_ALPHA);
 	// void fadeout(float value = 1, int min = 0);
 };

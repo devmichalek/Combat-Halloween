@@ -68,12 +68,12 @@ void EFMTextEditor::load(const float &screen_w, const float &screen_h)
 	cancelText.setSize(screen_w / 60);
 	proceedText.setSize(screen_w / 60);
 
-	infoText.setAlpha(0xFF);
-	formText.setAlpha(0xFF);
-	writtenText.setAlpha(0xFF);
-	arrowText.setAlpha(0xFF);
-	cancelText.setAlpha(0xFF);
-	proceedText.setAlpha(0xFF);
+	infoText.setAlpha(MAX_ALPHA);
+	formText.setAlpha(MAX_ALPHA);
+	writtenText.setAlpha(MAX_ALPHA);
+	arrowText.setAlpha(MAX_ALPHA);
+	cancelText.setAlpha(MAX_ALPHA);
+	proceedText.setAlpha(MAX_ALPHA);
 
 	arrowText.setText("|");
 	proceedText.setText("proceed");

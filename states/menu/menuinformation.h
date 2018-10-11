@@ -4,6 +4,7 @@
 #include "thread.h"
 #include "request.h"
 #include "eventwindow.h"
+#include "colors.h"
 
 class MenuInformation
 {
@@ -28,8 +29,8 @@ public:
 	void load(float screen_w, float screen_h);
 	void draw(sf::RenderWindow* &window);
 	void mechanics();
-	void fadein(float v = 1, int max = 0xFF);
-	void fadeout(float v = 1, int min = 0);
+	void fadein(float v = 1, int max = (int)MAX_ALPHA);
+	void fadeout(float v = 1, int min = (int)MIN_ALPHA);
 
 	void setThread();
 	void reloadThread();

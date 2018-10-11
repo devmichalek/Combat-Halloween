@@ -48,10 +48,10 @@ void MessageBoard::load(const float &screen_w, const float &screen_h)
 	noText.setSize(screen_w / 60);
 	okText.setSize(screen_w / 60);
 
-	infoText.setAlpha(0xFF);
-	yesText.setAlpha(0xFF);
-	noText.setAlpha(0xFF);
-	okText.setAlpha(0xFF);
+	infoText.setAlpha(MAX_ALPHA);
+	yesText.setAlpha(MAX_ALPHA);
+	noText.setAlpha(MAX_ALPHA);
+	okText.setAlpha(MAX_ALPHA);
 
 	yesText.setText("yes");
 	noText.setText("no");

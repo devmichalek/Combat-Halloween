@@ -11,7 +11,6 @@
 
 class EAFactory	: public EAKind
 {
-	int width;
 	float screen_w;
 	float screen_h;
 

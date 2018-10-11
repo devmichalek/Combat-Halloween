@@ -86,7 +86,7 @@ void RectButton::handle(const sf::Event &event)
 				if (checkCollision((float)event.mouseButton.x, (float)event.mouseButton.y))
 				{
 					// printf("%f %f\n", alpha, alphaBorders);
-					if (alpha > 0xFF / 2 && alphaBorders > 0xFF / 2)
+					if (alpha > MAX_ALPHA / 2 && alphaBorders > MAX_ALPHA / 2)
 					{
 						focus = true;
 						clicked = true;
@@ -120,11 +120,11 @@ void RectButton::mechanics(const double &elapsedTime)
 {
 	if (state == 1)
 	{
-		float value = (float)elapsedTime * 0xFF * 6;
+		float value = (float)elapsedTime * MAX_ALPHA * 6;
 
 		if (focus)
 		{
-			int max = 0xFF;
+			int max = (int)MAX_ALPHA;
 			fadein(value, max);
 			text_one.fadein(value, max);
 			text_two.fadeout(value, max);

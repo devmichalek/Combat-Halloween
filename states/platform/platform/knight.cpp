@@ -65,9 +65,13 @@ void pla::Knight::load(const float &screen_w, const float &screen_h)
 	attackRect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.6);
 
 	// --- TEST ---
-	shape.setFillColor(sf::Color(0xFF, 0xFA, 0xCD, 0xFF / 3));
+	sf::Color color = cmm::GREEN_COLOR;
+	color.a = MAX_ALPHA / 3;
+	shape.setFillColor(color);
 	shape.setSize(sf::Vector2f(static_cast<float>(rect.width), static_cast<float>(rect.height)));
-	attackShape.setFillColor(sf::Color(0xFF, 0x00, 0x00, 0xFF / 3));
+	color = cmm::RED_COLOR;
+	color.a = MAX_ALPHA / 3;
+	attackShape.setFillColor(color);
 	attackShape.setSize(sf::Vector2f(static_cast<float>(attackRect.width), static_cast<float>(attackRect.height)));
 	// ---      ---
 }

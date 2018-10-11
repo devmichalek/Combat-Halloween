@@ -21,7 +21,7 @@ int main(int argc, char** argv)
 	core->create("Combat Halloween");
 
 	sf::CircleShape shape(core->getWidth()/4);
-	shape.setFillColor(sf::Color(0xFF - R, 0xFF - G, 0xFF - B));
+	shape.setFillColor(sf::Color(MAX_ALPHA - R, MAX_ALPHA - G, MAX_ALPHA - B));
 	shape.setPosition(core->getWidth()/2 - core->getWidth()/4, core->getHeight()/2 - core->getWidth()/4);
 	while (core->open)
 	{

@@ -1,5 +1,6 @@
 #include "eainfo.h"
 #include "loading.h"
+#include "definitions.h"
 
 EAInfo::EAInfo()
 {
@@ -13,7 +14,6 @@ EAInfo::~EAInfo()
 
 void EAInfo::free()
 {
-	width = 0;
 	type = VOID;
 	chosen = 0;
 
@@ -39,11 +39,9 @@ void EAInfo::reset()
 
 
 
-void EAInfo::load(const float &screen_w, const float &screen_h, const int &width)
+void EAInfo::load(const float &screen_w, const float &screen_h)
 {
 	free();
-
-	this->width = width;
 
 	for (int i = 0; i < TEXTS::SIZE; ++i)
 	{
@@ -51,7 +49,7 @@ void EAInfo::load(const float &screen_w, const float &screen_h, const int &width
 		Loading::add(texts[i]->setFont(cmm::JCANDLE_FONT_PATH));
 		if (Loading::isError())	return;
 		texts[i]->setSize(screen_w / 60);
-		texts[i]->setAlpha(0xFF);
+		texts[i]->setAlpha(MAX_ALPHA);
 		i % 2 == 0 ? texts[i]->setFillColor(cmm::LOCKED_COLOR) : texts[i]->setFillColor(cmm::LOADING_COLOR);
 	}
 	texts[GRIDFORM]->setText("Grid:");
@@ -93,13 +91,13 @@ void EAInfo::set(const int &newType, const int &newChosen)
 void EAInfo::setChosenText(std::string line)
 {
 	texts[CHOSEN]->setText(line);
-	texts[CHOSEN]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[CHOSENFORM]->getY());
+	texts[CHOSEN]->setPosition(texts[CATEGORYFORM]->getRight() + TILE_FULL_WIDTH / 4, texts[CHOSENFORM]->getY());
 }
 
 void EAInfo::setCategoryText(std::string line)
 {
 	texts[CATEGORY]->setText(line);
-	texts[CATEGORY]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[CATEGORYFORM]->getY());
+	texts[CATEGORY]->setPosition(texts[CATEGORYFORM]->getRight() + TILE_FULL_WIDTH / 4, texts[CATEGORYFORM]->getY());
 }
 
 void EAInfo::setDescriptionText(std::string line)
@@ -112,14 +110,14 @@ void EAInfo::setOptionsText(bool getable)
 {
 	getable ? texts[OPTIONS]->setText("Available") : texts[OPTIONS]->setText("Unsupported");
 	getable ? texts[OPTIONS]->setFillColor(cmm::GREEN_COLOR) : texts[OPTIONS]->setFillColor(cmm::ERROR_COLOR);
-	texts[OPTIONS]->setPosition(texts[OPTIONSFORM]->getRight() + width / 4, texts[OPTIONSFORM]->getY());
+	texts[OPTIONS]->setPosition(texts[OPTIONSFORM]->getRight() + TILE_FULL_WIDTH / 4, texts[OPTIONSFORM]->getY());
 }
 
 void EAInfo::setGridText(bool grid)
 {
 	grid ? texts[GRID]->setText("On") : texts[GRID]->setText("Off");
 	grid ? texts[GRID]->setFillColor(cmm::GREEN_COLOR) : texts[GRID]->setFillColor(cmm::ERROR_COLOR);
-	texts[GRID]->setPosition(texts[CATEGORYFORM]->getRight() + width / 4, texts[GRIDFORM]->getY());
+	texts[GRID]->setPosition(texts[CATEGORYFORM]->getRight() + TILE_FULL_WIDTH / 4, texts[GRIDFORM]->getY());
 }
 
 

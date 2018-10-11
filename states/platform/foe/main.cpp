@@ -50,8 +50,8 @@ void loading_loop()
 			characterAttack->width = 50;
 			characterAttack->height = 50;
 
-			charRect.setFillColor(sf::Color(0xFF, 0xFF, 0xFF, 50));
-			charAttackRect.setFillColor(sf::Color(0xFF, 0, 0, 30));
+			charRect.setFillColor(cmm::LOADING_COLOR);
+			charAttackRect.setFillColor(cmm::RED_COLOR);
 			charRect.setSize(sf::Vector2f(character->width, character->height));
 			charAttackRect.setSize(sf::Vector2f(characterAttack->width, characterAttack->height));
 

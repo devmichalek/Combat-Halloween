@@ -8,7 +8,7 @@ int main(int argc, char** argv)
 
 	cmm::Sprite sprite;
 	sprite.load("images/buttons/agree.png", 3);
-	sprite.setAlpha(0xFF);
+	sprite.setAlpha(MAX_ALPHA);
 	sprite.setPosition(100, 100);
 	sprite.setColor(sf::Color::Red);
 
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
 		core.getWindow()->draw(sprite);
 
-		if (sprite.getAlpha() == 0xFF)		state = true;
+		if (sprite.getAlpha() == MAX_ALPHA)		state = true;
 		else if (sprite.getAlpha() == 0)	state = false;
 		float v = 1.0f;
 		int min = 0, max = 255;

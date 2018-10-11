@@ -1,6 +1,6 @@
 #include "settings.h"
 #include "loading.h"
-
+#include "definitions.h"
 
 Settings::Settings()
 {
@@ -133,7 +133,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	if (Loading::isError())	return;
 	table.setScale(screen_w / 2560, screen_h / 1440);
 	x1 = screen_w - screen_w / 128;
-	x2 = screen_w + screen_w / 64 - table.getWidth();
+	x2 = screen_w + screen_w / TILE_FULL_WIDTH - table.getWidth();
 	table.setPosition(x1, screen_h / 2.6);
 
 	// Set second table.
@@ -314,7 +314,7 @@ void Settings::mechanics(const double &elapsedTime)
 
 		positionTable();
 
-		float rotation = static_cast<float>(elapsedTime) * 0xFF;
+		float rotation = static_cast<float>(elapsedTime) * MAX_ALPHA;
 		if (tableMoves < 0)
 		{
 			gears[TOP]->setRotation(gears[TOP]->getRotation() + rotation);
@@ -329,7 +329,7 @@ void Settings::mechanics(const double &elapsedTime)
 
 	if (target != -1)
 	{
-		chart.getY() > y2 ? chartMoves = -(float)elapsedTime * 0xFF : chartMoves = 0.0f;
+		chart.getY() > y2 ? chartMoves = -(float)elapsedTime * MAX_ALPHA : chartMoves = 0.0f;
 
 		if (chart.getY() < y2)
 		{
@@ -338,7 +338,7 @@ void Settings::mechanics(const double &elapsedTime)
 	}
 	else
 	{
-		chart.getY() < y1 ? chartMoves = (float)elapsedTime * 0xFF : chartMoves = 0.0f;
+		chart.getY() < y1 ? chartMoves = (float)elapsedTime * MAX_ALPHA : chartMoves = 0.0f;
 
 		if (chart.getY() > y1)
 		{
@@ -351,7 +351,7 @@ void Settings::mechanics(const double &elapsedTime)
 		positionChart();
 		chart.move(0, chartMoves);
 
-		float rotation = static_cast<float>(elapsedTime) * 0xFF;
+		float rotation = static_cast<float>(elapsedTime) * MAX_ALPHA;
 		if (chartMoves < 0)
 		{
 			gears[LEFT]->setRotation(gears[LEFT]->getRotation() - rotation);
@@ -419,7 +419,7 @@ void Settings::fadeout(const float &v, const int &min)
 
 void Settings::exsertTable(const double &elapsedTime)
 {
-	table.getX() > x2 ? tableMoves = -(float)elapsedTime * 0xFF : tableMoves = 0.0f;
+	table.getX() > x2 ? tableMoves = -(float)elapsedTime * MAX_ALPHA : tableMoves = 0.0f;
 
 	if (table.getX() < x2)
 	{
@@ -430,7 +430,7 @@ void Settings::exsertTable(const double &elapsedTime)
 
 void Settings::shovelTable(const double &elapsedTime)
 {
-	table.getX() < x1 ? tableMoves = (float)elapsedTime * 0xFF : tableMoves = 0.0f;
+	table.getX() < x1 ? tableMoves = (float)elapsedTime * MAX_ALPHA : tableMoves = 0.0f;
 	
 	if (table.getX() > x1)
 	{

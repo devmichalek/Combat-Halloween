@@ -20,7 +20,7 @@ int main(int argc, char** argv)
 	text.flipVertically();
 	text.setSize(30);	printf("Size: %d\n", text.getSize());
 	text.setRotation(45.0);
-	text.setAlpha(0xFF);	printf("Alpha: %f\n", text.getAlpha());
+	text.setAlpha(MAX_ALPHA);	printf("Alpha: %f\n", text.getAlpha());
 	text.setFillColor(sf::Color::Black);
 	text.setOutlineColor(sf::Color::White);
 	text.setOutlineThickness(3);
@@ -32,7 +32,6 @@ int main(int argc, char** argv)
 	sf::RectangleShape rect;
 	rect.setSize(sf::Vector2f(text.getWidth(), text.getHeight()));
 	rect.setPosition(sf::Vector2f(text.getX(), text.getY()));
-	rect.setFillColor(sf::Color(0xFF, 0x00, 0x00, 0x80));
 
 	while (core.open)
 	{

@@ -2,6 +2,7 @@
 #include "loading.h"
 #include "boost/scope_exit.hpp"
 #include "core.h" // static core
+#include "definitions.h"
 
 EAFactory::EAFactory()
 {
@@ -15,7 +16,7 @@ EAFactory::~EAFactory()
 
 void EAFactory::free()
 {
-	width = screen_w = screen_h = 0;
+	screen_w = screen_h = 0;
 
 	reset();
 
@@ -109,10 +110,9 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 
 	tools.load(screen_w, screen_h);
 
-	width = 32;	// 64 is the width of a single tile but we divide it
 	eKnight.init(factory[KNIGHT][0]->getWidth(), factory[KNIGHT][0]->getHeight());
-	eTiles.init(width);
-	eUnTiles.init(width);
+	eTiles.init();
+	eUnTiles.init();
 	eLandscape.load(screen_w, screen_h);
 }
 
@@ -265,7 +265,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 	if (type != VOID)
 	{
 		redBacklight ? factory[t][chosen]->setColor(cmm::ERROR_COLOR) : factory[t][chosen]->setColor(cmm::LOADING_COLOR);
-		type == UNVISIBLE_TILE ? factory[t][chosen]->setAlpha(0xFF / 2) : factory[t][chosen]->setAlpha(0xFF);
+		type == UNVISIBLE_TILE ? factory[t][chosen]->setAlpha(MAX_ALPHA / 2) : factory[t][chosen]->setAlpha(MAX_ALPHA);
 		factory[t][chosen]->setPosition(tempX, tempY);
 
 		if(t == LANDSCAPE) // set current global scale for landscape
@@ -274,7 +274,7 @@ void EAFactory::draw(sf::RenderWindow* &window, const int &addX, const int &addY
 		window->draw(*factory[t][chosen]);
 
 		if (redBacklight)			factory[t][chosen]->setColor(cmm::LOADING_COLOR);	// set back
-		if(type == UNVISIBLE_TILE)	factory[t][chosen]->setAlpha(0xFF);				// set back
+		if(type == UNVISIBLE_TILE)	factory[t][chosen]->setAlpha(MAX_ALPHA);				// set back
 
 		tools.draw(window, factory[t], chosen);
 	}
@@ -373,10 +373,10 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 	}
 	
 	// log(1) time
-	int startX = -addX / width;
-	int endX = -addX + screen_w / width;
-	int startY = -addY / width;
-	int endY = -addY + screen_h / width;
+	int startX = -addX / TILE_WIDTH;
+	int endX = -addX + screen_w / TILE_WIDTH;
+	int startY = -addY / TILE_HEIGHT;
+	int endY = -addY + screen_h / TILE_HEIGHT;
 	char c;
 	for (int i = startX; i < endX; ++i)
 	{
@@ -385,17 +385,17 @@ void EAFactory::drawPrivate(sf::RenderWindow* &window, const int &addX, const in
 			c = eTiles.get(i, j);		// Draw tiles
 			if (c != VOID)
 			{
-				factory[TILE][c]->setPosition(i * width + addX, ((j * width + addY) * -1) + screen_h - width);
+				factory[TILE][c]->setPosition(i * TILE_WIDTH + addX, ((j * TILE_HEIGHT + addY) * -1) + screen_h - TILE_HEIGHT);
 				window->draw(*factory[TILE][c]);
 			}
 
 			c = eUnTiles.get(i, j);	// Draw Unvisible Tiles
 			if (c != VOID)
 			{
-				factory[TILE][c]->setAlpha(0xFF / 2);
-				factory[TILE][c]->setPosition(i * width, (j * width * -1) + screen_h - width);
+				factory[TILE][c]->setAlpha(MAX_ALPHA / 2);
+				factory[TILE][c]->setPosition(i * TILE_WIDTH, (j * TILE_HEIGHT * -1) + screen_h - TILE_HEIGHT);
 				window->draw(*factory[TILE][c]);
-				factory[TILE][c]->setAlpha(0xFF);	// set back
+				factory[TILE][c]->setAlpha(MAX_ALPHA);	// set back
 			}
 		}
 	}

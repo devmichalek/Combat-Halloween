@@ -96,7 +96,7 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 		Loading::add(texts[i]->setFont(cmm::JAPOKKI_FONT_PATH));
 		if (Loading::isError())	return;
 		texts[i]->setSize(screen_h / 35);
-		texts[i]->setAlpha(0xFF);
+		texts[i]->setAlpha(MAX_ALPHA);
 	}
 	texts[SCALE]->setText("Scale:");
 	texts[SCALE_EDIT]->setText("");

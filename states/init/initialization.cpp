@@ -1,5 +1,6 @@
 #include "initialization.h"
 #include "loading.h"
+#include "definitions.h"
 
 Initialization::Initialization()
 {
@@ -71,7 +72,7 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	// Set position.
 	texts[AUTHOR]->center(screen_w / 2, screen_h / 2 - screen_h / 20);
 	texts[PRESENTS]->setPosition(screen_w / 2 - texts[PRESENTS]->getWidth() / 2, texts[AUTHOR]->getBot());
-	texts[COMBAT]->center(screen_w / 2 - texts[HALLOWEEN]->getWidth() / 2 - screen_h / 32 - screen_h / 144, screen_h / 2 - screen_h / 20);
+	texts[COMBAT]->center(screen_w / 2 - texts[HALLOWEEN]->getWidth() / 2 - screen_h / TILE_HEIGHT - screen_h / 144, screen_h / 2 - screen_h / 20);
 	texts[HALLOWEEN]->setPosition(texts[COMBAT]->getRight() + screen_h / 72 + screen_h / 16, texts[COMBAT]->getBot() - texts[HALLOWEEN]->getHeight());
 }
 
@@ -88,9 +89,9 @@ void Initialization::mechanics(const double &elapsedTime)
 {
 	if (!next)
 	{
-		int min = 0, max = 0xFF;
+		int min = (int)MIN_ALPHA, max = (int)MAX_ALPHA;
 
-		float velocity = static_cast<float>(elapsedTime) * 0xFF;
+		float velocity = static_cast<float>(elapsedTime) * MAX_ALPHA;
 		if (state == 0)
 		{
 			texts[AUTHOR]->fadein(velocity, max);
@@ -119,11 +120,11 @@ void Initialization::mechanics(const double &elapsedTime)
 		}
 
 		// 1
-		if (texts[AUTHOR]->getAlpha() == 0xFF && state == 0)
+		if (texts[AUTHOR]->getAlpha() == MAX_ALPHA && state == 0)
 		{
 			state = 1;
 		}
-		else if (texts[PRESENTS]->getAlpha() == 0xFF && state == 1)
+		else if (texts[PRESENTS]->getAlpha() == MAX_ALPHA && state == 1)
 		{
 			state = 2;
 		}
@@ -133,11 +134,11 @@ void Initialization::mechanics(const double &elapsedTime)
 		}
 
 		// 2
-		else if (texts[COMBAT]->getAlpha() == 0xFF && state == 3)
+		else if (texts[COMBAT]->getAlpha() == MAX_ALPHA && state == 3)
 		{
 			state = 4;
 		}
-		else if (texts[HALLOWEEN]->getAlpha() == 0xFF && state == 4)
+		else if (texts[HALLOWEEN]->getAlpha() == MAX_ALPHA && state == 4)
 		{
 			state = 5;
 		}
