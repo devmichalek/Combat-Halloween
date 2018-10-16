@@ -2,16 +2,77 @@
 #include "colors.h"
 #include <math.h>
 
+cmm::Sprite::TextureMap::TextureMap()
+{
+	// ...
+}
+
+cmm::Sprite::TextureMap::~TextureMap()
+{
+	if (!paths.empty())
+		paths.clear();
+
+	if (!textures.empty())
+	{
+		for (auto &it : textures)
+		{
+			delete it;
+			it = nullptr;
+		}
+		textures.clear();
+	}
+
+	if (!unique_textures.empty())
+	{
+		for (auto &it : unique_textures)
+		{
+			delete it;
+			it = nullptr;
+		}
+		unique_textures.clear();
+	}
+}
+
+sf::Texture* cmm::Sprite::TextureMap::get(std::string &path)
+{
+	auto it = std::find(paths.begin(), paths.end(), path);
+	if (it != std::end(paths))
+	{
+		size_t pos = paths.size() - (paths.end() - it);
+		return textures[pos];
+	}
+
+	return nullptr;
+}
+
+cmm::Sprite::Sprite()
+{
+	w = h = 0.0f;
+}
+
 std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 {
 	std::string out = "Error: Cannot properly create texture from \"" + path + "\".";
 
-	texture = std::make_unique<sf::Texture>();
-	if (texture->loadFromFile(path))
+	sf::Texture* texture = nullptr;
+	sf::Texture* ptr = texture_map.get(path);
+	if (!ptr) // new one
+		texture = new sf::Texture();
+	else
+		texture = ptr;
+
+	if (!ptr && texture->loadFromFile(path))
 	{
 		out = "Success: Correctly loaded \"" + path + "\".";
-
 		texture->setSmooth(true);
+		texture_map.paths.push_back(path);
+		texture_map.textures.push_back(texture);
+	}
+	else if(ptr)
+		out = "Success: Correctly ascribed existing texture.";
+
+	if(texture)
+	{
 		numOfOffsets = numOfOffsets < 1 ? 1 : numOfOffsets;
 
 		if (numOfOffsets == 1)
@@ -31,6 +92,8 @@ std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 		{
 			sprite->setTexture(*texture);
 			setOffset(0);
+			w = static_cast<float>(width);
+			h = static_cast<float>(height);
 		}
 		else
 			out = "Error: Cannot create sprite from \"" + path + "\".";
@@ -68,10 +131,11 @@ std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool b
 			}
 		}
 
-		texture = std::make_unique<sf::Texture>();
+		sf::Texture* texture = new sf::Texture();
 		if (texture->loadFromImage(output))
 		{
 			texture->setSmooth(true);
+			texture_map.unique_textures.push_back(texture);
 			// texture->setRepeated(true);
 
 			sf::IntRect intRect(0, 0, realWidth, realHeight);
@@ -82,6 +146,8 @@ std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool b
 			{
 				sprite->setTexture(*texture);
 				setOffset(0);
+				w = static_cast<float>(width);
+				h = static_cast<float>(height);
 			}
 			else
 				out = "Error: Cannot create sprite from \"" + path + "\".";
@@ -97,10 +163,11 @@ std::string cmm::Sprite::create(int w, int h)
 {
 	std::string out = "Error: Cannot create texture with width: " + std::to_string(w) + " height: " + std::to_string(h);
 
-	texture = std::make_unique<sf::Texture>();
+	sf::Texture* texture = new sf::Texture();
 	if (texture->create(w, h))
 	{
 		texture->setSmooth(true);
+		texture_map.unique_textures.push_back(texture);
 
 		sf::IntRect intRect(0, 0, texture->getSize().x, texture->getSize().y);
 		rects.push_back(intRect);
@@ -122,6 +189,8 @@ std::string cmm::Sprite::create(int w, int h)
 			setOffset(0);
 			alpha = MAX_ALPHA;
 			setAlpha(0);
+			this->w = static_cast<float>(texture->getSize().x);
+			this->h = static_cast<float>(texture->getSize().y);
 			out = "Success: Correctly created sprite with width: " + std::to_string(w) + " height: " + std::to_string(h);
 		}
 		else
@@ -217,8 +286,8 @@ void cmm::Sprite::flipVertically()
 
 void cmm::Sprite::center(float x, float y)
 {
-	float left = x - ((float)texture->getSize().x * sprite->getScale().x / rects.size()) / 2;
-	float top = y - ((float)texture->getSize().y * sprite->getScale().y) / 2;
+	float left = x - (w * sprite->getScale().x / rects.size()) / 2;
+	float top = y - (h * sprite->getScale().y) / 2;
 	sprite->setPosition(left, top);
 }
 
@@ -260,14 +329,14 @@ float cmm::Sprite::getWidth() const
 {
 	float scale = sprite->getScale().x;
 	if (scale < 0)	scale = -scale;
-	return (float)texture->getSize().x * scale / rects.size();
+	return w * scale / rects.size();
 }
 
 float cmm::Sprite::getHeight() const
 {
 	float scale = sprite->getScale().y;
 	if (scale < 0)	scale = -scale;
-	return (float)texture->getSize().y * scale;
+	return h * scale;
 }
 
 const float& cmm::Sprite::getLeft() const
