@@ -1,20 +1,68 @@
 #include "text.h"
 
+cmm::Text::FontMap::FontMap()
+{
+	// ...
+}
+
+cmm::Text::FontMap::~FontMap()
+{
+	if (!paths.empty())
+		paths.clear();
+
+	if (!fonts.empty())
+	{
+		for (auto &it : fonts)
+		{
+			delete it;
+			it = nullptr;
+		}
+		fonts.clear();
+	}
+}
+
+sf::Font* cmm::Text::FontMap::get(std::string &path)
+{
+	auto it = std::find(paths.begin(), paths.end(), path);
+	if (it != std::end(paths))
+	{
+		size_t pos = paths.size() - (paths.end() - it);
+		return fonts[pos];
+	}
+
+	return nullptr;
+}
+
 const std::string cmm::Text::getString() const
 {
 	return text->getString();
 }
 
-std::string cmm::Text::setFont(const char* path)
+std::string cmm::Text::setFont(std::string path)
 {
-	font = std::make_unique<sf::Font>();
-	if (font->loadFromFile(path))
+	sf::Font* font = nullptr;
+	sf::Font* ptr = font_map.get(path);
+
+	if (!ptr) // new one
+		font = new sf::Font();
+	else
+		font = ptr;
+
+	if (!ptr && font->loadFromFile(path))
 	{
 		text = std::make_unique<sf::Text>();
 		text->setFont(*font);
+		font_map.paths.push_back(path);
+		font_map.fonts.push_back(font);
 		return "Success: Font \"" + std::string(path) + "\" loaded correctly.";
 	}
-
+	else if(ptr)
+	{
+		text = std::make_unique<sf::Text>();
+		text->setFont(*font);
+		return "Success: Font set correctly.";
+	}
+	
 	return "Error: Cannot create font face from \"" + std::string(path) + "\".";
 }
 

@@ -11,13 +11,23 @@ namespace cmm
 
 	class Text : public sf::Drawable
 	{
-		std::unique_ptr<sf::Font> font;
+		struct FontMap
+		{
+			std::vector<std::string> paths;
+			std::vector<sf::Font*> fonts;
+
+			FontMap();
+			~FontMap();
+			sf::Font* get(std::string &path);
+		};
+
+		inline static FontMap font_map;
 		std::unique_ptr<sf::Text> text;
 		float alpha;
 
 	public:
 		const std::string getString() const; // cannot return with &
-		std::string setFont(const char* path);
+		std::string setFont(std::string path);
 		void setText(std::string line);
 		void setTextW(std::wstring line);
 	private:
