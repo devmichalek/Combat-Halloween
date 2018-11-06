@@ -11,14 +11,17 @@
     <Filter Include="Dependencies\Common">
       <UniqueIdentifier>{d5607503-a1c9-4219-bb9c-2f78f45e43e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Knight">
+      <UniqueIdentifier>{798502f7-aad2-42f1-bbc1-d8921f55c455}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Other">
-      <UniqueIdentifier>{fecbc6bb-4c22-4c87-a378-f4a6e865e9e3}</UniqueIdentifier>
+      <UniqueIdentifier>{3bfd7a72-f9c5-4c6e-b44c-f5097e3ccb58}</UniqueIdentifier>
     </Filter>
     <Filter Include="Simulator">
-      <UniqueIdentifier>{1bdeebf7-2a25-4c54-912c-6e7cc3d4bd3c}</UniqueIdentifier>
+      <UniqueIdentifier>{fc9bb36b-1118-4316-8f8e-9d6f4dc9156c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Knight">
-      <UniqueIdentifier>{247d96dc-48f8-49ae-b699-312aa5571fb8}</UniqueIdentifier>
+    <Filter Include="Light System">
+      <UniqueIdentifier>{74b86b3b-983c-4451-a3cc-99a79e371093}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,77 +84,95 @@
     </ClCompile>
     <ClCompile Include="platform.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="moving_bg.cpp">
-      <Filter>Other</Filter>
-    </ClCompile>
-    <ClCompile Include="tiles.cpp">
-      <Filter>Other</Filter>
-    </ClCompile>
-    <ClCompile Include="kcoxing.cpp">
-      <Filter>Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="knight.cpp">
-      <Filter>Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="kspecs.cpp">
-      <Filter>Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="kstates.cpp">
-      <Filter>Knight</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\tools\rectbutton.cpp">
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\common\content.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="simulator.cpp">
-      <Filter>Simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="scontent.cpp">
-      <Filter>Simulator</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\common\audio.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="eye.cpp">
+    <ClCompile Include="knight\eye.cpp">
       <Filter>Knight</Filter>
     </ClCompile>
-    <ClCompile Include="landscape.cpp">
+    <ClCompile Include="knight\kcoxing.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="knight\knight.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="knight\kspecs.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="knight\kstates.cpp">
+      <Filter>Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="other\landscape.cpp">
       <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="other\tiles.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="simulator\scontent.cpp">
+      <Filter>Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="simulator\simulator.cpp">
+      <Filter>Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="other\movingbg.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="staticlightpoint.cpp">
+      <Filter>Light System</Filter>
+    </ClCompile>
+    <ClCompile Include="lightpoint.cpp">
+      <Filter>Light System</Filter>
+    </ClCompile>
+    <ClCompile Include="lightsystem.cpp">
+      <Filter>Light System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="platform.h" />
-    <ClInclude Include="moving_bg.h">
+    <ClInclude Include="knight\eye.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="knight\kcoxing.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="knight\knight.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="knight\kspecs.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="knight\kstates.h">
+      <Filter>Knight</Filter>
+    </ClInclude>
+    <ClInclude Include="other\landscape.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="tiles.h">
+    <ClInclude Include="other\tiles.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="kcoxing.h">
-      <Filter>Knight</Filter>
-    </ClInclude>
-    <ClInclude Include="knight.h">
-      <Filter>Knight</Filter>
-    </ClInclude>
-    <ClInclude Include="kspecs.h">
-      <Filter>Knight</Filter>
-    </ClInclude>
-    <ClInclude Include="kstates.h">
-      <Filter>Knight</Filter>
-    </ClInclude>
-    <ClInclude Include="simulator.h">
+    <ClInclude Include="simulator\scontent.h">
       <Filter>Simulator</Filter>
     </ClInclude>
-    <ClInclude Include="scontent.h">
+    <ClInclude Include="simulator\simulator.h">
       <Filter>Simulator</Filter>
     </ClInclude>
-    <ClInclude Include="eye.h">
-      <Filter>Knight</Filter>
-    </ClInclude>
-    <ClInclude Include="landscape.h">
+    <ClInclude Include="other\movingbg.h">
       <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="staticlightpoint.h">
+      <Filter>Light System</Filter>
+    </ClInclude>
+    <ClInclude Include="lightpoint.h">
+      <Filter>Light System</Filter>
+    </ClInclude>
+    <ClInclude Include="lightsystem.h">
+      <Filter>Light System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

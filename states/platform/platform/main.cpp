@@ -30,7 +30,7 @@ void loading_loop()
 			states.push_back(NULL);	// Init
 			states.push_back(NULL);	// Login
 			states.push_back(NULL);	// Menu
-			states.push_back(NULL);	// LevelMenu
+			states.push_back(NULL);	// Level Menu
 			states.push_back(new Platform);
 			states[cmm::PLATFORM]->load(screen_w, screen_h);
 			break;

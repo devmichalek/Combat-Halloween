@@ -210,13 +210,13 @@ void Platform::mechanics(const double &elapsedTime)
 					// ...?
 				}
 			}
-			
+#ifdef __TEST__
 			else if (SContent::type != SContent::TYPE::SERVER && chat.compCommand("@collision"))
 			{
 				knight.switchCollision();
 				tiles.switchCollision();
 			}
-
+#endif
 			// Turn on/off all sounds.
 			else if (chat.compCommand("@sound"))
 			{
@@ -258,14 +258,14 @@ void Platform::mechanics(const double &elapsedTime)
 		
 		if (knight.moveLeft(floatElapsedTime))
 		{
-			if (tiles.checkCollisionH(knight.getRect(), eye.getViewX(), eye.getViewY(), 2))
+			if (tiles.checkCollisionH(knight.getRect(), eye.getViewX(), eye.getViewY(), 3))
 				knight.undoMoveLeft(floatElapsedTime);
 			else
 				direction = 1;
 		}
 		else if (knight.moveRight(floatElapsedTime))
 		{
-			if (tiles.checkCollisionH(knight.getRect(), eye.getViewX(), eye.getViewY(), -2))
+			if (tiles.checkCollisionH(knight.getRect(), eye.getViewX(), eye.getViewY(), -3))
 				knight.undoMoveRight(floatElapsedTime);
 			else
 				direction = -1;

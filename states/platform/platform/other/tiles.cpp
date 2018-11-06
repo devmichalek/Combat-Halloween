@@ -1,6 +1,5 @@
 #include "tiles.h"
 #include "loading.h"
-#include "definitions.h"
 #include <boost/lexical_cast.hpp>
 
 pla::Tiles::Tiles()
@@ -57,7 +56,9 @@ void pla::Tiles::free()
 
 void pla::Tiles::reset()
 {
+#ifdef __TEST__
 	collision = false;
+#endif
 }
 
 void pla::Tiles::load(const float &screen_w, const float &screen_h)
@@ -69,10 +70,14 @@ void pla::Tiles::load(const float &screen_w, const float &screen_h)
 	wPad = static_cast<int>(((screen_w / (TILE_FULL_WIDTH)) - 3) / 2);
 	hPad = static_cast<int>(((screen_h / (TILE_FULL_HEIGHT)) - 3) / 2);
 
+#ifdef __TEST__
 	rect.setSize(sf::Vector2f(static_cast<float>(TILE_FULL_WIDTH), static_cast<float>(TILE_FULL_HEIGHT)));
-	rect.setFillColor(cmm::GREEN_COLOR);
+	sf::Color rColor = cmm::GREEN_COLOR;
+	rColor.a = MAX_ALPHA / 2;
+	rect.setFillColor(rColor);
+#endif
 
-	for (unsigned i = 0; i < 17; ++i)
+	for (unsigned i = 0; i < 21; ++i)
 	{
 		sprites.push_back(new cmm::Sprite());
 		Loading::add(sprites[i]->load("images/platform/tiles/" + std::to_string(i) + ".png"));
@@ -100,10 +105,10 @@ void pla::Tiles::load(const float &screen_w, const float &screen_h)
 
 void pla::Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y)
 {
-	int l = static_cast <int> (x / TILE_WIDTH) - 1;
-	int r = static_cast <int> ((x + screen_w) / TILE_WIDTH) + 1;
-	int b = static_cast <int> (y / TILE_HEIGHT);
-	int t = static_cast <int> (y + screen_h) / TILE_HEIGHT;
+	short l = static_cast <int> (x / TILE_WIDTH) - 1;
+	short r = static_cast <int> ((x + screen_w) / TILE_WIDTH) + 1;
+	short b = static_cast <int> (y / TILE_HEIGHT);
+	short t = static_cast <int> (y + screen_h) / TILE_HEIGHT;
 
 	if (l < MIN_TILE_MAP_WIDTH)
 		l = MIN_TILE_MAP_WIDTH;
@@ -118,61 +123,56 @@ void pla::Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const f
 			if (tiles[i][j] != -1)
 			{
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
-				// shader.setUniform("addAlpha", alphas[i][j] / MAX_ALPHA);
 				window->draw(*sprites[tiles[i][j]]/*, &shader*/);
 			}
 			else if (untiles[i][j] != -1)
 			{
 				sprites[untiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
-				// shader.setUniform("addAlpha", alphas[i][j] / MAX_ALPHA);
 				window->draw(*sprites[untiles[i][j]]/*, &shader*/);
 			}
 		}
 	}
 
 	// shader.setUniform("addAlpha", 1);
-
+#ifdef __TEST__
 	if (collision)
 	{
-		window->draw(rect/*, &shader*/);
+		window->draw(rect);
 		rect.setPosition(-rect.getSize().x, -rect.getSize().y);	// put rect outside of window are
 	}
+#endif
 }
 
 void pla::Tiles::read(std::vector<std::string> &vec)
 {
-	int x = -1, y = -1, c = -1;
+	short x = -1, y = -1, c = -1;
 	if (!vec.empty())
 	{
-		char** pointer = nullptr;
-		if (vec[0].find("t:1") != std::string::npos)
-			pointer = tiles;
-		else
-			pointer = untiles;
-
+		char** ptr = vec[0].find("t:1") != std::string::npos ? tiles : untiles;
 		for (auto &it : vec)
 		{
 			c = boost::lexical_cast<int>(it.substr(it.find("c:") + 2, it.find(" x:") - (it.find("c:") + 2)));
 			x = boost::lexical_cast<int>(it.substr(it.find("x:") + 2, it.find(" y:") - (it.find("x:") + 2))) / TILE_WIDTH;
 			y = boost::lexical_cast<int>(it.substr(it.find("y:") + 2, it.find(" id:") - (it.find("y:") + 2))) / TILE_HEIGHT;
-			pointer[x][y] = c;
+			ptr[x][y] = c;
 		}
 	}
 }
 
 
-
+#ifdef __TEST__
 void pla::Tiles::switchCollision(bool collision)
 {
 	this->collision = collision;
 }
+#endif
 
 bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const float &y, const char add)
 {
-	int l = static_cast<int> (x / TILE_WIDTH);
-	int r = static_cast<int> ((x + screen_w) / TILE_WIDTH);
-	int b = static_cast<int> (y / TILE_HEIGHT);
-	int t = static_cast<int> ((y + screen_h) / TILE_HEIGHT);
+	short l = static_cast<int> (x / TILE_WIDTH);
+	short r = static_cast<int> ((x + screen_w) / TILE_WIDTH);
+	short b = static_cast<int> (y / TILE_HEIGHT);
+	short t = static_cast<int> ((y + screen_h) / TILE_HEIGHT);
 	rect.top -= add;
 
 	// Optimisation
@@ -190,12 +190,13 @@ bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const floa
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
 				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
+#ifdef __TEST__
 					if (collision)
 					{
 						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
-
+#endif
 					rect.top += add;
 					return true;
 				}
@@ -205,12 +206,13 @@ bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const floa
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
 				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
+#ifdef __TEST__
 					if (collision)
 					{
 						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
-
+#endif
 					rect.top += add;
 					return true;
 				}
@@ -224,10 +226,10 @@ bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const floa
 
 bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const float &y, const char add)
 {
-	int l = static_cast<int> (x / TILE_WIDTH);
-	int r = static_cast<int> ((x + screen_w) / TILE_WIDTH);
-	int b = static_cast<int> (y / TILE_HEIGHT);
-	int t = static_cast<int> ((y + screen_h) / TILE_HEIGHT);
+	short l = static_cast<int> (x / TILE_WIDTH);
+	short r = static_cast<int> ((x + screen_w) / TILE_WIDTH);
+	short b = static_cast<int> (y / TILE_HEIGHT);
+	short t = static_cast<int> ((y + screen_h) / TILE_HEIGHT);
 	rect.left -= add;
 
 	// Optimisation
@@ -245,12 +247,13 @@ bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const floa
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
 				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
+#ifdef __TEST__
 					if (collision)
 					{
 						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
-						
+#endif
 					rect.left += add;
 					return true;
 				}
@@ -260,12 +263,13 @@ bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const floa
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
 				if (sprites[tiles[i][j]]->checkCollisionRect(rect))
 				{
+#ifdef __TEST__
 					if (collision)
 					{
 						this->rect.setSize(sf::Vector2f(sprites[tiles[i][j]]->getWidth(), sprites[tiles[i][j]]->getHeight()));
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
-
+#endif
 					rect.left += add;
 					return true;
 				}

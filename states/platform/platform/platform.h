@@ -2,7 +2,7 @@
 #include "state.h"
 #include "circlebutton.h"
 #include "volumebutton.h"
-#include "moving_bg.h"
+#include "movingbg.h"
 #include "knight.h"
 #include "eye.h"
 #include "tiles.h"

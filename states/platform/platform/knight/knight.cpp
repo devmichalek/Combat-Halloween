@@ -35,9 +35,9 @@ void pla::Knight::reset()
 	resetState();
 	coxing.reset();
 
-	// --- TEST ---
+#ifdef __TEST__
 	collisionMode = false;
-	// ---      ---
+#endif
 }
 
 
@@ -64,7 +64,7 @@ void pla::Knight::load(const float &screen_w, const float &screen_h)
 	attackRect.width = static_cast<int>(sprites[IDLE]->getWidth() * 0.7);
 	attackRect.height = static_cast<int>(sprites[IDLE]->getHeight() * 0.6);
 
-	// --- TEST ---
+#ifdef __TEST__
 	sf::Color color = cmm::GREEN_COLOR;
 	color.a = MAX_ALPHA / 3;
 	shape.setFillColor(color);
@@ -73,7 +73,7 @@ void pla::Knight::load(const float &screen_w, const float &screen_h)
 	color.a = MAX_ALPHA / 3;
 	attackShape.setFillColor(color);
 	attackShape.setSize(sf::Vector2f(static_cast<float>(attackRect.width), static_cast<float>(attackRect.height)));
-	// ---      ---
+#endif
 }
 
 void pla::Knight::handle(const sf::Event &event)
@@ -89,7 +89,7 @@ void pla::Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 	sprites[state]->setOffset(static_cast<int>(offset));
 	window->draw(*sprites[state]);
 
-	// --- TEST ---
+#ifdef __TEST__
 	if (collisionMode)
 	{
 		window->draw(shape);
@@ -98,7 +98,7 @@ void pla::Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
 			window->draw(attackShape);
 		}
 	}
-	// ---      ---
+#endif
 }
 
 void pla::Knight::mechanics(const float &elapsedTime)
@@ -112,10 +112,12 @@ void pla::Knight::mechanics(const float &elapsedTime)
 	}
 }
 
+#ifdef __TEST__
 void pla::Knight::switchCollision()
 {
 	collisionMode = !collisionMode;
 }
+#endif
 
 sf::IntRect& pla::Knight::getRect()
 {
@@ -262,14 +264,14 @@ void pla::Knight::attack()
 
 void pla::Knight::rest()
 {
-	// die
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q)) // test
+#ifdef __TEST__
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Q))
 	{
 		state = STATES::DIE;
 		offset = 0;
 		coxing.die = true;
 	}
-	// ---
+#endif
 
 	setAlign();
 	setPosition();
@@ -357,7 +359,7 @@ void pla::Knight::setPosition()
 		}
 	}
 
-	sprites[state]->setPosition(newX, newY);
+	sprites[state]->setPosition(newX, newY + 3);
 }
 
 void pla::Knight::setAlign()
@@ -373,12 +375,12 @@ void pla::Knight::setRect()
 	rect.left = static_cast<int>(xy.x - rect.width / 2);
 	rect.top = static_cast<int>(xy.y - rect.height);
 
-	// --- TEST ---
+#ifdef __TEST__
 	if (collisionMode)
 	{
 		shape.setPosition(static_cast<float>(rect.left), static_cast<float>(rect.top));
 	}
-	// ---      ---
+#endif
 }
 
 void pla::Knight::setAttackRect()
@@ -389,7 +391,7 @@ void pla::Knight::setAttackRect()
 		attackRect.left = static_cast<int>(xy.x) - attackRect.width;
 	attackRect.top = static_cast<int>(xy.y) -static_cast<int>(rect.height / 1.8f);
 
-	// --- TEST ---
+#ifdef __TEST__
 	if (collisionMode)
 	{
 		if (isAttack())
@@ -397,5 +399,5 @@ void pla::Knight::setAttackRect()
 			attackShape.setPosition(static_cast<float>(attackRect.left), static_cast<float>(attackRect.top));
 		}
 	}
-	// ---      ---
+#endif
 }

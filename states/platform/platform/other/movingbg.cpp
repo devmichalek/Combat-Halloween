@@ -1,4 +1,4 @@
-#include "moving_bg.h"
+#include "movingbg.h"
 #include "loading.h"
 
 pla::MovingBG::MovingBG()

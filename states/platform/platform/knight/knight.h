@@ -20,11 +20,11 @@ namespace pla
 		sf::IntRect rect;
 		sf::IntRect attackRect;
 
-		// --- TEST ---
+#ifdef __TEST__
 		bool collisionMode;
 		sf::RectangleShape shape;
 		sf::RectangleShape attackShape;
-		// ---      ---
+#endif
 
 	public:
 		Knight();
@@ -39,7 +39,9 @@ namespace pla
 		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
 
 		void mechanics(const float &elapsedTime);
+#ifdef __TEST__
 		void switchCollision();	// turn on/off drawing collision
+#endif
 
 		sf::IntRect& getRect();
 		const sf::IntRect& getAttackRect();

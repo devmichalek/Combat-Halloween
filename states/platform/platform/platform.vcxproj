@@ -37,9 +37,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools;..\..\editor</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\..\common;..\..\..\tools;..\..\editor;..\foe;other;simulator;knight;light system</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalUsingDirectories>
+      </AdditionalUsingDirectories>
+      <PreprocessorDefinitions>__TEST__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
@@ -69,31 +72,37 @@
     <ClCompile Include="..\..\..\tools\pausesystem.cpp" />
     <ClCompile Include="..\..\..\tools\rectbutton.cpp" />
     <ClCompile Include="..\..\..\tools\volumebutton.cpp" />
-    <ClCompile Include="eye.cpp" />
-    <ClCompile Include="kcoxing.cpp" />
-    <ClCompile Include="knight.cpp" />
-    <ClCompile Include="kspecs.cpp" />
-    <ClCompile Include="kstates.cpp" />
-    <ClCompile Include="landscape.cpp" />
+    <ClCompile Include="knight\eye.cpp" />
+    <ClCompile Include="knight\kcoxing.cpp" />
+    <ClCompile Include="knight\knight.cpp" />
+    <ClCompile Include="knight\kspecs.cpp" />
+    <ClCompile Include="knight\kstates.cpp" />
+    <ClCompile Include="lightpoint.cpp" />
+    <ClCompile Include="lightsystem.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="moving_bg.cpp" />
+    <ClCompile Include="other\landscape.cpp" />
+    <ClCompile Include="other\movingbg.cpp" />
+    <ClCompile Include="other\tiles.cpp" />
     <ClCompile Include="platform.cpp" />
-    <ClCompile Include="tiles.cpp" />
-    <ClCompile Include="scontent.cpp" />
-    <ClCompile Include="simulator.cpp" />
+    <ClCompile Include="simulator\scontent.cpp" />
+    <ClCompile Include="simulator\simulator.cpp" />
+    <ClCompile Include="staticlightpoint.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eye.h" />
-    <ClInclude Include="kcoxing.h" />
-    <ClInclude Include="knight.h" />
-    <ClInclude Include="kspecs.h" />
-    <ClInclude Include="kstates.h" />
-    <ClInclude Include="landscape.h" />
-    <ClInclude Include="moving_bg.h" />
+    <ClInclude Include="knight\eye.h" />
+    <ClInclude Include="knight\kcoxing.h" />
+    <ClInclude Include="knight\knight.h" />
+    <ClInclude Include="knight\kspecs.h" />
+    <ClInclude Include="knight\kstates.h" />
+    <ClInclude Include="lightpoint.h" />
+    <ClInclude Include="lightsystem.h" />
+    <ClInclude Include="other\landscape.h" />
+    <ClInclude Include="other\movingbg.h" />
+    <ClInclude Include="other\tiles.h" />
     <ClInclude Include="platform.h" />
-    <ClInclude Include="tiles.h" />
-    <ClInclude Include="scontent.h" />
-    <ClInclude Include="simulator.h" />
+    <ClInclude Include="simulator\scontent.h" />
+    <ClInclude Include="simulator\simulator.h" />
+    <ClInclude Include="staticlightpoint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
