@@ -1,3 +1,9 @@
+// This file is part of game called 'Combat Halloween'
+// Author: Adrian Michalek
+// Date: 09.11.2018
+// Read more about license (MIT) and readme here:
+// https://github.com/devmichalek/Combat-Halloween
+
 #include <lightpoint.h>
 #include <cassert>
 
@@ -9,9 +15,9 @@ LightPoint::LightPoint()
 LightPoint::LightPoint(const LightPoint &lp)
 {
 	radius = lp.radius;
-	maxDistance = lp.maxDistance;
+	//maxDistance = lp.maxDistance;
 	color = lp.color;
-	gposition = lp.gposition;
+	//gposition = lp.gposition;
 }
 
 LightPoint::~LightPoint()
@@ -22,9 +28,9 @@ LightPoint::~LightPoint()
 void LightPoint::free()
 {
 	radius = 0.0f;
-	maxDistance = 0.0f;
+	//maxDistance = 0.0f;
 	color = sf::Glsl::Vec4(1.0f, 1.0f, 1.0f, 2.0f);
-	gposition = sf::Glsl::Vec2(0.0f, 0.0f);
+	//gposition = sf::Glsl::Vec2(0.0f, 0.0f);
 }
 
 
@@ -42,10 +48,10 @@ StaticLightPoint::StaticLightPoint(const LightPoint &lp, const sf::Vector2f &pos
 StaticLightPoint::StaticLightPoint(const float &radius, const sf::Glsl::Vec4 &color, const sf::Vector2f &position)
 {
 	this->radius = radius;
-	maxDistance = 0.0f;
+	//maxDistance = 0.0f;
 	this->color = color;
 	this->position = sf::Vector2f(position);
-	gposition = sf::Glsl::Vec2(0.0f, 0.0f);
+	//gposition = sf::Glsl::Vec2(0.0f, 0.0f);
 }
 
 StaticLightPoint::~StaticLightPoint()
@@ -144,9 +150,11 @@ void LightPoints::free()
 void LightPoints::reset()
 {
 	if (!radii.empty())			radii.clear();
-	if (!maxDistances.empty())	maxDistances.clear();
+	//if (!maxDistances.empty())maxDistances.clear();
 	if (!colors.empty())		colors.clear();
-	if (!gpositions.empty())	gpositions.clear();
+	//if (!subcolors.empty())	subcolors.clear();
+	//if (!gpositions.empty())	gpositions.clear();
+	if (!units.empty())			units.clear();
 
 	if (!positions.empty())
 	{
@@ -174,8 +182,7 @@ void LightPoints::reset()
 		dynamicLPTree = nullptr;
 	}
 
-	if (!staticLPResult.empty())	staticLPResult.clear();
-	if (!dynamicLPResult.empty())	dynamicLPResult.clear();
+	if (!lightPointResult.empty())	lightPointResult.clear();
 
 	length = 0;
 	ssize = dsize = 0;
@@ -200,13 +207,16 @@ void LightPoints::init(const float &screen_w, const float &screen_h)
 
 void LightPoints::prepare(const int &count)
 {
-	assert(length == 0, "Length is bigger than 0!");
+	assert(length == 0);
 	length = radii.size();
 
 	const bool status = length == ssize + dsize;
-	assert(status, "Size of vectors do not match!");
+	assert(status);
 
 	shader = new sf::Shader;
+
+	// Dynamicly created shader to speed up GLSL program execution
+	// and to set the boundaries of array (not waste of memory)
 
 	const std::string vertexShader = \
 		"void main()" \
@@ -255,18 +265,20 @@ void LightPoints::prepare(const int &count)
 	}
 
 	radii.shrink_to_fit();
-	maxDistances.shrink_to_fit();
+	maxDistances.reserve(count);	maxDistances.shrink_to_fit();
 	colors.shrink_to_fit();
+	subcolors.reserve(count);		subcolors.shrink_to_fit();
 	positions.shrink_to_fit();
-	gpositions.shrink_to_fit();
+	gpositions.reserve(count);		gpositions.shrink_to_fit();
 }
 
 void LightPoints::add(LightPoint lp)
 {
 	radii.push_back(lp.radius);
-	maxDistances.push_back(lp.maxDistance);
+	//maxDistances.push_back(lp.maxDistance);
 	colors.push_back(lp.color);
-	gpositions.push_back(lp.gposition);
+	//subcolors.push_back(lp.color);
+	//gpositions.push_back(lp.gposition);
 }
 
 void LightPoints::addStaticLightPoint(StaticLightPoint &slp)
@@ -281,7 +293,9 @@ void LightPoints::addStaticLightPoint(StaticLightPoint &slp)
 	float b = slp.position.y + hradius; // bot
 
 	Box box(Point(l, t), Point(r, b));
-	staticLPTree->insert(box);
+	staticLPTree->insert(std::make_pair(box, ssize + dsize));
+
+	units.push_back(StaticLightUnit()); // same as nullptr for ptrs
 
 	++ssize;
 }
@@ -307,43 +321,42 @@ void LightPoints::addDynamicLightPoint(DynamicLightPoint &dlp)
 	}
 
 	Box box(Point(l, t), Point(r, b));
-	dynamicLPTree->insert(std::make_pair(box, DynamicLightUnit(trace, dlp.points)));
+	dynamicLPTree->insert(std::make_pair(box, ssize + dsize));
+
+	units.push_back(DynamicLightUnit(trace, dlp.points));
 
 	++dsize;
 }
 
 void LightPoints::mechanics(const double &elapsedTime, const float &x, const float &y)
 {
-	staticLPResult.clear();
-	Box queryBox(Point(x, y), Point(x + screen_w, y + screen_h));
-	staticLPTree->query(bgi::intersects(queryBox), std::back_inserter(staticLPResult));
-
-	float tx = 0, ty = 0;
-	BOOST_FOREACH(StaticLPBox const& item, staticLPResult)
-	{
-		tx = bg::get<0>(item.min_corner());
-		ty = bg::get<1>(item.min_corner()) + screen_h;
-		
-	}
-
+	// Prepare timers before calculating.
 	frameTime = clock.restart();
 	time += frameTime;
 
-	// local
-	size_t lssize = staticLPResult.size();
-	size_t ldsize = dynamicLPResult.size();
-	for (int i = 0; i < lssize; ++i)
+	// Prepare query box.
+	Box queryBox(Point(x, y), Point(x + screen_w, y + screen_h));
+
+	lightPointResult.clear();
+	dynamicLPTree->query(bgi::intersects(queryBox), std::back_inserter(lightPointResult));	// DYNAMIC TREE
+	staticLPTree->query(bgi::intersects(queryBox), std::back_inserter(lightPointResult));	// STATIC TREE
+
+	int lsize = lightPointResult.size(), id = 0;	// local size, id
+	for(size_t i = 0; i < lsize; ++i)
 	{
-		gpositions[i].x = positions[i].x / core.getWidth();
-		gpositions[i].y = positions[i].y / core.getWidth();
-		maxDistances[i] = radii[i] + 0.005 * sin(10 * time.asSeconds());
+		id = lightPointResult[i].second;
+		gpositions[i].x = positions[id]->x / screen_w;
+		gpositions[i].y = positions[id]->y / screen_h;
+		maxDistances[i] = radii[id] + 0.005 * sin(10 * time.asSeconds());
+		subcolors[i] = colors[id];
+		units[id].calculate(elapsedTime); // calculate dynamic/static lights
 	}
 
-	shader->setUniform("arraySize", size);
-	shader->setUniformArray("maxDistances", &std::vector<float>(maxDistances.begin(), maxDistances.begin() + size)[0], size);
-	shader->setUniformArray("lightColors", &std::vector<sf::Glsl::Vec4>(colors.begin(), colors.begin() + size)[0], size);
-	shader->setUniformArray("positions", &std::vector<sf::Glsl::Vec2>(gpositions.begin(), gpositions.begin() + size)[0], size);
-	shader->setUniform("addAlpha", 1.0f);
+	shader->setUniform("arraySize", lsize);
+	shader->setUniformArray("maxDistances", &std::vector<float>(maxDistances.begin(), maxDistances.begin() + lsize)[0], lsize);
+	shader->setUniformArray("lightColors", &std::vector<sf::Glsl::Vec4>(subcolors.begin(), subcolors.begin() + lsize)[0], lsize);
+	shader->setUniformArray("positions", &std::vector<sf::Glsl::Vec2>(gpositions.begin(), gpositions.begin() + lsize)[0], lsize);
+	//shader->setUniform("addAlpha", 1.0f); <- unique uniform
 }
 
 sf::Shader* &LightPoints::getShader()
