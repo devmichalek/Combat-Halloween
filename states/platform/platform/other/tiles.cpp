@@ -103,7 +103,7 @@ void pla::Tiles::load(const float &screen_w, const float &screen_h)
 	}
 }
 
-void pla::Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y)
+void pla::Tiles::draw(sf::RenderWindow* &window, sf::Shader &shader, const float &x, const float &y)
 {
 	short l = static_cast <int> (x / TILE_WIDTH) - 1;
 	short r = static_cast <int> ((x + screen_w) / TILE_WIDTH) + 1;
@@ -123,12 +123,12 @@ void pla::Tiles::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const f
 			if (tiles[i][j] != -1)
 			{
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
-				window->draw(*sprites[tiles[i][j]]/*, &shader*/);
+				window->draw(*sprites[tiles[i][j]], &shader);
 			}
 			else if (untiles[i][j] != -1)
 			{
 				sprites[untiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
-				window->draw(*sprites[untiles[i][j]]/*, &shader*/);
+				window->draw(*sprites[untiles[i][j]], &shader);
 			}
 		}
 	}

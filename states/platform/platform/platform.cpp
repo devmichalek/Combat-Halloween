@@ -124,6 +124,7 @@ void Platform::load(const float &screen_w, const float &screen_h)
 	eye.load(screen_w, screen_h);
 	tiles.load(screen_w, screen_h);
 	landscape.load(screen_w, screen_h);
+	lightsystem.init(screen_w, screen_h);
 	// ----------
 
 	// Set chat.
@@ -167,7 +168,7 @@ void Platform::draw(sf::RenderWindow* &window)
 	window->setView(eye.getView());				// ---------------
 	knight.draw				(window);
 	eye.draw				(window);
-	tiles.draw				(window, eye.getViewX(), eye.getViewY());
+	tiles.draw				(window, *lightsystem.getShader(), eye.getViewX(), eye.getViewY());
 	landscape.draw			(window, eye.getViewX(), eye.getViewY());
 	window->setView(window->getDefaultView());	// ---------------
 
@@ -281,6 +282,7 @@ void Platform::mechanics(const double &elapsedTime)
 		knight.rest();
 		eye.mechanics(floatElapsedTime, knight.getRect(), knight.isLeftAligned());
 		movingBG.mechanics(static_cast<float>(elapsedTime), direction);
+		lightsystem.mechanics(static_cast<float>(elapsedTime), eye.getViewX(), eye.getViewY());
 		
 		if (homebutton.isActive())
 		{
@@ -415,4 +417,6 @@ void Platform::prepare()
 	tiles.read(SContent::get(SContent::category().TILE));
 	tiles.read(SContent::get(SContent::category().UNVISIBLE_TILE));
 	landscape.read(SContent::get(SContent::category().LANDSCAPE));
+	lightsystem.read(SContent::get(SContent::category().LIGHTPOINT));
+	lightsystem.prepare(3);
 }

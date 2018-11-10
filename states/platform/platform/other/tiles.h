@@ -28,7 +28,7 @@ namespace pla
 	public:
 		void reset();
 		void load(const float &screen_w, const float &screen_h);
-		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y);
+		void draw(sf::RenderWindow* &window, sf::Shader &shader, const float &x, const float &y);
 		void read(std::vector<std::string> &vec);
 
 #ifdef __TEST__

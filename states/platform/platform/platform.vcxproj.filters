@@ -123,13 +123,10 @@
     <ClCompile Include="other\movingbg.cpp">
       <Filter>Other</Filter>
     </ClCompile>
-    <ClCompile Include="staticlightpoint.cpp">
+    <ClCompile Include="light system\lightpoint.cpp">
       <Filter>Light System</Filter>
     </ClCompile>
-    <ClCompile Include="lightpoint.cpp">
-      <Filter>Light System</Filter>
-    </ClCompile>
-    <ClCompile Include="lightsystem.cpp">
+    <ClCompile Include="light system\lightsystem.cpp">
       <Filter>Light System</Filter>
     </ClCompile>
   </ItemGroup>
@@ -165,13 +162,10 @@
     <ClInclude Include="other\movingbg.h">
       <Filter>Other</Filter>
     </ClInclude>
-    <ClInclude Include="staticlightpoint.h">
+    <ClInclude Include="light system\lightpoint.h">
       <Filter>Light System</Filter>
     </ClInclude>
-    <ClInclude Include="lightpoint.h">
-      <Filter>Light System</Filter>
-    </ClInclude>
-    <ClInclude Include="lightsystem.h">
+    <ClInclude Include="light system\lightsystem.h">
       <Filter>Light System</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,6 +7,7 @@
 #include "eye.h"
 #include "tiles.h"
 #include "landscape.h"
+#include "lightsystem.h"
 #include "chat.h"
 #include "pausesystem.h"
 #include "music.h"
@@ -26,6 +27,7 @@ class Platform :public cmm::State
 	pla::Eye eye;
 	pla::Tiles tiles;
 	pla::Landscape landscape;
+	pla::LightSystem lightsystem;
 	// ----------
 	Chat chat;
 	PauseSystem pausesystem;
