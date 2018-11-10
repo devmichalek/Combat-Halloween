@@ -47,7 +47,6 @@ t:3 c:3 x:859 y:118 id:2 ai:(scale:0.65)
 t:3 c:6 x:651 y:374 id:3 ai:(scale:0.65)
 t:1 c:0 x:1088 y:352 id:-1 ai:
 t:1 c:1 x:1152 y:352 id:-1 ai:
-t:1 c:1 x:1344 y:352 id:-1 ai:
 t:1 c:2 x:1408 y:352 id:-1 ai:
 t:1 c:9 x:1088 y:288 id:-1 ai:
 t:1 c:9 x:1088 y:224 id:-1 ai:
@@ -65,15 +64,17 @@ t:3 c:3 x:1362 y:207 id:5 ai:(scale:0.65)
 t:3 c:1 x:1347 y:318 id:6 ai:(scale:0.65)
 t:0 c:0 x:1202 y:489 id:7 ai:
 t:3 c:5 x:1420 y:441 id:8 ai:(scale:0.65)
-t:1 c:1 x:1216 y:352 id:-1 ai:
-t:1 c:1 x:1280 y:352 id:-1 ai:
 t:1 c:11 x:1408 y:288 id:-1 ai:
 t:1 c:11 x:1408 y:224 id:-1 ai:
 t:1 c:10 x:1152 y:288 id:-1 ai:
-t:1 c:10 x:1344 y:288 id:-1 ai:
 t:1 c:10 x:1344 y:224 id:-1 ai:
 t:1 c:10 x:1280 y:224 id:-1 ai:
 t:1 c:10 x:1216 y:224 id:-1 ai:
 t:1 c:10 x:1152 y:224 id:-1 ai:
+t:1 c:1 x:1216 y:352 id:-1 ai:
+t:1 c:1 x:1280 y:352 id:-1 ai:
+t:1 c:1 x:1344 y:352 id:-1 ai:
 t:1 c:10 x:1216 y:288 id:-1 ai:
 t:1 c:10 x:1280 y:288 id:-1 ai:
+t:1 c:10 x:1344 y:288 id:-1 ai:
+t:5 c:10 x:500 y:500 id:-1 ai:(points:() radius:400.0 color:(0.7,0.5,1.0,2.0))
