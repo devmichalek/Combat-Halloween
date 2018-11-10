@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -42,7 +42,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
-      <PreprocessorDefinitions>__TEST__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__TEST__;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
@@ -77,8 +77,8 @@
     <ClCompile Include="knight\knight.cpp" />
     <ClCompile Include="knight\kspecs.cpp" />
     <ClCompile Include="knight\kstates.cpp" />
-    <ClCompile Include="lightpoint.cpp" />
-    <ClCompile Include="lightsystem.cpp" />
+    <ClCompile Include="light system\lightpoint.cpp" />
+    <ClCompile Include="light system\lightsystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="other\landscape.cpp" />
     <ClCompile Include="other\movingbg.cpp" />
@@ -86,7 +86,6 @@
     <ClCompile Include="platform.cpp" />
     <ClCompile Include="simulator\scontent.cpp" />
     <ClCompile Include="simulator\simulator.cpp" />
-    <ClCompile Include="staticlightpoint.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="knight\eye.h" />
@@ -94,15 +93,14 @@
     <ClInclude Include="knight\knight.h" />
     <ClInclude Include="knight\kspecs.h" />
     <ClInclude Include="knight\kstates.h" />
-    <ClInclude Include="lightpoint.h" />
-    <ClInclude Include="lightsystem.h" />
+    <ClInclude Include="light system\lightpoint.h" />
+    <ClInclude Include="light system\lightsystem.h" />
     <ClInclude Include="other\landscape.h" />
     <ClInclude Include="other\movingbg.h" />
     <ClInclude Include="other\tiles.h" />
     <ClInclude Include="platform.h" />
     <ClInclude Include="simulator\scontent.h" />
     <ClInclude Include="simulator\simulator.h" />
-    <ClInclude Include="staticlightpoint.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

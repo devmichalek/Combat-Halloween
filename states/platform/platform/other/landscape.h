@@ -1,5 +1,4 @@
 #pragma once
-#define _SCL_SECURE_NO_WARNINGS
 #include "eventwindow.h"
 #include "treedefinitions.h"
 #include "sprite.h"
