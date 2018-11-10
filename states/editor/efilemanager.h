@@ -4,7 +4,7 @@
 #include "filemanager.h"
 
 // File Manager does saving, opening, refreshing and creating on another thread.
-class EFileManager : public EContent, public cmm::FileManager
+class EFileManager final : public EContent, public cmm::FileManager
 {
 	std::string dirPath;
 	std::vector<std::string> dirVec;

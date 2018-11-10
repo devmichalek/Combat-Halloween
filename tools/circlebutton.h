@@ -1,7 +1,7 @@
 #pragma once
 #include "button.h"
 
-class CircleButton :public Button
+class CircleButton final :public Button
 {
 	bool active;
 	bool changed;

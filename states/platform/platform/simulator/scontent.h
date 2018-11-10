@@ -2,7 +2,7 @@
 #include "content.h"
 #include "kind.h"
 
-struct SContent : public cmm::Content
+struct SContent final : public cmm::Content
 {
 	enum TYPE
 	{

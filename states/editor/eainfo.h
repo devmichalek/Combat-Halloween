@@ -3,7 +3,7 @@
 #include "eakind.h"
 #include "eventwindow.h"
 
-class EAInfo : public EAKind
+class EAInfo final : public EAKind
 {
 	enum TEXTS
 	{

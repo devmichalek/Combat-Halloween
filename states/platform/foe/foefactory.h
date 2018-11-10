@@ -2,7 +2,7 @@
 #include "foewrapper.h"
 
 
-class FoeFactory
+class FoeFactory final
 {
 	sf::Rect<float>* resolution;
 	FoeWrapper* wrapper;

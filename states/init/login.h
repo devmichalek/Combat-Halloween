@@ -5,7 +5,7 @@
 #include "request.h"
 #include "rectbutton.h"
 
-class Login : public cmm::State
+class Login final : public cmm::State
 {
 	// Basics.
 	float screen_w;

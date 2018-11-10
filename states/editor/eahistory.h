@@ -2,7 +2,7 @@
 #include "econtent.h"
 #include <SFML/Window/Event.hpp>
 
-class EAHistory : public EContent
+class EAHistory final : public EContent
 {
 	int index;
 	std::vector<int> ids;					// id

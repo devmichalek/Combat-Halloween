@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 
-class FoeText
+class FoeText final
 {
 	int chosen;
 	float line;

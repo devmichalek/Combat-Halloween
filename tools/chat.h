@@ -6,7 +6,7 @@
 #include "coxing.h"
 #include "eventwindow.h"
 
-class Chat
+class Chat final
 {
 	sf::Color color;	// typical text color
 	sf::Color ccolor;	// command color

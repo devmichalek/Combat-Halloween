@@ -4,7 +4,7 @@
 
 namespace ee // Editor Entity
 {
-	struct LandscapeEntity : public pla::LandscapeUnit
+	struct LandscapeEntity final : public pla::LandscapeUnit
 	{
 		int id;
 
@@ -15,7 +15,7 @@ namespace ee // Editor Entity
 
 	using LandscapeBox = std::pair<Box, LandscapeEntity>;
 	
-	class Landscape
+	class Landscape final
 	{
 		float screen_w;
 		float screen_h;

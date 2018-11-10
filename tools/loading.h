@@ -13,7 +13,7 @@ public:
 	static const sf::Uint8& getState();
 };
 
-class Loading : public cmm::StaticCore, public cmm::State, public LoadingState
+class Loading final : public cmm::StaticCore, public cmm::State, public LoadingState
 {
 	// Support.
 	inline static bool error_occured = false;

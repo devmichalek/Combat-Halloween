@@ -5,7 +5,7 @@
 
 namespace pla // platform
 {
-	struct LandscapeUnit
+	struct LandscapeUnit final
 	{
 		char chosen;
 		float scale;
@@ -20,7 +20,7 @@ namespace pla // platform
 		}
 	};
 
-	class Landscape
+	class Landscape final
 	{
 		float screen_w;
 		float screen_h;

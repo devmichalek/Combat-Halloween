@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "text.h"
 
-class EFMButtons	// Editor File Manager Buttons
+class EFMButtons final	// Editor File Manager Buttons
 {
 	enum TYPES
 	{

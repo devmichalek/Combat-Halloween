@@ -6,7 +6,7 @@
 
 namespace pla
 {
-	class Tiles
+	class Tiles final
 	{
 		char wPad, hPad;
 		float screen_w;

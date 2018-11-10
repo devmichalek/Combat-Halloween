@@ -3,7 +3,7 @@
 #include "eagrid.h"
 #include "eainfo.h"
 
-class EditorAction
+class EditorAction final
 {
 	EAFactory factory;
 	EAGrid grid;

@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "text.h"
 
-class EFMTextEditor
+class EFMTextEditor final
 {
 	enum DECISION
 	{

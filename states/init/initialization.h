@@ -4,7 +4,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
 
-class Initialization : public cmm::State
+class Initialization final : public cmm::State
 {
 	enum	// Enum with states of texts.
 	{

@@ -1,7 +1,7 @@
 #pragma once
 #include "skeleton.h"
 
-class Zombie: public Skeleton
+class Zombie final : public Skeleton
 {
 	void setFPS();
 	void marshial();

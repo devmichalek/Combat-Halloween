@@ -1,7 +1,7 @@
 #pragma once
 #include "button.h"
 
-class LinkButton :public Button
+class LinkButton final :public Button
 {
 	std::string url;
 

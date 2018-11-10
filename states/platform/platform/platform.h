@@ -12,7 +12,7 @@
 #include "pausesystem.h"
 #include "music.h"
 
-class Platform :public cmm::State
+class Platform final :public cmm::State
 {
 	bool loaded;
 	CircleButton homebutton;

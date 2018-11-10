@@ -7,7 +7,7 @@
 #include "pausesystem.h"
 #include "music.h"
 
-class LevelMenu :public cmm::State
+class LevelMenu final :public cmm::State
 {
 	bool loaded;
 	CircleButton homebutton;

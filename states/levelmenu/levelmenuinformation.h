@@ -5,7 +5,7 @@
 #include <vector>
 #include "eventwindow.h"
 
-class LevelMenuInformation
+class LevelMenuInformation final
 {
 	float screen_w;
 	float screen_h;

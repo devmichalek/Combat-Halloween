@@ -10,7 +10,7 @@ typedef std::pair<Box, int> BoxID;
 // Region Tree
 typedef bgi::rtree<BoxID, bgi::quadratic<16>> RTree;
 
-class FoeWrapper
+class FoeWrapper final
 {
 	RTree* tree;
 	std::vector<Foe*> foes;

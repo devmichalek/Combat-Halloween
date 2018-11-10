@@ -5,7 +5,7 @@
 
 namespace pla
 {
-	class Eye
+	class Eye final
 	{
 		float line_y;
 		float distance_y;

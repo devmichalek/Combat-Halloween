@@ -79,13 +79,13 @@ void main_loop()
 		if (pauseSystem.isActive())
 		{
 			float value = static_cast<float>(elapsedTime) * MAX_ALPHA * 2;
-			int min = MAX_ALPHA * 3 / 4;
+			int min = static_cast<int>(MAX_ALPHA * 3 / 4);
 			pauseSystem.fadein(value * 3, min);
 		}
 		else
 		{
 			float value = static_cast<float>(elapsedTime) * MAX_ALPHA * 2;
-			int max = MAX_ALPHA, min = 0;
+			int max = static_cast<int>(MAX_ALPHA), min = 0;
 			pauseSystem.fadeout(value, min);
 
 			if (pos.x < dest.x)

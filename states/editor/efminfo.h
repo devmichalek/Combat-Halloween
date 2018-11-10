@@ -4,7 +4,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class EFMInfo
+class EFMInfo final
 {
 	cmm::Sprite plank;
 	sf::RectangleShape blackLayer;

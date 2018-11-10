@@ -2,7 +2,7 @@
 #include "text.h"
 #include "circlebutton.h"
 
-class EATools
+class EATools final
 {
 	int screen_w;
 	int screen_h;

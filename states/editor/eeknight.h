@@ -3,7 +3,7 @@
 
 namespace ee // Editor Entity
 {
-	class Knight
+	class Knight final
 	{
 		int ID;
 		sf::IntRect rect;

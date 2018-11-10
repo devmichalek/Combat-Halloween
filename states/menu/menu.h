@@ -11,7 +11,7 @@
 #include "pausesystem.h"
 #include "music.h"
 
-class Menu :public cmm::State
+class Menu final :public cmm::State
 {
 	bool loaded;
 	Knightspecs knightspecs;

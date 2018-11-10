@@ -6,7 +6,7 @@
 #include "messageboard.h"
 #include "efmtexteditor.h"
 
-class EditorFileManager
+class EditorFileManager final
 {
 	int action;
 	enum ACTIONS

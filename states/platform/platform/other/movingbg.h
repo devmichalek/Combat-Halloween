@@ -4,7 +4,7 @@
 
 namespace pla
 {
-	class MovingBG
+	class MovingBG final
 	{
 		float screen_w;
 		float screen_h;

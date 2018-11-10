@@ -3,7 +3,7 @@
 #include "fpsconsole.h"
 #include <SFML/Graphics/RenderWindow.hpp>
 
-class FPS
+class FPS final
 {
 	enum POSITION
 	{

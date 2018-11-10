@@ -2,7 +2,7 @@
 #include "text.h"
 #include "circlebutton.h"
 
-class EditorNavigation
+class EditorNavigation final
 {
 	enum KIND
 	{

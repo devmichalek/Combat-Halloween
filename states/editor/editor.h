@@ -8,7 +8,7 @@
 // #include "editor_flare/editor_options.h"
 // #include "tiles_editor.h"
 
-class Editor :public cmm::State
+class Editor final :public cmm::State
 {
 	bool loaded;
 	

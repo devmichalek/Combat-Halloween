@@ -9,7 +9,7 @@
 #include "eahistory.h"
 #include "eatools.h"
 
-class EAFactory	: public EAKind
+class EAFactory final : public EAKind
 {
 	float screen_w;
 	float screen_h;

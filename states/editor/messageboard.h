@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "text.h"
 
-class MessageBoard
+class MessageBoard final
 {
 	enum TYPES	// types of message board, with two buttons "yes" and "no" or button "ok"
 	{

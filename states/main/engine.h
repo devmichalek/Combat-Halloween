@@ -10,7 +10,7 @@
 #include "editor.h"
 #include "simulator.h"
 
-class Engine
+class Engine final
 {	
 	std::unique_ptr<cmm::Core> core;
 	std::vector<cmm::State*> states;

@@ -6,7 +6,7 @@
 #include "eventwindow.h"
 #include "colors.h"
 
-class MenuInformation
+class MenuInformation final
 {
 	float screen_w;
 	float screen_h;

@@ -9,7 +9,7 @@
 //#include <mutex>
 
 
-class Simulator : public cmm::State
+class Simulator final : public cmm::State
 {
 	enum STATUS
 	{

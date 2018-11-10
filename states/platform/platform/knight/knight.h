@@ -8,7 +8,7 @@
 
 namespace pla
 {
-	class Knight : public KStates
+	class Knight final : public KStates
 	{
 		float screen_w;
 		float screen_h;

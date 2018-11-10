@@ -4,7 +4,7 @@
 
 namespace pla
 {
-	class KCoxing : public cmm::Coxing
+	class KCoxing final : public cmm::Coxing
 	{
 	public:
 		float walkTimer;

@@ -5,7 +5,7 @@
 #include <vector>
 
 
-class RectButton
+class RectButton final
 {
 	float alpha;
 	float alphaBorders;

@@ -4,7 +4,7 @@
 #include "text.h"
 #include "eventwindow.h"
 
-class PauseSystem
+class PauseSystem final
 {
 	cmm::Text text;
 	cmm::Sound click;

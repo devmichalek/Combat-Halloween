@@ -6,7 +6,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 
 // This object draw lines, display text and arrows
-class EAGrid	// Editor Action Grid
+class EAGrid final	// Editor Action Grid
 {
 	enum ARROWS
 	{

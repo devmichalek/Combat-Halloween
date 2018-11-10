@@ -3,7 +3,7 @@
 
 namespace ee // Editor Entity
 {
-	class Tile : public Collision
+	class Tile final : public Collision
 	{
 		char** array;
 

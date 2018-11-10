@@ -5,7 +5,7 @@
 #include "sprite.h"
 #include "eventwindow.h"
 
-class Settings : public cmm::Keys
+class Settings final : public cmm::Keys
 {
 	float screen_w;
 	float screen_h;

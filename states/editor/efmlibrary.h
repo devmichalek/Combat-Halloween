@@ -3,7 +3,7 @@
 #include "sprite.h"
 #include "text.h"
 
-class EFMLibrary
+class EFMLibrary final
 {
 	enum TYPES
 	{
