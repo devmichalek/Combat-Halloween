@@ -146,9 +146,6 @@
     <ClCompile Include="..\..\common\content.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\platform\scontent.cpp">
-      <Filter>Dependencies\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\audio.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
@@ -164,11 +161,14 @@
     <ClCompile Include="eetile.cpp">
       <Filter>Editor Action\Action\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\platform\landscape.cpp">
-      <Filter>Dependencies\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\converter.cpp">
       <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\other\landscape.cpp">
+      <Filter>Dependencies\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\simulator\scontent.cpp">
+      <Filter>Dependencies\Other</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
