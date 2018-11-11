@@ -291,7 +291,7 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 							for (size_t j = 0; j < buf.size(); ++j)
 								tmp += buf[j];
 							ty = boost::lexical_cast<float>(tmp);
-							pts.push_back(sf::Vector2f(tx, ty));
+							pts.push_back(sf::Vector2f(tx, screen_h - ty));
 						}
 						tmp += buf[i];
 					}
@@ -304,7 +304,7 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 			}
 			else
 			{
-				StaticLightPoint slp(LightPoint(r, sf::Glsl::Vec4(c[0], c[1], c[2], c[3])), sf::Vector2f(x, y));
+				StaticLightPoint slp(LightPoint(r, sf::Glsl::Vec4(c[0], c[1], c[2], c[3])), sf::Vector2f(x, screen_h - y));
 				addStaticLightPoint(slp);
 			}
 		}
@@ -328,8 +328,8 @@ void pla::LightSystem::mechanics(const double &elapsedTime, const float &x, cons
 	for (size_t i = 0; i < lsize; ++i)
 	{
 		id = lightPointResult[i].second;
-		gpositions[i].x = positions[id]->x / screen_w;
-		gpositions[i].y = positions[id]->y / screen_h;
+		gpositions[i].x = (positions[id]->x - x) / screen_w;
+		gpositions[i].y = (positions[id]->y - y) / screen_h;
 		maxDistances[i] = radii[id] / screen_w + 0.005 * sin(10 * time.asSeconds());
 		subcolors[i] = colors[id];
 		units[id]->calculate(elapsedTime); // calculate dynamic/static lights
@@ -342,7 +342,7 @@ void pla::LightSystem::mechanics(const double &elapsedTime, const float &x, cons
 	shader->setUniformArray("maxDistances", &std::vector<float>(maxDistances.begin(), maxDistances.begin() + lsize)[0], lsize);
 	shader->setUniformArray("lightColors", &std::vector<sf::Glsl::Vec4>(subcolors.begin(), subcolors.begin() + lsize)[0], lsize);
 	shader->setUniformArray("positions", &std::vector<sf::Glsl::Vec2>(gpositions.begin(), gpositions.begin() + lsize)[0], lsize);
-	//shader->setUniform("addAlpha", 1.0f); <- unique uniform
+	//shader->setUniform("addAlpha", 1.0f);// <- unique uniform
 }
 
 sf::Shader* &pla::LightSystem::getShader()
