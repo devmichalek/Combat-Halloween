@@ -160,10 +160,7 @@ const float& cmm::Core::getHeight() const
 
 double cmm::Core::getElapsedTime()
 {
-	const double elapsedTime = static_cast <double> (clock.getElapsedTime().asMicroseconds()) / 1000000; // per sec
-	clock.restart();
-
-	return elapsedTime;
+	return static_cast<double> (clock.restart().asMicroseconds()) / 1000000; // per sec;
 }
 
 const sf::Color& cmm::Core::getColor() const
