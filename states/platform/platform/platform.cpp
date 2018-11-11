@@ -119,6 +119,7 @@ void Platform::load(const float &screen_w, const float &screen_h)
 	music_volumebutton.setPosition(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
 	// Action ---
+	renderTexture.create(screen_w, screen_h);
 	movingBG.load(screen_w, screen_h);
 	knight.load(screen_w, screen_h);
 	eye.load(screen_w, screen_h);
@@ -164,13 +165,19 @@ void Platform::handle(const sf::Event &event)
 
 void Platform::draw(sf::RenderWindow* &window)
 {
-	movingBG.draw			(window);
-	window->setView(eye.getView());				// ---------------
-	knight.draw				(window);
-	eye.draw				(window);
-	tiles.draw				(window, *lightsystem.getShader(), eye.getViewX(), eye.getViewY());
-	landscape.draw			(window, eye.getViewX(), eye.getViewY());
-	window->setView(window->getDefaultView());	// ---------------
+	renderTexture.clear();
+	movingBG.draw			(renderTexture);
+	renderTexture.setView	(eye.getView());			// ---------------
+	knight.draw				(renderTexture);
+	eye.draw				(renderTexture);
+	tiles.draw				(renderTexture, eye.getViewX(), eye.getViewY());
+	landscape.draw			(renderTexture, eye.getViewX(), eye.getViewY());
+	renderTexture.setView(window->getDefaultView());
+
+	renderTexture.display();
+	sf::Sprite sprite(renderTexture.getTexture());
+	window->draw(sprite, lightsystem.getShader());		// ---------------
+
 
 	homebutton.draw			(window);
 	levelbutton.draw		(window);
@@ -253,9 +260,9 @@ void Platform::mechanics(const double &elapsedTime)
 		char direction = 0;
 		const float floatElapsedTime = static_cast<float>(elapsedTime);
 		knight.mechanics(floatElapsedTime);
-		knight.gravity();
+		knight.gravity(floatElapsedTime);
 		if (tiles.checkCollisionV(knight.getRect(), eye.getViewX(), eye.getViewY(), -1))
-			knight.undoGravity();
+			knight.undoGravity(floatElapsedTime);
 		
 		if (knight.moveLeft(floatElapsedTime))
 		{
@@ -418,5 +425,5 @@ void Platform::prepare()
 	tiles.read(SContent::get(SContent::category().UNVISIBLE_TILE));
 	landscape.read(SContent::get(SContent::category().LANDSCAPE));
 	lightsystem.read(SContent::get(SContent::category().LIGHTPOINT));
-	lightsystem.prepare(3);
+	lightsystem.prepare(21);
 }

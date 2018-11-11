@@ -75,12 +75,12 @@ void pla::MovingBG::load(const float &screen_w, const float &screen_h)
 	types.push_back(2);
 }
 
-void pla::MovingBG::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::MovingBG::draw(sf::RenderTexture &rt)
 {
 	for (unsigned i = 0; i < fs.size(); ++i)
 	{
 		sprites[types[i]]->setPosition(fs[i].x, fs[i].y);
-		window->draw(*sprites[types[i]]/*, &shader*/);
+		rt.draw(*sprites[types[i]]);
 	}
 }
 

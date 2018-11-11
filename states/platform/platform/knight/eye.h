@@ -1,6 +1,6 @@
 #pragma once
 #include "sprite.h"
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 //#include "play/game/foe/balloonchat.h"
 
 namespace pla
@@ -31,7 +31,7 @@ namespace pla
 		void reset(const sf::Rect<int> &rect);
 
 		void load(const float &screen_w, const float &screen_h);
-		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
+		void draw(sf::RenderTexture &rt);
 		void mechanics(const float &elapsedTime, const sf::Rect<int> &rect, const bool &align);
 
 		const sf::View& getView() const;

@@ -60,18 +60,18 @@ void pla::Eye::load(const float &screen_w, const float &screen_h)
 	//balloonchat.load(screen_w, screen_h);
 }
 
-void pla::Eye::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::Eye::draw(sf::RenderTexture &rt)
 {
 	if (scale_x < 0)
 	{
 		float x = sprite.getX();
 		sprite.setPosition(sprite.getX() + sprite.getWidth(), sprite.getY());
-		window->draw(sprite/*, &shader*/);
+		rt.draw(sprite);
 		sprite.setPosition(x, sprite.getY());
 	}
 	else
 	{
-		window->draw(sprite/*, &shader*/);
+		rt.draw(sprite);
 	}
 
 	if (textCounter > 0)

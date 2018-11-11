@@ -103,7 +103,7 @@ void pla::Tiles::load(const float &screen_w, const float &screen_h)
 	}
 }
 
-void pla::Tiles::draw(sf::RenderWindow* &window, sf::Shader &shader, const float &x, const float &y)
+void pla::Tiles::draw(sf::RenderTexture &rt, const float &x, const float &y)
 {
 	short l = static_cast <int> (x / TILE_WIDTH) - 1;
 	short r = static_cast <int> ((x + screen_w) / TILE_WIDTH) + 1;
@@ -123,12 +123,12 @@ void pla::Tiles::draw(sf::RenderWindow* &window, sf::Shader &shader, const float
 			if (tiles[i][j] != -1)
 			{
 				sprites[tiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
-				window->draw(*sprites[tiles[i][j]], &shader);
+				rt.draw(*sprites[tiles[i][j]]);
 			}
 			else if (untiles[i][j] != -1)
 			{
 				sprites[untiles[i][j]]->setPosition(i * TILE_WIDTH, -(j * TILE_HEIGHT) + screen_h - TILE_HEIGHT);
-				window->draw(*sprites[untiles[i][j]], &shader);
+				rt.draw(*sprites[untiles[i][j]]);
 			}
 		}
 	}
@@ -137,7 +137,7 @@ void pla::Tiles::draw(sf::RenderWindow* &window, sf::Shader &shader, const float
 #ifdef __TEST__
 	if (collision)
 	{
-		window->draw(rect);
+		rt.draw(rect);
 		rect.setPosition(-rect.getSize().x, -rect.getSize().y);	// put rect outside of window are
 	}
 #endif
@@ -197,6 +197,7 @@ bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const floa
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
 #endif
+					last = sf::Vector2i(i, j);
 					rect.top += add;
 					return true;
 				}
@@ -213,6 +214,7 @@ bool pla::Tiles::checkCollisionV(sf::Rect<int> &rect, const float &x, const floa
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
 #endif
+					last = sf::Vector2i(i, j);
 					rect.top += add;
 					return true;
 				}
@@ -254,6 +256,7 @@ bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const floa
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
 #endif
+					last = sf::Vector2i(i, j);
 					rect.left += add;
 					return true;
 				}
@@ -270,6 +273,7 @@ bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const floa
 						this->rect.setPosition(sprites[tiles[i][j]]->getX(), sprites[tiles[i][j]]->getY());
 					}
 #endif
+					last = sf::Vector2i(i, j);
 					rect.left += add;
 					return true;
 				}
@@ -279,4 +283,14 @@ bool pla::Tiles::checkCollisionH(sf::Rect<int> &rect, const float &x, const floa
 
 	rect.left += add;
 	return false;
+}
+
+float pla::Tiles::getTop()
+{
+	return (-last.y * TILE_HEIGHT) + screen_h;
+}
+
+float pla::Tiles::getLeft()
+{
+	return last.x * TILE_WIDTH;
 }

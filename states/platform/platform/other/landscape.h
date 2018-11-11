@@ -1,5 +1,5 @@
 #pragma once
-#include "eventwindow.h"
+#include <SFML/Graphics/RenderTexture.hpp>
 #include "treedefinitions.h"
 #include "sprite.h"
 
@@ -42,7 +42,7 @@ namespace pla // platform
 
 		void init();	// builds tree
 		void load(const float &screen_w, const float &screen_h);
-		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y);
+		void draw(sf::RenderTexture &rt, const float &x, const float &y);
 		void read(std::vector<std::string> &vec);
 	};
 }

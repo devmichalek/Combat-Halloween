@@ -62,12 +62,12 @@ void pla::Landscape::load(const float &screen_w, const float &screen_h)
 }
 
 
-void pla::Landscape::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, const float &x, const float &y)
+void pla::Landscape::draw(sf::RenderTexture &rt, const float &x, const float &y)
 {
 	result.clear();
 	Box queryBox(Point(x, y), Point(x + screen_w, y + screen_h));
 	tree->query(bgi::intersects(queryBox), std::back_inserter(result));
-
+	
 
 	char c = 0;
 	float tx = 0, ty = 0;
@@ -78,7 +78,7 @@ void pla::Landscape::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/, con
 		tx = bg::get<0>(item.first.min_corner());
 		ty = (bg::get<1>(item.first.min_corner()) + sprites[c]->getHeight()) * -1 + screen_h;
 		sprites[c]->setPosition(tx, ty);
-		window->draw(*sprites[c]);
+		rt.draw(*sprites[c]);
 	}
 }
 

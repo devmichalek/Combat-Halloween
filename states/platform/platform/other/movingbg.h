@@ -1,6 +1,6 @@
 #pragma once
 #include "sprite.h"
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 
 namespace pla
 {
@@ -19,7 +19,7 @@ namespace pla
 		~MovingBG();
 		void free();
 		void load(const float &screen_w, const float &screen_h);
-		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
+		void draw(sf::RenderTexture &rt);
 		void mechanics(const float &elapsedTime, const char &direction);
 		const float& getAlpha() const;
 	};

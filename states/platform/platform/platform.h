@@ -22,6 +22,7 @@ class Platform final :public cmm::State
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
 	// Action ---
+	sf::RenderTexture renderTexture;
 	pla::MovingBG movingBG;
 	pla::Knight knight;
 	pla::Eye eye;

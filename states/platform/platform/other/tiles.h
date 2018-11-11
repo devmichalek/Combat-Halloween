@@ -1,6 +1,6 @@
 #pragma once
 #include "sprite.h"
-#include "eventwindow.h"
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include "definitions.h"
 
@@ -16,6 +16,7 @@ namespace pla
 		bool collision;
 		sf::RectangleShape rect;
 #endif
+		sf::Vector2i last;
 		char** tiles;
 		char** untiles;	// unvisible tiles
 		std::vector <cmm::Sprite*> sprites;
@@ -28,7 +29,7 @@ namespace pla
 	public:
 		void reset();
 		void load(const float &screen_w, const float &screen_h);
-		void draw(sf::RenderWindow* &window, sf::Shader &shader, const float &x, const float &y);
+		void draw(sf::RenderTexture &rt, const float &x, const float &y);
 		void read(std::vector<std::string> &vec);
 
 #ifdef __TEST__
@@ -36,5 +37,9 @@ namespace pla
 #endif
 		bool checkCollisionV(sf::Rect<int> &rect, const float &x, const float &y, const char add = 0); // vertical
 		bool checkCollisionH(sf::Rect<int> &rect, const float &x, const float &y, const char add = 0); // horizontal
+
+		// get last 
+		float getTop();
+		float getLeft();
 	};
 }

@@ -81,21 +81,21 @@ void pla::Knight::handle(const sf::Event &event)
 	coxing.releaseJumping(event);
 }
 
-void pla::Knight::draw(sf::RenderWindow* &window/*, sf::Shader &shader*/)
+void pla::Knight::draw(sf::RenderTexture &rt)
 {
 	if (state == STATES::VOID)
 		return;
 	
 	sprites[state]->setOffset(static_cast<int>(offset));
-	window->draw(*sprites[state]);
+	rt.draw(*sprites[state]);
 
 #ifdef __TEST__
 	if (collisionMode)
 	{
-		window->draw(shape);
+		rt.draw(shape);
 		if (isAttack())
 		{
-			window->draw(attackShape);
+			rt.draw(attackShape);
 		}
 	}
 #endif
@@ -224,12 +224,12 @@ bool pla::Knight::jump(const float &elapsedTime)
 
 	if (state == STATES::JUMP_ATTACK)
 	{
-		xy.y -= specs.gravity; // keep the level
+		xy.y -= specs.gravity * elapsedTime; // keep the level
 		return false;
 	}
 	else if ((state == STATES::JUMP) && offset < 5) // go up
 	{
-		xy.y -= specs.gravity * 2;
+		xy.y -= specs.gravity * 2 * elapsedTime;
 		return true;
 	}
 
@@ -238,7 +238,7 @@ bool pla::Knight::jump(const float &elapsedTime)
 
 void pla::Knight::undoJump(const float &elapsedTime)
 {
-	xy.y += specs.gravity * 2;
+	xy.y += specs.gravity * 2 * elapsedTime;
 }
 
 void pla::Knight::attack()
@@ -279,18 +279,18 @@ void pla::Knight::rest()
 	setAttackRect();
 }
 
-void pla::Knight::gravity()
+void pla::Knight::gravity(const float &elapsedTime)
 {
 	coxing.falling = true;
-	xy.y += specs.gravity;
+	xy.y += specs.gravity * elapsedTime;
 }
 
-void pla::Knight::undoGravity()
+void pla::Knight::undoGravity(const float &elapsedTime)
 {
 	coxing.jumpCounter = 0;
 	coxing.jumpReleased = true;
 	coxing.falling = false;
-	xy.y -= specs.gravity;
+	xy.y -= specs.gravity * elapsedTime;
 }
 
 void pla::Knight::read(std::string &str)

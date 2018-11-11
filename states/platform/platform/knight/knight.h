@@ -3,7 +3,8 @@
 #include "kstates.h"
 #include "kcoxing.h"
 #include "kspecs.h"
-#include "eventwindow.h"
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 
 namespace pla
@@ -36,7 +37,7 @@ namespace pla
 
 		void load(const float &screen_w, const float &screen_h);
 		void handle(const sf::Event &event);
-		void draw(sf::RenderWindow* &window/*, sf::Shader &shader*/);
+		void draw(sf::RenderTexture &rt);
 
 		void mechanics(const float &elapsedTime);
 #ifdef __TEST__
@@ -58,7 +59,7 @@ namespace pla
 		bool jump(const float &elapsedTime);		void undoJump(const float &elapsedTime);
 		void attack();
 		void rest();
-		void gravity();								void undoGravity();
+		void gravity(const float &elapsedTime);		void undoGravity(const float &elapsedTime);
 		void read(std::string &str);
 		void setVolume(float volume);
 
