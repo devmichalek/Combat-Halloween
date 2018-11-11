@@ -51,7 +51,7 @@ void pla::KSpecs::setSpecs()
 	mresistant = static_cast<float>(features[MAGIC_RESISTANT]);
 	velocity = MAX_ALPHA + MAX_ALPHA * static_cast<float>(features[MOVEMENT_SPEED]) / 100;
 	hvelocity = velocity / 2;
-	gravity = 1;	// change later
+	gravity = 0xFF;	// change later
 	damage = static_cast<float>(features[DAMAGE]);
 	mdamage = static_cast<float>(features[MAGIC_DAMAGE]);
 	luck = static_cast<float>(features[LUCK]);
