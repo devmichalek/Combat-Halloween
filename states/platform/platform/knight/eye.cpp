@@ -107,12 +107,19 @@ void pla::Eye::mechanics(const float &elapsedTime, const sf::Rect<int> &rect, co
 		sprite.move(0, -elapsedTime * (sprite.getY() - (rect.top - sprite.getHeight() + distance_y)) * 2);
 
 	// X.
-	if (sprite.getX() < rect.left - sprite.getWidth())
+	if (sprite.getX() < rect.left - rect.width)
+	{
+		scale_x = -0.5f;
 		sprite.move(elapsedTime *((rect.left - sprite.getWidth() / 2) - sprite.getX()) * 2, 0);
-	else if (sprite.getX() > rect.left - sprite.getWidth())
+	}
+	else if (sprite.getX() + sprite.getWidth() > rect.left + rect.width)
+	{
+		scale_x = 0.5f;
 		sprite.move(-elapsedTime * (sprite.getX() - (rect.left - sprite.getWidth() / 2)) * 2, 0);
+	}
+		
 
-	scale_x = align ? 0.5f : -0.5f;
+	//scale_x = align ? 0.5f : -0.5f;
 	sprite.setScale(scale_x, 0.5f);
 
 
@@ -169,5 +176,5 @@ float pla::Eye::getViewX()
 float pla::Eye::getViewY()
 {
 	float y = view.getCenter().y - view.getSize().y / 2;
-	return y < 0 ? 0 : y;
+	return y > 0 ? 0 : -y;
 }
