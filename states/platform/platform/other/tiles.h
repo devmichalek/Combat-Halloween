@@ -16,7 +16,6 @@ namespace pla
 		bool collision;
 		sf::RectangleShape rect;
 #endif
-		sf::Vector2i last;
 		char** tiles;
 		char** untiles;	// unvisible tiles
 		std::vector <cmm::Sprite*> sprites;
@@ -37,9 +36,5 @@ namespace pla
 #endif
 		bool checkCollisionV(sf::Rect<int> &rect, const float &x, const float &y, const char add = 0); // vertical
 		bool checkCollisionH(sf::Rect<int> &rect, const float &x, const float &y, const char add = 0); // horizontal
-
-		// get last 
-		float getTop();
-		float getLeft();
 	};
 }

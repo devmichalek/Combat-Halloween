@@ -61,7 +61,7 @@ namespace pla
 		void rest();
 		void gravity(const float &elapsedTime);		void undoGravity(const float &elapsedTime);
 		void read(std::string &str);
-		void setVolume(float volume);
+		//void setVolume(float volume);
 
 	private:
 		void walk(const double &elapsedTime);
