@@ -1,5 +1,6 @@
 #pragma once
 #include "landscape.h"
+#include "eventwindow.h"
 #include "text.h"
 
 namespace ee // Editor Entity
