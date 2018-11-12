@@ -260,8 +260,9 @@ void Platform::mechanics(const double &elapsedTime)
 		char direction = 0;
 		const float floatElapsedTime = static_cast<float>(elapsedTime);
 		knight.mechanics(floatElapsedTime);
+
 		knight.gravity(floatElapsedTime);
-		if (tiles.checkCollisionV(knight.getRect(), eye.getViewX(), eye.getViewY(), -1))
+		if (tiles.checkCollisionV(knight.getRect(), eye.getViewX(), eye.getViewY(), -3))
 			knight.undoGravity(floatElapsedTime);
 		
 		if (knight.moveLeft(floatElapsedTime))
