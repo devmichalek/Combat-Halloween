@@ -82,3 +82,9 @@ t:5 c:10 x:1000 y:250 id:-1 ai:(points:() radius:500.0 color:(1.0,0.7,0.0,2.0))
 t:5 c:10 x:1400 y:600 id:-1 ai:(points:() radius:300.0 color:(1.0,0.5,1.0,2.0))
 t:5 c:10 x:100 y:100 id:-1 ai:(points:() radius:200.0 color:(0.0,0.0,1.0,2.0))
 t:5 c:10 x:1200 y:400 id:-1 ai:(points:() radius:350.0 color:(1.0,0.8,1.0,2.0))
+t:1 c:8 x:864 y:576 id:-1 ai:
+t:1 c:8 x:992 y:640 id:-1 ai:
+t:1 c:8 x:832 y:736 id:-1 ai:
+t:1 c:8 x:672 y:800 id:-1 ai:
+t:1 c:8 x:544 y:896 id:-1 ai:
+t:1 c:8 x:384 y:960 id:-1 ai:
