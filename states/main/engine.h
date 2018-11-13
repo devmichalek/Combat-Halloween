@@ -16,7 +16,7 @@ class Engine final
 	std::vector<cmm::State*> states;
 	
 public:
-	Engine();
+	explicit Engine();
 	~Engine();
 	void loading_loop();
 	void main_loop();

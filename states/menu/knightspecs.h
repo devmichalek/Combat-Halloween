@@ -8,7 +8,7 @@
 #include "eventwindow.h"
 
 
-class Knightspecs final : public Specs
+class Knightspecs final : public cmm::Specs
 {
 	float screen_w;
 	float screen_h;

@@ -1,5 +1,4 @@
 #include "efilemanager.h"
-#include "dirent.h"
 
 
 EFileManager::EFileManager()
@@ -195,7 +194,7 @@ bool EFileManager::checkIfFileExists(std::string fileName)
 {
 	bool retCode = false;
 	file.open(dirPath + "/" + fileName, std::ios::in);
-	if (file.good())
+	if (file.is_open())
 	{
 		retCode = true;
 	}

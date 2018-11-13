@@ -129,38 +129,11 @@
     <ClCompile Include="..\platform\foe\foewrapper.cpp">
       <Filter>States\Platform\Foe</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\platform\kcoxing.cpp">
-      <Filter>States\Platform\Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\knight.cpp">
-      <Filter>States\Platform\Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\kspecs.cpp">
-      <Filter>States\Platform\Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\kstates.cpp">
-      <Filter>States\Platform\Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\eye.cpp">
-      <Filter>States\Platform\Knight</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\simulator.cpp">
-      <Filter>States\Platform\Simulator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\scontent.cpp">
-      <Filter>States\Platform\Simulator</Filter>
-    </ClCompile>
     <ClCompile Include="..\platform\foe\zombie.cpp">
       <Filter>States\Platform\Foe\Kind</Filter>
     </ClCompile>
     <ClCompile Include="..\platform\foe\skeleton.cpp">
       <Filter>States\Platform\Foe\Kind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\platform.cpp">
-      <Filter>States\Platform\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\moving_bg.cpp">
-      <Filter>States\Platform\Other</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\audio.cpp">
       <Filter>Common</Filter>
@@ -207,14 +180,47 @@
     <ClCompile Include="..\..\common\user.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\platform\landscape.cpp">
-      <Filter>States\Platform\Other</Filter>
-    </ClCompile>
-    <ClCompile Include="..\platform\platform\tiles.cpp">
-      <Filter>States\Platform\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\common\converter.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\light system\lightpoint.cpp">
+      <Filter>States\Platform\Light System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\light system\lightsystem.cpp">
+      <Filter>States\Platform\Light System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\other\landscape.cpp">
+      <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\knight\eye.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\knight\kcoxing.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\knight\knight.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\knight\kspecs.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\knight\kstates.cpp">
+      <Filter>States\Platform\Knight</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\other\movingbg.cpp">
+      <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\other\tiles.cpp">
+      <Filter>States\Platform\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\platform.cpp">
+      <Filter>States\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\simulator\scontent.cpp">
+      <Filter>States\Platform\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\platform\platform\simulator\simulator.cpp">
+      <Filter>States\Platform\Simulator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,17 +263,11 @@
     <Filter Include="States\Platform\Other">
       <UniqueIdentifier>{b5af4066-f8e5-4ff9-94c1-f6a7b060b969}</UniqueIdentifier>
     </Filter>
+    <Filter Include="States\Platform\Light System">
+      <UniqueIdentifier>{8ac84f36-6273-45da-b2c6-5b65a9d55ffa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="engine.h" />
-    <ClInclude Include="..\editor\eeknight.h">
-      <Filter>States\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\editor\eelandscape.h">
-      <Filter>States\Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\editor\eetile.h">
-      <Filter>States\Editor</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

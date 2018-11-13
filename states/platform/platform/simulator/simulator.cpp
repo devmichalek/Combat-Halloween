@@ -218,7 +218,7 @@ bool Simulator::prepare()
 		SContent::content.clear();
 		std::fstream file;
 		file.open(SContent::path);
-		if (file.good())
+		if (file.is_open())
 		{
 			std::string line = "";
 			while (std::getline(file, line))

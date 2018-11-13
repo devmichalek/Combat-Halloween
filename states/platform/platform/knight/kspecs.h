@@ -3,7 +3,7 @@
 
 namespace pla
 {
-	class KSpecs final : public Specs// Knight Specs
+	class KSpecs final : public cmm::Specs// Knight Specs
 	{
 	public:
 		float hp;

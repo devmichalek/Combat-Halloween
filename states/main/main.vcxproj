@@ -55,7 +55,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\platform;..\platform\foe</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\platform;..\platform\foe;..\platform\platform\knight;..\platform\platform\light system;..\platform\platform\other;..\platform\platform\simulator</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -65,7 +65,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;sfml-main.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\SFML\lib;..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
       <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>
@@ -144,24 +144,23 @@
     <ClCompile Include="..\platform\foe\foewrapper.cpp" />
     <ClCompile Include="..\platform\foe\skeleton.cpp" />
     <ClCompile Include="..\platform\foe\zombie.cpp" />
-    <ClCompile Include="..\platform\platform\eye.cpp" />
-    <ClCompile Include="..\platform\platform\kcoxing.cpp" />
-    <ClCompile Include="..\platform\platform\knight.cpp" />
-    <ClCompile Include="..\platform\platform\kspecs.cpp" />
-    <ClCompile Include="..\platform\platform\kstates.cpp" />
-    <ClCompile Include="..\platform\platform\landscape.cpp" />
-    <ClCompile Include="..\platform\platform\moving_bg.cpp" />
+    <ClCompile Include="..\platform\platform\knight\eye.cpp" />
+    <ClCompile Include="..\platform\platform\knight\kcoxing.cpp" />
+    <ClCompile Include="..\platform\platform\knight\knight.cpp" />
+    <ClCompile Include="..\platform\platform\knight\kspecs.cpp" />
+    <ClCompile Include="..\platform\platform\knight\kstates.cpp" />
+    <ClCompile Include="..\platform\platform\light system\lightpoint.cpp" />
+    <ClCompile Include="..\platform\platform\light system\lightsystem.cpp" />
+    <ClCompile Include="..\platform\platform\other\landscape.cpp" />
+    <ClCompile Include="..\platform\platform\other\movingbg.cpp" />
+    <ClCompile Include="..\platform\platform\other\tiles.cpp" />
     <ClCompile Include="..\platform\platform\platform.cpp" />
-    <ClCompile Include="..\platform\platform\scontent.cpp" />
-    <ClCompile Include="..\platform\platform\simulator.cpp" />
-    <ClCompile Include="..\platform\platform\tiles.cpp" />
+    <ClCompile Include="..\platform\platform\simulator\scontent.cpp" />
+    <ClCompile Include="..\platform\platform\simulator\simulator.cpp" />
     <ClCompile Include="engine.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\editor\eeknight.h" />
-    <ClInclude Include="..\editor\eelandscape.h" />
-    <ClInclude Include="..\editor\eetile.h" />
     <ClInclude Include="engine.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
