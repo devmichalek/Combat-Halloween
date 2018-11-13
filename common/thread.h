@@ -3,13 +3,13 @@
 
 namespace cmm
 {
-	struct Thread
+	struct Thread final
 	{
 		bool ready;		// ready to start next action
 		bool success;	// thread finished action with success
 		std::thread* thread;
 
-		Thread();
+		explicit Thread();
 		~Thread();
 		void free();
 		void reset();

@@ -1,5 +1,15 @@
 #include "music.h"
 
+cmm::Music::Music()
+{
+	// ...
+}
+
+cmm::Music::~Music()
+{
+	// ...
+}
+
 void cmm::Music::stop()
 {
 	music->stop();

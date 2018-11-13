@@ -9,13 +9,13 @@ namespace cmm
 {
 	class Sprite : public sf::Drawable
 	{
-		struct TextureMap // to avoid duplicated textures
+		struct TextureMap final // to avoid duplicated textures
 		{
 			std::vector<std::string> paths;
 			std::vector<sf::Texture*> textures;
 			std::vector<sf::Texture*> unique_textures;
 
-			TextureMap();
+			explicit TextureMap();
 			~TextureMap();
 			sf::Texture* get(std::string &path);
 		};
@@ -28,7 +28,9 @@ namespace cmm
 		float alpha;
 
 	public:
-		Sprite();
+		explicit Sprite();
+		virtual ~Sprite();
+
 		std::string load(std::string path, int numOfOffsets = 1);
 		std::string loadRepeated(std::string path, float w, float h, bool borders = false);
 		std::string create(int w, int h);

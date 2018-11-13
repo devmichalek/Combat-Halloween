@@ -11,12 +11,12 @@ namespace cmm
 		inline static sf::Color color = BACKGROUND_COLOR;
 	public:
 		inline static bool open = false;	// State of the window.
-		StaticCore();
+		explicit StaticCore();
 		virtual ~StaticCore();
 		static sf::Vector2i getMousePosition();
 	};
 
-	class Core : public StaticCore
+	class Core /*final*/ : public StaticCore
 	{
 		float width;	// Screen width.
 		float height;	// Screen height.
@@ -30,12 +30,12 @@ namespace cmm
 		Core(int state = 0);
 		Core(int, sf::Color);
 		Core(int, sf::Uint8, sf::Uint8, sf::Uint8, sf::Uint8);
-		~Core();
+		virtual ~Core() override;
 		void free();
 		void close();
 
-		bool create(const char* title = "", int style = sf::Style::Titlebar | sf::Style::Close);
-		bool setIcon(const char* path);
+		virtual bool create(const char* title = "", int style = sf::Style::Titlebar | sf::Style::Close);
+		virtual bool setIcon(const char* path);
 
 		void clear() const;
 		void display() const;

@@ -11,6 +11,9 @@ namespace cmm
 		std::unique_ptr<sf::Music> music;
 
 	public:
+		explicit Music();
+		virtual ~Music() override;
+
 		void stop();
 		void play();
 		bool isPlaying() const;

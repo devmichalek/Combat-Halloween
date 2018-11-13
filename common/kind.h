@@ -16,5 +16,8 @@ namespace cmm
 			LIGHTPOINT,
 			AMOUNT
 		};
+
+		explicit Kind() {};
+		virtual ~Kind() {};
 	};
 }

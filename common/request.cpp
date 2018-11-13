@@ -1,5 +1,15 @@
 #include "request.h"
 
+cmm::Request::Request()
+{
+	result = "";
+}
+
+cmm::Request::~Request()
+{
+	result.clear();
+}
+
 bool cmm::Request::sendRequest()
 {
 	sf::Http::Response response = http.sendRequest(request);

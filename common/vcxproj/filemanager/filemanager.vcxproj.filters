@@ -5,7 +5,6 @@
     <ClCompile Include="..\..\filemanager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\dirent.h" />
     <ClInclude Include="..\..\filemanager.h" />
   </ItemGroup>
 </Project>

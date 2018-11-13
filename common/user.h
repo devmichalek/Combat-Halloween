@@ -3,7 +3,7 @@
 
 namespace cmm
 {
-	class User
+	class User final
 	{
 	public:
 		static std::string username;

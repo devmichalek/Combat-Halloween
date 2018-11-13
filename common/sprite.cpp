@@ -50,6 +50,11 @@ cmm::Sprite::Sprite()
 	w = h = 0.0f;
 }
 
+cmm::Sprite::~Sprite()
+{
+	w = h = 0.0f;
+}
+
 std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 {
 	std::string out = "Error: Cannot properly create texture from \"" + path + "\".";

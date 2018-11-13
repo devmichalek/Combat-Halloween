@@ -17,7 +17,8 @@ namespace cmm
 
 		static std::vector<int> keys;
 	public:
-		Coxing();
+		explicit Coxing();
+		virtual ~Coxing();
 	};
 
 	class Keys : public Coxing
@@ -38,7 +39,10 @@ namespace cmm
 		};
 
 	public:
-		static void setKey(int which, int newKey);	// special for chat
+		explicit Keys();
+		virtual ~Keys() override;
+
+		static void setKey(int which, int newKey);	// special for chat class
 		static int getKey(int which);
 		static int getActiveKeysAmount();
 		void resetKeys();

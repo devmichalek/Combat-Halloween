@@ -11,12 +11,12 @@ namespace cmm
 
 	class Text : public sf::Drawable
 	{
-		struct FontMap
+		struct FontMap final
 		{
 			std::vector<std::string> paths;
 			std::vector<sf::Font*> fonts;
 
-			FontMap();
+			explicit FontMap();
 			~FontMap();
 			sf::Font* get(std::string &path);
 		};
@@ -26,6 +26,9 @@ namespace cmm
 		float alpha;
 
 	public:
+		explicit Text();
+		virtual ~Text();
+
 		const std::string getString() const; // cannot return with &
 		std::string setFont(std::string path);
 		void setText(std::string line);

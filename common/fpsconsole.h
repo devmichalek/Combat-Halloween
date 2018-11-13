@@ -14,10 +14,10 @@ namespace cmm
 		double counter;
 		double max;
 	public:
-		FPSConsole();
-		~FPSConsole();
-		void mechanics(const double &elapsedTime);
-		bool timePassed();
-		const float& getFPS();
+		explicit FPSConsole();
+		virtual ~FPSConsole();
+		virtual void mechanics(const double &elapsedTime);
+		virtual bool timePassed();
+		virtual const float& getFPS();
 	};
 }

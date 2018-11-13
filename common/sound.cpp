@@ -33,6 +33,16 @@ sf::SoundBuffer* cmm::Sound::BufferMap::get(std::string &path)
 	return nullptr;
 }
 
+cmm::Sound::Sound()
+{
+	// ...
+}
+
+cmm::Sound::~Sound()
+{
+	// ...
+}
+
 void cmm::Sound::stop()
 {
 	sound->stop();

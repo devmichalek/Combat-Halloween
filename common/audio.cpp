@@ -1,14 +1,44 @@
 #include "audio.h"
-#include "dirent.h"
-#include "definitions.h"
-#include <direct.h>
-#include <fstream>
 #include "converter.h"
+#include "definitions.h"
+#include <boost/filesystem.hpp>
+#include <fstream>
+
 
 bool cmm::SoundData::sound_playable = true;
 float cmm::SoundData::sound_volume = START_SOUND_VOLUME;
 bool cmm::MusicData::music_playable = true;
 float cmm::MusicData::music_volume = START_MUSIC_VOLUME;
+
+cmm::SoundData::SoundData()
+{
+	// ...
+}
+
+cmm::SoundData::~SoundData()
+{
+	// ...
+}
+
+cmm::MusicData::MusicData()
+{
+	// ...
+}
+
+cmm::MusicData::~MusicData()
+{
+	// ...
+}
+
+cmm::Audio::Audio()
+{
+	// ...
+}
+
+cmm::Audio::~Audio()
+{
+	// ...
+}
 
 const bool& cmm::Audio::isSoundPlayable()
 {
@@ -41,10 +71,9 @@ void cmm::Audio::resetAudio()
 
 void cmm::Audio::saveAudio()
 {
-	// Open directory
-	DIR* dir = opendir("local");
-	if (!dir)	// Create directory if it does not exist
-		_mkdir("local");
+	// Create directory if it does not exist
+	if (!boost::filesystem::is_directory("local"))
+		boost::filesystem::create_directories("local");
 
 	std::ofstream file;
 	file.open("local/audio.settings");
@@ -59,7 +88,7 @@ void cmm::Audio::loadAudio()
 {
 	std::fstream file;
 	file.open("local/audio.settings");
-	if (!file.good())	// file does not exist -> reset audio
+	if (!file.is_open())	// file does not exist -> reset audio
 	{
 		file.close();
 		resetAudio();

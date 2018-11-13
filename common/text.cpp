@@ -33,6 +33,16 @@ sf::Font* cmm::Text::FontMap::get(std::string &path)
 	return nullptr;
 }
 
+cmm::Text::Text()
+{
+	// ...
+}
+
+cmm::Text::~Text()
+{
+	// ...
+}
+
 const std::string cmm::Text::getString() const
 {
 	return text->getString();

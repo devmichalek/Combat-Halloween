@@ -4,7 +4,7 @@
 
 namespace cmm
 {
-	class Request
+	class Request final
 	{
 		sf::Http http;
 		std::string result;
@@ -12,6 +12,9 @@ namespace cmm
 		sf::Http::Response response;
 
 	public:
+		explicit Request();
+		~Request();
+
 		bool sendRequest();
 		const std::string& getResult() const;
 		void setHttp(std::string url);

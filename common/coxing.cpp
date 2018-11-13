@@ -1,13 +1,27 @@
 #include "coxing.h"
-#include "dirent.h"
-#include <direct.h>
 #include <fstream>
 #include <string>
 #include <boost/lexical_cast.hpp>
+#include <boost/filesystem.hpp>
 
 std::vector<int> cmm::Coxing::keys;
 
 cmm::Coxing::Coxing()
+{
+	//...
+}
+
+cmm::Coxing::~Coxing()
+{
+	//...
+}
+
+cmm::Keys::Keys()
+{
+	//...
+}
+
+cmm::Keys::~Keys()
 {
 	//...
 }
@@ -47,10 +61,9 @@ void cmm::Keys::resetKeys()
 
 void cmm::Keys::saveKeys()
 {
-	// Open directory
-	DIR* dir = opendir("local");
-	if (!dir)	// Create directory if it does not exist
-		_mkdir("local");
+	// Create directory if it does not exist
+	if (!boost::filesystem::is_directory("local"))
+		boost::filesystem::create_directories("local");
 
 	std::ofstream file;
 	file.open("local/keys.settings");

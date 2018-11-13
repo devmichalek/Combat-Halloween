@@ -1,5 +1,6 @@
 #include "filemanager.h"
-#include "dirent.h"
+#include <boost/filesystem.hpp>
+#include <boost/range/iterator_range.hpp>
 
 cmm::FileManager::FileManager()
 {
@@ -140,7 +141,7 @@ void cmm::FileManager::createPrivate(std::string &fileName, std::string &pathToD
 	std::string pathToFile = pathToDir + "/" + fileName;
 
 	file.open(pathToFile, std::ios::in);
-	if (file.good())
+	if (file.is_open())
 	{
 		msg = "File \"" + substr(fileName) + "\" exists,\noverwriting remotely...";
 		status = WARNING;
@@ -148,7 +149,7 @@ void cmm::FileManager::createPrivate(std::string &fileName, std::string &pathToD
 	file.close();
 
 	file.open(pathToFile, std::ios::out);
-	if (file.good())
+	if (file.is_open())
 	{
 		if (!refreshSupport(pathToDir, dirVec))
 		{
@@ -290,7 +291,7 @@ void cmm::FileManager::refreshPrivate(std::string &pathToDir, std::vector<std::s
 bool cmm::FileManager::saveSupport(std::string &pathToFile, std::vector<std::string> &guts)
 {
 	file.open(pathToFile, std::ios::out);
-	if (file.good())
+	if (file.is_open())
 	{
 		for (auto &it : guts)
 			file << it;
@@ -308,7 +309,7 @@ bool cmm::FileManager::saveSupport(std::string &pathToFile, std::vector<std::str
 bool cmm::FileManager::openSupport(std::string &pathToFile, std::vector<std::string> &guts)
 {
 	file.open(pathToFile, std::ios::in);
-	if (file.good())
+	if (file.is_open())
 	{
 		if (!guts.empty())
 			guts.clear();
@@ -335,22 +336,16 @@ bool cmm::FileManager::refreshSupport(std::string &pathToDir, std::vector<std::s
 		dirVec.clear();
 
 	// Open directory
-	DIR* dir = opendir(pathToDir.c_str());
-
-	if (!dir)	// Create directory if it does not exist
+	if (!boost::filesystem::is_directory(pathToDir))	// Create directory if it does not exist
 	{
-		_mkdir(pathToDir.c_str());
+		boost::filesystem::create_directories("local");
 		return false;
 	}
 	else
 	{
 		// Fill.
-		struct dirent* ent = nullptr;
-		while (ent = readdir(dir))
-			dirVec.push_back(ent->d_name);
-
-		// Close.
-		closedir(dir);
+		for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(pathToDir), {}))
+			dirVec.push_back(entry.path().string());
 		return true;
 	}
 }

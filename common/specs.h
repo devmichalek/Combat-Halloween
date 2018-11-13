@@ -1,23 +1,30 @@
 #pragma once
 #include <vector>
 
-class Specs
+namespace cmm
 {
-protected:
-	enum FEATURES
+	class Specs
 	{
-		HEART_POINTS = 0,
-		MAGIC_POINTS,
-		ARMOUR,
-		MAGIC_RESISTANT,
-		MOVEMENT_SPEED,
-		DAMAGE,
-		MAGIC_DAMAGE,
-		LUCK,
-		EXPERIENCE,
-		LEVEL,
-		SIZE
-	};
+	protected:
+		enum FEATURES
+		{
+			HEART_POINTS = 0,
+			MAGIC_POINTS,
+			ARMOUR,
+			MAGIC_RESISTANT,
+			MOVEMENT_SPEED,
+			DAMAGE,
+			MAGIC_DAMAGE,
+			LUCK,
+			EXPERIENCE,
+			LEVEL,
+			SIZE
+		};
 
-	static std::vector<int> features;
-};
+		static std::vector<int> features;
+
+	public:
+		explicit Specs();
+		virtual ~Specs();
+	};
+}

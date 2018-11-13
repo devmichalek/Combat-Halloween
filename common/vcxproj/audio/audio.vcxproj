@@ -42,7 +42,7 @@
       <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib;..\..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-audio-d.lib;freetype.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

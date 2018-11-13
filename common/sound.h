@@ -8,12 +8,12 @@ namespace cmm
 {
 	class Sound : public SoundData
 	{
-		struct BufferMap
+		struct BufferMap final
 		{
 			std::vector<std::string> paths;
 			std::vector<sf::SoundBuffer*> buffers;
 
-			BufferMap();
+			explicit BufferMap();
 			~BufferMap();
 			sf::SoundBuffer* get(std::string &path);
 		};
@@ -23,6 +23,9 @@ namespace cmm
 		std::unique_ptr<sf::Sound> sound;
 
 	public:
+		explicit Sound();
+		virtual ~Sound() override;
+
 		void stop();
 		void play();
 		const bool isPlaying() const;
