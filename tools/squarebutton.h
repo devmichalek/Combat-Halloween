@@ -6,8 +6,8 @@ class SquareButton final :public Button
 	bool pressed;
 
 public:
-	SquareButton();
-	~SquareButton();
+	explicit SquareButton();
+	~SquareButton() override;
 	void free();
 
 	void handle(const sf::Event &event);

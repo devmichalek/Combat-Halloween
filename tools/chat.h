@@ -37,7 +37,7 @@ class Chat final
 	cmm::Text arrow;
 
 public:
-	Chat();
+	explicit Chat();
 	~Chat();
 	void free();
 	void reset();

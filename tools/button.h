@@ -11,7 +11,7 @@ protected:
 	bool locked;
 
 public:
-	Button();
+	explicit Button();
 	virtual ~Button();
 	virtual void free() = 0;
 

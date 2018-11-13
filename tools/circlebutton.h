@@ -7,8 +7,8 @@ class CircleButton final :public Button
 	bool changed;
 
 public:
-	CircleButton();
-	~CircleButton();
+	explicit CircleButton();
+	~CircleButton() override;
 	void free();
 
 	bool handle(const sf::Event &event);

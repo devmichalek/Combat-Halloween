@@ -15,7 +15,7 @@ class VolumeButton final
 	bool minus_pressed;
 
 public:
-	VolumeButton();
+	explicit VolumeButton();
 	~VolumeButton();
 	void free();
 

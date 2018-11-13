@@ -23,7 +23,7 @@ class FPS final
 	float screen_h;
 
 public:
-	FPS();
+	explicit FPS();
 	~FPS();
 private:
 	void free();

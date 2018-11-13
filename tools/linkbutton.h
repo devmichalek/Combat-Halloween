@@ -6,8 +6,8 @@ class LinkButton final :public Button
 	std::string url;
 
 public:
-	LinkButton();
-	~LinkButton();
+	explicit LinkButton();
+	~LinkButton() override;
 	void free();
 
 	void handle(const sf::Event &event);

@@ -160,7 +160,7 @@ void Loading::isFileExist(std::string pathToFile)
 	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	std::ifstream infile(pathToFile);
-	bool status = infile.good();
+	bool status = infile.is_open();
 	if (status)
 	{
 		SetConsoleTextAttribute(hConsole, 2);

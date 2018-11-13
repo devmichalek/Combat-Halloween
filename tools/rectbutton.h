@@ -19,7 +19,7 @@ class RectButton final
 	std::vector <sf::RectangleShape> rects;
 
 public:
-	RectButton();
+	explicit RectButton();
 	~RectButton();
 	void free();
 

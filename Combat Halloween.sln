@@ -82,7 +82,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "h", "h", "{35E7F257-D1D8-46
 		common\core.h = common\core.h
 		common\coxing.h = common\coxing.h
 		common\definitions.h = common\definitions.h
-		common\dirent.h = common\dirent.h
 		common\eventwindow.h = common\eventwindow.h
 		common\filemanager.h = common\filemanager.h
 		common\fpsconsole.h = common\fpsconsole.h

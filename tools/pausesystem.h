@@ -14,7 +14,7 @@ class PauseSystem final
 	bool key_released;
 
 public:
-	PauseSystem();
+	explicit PauseSystem();
 	~PauseSystem();
 	void free();
 

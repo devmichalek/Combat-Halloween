@@ -26,7 +26,7 @@ class Loading final : public cmm::StaticCore, public cmm::State, public LoadingS
 	static cmm::Sprite progress_bar;
 	
 public:
-	Loading();
+	explicit Loading();
 	~Loading();
 private:
 	void free();
