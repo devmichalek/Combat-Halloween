@@ -39,10 +39,10 @@
       <ConformanceMode>true</ConformanceMode>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3rd-party\SFML\include;..\..\..\3rd-party\boost;..\..\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib;..\..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\3rd-party\SFML\lib;..\..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-audio-d.lib;freetype.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

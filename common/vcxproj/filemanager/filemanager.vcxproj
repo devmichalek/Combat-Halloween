@@ -47,10 +47,10 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>..\..\..\..\boost;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3rd-party\boost;..\..\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -48,11 +48,11 @@
       <PreprocessorDefinitions>
       </PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\..\..\boost;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3rd-party\SFML\include;..\..\..\3rd-party\boost;..\..\</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\3rd-party\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

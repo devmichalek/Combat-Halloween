@@ -55,7 +55,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\platform;..\platform\foe;..\platform\platform\knight;..\platform\platform\light system;..\platform\platform\other;..\platform\platform\simulator</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\3rd-party\SFML\include;..\..\3rd-party\boost;..\..\common;..\..\tools;..\init;..\menu;..\levelmenu;..\editor;..\platform\platform;..\platform\foe;..\platform\platform\knight;..\platform\platform\light system;..\platform\platform\other;..\platform\platform\simulator</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -65,7 +65,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>sfml-graphics.lib;sfml-window.lib;sfml-audio.lib;sfml-network.lib;sfml-system.lib;sfml-main.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\SFML\lib;..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\3rd-party\SFML\lib;..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
       <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>

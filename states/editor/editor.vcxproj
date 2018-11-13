@@ -38,7 +38,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\platform\foe;..\platform\platform\other;..\platform\platform\simulator</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\3rd-party\SFML\include;..\..\3rd-party\boost;..\..\common;..\..\tools;..\platform\foe;..\platform\platform\other;..\platform\platform\simulator</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <EnableModules>false</EnableModules>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -46,7 +46,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\SFML\lib;..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\3rd-party\SFML\lib;..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
     </Link>
     <ProjectReference>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>

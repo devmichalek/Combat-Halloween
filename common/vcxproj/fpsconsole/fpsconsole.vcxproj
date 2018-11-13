@@ -37,12 +37,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\..\SFML\include;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3rd-party\SFML\include;..\..\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\..\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\3rd-party\SFML\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

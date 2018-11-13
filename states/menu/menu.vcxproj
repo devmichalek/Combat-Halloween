@@ -73,12 +73,12 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\..\..\SFML\include;..\..\..\boost;..\..\common;..\..\tools;..\platform\knight</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\3rd-party\SFML\include;..\..\3rd-party\boost;..\..\common;..\..\tools;..\platform\knight</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\SFML\lib;..\..\..\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\3rd-party\SFML\lib;..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-audio-d.lib;sfml-network-d.lib;sfml-system-d.lib;freetype.lib;opengl32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
