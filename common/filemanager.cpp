@@ -345,7 +345,9 @@ bool cmm::FileManager::refreshSupport(std::string &pathToDir, std::vector<std::s
 	{
 		// Fill.
 		for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(pathToDir), {}))
-			dirVec.push_back(entry.path().string());
+		{
+			dirVec.push_back(entry.path().string().substr(6, entry.path().string().size() - 6));
+		}
 		return true;
 	}
 }
