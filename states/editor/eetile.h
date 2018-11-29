@@ -1,24 +1,25 @@
 #pragma once
-#include "eecollision.h"
+#include "eeentity.h"
 
-namespace ee // Editor Entity
+namespace ee
 {
-	class Tile final : public Collision
+	class Tile : public Entity
 	{
 		char** array;
 
 	public:
 		Tile();
-		~Tile();
-	private:
+		virtual ~Tile();
 		void free();
-	public:
-		void reset();	// empty the array
+		void reset();
 
-		void init();	// allocate
-		char get(const int &x, const int &y);
-		bool add(int &mouseX, int &mouseY, const int &chosen);
-		int remove(int &mouseX, int &mouseY);
-		bool checkCollision(sf::Rect<int> rect);
+		bool checkCollision(sf::Vector2i mouse);
+
+		void load(sf::Vector2f &screen, int amount);
+		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
+		bool add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai = "");
+		bool remove(sf::Vector2i &mouse);
 	};
+
+	//class UnvisibleTile final : public Tile {};
 }

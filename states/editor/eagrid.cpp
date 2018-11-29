@@ -35,7 +35,7 @@ void EAGrid::reset()
 {
 	grid = false;
 	change = false;
-	addX = addY = 0;
+	add = sf::Vector2i(0, 0);
 	gridX = gridY = -1;
 	mouseX = mouseY = -1;
 
@@ -216,14 +216,9 @@ void EAGrid::mechanics(bool deleteMode)
 
 
 
-const int& EAGrid::getAddX() const
+const sf::Vector2i& EAGrid::getAdd() const
 {
-	return addX;
-}
-
-const int& EAGrid::getAddY() const
-{
-	return addY;
+	return add;
 }
 
 
@@ -263,8 +258,8 @@ const bool& EAGrid::isActive() const
 
 void EAGrid::setText()
 {
-	int rx = (grid ? gridX : mouseX) + (addX * -1);
-	int ry = (grid ? gridY : mouseY) + addY;
+	int rx = (grid ? gridX : mouseX) + (add.x * -1);
+	int ry = (grid ? gridY : mouseY) + add.y;
 	std::string result = "x: " + std::to_string((int)rx);
 	result += " y: " + std::to_string((int)(ry * -1 + screen_h));
 	xyText.setText(result);
@@ -283,11 +278,11 @@ void EAGrid::checkArrows()
 
 	if (change)
 	{
-		if (arrows[LEFT]->isActive())	addX += offsetX;
-		if (arrows[RIGHT]->isActive())	addX -= offsetX;
-		if (arrows[TOP]->isActive())	addY -= offsetY;
-		if (arrows[BOT]->isActive())	addY += offsetY;
-		if (arrows[CENTER]->isActive()) addX = addY = 0;
+		if (arrows[LEFT]->isActive())	add.x += offsetX;
+		if (arrows[RIGHT]->isActive())	add.x -= offsetX;
+		if (arrows[TOP]->isActive())	add.y -= offsetY;
+		if (arrows[BOT]->isActive())	add.y += offsetY;
+		if (arrows[CENTER]->isActive()) add.x = add.y = 0;
 	}
 }
 
@@ -307,28 +302,28 @@ void EAGrid::setArrows()
 // ARROWS -------------------------------------------------------------------
 bool EAGrid::isAbleToGoLeft()
 {
-	return addX <= -offsetX;
+	return add.x <= -offsetX;
 }
 
 bool EAGrid::isAbleToGoRight()
 {
-	return addX >= -MAX_MAP_WIDTH + offsetX;
+	return add.x >= -MAX_MAP_WIDTH + offsetX;
 }
 
 bool EAGrid::isAbleToGoUp()
 {
-	return addY >= -MAX_MAP_HEIGHT + offsetY;
+	return add.y >= -MAX_MAP_HEIGHT + offsetY;
 }
 
 bool EAGrid::isAbleToGoDown()
 {
-	int a = addY;
+	int a = add.y;
 	int b = -offsetY;
 
-	return addY <= -offsetY;
+	return add.y <= -offsetY;
 }
 
 bool EAGrid::isAbleToCenter()
 {
-	return addX != 0 || addY != 0;
+	return add.x != 0 || add.y != 0;
 }

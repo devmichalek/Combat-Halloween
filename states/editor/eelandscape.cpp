@@ -2,41 +2,25 @@
 #include "loading.h"
 #include "converter.h"
 
-ee::LandscapeEntity::LandscapeEntity(int newID, char newChosen, float newScale)
+ee::LandscapeItem::LandscapeItem(int ID, char chosen, float scale)
 {
-	id = newID;
-	chosen = newChosen;
-	scale = newScale;
+	this->ID = ID;
+	this->chosen = chosen;
+	type = LANDSCAPE;
+	this->scale = scale;
+	ai = "";
+	position = sf::Vector2i(0, 0);
 }
 
-ee::LandscapeEntity::~LandscapeEntity()
+ee::LandscapeItem::~LandscapeItem()
 {
-	id = -1;
-	chosen = -1;
 	scale = 0.0f;
 }
 
-bool ee::LandscapeEntity::operator==(const LandscapeEntity &le) const
+
+
+void ee::LandscapeBoard::free()
 {
-	return id == le.id;
-}
-
-
-ee::Landscape::Landscape()
-{
-	tree = nullptr;
-	free();
-}
-
-ee::Landscape::~Landscape()
-{
-	free();
-}
-
-void ee::Landscape::free()
-{
-	screen_w = screen_h = 0;
-
 	if (!texts.empty())
 	{
 		for (auto &it : texts)
@@ -51,43 +35,15 @@ void ee::Landscape::free()
 	if (!rects.empty())
 		rects.clear();
 
-	min = 0.4f; // 40%
-	max = 1.0f; // 100%
-
-	reset();
+	if (!rect_states.empty())
+		rect_states.clear();
 }
 
-void ee::Landscape::reset()
+void ee::LandscapeBoard::load(const float &screen_w, const float &screen_h)
 {
-	last.second.id = -1;
-
-	active = false;
-	str = "";
-	w = h = 0;
-
-	if (tree)
-	{
-		delete tree;
-		tree = nullptr;
-	}
-}
-
-void ee::Landscape::init()
-{
-	reset();
-	tree = new LandscapeTree;
-}
-
-void ee::Landscape::load(const float &screen_w, const float &screen_h)
-{
-	free();
-	init();
-
-	this->screen_w = screen_w;
-	this->screen_h = screen_h;
-
 	Loading::add(board.load("images/other/splank.png"));
 	if (Loading::isError())	return;
+
 	board.setScale(screen_w / 5120, screen_h / 2880);
 
 	for (int i = 0; i < SIZE; ++i)
@@ -98,6 +54,7 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 		texts[i]->setSize(screen_h / 35);
 		texts[i]->setAlpha(MAX_ALPHA);
 	}
+
 	texts[SCALE]->setText("Scale:");
 	texts[SCALE_EDIT]->setText("");
 	texts[GLOBAL]->setText("Global Scale:");
@@ -108,6 +65,7 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 	Loading::add(plus.load("images/buttons/plus.png", 3));
 	Loading::add(minus.load("images/buttons/minus.png", 3));
 	if (Loading::isError())	return;
+
 	plus.setScale(screen_w / 3840, screen_h / 2160);
 	minus.setScale(screen_w / 3840, screen_h / 2160);
 
@@ -120,67 +78,8 @@ void ee::Landscape::load(const float &screen_w, const float &screen_h)
 	}
 }
 
-bool ee::Landscape::handle(const sf::Event &event)
+void ee::LandscapeBoard::draw(sf::RenderWindow* &window)
 {
-	if (!active)
-		return false;
-
-	if (event.type == sf::Event::MouseButtonPressed)
-	{
-		if (event.mouseButton.button == sf::Mouse::Left)
-		{
-			sf::Vector2i mouse(event.mouseButton.x, event.mouseButton.y);
-
-			for (size_t i = 0; i < rects.size(); ++i)
-			{
-				if (rects[i].contains(mouse))
-				{
-					rect_states[i] = true;
-					return false;
-				}
-			}
-
-			if (!board.checkCollision(mouse.x, mouse.y))
-			{
-				active = false;
-				for (auto it : rect_states)
-					it = false;
-
-				tree->insert(last);
-				active = false;
-				return true;
-			}
-		}
-	}
-	else if (event.type == sf::Event::MouseButtonReleased)
-	{
-		if (event.mouseButton.button == sf::Mouse::Left)
-		{
-			for (auto it : rect_states)
-				it = false;
-		}
-	}
-
-	if (event.type == sf::Event::KeyPressed)
-	{
-		if (event.key.code == sf::Keyboard::Escape)
-		{
-			tree->insert(last);
-			active = false;
-			return true;
-		}
-	}
-
-	return false;
-}
-
-void ee::Landscape::draw(sf::RenderWindow* &window, cmm::Sprite* &object, const int &addX, const int &addY)
-{
-	if (!active)
-		return;
-
-	setPosition(addX, addY);
-
 	window->draw(board);
 
 	for (auto &it : texts)
@@ -199,14 +98,213 @@ void ee::Landscape::draw(sf::RenderWindow* &window, cmm::Sprite* &object, const 
 		plus.setPosition(rects[i].left, rects[i].top);
 		window->draw(plus);
 	}
+}
 
-	object->setScale(last.second.scale, last.second.scale);
-	float tX = bg::get<0>(last.first.min_corner()) + addX;
-	float tY = (bg::get<1>(last.first.min_corner()) + addY + object->getHeight()) * -1 + screen_h;
-	object->setPosition(tX, tY);
-	object->setColor(cmm::GREEN_COLOR);
-	window->draw(*object);
-	object->setColor(cmm::LOADING_COLOR);	// set back
+
+
+ee::Landscape::Landscape()
+{
+	tree = nullptr;
+	free();
+}
+
+ee::Landscape::~Landscape()
+{
+	free();
+}
+
+void ee::Landscape::free()
+{
+	reset();
+
+	if (!sprites.empty())
+	{
+		for (auto &it : sprites)
+		{
+			delete it;
+			it = nullptr;
+		}
+
+		sprites.clear();
+	}
+
+	if (tree)
+	{
+		delete tree;
+		tree = nullptr;
+	}
+
+	board.free();
+
+	minScale = 0.4f;		// 40%
+	maxScale = 1.0f;		// 100%
+	allowDuplicates = true;
+	screen = sf::Vector2f(0.0f, 0.0f);
+}
+
+void ee::Landscape::reset()
+{
+	item.reset();
+	active = false;
+	modified = false;
+
+	if (tree)
+	{
+		delete tree;
+		tree = new LandscapeTree;
+	}
+
+	result.clear();
+}
+
+
+
+bool ee::Landscape::isModified()
+{
+	if (modified)
+	{
+		modified = false;
+		return true;
+	}
+
+	return false;
+}
+
+void ee::Landscape::setActive(bool active)
+{
+	this->active = active;
+	if (active)
+		setPosition();
+}
+
+const ee::Item ee::Landscape::getItem()
+{
+	Item* buf = dynamic_cast<Item*> (&item);
+	buf->ai = "(scale:" + cmm::floatToStr(item.scale) + ")";
+	return *buf;
+}
+
+cmm::Sprite* ee::Landscape::getSprite(const int &chosen)
+{
+	sprites[chosen]->setScale(globalScale, globalScale);
+	return sprites[chosen];
+}
+
+bool ee::Landscape::checkCollision(sf::Vector2i mouse)
+{
+	return false;
+}
+
+
+
+void ee::Landscape::load(sf::Vector2f &screen, int amount)
+{
+	free();
+
+	// Load sprites.
+	for (int i = 0; i < amount; ++i)
+	{
+		sprites.push_back(new cmm::Sprite());
+		Loading::add(sprites[i]->load("images/platform/landscape/" + std::to_string(i) + ".png"));
+		if (Loading::isError())	return;
+		sprites[i]->setScale(globalScale, globalScale);
+		sprites[i]->setAlpha(MAX_ALPHA);
+	}
+
+	// Build tree.
+	tree = new LandscapeTree;
+
+	this->screen = screen;
+
+	board.load(screen.x, screen.y);
+}
+
+void ee::Landscape::handle(const sf::Event &event)
+{
+	if (!active)
+		return;
+
+	if (event.type == sf::Event::MouseButtonPressed)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			sf::Vector2i mouse(event.mouseButton.x, event.mouseButton.y);
+
+			for (size_t i = 0; i < board.rects.size(); ++i)
+			{
+				if (board.rects[i].contains(mouse))
+				{
+					board.rect_states[i] = true;
+					return;
+				}
+			}
+
+			if (!board.board.checkCollision(mouse.x, mouse.y))
+			{
+				active = false;
+				for (auto it : board.rect_states)
+					it = false;
+
+				modified = true;
+				return;
+			}
+		}
+	}
+	else if (event.type == sf::Event::MouseButtonReleased)
+	{
+		if (event.mouseButton.button == sf::Mouse::Left)
+		{
+			for (auto it : board.rect_states)
+				it = false;
+		}
+	}
+
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Escape)
+		{
+			active = false;
+			modified = false;
+			return;
+		}
+	}
+}
+
+void ee::Landscape::draw(sf::RenderWindow* &window, sf::Vector2i &add)
+{
+	result.clear();
+	Box queryBox(Point(add.x, add.y), Point(add.x + screen.x, add.y + screen.y));
+	tree->query(bgi::intersects(queryBox), std::back_inserter(result));
+
+	int c;
+	float x = 0, y = 0;
+	BOOST_FOREACH(LandscapeBox const& item, result)
+	{
+		c = item.second.chosen;
+		sprites[c]->setScale(item.second.scale, item.second.scale);
+		x = bg::get<0>(item.first.min_corner()) + add.x;
+		y = (bg::get<1>(item.first.min_corner()) + add.y + sprites[c]->getHeight()) * -1 + screen.y;
+		sprites[c]->setPosition(x, y);
+		window->draw(*sprites[c]);
+	}
+
+	if (!active)
+		return;
+
+	setPosition(sf::Vector2i(add.x, add.y));
+
+	//if (item.ID != item.VOID)
+	{
+		sprites[item.chosen]->setScale(item.scale, item.scale);
+
+		float tX = item.position.x + add.x;
+		float tY = (item.position.y + add.y + sprites[item.chosen]->getHeight()) * -1 + screen.y;
+
+		sprites[item.chosen]->setPosition(tX, tY);
+		sprites[item.chosen]->setColor(cmm::GREEN_COLOR);
+		window->draw(*sprites[item.chosen]);
+		sprites[item.chosen]->setColor(cmm::LOADING_COLOR);	// set back
+	}
 }
 
 void ee::Landscape::mechanics(const double &elapsedTime)
@@ -215,151 +313,115 @@ void ee::Landscape::mechanics(const double &elapsedTime)
 		return;
 
 	float value = elapsedTime;
-	bool change = true;
 
-	if (rect_states[TOP_MINUS])
+	if (board.rect_states[board.TOP_MINUS])
 	{
-		last.second.scale -= value;
-		if (last.second.scale < min)
-			last.second.scale = min;
+		item.scale -= value;
+		if (item.scale < minScale)
+			item.scale = minScale;
 	}
-	else if (rect_states[TOP_PLUS])
+	else if (board.rect_states[board.TOP_PLUS])
 	{
-		last.second.scale += value;
-		if (last.second.scale > max)
-			last.second.scale = max;
+		item.scale += value;
+		if (item.scale > maxScale)
+			item.scale = maxScale;
 	}
-	else if (rect_states[BOT_MINUS])
+	else if (board.rect_states[board.BOT_MINUS])
 	{
 		globalScale -= value;
-		if (globalScale < min)
-			globalScale = min;
+		if (globalScale < minScale)
+			globalScale = minScale;
 	}
-	else if (rect_states[BOT_PLUS])
+	else if (board.rect_states[board.BOT_PLUS])
 	{
 		globalScale += value;
-		if (globalScale > max)
-			globalScale = max;
+		if (globalScale > maxScale)
+			globalScale = maxScale;
 	}
+}
+
+bool ee::Landscape::add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai)
+{
+	int w = sprites[chosen]->getWidth() * globalScale;
+	int h = sprites[chosen]->getWidth() * globalScale;
+
+	Box box(Point(mouse.x, mouse.y), Point(mouse.x + w, mouse.y + h));
+
+	LandscapeLeaf ll;
+	ll.chosen = chosen;
+	ll.ID = ID;
+	if(ai.empty())
+		ll.scale = globalScale;
 	else
-		change = false;
+		ll.scale = boost::lexical_cast<float>(ai.substr(ai.find("scale("), ai.size() - 7));
 
-	if (change)
-	{
-		int tX = bg::get<0>(last.first.min_corner());
-		int tY = bg::get<1>(last.first.min_corner());
-		Box newBox(Point(tX, tY), Point(tX + w * last.second.scale, tY + h * last.second.scale));
-		last.first = newBox;
-		setTexts();
-	}
-}
-
-
-
-const std::vector<ee::LandscapeBox> &ee::Landscape::get(const int &addX, const int &addY, const float &screen_w, const float &screen_h)
-{
-	result.clear();
-	Box queryBox(Point(addX, addY), Point(addX + screen_w, addY + screen_h));
-	tree->query(bgi::intersects(queryBox), std::back_inserter(result));
-	return result;
-}
-
-bool ee::Landscape::add(const Box &box, const LandscapeEntity &le)
-{
-	last = std::make_pair(box, le);
-	tree->insert(last);
+	tree->insert(std::make_pair(box, ll));
 	return true;
 }
 
-bool ee::Landscape::remove(int &mouseX, int &mouseY)
+bool ee::Landscape::unfold(sf::Vector2i &mouse)
 {
 	result.clear();
-	Box queryBox(Point(mouseX, mouseY), Point(mouseX + 1, mouseY + 1));
+	Box queryBox(Point(mouse.x, mouse.y), Point(mouse.x + 1, mouse.y + 1));
+	tree->query(bgi::intersects(queryBox), std::back_inserter(result));
+
+	if (!result.empty())
+	{
+		setActive(true);
+		return true;
+	}
+
+	return false;
+}
+
+bool ee::Landscape::remove(sf::Vector2i &mouse)
+{
+	result.clear();
+	Box queryBox(Point(mouse.x, mouse.y), Point(mouse.x + 1, mouse.y + 1));
 	tree->query(bgi::intersects(queryBox), std::back_inserter(result));
 	
 	if (!result.empty())
 	{
-		mouseX = bg::get<0>(result[0].first.min_corner());
-		mouseY = bg::get<1>(result[0].first.min_corner());
+		mouse.x = bg::get<0>(result[0].first.min_corner());
+		mouse.y = bg::get<1>(result[0].first.min_corner());
 		tree->remove(result[0]);
-		last = result[0];
-
-		// set oryginal 100% width and height
-		w = (bg::get<0>(last.first.max_corner()) - bg::get<0>(last.first.min_corner())) / last.second.scale;
-		h = (bg::get<1>(last.first.max_corner()) - bg::get<1>(last.first.min_corner())) / last.second.scale;
 		return true;
 	}
-	
+
 	return false;
 }
 
 
 
-const int& ee::Landscape::getLastID()
-{
-	return last.second.id;
-}
 
-ee::LandscapeBox ee::Landscape::getLast()
-{
-	return last;
-}
-
-void ee::Landscape::setPosition(const int addX, const int addY)
-{
-	board.setPosition(bg::get<0>(last.first.min_corner()) + addX, (bg::get<1>(last.first.min_corner()) + addY) * -1 + screen_h);
-	setTexts();
-	setRects();
-}
 
 void ee::Landscape::setTexts()
 {
-	texts[SCALE_EDIT]->setText(std::to_string(static_cast<int>(last.second.scale * 100)) + "%");
-	texts[GLOBAL_EDIT]->setText(std::to_string(static_cast<int>(globalScale * 100)) + "%");
-	texts[SCALE]->setPosition(board.getX() + screen_w / 256, board.getY() + screen_h / 144);
-	texts[SCALE_EDIT]->setPosition(texts[SCALE]->getRight() + screen_w / 256, texts[SCALE]->getY());
-	texts[GLOBAL]->setPosition(texts[SCALE]->getX(), texts[SCALE]->getBot() + screen_h / 144);
-	texts[GLOBAL_EDIT]->setPosition(texts[GLOBAL]->getRight() + screen_w / 256, texts[GLOBAL]->getY());
+	board.texts[board.SCALE_EDIT]->		setText(std::to_string(static_cast<int>(item.scale * 100)) + "%");
+	board.texts[board.GLOBAL_EDIT]->	setText(std::to_string(static_cast<int>(globalScale * 100)) + "%");
+
+	board.texts[board.SCALE]->			setPosition(board.board.getX() + screen.x / 256,					board.board.getY() + screen.y / 144);
+	board.texts[board.SCALE_EDIT]->		setPosition(board.texts[board.SCALE]->getRight() + screen.x / 256,	board.texts[board.SCALE]->getY());
+	board.texts[board.GLOBAL]->			setPosition(board.texts[board.SCALE]->getX(),						board.texts[board.SCALE]->getBot() + screen.y / 144);
+	board.texts[board.GLOBAL_EDIT]->	setPosition(board.texts[board.GLOBAL]->getRight() + screen.x / 256, board.texts[board.GLOBAL]->getY());
 }
 
 void ee::Landscape::setRects()
 {
-	rects[TOP_MINUS].left = board.getRight();
-	rects[TOP_MINUS].top = texts[SCALE]->getTop() + screen_h / 144;
-	rects[TOP_PLUS].left = rects[TOP_MINUS].left + rects[TOP_MINUS].width;
-	rects[TOP_PLUS].top = rects[TOP_MINUS].top;
+	board.rects[board.TOP_MINUS].left =		board.board.getRight();
+	board.rects[board.TOP_MINUS].top =		board.texts[board.SCALE]->getTop() + screen.y / 144;
+	board.rects[board.TOP_PLUS].left =		board.rects[board.TOP_MINUS].left + board.rects[board.TOP_MINUS].width;
+	board.rects[board.TOP_PLUS].top =		board.rects[board.TOP_MINUS].top;
 
-	rects[BOT_MINUS].left = rects[TOP_MINUS].left;
-	rects[BOT_MINUS].top = texts[GLOBAL]->getTop() + screen_h / 144;
-	rects[BOT_PLUS].left = rects[TOP_PLUS].left;
-	rects[BOT_PLUS].top = rects[BOT_MINUS].top;
+	board.rects[board.BOT_MINUS].left =		board.rects[board.TOP_MINUS].left;
+	board.rects[board.BOT_MINUS].top =		board.texts[board.GLOBAL]->getTop() + screen.y / 144;
+	board.rects[board.BOT_PLUS].left =		board.rects[board.TOP_PLUS].left;
+	board.rects[board.BOT_PLUS].top =		board.rects[board.BOT_MINUS].top;
 }
 
-
-
-void ee::Landscape::setActive(bool newActive)
+void ee::Landscape::setPosition(sf::Vector2i add)
 {
-	active = newActive;
-	if (active)
-	{
-		setPosition();
-	}
-}
-
-const bool& ee::Landscape::isActive() const
-{
-	return active;
-}
-
-const char& ee::Landscape::getChosen()
-{
-	return last.second.chosen;
-}
-
-void ee::Landscape::setAI(std::string &ai)
-{
-	if (ai.empty())
-	{
-		ai = "(scale:" + cmm::floatToStr(last.second.scale) + ")";
-	}
+	board.board.setPosition(item.position.x + add.x, (item.position.y + add.y) * -1 + screen.y);
+	setTexts();
+	setRects();
 }

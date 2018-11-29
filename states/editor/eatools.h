@@ -1,8 +1,9 @@
 #pragma once
 #include "text.h"
 #include "circlebutton.h"
+#include "eakind.h"
 
-class EATools final
+class EATools final : public EAKind
 {
 	int screen_w;
 	int screen_h;
@@ -11,7 +12,7 @@ class EATools final
 	{
 		DELETEKEY = 0,
 		HOTKEY,
-		COLLISIONKEY,
+		WHOLECOLLISIONKEY,
 		COUNT
 	};
 
@@ -23,28 +24,30 @@ class EATools final
 
 	cmm::Sprite checkedIcon;
 
+	bool change;
+	bool redBack;
 	float hotKeyCounter;
 	float hotKeyState;
 
 public:
 	EATools();
 	~EATools();
-private:
 	void free();
-public:
 	void reset();
-	void resetButtons();
 
 	void load(const float& screen_w, const float& screen_h);
-	bool handle(const sf::Event &event);
-	void drawTools(sf::RenderWindow* &window);
-	void draw(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &sprites, const int& chosen);
+	bool handle(const sf::Event &event, const int &amount);
+	void draw(sf::RenderWindow* &window);
+	void thumbnail(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory, const int& chosen);
 	void mechanics(const float &elapsedTime);
 
-	bool isDeleteKeyPressed();
-	bool isHotKeyPressed();
-	bool isCollisionKeyPressed();
-
+	bool isDeleteKeyPressed() const			{ return pressed[DELETEKEY]; }
+	bool isHotKeyPressed() const			{ return pressed[HOTKEY]; }
+	bool isWholeCollisionKeyPressed() const { return pressed[WHOLECOLLISIONKEY]; }
 	bool isHotKeyElapsed();
-	bool isDeleteMode() const;
+	bool isDeleteMode() const				{ return states[DELETEKEY] != 0; }
+	bool isChange();
+	bool& isRedBack()				{ return redBack; }
+	const int& getType() const		{ return type; }
+	const int& getChosen() const	{ return chosen; }
 };

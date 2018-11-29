@@ -22,7 +22,7 @@ class EAGrid final	// Editor Action Grid
 
 	bool grid, change;		// is grid ON/OFF, is view moved YES/NO
 	int offsetX, offsetY;	// values for addX and addY
-	int addX, addY;			// additional x and y (window view x y)
+	sf::Vector2i add;		// additional x and y (window view x y)
 	int gridX, gridY;		// calculated x y grid
 	int mouseX, mouseY;		// current mouse x and y
 	float screen_w, screen_h;
@@ -46,8 +46,7 @@ public:
 	void draw(sf::RenderWindow* &window);
 	void mechanics(bool deleteMode);
 
-	const int& getAddX() const;
-	const int& getAddY() const;
+	const sf::Vector2i& getAdd() const;
 	
 	// Get grid/mouse x,y
 	int getX() const;

@@ -2,23 +2,18 @@
 #include "state.h"
 #include "editornavigation.h"
 #include "editorfilemanager.h"
-#include "editoraction.h"
-// #include "editor_flare/editor_information.h"
-// #include "editor_flare/editor_details.h"
-// #include "editor_flare/editor_options.h"
-// #include "tiles_editor.h"
+#include "eafactory.h"
+#include "eagrid.h"
+#include "eainfo.h"
 
 class Editor final :public cmm::State
 {
 	bool loaded;
-	
 	EditorNavigation navigation;
 	EditorFileManager editorFileManager;
-	EditorAction editorAction;
-	// Editor_information editor_information;
-	// Editor_details editor_details;
-	// Editor_options editor_options;
-	// Tiles_editor tiles_editor;
+	EAFactory factory;
+	EAGrid grid;
+	EAInfo info;
 	
 public:
 	Editor();
@@ -35,8 +30,4 @@ public:
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
 	void setState(int &state);
-private:
-	// void fades(double elapsedTime);
-	// void fadein(float value = 1, int max = MAX_ALPHA);
-	// void fadeout(float value = 1, int min = 0);
 };

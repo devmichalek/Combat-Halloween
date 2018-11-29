@@ -1,6 +1,6 @@
 #include "editor.h"
 #include "scontent.h"
-#include "core.h" // StaticCore
+#include "loading.h"
 
 Editor::Editor()
 {
@@ -42,7 +42,9 @@ void Editor::reset()
 
 	navigation.reset();
 	editorFileManager.reset();
-	editorAction.reset();
+	factory.reset();
+	grid.reset();
+	info.reset();
 }
 
 
@@ -53,7 +55,12 @@ void Editor::load(const float &screen_w, const float &screen_h)
 
 	navigation.load(screen_w, screen_h);
 	editorFileManager.load(screen_w, screen_h);
-	editorAction.load(screen_w, screen_h);
+	factory.load(screen_w, screen_h);
+	grid.load(screen_w, screen_h);
+	info.load(screen_w, screen_h);
+
+	if (Loading::isError())	return;
+	reset();
 }
 
 void Editor::handle(const sf::Event &event)
@@ -64,7 +71,11 @@ void Editor::handle(const sf::Event &event)
 
 		if (!editorFileManager.isActive())
 		{
-			editorAction.handle(event);
+			if (!grid.handle(event))	// if arrow buttons are in use don't let user to put an entity
+			{
+				if (factory.handle(event, grid.getAdd()))
+					factory.setPosition(grid.getX(), grid.getY());
+			}
 		}
 
 		navigation.handle(event);
@@ -74,7 +85,9 @@ void Editor::handle(const sf::Event &event)
 void Editor::draw(sf::RenderWindow* &window)
 {
 	navigation.drawBG(window);
-	editorAction.draw(window);
+	factory.draw(window, grid.getAdd());
+	grid.draw(window);
+	info.draw(window);
 	navigation.draw(window);
 	editorFileManager.draw(window);
 }
@@ -82,8 +95,6 @@ void Editor::draw(sf::RenderWindow* &window)
 void Editor::mechanics(const double &elapsedTime)
 {
 	set();
-
-	// fades(elapsedTime);
 
 	if (!isState())
 	{
@@ -145,9 +156,16 @@ void Editor::mechanics(const double &elapsedTime)
 
 		if (!editorFileManager.isActive())
 		{
-			editorAction.mechanics(elapsedTime);
-		}
+			if (factory.isChange())
+			{
+				info.set(factory.getType(), factory.getChosen());
+				info.isGridNeeded() ? grid.turnOn() : grid.turnOff();
+			}
 
+			grid.mechanics(factory.isDeleteMode());
+			factory.setPosition(grid.getX(), grid.getY());
+			factory.mechanics(elapsedTime);
+		}
 	}
 }
 

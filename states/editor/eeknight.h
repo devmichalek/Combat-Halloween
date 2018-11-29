@@ -1,25 +1,37 @@
 #pragma once
-#include <SFML/Graphics/Rect.hpp>
+#include "eeentity.h"
+#include "text.h"
+#include "specs.h"
 
-namespace ee // Editor Entity
+namespace ee
 {
-	class Knight final
+	class KnightBoard
 	{
-		int ID;
-		sf::IntRect rect;
+
+	};
+
+	class Knight final : public Entity
+	{
+		sf::IntRect rect; // buffer
+
 	public:
 		Knight();
 		~Knight();
-	private:
 		void free();
-	public:
 		void reset();
 
-		void init(const int& w, const int& h);
-		bool add(const int& x, const int& y, const int& newID);
-		bool remove(int& x, int y);
-		sf::Vector2f get();	// pos x y
-		bool isSet();
-		const int& getID() const;
+		bool isModified();
+		void setActive(bool active);
+		const Item getItem();
+		virtual bool checkCollision(sf::Vector2i mouse);
+
+		void load(sf::Vector2f &screen, int amount);
+		void handle(const sf::Event &event);
+		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
+		void mechanics(const double &elapsedTime);
+
+		bool add(sf::Vector2i&, const int&, const int&, std::string = "");
+		bool remove(sf::Vector2i &mouse);
+		bool unfold(sf::Vector2i &mouse);
 	};
 }

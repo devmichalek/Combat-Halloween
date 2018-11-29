@@ -1,4 +1,5 @@
 #include "eeknight.h"
+#include "loading.h"
 
 ee::Knight::Knight()
 {
@@ -13,51 +14,104 @@ ee::Knight::~Knight()
 void ee::Knight::free()
 {
 	reset();
+	screen.x = screen.y = 0;
 }
 
 void ee::Knight::reset()
 {
-	rect.left = rect.top = -1;
+	item.reset();
 }
 
-void ee::Knight::init(const int& w, const int& h)
+bool ee::Knight::isModified()
 {
-	rect.width = w;
-	rect.height = h;
+	return false; // change if knight board is ready
 }
 
-bool ee::Knight::add(const int& x, const int& y, const int& newID)
+void ee::Knight::setActive(bool active)
 {
-	rect.left = x;
-	rect.top = y;
-	ID = newID;
+	this->active = active; // change if knight board is ready
+}
+
+const ee::Item ee::Knight::getItem()
+{
+	// add ai changes here later..
+	return item;
+}
+
+bool ee::Knight::checkCollision(sf::Vector2i mouse)
+{
+	rect.left = item.position.x;
+	rect.top = item.position.y;
+	return rect.contains(mouse.x, mouse.y);
+}
+
+void ee::Knight::load(sf::Vector2f &screen, int amount)
+{
+	free();
+	this->screen = screen;
+
+	// Load sprites. (1)
+	for (int i = 0; i < amount; ++i)
+	{
+		sprites.push_back(new cmm::Sprite());
+		Loading::add(sprites[i]->load("images/platform/knight/" + std::to_string(i) + ".png", 10));
+		if (Loading::isError())	return;
+		sprites[i]->setScale(0.45f, 0.45f);
+		sprites[i]->setAlpha(MAX_ALPHA);
+	}
+
+	rect.width = static_cast<int>(sprites[0]->getWidth());
+	rect.height = static_cast<int>(sprites[0]->getHeight());
+}
+
+void ee::Knight::handle(const sf::Event &event)
+{
+	// ...
+}
+
+void ee::Knight::draw(sf::RenderWindow* &window, sf::Vector2i &add)
+{
+	if (item.position.x != -1 && item.position.y != -1)
+	{
+		sprites[0]->setPosition(item.position.x + add.x, -(item.position.y + add.y) + screen.y);
+		window->draw(*sprites[0]);
+	}
+}
+
+void ee::Knight::mechanics(const double &elapsedTime)
+{
+
+}
+
+bool ee::Knight::add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai)
+{
+	if (!ai.empty())
+	{
+
+	}
+	else
+		item.ai = "";
+
+	item.ID = ID;
+	item.position = mouse;
+	item.type = cmm::Kind::KNIGHT;
+	item.chosen = chosen;
+
 	return true;
 }
 
-bool ee::Knight::remove(int& x, int y)
+bool ee::Knight::remove(sf::Vector2i &mouse)
 {
-	if (rect.contains(x, y))
+	if (checkCollision(mouse))
 	{
-		//x = rect.left;
-		//y = rect.top;
-		add(-1, -1, ID);	// same ID
+		add(mouse, item.ID, item.chosen, "");
 		return true;
 	}
-		
+
 	return false;
 }
 
-sf::Vector2f ee::Knight::get()
+bool ee::Knight::unfold(sf::Vector2i &mouse)
 {
-	return sf::Vector2f(static_cast<float>(rect.left), static_cast<float>(rect.top));
-}
-
-bool ee::Knight::isSet()
-{
-	return rect.left != -1 && rect.top != -1;
-}
-
-const int& ee::Knight::getID() const
-{
-	return ID;
+	return false; // change later
 }

@@ -63,6 +63,7 @@
     <ClCompile Include="..\..\common\music.cpp" />
     <ClCompile Include="..\..\common\request.cpp" />
     <ClCompile Include="..\..\common\sound.cpp" />
+    <ClCompile Include="..\..\common\specs.cpp" />
     <ClCompile Include="..\..\common\sprite.cpp" />
     <ClCompile Include="..\..\common\state.cpp" />
     <ClCompile Include="..\..\common\text.cpp" />
@@ -71,7 +72,6 @@
     <ClCompile Include="..\..\tools\button.cpp" />
     <ClCompile Include="..\..\tools\circlebutton.cpp" />
     <ClCompile Include="..\..\tools\loading.cpp" />
-    <ClCompile Include="..\platform\platform\other\landscape.cpp" />
     <ClCompile Include="..\platform\platform\simulator\scontent.cpp" />
     <ClCompile Include="eetile.cpp" />
     <ClCompile Include="eelandscape.cpp" />
@@ -83,7 +83,6 @@
     <ClCompile Include="eatools.cpp" />
     <ClCompile Include="econtent.cpp" />
     <ClCompile Include="editor.cpp" />
-    <ClCompile Include="editoraction.cpp" />
     <ClCompile Include="editorfilemanager.cpp" />
     <ClCompile Include="editornavigation.cpp" />
     <ClCompile Include="efmbuttons.cpp" />
@@ -95,6 +94,8 @@
     <ClCompile Include="messageboard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="eeentity.h" />
+    <ClInclude Include="eeitem.h" />
     <ClInclude Include="eetile.h" />
     <ClInclude Include="eelandscape.h" />
     <ClInclude Include="eeknight.h" />
@@ -106,10 +107,8 @@
     <ClInclude Include="eatools.h" />
     <ClInclude Include="econtent.h" />
     <ClInclude Include="editor.h" />
-    <ClInclude Include="editoraction.h" />
     <ClInclude Include="editorfilemanager.h" />
     <ClInclude Include="editornavigation.h" />
-    <ClInclude Include="eecollision.h" />
     <ClInclude Include="efmbuttons.h" />
     <ClInclude Include="efminfo.h" />
     <ClInclude Include="efmlibrary.h" />

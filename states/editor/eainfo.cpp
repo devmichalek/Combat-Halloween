@@ -227,7 +227,7 @@ std::string EAInfo::getDescriptionStr()
 	std::string line = tab + "None\n";
 
 	if (type == KNIGHT)
-		line = tab + "Knight is one and only character.\nGame starts at knight's x and y positon.";
+		line = tab + "Knight is one and only character.\nGame starts at knight's (x, y) positon.";
 	else if (type == TILE)
 		line = tab + "Tiles are the linchpin of the game.\nThese blocks interacts with knight.";
 	else if (type == UNVISIBLE_TILE)

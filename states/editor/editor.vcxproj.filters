@@ -34,23 +34,17 @@
     <Filter Include="Editor Action">
       <UniqueIdentifier>{0cf9005f-0a3c-408c-9c3a-a1d1acd4598b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Editor Action\Action">
-      <UniqueIdentifier>{ef2d7aad-3af8-4592-9217-c631e69b093b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor Action\Action\Entities">
-      <UniqueIdentifier>{799c9bf2-b0e0-418b-a71f-abbecbd452da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor Action\Action\Other">
-      <UniqueIdentifier>{50b6109c-3cf2-4cb6-8a51-70581c66eb03}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Editor Action\Grid">
-      <UniqueIdentifier>{84610a28-9bd7-4ae2-9753-02edc0ac7982}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Other">
       <UniqueIdentifier>{d1c98336-8e03-49cb-8ef8-98e7e0de5a48}</UniqueIdentifier>
     </Filter>
     <Filter Include="Dependencies\Other">
       <UniqueIdentifier>{98539d6d-d035-4a99-bd8c-717ef2f75b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor Action\Other">
+      <UniqueIdentifier>{50b6109c-3cf2-4cb6-8a51-70581c66eb03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Editor Action\Entities">
+      <UniqueIdentifier>{799c9bf2-b0e0-418b-a71f-abbecbd452da}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,26 +66,17 @@
     <ClCompile Include="efmtexteditor.cpp">
       <Filter>Editor File Manager\Text Editor</Filter>
     </ClCompile>
-    <ClCompile Include="editoraction.cpp">
-      <Filter>Editor Action</Filter>
-    </ClCompile>
-    <ClCompile Include="eagrid.cpp">
-      <Filter>Editor Action\Grid</Filter>
-    </ClCompile>
-    <ClCompile Include="eafactory.cpp">
-      <Filter>Editor Action\Action</Filter>
-    </ClCompile>
     <ClCompile Include="editornavigation.cpp">
       <Filter>Other</Filter>
     </ClCompile>
     <ClCompile Include="eainfo.cpp">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClCompile>
     <ClCompile Include="eahistory.cpp">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClCompile>
     <ClCompile Include="eatools.cpp">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClCompile>
     <ClCompile Include="econtent.cpp">
       <Filter>Editor File Manager\File Manager</Filter>
@@ -153,22 +138,28 @@
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
     <ClCompile Include="eelandscape.cpp">
-      <Filter>Editor Action\Action\Entities</Filter>
+      <Filter>Editor Action\Entities</Filter>
     </ClCompile>
     <ClCompile Include="eeknight.cpp">
-      <Filter>Editor Action\Action\Entities</Filter>
+      <Filter>Editor Action\Entities</Filter>
     </ClCompile>
     <ClCompile Include="eetile.cpp">
-      <Filter>Editor Action\Action\Entities</Filter>
+      <Filter>Editor Action\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\common\converter.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\platform\platform\other\landscape.cpp">
-      <Filter>Dependencies\Other</Filter>
-    </ClCompile>
     <ClCompile Include="..\platform\platform\simulator\scontent.cpp">
       <Filter>Dependencies\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\common\specs.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="eagrid.cpp">
+      <Filter>Editor Action\Other</Filter>
+    </ClCompile>
+    <ClCompile Include="eafactory.cpp">
+      <Filter>Editor Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -190,29 +181,20 @@
     <ClInclude Include="efmtexteditor.h">
       <Filter>Editor File Manager\Text Editor</Filter>
     </ClInclude>
-    <ClInclude Include="editoraction.h">
-      <Filter>Editor Action</Filter>
-    </ClInclude>
-    <ClInclude Include="eagrid.h">
-      <Filter>Editor Action\Grid</Filter>
-    </ClInclude>
-    <ClInclude Include="eafactory.h">
-      <Filter>Editor Action\Action</Filter>
-    </ClInclude>
     <ClInclude Include="editornavigation.h">
       <Filter>Other</Filter>
     </ClInclude>
     <ClInclude Include="eainfo.h">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClInclude>
     <ClInclude Include="eakind.h">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClInclude>
     <ClInclude Include="eahistory.h">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClInclude>
     <ClInclude Include="eatools.h">
-      <Filter>Editor Action\Action\Other</Filter>
+      <Filter>Editor Action\Other</Filter>
     </ClInclude>
     <ClInclude Include="econtent.h">
       <Filter>Editor File Manager\File Manager</Filter>
@@ -222,16 +204,25 @@
     </ClInclude>
     <ClInclude Include="editor.h" />
     <ClInclude Include="eelandscape.h">
-      <Filter>Editor Action\Action\Entities</Filter>
+      <Filter>Editor Action\Entities</Filter>
     </ClInclude>
     <ClInclude Include="eeknight.h">
-      <Filter>Editor Action\Action\Entities</Filter>
+      <Filter>Editor Action\Entities</Filter>
     </ClInclude>
     <ClInclude Include="eetile.h">
-      <Filter>Editor Action\Action\Entities</Filter>
+      <Filter>Editor Action\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="eecollision.h">
-      <Filter>Editor Action\Action\Entities</Filter>
+    <ClInclude Include="eeentity.h">
+      <Filter>Editor Action\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="eeitem.h">
+      <Filter>Editor Action\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="eagrid.h">
+      <Filter>Editor Action\Other</Filter>
+    </ClInclude>
+    <ClInclude Include="eafactory.h">
+      <Filter>Editor Action</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

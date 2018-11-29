@@ -1,32 +1,19 @@
 #pragma once
-#include "landscape.h"
-#include "eventwindow.h"
+#include "treedefinitions.h"
+#include "eeentity.h"
 #include "text.h"
 
-namespace ee // Editor Entity
+namespace ee
 {
-	struct LandscapeEntity final : public pla::LandscapeUnit
+	struct LandscapeItem final : public Item
 	{
-		int id;
-
-		LandscapeEntity(int newID = -1, char newChosen = 1, float newScale = 1.0f);
-		~LandscapeEntity();
-		bool operator==(const LandscapeEntity&) const;
+		float scale;
+		LandscapeItem(int ID = -1, char chosen = 1, float scale = 1.0f);
+		~LandscapeItem();
 	};
 
-	using LandscapeBox = std::pair<Box, LandscapeEntity>;
-	
-	class Landscape final
+	struct LandscapeBoard
 	{
-		float screen_w;
-		float screen_h;
-
-		typedef bgi::rtree<LandscapeBox, bgi::quadratic<16>> LandscapeTree;
-		LandscapeTree* tree;
-
-		std::vector<LandscapeBox> result;
-		LandscapeBox last;
-
 		enum TEXTS
 		{
 			SCALE = 0,
@@ -35,7 +22,6 @@ namespace ee // Editor Entity
 			GLOBAL_EDIT,
 			SIZE
 		};
-		std::vector<cmm::Text*> texts;
 
 		enum RECTS
 		{
@@ -44,6 +30,8 @@ namespace ee // Editor Entity
 			TOP_PLUS,
 			BOT_PLUS
 		};
+
+		std::vector<cmm::Text*> texts;
 		std::vector<bool> rect_states;
 		std::vector<sf::Rect<int>> rects;
 
@@ -51,40 +39,57 @@ namespace ee // Editor Entity
 		cmm::Sprite plus;
 		cmm::Sprite minus;
 
+		void free();
+		void load(const float &screen_w, const float &screen_h);
+		void draw(sf::RenderWindow* &window);
+	};
+
+	struct LandscapeLeaf
+	{
+		int ID;
+		int chosen;
+		float scale;
+		bool operator==(const LandscapeLeaf &ll) const { return ID == ll.ID; }
+	};
+
+	class Landscape final : public Entity
+	{
+		using LandscapeBox = std::pair<Box, LandscapeLeaf>; // Box + LandscapeLeaf
+		using LandscapeTree = bgi::rtree<LandscapeBox, bgi::quadratic<16>>;
+
+		LandscapeItem item;
+		LandscapeTree* tree;
+		LandscapeBoard board;
+		std::vector<LandscapeBox> result;
+		
+		float minScale;
+		float maxScale;
 		inline static float globalScale = 0.65f;
-		bool active;
-		std::string str;
-		float min, max;
-		float w, h;
+		bool modified;
 
 	public:
 		Landscape();
 		~Landscape();
-	private:
-		void free();
-	public:
-		void reset();	// empty the tree
+		void free();	// detroy the tree
+		void reset();	// destroy and create the tree
 
-		void init();	// builds tree
-		void load(const float &screen_w, const float &screen_h);
-		bool handle(const sf::Event &event);	// returns true if it was open
-		void draw(sf::RenderWindow* &window, cmm::Sprite* &object, const int &addX, const int &addY);
+		bool isModified();
+		void setActive(bool active = true);
+		const ee::Item getItem();
+		cmm::Sprite* getSprite(const int &chosen);
+		bool checkCollision(sf::Vector2i mouse);
+
+		void load(sf::Vector2f &screen, int amount);
+		void handle(const sf::Event &event);
+		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
 		void mechanics(const double &elapsedTime);
-
-		const std::vector<LandscapeBox>& get(const int &addX, const int &addY, const float &screen_w, const float &screen_h);
-		bool add(const Box &box, const LandscapeEntity &le);
-		bool remove(int &mouseX, int &mouseY);
-		const int& getLastID();			// get last deleted LandscapeBox's id
-		LandscapeBox getLast();
-
-		void setActive(bool newActive = true);
-		const bool& isActive() const;
-		const char& getChosen();
-		void setAI(std::string &ai);
-		static float getGlobalScale() { return globalScale; }
+		bool add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai = "");
+		bool remove(sf::Vector2i &mouse);
+		bool unfold(sf::Vector2i &mouse);
 
 	private:
-		void setPosition(const int addX = 0, const int addY = 0);	// x y for board
+
+		void setPosition(sf::Vector2i add = sf::Vector2i(0, 0));
 		void setTexts();
 		void setRects();
 	};
