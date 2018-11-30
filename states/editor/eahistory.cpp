@@ -13,15 +13,7 @@ EAHistory::~EAHistory()
 
 void EAHistory::free()
 {
-	reset();
 	clear();
-}
-
-void EAHistory::reset()
-{
-	ctrl_key = false;
-	z_key = false;
-	undoState = false;
 }
 
 void EAHistory::clear()
@@ -38,17 +30,8 @@ void EAHistory::clear()
 
 void EAHistory::clear_local()
 {
-	if (!ids.empty())
-		ids.clear();
-
-	if (!xy.empty())
-		xy.clear();
-
-	if (!tc.empty())
-		tc.clear();
-
-	if (!ai.empty())
-		ai.clear();
+	if (!items.empty())
+		items.clear();
 
 	index = -1;
 }
@@ -70,63 +53,20 @@ void EAHistory::fill_local()
 	}
 
 	counterID = 0;
-	int id, x, y;
-	char t, c;
-	int s2 = 2, s3 = 3;
-	std::string ai;
+	char two = 2;
+	char three = 3;
+	ee::Item item;
 	for (auto &it : content)
 	{
-		t = boost::lexical_cast<int>(it.substr(it.find("t:") + s2, it.find(" c:") - (it.find("t:") + s2)));
-		c = boost::lexical_cast<int>(it.substr(it.find("c:") + s2, it.find(" x:") - (it.find("c:") + s2)));
-		x = boost::lexical_cast<int>(it.substr(it.find("x:") + s2, it.find(" y:") - (it.find("x:") + s2)));
-		y = boost::lexical_cast<int>(it.substr(it.find("y:") + s2, it.find(" id:") - (it.find("y:") + s2)));
-		id = boost::lexical_cast<int>(it.substr(it.find("id:") + s3, it.find(" ai:") - (it.find("id:") + s3)));
-		ai = it.substr(it.find("ai:") + s3);
+		item.type = boost::lexical_cast<int>(it.substr(it.find("t:") + two, it.find(" c:") - (it.find("t:") + two)));
+		item.chosen = boost::lexical_cast<int>(it.substr(it.find("c:") + two, it.find(" x:") - (it.find("c:") + two)));
+		item.position.x = boost::lexical_cast<int>(it.substr(it.find("x:") + two, it.find(" y:") - (it.find("x:") + two)));
+		item.position.y = boost::lexical_cast<int>(it.substr(it.find("y:") + two, it.find(" id:") - (it.find("y:") + two)));
+		item.ID = boost::lexical_cast<int>(it.substr(it.find("id:") + three, it.find(" ai:") - (it.find("id:") + three)));
+		item.ai = it.substr(it.find("ai:") + three);
 
-		tc.push_back(std::make_pair(t, c));
-		xy.push_back(std::make_pair(x, y));
-		ids.push_back(id);
-		this->ai.push_back(ai);
+		items.push_back(item);
 		++counterID;
-	}
-}
-
-
-
-void EAHistory::handle(const sf::Event &event)
-{
-	if (event.type == sf::Event::KeyPressed)
-	{
-		int code = event.key.code;
-
-		if (code == sf::Keyboard::LControl)
-		{
-			ctrl_key = true;
-		}
-
-		if (!z_key && ctrl_key)
-		{
-			if (code == sf::Keyboard::Z)
-			{
-				z_key = true;
-				undoState = true;
-			}
-		}
-	}
-
-	if (event.type == sf::Event::KeyReleased)
-	{
-		int code = event.key.code;
-
-		if (code == sf::Keyboard::LControl)
-		{
-			ctrl_key = false;
-		}
-
-		if (code == sf::Keyboard::Z)
-		{
-			z_key = false;
-		}
 	}
 }
 
@@ -142,122 +82,80 @@ bool EAHistory::next()
 	return false;
 }
 
-void EAHistory::getXY(int &x, int &y)
+const ee::Item &EAHistory::getItem()
 {
-	x = xy[index].first;
-	y = xy[index].second;
-}
-
-void EAHistory::getTC(char &t, char &c)
-{
-	t = tc[index].first;
-	c = tc[index].second;
-}
-
-void EAHistory::getID(int &id)
-{
-	id = ids[index];
-}
-
-void EAHistory::getAI(std::string &ai)
-{
-	ai = this->ai[index];
+	return items[index];
 }
 
 
 
-void EAHistory::add(const int &t, const int &c, const int &x, const int &y, const std::string &ai, int ID)
+void EAHistory::add(const ee::Item &item)
 {
-	xy.push_back(std::make_pair(x, y));
-	tc.push_back(std::make_pair(t, c));
-	this->ai.push_back(ai);
-	ids.push_back(ID);
+	items.push_back(item);
 
-	content.push_back("t:" + std::to_string(t) + " "
-		+ "c:" + std::to_string(c) + " "
-		+ "x:" + std::to_string(x) + " "
-		+ "y:" + std::to_string(y) + " "
-		+ "id:" + std::to_string(ID) + " "
-		+ "ai:" + ai + "\n");
+	content.push_back("t:" + std::to_string(item.type) + " "
+		+ "c:" + std::to_string(item.chosen) + " "
+		+ "x:" + std::to_string(item.position.x) + " "
+		+ "y:" + std::to_string(item.position.y) + " "
+		+ "id:" + std::to_string(item.ID) + " "
+		+ "ai:" + item.ai + "\n");
 	saveVersion = 1;
 }
 
-bool EAHistory::undo(int &t, int &x, int &y)
+bool EAHistory::tryUndo(int &t, int &x, int &y)
 {
-	if (!undoState)
+	if (items.empty())
 		return false;
 
-	undoState = false;
+	int n = items.size() - 1;
+	x = items[n].position.x;
+	y = items[n].position.y;
 
-	if (xy.empty())
-		return false;
-
-	int n = xy.size() - 1;
-	x = xy[n].first;
-	y = xy[n].second;
-
-	t = tc[n].first;
+	t = items[n].type;
 
 	// Revert changes
-	ids.pop_back();
-	xy.pop_back();
-	tc.pop_back();
-	ai.pop_back();
+	items.pop_back();
 	content.pop_back();
 
 	saveVersion = 1;
 	return true;
 }
 
-void EAHistory::remove(int t, const int &c, const int &x, const int &y)	// we promise that the one we remove has no ID (ID = -1)
+void EAHistory::remove(const ee::Item &item)
 {
-	saveVersion = 1;
-	std::vector<int> resultXY;
-	for (unsigned i = 0; i < xy.size(); ++i)
+	if (item.ID != cmm::Kind::VOID)
 	{
-		if (xy[i].first == x && xy[i].second == y)
-			resultXY.push_back(i);
-	}
-
-	if (!resultXY.empty())	// easy task, only one entity with that position
-	{
-		for (unsigned i = 0; i < resultXY.size(); ++i)
+		for (int i = 0; i < items.size(); ++i)
 		{
-			ids.erase(ids.begin() + resultXY[i]);
-			xy.erase(xy.begin() + resultXY[i]);
-			tc.erase(tc.begin() + resultXY[i]);
-			ai.erase(ai.begin() + resultXY[i]);
-			content.erase(content.begin() + resultXY[i]);
+			if (items[i].ID == item.ID)
+			{
+				items.erase(items.begin() + i);
+				content.erase(content.begin() + i);
+				saveVersion = 1;
+				return;
+			}
+		}
+	}
+	else //  ID is unknown
+	{
+		std::vector<int> resultXY;
+		for (unsigned i = 0; i < items.size(); ++i)
+		{
+			if (items[i].position.x == item.position.x && items[i].position.y == item.position.y)
+				resultXY.push_back(i);
+		}
+
+		if (!resultXY.empty())
+		{
+			saveVersion = 1;
+			for (unsigned i = 0; i < resultXY.size(); ++i)
+			{
+				items.erase(items.begin() + resultXY[i]);
+				content.erase(content.begin() + resultXY[i]);
+			}
 		}
 	}
 }
-
-void EAHistory::removeByID(const int &ID)
-{
-	saveVersion = 1;
-	for (int i = 0; i < ids.size(); ++i)
-	{
-		if (ids[i] == ID)
-		{
-			ids.erase(ids.begin() + i);
-			xy.erase(xy.begin() + i);
-			tc.erase(tc.begin() + i);
-			ai.erase(ai.begin() + i);
-			content.erase(content.begin() + i);
-			break;
-		}
-	}
-}
-
-//void EAHistory::modify(const int &t, const int &c, const int &x, const int &y, const std::string &ai)	// we promise that the one we modify has no ID (ID = -1)
-//{
-//	saveVersion = 1;
-//}
-//
-//void EAHistory::modifyByID(const int &ID, const std::string &ai)
-//{
-//	saveVersion = 1;
-//}
 
 const int EAHistory::getNewID()
 {

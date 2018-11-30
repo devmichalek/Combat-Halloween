@@ -16,6 +16,9 @@ void EFMButtons::free()
 {
 	reset();
 
+	if (!states.empty())
+		states.clear();
+
 	if (!labels.empty())
 	{
 		for (auto &it : labels)
@@ -43,8 +46,8 @@ void EFMButtons::reset()
 {
 	active = false;
 
-	if (!states.empty())
-		states.clear();
+	for (auto it : states)
+		it = false;
 
 	fileButton.setActive(false);
 }

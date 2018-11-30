@@ -177,7 +177,7 @@ void ee::Landscape::setActive(bool active)
 		setPosition();
 }
 
-const ee::Item ee::Landscape::getItem()
+ee::Item ee::Landscape::getItem()
 {
 	Item* buf = dynamic_cast<Item*> (&item);
 	buf->ai = "(scale:" + cmm::floatToStr(item.scale) + ")";

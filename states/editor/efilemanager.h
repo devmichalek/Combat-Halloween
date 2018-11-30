@@ -32,6 +32,7 @@ public:
 	bool loadedIsChosen();
 	void push(const std::string &line);
 	void pop();
+	void optimize();
 
 	void save();
 	void open();

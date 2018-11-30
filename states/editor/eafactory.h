@@ -34,6 +34,6 @@ public:
 	void setPosition(float x, float y)	{ current = tools.getType() != cmm::Kind::VOID ? sf::Vector2f(x, y) : sf::Vector2f(0, 0); }
 
 private:
+	void add(ee::Item &data);
 	void remove(sf::Vector2i &position);
-	void add(sf::Vector2i &position, int type, int chosen);
 };

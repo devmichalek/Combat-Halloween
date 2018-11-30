@@ -61,6 +61,12 @@ void EATools::reset()
 
 	type = VOID;
 	chosen = 0;
+
+	ctrl_key = false;
+	z_key = false;
+	undoKeyCounter = 0.0f;
+	undoKeyState = 0.1f;
+
 	change = false;
 	redBack = false;
 
@@ -123,7 +129,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	checkedIcon.setAlpha(MAX_ALPHA / 1.5);
 }
 
-bool EATools::handle(const sf::Event &event, const int &amount)
+void EATools::handle(const sf::Event &event, const int &amount)
 {
 	for (int i = 0; i < COUNT; ++i)
 	{
@@ -134,7 +140,7 @@ bool EATools::handle(const sf::Event &event, const int &amount)
 			else if (states[i] == 2)		states[i] = pressed[i] ? 1 : 0;
 			type = cmm::Kind::VOID;
 			chosen = 0;
-			return true;
+			return;
 		}
 
 		if (event.type == sf::Event::KeyPressed)
@@ -214,7 +220,26 @@ bool EATools::handle(const sf::Event &event, const int &amount)
 		}
 	}
 
-	return false;
+	// Undo Ctrl + Z
+	if (event.type == sf::Event::KeyPressed)
+	{
+		int code = event.key.code;
+		if (code == sf::Keyboard::LControl)
+			ctrl_key = true;
+
+		if (!z_key && ctrl_key)
+		{
+			if (code == sf::Keyboard::Z)
+				z_key = true;
+		}
+	}
+
+	if (event.type == sf::Event::KeyReleased)
+	{
+		int code = event.key.code;
+		if (code == sf::Keyboard::LControl)	ctrl_key = false;
+		if (code == sf::Keyboard::Z)		z_key = false;
+	}
 }
 
 void EATools::draw(sf::RenderWindow* &window)
@@ -290,9 +315,14 @@ void EATools::thumbnail(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &sp
 
 void EATools::mechanics(const float &elapsedTime)
 {
-	if (pressed[HOTKEY])
+	if (pressed[HOTKEY] || (states[HOTKEY] && pressed[DELETEKEY]))
 	{
 		hotKeyCounter += elapsedTime;
+	}
+
+	if (z_key && ctrl_key)
+	{
+		undoKeyCounter += elapsedTime;
 	}
 
 	ee::Entity::getWholeCollision() = states[WHOLECOLLISIONKEY] != 0 ? true : false;
@@ -310,6 +340,17 @@ bool EATools::isHotKeyElapsed()
 		return true;
 	}
 		
+	return false;
+}
+
+bool EATools::isUndoKeyElapsed()
+{
+	if (undoKeyCounter > undoKeyState)
+	{
+		undoKeyCounter = 0.0f;
+		return true;
+	}
+
 	return false;
 }
 

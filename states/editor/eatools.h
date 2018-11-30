@@ -24,8 +24,17 @@ class EATools final : public EAKind
 
 	cmm::Sprite checkedIcon;
 
+	// ctrl + z
+	bool ctrl_key;
+	bool z_key;
+	float undoKeyCounter;
+	float undoKeyState;
+
+	// support
 	bool change;
 	bool redBack;
+
+	// hot key
 	float hotKeyCounter;
 	float hotKeyState;
 
@@ -36,15 +45,16 @@ public:
 	void reset();
 
 	void load(const float& screen_w, const float& screen_h);
-	bool handle(const sf::Event &event, const int &amount);
+	void handle(const sf::Event &event, const int &amount);
 	void draw(sf::RenderWindow* &window);
 	void thumbnail(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &factory, const int& chosen);
 	void mechanics(const float &elapsedTime);
 
 	bool isDeleteKeyPressed() const			{ return pressed[DELETEKEY]; }
-	bool isHotKeyPressed() const			{ return pressed[HOTKEY]; }
+	bool isHotKeyPressed() const			{ return pressed[HOTKEY] || (states[HOTKEY] && pressed[DELETEKEY]); }
 	bool isWholeCollisionKeyPressed() const { return pressed[WHOLECOLLISIONKEY]; }
 	bool isHotKeyElapsed();
+	bool isUndoKeyElapsed();
 	bool isDeleteMode() const				{ return states[DELETEKEY] != 0; }
 	bool isChange();
 	bool& isRedBack()				{ return redBack; }

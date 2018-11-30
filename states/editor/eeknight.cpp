@@ -32,17 +32,22 @@ void ee::Knight::setActive(bool active)
 	this->active = active; // change if knight board is ready
 }
 
-const ee::Item ee::Knight::getItem()
+ee::Item ee::Knight::getItem()
 {
 	// add ai changes here later..
 	return item;
 }
 
-bool ee::Knight::checkCollision(sf::Vector2i mouse)
+bool ee::Knight::checkCollision(sf::Vector2i &mouse)
 {
+	oblong.left = mouse.x;
+	oblong.top = mouse.y + (!wholeCollision ? rect.height : 0);
+	oblong.width = wholeCollision ? rect.width : 1;
+	oblong.height = wholeCollision ? rect.height : 1;
 	rect.left = item.position.x;
 	rect.top = item.position.y;
-	return rect.contains(mouse.x, mouse.y);
+
+	return rect.intersects(oblong);
 }
 
 void ee::Knight::load(sf::Vector2f &screen, int amount)
@@ -83,19 +88,19 @@ void ee::Knight::mechanics(const double &elapsedTime)
 
 }
 
-bool ee::Knight::add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai)
+bool ee::Knight::add(Item &data)
 {
-	if (!ai.empty())
+	if (!data.ai.empty())
 	{
 
 	}
 	else
 		item.ai = "";
 
-	item.ID = ID;
-	item.position = mouse;
+	item.ID = data.ID;
+	item.position = data.position;
 	item.type = cmm::Kind::KNIGHT;
-	item.chosen = chosen;
+	item.chosen = data.chosen;
 
 	return true;
 }
@@ -104,7 +109,8 @@ bool ee::Knight::remove(sf::Vector2i &mouse)
 {
 	if (checkCollision(mouse))
 	{
-		add(mouse, item.ID, item.chosen, "");
+		item.ai = "";
+		item.position = sf::Vector2i(-1, -1);
 		return true;
 	}
 

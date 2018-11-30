@@ -57,7 +57,7 @@ void ee::Tile::reset()
 
 
 
-bool ee::Tile::checkCollision(sf::Vector2i mouse)
+bool ee::Tile::checkCollision(sf::Vector2i &mouse)
 {
 	int x = mouse.x / TILE_WIDTH;
 	int y = mouse.y / TILE_HEIGHT;
@@ -67,9 +67,10 @@ bool ee::Tile::checkCollision(sf::Vector2i mouse)
 
 	bool cell = array[x][y] != item.VOID;
 	if ((!wholeCollision && cell) || cell)
-	{
+	//{
+		//mouse = sf::Vector2i(x, y);
 		return true; // this cell is occupied
-	}
+	//}
 	else if(wholeCollision)
 	{
 		// check surrounding
@@ -91,7 +92,10 @@ bool ee::Tile::checkCollision(sf::Vector2i mouse)
 					break;
 
 				if (array[j][i] != -1)
+				//{
+					//mouse = sf::Vector2i(x, y);
 					return true;
+				//}
 			}
 		}
 	}
@@ -146,10 +150,10 @@ void ee::Tile::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 	}
 }
 
-bool ee::Tile::add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai)
+bool ee::Tile::add(Item &data)
 {
-	int x = mouse.x / TILE_WIDTH;
-	int y = mouse.y / TILE_HEIGHT;
+	int x = data.position.x / TILE_WIDTH;
+	int y = data.position.y / TILE_HEIGHT;
 
 	if (x < MIN_TILE_MAP_WIDTH || x >= MAX_TILE_MAP_WIDTH || y < MIN_TILE_MAP_HEIGHT || y >= MAX_TILE_MAP_HEIGHT)
 		return false; // out of range
@@ -158,11 +162,11 @@ bool ee::Tile::add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::s
 		return false; // this cell is already occupied
 
 	item.ID = item.VOID;
-	item.chosen = chosen;
+	item.chosen = data.chosen;
 	item.type = item.TILE;
 	item.ai = "";
-	mouse = item.position = sf::Vector2i(x * TILE_WIDTH, y * TILE_HEIGHT);
-	array[x][y] = chosen;
+	data.position = item.position = sf::Vector2i(x * TILE_WIDTH, y * TILE_HEIGHT);
+	array[x][y] = data.chosen;
 	return true;
 }
 

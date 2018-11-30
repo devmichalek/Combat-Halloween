@@ -1,5 +1,6 @@
 #include "efilemanager.h"
-
+#include <boost/lexical_cast.hpp>
+#include "kind.h"
 
 EFileManager::EFileManager()
 {
@@ -108,6 +109,23 @@ void EFileManager::pop()
 	content.pop_back();
 }
 
+void EFileManager::optimize()
+{
+	std::string IDstr = "";
+	int ID = -1, counter = 0;
+	for (auto &it : content)
+	{
+		IDstr = it.substr(it.find("id:") + 3, it.find(" ai:") - (it.find("id:") + 3));
+		ID = boost::lexical_cast<int>(IDstr);
+
+		if (ID != cmm::Kind::VOID)
+		{
+			IDstr = boost::lexical_cast<std::string>(counter++);
+			int IDpos = it.find("id:") + 3;
+			it.replace(IDpos, (it.find(" ai:") - IDpos), IDstr);
+		}
+	}
+}
 
 
 // ACTIONS -----------------------------------------
@@ -203,8 +221,6 @@ bool EFileManager::checkIfFileExists(std::string fileName)
 	return retCode;
 }
 
-
-
 void EFileManager::freeThread()
 {
 	if (thread.ready)
@@ -225,6 +241,7 @@ void EFileManager::thread_save()
 	}
 	else
 	{
+		optimize(); // before saving
 		savePrivate(loadedFileName, content, dirPath, dirVec);
 
 		if (status == SUCCESS)
@@ -256,6 +273,7 @@ void EFileManager::thread_open()
 	else
 	{
 		openPrivate(chosenFileName, content, dirPath);
+		optimize(); // after loading
 
 		if (status == SUCCESS)
 		{

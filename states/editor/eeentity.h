@@ -28,12 +28,13 @@ namespace ee
 		virtual void reset()							= 0;
 
 		virtual bool isModified()							{ return false; }
+		virtual bool isOneAndOnly()							{ return false; } // like Knight
 		virtual void setActive(bool active)					{ this->active = active; }
 		const bool& isActive() const						{ return active; }
-		virtual const Item getItem()						{ return item; }
+		virtual Item getItem()								{ return item; }
 		virtual cmm::Sprite* getSprite(const int &chosen)	{ return sprites[chosen]; }
 		std::vector<cmm::Sprite*> &getSprites()				{ return sprites; }
-		virtual bool checkCollision(sf::Vector2i mouse)		= 0;
+		virtual bool checkCollision(sf::Vector2i &mouse)	= 0;
 		static bool &getWholeCollision()					{ return wholeCollision; }
 		static void switchWholeCollision()					{ wholeCollision = !wholeCollision; }
 
@@ -42,7 +43,7 @@ namespace ee
 		virtual void draw(sf::RenderWindow* &window, sf::Vector2i &add)				= 0;
 		virtual void mechanics(const double &elapsedTime)							{}
 
-		virtual bool add(sf::Vector2i&, const int&, const int&, std::string = "")	= 0; // returns true if added correctly
+		virtual bool add(Item &data)												= 0; // returns true if added correctly
 		virtual bool remove(sf::Vector2i &mouse)									= 0; // returns true if deleted correctly
 		virtual bool unfold(sf::Vector2i &mouse)									{ return false; }
 	};

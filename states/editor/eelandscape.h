@@ -75,7 +75,7 @@ namespace ee
 
 		bool isModified();
 		void setActive(bool active = true);
-		const ee::Item getItem();
+		ee::Item getItem();
 		cmm::Sprite* getSprite(const int &chosen);
 		bool checkCollision(sf::Vector2i mouse);
 

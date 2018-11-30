@@ -13,11 +13,11 @@ namespace ee
 		void free();
 		void reset();
 
-		bool checkCollision(sf::Vector2i mouse);
+		bool checkCollision(sf::Vector2i &mouse);
 
 		void load(sf::Vector2f &screen, int amount);
 		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
-		bool add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai = "");
+		bool add(Item &data);
 		bool remove(sf::Vector2i &mouse);
 	};
 
