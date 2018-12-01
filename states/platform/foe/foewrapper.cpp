@@ -46,10 +46,7 @@ void FoeWrapper::incinerate()
 	}
 
 	if (!foes.empty())
-	{
 		foes.clear();
-		foes.shrink_to_fit();
-	}
 }
 
 
@@ -142,7 +139,7 @@ void FoeWrapper::process()
 						characterHasAttacked,
 						characterDamage,
 						characterHP,
-						characterArmour);
+						characterArmour );
 
 		// Draw
 		s = foe->getSpriteState();	// Foe's state e. g. IDLE, ATTACK etc.

@@ -30,7 +30,8 @@ void pla::KSpecs::freeSpecs()
 
 void pla::KSpecs::setSpecs()
 {
-	if (features.empty())	// happens while testing
+#ifdef __TEST__
+	if (features.empty())
 	{
 		features.push_back(20);
 		features.push_back(10);
@@ -43,6 +44,7 @@ void pla::KSpecs::setSpecs()
 		features.push_back(0);
 		features.push_back(1);
 	}
+#endif
 
 	// factors
 	hp = static_cast<float>(features[HEART_POINTS]);

@@ -53,20 +53,20 @@ void FoeFactory::load(const float &screen_w, const float &screen_h)
 	states.push_back(5);
 
 	// Skeleton
-	/*offsets.push_back(10);
+	offsets.push_back(10);
 	offsets.push_back(6);
 	offsets.push_back(8);
 	offsets.push_back(8);
 	offsets.push_back(8);
-	paths.push_back("images/platform/foes/type/skeleton/");*/
+	paths.push_back("images/platform/foes/type/skeleton/");
 
 	// Zombie
-	offsets.push_back(11);
+	/*offsets.push_back(11);
 	offsets.push_back(6);
 	offsets.push_back(10);
 	offsets.push_back(7);
 	offsets.push_back(8);
-	paths.push_back("images/platform/foes/type/zombie/");
+	paths.push_back("images/platform/foes/type/zombie/");*/
 
 	wrapper->load(paths, states, offsets);
 
