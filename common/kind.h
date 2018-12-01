@@ -2,9 +2,8 @@
 
 namespace cmm
 {
-	class Kind
+	struct Kind
 	{
-	public:
 		enum KIND
 		{
 			VOID = -1,
