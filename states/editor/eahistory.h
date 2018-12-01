@@ -24,6 +24,8 @@ public:
 
 	void add(const ee::Item &item);
 	bool tryUndo(int &t, int &x, int &y);
+	std::vector<ee::Item>::iterator getIteratorByID(const int &ID);
 	void remove(const ee::Item &item);
+	void modify(const ee::Item &item);
 	const int getNewID();
 };

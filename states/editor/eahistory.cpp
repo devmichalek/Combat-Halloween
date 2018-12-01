@@ -121,26 +121,42 @@ bool EAHistory::tryUndo(int &t, int &x, int &y)
 	return true;
 }
 
-void EAHistory::remove(const ee::Item &item)
+std::vector<ee::Item>::iterator EAHistory::getIteratorByID(const int &ID)
 {
-	if (item.ID != cmm::Kind::VOID)
+	std::vector<ee::Item>::iterator it = items.end();
+
+	if (ID != cmm::Kind::VOID)
 	{
-		for (int i = 0; i < items.size(); ++i)
+		for (it = items.begin(); it != items.end(); ++it)
 		{
-			if (items[i].ID == item.ID)
+			if ((*it).ID == ID)
 			{
-				items.erase(items.begin() + i);
-				content.erase(content.begin() + i);
-				saveVersion = 1;
-				return;
+				return it;
 			}
 		}
+	}
+
+	return it;
+}
+
+void EAHistory::remove(const ee::Item &item)
+{
+	auto it = getIteratorByID(item.ID);
+	if (it != items.end())
+	{
+		content.erase(content.begin() + std::distance(items.begin(), it));
+		items.erase(it);
+		saveVersion = 1;
+		return;
 	}
 	else //  ID is unknown
 	{
 		std::vector<int> resultXY;
 		for (unsigned i = 0; i < items.size(); ++i)
 		{
+			if (items[i].type != item.type || items[i].chosen != item.chosen)
+				continue;
+
 			if (items[i].position.x == item.position.x && items[i].position.y == item.position.y)
 				resultXY.push_back(i);
 		}
@@ -154,6 +170,59 @@ void EAHistory::remove(const ee::Item &item)
 				content.erase(content.begin() + resultXY[i]);
 			}
 		}
+	}
+}
+
+void EAHistory::modify(const ee::Item &item)
+{
+	auto it = getIteratorByID(item.ID);
+	if (it != items.end())
+	{
+		int index = std::distance(items.begin(), it);
+
+		items[index].ai = item.ai;
+		std::string new_one = "t:" + std::to_string(item.type) + " "
+			+ "c:" + std::to_string(item.chosen) + " "
+			+ "x:" + std::to_string(item.position.x) + " "
+			+ "y:" + std::to_string(item.position.y) + " "
+			+ "id:" + std::to_string(item.ID) + " "
+			+ "ai:" + item.ai + "\n";
+		content[index] = new_one;
+
+		saveVersion = 1;
+		return;
+	}
+	else //  ID is unknown
+	{
+		std::vector<int> result;
+		for (unsigned i = 0; i < items.size(); ++i)
+		{
+			if (items[i].type != item.type || items[i].chosen != item.chosen)
+				continue;
+
+			if (items[i].position.x == item.position.x && items[i].position.y == item.position.y)
+				result.push_back(i);
+		}
+
+		if (!result.empty()) // must not be empty
+		{
+			if(result.size() != 1)
+				assert(false);
+			
+			int index = result[0];
+			items[index].ai = item.ai;
+
+			std::string new_one = "t:" + std::to_string(item.type) + " "
+				+ "c:" + std::to_string(item.chosen) + " "
+				+ "x:" + std::to_string(item.position.x) + " "
+				+ "y:" + std::to_string(item.position.y) + " "
+				+ "id:" + std::to_string(item.ID) + " "
+				+ "ai:" + item.ai + "\n";
+			content[index] = new_one;
+			saveVersion = 1;
+		}
+		else
+			assert(false);
 	}
 }
 
