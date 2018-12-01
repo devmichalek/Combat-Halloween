@@ -13,7 +13,7 @@ class EAFactory final
 
 	sf::Vector2f screen;
 	sf::Vector2f current;
-	std::vector<int> amounts;
+	std::vector<int> amounts; // Number of types of entity.
 	std::vector<ee::Entity*> entities;
 
 public:

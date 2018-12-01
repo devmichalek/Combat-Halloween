@@ -52,39 +52,54 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	entities.push_back(new ee::Knight);
 	entities.push_back(new ee::Tile);
 	entities.push_back(new ee::UnvisibleTile);
-	//entities.push_back(new ee::Landscape);
+	entities.push_back(new ee::Landscape);
+	entities.shrink_to_fit();
 
 	amounts.push_back(1);	// Knight
 	amounts.push_back(21);	// Tile
 	amounts.push_back(21);	// Unvisible Tile
-	//amounts.push_back(14);	// Landscape
+	amounts.push_back(14);	// Landscape
+	amounts.shrink_to_fit();
 	for (size_t i = 0; i < amounts.size(); ++i)
 		entities[i]->load(screen, amounts[i]);
 }
 
 bool EAFactory::handle(const sf::Event &event, const sf::Vector2i &addi)
 {
-	// Type has to be different than VOID and need to be withing range.
-	char nwt = tools.getType() == cmm::Kind::VOID ? -1 : (amounts.size() > tools.getType() ? amounts[tools.getType()] : -1);
-	tools.handle(event, nwt);
-
 	// --- unfold ---
 	if (event.type == sf::Event::MouseButtonPressed)
 	{
 		if (event.mouseButton.button == sf::Mouse::Right)
 		{
-			sf::Vector2i mouse = sf::Vector2i(event.mouseButton.x + (addi.x * -1), event.mouseButton.y + screen.y + (addi.y * -1));
-
-			for (auto &it : entities)
-				if (it->unfold(mouse))
+			auto activeit = entities.end();
+			for (std::vector<ee::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+				if ((*it)->isActive())
+				{
+					activeit = it;
 					break;
+				}
+
+			sf::Vector2i mouse = sf::Vector2i(event.mouseButton.x + -addi.x, -event.mouseButton.y + screen.y + -addi.y);
+			for (auto &it : entities)
+				if (((activeit != entities.end() && it != (*activeit)) || activeit == entities.end()) && it->unfold(mouse))
+				{
+					it->setActive(true);
+					break;
+				}
 		}
 	}
 
 	for (auto &it : entities)
 		if (it->isActive())
+		{
+			it->handle(event);
 			return false;
+		}
 	// --- unfold ---
+
+	// Type has to be different than VOID and need to be withing range.
+	char nwt = tools.getType() == cmm::Kind::VOID ? -1 : (amounts.size() > tools.getType() ? amounts[tools.getType()] : -1);
+	tools.handle(event, nwt);
 
 	// Does mouse button or hot key is pressed?
 	bool pressed = false;
@@ -103,20 +118,16 @@ bool EAFactory::handle(const sf::Event &event, const sf::Vector2i &addi)
 			mouse = sf::Vector2i(event.mouseButton.x, event.mouseButton.y);
 			pressed = true;
 		}
-			
-
 	
+	// Prepare mouse position.
 	mouse.x = mouse.x + -addi.x;
 	mouse.y = -mouse.y +screen.y + -addi.y;
 
 	// Set Red Backlight
 	tools.isRedBack() = false;
-	for (auto &it : entities)
-		if (it->checkCollision(mouse))
-		{
+	if(tools.getType() != cmm::Kind::VOID)
+		if (entities[tools.getType()]->checkCollision(mouse))
 			tools.isRedBack() = true;
-			break;
-		}
 
 	// If there is no Red Backlight remove or add.
 	if (pressed)
@@ -156,12 +167,12 @@ void EAFactory::draw(sf::RenderWindow* &window, const sf::Vector2i &add)
 
 void EAFactory::mechanics(const double &elapsedTime)
 {
-	int t;
 	if (tools.isUndoKeyElapsed())
 	{
+		int type;
 		sf::Vector2i position;
-		if (history.tryUndo(t, position.x, position.y))
-			entities[t]->remove(position);
+		if (history.tryUndo(type, position.x, position.y))
+			entities[type]->remove(position);
 	}
 
 	if (history.isNewLoadVersion())	// clear everything and reload it
@@ -176,15 +187,28 @@ void EAFactory::mechanics(const double &elapsedTime)
 		while (history.next())
 		{
 			item = history.getItem();
-			if (entities[t]->add(item))
-				entities[t]->getItem();
+			if (entities[item.type]->add(item))
+				entities[item.type]->getItem();
 		}
 	}
 
 	tools.mechanics(elapsedTime);
 
 	for (auto &it : entities)
-		it->mechanics(elapsedTime);
+		if (it->isActive())
+		{
+			it->mechanics(elapsedTime);
+			break;
+		}
+
+	for (auto &it : entities)
+		if (it->isModified())
+		{
+			it->setActive(false); // to be sure
+			ee::Item item = it->getItem();
+			history.modify(item);
+			break;
+		}
 }
 
 void EAFactory::add(ee::Item &data)
