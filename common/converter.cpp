@@ -16,6 +16,17 @@ std::string cmm::floatToStr(float value)
 	return str;
 }
 
+std::string cmm::floatToStr(float value, int precision)
+{
+	std::string str = std::to_string(value);
+
+	size_t pos = str.find('.');
+	if (pos != std::string::npos)
+		str = str.substr(0, pos + 1 + precision);
+
+	return str;
+}
+
 std::string cmm::doubleToStr(double value)
 {
 	std::string str = std::to_string(value);
@@ -29,5 +40,16 @@ std::string cmm::doubleToStr(double value)
 
 	if (!str.empty() && str[str.size() - 1] == '.')
 		str += "0";
+	return str;
+}
+
+std::string cmm::doubleToStr(double value, int precision)
+{
+	std::string str = std::to_string(value);
+
+	size_t pos = str.find('.');
+	if (pos != std::string::npos)
+		str = str.substr(0, pos + 1 + precision);
+
 	return str;
 }

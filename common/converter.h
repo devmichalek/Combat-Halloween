@@ -5,5 +5,7 @@
 namespace cmm
 {
 	std::string floatToStr(float value);
+	std::string floatToStr(float value, int precision);
 	std::string doubleToStr(double value);
+	std::string doubleToStr(double value, int precision);
 }
