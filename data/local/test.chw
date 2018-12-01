@@ -62,7 +62,7 @@ t:1 c:14 x:1408 y:160 id:-1 ai:
 t:3 c:0 x:1199 y:220 id:4 ai:(scale:0.65)
 t:3 c:3 x:1362 y:207 id:5 ai:(scale:0.65)
 t:3 c:1 x:1347 y:318 id:6 ai:(scale:0.65)
-t:0 c:0 x:1202 y:489 id:7 ai:
+t:0 c:0 x:1202 y:660 id:7 ai:
 t:3 c:5 x:1420 y:441 id:8 ai:(scale:0.65)
 t:1 c:11 x:1408 y:288 id:-1 ai:
 t:1 c:11 x:1408 y:224 id:-1 ai:
