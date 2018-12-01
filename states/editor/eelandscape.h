@@ -31,8 +31,8 @@ namespace ee
 			BOT_PLUS
 		};
 
+		std::vector<bool> states;
 		std::vector<cmm::Text*> texts;
-		std::vector<bool> rect_states;
 		std::vector<sf::Rect<int>> rects;
 
 		cmm::Sprite board;
@@ -40,7 +40,7 @@ namespace ee
 		cmm::Sprite minus;
 
 		void free();
-		void load(const float &screen_w, const float &screen_h);
+		void load(sf::Vector2f &screen);
 		void draw(sf::RenderWindow* &window);
 	};
 
@@ -70,25 +70,24 @@ namespace ee
 	public:
 		Landscape();
 		~Landscape();
-		void free();	// detroy the tree
+		void free();	// destroy the tree
 		void reset();	// destroy and create the tree
 
 		bool isModified();
 		void setActive(bool active = true);
 		ee::Item getItem();
 		cmm::Sprite* getSprite(const int &chosen);
-		bool checkCollision(sf::Vector2i mouse);
+		bool checkCollision(sf::Vector2i &mouse);
 
 		void load(sf::Vector2f &screen, int amount);
 		void handle(const sf::Event &event);
 		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
 		void mechanics(const double &elapsedTime);
-		bool add(sf::Vector2i &mouse, const int &ID, const int &chosen, std::string ai = "");
+		bool add(Item &data);
 		bool remove(sf::Vector2i &mouse);
 		bool unfold(sf::Vector2i &mouse);
 
-	private:
-
+	private: // Board
 		void setPosition(sf::Vector2i add = sf::Vector2i(0, 0));
 		void setTexts();
 		void setRects();
