@@ -40,13 +40,25 @@ ee::Item ee::Knight::getItem()
 
 bool ee::Knight::checkCollision(sf::Vector2i &mouse)
 {
-	oblong.left = mouse.x;
-	oblong.top = mouse.y + (!wholeCollision ? rect.height : 0);
-	oblong.width = wholeCollision ? rect.width : 1;
-	oblong.height = wholeCollision ? rect.height : 1;
 	rect.left = item.position.x;
 	rect.top = item.position.y;
 
+	// here I added own implementation of contains()
+	// the reason: y is in correct axis where higher y values are going upwards.
+	if (!wholeCollision)
+	{
+		if (mouse.x < rect.left)				return false;
+		if (mouse.x > rect.left + rect.width)	return false;
+		if (mouse.y > rect.top)					return false;
+		if (mouse.y < rect.top - rect.height)	return false;
+		return true;
+	}
+	
+	sf::IntRect oblong;
+	oblong.left = mouse.x;
+	oblong.top = mouse.y;
+	oblong.width = rect.width;
+	oblong.height = rect.height;
 	return rect.intersects(oblong);
 }
 

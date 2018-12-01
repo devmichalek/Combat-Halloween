@@ -13,7 +13,6 @@ namespace ee
 	class Knight final : public Entity
 	{
 		sf::IntRect rect;
-		sf::IntRect oblong;
 
 	public:
 		Knight();
