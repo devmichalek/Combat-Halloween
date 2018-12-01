@@ -2,6 +2,7 @@
 #include "text.h"
 #include "circlebutton.h"
 #include "eakind.h"
+#include <SFML/Graphics/RectangleShape.hpp>
 
 class EATools final : public EAKind
 {
@@ -22,6 +23,8 @@ class EATools final : public EAKind
 	std::vector<int> states;
 	std::vector<int> keys;
 
+	// mark the chosen entity's element
+	sf::RectangleShape shape;
 	cmm::Sprite checkedIcon;
 
 	// ctrl + z

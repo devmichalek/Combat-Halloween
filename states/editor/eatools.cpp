@@ -123,6 +123,7 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	for (int i = 0; i < COUNT; ++i)
 		texts[i]->setPosition(buttons[i]->getLeft() + buttons[i]->getWidth() / 2 - texts[i]->getWidth() / 2, buttons[i]->getBot() + screen_w / 300.0f);
 
+	shape.setFillColor(cmm::DULL_IRON_COLOR);
 	Loading::add(checkedIcon.load("images/icons/checkedicon.png"));
 	if (Loading::isError()) return;
 	checkedIcon.setScale(0.3, 0.3);
@@ -272,8 +273,6 @@ void EATools::thumbnail(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &sp
 
 	for (unsigned i = 0; i < sprites.size(); ++i)
 	{
-		if (i != chosen)	sprites[i]->setAlpha(MAX_ALPHA / 1.5);
-
 		sprites[i]->setScale(0.3, 0.3); // 30% of oryginal
 		if (i != 0)
 		{
@@ -295,8 +294,14 @@ void EATools::thumbnail(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &sp
 			largestWidth = 0;
 		}
 
+		if (i == chosen)
+		{
+			shape.setSize(sf::Vector2f(sprites[i]->getWidth() * 1.05f, sprites[i]->getHeight() * 1.05f));
+			shape.setPosition(sf::Vector2f(sprites[i]->getX() - sprites[i]->getWidth() * 0.025f, sprites[i]->getY() - sprites[i]->getHeight() * 0.025f));
+			window->draw(shape);
+		}
+
 		window->draw(*sprites[i]);
-		sprites[i]->setAlpha(MAX_ALPHA); // set back
 	}
 
 	sprites[sprites.size() - 1]->setScale(scaleX, scaleY); // set back 50% of oryginal for the first one
