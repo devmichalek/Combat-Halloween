@@ -25,6 +25,8 @@ void EATools::free()
 			delete it;
 			it = nullptr;
 		}
+
+		buttons.clear();
 	}
 	
 	if (!texts.empty())
@@ -34,6 +36,8 @@ void EATools::free()
 			delete it;
 			it = nullptr;
 		}
+
+		texts.clear();
 	}
 	
 	if (!pressed.empty())
