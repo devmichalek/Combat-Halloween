@@ -231,7 +231,7 @@ std::string EAInfo::getDescriptionStr()
 	else if (type == TILE)
 		line = tab + "Tiles are the linchpin of the game.\nThese blocks interacts with knight.";
 	else if (type == UNVISIBLE_TILE)
-		line = tab + "Unvisible tiles are special. They get\nvisible after knight is standing on them.";
+		line = tab + "Unvisible tiles are getting visible\nafter the knight is standing on them.";
 	else if (type == LANDSCAPE)
 		line = tab + "Still Life objects do not interact\nwith anything. They just there.";
 	else if (type == FOE)
