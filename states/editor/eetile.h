@@ -5,6 +5,7 @@ namespace ee
 {
 	class Tile : public Entity
 	{
+	protected:
 		char** array;
 
 	public:
@@ -16,10 +17,15 @@ namespace ee
 		bool checkCollision(sf::Vector2i &mouse);
 
 		void load(sf::Vector2f &screen, int amount);
-		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
+		virtual void draw(sf::RenderWindow* &window, sf::Vector2i &add);
 		bool add(Item &data);
 		bool remove(sf::Vector2i &mouse);
 	};
 
-	//class UnvisibleTile final : public Tile {};
+	class UnvisibleTile final : public Tile
+	{
+	public:
+		void load(sf::Vector2f &screen, int amount);
+		void draw(sf::RenderWindow* &window, sf::Vector2i &add);
+	};
 }

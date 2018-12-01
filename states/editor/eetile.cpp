@@ -213,3 +213,50 @@ bool ee::Tile::remove(sf::Vector2i &mouse)
 
 	return removed;
 }
+
+void ee::UnvisibleTile::load(sf::Vector2f &screen, int amount)
+{
+	free();
+
+	this->screen = screen;
+
+	for (int i = 0; i < amount; ++i)
+	{
+		sprites.push_back(new cmm::Sprite());
+		Loading::add(sprites[i]->load("images/platform/tiles/" + std::to_string(i) + ".png"));
+		if (Loading::isError())	return;
+		sprites[i]->setScale(0.51f, 0.51f);
+		sprites[i]->setAlpha(MAX_ALPHA / 2);
+	}
+
+	if (!array)
+	{
+		array = new char*[MAX_TILE_MAP_WIDTH];
+		for (int i = 0; i < MAX_TILE_MAP_WIDTH; ++i)
+			array[i] = new char[MAX_TILE_MAP_HEIGHT];
+	}
+
+	reset();
+}
+
+void ee::UnvisibleTile::draw(sf::RenderWindow* &window, sf::Vector2i &add)
+{
+	int startX = -add.x / TILE_WIDTH;
+	int endX = -add.x + static_cast<int>(screen.x / TILE_WIDTH);
+	int startY = -add.y / TILE_HEIGHT;
+	int endY = -add.y + static_cast<int>(screen.y / TILE_HEIGHT);
+	char c;
+
+	for (int i = startX; i < endX; ++i)
+	{
+		for (int j = startY; j < endY; ++j)
+		{
+			c = array[i][j];
+			if (c != item.VOID)
+			{
+				sprites[c]->setPosition(i * TILE_WIDTH + add.x, ((j * TILE_HEIGHT + add.y) * -1) + screen.y - TILE_HEIGHT);
+				window->draw(*sprites[c]);
+			}
+		}
+	}
+}
