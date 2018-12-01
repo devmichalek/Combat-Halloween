@@ -3,9 +3,8 @@
 
 namespace cmm
 {
-	class Specs
+	struct Specs
 	{
-	protected:
 		enum FEATURES
 		{
 			HEART_POINTS = 0,
@@ -20,7 +19,7 @@ namespace cmm
 			LEVEL,
 			SIZE
 		};
-
+	protected:
 		static std::vector<int> features;
 
 	public:
