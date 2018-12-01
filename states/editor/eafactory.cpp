@@ -51,10 +51,12 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 	
 	entities.push_back(new ee::Knight);
 	entities.push_back(new ee::Tile);
+	entities.push_back(new ee::UnvisibleTile);
 	//entities.push_back(new ee::Landscape);
 
 	amounts.push_back(1);	// Knight
 	amounts.push_back(21);	// Tile
+	amounts.push_back(21);	// Unvisible Tile
 	//amounts.push_back(14);	// Landscape
 	for (size_t i = 0; i < amounts.size(); ++i)
 		entities[i]->load(screen, amounts[i]);
