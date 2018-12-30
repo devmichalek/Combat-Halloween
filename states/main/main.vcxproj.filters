@@ -78,9 +78,6 @@
     <ClCompile Include="..\editor\editor.cpp">
       <Filter>States\Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\editor\editoraction.cpp">
-      <Filter>States\Editor</Filter>
-    </ClCompile>
     <ClCompile Include="..\editor\editorfilemanager.cpp">
       <Filter>States\Editor</Filter>
     </ClCompile>
