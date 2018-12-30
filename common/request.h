@@ -4,6 +4,11 @@
 
 namespace cmm
 {
+	const std::string WEBSITE_PATH = "http://amichalek.pl/";
+	const std::string WEBSITE_SUBPATH = "/combathalloween/";
+	const std::string WEBSITE_FULLPATH = "http://amichalek.pl/combathalloween/";
+	const std::string GITHUB_FULLPATH = "https://github.com/devmichalek/Combat-Halloween";
+
 	class Request final
 	{
 		sf::Http http;
