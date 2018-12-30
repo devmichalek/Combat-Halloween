@@ -1,5 +1,6 @@
 #include "efmtexteditor.h"
 #include "loading.h"
+#include "filemanager.h"
 
 EFMTextEditor::EFMTextEditor()
 {
@@ -219,7 +220,7 @@ void EFMTextEditor::set(std::string info, std::string form, std::string written)
 
 std::string EFMTextEditor::get()
 {
-	return writtenText.getString() + ".chw";
+	return writtenText.getString() + cmm::LOCALFILE_EXTENSION;
 }
 
 bool EFMTextEditor::isMistake()

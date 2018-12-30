@@ -183,8 +183,8 @@ void Knightspecs::setValues()
 {
 	cmm::Request request;
 	request.setMessage("username=" + cmm::User::getUsername());
-	request.setRequest("/combathalloween/getters/getfeatures.php", sf::Http::Request::Post);
-	request.setHttp("http://amichalek.pl/");
+	request.setRequest(cmm::WEBSITE_SUBPATH + "getters/getfeatures.php", sf::Http::Request::Post);
+	request.setHttp(cmm::WEBSITE_PATH);
 
 	bool success = request.sendRequest();
 	if (success)

@@ -3,6 +3,7 @@
 #include "platform.h"
 #include "simulator.h"
 #include "scontent.h"
+#include "filemanager.h"
 
 cmm::Core* core = new cmm::Core(0, cmm::BACKGROUND_COLOR);
 std::vector<cmm::State*> states;
@@ -56,7 +57,7 @@ void loading_loop()
 void main_loop()
 {
 	SContent::type = SContent::TYPE::FILE;
-	SContent::path = "local/test.chw";
+	SContent::path = "local/test" + LOCALFILE_EXTENSION;
 	core->state = cmm::STATES::SIMULATOR; // Start test state
 
 	while (core->open)

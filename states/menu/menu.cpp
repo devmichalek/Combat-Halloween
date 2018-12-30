@@ -125,9 +125,9 @@ void Menu::load(const float &screen_w, const float &screen_h)
 	github.setPosition	(screen_w / 256, screen_h / 144);
 	scores.setPosition	(github.getRight() + screen_w / 256, screen_h / 144);
 	website.setPosition	(scores.getRight() + screen_w / 256, screen_h / 144);
-	github.setUrl		("https://github.com/devmichalek/Combat-Halloween");
+	github.setUrl		(cmm::GITHUB_FULLPATH);
 	scores.setUrl		("empty");
-	website.setUrl		("http://amichalek.pl/combathalloween/");
+	website.setUrl		(cmm::WEBSITE_FULLPATH);
 
 	// Main buttons.
 	singleplayerbutton.load			("images/buttons/singleplayer.png");

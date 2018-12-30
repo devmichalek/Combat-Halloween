@@ -150,8 +150,8 @@ void MenuInformation::setMoney()
 {
 	cmm::Request request;
 	request.setMessage("username=" + cmm::User::getUsername());
-	request.setRequest("/combathalloween/getters/getmoney.php", sf::Http::Request::Post);
-	request.setHttp("http://amichalek.pl/");
+	request.setRequest(cmm::WEBSITE_SUBPATH + "getters/getmoney.php", sf::Http::Request::Post);
+	request.setHttp(cmm::WEBSITE_PATH);
 
 	bool success = request.sendRequest();
 	if (success)

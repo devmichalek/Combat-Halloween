@@ -339,8 +339,8 @@ void Login::mechanics(const double &elapsedTime)
 
 	if (signupbutton.getClicked())
 	{
-		const char* command = "start http://amichalek.pl/combathalloween/user/register/registerform.php";
-		system(command);
+		std::string command = "start " + cmm::WEBSITE_FULLPATH + "user/register/registerform.php";
+		system(command.c_str());
 		signupbutton.getClicked() = false;
 	}
 	else if (forgetbutton.getClicked())
@@ -427,8 +427,8 @@ void Login::setThread()
 {
 	cmm::Request request;
 	request.setMessage("username=" + username + "&password=" + password);
-	request.setHttp("http://amichalek.pl/");
-	request.setRequest("/combathalloween/getters/request.php", sf::Http::Request::Post);
+	request.setHttp(cmm::WEBSITE_PATH);
+	request.setRequest(cmm::WEBSITE_SUBPATH + "getters/request.php", sf::Http::Request::Post);
 	
 	if (!request.sendRequest())
 	{

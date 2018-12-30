@@ -240,8 +240,8 @@ bool Simulator::prepare()
 		SContent::content.clear();
 		cmm::Request request;
 		request.setMessage(SContent::path);
-		request.setRequest("/combathalloween/getters/getworld.php", sf::Http::Request::Post);
-		request.setHttp("http://amichalek.pl/");
+		request.setRequest(cmm::WEBSITE_SUBPATH + "getters/getworld.php", sf::Http::Request::Post);
+		request.setHttp(cmm::WEBSITE_PATH);
 
 		bool success = request.sendRequest();
 		if (success)

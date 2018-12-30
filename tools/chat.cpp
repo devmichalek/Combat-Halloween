@@ -2,6 +2,7 @@
 #include "colors.h"
 #include "user.h"
 #include "loading.h"
+#include "request.h"
 #include "definitions.h"
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string.hpp>
@@ -337,7 +338,8 @@ bool Chat::isCommand()
 		}
 		else if (compCommand("@github"))
 		{
-			system("start https://github.com/devmichalek/Combat-Halloween");
+			std::string cmd = "start " + cmm::GITHUB_FULLPATH;
+			system(cmd.c_str());
 			return false;
 		}
 		else if (compCommand("@scores"))
@@ -347,7 +349,8 @@ bool Chat::isCommand()
 		}
 		else if (compCommand("@website"))
 		{
-			system("start http://amichalek.pl/combathalloween/");
+			std::string cmd = "start " + cmm::WEBSITE_FULLPATH;
+			system(cmd.c_str());
 			return false;
 		}
 		else if (compCommand("@fps"))
