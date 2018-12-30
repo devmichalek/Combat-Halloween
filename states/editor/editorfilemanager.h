@@ -57,7 +57,7 @@ private:
 	void newFile();
 	void openFile();
 	void saveFile();
-	// void uploadFile();
+	void uploadFile();
 	void copyFile();
 	void renameFile();
 	void deleteFile();

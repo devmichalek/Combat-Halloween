@@ -151,6 +151,17 @@ void EFileManager::open()
 	}
 }
 
+void EFileManager::upload()
+{
+	if (!thread.success && !thread.ready && !thread.thread)
+	{
+		status = PROCESSING;
+		msg = "Uploading file...";
+		thread.thread = new std::thread(&EFileManager::thread_upload, this);
+		thread.thread->detach();
+	}
+}
+
 void EFileManager::create(std::string newFileName)
 {
 	if (!thread.success && !thread.ready && !thread.thread)
@@ -197,10 +208,10 @@ void EFileManager::deletee()
 
 void EFileManager::refresh()
 {
-	if (!thread.success && !thread.ready && !thread.thread && status == EMPTY)
+	if (!thread.success && !thread.ready && !thread.thread/* && status == EMPTY*/)
 	{
 		status = PROCESSING;
-		msg = "Refreshing library...";
+		msg = "Refreshing library...\nChecking files from server...";
 		thread.thread = new std::thread(&EFileManager::thread_refresh, this);
 		thread.thread->detach();
 	}
@@ -281,6 +292,19 @@ void EFileManager::thread_open()
 			loadedFileName = chosenFileName;
 			thread.success = true;
 		}
+	}
+
+	thread.ready = true;
+}
+
+void EFileManager::thread_upload()
+{
+	optimize(); // before uploading
+	uploadPrivate(chosenFileName, dirPath, dirVec);
+
+	if (status == SUCCESS)
+	{
+		thread.success = true;
 	}
 
 	thread.ready = true;

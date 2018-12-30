@@ -24,7 +24,8 @@ void Editor::set()
 {
 	if (!loaded)
 	{
-		// ...
+		editorFileManager.reset();
+		loaded = true;
 	}
 }
 

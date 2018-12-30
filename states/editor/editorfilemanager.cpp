@@ -24,6 +24,7 @@ void EditorFileManager::reset()
 	messageBoard.reset();
 	textEditor.reset();
 	textEditor.clear();
+	fileManager.freeThread();
 	refresh();
 }
 
@@ -100,13 +101,10 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 {
 	if (buttons.isActive())
 	{
-		if (buttons.isNewFile())		newFile();
-		else if (buttons.isOpenFile())	openFile();
-		else if (buttons.isSaveFile())	saveFile();
-		else if (buttons.isUploadFile())
-		{
-			// there is no upload available
-		}
+		if (buttons.isNewFile())			newFile();
+		else if (buttons.isOpenFile())		openFile();
+		else if (buttons.isSaveFile())		saveFile();
+		else if (buttons.isUploadFile())	uploadFile();
 		else if (buttons.isCopyFile())		copyFile();
 		else if (buttons.isRenameFile())	renameFile();
 		else if (buttons.isDeleteFile())	deleteFile();
@@ -321,7 +319,6 @@ void EditorFileManager::newFile()
 void EditorFileManager::openFile()
 {
 	action = LOADING;
-
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
@@ -340,23 +337,35 @@ void EditorFileManager::openFile()
 
 void EditorFileManager::saveFile()
 {
+	action = SAVING;
 	if (isFileOpen())
 	{
-		action = SAVING;
 		fileManager.save();
 	}
 	else
 	{
-		action = SAVING;
 		textEditor.setActive();
 		textEditor.set("New File", "File Name:", "");
+	}
+}
+
+void EditorFileManager::uploadFile()
+{
+	action = UPLOADING;
+	if (!library.isChosen())
+	{
+		messageBoard.setActive(2);
+		messageBoard.setMessage("There is no chosen file.\nChoose file by clicking on the icon.");
+	}
+	else
+	{
+		fileManager.upload();
 	}
 }
 
 void EditorFileManager::copyFile()
 {
 	action = COPYING;
-
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
@@ -386,7 +395,6 @@ void EditorFileManager::renameFile()
 void EditorFileManager::deleteFile()
 {
 	action = DELETING;
-	
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
@@ -395,7 +403,7 @@ void EditorFileManager::deleteFile()
 	else
 	{
 		messageBoard.setActive();
-		messageBoard.setMessage("Do you really want to delete file?\nClick yes to continue...");
+		messageBoard.setMessage("Do you really want to delete this file?\nClick yes to continue...");
 	}
 }
 

@@ -5,6 +5,9 @@
 
 namespace cmm
 {
+	const char* const LOCALFILE_EXTENSION = ".chw";
+	const char* const SERVERFILE_EXTENSION = ".chws";
+
 	class FileManager
 	{
 	protected:
@@ -35,6 +38,7 @@ namespace cmm
 	protected:
 		virtual std::string substr(std::string &buf);
 		virtual void savePrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir, std::vector<std::string> &dirVec);
+		virtual void uploadPrivate(std::string &fileName, std::string &pathToDir, std::vector<std::string> &dirVec);
 		virtual void openPrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir);
 		virtual void createPrivate(std::string &fileName, std::string &pathToDir, std::vector<std::string> &dirVec);
 		virtual void copyPrivate(std::string &fileName, std::vector<std::string> &guts, std::string &pathToDir, std::vector<std::string> &dirVec);

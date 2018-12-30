@@ -43,9 +43,12 @@ void EFMLibrary::free()
 
 		textLabels.clear();
 	}
+	
+	if (!worldPositions.empty())
+		worldPositions.clear();
 
-	if (!iconPos.empty())
-		iconPos.clear();
+	if (!worldTypes.empty())
+		worldTypes.clear();
 }
 
 void EFMLibrary::reset()
@@ -73,6 +76,7 @@ void EFMLibrary::load(const float &screen_w, const float &screen_h, sf::FloatRec
 	Loading::add(icons[LEFT]->load("images/icons/lefticon.png"));
 	Loading::add(icons[RIGHT]->load("images/icons/righticon.png"));
 	Loading::add(icons[WORLD]->load("images/icons/fileicon.png"));
+	Loading::add(icons[SERVER_WORLD]->load("images/icons/serverfileicon.png"));
 	Loading::add(icons[CHECKED]->load("images/icons/checkedicon.png"));
 	if (Loading::isError())	return;
 
@@ -127,7 +131,7 @@ bool EFMLibrary::handle(const sf::Event &event, const bool &status)
 				getPositions(start, end);
 				for (int i = start; i < end; ++i)
 				{
-					icons[WORLD]->setPosition(iconPos[i].x, iconPos[i].y);
+					icons[WORLD]->setPosition(worldPositions[i].x, worldPositions[i].y);
 					if (icons[WORLD]->checkCollision(x, y))
 					{
 						icons[CHECKED]->setPosition(icons[WORLD]->getX(), icons[WORLD]->getY());
@@ -166,10 +170,12 @@ void EFMLibrary::draw(sf::RenderWindow* &window)
 
 	int start, end;
 	getPositions(start, end);
+	
 	for (int i = start; i < end; ++i)
 	{
-		icons[WORLD]->setPosition(iconPos[i].x, iconPos[i].y);
-		window->draw(*icons[WORLD]);
+		int temp = worldTypes[i] == STORING::LOCAL ? WORLD : SERVER_WORLD;
+		icons[temp]->setPosition(worldPositions[i].x, worldPositions[i].y);
+		window->draw(*icons[temp]);
 		window->draw(*textLabels[i]);
 	}
 
@@ -194,18 +200,37 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 	page = 0;
 	chosen = -1;
 
+	// Clear world positions
+	if (!worldPositions.empty())
+		worldPositions.clear();
+
+	// Clear world types
+	if (!worldTypes.empty())
+		worldTypes.clear();
+
 	// Erase other files.
 	for (std::vector<std::string>::iterator it = copy.begin(); it != copy.end();)
 	{
-		int size = it->size() - 1;
+		int last = it->size() - 1;
 
 		std::string str = *it;
-		if (size - 3 < 1)
+		if (last - 3 < 1)
 			it = copy.erase(it);
-		else if (str[size] != 'w' || str[size - 1] != 'h' || str[size - 2] != 'c' || str[size - 3] != '.')
-			it = copy.erase(it);
+		else if (str[last] != 'w' || str[last - 1] != 'h' || str[last - 2] != 'c' || str[last - 3] != '.')
+		{
+			if (str[last] != 's' || str[last - 1] != 'w' || str[last - 2] != 'h' || str[last - 3] != 'c' || str[last - 4] != '.')
+				it = copy.erase(it);
+			else
+			{
+				worldTypes.push_back(STORING::SERVER);
+				++it;
+			}
+		}
 		else
+		{
+			worldTypes.push_back(STORING::LOCAL);
 			++it;
+		}	
 	}
 
 	// Clear world names.
@@ -224,24 +249,26 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 		textLabels.clear();
 	}
 
-	// Clear icon positions
-	if (!iconPos.empty())
-		iconPos.clear();
-
 	const char* pathToFont = cmm::JAPOKKI_FONT_PATH;
-	for (auto &it : copy)
+	for (int i = 0; i < static_cast<int>(copy.size()); ++i)
 	{
+		std::string str = copy[i];
+
 		textLabels.push_back(new cmm::Text);
 		int n = textLabels.size() - 1;
 		textLabels[n]->setFont(pathToFont);
 		textLabels[n]->setSize(plank.width / 30);
-		strLabels.push_back(it);
+		strLabels.push_back(str);
 
-		std::string outStr = it.substr(0, it.size() - 4);
-		if (it.size() > 21)			outStr = it.substr(0, 11) + "\n" + it.substr(12, 8) + "...";
-		else if (it.size() > 12)	outStr = it.substr(0, 8) + "..."; // 11 c
+		// Prepare outstring.
+		int length = worldTypes[i] == STORING::LOCAL ? 4 : 5; // Extension length.
+		int STEP_ONE = 12;
+		int STEP_TWO = 21;
+		std::string outStr = str.substr(0, str.size() - length);
+		if ((int)str.size() > STEP_TWO)				outStr = str.substr(0, (STEP_ONE-1)) + "\n" + str.substr(STEP_ONE, (STEP_ONE - length)) + "...";
+		else if ((int)str.size() > STEP_ONE)		outStr = str.substr(0, (STEP_ONE - length)) + "...";
+
 		textLabels[n]->setText(outStr);
-
 		textLabels[n]->setAlpha(MAX_ALPHA);
 	}
 
@@ -253,11 +280,11 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 	int startX = (int)(plank.left + plank.width / 2 - (w * (gridLength + 1) + off * gridLength) / 2 + off);
 	for (unsigned i = 0; i < textLabels.size(); ++i)
 	{
-		iconPos.push_back(sf::Vector2f());
-		iconPos[i].x = startX + off + (w + off) * xc;
-		iconPos[i].y = static_cast<float>((plank.top + plank.height / 4.5) + off * 2 + w * yc);
+		worldPositions.push_back(sf::Vector2f());
+		worldPositions[i].x = startX + off + (w + off) * xc;
+		worldPositions[i].y = static_cast<float>((plank.top + plank.height / 4.5) + off * 2 + w * yc);
 
-		textLabels[i]->setPosition(iconPos[i].x + icons[WORLD]->getWidth() / 2 - textLabels[i]->getWidth() / 2, iconPos[i].y + icons[WORLD]->getHeight());
+		textLabels[i]->setPosition(worldPositions[i].x + icons[WORLD]->getWidth() / 2 - textLabels[i]->getWidth() / 2, worldPositions[i].y + icons[WORLD]->getHeight());
 
 		++xc;
 
@@ -271,7 +298,8 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 	}
 
 	textLabels.shrink_to_fit();
-	iconPos.shrink_to_fit();
+	worldPositions.shrink_to_fit();
+	worldTypes.shrink_to_fit();
 	setPageText();
 }
 
@@ -287,12 +315,12 @@ const std::string& EFMLibrary::getChosenStr() const
 
 void EFMLibrary::setPageText()
 {
-	pageText.setText(std::to_string(page) + "/" + std::to_string(iconPos.size() / gridSquare));
+	pageText.setText(std::to_string(page) + "/" + std::to_string(worldPositions.size() / gridSquare));
 	pageText.setPosition(plank.left + plank.width - pageText.getWidth() * 1.2, plank.top + plank.height - plank.width / 15);
 
 	ableToGoLeft = page == 0 ? false : true;
 
-	if((float)page + 1 < (float)iconPos.size() / gridSquare)
+	if((float)page + 1 < (float)worldPositions.size() / gridSquare)
 		ableToGoRight = true;
 	else
 		ableToGoRight = false;
@@ -302,5 +330,5 @@ void EFMLibrary::getPositions(int &s, int &e)
 {
 	s = page == 0 ? 0 : gridSquare * page;
 	int iconPage = gridSquare + gridSquare * page;
-	e = (int)iconPos.size() > iconPage ? iconPage : iconPos.size();
+	e = (int)worldPositions.size() > iconPage ? iconPage : worldPositions.size();
 }

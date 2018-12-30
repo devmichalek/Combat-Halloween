@@ -5,11 +5,18 @@
 
 class EFMLibrary final
 {
+	enum STORING
+	{
+		LOCAL = 0,
+		SERVER = 1
+	};
+
 	enum TYPES
 	{
 		LEFT = 0,
 		RIGHT,
 		WORLD,
+		SERVER_WORLD,
 		CHECKED,
 		SIZE
 	};
@@ -25,7 +32,8 @@ class EFMLibrary final
 	std::vector<cmm::Sprite*> icons;
 	std::vector<std::string> strLabels;
 	std::vector<cmm::Text*> textLabels;
-	std::vector<sf::Vector2f> iconPos;
+	std::vector<sf::Vector2f> worldPositions;
+	std::vector<int> worldTypes;
 
 public:
 	EFMLibrary();

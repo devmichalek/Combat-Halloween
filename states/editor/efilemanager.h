@@ -36,6 +36,7 @@ public:
 
 	void save();
 	void open();
+	void upload();
 	void create(std::string newFileName);
 	void copy();
 	void rename(std::string newFileName);
@@ -48,6 +49,7 @@ public:
 private:	// thread functions
 	void thread_save();
 	void thread_open();
+	void thread_upload();
 	void thread_create(std::string newFileName);
 	void thread_copy();
 	void thread_rename(std::string newFileName);
