@@ -28,7 +28,7 @@
 					if($row['activationcode'] == $code && $row['activated'] == 0)
 					{
 						$result->free_result();
-						$connection->query("UPDATE users SET activated='1' WHERE email='$email'");
+						@$connection->query(sprintf("UPDATE users SET activated='1' WHERE email='$s'", mysqli_real_escape_string($connection, $email)))
 						$confirmedemail = true;
 					}
 					else

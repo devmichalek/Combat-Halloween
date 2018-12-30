@@ -95,7 +95,7 @@
       else
       {
         // IF EMAIL EXIST
-        $result = $connection->query("SELECT ID FROM users WHERE email='$email'");
+        $result = $connection->query(sprintf("SELECT ID FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $email)));
         if(!$result)
         {
           throw new Exception($connection->error);
@@ -108,7 +108,7 @@
         }
 
         // IF USERNAME EXISTS
-        $result = $connection->query("SELECT ID FROM users WHERE username='$username'");
+        $result = $connection->query(sprintf("SELECT ID FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $username)));
         if(!$result)
         {
           throw new Exception($connection->error);
@@ -139,12 +139,14 @@
           $experience = 0;    // 0 ... 100
           $level = 1;
 
-          if(!$connection->query("INSERT INTO usersfeatures VALUES (NULL, '$username', '71@72@73@23@25@', '$heart_points', '$magic_points', '$armour', '$magic_resistant', '$movement_speed', '$damage', '$magic_damage', '$luck', '$experience', '$level')"))
+          $sql_query = "INSERT INTO usersfeatures VALUES (NULL, '$username', '71@72@73@23@25@', '$heart_points', '$magic_points', '$armour', '$magic_resistant', '$movement_speed', '$damage', '$magic_damage', '$luck', '$experience', '$level')";
+          if(!$connection->query($sql_query))
           {
             throw new Exception($connection->error);
           }
 
-          if($connection->query("INSERT INTO users VALUES (NULL, '$username', '$password_hashed', '$email', '$first_time', '0', '$activation_code', 'user')"))
+          $sql_query = "INSERT INTO users VALUES (NULL, '$username', '$password_hashed', '$email', '$first_time', '0', '$activation_code', 'user')";
+          if($connection->query($sql_query))
           {
             $_SESSION['wellregistered'] = true;
             $_SESSION['activation_code'] = $activation_code;

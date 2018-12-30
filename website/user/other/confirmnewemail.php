@@ -28,7 +28,9 @@
 					if($row['activationcode'] == $code)
 					{
 						$result->free_result();
-						$connection->query("UPDATE users SET email='$newemail', activationcode='0' WHERE email='$email'");
+						$newemail = mysqli_real_escape_string($connection, $newemail);
+						$sql_query = "UPDATE users SET email='$newemail', activationcode='0' WHERE email='$email'";
+						$connection->query($sql_query);
 						$_SESSION['email'] = $newemail;
 					}
 				}

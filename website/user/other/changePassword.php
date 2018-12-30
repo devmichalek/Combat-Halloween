@@ -89,7 +89,9 @@
 	}
 	else
 	{
-		if(!$connection->query("UPDATE users SET password='$password_hashed' WHERE email='$email'"))
+		$email = mysqli_real_escape_string($connection, $email);
+		$sql_query = "UPDATE users SET password='$password_hashed' WHERE email='$email'");
+		if(!$connection->query($sql_query)
 		{
 			throw new Exception($connection->error);
 		}

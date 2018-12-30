@@ -15,7 +15,7 @@
     
     $ID = $_GET['ID'];
     $connection = @new mysqli($host, $db_user, $db_password, $db_name);
-    $records = $connection->query("SELECT * FROM bugs WHERE ID='$ID'");
+    $records = $connection->query(sprintf("SELECT * FROM bugs WHERE ID='%s'", mysqli_real_escape_string($connection, $ID)));
     $row = $records->fetch_assoc();
 
     $name = $row['name'];

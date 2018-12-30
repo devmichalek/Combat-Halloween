@@ -34,7 +34,7 @@
 
 	// Set flag to see more details about errors.
 	mysqli_report(MYSQLI_REPORT_STRICT);
-
+	
 	try
 	{
 		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
@@ -45,23 +45,23 @@
 		    $author = addslashes($_POST['author']);
 		    
 			// Send query.
-			$sql = "SELECT * FROM bugs WHERE author='$author'";
-			$result = $connection->query($sql);
+			$result = $connection->query(sprintf("SELECT * FROM bugs WHERE author='%s'", mysqli_real_escape_string($connection, $author)));
 			$sum = mysqli_num_rows($result);
 
 			// Set variables.
-			$name =			addslashes($_POST['name']);
-			$type =			$_POST['type'];
-			$action =		$_POST['actiontodo'];
-			$description =	nl2br(addslashes($_POST['description']));
-			$location =		addslashes($_POST['location']);
-			$severity =		$_POST['severity'];
-			$priority =		$_POST['priority'];
-			$deadline =		addslashes($_POST['deadline']);
-			$developer =	$_POST['developer'];
-			$resolution =	$_POST['resolution'];
+			$name =			mysqli_real_escape_string($connection, addslashes($_POST['name']));
+			$type =			mysqli_real_escape_string($connection, $_POST['type']);
+			$action =		mysqli_real_escape_string($connection, $_POST['actiontodo']);
+			$description =	mysqli_real_escape_string($connection, nl2br(addslashes($_POST['description'])));
+			$location =		mysqli_real_escape_string($connection, addslashes($_POST['location']));
+			$severity =		mysqli_real_escape_string($connection, $_POST['severity']);
+			$priority =		mysqli_real_escape_string($connection, $_POST['priority']);
+			$deadline =		mysqli_real_escape_string($connection, addslashes($_POST['deadline']));
+			$developer =	mysqli_real_escape_string($connection, $_POST['developer']);
+			$resolution =	mysqli_real_escape_string($connection, $_POST['resolution']);
 
-			if(!$connection->query("INSERT INTO bugs VALUES (NULL, '$name', '$type', '$action', '$description', '$location', '$severity', '$priority', '$deadline', '$author', '$developer', '$resolution')"))
+			$sql_query = "INSERT INTO bugs VALUES (NULL, '$name', '$type', '$action', '$description', '$location', '$severity', '$priority', '$deadline', '$author', '$developer', '$resolution')";
+			if(!$connection->query($sql_query))
 			{
 				throw new Exception($connection->error);
 			}

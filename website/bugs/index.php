@@ -104,7 +104,8 @@
         if($dselect == "mine")        $dresult = " AND developer='$author'";
         else if($dselect == "their")  $dresult = " AND NOT developer='$author'";
         
-        $records = $connection->query("SELECT * FROM bugs ".$rresult.$dresult);
+        $sql_query = "SELECT * FROM bugs ".$rresult.$dresult;
+        $records = $connection->query($sql_query);
     }
     else
     {

@@ -42,20 +42,22 @@
 			throw new Exception(mysqli_connect_errno());
 		else
 		{
-		    $ID =       $_POST['ID'];
-			$name =         addslashes($_POST['name']);
-			$type =         $_POST['type'];
-			$action =   	$_POST['actiontodo'];
-			$description =  nl2br(addslashes($_POST['description']));
-			$location =     addslashes($_POST['location']);
-			$severity =     $_POST['severity'];
-			$priority =     $_POST['priority'];
-			$deadline =     addslashes($_POST['deadline']);
-			$author =       addslashes($_POST['author']);
-			$developer =    $_POST['developer'];
-			$resolution =   $_POST['resolution'];
+		    $ID =       	mysqli_real_escape_string($connection, $_POST['ID']);;
+			$name =			mysqli_real_escape_string($connection, addslashes($_POST['name']));
+			$type =			mysqli_real_escape_string($connection, $_POST['type']);
+			$action =		mysqli_real_escape_string($connection, $_POST['actiontodo']);
+			$description =	mysqli_real_escape_string($connection, nl2br(addslashes($_POST['description'])));
+			$location =		mysqli_real_escape_string($connection, addslashes($_POST['location']));
+			$severity =		mysqli_real_escape_string($connection, $_POST['severity']);
+			$priority =		mysqli_real_escape_string($connection, $_POST['priority']);
+			$deadline =		mysqli_real_escape_string($connection, addslashes($_POST['deadline']));
+			$author =       mysqli_real_escape_string($connection, addslashes($_POST['author']));
+			$developer =	mysqli_real_escape_string($connection, $_POST['developer']);
+			$resolution =	mysqli_real_escape_string($connection, $_POST['resolution']);
 
-			if(!$connection->query("UPDATE bugs SET name='$name', type='$type', action='$action', description='$description', location='$location', severity='$severity', priority='$priority', deadline='$deadline', author='$author', developer='$developer', resolution='$resolution' WHERE ID='$ID'"))
+			$sql_query = "UPDATE bugs SET name='$name', type='$type', action='$action', description='$description', location='$location', severity='$severity', priority='$priority', deadline='$deadline', author='$author', developer='$developer', resolution='$resolution' WHERE ID='$ID'";
+
+			if(!$connection->query($sql_query))
 			{
 				throw new Exception($connection->error);
 			}

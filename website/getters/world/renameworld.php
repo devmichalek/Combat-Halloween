@@ -49,7 +49,13 @@
 									echo '2';
 								else
 								{
-									if(!$connection->query("UPDATE worlds SET title='$newtitle' WHERE username='$username' AND title='$oldtitle'"))
+									// Prepare strings.
+									$username = mysqli_real_escape_string($connection, $_POST['username']);
+									$oldtitle = mysqli_real_escape_string($connection, $_POST['oldtitle']);
+									$newtitle = mysqli_real_escape_string($connection, $_POST['newtitle']);
+
+									$sql_query = "UPDATE worlds SET title='$newtitle' WHERE username='$username' AND title='$oldtitle'";
+									if(!$connection->query($sql_query))
 										echo '-1';
 									else
 										echo '0'; // SUCCESS

@@ -53,7 +53,7 @@
 	// Check if this username is not occupied.
 	try
 	{
-		$result = $connection->query("SELECT ID FROM users WHERE username='$username'");
+		$result = @$connection->query(sprintf("SELECT ID FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $username)));
 		if(!$result)
 		{
 		    throw new Exception($connection->error);
@@ -109,21 +109,29 @@
 	}
 	else
 	{
-	    $oldusername = $_SESSION['username'];
-		if(!$connection->query("UPDATE users SET username='$username' WHERE email='$email'"))
-		{
-			throw new Exception($connection->error);
-		}
-		else if(!$connection->query("UPDATE usersfeatures SET username='$username' WHERE username='$oldusername'"))
+		$oldusername = $_SESSION['username'];
+		$username =	mysqli_real_escape_string($connection, $username);
+		$email =	mysqli_real_escape_string($connection, $email);
+
+		$sql_query = "UPDATE users SET username='$username' WHERE email='$email'";
+		if(!$connection->query($sql_query))
 		{
 			throw new Exception($connection->error);
 		}
 		else
 		{
-			$_SESSION['successUsername'] = "The username was changed correctly! Log In again to see results.";
-			$_SESSION['username'] = $username;
-			header('Location: profile.php');
-			exit();
+			$sql_query = "UPDATE usersfeatures SET username='$username' WHERE username='$oldusername'";
+			if(!$connection->query($sql_query))
+			{
+				throw new Exception($connection->error);
+			}
+			else
+			{
+				$_SESSION['successUsername'] = "The username was changed correctly! Log In again to see results.";
+				$_SESSION['username'] = $username;
+				header('Location: profile.php');
+				exit();
+			}
 		}
 	}
 

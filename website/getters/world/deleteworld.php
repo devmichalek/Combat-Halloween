@@ -48,7 +48,7 @@
 									echo '2';
 								else
 								{
-									if(!$connection->query("DELETE FROM worlds where username='$username' AND title='$title'"))
+									if(!$connection->query(sprintf("DELETE FROM worlds WHERE username='%s' AND title='%s'", mysqli_real_escape_string($connection, $username), mysqli_real_escape_string($connection, $title)))
 										echo '-1';
 									else
 										echo '0'; // SUCCESS

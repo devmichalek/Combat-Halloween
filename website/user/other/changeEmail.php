@@ -55,7 +55,7 @@
 	// Check if this email is not occupied.
 	try
 	{
-		$result = $connection->query("SELECT ID FROM users WHERE email='$newemail'");
+		$result = @$connection->query(sprintf("SELECT ID FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $newemail)));
 		if(!$result)
 		{
 		    throw new Exception($connection->error);
@@ -103,7 +103,10 @@
 	else
 	{
 	    $activationcode = generateCode();
-	    $connection->query("UPDATE users SET activationcode='$activationcode' WHERE email='$email'");
+		$activationcode =	mysqli_real_escape_string($connection, $activationcode);
+		$email =			mysqli_real_escape_string($connection, $email);
+		$sql_query = "UPDATE users SET activationcode='$activationcode' WHERE email='$email'";
+	    $connection->query($sql_query);
 	    
 		// Send email
 		$subject = 'Combat Halloween - New Email';

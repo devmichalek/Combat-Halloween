@@ -54,7 +54,13 @@
 									echo '4';
 								else
 								{
-									if(!$connection->query("INSERT INTO worlds VALUES (NULL, '$username', '$title', '$oryginal', '$data')"))
+									// Prepare strings.
+									$username = mysqli_real_escape_string($connection, $_POST['username']);
+									$title = mysqli_real_escape_string($connection, $_POST['title']);
+									$data = mysqli_real_escape_string($connection, $_POST['data']);
+
+									$sql_query = "INSERT INTO worlds VALUES (NULL, '$username', '$title', '$oryginal', '$data')";
+									if(!$connection->query($sql_query))
 										echo '-1';
 									else
 										echo '0'; // SUCCESS
