@@ -21,7 +21,7 @@ class FoeWrapper final
 	sf::RenderWindow* window;
 	double elapsedTime;
 	Rect* screen;
-	Rect* character;
+	Rect* character;		// character box
 	Rect* characterAttack;	// attack box
 	bool characterHasAttacked;
 	float characterDamage;

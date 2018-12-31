@@ -87,6 +87,9 @@
     <ClCompile Include="..\..\..\common\fpsconsole.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\converter.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="foefactory.h">

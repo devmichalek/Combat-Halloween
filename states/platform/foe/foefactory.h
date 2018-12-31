@@ -17,16 +17,15 @@ public:
 
 	void load(const float &screen_w, const float &screen_h);
 	
-	void update(sf::RenderWindow* &,
-				double,
-				Rect* &,
-				Rect* &,
-				bool &,
-				float &,
-				float &,
-				float &);
-
-	void setBorderX(const float &newX);
-	void setBorderY(const float &newY);
-	void setBorders(const float &newX, const float &newY);
+	void update(sf::RenderWindow* &window,
+				double elapsedTime,
+				Rect* &character,
+				Rect* &characterAttack,
+				bool &characterHasAttacked,
+				float &characterDamage,
+				float &characterHP,
+				float &characterArmour,
+				float &newX,
+				float &newY
+				);
 };

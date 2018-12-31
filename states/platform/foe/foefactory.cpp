@@ -1,6 +1,14 @@
+// Family
 #include "foefactory.h"
 #include "skeleton.h"
 #include "zombie.h"
+
+// Common
+#include "converter.h"
+
+// Boost
+#include <boost/filesystem.hpp>
+#include <boost/range/iterator_range.hpp>
 
 FoeFactory::FoeFactory()
 {
@@ -38,45 +46,127 @@ void FoeFactory::load(const float &screen_w, const float &screen_h)
 {
 	free();
 
-	resolution = new sf::Rect<float>;
+	// Prepare resolution.
+	{
+		resolution = new sf::Rect<float>;
+		resolution->width = screen_w;
+		resolution->height = screen_h;
+	}
 
-	resolution->width = screen_w;
-	resolution->height = screen_h;
+	// Open directory, load paths to templates and prepare types.
+	std::vector<std::pair<int, std::string>> types;
+	{
+		std::string pathToDir = "config/";
+		if (!boost::filesystem::is_directory(pathToDir))
+		{
+			// sth else?
+			__debugbreak();
+		}
+		else
+		{
+			// Fill.
+			int length = pathToDir.size();
+			std::string TEMPLATE_EXTENSION = ".template";
+			for (auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(pathToDir), {}))
+			{
+				std::string buf = entry.path().string().substr(length, entry.path().string().size() - length);
+				if (cmm::compareExtension(buf, TEMPLATE_EXTENSION))
+				{
+					// Found template file.
+					types.push_back(std::make_pair(-1, buf));
 
-	wrapper = new FoeWrapper;
+					// Extract type.
+					{
+						std::string seek = "type: ";
 
-	
-	std::vector<int> states;	// 3 for example APPEAR, IDLE, WALK
-	std::vector<int> offsets;	// 10, 12, 8
-	std::vector<std::string> paths;	// skeleton, zombie, vampire etc.
+						// Load content.
+						{
+							std::ifstream file_in;
+							std::string line = cmm::SEMPTY;
+							file_in.open(entry.path().string());
+							while (std::getline(file_in, line))
+								if (line.find(seek) != std::string::npos)
+									break;
+							file_in.close();
+							buf = line;
+						}
 
-	states.push_back(5);
+						std::string value = cmm::extractFromString(buf, seek, cmm::CNEWLINE);
+						if (value.empty())
+							__debugbreak();
+						else
+							types[types.size() - 1].first = boost::lexical_cast<int>(value);
+					}
+				}
+			}
+		}
+	}
 
-	// Skeleton
-	offsets.push_back(10);
-	offsets.push_back(6);
-	offsets.push_back(8);
-	offsets.push_back(8);
-	offsets.push_back(8);
-	paths.push_back("images/platform/foes/type/skeleton/");
+	// Sort templates by type.
+	{
+		using TemplatePair = std::pair<int, std::string>;
+		struct {
+			bool operator()(TemplatePair a, TemplatePair b) const
+			{
+				return a.first < b.first;
+			}
+		} CustomLess;
+		std::sort(types.begin(), types.end(), CustomLess);
+	}
 
-	// Zombie
-	/*offsets.push_back(11);
-	offsets.push_back(6);
-	offsets.push_back(10);
-	offsets.push_back(7);
-	offsets.push_back(8);
-	paths.push_back("images/platform/foes/type/zombie/");*/
+	// Now templates are sorted.
+	// Prepare wrapper.
+	{
+		wrapper = new FoeWrapper;
+		std::vector<int> states;		// 3 for example APPEAR, IDLE, WALK etc.
+		std::vector<int> offsets;		// 10, 12, 8 etc.
+		std::vector<std::string> paths;	// skeleton, zombie, vampire etc.
 
-	wrapper->load(paths, states, offsets);
+		for (auto &it : types)
+		{
+			std::string path = "config/" + it.second;
+			std::string data = cmm::SEMPTY;
 
+			// Load content.
+			{
+				std::ifstream file_in;
+				std::string line = cmm::SEMPTY;
+				file_in.open(path);
+				while (std::getline(file_in, line))
+					data += line + cmm::CNEWLINE;
+				file_in.close();
+			}
+
+			// States.
+			std::string value = cmm::extractFromString(data, "states: ", cmm::CNEWLINE);
+			states.push_back(boost::lexical_cast<int>(value));
+
+			// Offsets.
+			value = cmm::extractFromString(data, "offsets: ", cmm::CNEWLINE) + " ";
+			std::string buf = cmm::SEMPTY;
+			for (auto jt : value)
+			{
+				if (jt == cmm::CSPACE)
+				{
+					offsets.push_back(boost::lexical_cast<int>(buf));
+					buf.clear();
+					continue;
+				}
+				buf += jt;
+			}
+
+			// Path.
+			value = cmm::extractFromString(data, "path: ", cmm::CNEWLINE);
+			paths.push_back(value);
+		}
+		wrapper->load(paths, states, offsets);
+	}
+
+	// Test
 	Foe* foe = nullptr;
-
-	int counter = 0;
-
 	foe = new Zombie;
 	foe->setSpriteType(0);
-	foe->setSpriteLines(offsets);
+	foe->setSpriteLines({ 11, 6, 10, 7, 8 });
 	foe->setScale(0.5);
 	foe->setWidth(66);
 	foe->setPosition(200, screen_h - 500);
@@ -95,27 +185,16 @@ void FoeFactory::update(sf::RenderWindow* &window,
 						bool &characterHasAttacked,
 						float &characterDamage,
 						float &characterHP,
-						float &characterArmour)
+						float &characterArmour,
+						float &newX,
+						float &newY)
 {
+	// Prepare resolution.
+	resolution->left = newX;
+	resolution->top = newY;
+
 	wrapper->update(window, elapsedTime, resolution, character, characterAttack, characterHasAttacked,
 					characterDamage, characterHP, characterArmour);
+
 	wrapper->process();
-}
-
-
-
-void FoeFactory::setBorderX(const float &newX)
-{
-	resolution->left = newX;
-}
-
-void FoeFactory::setBorderY(const float &newY)
-{
-	resolution->top = newY;
-}
-
-void FoeFactory::setBorders(const float &newX, const float &newY)
-{
-	setBorderX(newX);
-	setBorderY(newY);
 }

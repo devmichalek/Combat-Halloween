@@ -1,4 +1,5 @@
 #include "foewrapper.h"
+#include "loading.h"
 
 FoeWrapper::FoeWrapper()
 {
@@ -81,7 +82,8 @@ void FoeWrapper::load(std::vector<std::string> &str, std::vector<int> &s, std::v
 		for (int j = 0; j < s[i]; ++j)
 		{
 			cmm::Sprite* sprite = new cmm::Sprite;
-			sprite->load((str[i] + std::to_string(j) + ".png").c_str(), o[counter]);
+			Loading::add(sprite->load((str[i] + std::to_string(j) + ".png").c_str(), o[counter]));
+			if (Loading::isError()) return;
 			temp.push_back(sprite);
 			++counter;
 		}
