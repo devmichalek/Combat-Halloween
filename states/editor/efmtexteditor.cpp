@@ -1,6 +1,7 @@
 #include "efmtexteditor.h"
 #include "loading.h"
 #include "filemanager.h"
+#include "converter.h"
 
 EFMTextEditor::EFMTextEditor()
 {
@@ -20,7 +21,7 @@ void EFMTextEditor::free()
 	arrow_counter = 0;
 	arrow_line = 0.5;
 
-	msg = "";
+	msg = cmm::SEMPTY;
 
 	reset();
 	clear();
@@ -229,7 +230,7 @@ bool EFMTextEditor::isMistake()
 
 	if (temp.size() == 0)
 	{
-		msg = "File name should contain\nat least 1 character.";
+		msg = "File name should contain" + cmm::SNEWLINE + "at least 1 character.";
 		return true;
 	}
 

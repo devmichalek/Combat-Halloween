@@ -1,4 +1,5 @@
 #include "loading.h"
+#include "converter.h"
 #include "colors.h"
 #include <fstream>
 #include <iostream>
@@ -22,7 +23,7 @@ Loading::Loading()
 	free();
 
 	// Here below is the list of all files that "Loading" object need to have to initialize.
-	printf("Checking files to initialize game...\n");
+	printf("Checking files to initialize game...%s", cmm::CSNEWLINE);
 	isFileExist("openal32.dll");
 	isFileExist("sfml-audio-2.dll");
 	isFileExist("sfml-graphics-2.dll");
@@ -43,8 +44,8 @@ Loading::Loading()
 	if (error_occured)
 	{
 		// Press enter to continue...
-		std::cout << "Press Enter to Continue...\n";
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Press Enter to Continue..." << std::endl;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), cmm::CNEWLINE);
 	}
 	else
 		::ShowWindow(::GetConsoleWindow(), SW_HIDE);
@@ -164,13 +165,13 @@ void Loading::isFileExist(std::string pathToFile)
 	if (status)
 	{
 		SetConsoleTextAttribute(hConsole, 2);
-		printf("Success: Correctly inspected file \"%s\".\n", pathToFile.c_str());
+		printf("Success: Correctly inspected file \"%s\".%s", pathToFile.c_str(), cmm::CSNEWLINE);
 	}
 	else
 	{
 		error_occured = true;
 		SetConsoleTextAttribute(hConsole, 4);
-		printf("Error: File \"%s\" does not exist.\n", pathToFile.c_str());
+		printf("Error: File \"%s\" does not exist.%s", pathToFile.c_str(), cmm::CSNEWLINE);
 	}
 
 	SetConsoleTextAttribute(hConsole, 7);
@@ -185,7 +186,7 @@ void Loading::isDirExist(std::string pathToDir)
 	if (stat(pathToDir.c_str(), &info) != 0)
 	{
 		SetConsoleTextAttribute(hConsole, 6);
-		printf("Warning: Cannot access directory \"%s\".\n", pathToDir.c_str());
+		printf("Warning: Cannot access directory \"%s\".%s", pathToDir.c_str(), cmm::CSNEWLINE);
 	}
 	
 	SetConsoleTextAttribute(hConsole, 7);

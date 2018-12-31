@@ -1,5 +1,6 @@
 #include "sound.h"
 #include "music.h"
+#include "converter.h"
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -16,8 +17,8 @@ int main(int argc, char** argv)
 	while (sound.isPlaying()) {}
 
 	// Coontinue
-	std::cout << "Press Enter to Continue...\n";
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cout << "Press Enter to Continue..." + cmm::SNEWLINE;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), cmm::CNEWLINE);
 
 
 	cmm::Music music;

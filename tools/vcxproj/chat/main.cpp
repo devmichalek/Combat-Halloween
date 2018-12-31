@@ -1,6 +1,7 @@
 #include "core.h"
 #include "loading.h"
 #include "chat.h"
+#include "converter.h"
 
 cmm::Core* core = new cmm::Core(0, cmm::BACKGROUND_COLOR);
 std::vector<cmm::State*> states;
@@ -64,7 +65,7 @@ void main_loop()
 		{
 			if (chat.compCommand("@blah"))
 			{
-				printf("blah!\n");
+				printf("blah!%s", cmm::CSNEWLINE);
 			}
 		}
 

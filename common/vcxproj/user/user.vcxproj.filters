@@ -3,8 +3,16 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="..\..\user.cpp" />
+    <ClCompile Include="..\..\converter.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\user.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dependencies">
+      <UniqueIdentifier>{a2423d5e-5f64-42ac-b5cd-12e851221b26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

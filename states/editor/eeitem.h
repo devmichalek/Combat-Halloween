@@ -2,6 +2,7 @@
 #include "kind.h"
 #include <string>
 #include <SFML/Graphics/Rect.hpp>
+#include "converter.h"
 
 namespace ee
 {
@@ -22,7 +23,7 @@ namespace ee
 			position = item.position;
 		}
 
-		Item(int ID, int type, int chosen, sf::Vector2i position, std::string ai = "")
+		Item(int ID, int type, int chosen, sf::Vector2i position, std::string ai = cmm::SEMPTY)
 		{
 			this->ID = ID;
 			this->chosen = chosen;
@@ -38,7 +39,7 @@ namespace ee
 		void reset()
 		{
 			ID = chosen = type = -1;
-			ai = "";
+			ai = cmm::SEMPTY;
 			position = sf::Vector2i(-1, -1);
 		}
 	};

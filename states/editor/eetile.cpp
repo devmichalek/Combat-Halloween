@@ -164,7 +164,7 @@ bool ee::Tile::add(Item &data)
 	item.ID = item.VOID;
 	item.chosen = data.chosen;
 	item.type = item.TILE;
-	item.ai = "";
+	item.ai = cmm::SEMPTY;
 	data.position = item.position = sf::Vector2i(x * TILE_WIDTH, y * TILE_HEIGHT);
 	array[x][y] = data.chosen;
 	return true;
@@ -206,7 +206,7 @@ bool ee::Tile::remove(sf::Vector2i &mouse)
 		item.ID = item.VOID;
 		item.chosen = array[x][y];
 		item.type = item.TILE;
-		item.ai = "";
+		item.ai = cmm::SEMPTY;
 		mouse = item.position = sf::Vector2i(x * TILE_WIDTH, y * TILE_HEIGHT);
 		array[x][y] = item.VOID;
 	}

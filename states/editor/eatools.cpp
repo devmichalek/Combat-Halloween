@@ -2,6 +2,7 @@
 #include "loading.h"
 #include "definitions.h"
 #include "eeentity.h"
+#include "converter.h"
 
 EATools::EATools()
 {
@@ -120,9 +121,9 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	buttons[HOTKEY]->setPosition(buttons[DELETEKEY]->getLeft() - screen_w / 256 - buttons[HOTKEY]->getWidth(), buttons[DELETEKEY]->getTop());
 	buttons[WHOLECOLLISIONKEY]->setPosition(buttons[HOTKEY]->getLeft() - screen_w / 256 - buttons[WHOLECOLLISIONKEY]->getWidth(), buttons[DELETEKEY]->getTop());
 
-	texts[DELETEKEY]->setText("Delete\nMode");
-	texts[HOTKEY]->setText("Quick\nMode");
-	texts[WHOLECOLLISIONKEY]->setText("  Whole\nCollision");
+	texts[DELETEKEY]->setText("Delete" + cmm::SNEWLINE + "Mode");
+	texts[HOTKEY]->setText("Quick" + cmm::SNEWLINE + "Mode");
+	texts[WHOLECOLLISIONKEY]->setText("  Whole" + cmm::SNEWLINE + "Collision");
 
 	for (int i = 0; i < COUNT; ++i)
 		texts[i]->setPosition(buttons[i]->getLeft() + buttons[i]->getWidth() / 2 - texts[i]->getWidth() / 2, buttons[i]->getBot() + screen_w / 300.0f);

@@ -74,11 +74,11 @@ public:
 	virtual bool isAttacking();
 
 	void mechanics( double &elapsedTime,
-					Rect* &,
-					Rect* &,
-					bool &,
-					float &,
-					float &,
-					float &
+					Rect* &character,
+					Rect* &characterAttack,
+					bool &characterHasAttacked,
+					float &characterDamage,
+					float &characterHP,
+					float &characterArmour
 				  );
 };

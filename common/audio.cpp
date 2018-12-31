@@ -78,8 +78,8 @@ void cmm::Audio::saveAudio()
 	std::ofstream file;
 	file.open("local/audio.settings");
 
-	file << std::to_string(sound_playable) << " " << std::to_string(static_cast<int>(sound_volume)) << std::endl;
-	file << std::to_string(music_playable) << " " << std::to_string(static_cast<int>(music_volume));
+	file << std::to_string(sound_playable) << cmm::SSPACE << std::to_string(static_cast<int>(sound_volume)) << std::endl;
+	file << std::to_string(music_playable) << cmm::SSPACE << std::to_string(static_cast<int>(music_volume));
 
 	file.close();	// not needed actually
 }
@@ -95,7 +95,7 @@ void cmm::Audio::loadAudio()
 	}
 	else
 	{
-		std::string line = "";
+		std::string line = cmm::SEMPTY;
 		int counter = 0;
 		while (std::getline(file, line))
 		{

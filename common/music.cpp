@@ -39,10 +39,10 @@ std::string cmm::Music::load(const char* path)
 	if(music->openFromFile(path))
 	{
 		music->setLoop(true);
-		return "Success: Music \"" + std::string(path) + "\" loaded correctly.";
+		return "Success: Music '" + std::string(path) + "' loaded correctly.";
 	}
 
-	return "Error: Cannot create music buffer from\"" + std::string(path) + "\".";
+	return "Error: Cannot create music buffer from'" + std::string(path) + "'.";
 }
 
 void cmm::Music::setVolume(const float &newVolume)

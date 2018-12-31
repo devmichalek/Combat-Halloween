@@ -1,6 +1,7 @@
 #include "editornavigation.h"
 #include "loading.h"
 #include "definitions.h"
+#include "converter.h"
 
 EditorNavigation::EditorNavigation()
 {
@@ -84,7 +85,7 @@ void EditorNavigation::load(const float &screen_w, const float &screen_h)
 	}
 
 	labels[MENU]->setText("Menu");
-	labels[LEVELMENU]->setText("Level\nMenu");
+	labels[LEVELMENU]->setText("Level" + cmm::SNEWLINE + "Menu");
 	labels[PLAY]->setText("Test");
 
 	for (int i = 0; i < KIND::SIZE; ++i)

@@ -50,6 +50,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\common\audio.cpp" />
+    <ClCompile Include="..\..\..\common\converter.cpp" />
     <ClCompile Include="..\..\..\common\core.cpp" />
     <ClCompile Include="..\..\..\common\sound.cpp" />
     <ClCompile Include="..\..\..\common\sprite.cpp" />

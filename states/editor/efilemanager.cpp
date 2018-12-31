@@ -1,6 +1,7 @@
 #include "efilemanager.h"
 #include <boost/lexical_cast.hpp>
 #include "kind.h"
+#include "converter.h"
 
 EFileManager::EFileManager()
 {
@@ -15,7 +16,7 @@ EFileManager::~EFileManager()
 void EFileManager::free()
 {
 	status = EMPTY;
-	msg = "";
+	msg = cmm::SEMPTY;
 	
 	if (file.is_open())
 		file.close();
@@ -31,9 +32,9 @@ void EFileManager::clear()
 	if (!dirVec.empty())
 		dirVec.clear();
 
-	dirPath = "";
-	chosenFileName = "";
-	loadedFileName = "";
+	dirPath = cmm::SEMPTY;
+	chosenFileName = cmm::SEMPTY;
+	loadedFileName = cmm::SEMPTY;
 
 	if (thread.ready)
 		thread.free();
@@ -111,7 +112,7 @@ void EFileManager::pop()
 
 void EFileManager::optimize()
 {
-	std::string IDstr = "";
+	std::string IDstr = cmm::SEMPTY;
 	int ID = -1, counter = 0;
 	for (auto &it : content)
 	{
@@ -211,7 +212,7 @@ void EFileManager::refresh()
 	if (!thread.success && !thread.ready && !thread.thread/* && status == EMPTY*/)
 	{
 		status = PROCESSING;
-		msg = "Refreshing library...\nChecking files from server...";
+		msg = "Refreshing library..." + cmm::SNEWLINE + "Checking files from server...";
 		thread.thread = new std::thread(&EFileManager::thread_refresh, this);
 		thread.thread->detach();
 	}
@@ -246,7 +247,7 @@ void EFileManager::thread_save()
 	{
 		msg = "There is nothing new to save!";
 		if (content.empty())
-			loadedFileName = "";
+			loadedFileName = cmm::SEMPTY;
 		status = WARNING;
 		thread.success = true;
 	}
@@ -265,8 +266,8 @@ void EFileManager::thread_save()
 		{
 			if (!loadedFileName.empty())	// if file was loaded, now it does not exist
 				saveVersion = 1;
-			chosenFileName = "";
-			loadedFileName = "";
+			chosenFileName = cmm::SEMPTY;
+			loadedFileName = cmm::SEMPTY;
 		}
 	}
 
@@ -277,7 +278,7 @@ void EFileManager::thread_open()
 {
 	if (loadedFileName == chosenFileName)
 	{
-		msg = "File \"" + chosenFileName + "\" is already loaded.";
+		msg = "File '" + chosenFileName + "' is already loaded.";
 		status = WARNING;
 		thread.success = true;
 	}
@@ -330,8 +331,8 @@ void EFileManager::thread_create(std::string newFileName)
 	{
 		if (!loadedFileName.empty())	// if file was loaded, now it does not exist
 			saveVersion = 1;
-		chosenFileName = "";
-		loadedFileName = "";
+		chosenFileName = cmm::SEMPTY;
+		loadedFileName = cmm::SEMPTY;
 	}
 
 	thread.ready = true;
@@ -350,8 +351,8 @@ void EFileManager::thread_copy()
 	{
 		if (!loadedFileName.empty())	// if file was loaded, now it does not exist
 			saveVersion = 1;
-		chosenFileName = "";
-		loadedFileName = "";
+		chosenFileName = cmm::SEMPTY;
+		loadedFileName = cmm::SEMPTY;
 	}
 
 	thread.ready = true;
@@ -385,8 +386,8 @@ void EFileManager::thread_rename(std::string newFileName)
 	{
 		if (!loadedFileName.empty())	// if file was loaded, now it does not exist
 			saveVersion = 1;
-		chosenFileName = "";
-		loadedFileName = "";
+		chosenFileName = cmm::SEMPTY;
+		loadedFileName = cmm::SEMPTY;
 	}
 	
 	thread.ready = true;
@@ -401,7 +402,7 @@ void EFileManager::thread_delete()
 		if (loadedFileName == chosenFileName)
 		{
 			saveVersion = 1;
-			loadedFileName = "";
+			loadedFileName = cmm::SEMPTY;
 		}
 
 		thread.success = true;
@@ -411,8 +412,8 @@ void EFileManager::thread_delete()
 	{
 		if(!loadedFileName.empty())	// if file was loaded, now it does not exist
 			saveVersion = 1;
-		chosenFileName = "";
-		loadedFileName = "";
+		chosenFileName = cmm::SEMPTY;
+		loadedFileName = cmm::SEMPTY;
 	}
 	
 	thread.ready = true;
@@ -431,8 +432,8 @@ void EFileManager::thread_refresh()
 	{
 		if (!loadedFileName.empty())	// if file was loaded, now it does not exist
 			saveVersion = 1;
-		chosenFileName = "";
-		loadedFileName = "";
+		chosenFileName = cmm::SEMPTY;
+		loadedFileName = cmm::SEMPTY;
 	}
 	
 	thread.ready = true;

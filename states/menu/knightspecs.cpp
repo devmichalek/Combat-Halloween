@@ -75,7 +75,16 @@ void Knightspecs::load(const float &screen_w, const float &screen_h)
 
 	Loading::add(categories.setFont("fonts/jcandlestickextracond.ttf"));
 	if (Loading::isError())	return;
-	categories.setText("Heart Points:\nMagic Points:\nArmour:\nMagic Resistant:\nMovement Speed:\nDamage:\nMagic Damage:\nLuck:\nExperience:\nLevel:");
+	categories.setText(	"Heart Points:" 	+ cmm::SNEWLINE + 
+						"Magic Points:" 	+ cmm::SNEWLINE + 
+						"Armour:" 			+ cmm::SNEWLINE + 
+						"Magic Resistant:" 	+ cmm::SNEWLINE + 
+						"Movement Speed:" 	+ cmm::SNEWLINE + 
+						"Damage:" 			+ cmm::SNEWLINE + 
+						"Magic Damage:" 	+ cmm::SNEWLINE + 
+						"Luck:" 			+ cmm::SNEWLINE + 
+						"Experience:" 		+ cmm::SNEWLINE + 
+						"Level:");
 	categories.setFillColor(cmm::LOCKED_COLOR);
 	categories.setSize(screen_h / 28);
 	categories.setPosition(screen_h / 128, plank.getTop() + screen_h / 72);
@@ -196,7 +205,7 @@ void Knightspecs::setValues()
 		else
 		{
 			features.clear();
-			std::string result = request.getResult(), buf = "";
+			std::string result = request.getResult(), buf = cmm::SEMPTY;
 			std::vector<std::string> strs;
 			for (unsigned i = 0; i < result.size(); ++i)
 			{
@@ -204,7 +213,7 @@ void Knightspecs::setValues()
 				{
 					features.push_back(boost::lexical_cast<int>(buf));
 					strs.push_back(buf);
-					buf = "";
+					buf = cmm::SEMPTY;
 					continue;
 				}
 

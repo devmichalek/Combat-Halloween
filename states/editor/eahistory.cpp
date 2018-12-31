@@ -1,5 +1,5 @@
 #include "eahistory.h"
-#include "boost/lexical_cast.hpp"
+#include "converter.h"
 
 EAHistory::EAHistory()
 {
@@ -98,7 +98,7 @@ void EAHistory::add(const ee::Item &item)
 		+ "x:" + std::to_string(item.position.x) + " "
 		+ "y:" + std::to_string(item.position.y) + " "
 		+ "id:" + std::to_string(item.ID) + " "
-		+ "ai:" + item.ai + "\n");
+		+ "ai:" + item.ai + cmm::SNEWLINE);
 	saveVersion = 1;
 }
 
@@ -186,7 +186,7 @@ void EAHistory::modify(const ee::Item &item)
 			+ "x:" + std::to_string(item.position.x) + " "
 			+ "y:" + std::to_string(item.position.y) + " "
 			+ "id:" + std::to_string(item.ID) + " "
-			+ "ai:" + item.ai + "\n";
+			+ "ai:" + item.ai + cmm::SNEWLINE;
 		content[index] = new_one;
 
 		saveVersion = 1;
@@ -217,7 +217,7 @@ void EAHistory::modify(const ee::Item &item)
 				+ "x:" + std::to_string(item.position.x) + " "
 				+ "y:" + std::to_string(item.position.y) + " "
 				+ "id:" + std::to_string(item.ID) + " "
-				+ "ai:" + item.ai + "\n";
+				+ "ai:" + item.ai + cmm::SNEWLINE;
 			content[index] = new_one;
 			saveVersion = 1;
 		}

@@ -1,4 +1,5 @@
 #include "chat.h"
+#include "converter.h"
 #include "colors.h"
 #include "user.h"
 #include "loading.h"
@@ -88,10 +89,10 @@ void Chat::load(const float &screen_w, const float &screen_h)
 		writtens.push_back(new cmm::Text);
 		Loading::add(writtens[i]->setFont(cmm::JAPOKKI_FONT_PATH));
 		if (Loading::isError())	return;
-		writtens[i]->setText("");
+		writtens[i]->setText(cmm::SEMPTY);
 		writtens[i]->setSize(fontSize);
 		writtens[i]->setAlpha(0);
-		writtenStrs.push_back("");
+		writtenStrs.push_back(cmm::SEMPTY);
 	}
 
 	fps.load(screen_w, screen_h);
@@ -156,7 +157,7 @@ void Chat::handle(const sf::Event &event)
 				else if (event.key.code == sf::Keyboard::Enter && !writtenStrs[0].empty())
 				{
 					int i = 0;	// remove space from the beggining
-					while (writtenStrs[0][i] == ' ')
+					while (writtenStrs[0][i] == cmm::CSPACE)
 					{
 						writtenStrs[0].erase(i, 1);
 						++i;
@@ -166,7 +167,7 @@ void Chat::handle(const sf::Event &event)
 					if (!writtenStrs[0].empty())
 					{
 						i = writtenStrs[0].size() - 1;
-						while (writtenStrs[0][i] == ' ')
+						while (writtenStrs[0][i] == cmm::CSPACE)
 						{
 							writtenStrs[0].erase(i, 1);
 							--i;
@@ -398,12 +399,12 @@ bool Chat::checkCoxing()
 
 		if (activity_result == -1)
 		{
-			setError(" - cannot recognize activity \"" + activity + "\".");
+			setError(" - cannot recognize activity '" + activity + "'.");
 			return false;
 		}
 		else if (newKey_result == -1)
 		{
-			setError(" - cannot recognize key \"" + newKey + "\".");
+			setError(" - cannot recognize key '" + newKey + "'.");
 			return false;
 		}
 		else
@@ -413,7 +414,7 @@ bool Chat::checkCoxing()
 			{
 				if (keys.getKey(i) == newKey_result)
 				{
-					setError(" - key \"" + newKey + "\" is already in use.");
+					setError(" - key '" + newKey + "' is already in use.");
 					return false;
 				}
 			}
@@ -570,15 +571,15 @@ void Chat::setWritten()
 
 void Chat::prepareWritten(int n, int k)
 {
-	// Add \n if needed.
-	std::string buf = "";
+	// Add new line if needed.
+	std::string buf = cmm::SEMPTY;
 	for (unsigned i = 0; i < writtenStrs[k].size(); ++i)
 	{
 		buf += writtenStrs[k][i];
 		writtens[n]->setText(buf);
 
 		if (writtens[n]->getWidth() + username.getWidth() + screen_w / 64 >= background.getRight())
-			buf = buf.substr(0, buf.size() - 1) + "\n" + buf[buf.size() - 1];
+			buf = buf.substr(0, buf.size() - 1) + cmm::SNEWLINE + buf[buf.size() - 1];
 	}
 
 	writtenStrs[k] = buf;

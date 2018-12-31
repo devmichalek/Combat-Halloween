@@ -1,13 +1,14 @@
 #include "user.h"
+#include "converter.h"
 #include <stdio.h>
 #include <iostream>
 
 int main(int argc, char** argv)
 {
-	printf("Username: %s\nPassword: %s\n", cmm::User::getUsername().c_str(), cmm::User::getPassword().c_str());
+	printf("Username: %s%sPassword: %s%s", cmm::User::getUsername().c_str(), cmm::CSNEWLINE, cmm::User::getPassword().c_str(), cmm::CSNEWLINE);
 
-	std::cout << "Press Enter to Continue...\n";
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cout << "Press Enter to Continue..." << std::endl;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), cmm::CNEWLINE);
 
 	return 0;
 }

@@ -57,7 +57,7 @@ cmm::Sprite::~Sprite()
 
 std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 {
-	std::string out = "Error: Cannot properly create texture from \"" + path + "\".";
+	std::string out = "Error: Cannot properly create texture from '" + path + "'.";
 
 	sf::Texture* texture = nullptr;
 	sf::Texture* ptr = texture_map.get(path);
@@ -68,7 +68,7 @@ std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 
 	if (!ptr && texture->loadFromFile(path))
 	{
-		out = "Success: Correctly loaded \"" + path + "\".";
+		out = "Success: Correctly loaded '" + path + "'.";
 		texture->setSmooth(true);
 		texture_map.paths.push_back(path);
 		texture_map.textures.push_back(texture);
@@ -81,7 +81,7 @@ std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 		numOfOffsets = numOfOffsets < 1 ? 1 : numOfOffsets;
 
 		if (numOfOffsets == 1)
-			out = "Warning: The number of offsets of the sprite \"" + path + "\" is 1.";
+			out = "Warning: The number of offsets of the sprite '" + path + "' is 1.";
 
 		int width = texture->getSize().x;
 		int height = texture->getSize().y;
@@ -101,7 +101,7 @@ std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 			h = static_cast<float>(height);
 		}
 		else
-			out = "Error: Cannot create sprite from \"" + path + "\".";
+			out = "Error: Cannot create sprite from '" + path + "'.";
 	}
 
 	return out;
@@ -109,12 +109,12 @@ std::string cmm::Sprite::load(std::string path, int numOfOffsets)
 
 std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool borders)
 {
-	std::string out = "Error: Cannot create image from \"" + path + "\"";
+	std::string out = "Error: Cannot create image from '" + path + "'";
 
 	sf::Image image;
 	if (image.loadFromFile(path))
 	{
-		out = "Success: Correctly loaded \"" + path + "\".";
+		out = "Success: Correctly loaded '" + path + "'.";
 
 		int width = image.getSize().x;
 		int height = image.getSize().y;
@@ -155,10 +155,10 @@ std::string cmm::Sprite::loadRepeated(std::string path, float w, float h, bool b
 				h = static_cast<float>(height);
 			}
 			else
-				out = "Error: Cannot create sprite from \"" + path + "\".";
+				out = "Error: Cannot create sprite from '" + path + "'.";
 		}
 		else
-			out = "Error: Cannot properly create texture from \"" + path + "\".";
+			out = "Error: Cannot properly create texture from '" + path + "'.";
 	}
 
 	return out;

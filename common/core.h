@@ -1,6 +1,7 @@
 #pragma once
 #include "eventwindow.h"
 #include "colors.h"
+#include "converter.h"
 
 namespace cmm
 {
@@ -34,7 +35,7 @@ namespace cmm
 		void free();
 		void close();
 
-		virtual bool create(const char* title = "", int style = sf::Style::Titlebar | sf::Style::Close);
+		virtual bool create(const char* title = cmm::SEMPTY.c_str(), int style = sf::Style::Titlebar | sf::Style::Close);
 		virtual bool setIcon(const char* path);
 
 		void clear() const;

@@ -1,5 +1,6 @@
 #include "rectbutton.h"
 #include "loading.h"
+#include "converter.h"
 
 RectButton::RectButton()
 {
@@ -85,7 +86,7 @@ void RectButton::handle(const sf::Event &event)
 			{
 				if (checkCollision((float)event.mouseButton.x, (float)event.mouseButton.y))
 				{
-					// printf("%f %f\n", alpha, alphaBorders);
+					// printf("%f %f%s", alpha, alphaBorders, cmm::CSNEWLINE);
 					if (alpha > MAX_ALPHA / 2 && alphaBorders > MAX_ALPHA / 2)
 					{
 						focus = true;

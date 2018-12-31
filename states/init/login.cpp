@@ -1,6 +1,7 @@
 #include "login.h"
 #include "user.h"
 #include "loading.h"
+#include "converter.h"
 
 Login::Login()
 {
@@ -21,7 +22,7 @@ void Login::free()
 	arrow_counter = 0;
 	arrow_line = 0;
 
-	info_str = "";
+	info_str = cmm::SEMPTY;
 
 	loginbutton.free();
 	signupbutton.free();
@@ -29,8 +30,8 @@ void Login::free()
 	backbutton.free();
 
 	state = 0;
-	username = "";
-	password = "";
+	username = cmm::SEMPTY;
+	password = cmm::SEMPTY;
 	max_length_username = 0;
 	min_length_username = 0;
 	max_length_password = 0;
@@ -264,7 +265,7 @@ void Login::mechanics(const double &elapsedTime)
 	/*FPS::mechanics(elapsedTime);
 	if (FPS::timePassed())
 	{
-		printf("%d\n", FPS::getFPS());
+		printf("%d%s", FPS::getFPS(), cmm::CSNEWLINE);
 	}*/
 
 	// Delete thread if is done.
@@ -276,7 +277,7 @@ void Login::mechanics(const double &elapsedTime)
 	if (!info_str.empty())
 	{
 		info.setText(info_str);
-		info_str = "";
+		info_str = cmm::SEMPTY;
 		// Set alpha and position of info.
 		info.setAlpha(MAX_ALPHA);
 		info.setPosition(screen_w / 2 - info.getWidth() / 2, password_form.getBot() + screen_h / 20);
@@ -459,7 +460,7 @@ void Login::setThread()
 
 std::string Login::getPassword()
 {
-	std::string new_password = "";
+	std::string new_password = cmm::SEMPTY;
 	for (unsigned i = 0; i < password.size(); ++i)
 	{
 		new_password += '*';

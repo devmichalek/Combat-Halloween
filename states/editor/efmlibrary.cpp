@@ -1,5 +1,6 @@
 #include "efmlibrary.h"
 #include "loading.h"
+#include "converter.h"
 
 EFMLibrary::EFMLibrary()
 {
@@ -265,7 +266,7 @@ void EFMLibrary::refresh(std::vector<std::string> copy)
 		int STEP_ONE = 12;
 		int STEP_TWO = 21;
 		std::string outStr = str.substr(0, str.size() - length);
-		if ((int)str.size() > STEP_TWO)				outStr = str.substr(0, (STEP_ONE-1)) + "\n" + str.substr(STEP_ONE, (STEP_ONE - length)) + "...";
+		if ((int)str.size() > STEP_TWO)				outStr = str.substr(0, (STEP_ONE-1)) + cmm::SNEWLINE + str.substr(STEP_ONE, (STEP_ONE - length)) + "...";
 		else if ((int)str.size() > STEP_ONE)		outStr = str.substr(0, (STEP_ONE - length)) + "...";
 
 		textLabels[n]->setText(outStr);

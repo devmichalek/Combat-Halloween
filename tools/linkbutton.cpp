@@ -1,4 +1,5 @@
 #include "linkbutton.h"
+#include "converter.h"
 
 LinkButton::LinkButton()
 {
@@ -13,7 +14,7 @@ LinkButton::~LinkButton()
 void LinkButton::free()
 {
 	locked = false;
-	url = "";
+	url = cmm::SEMPTY;
 }
 
 void LinkButton::handle(const sf::Event &event)

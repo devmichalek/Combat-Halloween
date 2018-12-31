@@ -8,13 +8,13 @@
 cmm::FileManager::FileManager()
 {
 	status = EMPTY;
-	msg = "";
+	msg = cmm::SEMPTY;
 }
 
 cmm::FileManager::~FileManager()
 {
 	status = EMPTY;
-	msg = "";
+	msg = cmm::SEMPTY;
 
 	if (file.is_open())
 		file.close();
@@ -99,7 +99,7 @@ void cmm::FileManager::savePrivate(std::string &fileName, std::vector<std::strin
 	file.open(pathToFile, std::ios::in);
 	if (file.bad())
 	{
-		msg = "Cannot find file \"" + substr(fileName) + "\", creating remotely...";
+		msg = "Cannot find file '" + substr(fileName) + "', creating remotely...";
 		status = WARNING;
 	}
 	file.close();
@@ -108,13 +108,13 @@ void cmm::FileManager::savePrivate(std::string &fileName, std::vector<std::strin
 	{
 		if (refreshSupport(pathToDir, dirVec))
 		{
-			msg = "Correctly saved file \"" + substr(fileName) + "\".";
+			msg = "Correctly saved file '" + substr(fileName) + "'.";
 			status = SUCCESS;
 		}
 	}
 	else
 	{
-		msg = "Cannot save file \"" + substr(fileName) + "\"!";
+		msg = "Cannot save file '" + substr(fileName) + "'!";
 		status = FAILURE;
 	}
 }
@@ -123,7 +123,7 @@ void cmm::FileManager::uploadPrivate(std::string &fileName, std::string &pathToD
 {
 	if (compareExtension(fileName, SERVERFILE_EXTENSION))
 	{
-		msg = "Cannot upload file \"" + substr(fileName) + "\".\n";
+		msg = "Cannot upload file '" + substr(fileName) + "'." + cmm::SNEWLINE;
 		msg += "File need to be local to be uploaded.";
 		status = FAILURE;
 	}
@@ -143,7 +143,7 @@ void cmm::FileManager::uploadPrivate(std::string &fileName, std::string &pathToD
 					cmm::removeExtension(b);
 					if (a == b)
 					{
-						msg = "Cannot upload file \"" + substr(fileName) + "\".\n";
+						msg = "Cannot upload file '" + substr(fileName) + "'." + cmm::SNEWLINE;
 						msg += "File already exists on the server site.";
 						status = FAILURE;
 						return;
@@ -153,7 +153,7 @@ void cmm::FileManager::uploadPrivate(std::string &fileName, std::string &pathToD
 
 			if (failure)
 			{
-				msg = "Cannot upload file \"" + substr(fileName) + "\".\n";
+				msg = "Cannot upload file '" + substr(fileName) + "'." + cmm::SNEWLINE;
 				msg += "Couldn't find files with server extension.";
 				status = FAILURE;
 				return;
@@ -164,7 +164,7 @@ void cmm::FileManager::uploadPrivate(std::string &fileName, std::string &pathToD
 			std::vector<std::string> guts = {};
 			if (openSupport(pathToFile, guts))
 			{
-				std::string oneStr = "";
+				std::string oneStr = cmm::SEMPTY;
 				for (auto &it : guts)
 					oneStr += it;
 
@@ -177,13 +177,13 @@ void cmm::FileManager::uploadPrivate(std::string &fileName, std::string &pathToD
 					request.setHttp(cmm::WEBSITE_PATH);
 					request.setRequest(cmm::WEBSITE_SUBPATH + "getters/world/uploadworld.php", sf::Http::Request::Post);
 
-					std::string info_str = "";
+					std::string info_str = cmm::SEMPTY;
 					if (request.sendRequest())
 					{
 						std::string result = request.getResult();
 						if (result != "0")
 						{
-							msg = "Unexpected error.\nCannot upload file to server!";
+							msg = "Unexpected error." + cmm::SNEWLINE + "Cannot upload file to server!";
 							status = FAILURE;
 						}
 						else
@@ -210,8 +210,8 @@ void cmm::FileManager::openPrivate(std::string &fileName, std::vector<std::strin
 {
 	if (compareExtension(fileName, SERVERFILE_EXTENSION))
 	{
-		msg = "Cannot open server file \"" + substr(fileName) + "\".\n";
-		msg += "File need to be copied first to be opened\nlocally.";
+		msg = "Cannot open server file '" + substr(fileName) + "'." + cmm::SNEWLINE;
+		msg += "File need to be copied first to be opened" + cmm::SNEWLINE + "locally.";
 		status = FAILURE;
 	}
 	else
@@ -219,12 +219,12 @@ void cmm::FileManager::openPrivate(std::string &fileName, std::vector<std::strin
 		std::string pathToFile = pathToDir + "/" + fileName;
 		if (openSupport(pathToFile, guts))
 		{
-			msg = "Correctly loaded file \"" + substr(fileName) + "\".";
+			msg = "Correctly loaded file '" + substr(fileName) + "'.";
 			status = SUCCESS;
 		}
 		else
 		{
-			msg = "Cannot open file \"" + substr(fileName) + "\"!";
+			msg = "Cannot open file '" + substr(fileName) + "'!";
 			status = FAILURE;
 		}
 	}
@@ -237,7 +237,7 @@ void cmm::FileManager::createPrivate(std::string &fileName, std::string &pathToD
 	file.open(pathToFile, std::ios::in);
 	if (file.is_open())
 	{
-		msg = "File \"" + substr(fileName) + "\" exists,\noverwriting remotely...";
+		msg = "File '" + substr(fileName) + "' exists," + cmm::SNEWLINE + "overwriting remotely...";
 		status = WARNING;
 	}
 	file.close();
@@ -247,13 +247,13 @@ void cmm::FileManager::createPrivate(std::string &fileName, std::string &pathToD
 	{
 		if (refreshSupport(pathToDir, dirVec))
 		{
-			msg = "Correctly created file \"" + substr(fileName) + "\".";
+			msg = "Correctly created file '" + substr(fileName) + "'.";
 			status = SUCCESS;
 		}
 	}
 	else
 	{
-		msg = "Cannot create file \"" + substr(fileName) + "\"!";
+		msg = "Cannot create file '" + substr(fileName) + "'!";
 		status = FAILURE;
 	}
 	file.close();
@@ -279,25 +279,25 @@ void cmm::FileManager::copyPrivate(std::string &fileName, std::vector<std::strin
 			request.setHttp(cmm::WEBSITE_PATH);
 			request.setRequest(cmm::WEBSITE_SUBPATH + "getters/world/copyworld.php", sf::Http::Request::Post);
 
-			std::string info_str = "";
+			std::string info_str = cmm::SEMPTY;
 			if (request.sendRequest())
 			{
 				std::string result = request.getResult();
 				if (result.size() < 2 && !result.empty()) // decimal means error e. g. -1, 1, 2 ...
 				{
-					msg = "Unexpected error.\nCannot copy file from server!";
+					msg = "Unexpected error." + cmm::SNEWLINE + "Cannot copy file from server!";
 					status = FAILURE;
 				}
 				else
 				{
 					// Extract data.
-					std::string line = "";
+					std::string line = cmm::SEMPTY;
 					for (auto it : result)
 					{
-						if (it == '\n')
+						if (it == cmm::CNEWLINE)
 						{
 							temp.push_back(line);
-							line = "";
+							line = cmm::SEMPTY;
 							continue;
 						}
 						line += it;
@@ -318,7 +318,7 @@ void cmm::FileManager::copyPrivate(std::string &fileName, std::vector<std::strin
 				success = true;
 			else
 			{
-				msg = "Cannot copy file \"" + substr(fileName) + "\"!";
+				msg = "Cannot copy file '" + substr(fileName) + "'!";
 				status = FAILURE;
 			}
 		}
@@ -347,13 +347,13 @@ void cmm::FileManager::copyPrivate(std::string &fileName, std::vector<std::strin
 			{
 				if (refreshSupport(pathToDir, dirVec))
 				{
-					msg = "Correctly copied file \"" + substr(fileName) + "\"\nto \"" + substr(newFileName) + "\".";
+					msg = "Correctly copied file '" + substr(fileName) + "'" + cmm::SNEWLINE + "to '" + substr(newFileName) + "'.";
 					status = SUCCESS;
 				}
 			}
 			else
 			{
-				msg = "Cannot copy file \"" + substr(fileName) + "\"\nto \"" + substr(newFileName) + "\"!";
+				msg = "Cannot copy file '" + substr(fileName) + "'" + cmm::SNEWLINE + "to '" + substr(newFileName) + "'!";
 				status = FAILURE;
 			}
 		}
@@ -376,13 +376,13 @@ void cmm::FileManager::renamePrivate(std::string &oldFileName, std::string &newF
 			request.setHttp(cmm::WEBSITE_PATH);
 			request.setRequest(cmm::WEBSITE_SUBPATH + "getters/world/renameworld.php", sf::Http::Request::Post);
 
-			std::string info_str = "";
+			std::string info_str = cmm::SEMPTY;
 			if (request.sendRequest())
 			{
 				std::string result = request.getResult();
 				if (result != "0")
 				{
-					msg = "Unexpected error.\nCannot rename file from server!";
+					msg = "Unexpected error." + cmm::SNEWLINE + "Cannot rename file from server!";
 					status = FAILURE;
 					return;
 				}
@@ -408,13 +408,13 @@ void cmm::FileManager::renamePrivate(std::string &oldFileName, std::string &newF
 	{
 		if (refreshSupport(pathToDir, dirVec))
 		{
-			msg = "Correctly renamed file \"" + substr(oldFileName) + "\"\ninto \"" + substr(newFileName) + "\".";
+			msg = "Correctly renamed file '" + substr(oldFileName) + "'" + cmm::SNEWLINE + "into '" + substr(newFileName) + "'.";
 			status = SUCCESS;
 		}
 	}
 	else
 	{
-		msg = "Cannot rename file \"" + substr(oldFileName) + "\"\ninto \"" + substr(newFileName) + "\"!";
+		msg = "Cannot rename file '" + substr(oldFileName) + "'" + cmm::SNEWLINE + "into '" + substr(newFileName) + "'!";
 		status = FAILURE;
 	}
 }
@@ -434,13 +434,13 @@ void cmm::FileManager::deletePrivate(std::string &fileName, std::string &pathToD
 			request.setHttp(cmm::WEBSITE_PATH);
 			request.setRequest(cmm::WEBSITE_SUBPATH + "getters/world/deleteworld.php", sf::Http::Request::Post);
 
-			std::string info_str = "";
+			std::string info_str = cmm::SEMPTY;
 			if (request.sendRequest())
 			{
 				std::string result = request.getResult();
 				if (result != "0")
 				{
-					msg = "Unexpected error.\nCannot delete file from server!";
+					msg = "Unexpected error." + cmm::SNEWLINE + "Cannot delete file from server!";
 					status = FAILURE;
 					return;
 				}
@@ -461,12 +461,12 @@ void cmm::FileManager::deletePrivate(std::string &fileName, std::string &pathToD
 	if (retcode)
 	{
 		refreshSupport(pathToDir, dirVec);
-		msg = "Correctly deleted file \"" + substr(fileName) + "\".";
+		msg = "Correctly deleted file '" + substr(fileName) + "'.";
 		status = SUCCESS;
 	}
 	else
 	{
-		msg = "Cannot delete file \"" + substr(fileName) + "\"!";
+		msg = "Cannot delete file '" + substr(fileName) + "'!";
 		status = FAILURE;
 	}
 }
@@ -475,7 +475,7 @@ void cmm::FileManager::refreshPrivate(std::string &pathToDir, std::vector<std::s
 {
 	if (!refreshSupport(pathToDir, dirVec))
 	{
-		msg += "\nCreating remotely...";
+		msg += cmm::SNEWLINE + "Creating remotely...";
 		status = WARNING;
 	}
 
@@ -509,10 +509,10 @@ bool cmm::FileManager::openSupport(std::string &pathToFile, std::vector<std::str
 		if (!guts.empty())
 			guts.clear();
 
-		std::string line = "";
+		std::string line = cmm::SEMPTY;
 
 		while (std::getline(file, line))
-			guts.push_back(line + "\n");
+			guts.push_back(line + cmm::SNEWLINE);
 	}
 	else
 	{
@@ -537,41 +537,40 @@ bool cmm::FileManager::refreshSupport(std::string &pathToDir, std::vector<std::s
 		request.setHttp(cmm::WEBSITE_PATH);
 		request.setRequest(cmm::WEBSITE_SUBPATH + "getters/world/refreshworld.php", sf::Http::Request::Post);
 
-		std::string info_str = "";
+		std::string info_str = cmm::SEMPTY;
 		if (request.sendRequest())
 		{
 			std::string result = request.getResult();
-			// printf("%s\n", result.c_str());
-			if (result.find("\n") != std::string::npos)
+			if (result.find(cmm::SNEWLINE) != std::string::npos)
 			{
 				// Extract.
-				std::string line = "";
+				std::string line = cmm::SEMPTY;
 				for (auto it : result)
 				{
-					if (it == '\n')
+					if (it == cmm::CNEWLINE)
 					{
 						// Remove doublequotes.
 						//cmm::removeDoubleQuotes(line);
 
 						dirVec.push_back(line + SERVERFILE_EXTENSION);
-						line = "";
+						line = cmm::SEMPTY;
 						continue;
 					}
 					line += it;
 				}
 
-				msg = "Correctly loaded files from server.\n";
+				msg = "Correctly loaded files from server." + cmm::SNEWLINE;
 				status = SUCCESS;
 			}
 			else if (!result.empty())
 			{
-				msg = "Received Server Warning.\nCouldn't find server files!\n";
+				msg = "Received Server Warning." + cmm::SNEWLINE + "Couldn't find server files!" + cmm::SNEWLINE;
 				status = WARNING;
 			}
 		}
 		else
 		{
-			msg = "Unexpected Error.\nCouldn't connect with database!\n";
+			msg = "Unexpected Error." + cmm::SNEWLINE + "Couldn't connect with database!" + cmm::SNEWLINE;
 			status = WARNING;
 		}
 	}
@@ -580,7 +579,7 @@ bool cmm::FileManager::refreshSupport(std::string &pathToDir, std::vector<std::s
 	if (!boost::filesystem::is_directory(pathToDir))	// Create directory if it does not exist
 	{
 		boost::filesystem::create_directories("local");
-		msg = "Unexpected Error.\nDirectory \"" + substr(pathToDir) + "\" is empty!";
+		msg = "Unexpected Error." + cmm::SNEWLINE + "Directory '" + substr(pathToDir) + "' is empty!";
 		status = WARNING;
 		return false;
 	}
@@ -594,7 +593,7 @@ bool cmm::FileManager::refreshSupport(std::string &pathToDir, std::vector<std::s
 			dirVec.push_back(buf);
 	}
 
-	msg += "Correctly loaded files from\ndirectory \"" + substr(pathToDir) + "\".";
+	msg += "Correctly loaded files from" + cmm::SNEWLINE + "directory '" + substr(pathToDir) + "'.";
 	status = SUCCESS;
 	return true;
 }

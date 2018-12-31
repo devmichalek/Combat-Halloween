@@ -119,10 +119,10 @@ void main_loop()
 		fps.draw(core->getWindow());
 		fps.mechanics(elapsedTime);
 
-		foeFactory->setBorders(0, 0);
+		float newX = 0, newY = 0;
 		foeFactory->update(core->getWindow(), elapsedTime,
 			character, characterAttack, characterHasAttacked, characterDamage, characterHP,
-			characterArmour);
+			characterArmour, newX, newY);
 
 		// display
 		core->display();

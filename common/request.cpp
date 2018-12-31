@@ -1,8 +1,9 @@
 #include "request.h"
+#include "converter.h"
 
 cmm::Request::Request()
 {
-	result = "";
+	result = cmm::SEMPTY;
 }
 
 cmm::Request::~Request()
@@ -21,7 +22,7 @@ bool cmm::Request::sendRequest()
 		return true;
 	}
 
-	result = "";
+	result = cmm::SEMPTY;
 	return false;
 }
 

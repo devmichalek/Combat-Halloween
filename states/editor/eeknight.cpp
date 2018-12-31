@@ -61,7 +61,7 @@ void ee::KnightBoard::load(sf::Vector2f &screen)
 	texts[EXPERIENCE * 2]->setText("Experience:");
 	texts[LEVEL * 2]->setText("Level:");
 	for (int i = 1; i < FEATURES::SIZE * 2; i += 2)
-		texts[i]->setText("");
+		texts[i]->setText(cmm::SEMPTY);
 	for (int i = 0; i < FEATURES::SIZE * 2; i += 2)
 		texts[i]->setFillColor(cmm::LOCKED_COLOR);
 	texts[EXPERIENCE * 2 + 1]->setText("-");
@@ -161,7 +161,7 @@ bool ee::Knight::isModified()
 
 ee::Item ee::Knight::getItem()
 {
-	std::string new_ai = "";
+	std::string new_ai = cmm::SEMPTY;
 	new_ai += "hp(" + std::to_string(static_cast<int>(board.values[board.HEART_POINTS])) + "), ";
 	new_ai += "mp(" + std::to_string(static_cast<int>(board.values[board.MAGIC_POINTS])) + "), ";
 	new_ai += "armour(" + cmm::floatToStr(board.values[board.ARMOUR] / 1000, 3) + "), ";
@@ -327,7 +327,7 @@ bool ee::Knight::add(Item &data)
 		board.values[board.LUCK] = boost::lexical_cast<float>(str.substr(str.find("luck(") + 5, (str.size() - 1) - (str.find("luck(") + 6)));
 	}
 	else
-		item.ai = "";
+		item.ai = cmm::SEMPTY;
 
 	item.ID = data.ID;
 	item.position = data.position;
@@ -341,7 +341,7 @@ bool ee::Knight::remove(sf::Vector2i &mouse)
 {
 	if (checkCollision(mouse))
 	{
-		item.ai = "";
+		item.ai = cmm::SEMPTY;
 		item.position = sf::Vector2i(-1, -1);
 		return true;
 	}

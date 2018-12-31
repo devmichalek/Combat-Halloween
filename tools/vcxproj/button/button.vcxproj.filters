@@ -34,6 +34,9 @@
     <ClCompile Include="..\..\..\common\audio.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\converter.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\button.h" />

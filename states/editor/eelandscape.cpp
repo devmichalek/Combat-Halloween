@@ -8,7 +8,7 @@ ee::LandscapeItem::LandscapeItem(int ID, char chosen, float scale)
 	this->chosen = chosen;
 	type = LANDSCAPE;
 	this->scale = scale;
-	ai = "";
+	ai = cmm::SEMPTY;
 	position = sf::Vector2i(0, 0);
 }
 
@@ -56,9 +56,9 @@ void ee::LandscapeBoard::load(sf::Vector2f &screen)
 	}
 
 	texts[SCALE]->setText("Scale:");
-	texts[SCALE_EDIT]->setText("");
+	texts[SCALE_EDIT]->setText(cmm::SEMPTY);
 	texts[GLOBAL]->setText("Global Scale:");
-	texts[GLOBAL_EDIT]->setText("");
+	texts[GLOBAL_EDIT]->setText(cmm::SEMPTY);
 	texts[SCALE]->setFillColor(cmm::LOCKED_COLOR);
 	texts[GLOBAL]->setFillColor(cmm::LOCKED_COLOR);
 

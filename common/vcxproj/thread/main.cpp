@@ -1,4 +1,5 @@
 #include "thread.h"
+#include "converter.h"
 #include <stdio.h>
 #include <limits>
 #include <iostream>
@@ -7,7 +8,7 @@ void counting(const char* t, int s, int e, bool &r, bool &v)
 {
 	for (int i = s; i < e; ++i)
 	{
-		printf("%s: %d\n", t, i);
+		printf("%s: %d%s", t, i, cmm::CSNEWLINE);
 	}
 
 	// now is ready for the next task
@@ -34,12 +35,12 @@ int main(int argc, char** argv)
 	}
 
 	// Print status
-	// if (t1.success && t2.success)	printf("Success...\n");
-	// else								printf("Error...\n");
+	// if (t1.success && t2.success)	printf("Success...%s", cmm::SNEWLINE);
+	// else								printf("Error...%s", cmm::SNEWLINE);
 	
 	// Finish
-	std::cout << "Press Enter to Continue...\n";
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	std::cout << "Press Enter to Continue..." << std::endl;
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), cmm::CNEWLINE);
 
 	// Free
 	t1.free();

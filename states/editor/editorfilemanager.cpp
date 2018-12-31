@@ -1,5 +1,6 @@
 #include "editorfilemanager.h"
 #include "loading.h"
+#include "converter.h"
 
 EditorFileManager::EditorFileManager()
 {
@@ -186,7 +187,7 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 				else if (fileManager.checkIfFileExists(textEditor.get()))
 				{
 					messageBoard.setActive();
-					messageBoard.setMessage("There is already file with this name.\nDo you want to override this file?");
+					messageBoard.setMessage("There is already file with this name." + cmm::SNEWLINE + "Do you want to override this file?");
 				}
 				else
 				{
@@ -269,7 +270,7 @@ const bool& EditorFileManager::isActive() const
 
 bool EditorFileManager::isFileOpen()
 {
-	return fileManager.getLoadedFileName() != "";
+	return fileManager.getLoadedFileName() != cmm::SEMPTY;
 }
 
 bool EditorFileManager::isFileUnsave()
@@ -304,7 +305,7 @@ bool EditorFileManager::isYes()
 void EditorFileManager::openMessageBoard()
 {
 	messageBoard.setActive();
-	messageBoard.setMessage("There is unsaved file.\nDo you want to continue?");
+	messageBoard.setMessage("There is unsaved file." + cmm::SNEWLINE + "Do you want to continue?");
 }
 
 
@@ -313,7 +314,7 @@ void EditorFileManager::newFile()
 {
 	action = CREATING;
 	textEditor.setActive();
-	textEditor.set("New File", "File Name:", "");
+	textEditor.set("New File", "File Name:", cmm::SEMPTY);
 }
 
 void EditorFileManager::openFile()
@@ -322,12 +323,12 @@ void EditorFileManager::openFile()
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
-		messageBoard.setMessage("There is no chosen file.\nChoose file by clicking on the icon.");
+		messageBoard.setMessage("There is no chosen file." + cmm::SNEWLINE + "Choose file by clicking on the icon.");
 	}
 	else if (isFileUnsave())
 	{
 		messageBoard.setActive();
-		messageBoard.setMessage("There is unsaved file.\nDo you want to continue?");
+		messageBoard.setMessage("There is unsaved file." + cmm::SNEWLINE + "Do you want to continue?");
 	}
 	else
 	{
@@ -345,7 +346,7 @@ void EditorFileManager::saveFile()
 	else
 	{
 		textEditor.setActive();
-		textEditor.set("New File", "File Name:", "");
+		textEditor.set("New File", "File Name:", cmm::SEMPTY);
 	}
 }
 
@@ -355,7 +356,7 @@ void EditorFileManager::uploadFile()
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
-		messageBoard.setMessage("There is no chosen file.\nChoose file by clicking on the icon.");
+		messageBoard.setMessage("There is no chosen file." + cmm::SNEWLINE + "Choose file by clicking on the icon.");
 	}
 	else
 	{
@@ -369,7 +370,7 @@ void EditorFileManager::copyFile()
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
-		messageBoard.setMessage("There is no chosen file.\nChoose file by clicking on the icon.");
+		messageBoard.setMessage("There is no chosen file." + cmm::SNEWLINE + "Choose file by clicking on the icon.");
 	}
 	else
 	{
@@ -383,12 +384,12 @@ void EditorFileManager::renameFile()
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
-		messageBoard.setMessage("There is no chosen file.\nChoose file by clicking on the icon.");
+		messageBoard.setMessage("There is no chosen file." + cmm::SNEWLINE + "Choose file by clicking on the icon.");
 	}
 	else
 	{
 		textEditor.setActive();
-		textEditor.set("Rename File", "File Name:", "");
+		textEditor.set("Rename File", "File Name:", cmm::SEMPTY);
 	}
 }
 
@@ -398,12 +399,12 @@ void EditorFileManager::deleteFile()
 	if (!library.isChosen())
 	{
 		messageBoard.setActive(2);
-		messageBoard.setMessage("There is no chosen file.\nChoose file by clicking on the icon.");
+		messageBoard.setMessage("There is no chosen file." + cmm::SNEWLINE + "Choose file by clicking on the icon.");
 	}
 	else
 	{
 		messageBoard.setActive();
-		messageBoard.setMessage("Do you really want to delete this file?\nClick yes to continue...");
+		messageBoard.setMessage("Do you really want to delete this file?" + cmm::SNEWLINE + "Click yes to continue...");
 	}
 }
 

@@ -1,9 +1,10 @@
 #include "scontent.h"
 #include <boost/lexical_cast.hpp>
+#include "converter.h"
 
 cmm::Kind SContent::kind;
 int SContent::type = SContent::TYPE::NONE;
-std::string SContent::path = "";
+std::string SContent::path = cmm::SEMPTY;
 std::vector<std::string> SContent::content_sorted;
 std::vector<std::string> SContent::buffer;
 
@@ -15,7 +16,7 @@ SContent::SContent()
 SContent::~SContent()
 {
 	type = TYPE::NONE;
-	path = "";
+	path = cmm::SEMPTY;
 	
 	if (!content_sorted.empty())
 	{

@@ -82,7 +82,7 @@ std::string cmm::Sound::load(std::string path)
 		sound->setBuffer(*buffer);
 		buffer_map.paths.push_back(path);
 		buffer_map.buffers.push_back(buffer);
-		return "Success: Sound \"" + std::string(path) + "\" loaded correctly.";
+		return "Success: Sound '" + std::string(path) + "' loaded correctly.";
 	}
 	else if (ptr)
 	{
@@ -91,7 +91,7 @@ std::string cmm::Sound::load(std::string path)
 		return "Success: Sound Buffer set correctly.";
 	}
 
-	return "Error: Cannot create sound buffer from\"" + std::string(path) + "\".";
+	return "Error: Cannot create sound buffer from'" + std::string(path) + "'.";
 }
 
 void cmm::Sound::setVolume(const float &newVolume)

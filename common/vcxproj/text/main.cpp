@@ -1,5 +1,6 @@
 #include "core.h"
 #include "text.h"
+#include "converter.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
 int main(int argc, char** argv)
@@ -18,16 +19,16 @@ int main(int argc, char** argv)
 	text.setScale(1.5, 1.4);
 	text.flipHorizontally();
 	text.flipVertically();
-	text.setSize(30);	printf("Size: %d\n", text.getSize());
+	text.setSize(30);	printf("Size: %d%s", text.getSize(), cmm::CSNEWLINE);
 	text.setRotation(45.0);
-	text.setAlpha(MAX_ALPHA);	printf("Alpha: %f\n", text.getAlpha());
+	text.setAlpha(MAX_ALPHA);	printf("Alpha: %f%s", text.getAlpha(), cmm::CSNEWLINE);
 	text.setFillColor(sf::Color::Black);
 	text.setOutlineColor(sf::Color::White);
 	text.setOutlineThickness(3);
-	printf("Left: %f=%f\n", text.getX(), text.getLeft());
-	printf("Right: %f=%f\n", text.getX() + text.getWidth(), text.getRight());
-	printf("Top: %f=%f\n", text.getY(), text.getTop());
-	printf("Bot: %f=%f\n", text.getY() + text.getHeight(), text.getBot());
+	printf("Left: %f=%f%s", text.getX(), text.getLeft(), cmm::CSNEWLINE);
+	printf("Right: %f=%f%s", text.getX() + text.getWidth(), text.getRight(), cmm::CSNEWLINE);
+	printf("Top: %f=%f%s", text.getY(), text.getTop(), cmm::CSNEWLINE);
+	printf("Bot: %f=%f%s", text.getY() + text.getHeight(), text.getBot(), cmm::CSNEWLINE);
 
 	sf::RectangleShape rect;
 	rect.setSize(sf::Vector2f(text.getWidth(), text.getHeight()));

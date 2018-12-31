@@ -1,6 +1,7 @@
 #include "settings.h"
 #include "loading.h"
 #include "definitions.h"
+#include "converter.h"
 
 Settings::Settings()
 {
@@ -166,7 +167,7 @@ void Settings::load(const float &screen_w, const float &screen_h)
 	// Set info.
 	Loading::add(info.setFont(cmm::JCANDLE_FONT_PATH));
 	if (Loading::isError())	return;
-	info.setText("Press new key to change.\nClick anywhere to save.");
+	info.setText("Press new key to change." + cmm::SNEWLINE + "Click anywhere to save.");
 	info.setSize(size);
 	info.setFillColor(cmm::LOCKED_COLOR);
 
@@ -499,7 +500,7 @@ void Settings::positionChart()
 
 const std::string Settings::getName(const int &n)
 {
-	std::string name = "";
+	std::string name = cmm::SEMPTY;
 
 	if (n > -1 && n <= 25)			// from a to z
 	{

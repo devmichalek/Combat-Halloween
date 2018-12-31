@@ -1,6 +1,7 @@
 #include "editor.h"
 #include "scontent.h"
 #include "loading.h"
+#include "converter.h"
 
 Editor::Editor()
 {
@@ -185,7 +186,7 @@ void Editor::setState(int &state)
 	else if (isNext())
 	{
 		SContent::type = SContent::TYPE::EDITOR;
-		SContent::path = "";
+		SContent::path = cmm::SEMPTY;
 		reset();
 		state = cmm::STATES::SIMULATOR;
 	}

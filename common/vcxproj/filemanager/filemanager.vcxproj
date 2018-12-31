@@ -7,7 +7,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\converter.cpp" />
     <ClCompile Include="..\..\filemanager.cpp" />
+    <ClCompile Include="..\..\request.cpp" />
+    <ClCompile Include="..\..\user.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -47,10 +50,11 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
-      <AdditionalIncludeDirectories>..\..\..\3rd-party\boost;..\..\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\3rd-party\SFML\include;..\..\..\3rd-party\boost;..\..\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>..\..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\3rd-party\SFML\lib;..\..\..\3rd-party\boost\stage\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-network-d.lib;sfml-system-d.lib;freetype.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -64,7 +64,7 @@ std::string cmm::Text::setFont(std::string path)
 		text->setFont(*font);
 		font_map.paths.push_back(path);
 		font_map.fonts.push_back(font);
-		return "Success: Font \"" + std::string(path) + "\" loaded correctly.";
+		return "Success: Font '" + std::string(path) + "' loaded correctly.";
 	}
 	else if(ptr)
 	{
@@ -73,7 +73,7 @@ std::string cmm::Text::setFont(std::string path)
 		return "Success: Font set correctly.";
 	}
 	
-	return "Error: Cannot create font face from \"" + std::string(path) + "\".";
+	return "Error: Cannot create font face from '" + std::string(path) + "'.";
 }
 
 void cmm::Text::setText(std::string line)

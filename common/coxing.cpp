@@ -1,4 +1,5 @@
 #include "coxing.h"
+#include "converter.h"
 #include <fstream>
 #include <string>
 #include <boost/lexical_cast.hpp>
@@ -91,7 +92,7 @@ void cmm::Keys::loadKeys()
 	}
 	else
 	{
-		std::string line = "";
+		std::string line = cmm::SEMPTY;
 		while (std::getline(file, line))
 		{
 			int newKey = boost::lexical_cast<int>(line);

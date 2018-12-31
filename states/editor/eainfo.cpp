@@ -1,6 +1,7 @@
 #include "eainfo.h"
 #include "loading.h"
 #include "definitions.h"
+#include "converter.h"
 
 EAInfo::EAInfo()
 {
@@ -139,7 +140,7 @@ std::string EAInfo::getTypeStr()
 
 std::string EAInfo::getChosenStr()
 {
-	std::string line = "";
+	std::string line = cmm::SEMPTY;
 
 	if (type == KNIGHT)
 	{
@@ -224,20 +225,20 @@ std::string EAInfo::getChosenStr()
 std::string EAInfo::getDescriptionStr()
 {
 	std::string tab = "\t\t\t\t\t";
-	std::string line = tab + "None\n";
+	std::string line = tab + "None" + cmm::SNEWLINE;
 
 	if (type == KNIGHT)
-		line = tab + "Knight is one and only character.\nGame starts at knight's (x, y) positon.";
+		line = tab + "Knight is one and only character." + cmm::SNEWLINE + "Game starts at knight's (x, y) positon.";
 	else if (type == TILE)
-		line = tab + "Tiles are the linchpin of the game.\nThese blocks interacts with knight.";
+		line = tab + "Tiles are the linchpin of the game." + cmm::SNEWLINE + "These blocks interacts with knight.";
 	else if (type == UNVISIBLE_TILE)
-		line = tab + "Unvisible tiles are getting visible\nafter the knight is standing on them.";
+		line = tab + "Unvisible tiles are getting visible" + cmm::SNEWLINE + "after the knight is standing on them.";
 	else if (type == LANDSCAPE)
-		line = tab + "Still Life objects do not interact\nwith anything. They just there.";
+		line = tab + "Still Life objects do not interact" + cmm::SNEWLINE + "with anything. They just there.";
 	else if (type == FOE)
-		line = tab + "Foes that trying their best to combat\nknight and not let him finish the game.";
+		line = tab + "Foes that trying their best to combat" + cmm::SNEWLINE + "knight and not let him finish the game.";
 	else if (type == LIGHTPOINT)
-		line = tab + "Here the lights come to take\nan action and spotlight the darkness of the halloween.";
+		line = tab + "Here the lights come to take" + cmm::SNEWLINE + "an action and spotlight the darkness of the halloween.";
 
 	return line;
 }

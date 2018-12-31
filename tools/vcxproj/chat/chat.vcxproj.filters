@@ -41,6 +41,9 @@
     <ClCompile Include="..\..\..\common\coxing.cpp">
       <Filter>Dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\converter.cpp">
+      <Filter>Dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\chat.h" />

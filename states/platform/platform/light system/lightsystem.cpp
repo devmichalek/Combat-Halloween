@@ -5,6 +5,7 @@
 // https://github.com/devmichalek/Combat-Halloween
 
 #include "lightsystem.h"
+#include "converter.h"
 
 pla::LightSystem::LightSystem()
 {
@@ -253,7 +254,7 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 
 			// color
 			std::vector<float> c;
-			std::string buf = "";
+			std::string buf = cmm::SEMPTY;
 			str = it.substr(it.find("color:(") + 7, it.size() - (it.find("color:(") + 7));
 			str.replace(str.size() - 2, str.size() - 1, ",");
 			for (size_t i = 0; i < str.size(); ++i)
@@ -261,7 +262,7 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 				if (str[i] == ',')
 				{
 					c.push_back(boost::lexical_cast<float>(buf));
-					buf = "";
+					buf = cmm::SEMPTY;
 				}
 				else
 					buf += str[i];
@@ -281,13 +282,13 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 					buf = str.substr(p1, p2 - p1);
 
 					float tx, ty;
-					std::string tmp = "";
+					std::string tmp = cmm::SEMPTY;
 					for (size_t i = 0; i < buf.size(); ++i)
 					{
 						if (buf[i] == ',') // -> y
 						{
 							tx = boost::lexical_cast<float>(tmp);
-							tmp = "";
+							tmp = cmm::SEMPTY;
 							for (size_t j = 0; j < buf.size(); ++j)
 								tmp += buf[j];
 							ty = boost::lexical_cast<float>(tmp);

@@ -34,7 +34,7 @@ void Simulator::reset()
 	reloadbutton.getClicked() = false;
 
 	thread.reset();
-	msg = "";
+	msg = cmm::SEMPTY;
 
 	setInfo();
 }
@@ -220,18 +220,18 @@ bool Simulator::prepare()
 		file.open(SContent::path);
 		if (file.is_open())
 		{
-			std::string line = "";
+			std::string line = cmm::SEMPTY;
 			while (std::getline(file, line))
 			{
 				SContent::content.push_back(line);
 			}
 
-			if (!checkContent("Correctly loaded file \"" + SContent::path + "\"."))
+			if (!checkContent("Correctly loaded file '" + SContent::path + "'."))
 				return false;
 		}
 		else
 		{
-			setErrorMsg("Error occured, cannot load file \"" + SContent::path + "\".");
+			setErrorMsg("Error occured, cannot load file '" + SContent::path + "'.");
 			return false;
 		}
 	}
@@ -253,15 +253,15 @@ bool Simulator::prepare()
 			else
 			{
 				// success
-				std::string line = "";
+				std::string line = cmm::SEMPTY;
 				std::string result = request.getResult();
 				for(auto it : result)
 				{
 					line += it;
-					if (it == '\n')
+					if (it == cmm::CNEWLINE)
 					{
 						SContent::content.push_back(line);
-						line = "";
+						line = cmm::SEMPTY;
 					}
 				}
 

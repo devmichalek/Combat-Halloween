@@ -1,5 +1,6 @@
 #include "core.h"
 #include "fpsconsole.h"
+#include "converter.h"
 
 int main(int argc, char** argv)
 {
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
 
 		if (fps.timePassed())
 		{
-			printf("FPS: %f\n", fps.getFPS());
+			printf("FPS: %f%s", fps.getFPS(), cmm::CSNEWLINE);
 		}
 
 		core.getWindow()->display();

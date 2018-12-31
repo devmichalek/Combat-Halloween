@@ -14,7 +14,7 @@ int main(int argc, char** argv)
 	sf::Uint8 G = boost::lexical_cast<int> (argv[3]);
 	sf::Uint8 B = boost::lexical_cast<int> (argv[4]);
 	sf::Uint8 A = boost::lexical_cast<int> (argv[5]);
-	// printf("Input: state=%d r=%d g=%d b=%d a=%d\n", state, R, G, B, A);
+	// printf("Input: state=%d r=%d g=%d b=%d a=%d", state, R, G, B, A);
 
 	sf::Color color(R, G, B, A);
 	cmm::Core* core = new cmm::Core(state, color);
