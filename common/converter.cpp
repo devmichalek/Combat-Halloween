@@ -96,3 +96,22 @@ bool cmm::removeDoubleQuotes(std::string & str)
 
 	return false;
 }
+
+std::string cmm::extractFromString(std::string &line, std::string seek, char until)
+{
+	size_t pos = line.find(seek);
+	if (pos != std::string::npos)
+	{
+		std::string str = "";
+		for (size_t i = pos + seek.size(); i < line.size(); ++i)
+		{
+			if (line[i] == until)
+				break;
+			str += line[i];
+		}
+
+		return str;
+	}
+
+	return "";
+}
