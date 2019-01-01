@@ -207,7 +207,11 @@ void Login::handle(const sf::Event &event)
 				}
 				else if (event.key.code == sf::Keyboard::Enter)
 				{
-					if (state == 0)
+					if (loginbutton.getTop() <= screen_h / 2) // Skip.
+					{
+						counter = -1;
+					}
+					else if (state == 0)
 					{
 						state = 1;
 						setArrow();
@@ -219,6 +223,22 @@ void Login::handle(const sf::Event &event)
 							gobutton.getFocus() = true;
 							gobutton.getClicked() = true;
 						}
+					}
+				}
+				else if (event.key.code == sf::Keyboard::Up)
+				{
+					if (state == 1)
+					{
+						state = 0;
+						setArrow();
+					}
+				}
+				else if (event.key.code == sf::Keyboard::Down)
+				{
+					if (state == 0)
+					{
+						state = 1;
+						setArrow();
 					}
 				}
 			}
@@ -261,13 +281,6 @@ void Login::draw(sf::RenderWindow* &window)
 
 void Login::mechanics(const double &elapsedTime)
 {
-	// FPS.
-	/*FPS::mechanics(elapsedTime);
-	if (FPS::timePassed())
-	{
-		printf("%d%s", FPS::getFPS(), cmm::CSNEWLINE);
-	}*/
-
 	// Delete thread if is done.
 	if (thread.ready)
 	{

@@ -40,11 +40,11 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 
 	// Set font.
 	const char* path = cmm::JAPOKKI_FONT_PATH;
-	Loading::add(texts[AUTHOR]->setFont(path));
-	Loading::add(texts[PRESENTS]->setFont(path));
-	Loading::add(texts[HALLOWEEN]->setFont(path));
-	Loading::add(texts[COMBAT]->setFont(path));
-	if (Loading::isError()) return;
+	for (auto &it : texts)
+	{
+		Loading::add(it->setFont(path));
+		if (Loading::isError()) return;
+	}
 
 	// Set text.
 	texts[AUTHOR]->setTextW(L"Adrian Micha\u0142ek");
@@ -53,6 +53,7 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	texts[HALLOWEEN]->setOutlineThickness(3);
 	texts[COMBAT]->setText("Combat");
 	texts[COMBAT]->setOutlineThickness(3);
+	texts[SKIP]->setText("Press enter to skip introduction...");
 
 	// Set size.
 	for(unsigned i = 0; i < HALLOWEEN; ++i)
@@ -60,6 +61,7 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	texts[PRESENTS]->setSize(screen_h / 24);
 	texts[HALLOWEEN]->setSize(screen_h / 10);
 	texts[COMBAT]->setSize(screen_h / 10);
+	texts[SKIP]->setSize(screen_h / 32);
 
 	// Set color.
 	texts[AUTHOR]->setFillColor(cmm::DULL_IRON_COLOR);
@@ -68,12 +70,25 @@ void Initialization::load(const float &screen_w, const float &screen_h)
 	texts[HALLOWEEN]->setOutlineColor(cmm::RED_COLOR);
 	texts[COMBAT]->setFillColor(cmm::BACKGROUND_COLOR);
 	texts[COMBAT]->setOutlineColor(cmm::DULL_IRON_COLOR);
+	texts[SKIP]->setFillColor(cmm::IRON_COLOR);
 
 	// Set position.
 	texts[AUTHOR]->center(screen_w / 2, screen_h / 2 - screen_h / 20);
 	texts[PRESENTS]->setPosition(screen_w / 2 - texts[PRESENTS]->getWidth() / 2, texts[AUTHOR]->getBot());
 	texts[COMBAT]->center(screen_w / 2 - texts[HALLOWEEN]->getWidth() / 2 - screen_h / TILE_HEIGHT - screen_h / 144, screen_h / 2 - screen_h / 20);
 	texts[HALLOWEEN]->setPosition(texts[COMBAT]->getRight() + screen_h / 72 + screen_h / 16, texts[COMBAT]->getBot() - texts[HALLOWEEN]->getHeight());
+	texts[SKIP]->setPosition((screen_w - texts[SKIP]->getWidth()) - (screen_h / 72), screen_h - texts[SKIP]->getHeight() - screen_h / 72);
+}
+
+void Initialization::handle(const sf::Event &event)
+{
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::Enter)
+		{
+			next = true;
+		}
+	}
 }
 
 void Initialization::draw(sf::RenderWindow* &window)
@@ -91,14 +106,16 @@ void Initialization::mechanics(const double &elapsedTime)
 	{
 		int min = (int)MIN_ALPHA, max = (int)MAX_ALPHA;
 
-		float velocity = static_cast<float>(elapsedTime) * MAX_ALPHA;
+		float velocity = static_cast<float>(elapsedTime) * MAX_ALPHA / 2;
 		if (state == 0)
 		{
 			texts[AUTHOR]->fadein(velocity, max);
+			texts[SKIP]->fadein(velocity, max);
 		}
 		else if (state == 1)
 		{
-			texts[PRESENTS]->fadein(velocity * (float)1.5, max);
+			texts[PRESENTS]->fadein(velocity * 1.5f, max);
+			texts[SKIP]->fadeout(velocity * 1.5f, min);
 		}
 		else if (state == 2)
 		{

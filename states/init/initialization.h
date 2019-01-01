@@ -12,6 +12,7 @@ class Initialization final : public cmm::State
 		PRESENTS,
 		HALLOWEEN,
 		COMBAT,
+		SKIP,
 		AMOUNT
 	};
 	
@@ -24,7 +25,7 @@ public:
 	void free();
 	
 	void load(const float &screen_w, const float &screen_h);
-	void handle(const sf::Event &event) {}
+	void handle(const sf::Event &event);
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
 
