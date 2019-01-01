@@ -13,14 +13,14 @@
 	$error_msg = "";
 	if(strlen($_POST['name']) <= 0)					$error_msg = "Field 'name' is empty!";
 	else if(strlen($_POST['type']) <= 0)			$error_msg = "Field 'type' is empty!";
-	else if(strlen($_POST['actiontodo']) <= 0)	    $error_msg = "Field 'action' is empty!";
-	else if(strlen($_POST['description']) <= 0)     $error_msg = "Field 'description' is empty!";
+	else if(strlen($_POST['actiontodo']) <= 0)		$error_msg = "Field 'action' is empty!";
+	else if(strlen($_POST['description']) <= 0)		$error_msg = "Field 'description' is empty!";
 	else if(strlen($_POST['location']) <= 0)		$error_msg = "Field 'location' is empty!";
 	else if(strlen($_POST['severity']) <= 0)		$error_msg = "Field 'severity' is empty!";
 	else if(strlen($_POST['priority']) <= 0)		$error_msg = "Field 'priority' is empty!";
 	else if(strlen($_POST['deadline']) <= 0)		$error_msg = "Field 'deadline' is empty!";
 	else if(strlen($_POST['author']) <= 0)			$error_msg = "Field 'author' is empty!";
-	else if(strlen($_POST['developer']) <= 0)	    $error_msg = "Field 'developer' is empty!";
+	else if(strlen($_POST['developer']) <= 0)		$error_msg = "Field 'developer' is empty!";
 
 	// Change location if there is an error and does not allow to add new bug to the table.
 	if(strlen($error_msg) > 0)
@@ -42,8 +42,8 @@
 			throw new Exception(mysqli_connect_errno());
 		else
 		{
-		    $author = addslashes($_POST['author']);
-		    
+			$author = addslashes($_POST['author']);
+			
 			// Send query.
 			$result = $connection->query(sprintf("SELECT * FROM bugs WHERE author='%s'", mysqli_real_escape_string($connection, $author)));
 			$sum = mysqli_num_rows($result);

@@ -9,15 +9,15 @@
 	// Just in case.
 	unset($_SESSION['errorUsername']);
 
-    function backToProfile()
-    {
-        header('Location: profile.php');
-    	exit();
-    }
+	function backToProfile()
+	{
+		header('Location: profile.php');
+		exit();
+	}
 
 	$success = true;
 	$username = $_POST['username'];
-	$password =  $_POST['password'];
+	$password =	$_POST['password'];
 	$email = $_SESSION['email'];
 
 	// Get current password from database.
@@ -35,13 +35,13 @@
 		{
 			if($result = @$connection->query(sprintf("SELECT * FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $email))))
 			{
-		    	$row = $result->fetch_assoc();
-		    	if(!password_verify($password, $row['password']))
-		    	{
-		        	$success = false;
-		        	$_SESSION['errorUsername'] = "Password is incorrect. ";
-		    	}
-		    }
+				$row = $result->fetch_assoc();
+				if(!password_verify($password, $row['password']))
+				{
+					$success = false;
+					$_SESSION['errorUsername'] = "Password is incorrect. ";
+				}
+			}
 		}
 	}
 	catch(Exception $e)
@@ -56,15 +56,15 @@
 		$result = @$connection->query(sprintf("SELECT ID FROM users WHERE username='%s'", mysqli_real_escape_string($connection, $username)));
 		if(!$result)
 		{
-		    throw new Exception($connection->error);
+			throw new Exception($connection->error);
 		}
 
 		$how_many_usernames = $result->num_rows;
 
 		if($how_many_usernames > 0)
 		{
-		    $success = false;
-		    $_SESSION['errorUsername'] = "This username already exists.";
+			$success = false;
+			$_SESSION['errorUsername'] = "This username already exists.";
 		}
 	}
 	catch(Exception $e)

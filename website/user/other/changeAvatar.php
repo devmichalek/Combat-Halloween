@@ -11,17 +11,17 @@
 	if($_FILES['file']['error'])
 	{
 		$success = false;
-	    $_SESSION['errorAvatar'] = "Error while uploading file.";
+		$_SESSION['errorAvatar'] = "Error while uploading file.";
 	}
 	
 
 	// Check if image file is a actual image or fake image
-    list($width, $height) = getimagesize($_FILES["file"]["tmp_name"]);
-    if($width > 150 || $height > 150)
-    {
-    	$success = false;
-        $_SESSION['errorAvatar'] = "Image size must be less than 150x150!";
-    }
+	list($width, $height) = getimagesize($_FILES["file"]["tmp_name"]);
+	if($width > 150 || $height > 150)
+	{
+		$success = false;
+		$_SESSION['errorAvatar'] = "Image size must be less than 150x150!";
+	}
 
 	// Check file size
 	if($_FILES['file']['size'] > (1024000)) //can't be larger than 1 MB
@@ -35,22 +35,22 @@
 	if($imageFileType != "jpg")
 	{
 		$success = false;
-	    $_SESSION['errorAvatar'] = "Sorry, only JPG files are allowed.";
+		$_SESSION['errorAvatar'] = "Sorry, only JPG files are allowed.";
 	}
-    
-    if($success)
-    {
-        if (!move_uploaded_file($_FILES["file"]["tmp_name"], '../../images/users/'.$_SESSION['email'].".jpg"))
-    	{
-        	$success = false;
-            $_SESSION['errorAvatar'] = "Error while uploading file.";
-        }
-    }
 	
-    if($success)
-    {
-    	$_SESSION['successAvatar'] = "The file ".basename($_FILES["file"]["name"]). " has been uploaded.";
-    }
+	if($success)
+	{
+		if (!move_uploaded_file($_FILES["file"]["tmp_name"], '../../images/users/'.$_SESSION['email'].".jpg"))
+		{
+			$success = false;
+			$_SESSION['errorAvatar'] = "Error while uploading file.";
+		}
+	}
+	
+	if($success)
+	{
+		$_SESSION['successAvatar'] = "The file ".basename($_FILES["file"]["name"]). " has been uploaded.";
+	}
 
 	header('Location: profile.php');
 	exit();

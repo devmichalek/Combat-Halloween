@@ -1,33 +1,33 @@
 body {
-    background: url(https://amichalek.pl/combathalloween/images/tile.png);
-    background-repeat: repeat;
+	background: url(https://amichalek.pl/combathalloween/images/tile.png);
+	background-repeat: repeat;
 }
 
 .background {
-    background: url(https://amichalek.pl/combathalloween/images/tile-sidenav.png);
-    background-repeat: repeat;
+	background: url(https://amichalek.pl/combathalloween/images/tile-sidenav.png);
+	background-repeat: repeat;
 }
 
 body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
 }
 
 main {
-    flex: 1 0 auto;
+	flex: 1 0 auto;
 }
 
 .navbar-fixed {
-    z-index: 99 !important;
+	z-index: 99 !important;
 }
 
 #sidenav-overlay {
-   left: 300px;
+	left: 300px;
 }
 
 .fixed-action-btn {
-    z-index: 98 !important;
+	z-index: 98 !important;
 }
 
 @font-face {
@@ -38,91 +38,91 @@ main {
 
 /* Colors */
 .bg-white {
-    background-color: #FCFEFD;
+	background-color: #FCFEFD;
 }
 
 .bg-black {
-    background-color: #263238;
+	background-color: #263238;
 }
 
 .char-white {
-    color: #FCFEFD !important;
+	color: #FCFEFD !important;
 }
 
 .char-black {
-    color: #263238 !important;
+	color: #263238 !important;
 }
 
 /* Font */
 .japokki {
-    font-family: japokki;
+	font-family: japokki;
 }
 
 .japokki-white {
-    font-family: japokki;
-    color: #FCFEFD !important;
+	font-family: japokki;
+	color: #FCFEFD !important;
 }
 
 .japokki-black {
-    font-family: japokki !important;
-    color: #263238 !important;
+	font-family: japokki !important;
+	color: #263238 !important;
 }
 
 .japokki-success {
-    font-family: japokki;
-    color: #66BB6A;
+	font-family: japokki;
+	color: #66BB6A;
 }
 
 .japokki-error {
-    font-family: japokki;
-    color: #EF5350;
+	font-family: japokki;
+	color: #EF5350;
 }
 
 .A1 {
-    font-size: 110%;
+	font-size: 110%;
 }
 
 .A2 {
-    font-size: 120%;
+	font-size: 120%;
 }
 
 .A3 {
-    font-size: 130%;
+	font-size: 130%;
 }
 
 .A4 {
-    font-size: 140%;
+	font-size: 140%;
 }
 
 .A5 {
-    font-size: 150%;
+	font-size: 150%;
 }
 
 .A7 {
-    font-size: 170%;
+	font-size: 170%;
 }
 
 .A22 {
-    font-size: 220%;
+	font-size: 220%;
 }
 
 .dropdown-content.select-dropdown li span {
-    font-family: japokki !important;
-    color: #263238 !important;
+	font-family: japokki !important;
+	color: #263238 !important;
 }
 
 input {
-    font-family: japokki;
+	font-family: japokki;
 }
 
 select {
-    font-family: japokki !important;
-    color: #263238 !important;
+	font-family: japokki !important;
+	color: #263238 !important;
 }
 
 textarea {
-    font-family: japokki !important;
-    color: #263238 !important;
+	font-family: japokki !important;
+	color: #263238 !important;
 }
 
 .preloader-background {
@@ -141,13 +141,13 @@ textarea {
 
 /* For scrollspy to move offset */
 .anchor {
-    display: block;
-    position: relative;
-    top: -60px;
+	display: block;
+	position: relative;
+	top: -60px;
 }
 
 /* To disable links in a tags*/
 .disabled {
-    pointer-events:none;
-    opacity:0.6;
+	pointer-events:none;
+	opacity:0.6;
 }

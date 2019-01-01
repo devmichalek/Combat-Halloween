@@ -4,12 +4,12 @@
 	session_start();
 
 	// Check if user is logged.
-  	require_once("../../user/login/isLogged.php");
+	require_once("../../user/login/isLogged.php");
 
-  	// Check if user has admin/moderator permissions.
-  	require_once("../../user/other/isModerator.php");
+	// Check if user has admin/moderator permissions.
+	require_once("../../user/other/isModerator.php");
 
-  	// Get $host, $db_user, $db_password and $db_name
+	// Get $host, $db_user, $db_password and $db_name
 	require_once("../../connect.php");
 
 	// Set flag to see more details about errors.
@@ -18,11 +18,11 @@
 	try
 	{
 		$connection = @new mysqli($host, $db_user, $db_password, $db_name);
-	    if($connection->connect_errno != 0)
-	    	throw new Exception(mysqli_connect_errno());
-	    else
+		if($connection->connect_errno != 0)
+			throw new Exception(mysqli_connect_errno());
+		else
 		{
-		    $sql = "DELETE FROM bugs WHERE ID='".$_GET['ID']."'";
+			$sql = "DELETE FROM bugs WHERE ID='".$_GET['ID']."'";
 			if(!$connection->query($sql))
 				throw new Exception($connection->error);
 			else

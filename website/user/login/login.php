@@ -1,5 +1,4 @@
 <?php
-    
 	session_start();
 	
 	if(!isset($_POST['username']) || !isset($_POST['password']))
@@ -13,20 +12,20 @@
 	mysqli_report(MYSQLI_REPORT_STRICT);
 
 	// RECAPTCHA
-    $mysecret = "6Lf9NWgUAAAAAAe-lNJAcxTOubIdu_KUe-cSMwTU";
-    $confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
-    if(!json_decode($confirm)->success)
-    {
-    	$_SESSION['error'] = "Confirm humanity.";
-    	header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
-    	exit();
-    }
-    
-    // REMEMBER DATA
-    $username = $_POST['username'];
+	$mysecret = "6Lf9NWgUAAAAAAe-lNJAcxTOubIdu_KUe-cSMwTU";
+	$confirm = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.$mysecret.'&response='.$_POST['g-recaptcha-response']);
+	if(!json_decode($confirm)->success)
+	{
+		$_SESSION['error'] = "Confirm humanity.";
+		header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
+		exit();
+	}
+	
+	// REMEMBER DATA
+	$username = $_POST['username'];
 	$password = $_POST['password'];
-    $_SESSION['rem_username'] = $username;
-    $_SESSION['rem_password'] = $password;
+	$_SESSION['rem_username'] = $username;
+	$_SESSION['rem_password'] = $password;
 	
 	try
 	{
@@ -51,7 +50,7 @@
 						{
 							$_SESSION['error'] = 'Confirm your address email.';
 							header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
-    						exit();
+							exit();
 						}
 						else
 						{
@@ -61,17 +60,17 @@
 							$_SESSION['permissions'] = $row['permissions'];
 							
 							// DELETE TEMPORARY DATA
-                        	if(isset($_SESSION['rem_username'])) 	unset($_SESSION['rem_username']);
-                        	if(isset($_SESSION['rem_email'])) 		unset($_SESSION['rem_email']);
-                        	if(isset($_SESSION['rem_password'])) 	unset($_SESSION['rem_password']);
-                        	if(isset($_SESSION['rem_passwordcon'])) unset($_SESSION['rem_passwordcon']);
-                        
-                        	// DELETE ERROR DATA
-                        	if(isset($_SESSION['e_username'])) 		unset($_SESSION['e_username']);
-                        	if(isset($_SESSION['e_email'])) 		unset($_SESSION['e_email']);
-                        	if(isset($_SESSION['e_password'])) 		unset($_SESSION['e_password']);
-                        	if(isset($_SESSION['e_passwordcon'])) 	unset($_SESSION['e_passwordcon']);
-                        	if(isset($_SESSION['e_bot'])) 			unset($_SESSION['e_bot']);
+							if(isset($_SESSION['rem_username'])) 	unset($_SESSION['rem_username']);
+							if(isset($_SESSION['rem_email'])) 		unset($_SESSION['rem_email']);
+							if(isset($_SESSION['rem_password'])) 	unset($_SESSION['rem_password']);
+							if(isset($_SESSION['rem_passwordcon'])) unset($_SESSION['rem_passwordcon']);
+						
+							// DELETE ERROR DATA
+							if(isset($_SESSION['e_username'])) 		unset($_SESSION['e_username']);
+							if(isset($_SESSION['e_email'])) 		unset($_SESSION['e_email']);
+							if(isset($_SESSION['e_password'])) 		unset($_SESSION['e_password']);
+							if(isset($_SESSION['e_passwordcon'])) 	unset($_SESSION['e_passwordcon']);
+							if(isset($_SESSION['e_bot'])) 			unset($_SESSION['e_bot']);
 							
 							unset($_SESSION['error']);
 							$result->free_result();
@@ -82,14 +81,14 @@
 					{
 						$_SESSION['error'] = 'Wrong username or password.';
 						header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
-    					exit();
+						exit();
 					}
 				}
 				else
 				{
 					$_SESSION['error'] = 'Wrong username or password.';
 					header('Location: https://amichalek.pl/combathalloween/user/login/loginform.php');
-    				exit();
+					exit();
 				}
 			}
 			$connection->close();

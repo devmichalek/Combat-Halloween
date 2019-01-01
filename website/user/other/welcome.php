@@ -57,12 +57,12 @@
 
 	<!-- NAVBAR -->
 	<?php require_once("../../common/navbar-b.php"); ?>
-        <li><a class='btn blue-grey darken-1 japokki-white' href='../../index.php'>Start</a></li>
-    <?php require_once("../../common/navbar-e.php"); ?>
-    <?php require_once("../../common/sidebar-b.php"); ?>
-        <li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
-    <?php require_once("../../common/sidebar-e.php"); ?>
-    <!-- END OF NAVBAR-->
+		<li><a class='btn blue-grey darken-1 japokki-white' href='../../index.php'>Start</a></li>
+	<?php require_once("../../common/navbar-e.php"); ?>
+	<?php require_once("../../common/sidebar-b.php"); ?>
+		<li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
+	<?php require_once("../../common/sidebar-e.php"); ?>
+	<!-- END OF NAVBAR-->
 
 	<div class="container center">
 		

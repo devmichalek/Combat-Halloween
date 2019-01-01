@@ -4,7 +4,7 @@
 
 	if(isset($_GET['email']) && isset($_GET['code']) && isset($_GET['newemail']))
 	{
-    	// Connect.
+		// Connect.
 		require_once("../../connect.php");
 		mysqli_report(MYSQLI_REPORT_STRICT);
 
@@ -38,7 +38,7 @@
 
 			$connection->close();
 		}
-  	}
+	}
 
 
 	header('Location: https://amichalek.pl/combathalloween/home.php');

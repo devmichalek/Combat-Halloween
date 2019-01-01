@@ -6,7 +6,7 @@
 
 	if(isset($_GET['email']) && isset($_GET['code']))
 	{
-    	// Connect.
+		// Connect.
 		require_once("../../connect.php");
 		mysqli_report(MYSQLI_REPORT_STRICT);
 
@@ -32,20 +32,20 @@
 						$confirmedemail = true;
 					}
 					else
-				  	{
-				  		header('Location: ../../home.php');
-				  	}
+					{
+						header('Location: ../../home.php');
+					}
 				}
 			}
 
 			$connection->close();
 		}
-  	}
-  	else
-  	{
-  		header('Location: ../../home.php');
-  		exit();
-  	}
+	}
+	else
+	{
+		header('Location: ../../home.php');
+		exit();
+	}
 
 	if(!$confirmedemail)
 	{
@@ -57,15 +57,15 @@
 ?>
 
 	<!-- NAVBAR -->
-    <?php require_once("../../common/navbar-b.php"); ?>
-                <li><a class='nav japokki-white A3' href='../../index.php'>Start</a></li>
-                <li><a class='btn blue-grey darken-1 japokki-white' href='../register/registerform.php'>Sign Up</a></li>
-    <?php require_once("../../common/navbar-e.php"); ?>
-    <?php require_once("../../common/sidenav-b.php"); ?>
-        <li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
-        <li><a class='btn blue-grey darken-1 japokki-white' href='../register/registerform.php'>Sign Up</a></li>
-    <?php require_once("../../common/sidenav-e.php"); ?>
-    <!-- END OF NAVBAR-->
+	<?php require_once("../../common/navbar-b.php"); ?>
+				<li><a class='nav japokki-white A3' href='../../index.php'>Start</a></li>
+				<li><a class='btn blue-grey darken-1 japokki-white' href='../register/registerform.php'>Sign Up</a></li>
+	<?php require_once("../../common/navbar-e.php"); ?>
+	<?php require_once("../../common/sidenav-b.php"); ?>
+		<li><a href="../../index.php" class="japokki-black"><i class="material-icons">stay_primary_portrait</i>Start</a></li>
+		<li><a class='btn blue-grey darken-1 japokki-white' href='../register/registerform.php'>Sign Up</a></li>
+	<?php require_once("../../common/sidenav-e.php"); ?>
+	<!-- END OF NAVBAR-->
 
 	<div class="container center japokki-black">
 		<!-- Header -->

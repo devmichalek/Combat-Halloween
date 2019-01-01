@@ -11,15 +11,15 @@
 
 	require_once("generateCode.php");
 
-    function backToProfile()
-    {
-        header('Location: profile.php');
-    	exit();
-    }
+	function backToProfile()
+	{
+		header('Location: profile.php');
+		exit();
+	}
 
 	$success = true;
 	$newemail = $_POST['email'];
-	$password =  $_POST['password'];
+	$password =	$_POST['password'];
 	$email = $_SESSION['email'];
 
 	// Get current password from database.
@@ -37,13 +37,13 @@
 		{
 			if($result = @$connection->query(sprintf("SELECT * FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $email))))
 			{
-		    	$row = $result->fetch_assoc();
-		    	if(!password_verify($password, $row['password']))
-		    	{
-		        	$success = false;
-		        	$_SESSION['errorEmail'] = "Password is incorrect. ";
-		    	}
-		    }
+				$row = $result->fetch_assoc();
+				if(!password_verify($password, $row['password']))
+				{
+					$success = false;
+					$_SESSION['errorEmail'] = "Password is incorrect. ";
+				}
+			}
 		}
 	}
 	catch(Exception $e)
@@ -58,15 +58,15 @@
 		$result = @$connection->query(sprintf("SELECT ID FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $newemail)));
 		if(!$result)
 		{
-		    throw new Exception($connection->error);
+			throw new Exception($connection->error);
 		}
 
 		$how_many_emails = $result->num_rows;
 
 		if($how_many_emails > 0)
 		{
-		    $success = false;
-		    $_SESSION['errorEmail'] = "This email already exists.";
+			$success = false;
+			$_SESSION['errorEmail'] = "This email already exists.";
 		}
 	}
 	catch(Exception $e)
@@ -75,12 +75,12 @@
 		// echo 'Error: '.$e;
 	}
 
-    $email_safe = filter_var($newemail, FILTER_SANITIZE_EMAIL);
-    if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $newemail)
-    {
-    	$success = false;
-    	$_SESSION['errorEmail'] = "Valid address email required.";
-    }
+	$email_safe = filter_var($newemail, FILTER_SANITIZE_EMAIL);
+	if(!filter_var($email_safe, FILTER_VALIDATE_EMAIL) || $email_safe != $newemail)
+	{
+		$success = false;
+		$_SESSION['errorEmail'] = "Valid address email required.";
+	}
 
 
 	// RECAPTCHA
@@ -102,12 +102,12 @@
 	}
 	else
 	{
-	    $activationcode = generateCode();
+		$activationcode = generateCode();
 		$activationcode =	mysqli_real_escape_string($connection, $activationcode);
 		$email =			mysqli_real_escape_string($connection, $email);
 		$sql_query = "UPDATE users SET activationcode='$activationcode' WHERE email='$email'";
-	    $connection->query($sql_query);
-	    
+		$connection->query($sql_query);
+		
 		// Send email
 		$subject = 'Combat Halloween - New Email';
 

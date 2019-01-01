@@ -42,7 +42,7 @@
 			throw new Exception(mysqli_connect_errno());
 		else
 		{
-		    $ID =       	mysqli_real_escape_string($connection, $_POST['ID']);;
+			$ID =			mysqli_real_escape_string($connection, $_POST['ID']);;
 			$name =			mysqli_real_escape_string($connection, addslashes($_POST['name']));
 			$type =			mysqli_real_escape_string($connection, $_POST['type']);
 			$action =		mysqli_real_escape_string($connection, $_POST['actiontodo']);
@@ -51,7 +51,7 @@
 			$severity =		mysqli_real_escape_string($connection, $_POST['severity']);
 			$priority =		mysqli_real_escape_string($connection, $_POST['priority']);
 			$deadline =		mysqli_real_escape_string($connection, addslashes($_POST['deadline']));
-			$author =       mysqli_real_escape_string($connection, addslashes($_POST['author']));
+			$author =		mysqli_real_escape_string($connection, addslashes($_POST['author']));
 			$developer =	mysqli_real_escape_string($connection, $_POST['developer']);
 			$resolution =	mysqli_real_escape_string($connection, $_POST['resolution']);
 

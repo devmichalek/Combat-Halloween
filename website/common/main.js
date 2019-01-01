@@ -1,37 +1,37 @@
-// preloader
+// Preloader.
 document.addEventListener("DOMContentLoaded", function(){
 	$('.preloader-background').delay(1000).fadeOut('slow');
 	$('.preloader-wrapper').delay(1000).fadeOut();
 });
 
 $(document).ready(function(){
-  $('.modal').modal();
+	$('.modal').modal();
 });
 
 
 
 $(document).ready(function(){
-  $('select').formSelect();
+	$('select').formSelect();
 });
 
 $(document).ready(function(){
-    $('.parallax').parallax();
-  });
+	$('.parallax').parallax();
+});
 
 
 $(document).ready(function(){
-  $('.datepicker').datepicker();
+	$('.datepicker').datepicker();
 });
 
 
 
 $(document).ready(function(){
-  $('.sidenav').sidenav();
+	$('.sidenav').sidenav();
 });
 
 $(document).ready(function(){
-    $('.fixed-action-btn').floatingActionButton();
-  });
+	$('.fixed-action-btn').floatingActionButton();
+});
 
 $('.dropdown-trigger').dropdown();
 
@@ -42,17 +42,17 @@ $('select').material_select();
 
 
 $(document).ready(function() {
-    M.updateTextFields();
-  });
+	M.updateTextFields();
+});
 
 $(document).ready(function(){
-    $('.scrollspy').scrollSpy();
-  });
-  
+	$('.scrollspy').scrollSpy();
+});
+
 $(document).ready(function(){
-    $('.tap-target').tapTarget();
-  });
-  
+	$('.tap-target').tapTarget();
+});
+
 $(document).ready(function(){
-    $('.tooltipped').tooltip();
-  });
+	$('.tooltipped').tooltip();
+});

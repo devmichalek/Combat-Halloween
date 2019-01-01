@@ -9,16 +9,16 @@
 	// Just in case.
 	unset($_SESSION['errorPassword']);
 
-    function backToProfile()
-    {
-        header('Location: profile.php');
-    	exit();
-    }
+	function backToProfile()
+	{
+		header('Location: profile.php');
+		exit();
+	}
 
 	$success = true;
-	$oldpassword =  $_POST['oldpassword'];
-	$newpassword =  $_POST['password'];
-	$newpasswordcon =  $_POST['passwordcon'];
+	$oldpassword = $_POST['oldpassword'];
+	$newpassword = $_POST['password'];
+	$newpasswordcon = $_POST['passwordcon'];
 	$email = $_SESSION['email'];
 
 	// Get current password from database.
@@ -36,13 +36,13 @@
 		{
 			if($result = @$connection->query(sprintf("SELECT * FROM users WHERE email='%s'", mysqli_real_escape_string($connection, $email))))
 			{
-		    	$row = $result->fetch_assoc();
-		    	if(!password_verify($oldpassword, $row['password']))
-		    	{
-		        	$success = false;
-		        	$_SESSION['errorPassword'] = "Password is incorrect.";
-		    	}
-		    }
+				$row = $result->fetch_assoc();
+				if(!password_verify($oldpassword, $row['password']))
+				{
+					$success = false;
+					$_SESSION['errorPassword'] = "Password is incorrect.";
+				}
+			}
 		}
 	}
 	catch(Exception $e)
@@ -51,22 +51,22 @@
 		// echo 'Error: '.$e;
 	}
 
-    if((strlen($newpassword)) < 8)
-    {
-      $success = false;
-      $_SESSION['errorPassword'] = "Please choose a password with at least 8 characters.";
-    }
-    else if((strlen($newpassword)) > 20)
-    {
-      $success = false;
-      $_SESSION['errorPassword'] = "Password may contain at the maximum 20 characters.";
-    }
-    else if($newpassword != $newpasswordcon)
-    {
-      $success = false;
-      $_SESSION['errorPassword'] = "Passwords do not match.";
-    }
-    $password_hashed = password_hash($newpassword, PASSWORD_DEFAULT);
+	if((strlen($newpassword)) < 8)
+	{
+		$success = false;
+		$_SESSION['errorPassword'] = "Please choose a password with at least 8 characters.";
+	}
+	else if((strlen($newpassword)) > 20)
+	{
+		$success = false;
+		$_SESSION['errorPassword'] = "Password may contain at the maximum 20 characters.";
+	}
+	else if($newpassword != $newpasswordcon)
+	{
+		$success = false;
+		$_SESSION['errorPassword'] = "Passwords do not match.";
+	}
+	$password_hashed = password_hash($newpassword, PASSWORD_DEFAULT);
 
 
 	// RECAPTCHA
