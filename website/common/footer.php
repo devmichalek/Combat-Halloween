@@ -35,11 +35,11 @@
 		</div>
 		<div class="col s12 m6">
 			<h5>Project Structure:</h5>
-			<p class="grey-text text-lighten-4">The website based on Materialize and Chart.js, some PHP & SQL code and mostly HTML & CSS & JS. The game was made with C++ language (C++14 standard) and SFML. Map editor was written with QT modules like Network, Window or Graphics. The whole project "Combat Halloween" was developed with Agile Software Development & SWOT approach.</p>
+			<p class="grey-text text-lighten-4">Combat Halloween website was built with Materialize and Chart.js. Database support was made with PHP and SQL with no framework included. Code syntax was completed with HTML, CSS and JS. Desktop application was made with C++ language (C++14 standard), SFML and Boost library. Project was developed with Agile Software Development and SWOT approach.</p>
 		</div>
 	</div>
 	<div class="footer-copyright col s12 m4">
-	<a class="modal-trigger waves-effect waves-light btn blue-grey darken-1" href="#license">©2018 Terms of Use</a>
+	<a class="modal-trigger waves-effect waves-light btn blue-grey darken-1" href="#license">©2019 Terms of Use</a>
 	</div>
 	</div>
 </footer>
