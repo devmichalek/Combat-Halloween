@@ -144,7 +144,7 @@ bool EAFactory::handle(const sf::Event &event, const sf::Vector2i &addi)
 	return false;
 }
 
-void EAFactory::draw(sf::RenderWindow* &window, const sf::Vector2i &add)
+void EAFactory::draw(sf::RenderWindow* &window, const sf::Vector2i &add, const bool &grid)
 {
 	// Draw entities.
 	sf::Vector2i addi = add;
@@ -156,7 +156,13 @@ void EAFactory::draw(sf::RenderWindow* &window, const sf::Vector2i &add)
 	{
 		cmm::Sprite* const sprite = entities[tools.getType()]->getSprite(tools.getChosen());
 		sprite->setColor(tools.isRedBack() ? cmm::ERROR_COLOR : cmm::LOADING_COLOR);
-		sprite->setPosition(current.x, current.y);
+
+		// Set valid position.
+		if(grid)
+			sprite->setPosition(current.x, current.y);
+		else
+			sprite->setPosition(current.x, current.y - sprite->getHeight());
+
 		window->draw(*sprite);
 		sprite->setColor(cmm::LOADING_COLOR);
 		tools.thumbnail(window, entities[tools.getType()]->getSprites(), tools.getChosen());

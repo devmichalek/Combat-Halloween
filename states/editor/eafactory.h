@@ -24,7 +24,7 @@ public:
 
 	void load(const float& screen_w, const float& screen_h);
 	bool handle(const sf::Event &event, const sf::Vector2i &add);
-	void draw(sf::RenderWindow* &window, const sf::Vector2i &add);
+	void draw(sf::RenderWindow* &window, const sf::Vector2i &add, const bool &grid);
 	void mechanics(const double &elapsedTime);
 
 	bool isChange()						{ return tools.isChange(); }
