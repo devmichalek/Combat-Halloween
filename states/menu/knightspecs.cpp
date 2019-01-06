@@ -128,7 +128,8 @@ void Knightspecs::mechanics(const double &elapsedTime)
 
 	// Offset.
 	offset += elapsedTime * 25;
-	if (offset > max_offset)	offset = 0;
+	if (static_cast<int>(offset) >= static_cast<int>(max_offset))
+		offset = 0;
 	knight.setOffset(offset);
 }
 

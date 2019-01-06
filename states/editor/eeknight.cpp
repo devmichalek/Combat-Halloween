@@ -314,7 +314,7 @@ void ee::Knight::mechanics(const double &elapsedTime)
 
 bool ee::Knight::add(Item &data)
 {
-	if (!data.ai.empty())
+	if (!data.ai.empty() && data.ai != cmm::CSNEWLINE)
 	{
 		std::string str = item.ai = data.ai;
 		board.values[board.HEART_POINTS] = boost::lexical_cast<float>(str.substr(str.find("hp(") + 3, str.find("), mp(") - (str.find("hp(") + 3)));
