@@ -53,17 +53,15 @@ void EAHistory::fill_local()
 	}
 
 	counterID = 0;
-	char two = 2;
-	char three = 3;
 	ee::Item item;
 	for (auto &it : content)
 	{
-		item.type = boost::lexical_cast<int>(it.substr(it.find("t:") + two, it.find(" c:") - (it.find("t:") + two)));
-		item.chosen = boost::lexical_cast<int>(it.substr(it.find("c:") + two, it.find(" x:") - (it.find("c:") + two)));
-		item.position.x = boost::lexical_cast<int>(it.substr(it.find("x:") + two, it.find(" y:") - (it.find("x:") + two)));
-		item.position.y = boost::lexical_cast<int>(it.substr(it.find("y:") + two, it.find(" id:") - (it.find("y:") + two)));
-		item.ID = boost::lexical_cast<int>(it.substr(it.find("id:") + three, it.find(" ai:") - (it.find("id:") + three)));
-		item.ai = it.substr(it.find("ai:") + three);
+		item.type = boost::lexical_cast<int>(cmm::extractFromString(it, "t:", cmm::CSPACE));
+		item.chosen = boost::lexical_cast<int>(cmm::extractFromString(it, "c:", cmm::CSPACE));
+		item.position.x = boost::lexical_cast<int>(cmm::extractFromString(it, "x:", cmm::CSPACE));
+		item.position.y = boost::lexical_cast<int>(cmm::extractFromString(it, "y:", cmm::CSPACE));
+		item.ID = boost::lexical_cast<int>(cmm::extractFromString(it, "id:", cmm::CSPACE));
+		item.ai = cmm::extractFromString(it, "ai:", cmm::CNEWLINE);
 
 		items.push_back(item);
 		++counterID;
@@ -164,10 +162,31 @@ void EAHistory::remove(const ee::Item &item)
 		if (!resultXY.empty())
 		{
 			saveVersion = 1;
-			for (unsigned i = 0; i < resultXY.size(); ++i)
+
+			if (resultXY.size() != 1)
 			{
-				items.erase(items.begin() + resultXY[i]);
-				content.erase(content.begin() + resultXY[i]);
+				// Rewrite, this process is slow but the most safety...
+				std::vector<ee::Item> buffer;
+				std::vector<std::string> strs;
+				for (unsigned i = 0; i < items.size(); ++i)
+				{
+					std::vector<int>::iterator pos = std::find(resultXY.begin(), resultXY.end(), i);
+					if (pos != resultXY.end())
+						continue;
+
+					buffer.push_back(items[i]);
+					strs.push_back(content[i]);
+				}
+				items = buffer;
+				content = strs;
+			}
+			else
+			{
+				for (unsigned i = 0; i < resultXY.size(); ++i)
+				{
+					items.erase(items.begin() + resultXY[i]);
+					content.erase(content.begin() + resultXY[i]);
+				}
 			}
 		}
 	}
