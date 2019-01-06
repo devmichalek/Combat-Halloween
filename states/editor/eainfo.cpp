@@ -232,7 +232,7 @@ std::string EAInfo::getDescriptionStr()
 	else if (type == TILE)
 		line = tab + "Tiles are the linchpin of the game." + cmm::SNEWLINE + "These blocks interacts with knight.";
 	else if (type == UNVISIBLE_TILE)
-		line = tab + "Unvisible tiles are getting visible" + cmm::SNEWLINE + "after the knight is standing on them.";
+		line = tab + "Unvisible tiles are getting visible" + cmm::SNEWLINE + "when the knight is standing on them.";
 	else if (type == LANDSCAPE)
 		line = tab + "Still Life objects do not interact" + cmm::SNEWLINE + "with anything. They just there.";
 	else if (type == FOE)
