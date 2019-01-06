@@ -245,6 +245,7 @@ void LevelMenu::mechanics(const double &elapsedTime)
 			else if (chat.compCommand("@editor"))
 			{
 				prev = true;
+				next = true;
 				chat.isActive() = false;
 			}
 
