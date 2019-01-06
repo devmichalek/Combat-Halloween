@@ -354,10 +354,10 @@ bool ee::Landscape::add(Item &data)
 	LandscapeLeaf ll;
 	ll.chosen = data.chosen;
 	ll.ID = data.ID;
-	if(data.ai.empty())
+	if (data.ai.empty())
 		ll.scale = globalScale;
 	else
-		ll.scale = boost::lexical_cast<float>(data.ai.substr(data.ai.find("scale("), data.ai.size() - 7));
+		ll.scale = boost::lexical_cast<float>(cmm::extractFromString(data.ai, "(scale:", ')'));
 
 	tree->insert(std::make_pair(box, ll));
 	return true;
