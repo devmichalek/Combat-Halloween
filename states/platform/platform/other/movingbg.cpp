@@ -88,22 +88,20 @@ void pla::MovingBG::mechanics(const float &elapsedTime, const char &direction)
 {
 	for (unsigned i = 1; i < 3; ++i)
 	{
-		fs[i].x += -velocity / 2 * elapsedTime * direction;
-
+		fs[i].x += -velocity * 0.45f * elapsedTime * direction;
 		if (fs[i].x < -screen_w)
-		{
 			fs[i].x = screen_w;
-		}
+		else if (fs[i].x > screen_w)
+			fs[i].x = -screen_w;
 	}
 
 	for (unsigned i = 3; i < fs.size(); ++i)
 	{
 		fs[i].x += velocity * elapsedTime * direction;
-
 		if (fs[i].x > screen_w)
-		{
 			fs[i].x = -screen_w;
-		}
+		else if (fs[i].x < -screen_w)
+			fs[i].x = screen_w;
 	}
 }
 

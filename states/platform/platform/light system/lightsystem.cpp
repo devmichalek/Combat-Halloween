@@ -243,32 +243,29 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 	{
 		for (auto &it : vec)
 		{
-			//c = boost::lexical_cast<int>(it.substr(it.find("c:") + 2, it.find(" x:") - (it.find("c:") + 2)));
-
-			// start position
-			x = boost::lexical_cast<int>(it.substr(it.find("x:") + 2, it.find(" y:") - (it.find("x:") + 2)));
-			y = boost::lexical_cast<int>(it.substr(it.find("y:") + 2, it.find(" id:") - (it.find("y:") + 2)));
+			// Start position.
+			x = boost::lexical_cast<int>(cmm::extractFromString(it, "x:", cmm::CSPACE));
+			y = boost::lexical_cast<int>(cmm::extractFromString(it, "y:", cmm::CSPACE));
 			
-			// radius
-			r = boost::lexical_cast<float>(it.substr(it.find("radius:") + 7, it.find(" color:") - (it.find("radius:") + 7)));
+			// Radius.
+			r = boost::lexical_cast<float>(cmm::extractFromString(it, "radius:", cmm::CSPACE));
 
-			// color
-			std::vector<float> c;
+			// Color.
+			std::vector<float> colorbuf;
 			std::string buf = cmm::SEMPTY;
-			str = it.substr(it.find("color:(") + 7, it.size() - (it.find("color:(") + 7));
+			str = cmm::extractFromString(it, "color:(", ')');
 			str.replace(str.size() - 2, str.size() - 1, ",");
 			for (size_t i = 0; i < str.size(); ++i)
 			{
 				if (str[i] == ',')
 				{
-					c.push_back(boost::lexical_cast<float>(buf));
+					colorbuf.push_back(boost::lexical_cast<float>(buf));
 					buf = cmm::SEMPTY;
 				}
 				else
 					buf += str[i];
 			}
 
-			// ai:((points:((x,y),(x,y),(x,y)) radius:r color:(r,g,b,a)))
 			if (it.find("points:()") == std::string::npos)
 			{
 				str = it.substr(it.find("points:(") + 8, it.find(") radius:") - (it.find("points:(") + 8));
@@ -300,12 +297,12 @@ void pla::LightSystem::read(std::vector<std::string> &vec)
 					str.erase(0, p2 + 1);
 				}
 
-				DynamicLightPoint dlp(LightPoint(r, sf::Glsl::Vec4(c[0], c[1], c[2], c[3])), pts);
+				DynamicLightPoint dlp(LightPoint(r, sf::Glsl::Vec4(colorbuf[0], colorbuf[1], colorbuf[2], colorbuf[3])), pts);
 				addDynamicLightPoint(dlp);
 			}
 			else
 			{
-				StaticLightPoint slp(LightPoint(r, sf::Glsl::Vec4(c[0], c[1], c[2], c[3])), sf::Vector2f(x, screen_h - y));
+				StaticLightPoint slp(LightPoint(r, sf::Glsl::Vec4(colorbuf[0], colorbuf[1], colorbuf[2], colorbuf[3])), sf::Vector2f(x, screen_h - y));
 				addStaticLightPoint(slp);
 			}
 		}

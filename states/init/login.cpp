@@ -1,7 +1,6 @@
 #include "login.h"
 #include "user.h"
 #include "loading.h"
-#include "converter.h"
 
 Login::Login()
 {

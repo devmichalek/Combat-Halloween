@@ -1,6 +1,5 @@
 #include "efmlibrary.h"
 #include "loading.h"
-#include "converter.h"
 
 EFMLibrary::EFMLibrary()
 {

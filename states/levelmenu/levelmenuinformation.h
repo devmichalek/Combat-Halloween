@@ -12,7 +12,7 @@ class LevelMenuInformation final
 
 	enum Types
 	{
-		MAIN = 0,
+		ORYGINAL = 0,
 		MINE,
 		BYUSERS,
 		SIZE

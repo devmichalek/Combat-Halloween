@@ -52,6 +52,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\common\audio.cpp" />
     <ClCompile Include="..\..\..\common\content.cpp" />
+    <ClCompile Include="..\..\..\common\converter.cpp" />
     <ClCompile Include="..\..\..\common\core.cpp" />
     <ClCompile Include="..\..\..\common\coxing.cpp" />
     <ClCompile Include="..\..\..\common\fpsconsole.cpp" />
@@ -80,6 +81,7 @@
     <ClCompile Include="light system\lightpoint.cpp" />
     <ClCompile Include="light system\lightsystem.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="other\exitdoor.cpp" />
     <ClCompile Include="other\landscape.cpp" />
     <ClCompile Include="other\movingbg.cpp" />
     <ClCompile Include="other\tiles.cpp" />
@@ -95,6 +97,7 @@
     <ClInclude Include="knight\kstates.h" />
     <ClInclude Include="light system\lightpoint.h" />
     <ClInclude Include="light system\lightsystem.h" />
+    <ClInclude Include="other\exitdoor.h" />
     <ClInclude Include="other\landscape.h" />
     <ClInclude Include="other\movingbg.h" />
     <ClInclude Include="other\tiles.h" />

@@ -130,15 +130,21 @@ void ee::Tile::load(sf::Vector2f &screen, int amount)
 
 void ee::Tile::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 {
-	int startX = -add.x / TILE_WIDTH;
-	int endX = -add.x + static_cast<int>(screen.x / TILE_WIDTH);
-	int startY = -add.y / TILE_HEIGHT;
-	int endY = -add.y + static_cast<int>(screen.y / TILE_HEIGHT);
-	char c;
+	short l = static_cast <int> (-add.x / TILE_WIDTH) - 1;
+	short r = static_cast <int> ((-add.x + screen.x) / TILE_WIDTH) + 1;
+	short b = static_cast <int> (-add.y / TILE_HEIGHT);
+	short t = static_cast <int> (-add.y + screen.y) / TILE_HEIGHT;
 
-	for (int i = startX; i < endX; ++i)
+	if (l < MIN_TILE_MAP_WIDTH)
+		l = MIN_TILE_MAP_WIDTH;
+
+	if (r >= MAX_TILE_MAP_WIDTH)
+		r = MAX_TILE_MAP_WIDTH - 1;
+
+	char c;
+	for (int i = l; i < r; ++i)
 	{
-		for (int j = startY; j < endY; ++j)
+		for (int j = b; j < t; ++j)
 		{
 			c = array[i][j];
 			if (c != item.VOID)

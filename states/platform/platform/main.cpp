@@ -57,7 +57,7 @@ void loading_loop()
 void main_loop()
 {
 	SContent::type = SContent::TYPE::FILE;
-	SContent::path = "local/test" + std::string(cmm::LOCALFILE_EXTENSION);
+	SContent::path = "local/testownik" + std::string(cmm::LOCALFILE_EXTENSION);
 	core->state = cmm::STATES::SIMULATOR; // Start test state
 
 	while (core->open)

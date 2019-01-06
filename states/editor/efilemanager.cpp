@@ -141,7 +141,6 @@ void EFileManager::optimize()
 		} CustomLess;
 		std::sort(content.begin(), content.end(), CustomLess);
 	}
-	// lol?
 }
 
 

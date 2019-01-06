@@ -25,8 +25,9 @@ namespace pla
 		KSpecs();
 		~KSpecs();
 	private:
-		void freeSpecs();
+		void free();
 	public:
-		void setSpecs();	// also reset
+		void prepare();
+		void set(int i, int value);
 	};
 }

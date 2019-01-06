@@ -44,7 +44,7 @@ namespace ee
 
 		bool isModified();
 		bool isOneAndOnly() { return true; }
-		//void setActive(bool active);
+
 		Item getItem();
 		virtual bool checkCollision(sf::Vector2i &mouse);
 

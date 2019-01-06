@@ -108,13 +108,11 @@ void pla::Tiles::draw(sf::RenderTexture &rt, const float &x, const float &y)
 	short l = static_cast <int> (x / TILE_WIDTH) - 1;
 	short r = static_cast <int> ((x + screen_w) / TILE_WIDTH) + 1;
 	short b = static_cast <int> (y / TILE_HEIGHT);
-	short t = static_cast <int> (y + screen_h) / TILE_HEIGHT;
+	short t = static_cast <int> ((y + screen_h) / TILE_HEIGHT) + 1;
 
-	if (l < MIN_TILE_MAP_WIDTH)
-		l = MIN_TILE_MAP_WIDTH;
-
-	if (r >= MAX_TILE_MAP_WIDTH)
-		r = MAX_TILE_MAP_WIDTH -1;
+	if (l < MIN_TILE_MAP_WIDTH)		l = MIN_TILE_MAP_WIDTH;
+	if (r >= MAX_TILE_MAP_WIDTH)	r = MAX_TILE_MAP_WIDTH - 1;
+	if (t >= MAX_TILE_MAP_HEIGHT)	t = MAX_TILE_MAP_HEIGHT - 1;
 
 	for (int i = l; i < r; ++i)
 	{
@@ -151,9 +149,9 @@ void pla::Tiles::read(std::vector<std::string> &vec)
 		char** ptr = vec[0].find("t:1") != std::string::npos ? tiles : untiles;
 		for (auto &it : vec)
 		{
-			c = boost::lexical_cast<int>(it.substr(it.find("c:") + 2, it.find(" x:") - (it.find("c:") + 2)));
-			x = boost::lexical_cast<int>(it.substr(it.find("x:") + 2, it.find(" y:") - (it.find("x:") + 2))) / TILE_WIDTH;
-			y = boost::lexical_cast<int>(it.substr(it.find("y:") + 2, it.find(" id:") - (it.find("y:") + 2))) / TILE_HEIGHT;
+			c = boost::lexical_cast<int>(cmm::extractFromString(it, "c:", cmm::CSPACE));
+			x = boost::lexical_cast<int>(cmm::extractFromString(it, "x:", cmm::CSPACE)) / TILE_WIDTH;
+			y = boost::lexical_cast<int>(cmm::extractFromString(it, "y:", cmm::CSPACE)) / TILE_HEIGHT;
 			ptr[x][y] = c;
 		}
 	}

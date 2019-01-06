@@ -1,7 +1,6 @@
 #include "knightspecs.h"
 #include "user.h"
 #include "loading.h"
-#include "converter.h"
 
 Knightspecs::Knightspecs()
 {

@@ -129,6 +129,12 @@
     <ClCompile Include="light system\lightsystem.cpp">
       <Filter>Light System</Filter>
     </ClCompile>
+    <ClCompile Include="other\exitdoor.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\converter.cpp">
+      <Filter>Dependencies\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="platform.h" />
@@ -167,6 +173,9 @@
     </ClInclude>
     <ClInclude Include="light system\lightsystem.h">
       <Filter>Light System</Filter>
+    </ClInclude>
+    <ClInclude Include="other\exitdoor.h">
+      <Filter>Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
