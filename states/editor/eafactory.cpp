@@ -125,7 +125,7 @@ bool EAFactory::handle(const sf::Event &event, const sf::Vector2i &addi)
 
 	// Set Red Backlight
 	tools.isRedBack() = false;
-	if(tools.getType() != cmm::Kind::VOID)
+	if(tools.getType() != cmm::Kind::VOID && tools.getType() < entities.size())
 		if (entities[tools.getType()]->checkCollision(mouse))
 			tools.isRedBack() = true;
 
