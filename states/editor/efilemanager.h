@@ -45,6 +45,7 @@ public:
 	
 	bool checkIfFileExists(std::string fileName);
 	void freeThread();
+	bool isThreadReady();
 
 private:	// thread functions
 	void thread_save();

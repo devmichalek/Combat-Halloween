@@ -112,20 +112,36 @@ void EFileManager::pop()
 
 void EFileManager::optimize()
 {
-	std::string IDstr = cmm::SEMPTY;
+	std::string str = cmm::SEMPTY;
+
+	// Changing id's
 	int ID = -1, counter = 0;
 	for (auto &it : content)
 	{
-		IDstr = it.substr(it.find("id:") + 3, it.find(" ai:") - (it.find("id:") + 3));
-		ID = boost::lexical_cast<int>(IDstr);
+		str = cmm::extractFromString(it, "id:", cmm::CSPACE);
+		ID = boost::lexical_cast<int>(str);
 
 		if (ID != cmm::Kind::VOID)
 		{
-			IDstr = boost::lexical_cast<std::string>(counter++);
-			int IDpos = it.find("id:") + 3;
-			it.replace(IDpos, (it.find(" ai:") - IDpos), IDstr);
+			str = boost::lexical_cast<std::string>(counter++);
+			int pos = it.find("id:") + 3;
+			it.replace(pos, (it.find(" ai:") - pos), str);
 		}
 	}
+
+	// Sorting data by types
+	{
+		struct {
+			bool operator()(std::string a, std::string b) const
+			{
+				int ta = boost::lexical_cast<int>(cmm::extractFromString(a, "t:", cmm::CSPACE));
+				int tb = boost::lexical_cast<int>(cmm::extractFromString(b, "t:", cmm::CSPACE));
+				return ta < tb;
+			}
+		} CustomLess;
+		std::sort(content.begin(), content.end(), CustomLess);
+	}
+	// lol?
 }
 
 
@@ -239,6 +255,10 @@ void EFileManager::freeThread()
 		thread.free();
 }
 
+bool EFileManager::isThreadReady()
+{
+	return thread.ready;
+}
 
 
 void EFileManager::thread_save()

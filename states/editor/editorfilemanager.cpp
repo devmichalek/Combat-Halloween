@@ -218,7 +218,7 @@ void EditorFileManager::mechanics(const double &elapsedTime)
 	textEditor.mechanics(elapsedTime);
 
 
-	if(fileManager.isStatus())
+	if(fileManager.isStatus() && fileManager.isThreadReady())
 	{
 		if (fileManager.isSuccess())
 		{
