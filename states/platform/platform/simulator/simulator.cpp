@@ -294,7 +294,7 @@ bool Simulator::sort()
 	{
 		for (auto &it : SContent::content)
 		{
-			if (boost::lexical_cast<int>(it.substr(it.find("t:") + 2, it.find(" c:") - (it.find("t:") + 2))) == c)
+			if (boost::lexical_cast<int>(cmm::extractFromString(it, "t:", cmm::CSPACE)) == c)
 			{
 				SContent::content_sorted.push_back(it);
 			}
@@ -337,7 +337,9 @@ bool Simulator::simulate()
 	}
 
 	// Check if knight is not inside tile.
-
+	// Check if each line contains type, chosen, id etc...
+	// Check if the brackets are close (), check amount of ':'
+	// Check if there are types that we do not recognize, bigger than size of KIND
 
 	return true;
 }
