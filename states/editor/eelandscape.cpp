@@ -1,6 +1,5 @@
 #include "eelandscape.h"
 #include "loading.h"
-#include "converter.h"
 
 ee::LandscapeItem::LandscapeItem(int ID, char chosen, float scale)
 {
@@ -10,6 +9,16 @@ ee::LandscapeItem::LandscapeItem(int ID, char chosen, float scale)
 	this->scale = scale;
 	ai = cmm::SEMPTY;
 	position = sf::Vector2i(0, 0);
+}
+
+ee::LandscapeItem::LandscapeItem(Item &it, float scale)
+{
+	this->ID = it.ID;
+	this->chosen = it.chosen;
+	type = LANDSCAPE;
+	this->scale = scale;
+	ai = cmm::SEMPTY;
+	position = it.position;
 }
 
 ee::LandscapeItem::~LandscapeItem()
@@ -250,6 +259,8 @@ void ee::Landscape::handle(const sf::Event &event)
 					it = false;
 
 				modified = true;
+				ee::Item item = getItem();
+				add(item);
 				return;
 			}
 		}
@@ -277,7 +288,7 @@ void ee::Landscape::handle(const sf::Event &event)
 void ee::Landscape::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 {
 	result.clear();
-	Box queryBox(Point(add.x, add.y), Point(add.x + screen.x, add.y + screen.y));
+	Box queryBox(Point(add.x, -add.y), Point(add.x + screen.x, -add.y + screen.y));
 	tree->query(bgi::intersects(queryBox), std::back_inserter(result));
 
 	int c;
@@ -287,7 +298,7 @@ void ee::Landscape::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 		c = it.second.chosen;
 		sprites[c]->setScale(it.second.scale, it.second.scale);
 		x = bg::get<0>(it.first.min_corner()) + add.x;
-		y = (bg::get<1>(it.first.min_corner()) + add.y) * -1 + screen.y;
+		y = (bg::get<1>(it.first.max_corner()) + add.y) * -1 + screen.y;
 		sprites[c]->setPosition(x, y);
 		window->draw(*sprites[c]);
 	}
@@ -295,20 +306,21 @@ void ee::Landscape::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 	if (!active)
 		return;
 
-	setPosition(add);
-
 	//if (item.ID != item.VOID)
 	{
 		sprites[item.chosen]->setScale(item.scale, item.scale);
 
 		float tX = item.position.x + add.x;
-		float tY = (item.position.y + add.y + sprites[item.chosen]->getHeight()) * -1 + screen.y;
+		float tY = (item.position.y + add.y) * -1 + screen.y;
 
 		sprites[item.chosen]->setPosition(tX, tY);
 		sprites[item.chosen]->setColor(cmm::GREEN_COLOR);
 		window->draw(*sprites[item.chosen]);
 		sprites[item.chosen]->setColor(cmm::LOADING_COLOR);	// set back
 	}
+
+	setPosition(add);
+	board.draw(window);
 }
 
 void ee::Landscape::mechanics(const double &elapsedTime)
@@ -346,19 +358,23 @@ void ee::Landscape::mechanics(const double &elapsedTime)
 
 bool ee::Landscape::add(Item &data)
 {
-	int w = sprites[data.chosen]->getWidth() * globalScale;
-	int h = sprites[data.chosen]->getWidth() * globalScale;
-
-	Box box(Point(data.position.x, data.position.y), Point(data.position.x + w, data.position.y + h));
-
 	LandscapeLeaf ll;
-	ll.chosen = data.chosen;
-	ll.ID = data.ID;
-	if (data.ai.empty())
+	if (data.ai.empty() || data.ai == cmm::CSNEWLINE)
 		ll.scale = globalScale;
 	else
 		ll.scale = boost::lexical_cast<float>(cmm::extractFromString(data.ai, "(scale:", ')'));
+	ll.chosen = data.chosen;
+	ll.ID = data.ID;
 
+	sprites[data.chosen]->setScale(ll.scale, ll.scale);
+	int w = sprites[data.chosen]->getWidth();
+	int h = sprites[data.chosen]->getHeight();
+
+	// If item was modified it means we add the item back, so its position is already set correctly.
+	Box box(Point(data.position.x, data.position.y + (modified ? -h : 0)), Point(data.position.x + w, data.position.y + (modified ? 0 : h)));
+	data.position = sf::Vector2i(data.position.x, data.position.y);
+
+	item = ee::LandscapeItem(data, ll.scale);
 	tree->insert(std::make_pair(box, ll));
 	return true;
 }
@@ -368,7 +384,8 @@ bool ee::Landscape::remove(sf::Vector2i &mouse)
 	if (checkCollision(mouse))
 	{
 		mouse.x = bg::get<0>(result[0].first.min_corner());
-		mouse.y = bg::get<1>(result[0].first.min_corner());
+		mouse.y = bg::get<1>(result[0].first.max_corner());
+		item.ID = result[0].second.ID;
 		tree->remove(result[0]);
 		return true;
 	}
@@ -378,9 +395,14 @@ bool ee::Landscape::remove(sf::Vector2i &mouse)
 
 bool ee::Landscape::unfold(sf::Vector2i &mouse)
 {
-	if (checkCollision(mouse)) // result is empty - new bug
+	if (checkCollision(mouse))
 	{
+		float x = bg::get<0>(result[0].first.min_corner());
+		float y = bg::get<1>(result[0].first.max_corner());
+		item.position = sf::Vector2i(static_cast<int>(x), static_cast<int>(y));
+		item.chosen = result[0].second.chosen;
 		setActive(true);
+		tree->remove(result[0]);
 		return true;
 	}
 
@@ -415,7 +437,7 @@ void ee::Landscape::setRects()
 
 void ee::Landscape::setPosition(sf::Vector2i add)
 {
-	board.board.setPosition(item.position.x + add.x, (item.position.y + add.y) * -1 + screen.y);
+	board.board.setPosition(item.position.x + add.x, (item.position.y + add.y) * -1 + screen.y - board.board.getHeight());
 	setTexts();
 	setRects();
 }

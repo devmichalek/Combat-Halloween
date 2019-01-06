@@ -76,7 +76,7 @@ void pla::Landscape::draw(sf::RenderTexture &rt, const float &x, const float &y)
 		c = item.second.chosen;
 		sprites[c]->setScale(item.second.scale, item.second.scale);
 		tx = bg::get<0>(item.first.min_corner());
-		ty = (bg::get<1>(item.first.min_corner()) + sprites[c]->getHeight()) * -1 + screen_h;
+		ty = (bg::get<1>(item.first.max_corner())) * -1 + screen_h;
 		sprites[c]->setPosition(tx, ty);
 		rt.draw(*sprites[c]);
 	}
@@ -93,13 +93,14 @@ void pla::Landscape::read(std::vector<std::string> &vec)
 	{
 		for (auto &it : vec)
 		{
-			c = boost::lexical_cast<int>(it.substr(it.find("c:") + 2, it.find(" x:") - (it.find("c:") + 2)));
-			x = boost::lexical_cast<int>(it.substr(it.find("x:") + 2, it.find(" y:") - (it.find("x:") + 2)));
-			y = boost::lexical_cast<int>(it.substr(it.find("y:") + 2, it.find(" id:") - (it.find("y:") + 2)));
-			scale = boost::lexical_cast<float>(it.substr(it.find("(scale:") + 7, it.find(")") - (it.find("(scale:") + 7)));
+			
+			c = boost::lexical_cast<int>(cmm::extractFromString(it, "c:", cmm::CSPACE));
+			x = boost::lexical_cast<int>(cmm::extractFromString(it, "x:", cmm::CSPACE));
+			y = boost::lexical_cast<int>(cmm::extractFromString(it, "y:", cmm::CSPACE));
+			scale = boost::lexical_cast<float>(cmm::extractFromString(it, "(scale:", ')'));
 
 			sprites[c]->setScale(scale, scale);
-			Box box(Point(x, y - sprites[c]->getHeight()), Point(x + sprites[c]->getWidth(), y));
+			Box box(Point(x, y), Point(x + sprites[c]->getWidth(), y + sprites[c]->getHeight()));
 			LandscapeUnit lu(c, scale);
 			LandscapeBox lbox = std::make_pair(box, lu);
 			tree->insert(lbox);

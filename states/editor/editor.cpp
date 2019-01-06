@@ -1,7 +1,6 @@
 #include "editor.h"
 #include "scontent.h"
 #include "loading.h"
-#include "converter.h"
 
 Editor::Editor()
 {
@@ -87,7 +86,7 @@ void Editor::handle(const sf::Event &event)
 void Editor::draw(sf::RenderWindow* &window)
 {
 	navigation.drawBG(window);
-	factory.draw(window, grid.getAdd());
+	factory.draw(window, grid.getAdd(), grid.isActive());
 	grid.draw(window);
 	info.draw(window);
 	navigation.draw(window);

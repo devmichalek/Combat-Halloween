@@ -9,6 +9,7 @@ namespace ee
 	{
 		float scale;
 		LandscapeItem(int ID = -1, char chosen = 1, float scale = 1.0f);
+		LandscapeItem(Item &it, float scale = 1.0f);
 		~LandscapeItem();
 	};
 

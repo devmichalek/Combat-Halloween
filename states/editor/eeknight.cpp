@@ -1,6 +1,5 @@
 #include "eeknight.h"
 #include "loading.h"
-#include "converter.h"
 
 ee::KnightBoard::KnightBoard()
 {
@@ -50,24 +49,24 @@ void ee::KnightBoard::load(sf::Vector2f &screen)
 		texts[i]->setAlpha(MAX_ALPHA);
 	}
 
-	texts[HEART_POINTS * 2]->setText("Heart Points:");
-	texts[MAGIC_POINTS * 2]->setText("Magic Points:");
-	texts[ARMOUR * 2]->setText("Armour:");
+	texts[HEART_POINTS * 2]->	setText("Heart Points:");
+	texts[MAGIC_POINTS * 2]->	setText("Magic Points:");
+	texts[ARMOUR * 2]->			setText("Armour:");
 	texts[MAGIC_RESISTANT * 2]->setText("Magic Resistant:");
-	texts[MOVEMENT_SPEED * 2]->setText("Movement Speed:");
-	texts[DAMAGE * 2]->setText("Damage:");
-	texts[MAGIC_DAMAGE * 2]->setText("Magic Damage:");
-	texts[LUCK * 2]->setText("Luck:");
-	texts[EXPERIENCE * 2]->setText("Experience:");
-	texts[LEVEL * 2]->setText("Level:");
+	texts[MOVEMENT_SPEED * 2]->	setText("Movement Speed:");
+	texts[DAMAGE * 2]->			setText("Damage:");
+	texts[MAGIC_DAMAGE * 2]->	setText("Magic Damage:");
+	texts[LUCK * 2]->			setText("Luck:");
+	texts[EXPERIENCE * 2]->		setText("Experience:");
+	texts[LEVEL * 2]->			setText("Level:");
 	for (int i = 1; i < FEATURES::SIZE * 2; i += 2)
-		texts[i]->setText(cmm::SEMPTY);
+		texts[i]->				setText(cmm::SEMPTY);
 	for (int i = 0; i < FEATURES::SIZE * 2; i += 2)
-		texts[i]->setFillColor(cmm::LOCKED_COLOR);
-	texts[EXPERIENCE * 2 + 1]->setText("-");
-	texts[LEVEL * 2 + 1]->setText("-");
-	texts[EXPERIENCE * 2 + 1]->setFillColor(cmm::LOCKED_COLOR);
-	texts[LEVEL * 2 + 1]->setFillColor(cmm::LOCKED_COLOR);
+		texts[i]->				setFillColor(cmm::LOCKED_COLOR);
+	texts[EXPERIENCE * 2 + 1]->	setText("-");
+	texts[LEVEL * 2 + 1]->		setText("-");
+	texts[EXPERIENCE * 2 + 1]->	setFillColor(cmm::LOCKED_COLOR);
+	texts[LEVEL * 2 + 1]->		setFillColor(cmm::LOCKED_COLOR);
 
 	Loading::add(plus.load("images/buttons/plus.png", 3));
 	if (Loading::isError())	return;
@@ -154,24 +153,18 @@ bool ee::Knight::isModified()
 	return false;
 }
 
-//void ee::Knight::setActive(bool active)
-//{
-//	this->active = active;
-//}
-
 ee::Item ee::Knight::getItem()
 {
 	std::string new_ai = cmm::SEMPTY;
-	new_ai += "hp(" + std::to_string(static_cast<int>(board.values[board.HEART_POINTS])) + "), ";
-	new_ai += "mp(" + std::to_string(static_cast<int>(board.values[board.MAGIC_POINTS])) + "), ";
-	new_ai += "armour(" + cmm::floatToStr(board.values[board.ARMOUR] / 1000, 3) + "), ";
-	new_ai += "mr(" + cmm::floatToStr(board.values[board.MAGIC_RESISTANT] / 1000, 3) + "), ";
-	new_ai += "ms(" + cmm::floatToStr(board.values[board.MOVEMENT_SPEED] / 100, 2) + "), ";
-	new_ai += "dmg(" + cmm::floatToStr(board.values[board.DAMAGE], 1) + "), ";
-	new_ai += "mdmg(" + cmm::floatToStr(board.values[board.MAGIC_DAMAGE], 1) + "), ";
-	new_ai += "luck(" + std::to_string(static_cast<int>(board.values[board.LUCK])) + ")";
+	new_ai += "(hp:" +		std::to_string(static_cast<int>(board.values[board.HEART_POINTS]))		+ ", ";
+	new_ai += "mp:" +		std::to_string(static_cast<int>(board.values[board.MAGIC_POINTS]))		+ ", ";
+	new_ai += "armour:" +	std::to_string(static_cast<int>(board.values[board.ARMOUR]))			+ ", ";
+	new_ai += "mr:" +		std::to_string(static_cast<int>(board.values[board.MAGIC_RESISTANT]))	+ ", ";
+	new_ai += "ms:" +		std::to_string(static_cast<int>(board.values[board.MOVEMENT_SPEED]))	+ ", ";
+	new_ai += "dmg:" +		std::to_string(static_cast<int>(board.values[board.DAMAGE]))			+ ", ";
+	new_ai += "mdmg:" +		std::to_string(static_cast<int>(board.values[board.MAGIC_DAMAGE]))		+ ", ";
+	new_ai += "luck:" +		std::to_string(static_cast<int>(board.values[board.LUCK]))				+ ")";
 	item.ai = new_ai;
-
 	return item;
 }
 
@@ -275,14 +268,17 @@ void ee::Knight::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 {
 	if (item.position.x != -1 && item.position.y != -1)
 	{
-		sprites[0]->setPosition(item.position.x + add.x, -(item.position.y + add.y) + screen.y);
+		sprites[0]->setPosition(item.position.x + add.x, -(item.position.y + add.y) + screen.y - sprites[0]->getHeight());
 		window->draw(*sprites[0]);
 
 		if (active)
 		{
 			setPosition(add);
 			board.draw(window);
+			sprites[0]->setColor(cmm::GREEN_COLOR);
 		}
+		else
+			sprites[item.chosen]->setColor(cmm::LOADING_COLOR); // set back	
 	}
 }
 
@@ -317,14 +313,15 @@ bool ee::Knight::add(Item &data)
 	if (!data.ai.empty() && data.ai != cmm::CSNEWLINE)
 	{
 		std::string str = item.ai = data.ai;
-		board.values[board.HEART_POINTS] = boost::lexical_cast<float>(str.substr(str.find("hp(") + 3, str.find("), mp(") - (str.find("hp(") + 3)));
-		board.values[board.MAGIC_POINTS] = boost::lexical_cast<float>(str.substr(str.find("mp(") + 3, str.find("), armour(") - (str.find("mp(") + 3)));
-		board.values[board.ARMOUR] = boost::lexical_cast<float>(str.substr(str.find("armour(") + 7, str.find("), mr(") - (str.find("armour(") + 7))) * 1000;
-		board.values[board.MAGIC_RESISTANT] = boost::lexical_cast<float>(str.substr(str.find("mr(") + 3, str.find("), ms(") - (str.find("mr(") + 3))) * 1000;
-		board.values[board.MOVEMENT_SPEED] = boost::lexical_cast<float>(str.substr(str.find("ms(") + 3, str.find("), dmg(") - (str.find("ms(") + 3))) * 100;
-		board.values[board.DAMAGE] = boost::lexical_cast<float>(str.substr(str.find("dmg(") + 4, str.find("), mdmg(") - (str.find("dmg(") + 4)));
-		board.values[board.MAGIC_DAMAGE] = boost::lexical_cast<float>(str.substr(str.find("mdmg(") + 5, str.find("), luck(") - (str.find("mdmg(") + 5)));
-		board.values[board.LUCK] = boost::lexical_cast<float>(str.substr(str.find("luck(") + 5, (str.size() - 1) - (str.find("luck(") + 6)));
+		
+		board.values[board.HEART_POINTS] =		boost::lexical_cast<float>(cmm::extractFromString(str, "hp:",		','));
+		board.values[board.MAGIC_POINTS] =		boost::lexical_cast<float>(cmm::extractFromString(str, "mp:",		','));
+		board.values[board.ARMOUR] =			boost::lexical_cast<float>(cmm::extractFromString(str, "armour:",	','));
+		board.values[board.MAGIC_RESISTANT] =	boost::lexical_cast<float>(cmm::extractFromString(str, "mr:",		','));
+		board.values[board.MOVEMENT_SPEED] =	boost::lexical_cast<float>(cmm::extractFromString(str, "ms:",		','));
+		board.values[board.DAMAGE] =			boost::lexical_cast<float>(cmm::extractFromString(str, "dmg:",		','));
+		board.values[board.MAGIC_DAMAGE] =		boost::lexical_cast<float>(cmm::extractFromString(str, "mdmg:",		','));
+		board.values[board.LUCK] =				boost::lexical_cast<float>(cmm::extractFromString(str, "luck:",		')'));
 	}
 	else
 		item.ai = cmm::SEMPTY;
@@ -333,13 +330,13 @@ bool ee::Knight::add(Item &data)
 	item.position = data.position;
 	item.type = cmm::Kind::KNIGHT;
 	item.chosen = data.chosen;
-
 	return true;
 }
 
 bool ee::Knight::remove(sf::Vector2i &mouse)
 {
-	if (checkCollision(mouse))
+	sf::Vector2i buffer = sf::Vector2i(mouse.x, mouse.y - sprites[0]->getHeight());
+	if (checkCollision(buffer))
 	{
 		item.ai = cmm::SEMPTY;
 		item.position = sf::Vector2i(-1, -1);
@@ -351,7 +348,8 @@ bool ee::Knight::remove(sf::Vector2i &mouse)
 
 bool ee::Knight::unfold(sf::Vector2i &mouse)
 {
-	if (checkCollision(mouse))
+	sf::Vector2i buffer = sf::Vector2i(mouse.x, mouse.y - sprites[0]->getHeight());
+	if (checkCollision(buffer))
 	{
 		setPosition(mouse);
 		setActive(true);
