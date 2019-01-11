@@ -13,7 +13,7 @@ ee::KnightBoard::~KnightBoard()
 
 void ee::KnightBoard::free()
 {
-	sclaimer = false;
+	sclaimer = true;
 
 	if (!mins.empty())		mins.clear();
 	if (!maxs.empty())		maxs.clear();
@@ -35,10 +35,17 @@ void ee::KnightBoard::free()
 
 void ee::KnightBoard::load(sf::Vector2f &screen)
 {
+	// Load board texture.
 	Loading::add(board.load("images/other/splank.png"));
 	if (Loading::isError())	return;
+	board.setScale(screen.x / 3200, screen.y / 700);
 
-	board.setScale(screen.x / 3200, screen.y / 720);
+	// Prepare claimer text.
+	Loading::add(claimer.setFont(cmm::JAPOKKI_FONT_PATH));
+	if (Loading::isError())	return;
+	claimer.setSize(screen.y / 35);
+	claimer.setAlpha(MAX_ALPHA);
+	claimer.setText("Use user's specification");
 
 	for (int i = 0; i < FEATURES::SIZE*2; ++i)
 	{
@@ -67,13 +74,17 @@ void ee::KnightBoard::load(sf::Vector2f &screen)
 	texts[LEVEL * 2 + 1]->		setText("-");
 	texts[EXPERIENCE * 2 + 1]->	setFillColor(cmm::LOCKED_COLOR);
 	texts[LEVEL * 2 + 1]->		setFillColor(cmm::LOCKED_COLOR);
-
+	
 	Loading::add(plus.load("images/buttons/plus.png", 3));
 	if (Loading::isError())	return;
 	Loading::add(minus.load("images/buttons/minus.png", 3));
 	if (Loading::isError())	return;
+	Loading::add(agree.load("images/buttons/agree.png", 3));
+	if (Loading::isError())	return;
 	plus.setScale(screen.x / 3840, screen.y / 2160);
 	minus.setScale(screen.x / 3840, screen.y / 2160);
+	agree.setScale(screen.x / (3840 * 2), screen.y / (2160 * 2));
+	rclaimer = sf::IntRect(-1, -1, agree.getWidth(), agree.getHeight());
 
 	mins.resize(FEATURES::SIZE - 2); // we do not count EXPERIENCE and LEVEL
 	maxs.resize(FEATURES::SIZE - 2);
@@ -83,7 +94,7 @@ void ee::KnightBoard::load(sf::Vector2f &screen)
 	ratios[MAGIC_POINTS] = 0.1f;	values[MAGIC_POINTS] =		mins[MAGIC_POINTS] = 1;			maxs[MAGIC_POINTS] = 2000;		// points
 	ratios[ARMOUR] = 0.1f;			values[ARMOUR] =			mins[ARMOUR] = 0;				maxs[ARMOUR] = 1000;			// per mille, 0%-100%
 	ratios[MAGIC_RESISTANT] = 0.1f;	values[MAGIC_RESISTANT] =	mins[MAGIC_RESISTANT] = 0;		maxs[MAGIC_RESISTANT] = 1000;	// per mille, 0%-100%
-	ratios[MOVEMENT_SPEED] = 0.25f;	values[MOVEMENT_SPEED] =	mins[MOVEMENT_SPEED] = 20;		maxs[MOVEMENT_SPEED] = 200;		// 0.2px/sec - 2.0px/sec (conventionally)
+	ratios[MOVEMENT_SPEED] = 0.25f;	values[MOVEMENT_SPEED] =	mins[MOVEMENT_SPEED] = 20;		maxs[MOVEMENT_SPEED] = 200;		// 0.2px - 2.0px (conventionally)
 	ratios[DAMAGE] = 0.1f;			values[DAMAGE] =			mins[DAMAGE] = 0;				maxs[DAMAGE] = 1000;			// points
 	ratios[MAGIC_DAMAGE] = 0.1f;	values[MAGIC_DAMAGE] =		mins[MAGIC_DAMAGE] = 0;			maxs[MAGIC_DAMAGE] = 2000;		// points
 	ratios[LUCK] = 0.1f;			values[LUCK] =				mins[LUCK] = 1;					maxs[LUCK] = 50;				// percent, 1%-50%	
@@ -106,17 +117,21 @@ void ee::KnightBoard::draw(sf::RenderWindow* &window)
 
 	for (int i = 0; i < EXPERIENCE; ++i)
 	{
-		states[i] ? minus.setOffset(1) : minus.setOffset(0);
+		sclaimer ? minus.setOffset(2) : states[i] ? minus.setOffset(1) : minus.setOffset(0);
 		minus.setPosition(rects[i].left, rects[i].top);
 		window->draw(minus);
 	}
 
 	for (int i = EXPERIENCE; i < EXPERIENCE * 2; ++i)
 	{
-		states[i] ? plus.setOffset(1) : plus.setOffset(0);
+		sclaimer ? plus.setOffset(2) : states[i] ? plus.setOffset(1) : plus.setOffset(0);
 		plus.setPosition(rects[i].left, rects[i].top);
 		window->draw(plus);
 	}
+
+	window->draw(claimer);
+	agree.setOffset(sclaimer ? 1 : 0);
+	window->draw(agree);
 }
 
 
@@ -138,6 +153,7 @@ void ee::Knight::free()
 
 void ee::Knight::reset()
 {
+	board.sclaimer = true;
 	modified = false;
 	item.reset();
 }
@@ -156,14 +172,17 @@ bool ee::Knight::isModified()
 ee::Item ee::Knight::getItem()
 {
 	std::string new_ai = cmm::SEMPTY;
-	new_ai += "(hp:" +		std::to_string(static_cast<int>(board.values[board.HEART_POINTS]))		+ ", ";
-	new_ai += "mp:" +		std::to_string(static_cast<int>(board.values[board.MAGIC_POINTS]))		+ ", ";
-	new_ai += "armour:" +	std::to_string(static_cast<int>(board.values[board.ARMOUR]))			+ ", ";
-	new_ai += "mr:" +		std::to_string(static_cast<int>(board.values[board.MAGIC_RESISTANT]))	+ ", ";
-	new_ai += "ms:" +		std::to_string(static_cast<int>(board.values[board.MOVEMENT_SPEED]))	+ ", ";
-	new_ai += "dmg:" +		std::to_string(static_cast<int>(board.values[board.DAMAGE]))			+ ", ";
-	new_ai += "mdmg:" +		std::to_string(static_cast<int>(board.values[board.MAGIC_DAMAGE]))		+ ", ";
-	new_ai += "luck:" +		std::to_string(static_cast<int>(board.values[board.LUCK]))				+ ")";
+	if (!board.sclaimer)
+	{
+		new_ai += "(hp:" + std::to_string(static_cast<int>(board.values[board.HEART_POINTS])) + ", ";
+		new_ai += "mp:" + std::to_string(static_cast<int>(board.values[board.MAGIC_POINTS])) + ", ";
+		new_ai += "armour:" + std::to_string(static_cast<int>(board.values[board.ARMOUR])) + ", ";
+		new_ai += "mr:" + std::to_string(static_cast<int>(board.values[board.MAGIC_RESISTANT])) + ", ";
+		new_ai += "ms:" + std::to_string(static_cast<int>(board.values[board.MOVEMENT_SPEED])) + ", ";
+		new_ai += "dmg:" + std::to_string(static_cast<int>(board.values[board.DAMAGE])) + ", ";
+		new_ai += "mdmg:" + std::to_string(static_cast<int>(board.values[board.MAGIC_DAMAGE])) + ", ";
+		new_ai += "luck:" + std::to_string(static_cast<int>(board.values[board.LUCK])) + ")";
+	}
 	item.ai = new_ai;
 	return item;
 }
@@ -224,13 +243,21 @@ void ee::Knight::handle(const sf::Event &event)
 		{
 			sf::Vector2i mouse(event.mouseButton.x, event.mouseButton.y);
 
-			for (size_t i = 0; i < board.rects.size(); ++i)
-			{
-				if (board.rects[i].contains(mouse))
+			if(!board.sclaimer)
+				for (size_t i = 0; i < board.rects.size(); ++i)
 				{
-					board.states[i] = true;
-					return;
+					if (board.rects[i].contains(mouse))
+					{
+						board.states[i] = true;
+						return;
+					}
 				}
+			
+			if (board.rclaimer.contains(mouse))
+			{
+				board.sclaimer = !board.sclaimer;
+				set();
+				return;
 			}
 
 			if (!board.board.checkCollision(mouse.x, mouse.y))
@@ -273,7 +300,7 @@ void ee::Knight::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 
 		if (active)
 		{
-			setPosition(add);
+			set(add);
 			board.draw(window);
 			sprites[0]->setColor(cmm::GREEN_COLOR);
 		}
@@ -284,6 +311,9 @@ void ee::Knight::draw(sf::RenderWindow* &window, sf::Vector2i &add)
 
 void ee::Knight::mechanics(const double &elapsedTime)
 {
+	if (board.sclaimer)
+		return;
+
 	float value = elapsedTime;
 
 	for (int i = 0; i < board.FEATURES::EXPERIENCE; ++i) // minus
@@ -313,7 +343,6 @@ bool ee::Knight::add(Item &data)
 	if (!data.ai.empty() && data.ai != cmm::CSNEWLINE)
 	{
 		std::string str = item.ai = data.ai;
-		
 		board.values[board.HEART_POINTS] =		boost::lexical_cast<float>(cmm::extractFromString(str, "hp:",		','));
 		board.values[board.MAGIC_POINTS] =		boost::lexical_cast<float>(cmm::extractFromString(str, "mp:",		','));
 		board.values[board.ARMOUR] =			boost::lexical_cast<float>(cmm::extractFromString(str, "armour:",	','));
@@ -322,9 +351,13 @@ bool ee::Knight::add(Item &data)
 		board.values[board.DAMAGE] =			boost::lexical_cast<float>(cmm::extractFromString(str, "dmg:",		','));
 		board.values[board.MAGIC_DAMAGE] =		boost::lexical_cast<float>(cmm::extractFromString(str, "mdmg:",		','));
 		board.values[board.LUCK] =				boost::lexical_cast<float>(cmm::extractFromString(str, "luck:",		')'));
+		board.sclaimer = false;
 	}
 	else
+	{
+		board.sclaimer = true;
 		item.ai = cmm::SEMPTY;
+	}
 
 	item.ID = data.ID;
 	item.position = data.position;
@@ -351,7 +384,7 @@ bool ee::Knight::unfold(sf::Vector2i &mouse)
 	sf::Vector2i buffer = sf::Vector2i(mouse.x, mouse.y - sprites[0]->getHeight());
 	if (checkCollision(buffer))
 	{
-		setPosition(mouse);
+		set(mouse);
 		setActive(true);
 		return true;
 	}
@@ -361,22 +394,41 @@ bool ee::Knight::unfold(sf::Vector2i &mouse)
 
 
 
+void ee::Knight::set(sf::Vector2i add)
+{
+	board.board.setPosition(item.position.x + add.x + sprites[0]->getWidth(), (item.position.y + add.y) * -1 + screen.y - board.board.getHeight());
+	setTexts();
+	setRects();
+	setColors();
+}
+
 void ee::Knight::setTexts()
 {
+	int widest = 0, highest = 0;
+	for (int i = 0; i < board.FEATURES::SIZE * 2; ++i)
+	{
+		if (board.texts[i]->getHeight() > highest)
+			highest = board.texts[i]->getHeight();
+		if (board.texts[i]->getWidth() > widest)
+			widest = board.texts[i]->getWidth();
+	}
+	highest *= 0.85;
+
 	board.texts[board.HEART_POINTS * 2 + 1]->	setText(std::to_string(static_cast<int>(board.values[board.HEART_POINTS])) + "p.");
 	board.texts[board.MAGIC_POINTS * 2 + 1]->	setText(std::to_string(static_cast<int>(board.values[board.MAGIC_POINTS])) + "p.");
 	board.texts[board.ARMOUR * 2 + 1]->			setText(cmm::floatToStr(board.values[board.ARMOUR] / 10, 1) + "%");
 	board.texts[board.MAGIC_RESISTANT * 2 + 1]->setText(cmm::floatToStr(board.values[board.MAGIC_RESISTANT] / 10, 1) + "%");
-	board.texts[board.MOVEMENT_SPEED * 2 + 1]->	setText(cmm::floatToStr(board.values[board.MOVEMENT_SPEED] / 100, 2) + "px/sec");
+	board.texts[board.MOVEMENT_SPEED * 2 + 1]->	setText(cmm::floatToStr(board.values[board.MOVEMENT_SPEED] / 100, 2) + "px");
 	board.texts[board.DAMAGE * 2 + 1]->			setText(cmm::floatToStr(board.values[board.DAMAGE], 1) + "p.");
 	board.texts[board.MAGIC_DAMAGE * 2 + 1]->	setText(cmm::floatToStr(board.values[board.MAGIC_DAMAGE], 1) + "p.");
 	board.texts[board.LUCK * 2 + 1]->			setText(std::to_string(static_cast<int>(board.values[board.LUCK])) + "%");
 
 	board.texts[board.HEART_POINTS]->setPosition(board.board.getX() + screen.x / 256, board.board.getY() + screen.y / 144);
 	for(int i = board.MAGIC_POINTS*2; i < board.SIZE * 2; i += 2)
-		board.texts[i]->setPosition(board.texts[i - 2]->getX(), board.texts[i - 2]->getBot() + screen.y / 144);
+		board.texts[i]->setPosition(board.texts[i - 2]->getX(), board.texts[i - 2]->getY() + highest + screen.y / 144);
 	for (int i = board.HEART_POINTS + 1; i < board.SIZE * 2; i += 2)
-		board.texts[i]->setPosition(board.texts[i - 1]->getRight() + screen.x / 256, board.texts[i - 1]->getY());
+		board.texts[i]->setPosition(board.board.getX() + widest + screen.x / 128, board.texts[i - 1]->getY());
+	board.claimer.setPosition(board.texts[board.HEART_POINTS]->getX(), board.board.getBot() - board.rclaimer.height - screen.y / 144);
 }
 
 void ee::Knight::setRects()
@@ -384,7 +436,7 @@ void ee::Knight::setRects()
 	for (int i = 0; i < board.FEATURES::EXPERIENCE; ++i)
 	{
 		board.rects[i].left = board.board.getRight();
-		board.rects[i].top = board.texts[i*2]->getTop() + screen.y / 144;
+		board.rects[i].top = board.texts[i * 2]->getTop() + screen.y / 144;
 	}
 
 	for (int i = board.EXPERIENCE; i < board.EXPERIENCE * 2; ++i)
@@ -392,11 +444,24 @@ void ee::Knight::setRects()
 		board.rects[i].left = board.rects[i - board.EXPERIENCE].left + board.rects[i - board.EXPERIENCE].width;
 		board.rects[i].top = board.rects[i - board.EXPERIENCE].top;
 	}
+
+	board.rclaimer.left = board.board.getRight();
+	board.rclaimer.top = board.claimer.getY();
+	board.agree.setPosition(board.rclaimer.left, board.rclaimer.top);
 }
 
-void ee::Knight::setPosition(sf::Vector2i add)
+void ee::Knight::setColors()
 {
-	board.board.setPosition(item.position.x + add.x + sprites[0]->getWidth(), (item.position.y + add.y) * -1 + screen.y - board.board.getHeight());
-	setTexts();
-	setRects();
+	if (board.sclaimer)
+	{
+		for (int i = 0; i < board.FEATURES::SIZE * 2; ++i)
+			board.texts[i]->setFillColor(cmm::LOCKED_COLOR);
+		board.claimer.setFillColor(cmm::LOADING_COLOR);
+	}
+	else
+	{
+		for (int i = 1; i < board.FEATURES::SIZE * 2; i += 2)
+			board.texts[i]->setFillColor(cmm::LOADING_COLOR);
+		board.claimer.setFillColor(cmm::LOCKED_COLOR);
+	}
 }

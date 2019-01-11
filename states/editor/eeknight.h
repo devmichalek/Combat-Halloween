@@ -7,7 +7,7 @@ namespace ee
 {
 	struct KnightBoard : public cmm::Specs
 	{
-		cmm::Text claimer; // Use user's specification.
+		cmm::Text claimer;
 		sf::IntRect rclaimer;
 		bool sclaimer;
 
@@ -22,6 +22,7 @@ namespace ee
 		cmm::Sprite board;
 		cmm::Sprite plus;
 		cmm::Sprite minus;
+		cmm::Sprite agree;
 
 		KnightBoard();
 		~KnightBoard();
@@ -58,8 +59,9 @@ namespace ee
 		bool unfold(sf::Vector2i &mouse);
 
 	private: // Board
-		void setPosition(sf::Vector2i add = sf::Vector2i(0, 0));
+		void set(sf::Vector2i add = sf::Vector2i(0, 0));
 		void setTexts();
 		void setRects();
+		void setColors();
 	};
 }
