@@ -2,7 +2,6 @@
 #include "loading.h"
 #include <fstream>
 #include "request.h"
-#include "converter.h"
 
 Simulator::Simulator()
 {
@@ -129,6 +128,7 @@ void Simulator::mechanics(const double &elapsedTime)
 
 		if (info.getAlpha() == MAX_ALPHA)
 		{
+			status = PROCESSING;
 			thread.thread = new std::thread(&Simulator::disunite, this);
 			thread.thread->detach();
 		}
@@ -196,7 +196,7 @@ void Simulator::disunite()
 			setSuccessMsg("Simulating data...");
 			if (simulate())
 			{
-				setSuccessMsg("Killing thread...");
+				setSuccessMsg("Leaving thread...");
 				thread.success = true;
 				next = true;
 			}
@@ -292,9 +292,15 @@ bool Simulator::sort()
 	SContent::content_sorted.clear();
 	for (int c = 0; c < SContent::amount(); ++c)
 	{
-		for (auto &it : SContent::content)
+		for (int i = 0; i < SContent::content.size(); ++i)
 		{
-			if (boost::lexical_cast<int>(cmm::extractFromString(it, "t:", cmm::CSPACE)) == c)
+			std::string it = SContent::content[i];
+			if (it.find("t:") == std::string::npos)
+			{
+				setErrorMsg("Data is corrupted, there is no \"t:\" (type).\nFile '" + SContent::path + "' Line " + std::to_string(++i) + ".");
+				return false;
+			}
+			else if (boost::lexical_cast<int>(cmm::extractFromString(it, "t:", cmm::CSPACE)) == c)
 			{
 				SContent::content_sorted.push_back(it);
 			}
@@ -337,7 +343,33 @@ bool Simulator::simulate()
 	}
 
 	// Check if knight is not inside tile.
-	// Check if each line contains type, chosen, id etc...
+
+
+	// Check if each line contains type, chosen, id, x, y, additional info
+	if (SContent::type != SContent::TYPE::SERVER)
+	{
+		for (int i = 0; i < SContent::content_sorted.size(); ++i)
+		{
+			bool errorOccured = true;
+			std::string it = SContent::content_sorted[i];
+			if (it.find("c:") == std::string::npos)
+				setErrorMsg("Data is corrupted, there is no \"c:\" (chosen).\nFile '" + SContent::path + "' Line " + std::to_string(++i) + ".");
+			else if (it.find("x:") == std::string::npos)
+				setErrorMsg("Data is corrupted, there is no \"x:\" (x position).\nFile '" + SContent::path + "' Line " + std::to_string(++i) + ".");
+			else if (it.find("y:") == std::string::npos)
+				setErrorMsg("Data is corrupted, there is no \"y:\" (y position).\nFile '" + SContent::path + "' Line " + std::to_string(++i) + ".");
+			else if (it.find("id:") == std::string::npos)
+				setErrorMsg("Data is corrupted, there is no \"id:\" (ID).\nFile '" + SContent::path + "' Line " + std::to_string(++i) + ".");
+			else if (it.find("ai:") == std::string::npos)
+				setErrorMsg("Data is corrupted, there is no \"ai:\" (additional info).\nFile '" + SContent::path + "' Line " + std::to_string(++i) + ".");
+			else
+				errorOccured = false;
+
+			if (errorOccured)
+				return false;
+		}
+	}
+
 	// Check if the brackets are close (), check amount of ':'
 	// Check if there are types that we do not recognize, bigger than size of KIND
 
@@ -356,7 +388,7 @@ void Simulator::setInfo()
 			info.setFillColor(cmm::LOADING_COLOR);
 			
 		info.setText(msg);
-		info.setPosition(screen_w / 2 - info.getWidth() / 2 + screen_w / 160, screen_h / 2 - info.getHeight() / 2 - screen_h / 72);
+		info.setPosition(screen_w / 2 - info.getWidth() / 2 + screen_w / 160, screen_h / 2 - info.getHeight() - screen_h / 72);
 		msg.clear();
 	}
 }
@@ -375,33 +407,33 @@ bool Simulator::checkContent(std::string str)
 
 void Simulator::condition()
 {
-	//while (!msg.empty()){}
+	while (!msg.empty()) {}
 }
 
 void Simulator::setProcessingMsg(std::string str)
 {
-	condition();
 	msg = str;
+	condition();
 	status = PROCESSING;
 }
 
 void Simulator::setSuccessMsg(std::string str)
 {
-	condition();
 	msg = str;
+	condition();
 	status = SUCCESS;
 }
 
 void Simulator::setWarningMsg(std::string str)
 {
-	condition();
 	msg = str;
+	condition();
 	status = WARNING;
 }
 
 void Simulator::setErrorMsg(std::string str)
 {
-	condition();
 	msg = str;
+	condition();
 	status = FAILURE;
 }
