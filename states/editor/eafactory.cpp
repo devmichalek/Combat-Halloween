@@ -149,7 +149,14 @@ void EAFactory::draw(sf::RenderWindow* &window, const sf::Vector2i &add, const b
 	// Draw entities.
 	sf::Vector2i addi = add;
 	for (auto &it : entities)
-		it->draw(window, addi);
+		if (!it->isActive())
+			it->draw(window, addi);
+	for (auto it : entities)
+		if (it->isActive())
+		{
+			it->draw(window, addi);
+			break;
+		}
 
 	// Draw current single entity.
 	if (tools.getType() != cmm::Kind::VOID && amounts.size() > tools.getType())
