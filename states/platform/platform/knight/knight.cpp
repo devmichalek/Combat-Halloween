@@ -297,15 +297,18 @@ void pla::Knight::read(std::string &str)
 {
 	xy.x = boost::lexical_cast<int>(cmm::extractFromString(str, "x:", cmm::CSPACE)) + sprites[IDLE]->getWidth() / 2;
 	xy.y = (boost::lexical_cast<int>(cmm::extractFromString(str, "y:", cmm::CSPACE)) * -1) + screen_h;
+	if (cmm::extractFromString(str, "ai:", cmm::CNEWLINE) != "")
+	{
+		specs.set(specs.HEART_POINTS, boost::lexical_cast<int>(cmm::extractFromString(str, "hp:", ',')));
+		specs.set(specs.MAGIC_POINTS, boost::lexical_cast<int>(cmm::extractFromString(str, "mp:", ',')));
+		specs.set(specs.ARMOUR, boost::lexical_cast<int>(cmm::extractFromString(str, "armour:", ',')));
+		specs.set(specs.MAGIC_RESISTANT, boost::lexical_cast<int>(cmm::extractFromString(str, "mr:", ',')));
+		specs.set(specs.MOVEMENT_SPEED, boost::lexical_cast<int>(cmm::extractFromString(str, "ms:", ',')));
+		specs.set(specs.DAMAGE, boost::lexical_cast<int>(cmm::extractFromString(str, "dmg:", ',')));
+		specs.set(specs.MAGIC_DAMAGE, boost::lexical_cast<int>(cmm::extractFromString(str, "mdmg:", ',')));
+		specs.set(specs.LUCK, boost::lexical_cast<int>(cmm::extractFromString(str, "luck:", ')')));
+	}
 
-	specs.set(specs.HEART_POINTS,		boost::lexical_cast<int>(cmm::extractFromString(str, "hp:", ',')));
-	specs.set(specs.MAGIC_POINTS,		boost::lexical_cast<int>(cmm::extractFromString(str, "mp:", ',')));
-	specs.set(specs.ARMOUR,				boost::lexical_cast<int>(cmm::extractFromString(str, "armour:", ',')));
-	specs.set(specs.MAGIC_RESISTANT,	boost::lexical_cast<int>(cmm::extractFromString(str, "mr:", ',')));
-	specs.set(specs.MOVEMENT_SPEED,		boost::lexical_cast<int>(cmm::extractFromString(str, "ms:", ',')));
-	specs.set(specs.DAMAGE,				boost::lexical_cast<int>(cmm::extractFromString(str, "dmg:", ',')));
-	specs.set(specs.MAGIC_DAMAGE,		boost::lexical_cast<int>(cmm::extractFromString(str, "mdmg:", ',')));
-	specs.set(specs.LUCK,				boost::lexical_cast<int>(cmm::extractFromString(str, "luck:", ')')));
 	specs.prepare();
 
 	setAlign();
