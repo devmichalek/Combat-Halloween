@@ -415,10 +415,9 @@ void ee::Landscape::setTexts()
 {
 	board.texts[board.SCALE_EDIT]->		setText(std::to_string(static_cast<int>(item.scale * 100)) + "%");
 	board.texts[board.GLOBAL_EDIT]->	setText(std::to_string(static_cast<int>(globalScale * 100)) + "%");
-
-	board.texts[board.SCALE]->			setPosition(board.board.getX() + screen.x / 256,					board.board.getY() + screen.y / 144);
-	board.texts[board.SCALE_EDIT]->		setPosition(board.texts[board.SCALE]->getRight() + screen.x / 256,	board.texts[board.SCALE]->getY());
-	board.texts[board.GLOBAL]->			setPosition(board.texts[board.SCALE]->getX(),						board.texts[board.SCALE]->getBot() + screen.y / 144);
+	board.texts[board.SCALE]->			setPosition(board.board.getX() + screen.x / 256, board.board.getY() + screen.y / 144);
+	board.texts[board.GLOBAL]->			setPosition(board.texts[board.SCALE]->getX(), board.texts[board.SCALE]->getBot() + screen.y / 144);
+	board.texts[board.SCALE_EDIT]->		setPosition(board.texts[board.GLOBAL]->getRight() + screen.x / 256,	board.texts[board.SCALE]->getY());
 	board.texts[board.GLOBAL_EDIT]->	setPosition(board.texts[board.GLOBAL]->getRight() + screen.x / 256, board.texts[board.GLOBAL]->getY());
 }
 
