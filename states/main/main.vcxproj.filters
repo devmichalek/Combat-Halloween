@@ -54,9 +54,6 @@
     <ClCompile Include="..\levelmenu\levelmenu.cpp">
       <Filter>States\Level Menu</Filter>
     </ClCompile>
-    <ClCompile Include="..\levelmenu\levelmenuinformation.cpp">
-      <Filter>States\Level Menu</Filter>
-    </ClCompile>
     <ClCompile Include="..\editor\eafactory.cpp">
       <Filter>States\Editor</Filter>
     </ClCompile>
@@ -218,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="..\platform\platform\simulator\simulator.cpp">
       <Filter>States\Platform\Simulator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\lvminformation.cpp">
+      <Filter>States\Level Menu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

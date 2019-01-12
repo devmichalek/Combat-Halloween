@@ -26,6 +26,7 @@ void LevelMenu::free()
 	sound_volumebutton.free();
 	music_volumebutton.free();
 	information.free();
+	board.free();
 	chat.free();
 	pausesystem.free();
 }
@@ -52,6 +53,7 @@ void LevelMenu::set()
 		sound_volumebutton.setGlobalVolume	(soundVolume);
 		music_volumebutton.setVolume		(soundVolume);
 		information.setVolume				(soundVolume);
+		board.setVolume						(soundVolume);
 		pausesystem.setVolume				(soundVolume);
 		soundbutton.setActive				(soundPlayable);
 
@@ -121,6 +123,7 @@ void LevelMenu::load(const float &screen_w, const float &screen_h)
 	music_volumebutton.setPosition(musicbutton.getLeft(), musicbutton.getRight(), musicbutton.getBot());
 
 	information.load(screen_w, screen_h);
+	board.load(screen_w, screen_h);
 
 	chat.load(screen_w, screen_h);
 	chat.setStyleBlackish();
@@ -142,12 +145,14 @@ void LevelMenu::handle(const sf::Event &event)
 			{
 				homebutton.handle(event);
 				updatebutton.handle(event);
-				playbutton.handle(event);
+				if (board.isChosen())
+					playbutton.handle(event);
 
 				if (!sound_volumebutton.handle(event))	soundbutton.handle(event);
 				if (!music_volumebutton.handle(event))	musicbutton.handle(event);
 
 				information.handle(event);
+				board.handle(event);
 			}
 		}
 
@@ -161,8 +166,10 @@ void LevelMenu::handle(const sf::Event &event)
 void LevelMenu::draw(sf::RenderWindow* &window)
 {
 	information.draw			(window);
+	board.draw					(window);
 	homebutton.draw				(window);
 	updatebutton.draw			(window);
+	if (board.isChosen())		playbutton.lock();
 	playbutton.draw				(window);
 	soundbutton.draw			(window);
 	musicbutton.draw			(window);
@@ -193,25 +200,14 @@ void LevelMenu::mechanics(const double &elapsedTime)
 			{
 				homebutton.setActive(true);
 			}
-
-			// Same as someone clicked play.
-			/*else if (chat.findCommand("@play") || chat.findCommand("@start"))
+			else if (chat.compCommand("@play") || chat.compCommand("@start"))
 			{
-				if (worldtable.isChosen())
+				if (board.isChosen())
 				{
 					playbutton.setActive(true);
 				}
-			}*/
+			}
 
-			// Reload data.
-			/*else if (chat.findCommand("@reload"))
-			{
-				if (worldtable.abletoreload())
-				{
-
-					worldtable.setThread();
-				}
-			}*/
 			// Chat changed keys settings so we reload texts
 			else if (chat.isNewCoxing())
 			{
@@ -291,7 +287,7 @@ void LevelMenu::mechanics(const double &elapsedTime)
 			cmm::Sound::setGlobalPlayable(soundbutton.isActive());
 		}
 
-		// Volume of sounds is changed.
+		// Volume of sounds has changed.
 		if (sound_volumebutton.hasChanged())
 		{
 			float value = sound_volumebutton.getGlobalVolume();
@@ -304,6 +300,7 @@ void LevelMenu::mechanics(const double &elapsedTime)
 			sound_volumebutton.setVolume(value);
 			music_volumebutton.setVolume(value);
 			information.setVolume(value);
+			board.setVolume(value);
 			pausesystem.setVolume(value);
 		}
 
@@ -314,7 +311,7 @@ void LevelMenu::mechanics(const double &elapsedTime)
 			musicbutton.isActive() ? music.play() : music.pause();
 		}
 
-		// Volume of music is changed.
+		// Volume of music has changed.
 		if (music_volumebutton.hasChanged())
 		{
 			float value = music_volumebutton.getGlobalVolume();
@@ -384,6 +381,7 @@ void LevelMenu::fadein(const float &value, const int &max)
 	sound_volumebutton.fadein	(value, max);
 	music_volumebutton.fadein	(value, max);
 	information.fadein			(value, max);
+	board.fadein				(value, max);
 }
 
 void LevelMenu::fadeout(const float &value, const int &min)
@@ -396,5 +394,6 @@ void LevelMenu::fadeout(const float &value, const int &min)
 	sound_volumebutton.fadeout	(value, min);
 	music_volumebutton.fadeout	(value, min);
 	information.fadeout			(value, min);
+	board.fadeout				(value, min);
 	chat.fadeout				(value, min);
 }

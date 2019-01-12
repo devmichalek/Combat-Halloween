@@ -2,7 +2,8 @@
 #include "state.h"
 #include "circlebutton.h"
 #include "volumebutton.h"
-#include "levelmenuinformation.h"
+#include "lvminformation.h"
+#include "lvmboard.h"
 #include "chat.h"
 #include "pausesystem.h"
 #include "music.h"
@@ -17,7 +18,8 @@ class LevelMenu final :public cmm::State
 	CircleButton musicbutton;
 	VolumeButton sound_volumebutton;
 	VolumeButton music_volumebutton;
-	LevelMenuInformation information;
+	lvm::Information information;
+	lvm::Board board;
 	Chat chat;
 	PauseSystem pausesystem;
 	cmm::Music music;

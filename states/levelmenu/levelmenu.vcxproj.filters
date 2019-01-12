@@ -59,7 +59,6 @@
       <Filter>Dependencies\Tools</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="levelmenuinformation.cpp" />
     <ClCompile Include="levelmenu.cpp" />
     <ClCompile Include="..\..\common\fpsconsole.cpp">
       <Filter>Dependencies\Common</Filter>
@@ -73,9 +72,12 @@
     <ClCompile Include="..\..\common\coxing.cpp">
       <Filter>Dependencies\Common</Filter>
     </ClCompile>
+    <ClCompile Include="lvminformation.cpp" />
+    <ClCompile Include="lvmboard.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="levelmenuinformation.h" />
     <ClInclude Include="levelmenu.h" />
+    <ClInclude Include="lvminformation.h" />
+    <ClInclude Include="lvmboard.h" />
   </ItemGroup>
 </Project>

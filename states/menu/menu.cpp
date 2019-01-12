@@ -378,12 +378,12 @@ void Menu::mechanics(const double &elapsedTime)
 			cmm::Sound::setGlobalPlayable(soundbutton.isActive());
 		}
 
-		// Volume of sounds is changed.
+		// Volume of sounds has changed.
 		if (sound_volumebutton.hasChanged())
 		{
 			float value = sound_volumebutton.getGlobalVolume();
 			cmm::Sound::setGlobalVolume		(value);
-			// knightspecs.setVolume			(value);
+			//knightspecs.setVolume			(value);
 			github.setVolume				(value);
 			scores.setVolume				(value);
 			website.setVolume				(value);
@@ -406,7 +406,7 @@ void Menu::mechanics(const double &elapsedTime)
 			musicbutton.isActive() ? music.play() : music.pause();
 		}
 
-		// Volume of music is changed.
+		// Volume of music has changed.
 		if (music_volumebutton.hasChanged())
 		{
 			float value = music_volumebutton.getGlobalVolume();

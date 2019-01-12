@@ -67,12 +67,14 @@
     <ClCompile Include="..\..\tools\pausesystem.cpp" />
     <ClCompile Include="..\..\tools\volumebutton.cpp" />
     <ClCompile Include="levelmenu.cpp" />
-    <ClCompile Include="levelmenuinformation.cpp" />
+    <ClCompile Include="lvmboard.cpp" />
+    <ClCompile Include="lvminformation.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="levelmenu.h" />
-    <ClInclude Include="levelmenuinformation.h" />
+    <ClInclude Include="lvmboard.h" />
+    <ClInclude Include="lvminformation.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -50,7 +50,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -131,7 +131,7 @@
     <ClCompile Include="..\init\initialization.cpp" />
     <ClCompile Include="..\init\login.cpp" />
     <ClCompile Include="..\levelmenu\levelmenu.cpp" />
-    <ClCompile Include="..\levelmenu\levelmenuinformation.cpp" />
+    <ClCompile Include="..\levelmenu\lvminformation.cpp" />
     <ClCompile Include="..\menu\knightspecs.cpp" />
     <ClCompile Include="..\menu\menu.cpp" />
     <ClCompile Include="..\menu\menuinformation.cpp" />
