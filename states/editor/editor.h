@@ -1,6 +1,7 @@
 #pragma once
 #include "state.h"
 #include "editornavigation.h"
+#include "editoroptions.h"
 #include "editorfilemanager.h"
 #include "eafactory.h"
 #include "eagrid.h"
@@ -10,7 +11,8 @@ class Editor final :public cmm::State
 {
 	bool loaded;
 	EditorNavigation navigation;
-	EditorFileManager editorFileManager;
+	EditorOptions options;
+	EditorFileManager fileManager;
 	EAFactory factory;
 	EAGrid grid;
 	EAInfo info;

@@ -161,6 +161,9 @@
     <ClCompile Include="eafactory.cpp">
       <Filter>Editor Action</Filter>
     </ClCompile>
+    <ClCompile Include="editoroptions.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="messageboard.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="eafactory.h">
       <Filter>Editor Action</Filter>
+    </ClInclude>
+    <ClInclude Include="editoroptions.h">
+      <Filter>Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

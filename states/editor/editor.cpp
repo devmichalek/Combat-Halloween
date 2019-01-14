@@ -24,7 +24,7 @@ void Editor::set()
 {
 	if (!loaded)
 	{
-		editorFileManager.reset();
+		fileManager.reset();
 		loaded = true;
 	}
 }
@@ -42,7 +42,8 @@ void Editor::reset()
 	loaded = false;
 
 	navigation.reset();
-	editorFileManager.reset();
+	options.reset();
+	fileManager.reset();
 	factory.reset();
 	grid.reset();
 	info.reset();
@@ -55,7 +56,8 @@ void Editor::load(const float &screen_w, const float &screen_h)
 	free();
 
 	navigation.load(screen_w, screen_h);
-	editorFileManager.load(screen_w, screen_h);
+	options.load(screen_w, screen_h);
+	fileManager.load(screen_w, screen_h);
 	factory.load(screen_w, screen_h);
 	grid.load(screen_w, screen_h);
 	info.load(screen_w, screen_h);
@@ -68,18 +70,22 @@ void Editor::handle(const sf::Event &event)
 {
 	if (!isState())
 	{
-		editorFileManager.handle(event);
+		if (!options.isActive())
+			fileManager.handle(event);
 
-		if (!editorFileManager.isActive())
+		if (!fileManager.isActive())
+			options.handle(event);
+		
+		if (!fileManager.isActive() && !options.isActive())
 		{
+			navigation.handle(event);
+
 			if (!grid.handle(event))	// if arrow buttons are in use don't let user to put an entity
 			{
 				if (factory.handle(event, grid.getAdd()))
 					factory.setPosition(grid.getX(), grid.getY());
 			}
 		}
-
-		navigation.handle(event);
 	}
 }
 
@@ -90,7 +96,9 @@ void Editor::draw(sf::RenderWindow* &window)
 	grid.draw(window);
 	info.draw(window);
 	navigation.draw(window);
-	editorFileManager.draw(window);
+	options.drawButton(window);
+	fileManager.draw(window);
+	options.draw(window);
 }
 
 void Editor::mechanics(const double &elapsedTime)
@@ -99,9 +107,9 @@ void Editor::mechanics(const double &elapsedTime)
 
 	if (!isState())
 	{
-		navigation.disablePlay(editorFileManager.isFileOpen());
+		navigation.disablePlay(fileManager.isFileOpen());
 
-		if (editorFileManager.isFileUnsave())
+		if (fileManager.isFileUnsave())
 		{
 			navigation.disablePlay(false);
 		}
@@ -109,14 +117,14 @@ void Editor::mechanics(const double &elapsedTime)
 		// Back to menu.
 		if (navigation.isHome())
 		{
-			if (editorFileManager.isFileUnsave())
+			if (fileManager.isFileUnsave())
 			{
 				if (navigation.homeHasChanged())
-					editorFileManager.openMessageBoard();
+					fileManager.openMessageBoard();
 
-				if (editorFileManager.isYes())
+				if (fileManager.isYes())
 					prev = true;
-				else if (editorFileManager.isNo())
+				else if (fileManager.isNo())
 					navigation.disableHome(false);
 			}
 			else
@@ -126,17 +134,17 @@ void Editor::mechanics(const double &elapsedTime)
 		// Back to levelmenu.
 		else if (navigation.isLevelMenu())
 		{
-			if (editorFileManager.isFileUnsave())
+			if (fileManager.isFileUnsave())
 			{
 				if (navigation.levelMenuHasChanged())
-					editorFileManager.openMessageBoard();
+					fileManager.openMessageBoard();
 
-				if (editorFileManager.isYes())
+				if (fileManager.isYes())
 				{
 					prev = true;
 					next = true;
 				}
-				else if (editorFileManager.isNo())
+				else if (fileManager.isNo())
 					navigation.disableLevelMenu(false);
 			}
 			else
@@ -152,10 +160,12 @@ void Editor::mechanics(const double &elapsedTime)
 			next = true;
 		}
 
+		if (options.isActive())
+			return;
 
-		editorFileManager.mechanics(elapsedTime);
+		fileManager.mechanics(elapsedTime);
 
-		if (!editorFileManager.isActive())
+		if (!fileManager.isActive())
 		{
 			if (factory.isChange())
 			{
