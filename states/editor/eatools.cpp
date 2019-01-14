@@ -117,13 +117,13 @@ void EATools::load(const float& screen_w, const float& screen_h)
 		it->setScale(screen_w / 2560, screen_h / 1440);
 	}
 	
-	buttons[DELETEKEY]->setPosition(screen_w - screen_w / 85 - buttons[DELETEKEY]->getWidth() * 3, screen_h / 144);
-	buttons[HOTKEY]->setPosition(buttons[DELETEKEY]->getLeft() - screen_w / 256 - buttons[HOTKEY]->getWidth(), buttons[DELETEKEY]->getTop());
-	buttons[WHOLECOLLISIONKEY]->setPosition(buttons[HOTKEY]->getLeft() - screen_w / 256 - buttons[WHOLECOLLISIONKEY]->getWidth(), buttons[DELETEKEY]->getTop());
+	buttons[DELETEKEY]->setPosition(screen_w - screen_w / 256 - buttons[DELETEKEY]->getWidth(), screen_h / 18 + buttons[DELETEKEY]->getHeight());
+	buttons[HOTKEY]->setPosition(buttons[DELETEKEY]->getLeft(), buttons[DELETEKEY]->getBot() + screen_h / 13);
+	buttons[WHOLECOLLISIONKEY]->setPosition(buttons[DELETEKEY]->getLeft(), buttons[HOTKEY]->getBot() + screen_h / 13);
 
 	texts[DELETEKEY]->setText("Delete" + cmm::SNEWLINE + "Mode");
 	texts[HOTKEY]->setText("Quick" + cmm::SNEWLINE + "Mode");
-	texts[WHOLECOLLISIONKEY]->setText("  Whole" + cmm::SNEWLINE + "Collision");
+	texts[WHOLECOLLISIONKEY]->setText("  Whole" + cmm::SNEWLINE + "Collision" + cmm::SNEWLINE + "  Mode");
 
 	for (int i = 0; i < COUNT; ++i)
 		texts[i]->setPosition(buttons[i]->getLeft() + buttons[i]->getWidth() / 2 - texts[i]->getWidth() / 2, buttons[i]->getBot() + screen_w / 300.0f);
