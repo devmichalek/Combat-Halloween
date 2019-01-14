@@ -91,7 +91,7 @@ void EFMLibrary::load(const float &screen_w, const float &screen_h, sf::FloatRec
 	icons[RIGHT]->setAlpha(MAX_ALPHA / 1.5);
 
 	// The Rest
-	Loading::add(pageText.setFont(cmm::JAPOKKI_FONT_PATH));
+	Loading::add(pageText.setFont(cmm::JCANDLE_FONT_PATH));
 	if (Loading::isError())	return;
 	pageText.setSize(plank.width / 20);
 	pageText.setAlpha(MAX_ALPHA);
