@@ -188,6 +188,16 @@ bool EFMButtons::handle(const sf::Event &event)
 				if (it->checkCollision(x, y))
 					it->setAlpha(MAX_ALPHA);
 		}
+
+		if (event.type == sf::Event::KeyPressed)
+		{
+			if (event.key.code == sf::Keyboard::Escape)
+			{
+				active = false;
+				fileButton.setActive(false);
+				return false;
+			}
+		}
 	}
 	else
 	{
