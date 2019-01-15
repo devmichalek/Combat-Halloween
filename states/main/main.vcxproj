@@ -119,6 +119,7 @@
     <ClCompile Include="..\editor\editor.cpp" />
     <ClCompile Include="..\editor\editorfilemanager.cpp" />
     <ClCompile Include="..\editor\editornavigation.cpp" />
+    <ClCompile Include="..\editor\editoroptions.cpp" />
     <ClCompile Include="..\editor\eeknight.cpp" />
     <ClCompile Include="..\editor\eelandscape.cpp" />
     <ClCompile Include="..\editor\eetile.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="..\init\initialization.cpp" />
     <ClCompile Include="..\init\login.cpp" />
     <ClCompile Include="..\levelmenu\levelmenu.cpp" />
+    <ClCompile Include="..\levelmenu\lvmboard.cpp" />
     <ClCompile Include="..\levelmenu\lvminformation.cpp" />
     <ClCompile Include="..\menu\knightspecs.cpp" />
     <ClCompile Include="..\menu\menu.cpp" />

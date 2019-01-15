@@ -19,7 +19,7 @@ class Menu final :public cmm::State
 	LinkButton scores;
 	LinkButton website;
 	SquareButton singleplayerbutton;
-	SquareButton multiplayerbutton;
+	SquareButton editorbutton;
 	SquareButton exitbutton;
 	CircleButton soundbutton;
 	CircleButton musicbutton;

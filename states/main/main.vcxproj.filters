@@ -219,6 +219,12 @@
     <ClCompile Include="..\levelmenu\lvminformation.cpp">
       <Filter>States\Level Menu</Filter>
     </ClCompile>
+    <ClCompile Include="..\editor\editoroptions.cpp">
+      <Filter>States\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\levelmenu\lvmboard.cpp">
+      <Filter>States\Level Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Common">

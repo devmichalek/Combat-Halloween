@@ -24,7 +24,7 @@ void Menu::free()
 	scores.free();
 	website.free();
 	singleplayerbutton.free();
-	multiplayerbutton.free();
+	editorbutton.free();
 	exitbutton.free();
 	soundbutton.free();
 	musicbutton.free();
@@ -58,7 +58,7 @@ void Menu::set()
 		scores.setVolume					(soundVolume);
 		website.setVolume					(soundVolume);
 		singleplayerbutton.setVolume		(soundVolume);
-		multiplayerbutton.setVolume			(soundVolume);
+		editorbutton.setVolume				(soundVolume);
 		exitbutton.setVolume				(soundVolume);
 		soundbutton.setVolume				(soundVolume);
 		musicbutton.setVolume				(soundVolume);
@@ -96,6 +96,7 @@ void Menu::reset()
 	loaded = false;
 	
 	singleplayerbutton.reset();
+	editorbutton.reset();
 	settingsbutton.setActive(false);
 	settings.reset();
 	chat.reset();
@@ -131,15 +132,15 @@ void Menu::load(const float &screen_w, const float &screen_h)
 
 	// Main buttons.
 	singleplayerbutton.load			("images/buttons/singleplayer.png");
-	multiplayerbutton.load			("images/buttons/multiplayer.png", true);
+	editorbutton.load				("images/buttons/editor.png");
 	exitbutton.load					("images/buttons/exit.png");
 	if (Loading::isError())			return;
 	singleplayerbutton.setScale		(scale_x, scale_y);
-	multiplayerbutton.setScale		(scale_x, scale_y);
+	editorbutton.setScale			(scale_x, scale_y);
 	exitbutton.setScale				(scale_x, scale_y);
 	singleplayerbutton.setPosition	(static_cast<float>(screen_w) / 1.9f, static_cast<float>(screen_h) / 2.35f);
-	multiplayerbutton.setPosition	(static_cast<float>(screen_w) / 1.9f, singleplayerbutton.getBot() + static_cast<float>(screen_h) / 72.0f);
-	exitbutton.setPosition			(static_cast<float>(screen_w) / 1.9f, multiplayerbutton.getBot() + static_cast<float>(screen_h) / 72.0f);
+	editorbutton.setPosition		(static_cast<float>(screen_w) / 1.9f, singleplayerbutton.getBot() + static_cast<float>(screen_h) / 72.0f);
+	exitbutton.setPosition			(static_cast<float>(screen_w) / 1.9f, editorbutton.getBot() + static_cast<float>(screen_h) / 72.0f);
 	
 	// Circle buttons.
 	soundbutton.load			("images/buttons/sound.png");
@@ -192,7 +193,7 @@ void Menu::handle(const sf::Event &event)
 				scores.handle				(event);
 				website.handle				(event);
 				singleplayerbutton.handle	(event);
-				multiplayerbutton.handle	(event);
+				editorbutton.handle			(event);
 				exitbutton.handle			(event);
 
 				if (!sound_volumebutton.handle(event))	soundbutton.handle(event);
@@ -219,7 +220,7 @@ void Menu::draw(sf::RenderWindow* &window)
 	scores.draw				(window);
 	website.draw			(window);
 	singleplayerbutton.draw	(window);
-	multiplayerbutton.draw	(window);
+	editorbutton.draw		(window);
 	exitbutton.draw			(window);
 	soundbutton.draw		(window);
 	musicbutton.draw		(window);
@@ -304,8 +305,7 @@ void Menu::mechanics(const double &elapsedTime)
 			// Editor.
 			else if (chat.compCommand("@editor"))
 			{
-				prev = true;
-				chat.isActive() = false;
+				editorbutton.setPressed();
 			}
 
 			// Volume
@@ -341,6 +341,13 @@ void Menu::mechanics(const double &elapsedTime)
 		{
 			chat.isActive() = false;
 			next = true;
+		}
+
+		// Someone clicked editor button.
+		if (editorbutton.isPressed())
+		{
+			chat.isActive() = false;
+			prev = true;
 		}
 
 		// Exsert / shovel settings.
@@ -388,7 +395,7 @@ void Menu::mechanics(const double &elapsedTime)
 			scores.setVolume				(value);
 			website.setVolume				(value);
 			singleplayerbutton.setVolume	(value);
-			multiplayerbutton.setVolume		(value);
+			editorbutton.setVolume			(value);
 			exitbutton.setVolume			(value);
 			soundbutton.setVolume			(value);
 			musicbutton.setVolume			(value);
@@ -468,7 +475,7 @@ void Menu::fadein(const float &value, const int &max)
 	scores.fadein				(value, max);
 	website.fadein				(value, max);
 	singleplayerbutton.fadein	(value, max);
-	multiplayerbutton.fadein	(value, max);
+	editorbutton.fadein			(value, max);
 	exitbutton.fadein			(value, max);
 	soundbutton.fadein			(value, max);
 	musicbutton.fadein			(value, max);
@@ -488,7 +495,7 @@ void Menu::fadeout(const float &value, const int &min)
 	scores.fadeout				(value, min);
 	website.fadeout				(value, min);
 	singleplayerbutton.fadeout	(value, min);
-	multiplayerbutton.fadeout	(value, min);
+	editorbutton.fadeout		(value, min);
 	exitbutton.fadeout			(value, min);
 	soundbutton.fadeout			(value, min);
 	musicbutton.fadeout			(value, min);
