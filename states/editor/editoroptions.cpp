@@ -83,10 +83,10 @@ void EditorOptions::load(const float& screen_w, const float& screen_h)
 	// Set left/right buttons.
 	Loading::add(leftbutton.load("images/icons/lefticon.png"));
 	Loading::add(rightbutton.load("images/icons/righticon.png"));
+	if (Loading::isError())	return;
 	float factor = 0.9f;
 	leftbutton.setScale(scale_x * factor, scale_y * factor);
 	rightbutton.setScale(scale_x * factor, scale_y * factor);
-	if (Loading::isError())	return;
 	leftbutton.setPosition(plank.getLeft() + screen_w / 128, plank.getTop() + plank.getHeight() / 2 - leftbutton.getHeight() / 2);
 	rightbutton.setPosition((plank.getRight() - screen_w / 128) - rightbutton.getWidth(), leftbutton.getY());
 	leftbutton.setAlpha(MAX_ALPHA / 1.5);
