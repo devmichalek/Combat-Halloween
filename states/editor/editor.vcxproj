@@ -73,6 +73,7 @@
     <ClCompile Include="..\..\tools\circlebutton.cpp" />
     <ClCompile Include="..\..\tools\loading.cpp" />
     <ClCompile Include="..\platform\platform\simulator\scontent.cpp" />
+    <ClCompile Include="eadetails.cpp" />
     <ClCompile Include="editoroptions.cpp" />
     <ClCompile Include="eetile.cpp" />
     <ClCompile Include="eelandscape.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="messageboard.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="eadetails.h" />
     <ClInclude Include="editoroptions.h" />
     <ClInclude Include="eeentity.h" />
     <ClInclude Include="eeitem.h" />

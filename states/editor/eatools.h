@@ -1,8 +1,7 @@
 #pragma once
-#include "text.h"
 #include "circlebutton.h"
 #include "eakind.h"
-#include <SFML/Graphics/RectangleShape.hpp>
+#include "eadetails.h"
 
 class EATools final : public EAKind
 {
@@ -42,6 +41,7 @@ class EATools final : public EAKind
 	float hotKeyState;
 
 public:
+	EADetails details;
 	EATools();
 	~EATools();
 	void free();

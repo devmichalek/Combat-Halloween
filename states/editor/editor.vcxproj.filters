@@ -164,6 +164,9 @@
     <ClCompile Include="editoroptions.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="eadetails.cpp">
+      <Filter>Editor Action\Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="messageboard.h">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="editoroptions.h">
       <Filter>Other</Filter>
+    </ClInclude>
+    <ClInclude Include="eadetails.h">
+      <Filter>Editor Action\Other</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

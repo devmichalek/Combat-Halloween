@@ -77,6 +77,7 @@ void EATools::reset()
 
 	hotKeyCounter = 0.0f;
 	hotKeyState = 0.25f;
+	details.reset();
 }
 
 
@@ -133,10 +134,17 @@ void EATools::load(const float& screen_w, const float& screen_h)
 	if (Loading::isError()) return;
 	checkedIcon.setScale(0.3, 0.3);
 	checkedIcon.setAlpha(MAX_ALPHA / 1.5);
+
+	// Prepare details.
+	details.load(screen_w, screen_h);
 }
 
 void EATools::handle(const sf::Event &event, const int &amount)
 {
+	details.handle(event);
+	if (details.isActive())
+		return;
+
 	for (int i = 0; i < COUNT; ++i)
 	{
 		buttons[i]->handle(event);
@@ -261,6 +269,8 @@ void EATools::draw(sf::RenderWindow* &window)
 
 	for (auto &it : texts)
 		window->draw(*it);
+
+	details.drawButton(window);
 }
 
 void EATools::thumbnail(sf::RenderWindow* &window, std::vector<cmm::Sprite*> &sprites, const int& chosen)
