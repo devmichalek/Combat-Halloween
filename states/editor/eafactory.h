@@ -25,8 +25,10 @@ public:
 	void load(const float& screen_w, const float& screen_h);
 	bool handle(const sf::Event &event, const sf::Vector2i &add);
 	void draw(sf::RenderWindow* &window, const sf::Vector2i &add, const bool &grid);
+	void print(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
 
+	bool isActive()						{ return tools.details.isActive(); }
 	bool isChange()						{ return tools.isChange(); }
 	bool isDeleteMode()					{ return tools.isDeleteMode(); }
 	const int& getType() const			{ return tools.getType(); }

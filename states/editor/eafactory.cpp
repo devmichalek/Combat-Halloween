@@ -66,40 +66,46 @@ void EAFactory::load(const float& screen_w, const float& screen_h)
 
 bool EAFactory::handle(const sf::Event &event, const sf::Vector2i &addi)
 {
-	// --- unfold ---
-	if (event.type == sf::Event::MouseButtonPressed)
+	if (!tools.details.isActive())
 	{
-		if (event.mouseButton.button == sf::Mouse::Right)
+		// --- unfold ---
+		if (event.type == sf::Event::MouseButtonPressed)
 		{
-			auto activeit = entities.end();
-			for (std::vector<ee::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
-				if ((*it)->isActive())
-				{
-					activeit = it;
-					break;
-				}
+			if (event.mouseButton.button == sf::Mouse::Right)
+			{
+				auto activeit = entities.end();
+				for (std::vector<ee::Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+					if ((*it)->isActive())
+					{
+						activeit = it;
+						break;
+					}
 
-			sf::Vector2i mouse = sf::Vector2i(event.mouseButton.x + -addi.x, -event.mouseButton.y + screen.y + -addi.y);
-			for (auto &it : entities)
-				if (((activeit != entities.end() && it != (*activeit)) || activeit == entities.end()) && it->unfold(mouse))
-				{
-					it->setActive(true);
-					break;
-				}
+				sf::Vector2i mouse = sf::Vector2i(event.mouseButton.x + -addi.x, -event.mouseButton.y + screen.y + -addi.y);
+				for (auto &it : entities)
+					if (((activeit != entities.end() && it != (*activeit)) || activeit == entities.end()) && it->unfold(mouse))
+					{
+						it->setActive(true);
+						break;
+					}
+			}
 		}
+
+		for (auto &it : entities)
+			if (it->isActive())
+			{
+				it->handle(event);
+				return false;
+			}
+		// --- unfold ---
 	}
-
-	for (auto &it : entities)
-		if (it->isActive())
-		{
-			it->handle(event);
-			return false;
-		}
-	// --- unfold ---
 
 	// Type has to be different than VOID and need to be withing range.
 	char nwt = tools.getType() == cmm::Kind::VOID ? -1 : (amounts.size() > tools.getType() ? amounts[tools.getType()] : -1);
 	tools.handle(event, nwt);
+
+	if (tools.details.isActive())
+		return false;
 
 	// Does mouse button or hot key is pressed?
 	bool pressed = false;
@@ -178,8 +184,19 @@ void EAFactory::draw(sf::RenderWindow* &window, const sf::Vector2i &add, const b
 	tools.draw(window);
 }
 
+void EAFactory::print(sf::RenderWindow* &window)
+{
+	tools.details.draw(window);
+}
+
 void EAFactory::mechanics(const double &elapsedTime)
 {
+	if (tools.details.isActive())
+	{
+		tools.details.mechanics(elapsedTime);
+		return;
+	}
+
 	if (tools.isUndoKeyElapsed())
 	{
 		int type;

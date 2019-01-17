@@ -70,21 +70,23 @@ void Editor::handle(const sf::Event &event)
 {
 	if (!isState())
 	{
-		if (!options.isActive())
+		if (!options.isActive() && !factory.isActive())
 			fileManager.handle(event);
 
-		if (!fileManager.isActive())
+		if (!fileManager.isActive() && !factory.isActive())
 			options.handle(event);
-		
-		if (!fileManager.isActive() && !options.isActive())
+
+		bool allowFactory = true;
+		if (!fileManager.isActive() && !options.isActive() && !factory.isActive())
 		{
 			navigation.handle(event);
+			allowFactory = !grid.handle(event);
+		}
 
-			if (!grid.handle(event))	// if arrow buttons are in use don't let user to put an entity
-			{
-				if (factory.handle(event, grid.getAdd()))
-					factory.setPosition(grid.getX(), grid.getY());
-			}
+		if (!fileManager.isActive() && !options.isActive() && allowFactory)
+		{
+			if (factory.handle(event, grid.getAdd()))
+				factory.setPosition(grid.getX(), grid.getY());
 		}
 	}
 }
@@ -99,6 +101,7 @@ void Editor::draw(sf::RenderWindow* &window)
 	options.drawButton(window);
 	fileManager.draw(window);
 	options.draw(window);
+	factory.print(window);
 }
 
 void Editor::mechanics(const double &elapsedTime)
@@ -164,7 +167,6 @@ void Editor::mechanics(const double &elapsedTime)
 			return;
 
 		fileManager.mechanics(elapsedTime);
-
 		if (!fileManager.isActive())
 		{
 			if (factory.isChange())
