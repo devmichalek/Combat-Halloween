@@ -15,13 +15,20 @@ EADetails::~EADetails()
 
 void EADetails::free()
 {
-
+	titleresetstr = "Yellowstone";
+	specsresetstr = "Stone is yellow.";
 	arrow_line = 0.5;	// 0.5 sec.
+	max_length_title = 25;
+	min_length_title = 1;
+	max_length_specs = 72;
+	min_length_specs = 1;
 	reset();
 }
 
 void EADetails::reset()
 {
+	titlestr = cmm::SEMPTY;
+	specsstr = cmm::SEMPTY;
 	chosen = -1;
 	arrow_counter = 0;
 	active = false;
@@ -96,9 +103,9 @@ void EADetails::load(const float& screen_w, const float& screen_h)
 	specswritten.	setAlpha(MAX_ALPHA);
 	info.			setText("Welcome to the world's details. Here you\ncan easily change the world's title and the\ndescription of the world. Click on the text\nto change it.");
 	titleform.		setText("Title: ");
-	titlewritten.	setText("Yellowstone");
-	specsform.		setText("Description: ");
-	specswritten.	setText("Stone is yellow.");
+	titlewritten.	setText(titleresetstr);
+	specsform.		setText("Description");
+	specswritten.	setText(specsresetstr);
 	info.setPosition(plank.getX() + screen_w / 128, plank.getY() + screen_h / 144);
 	titleform.setPosition(info.getX(), info.getBot() + plank.getHeight() / 20);
 	specsform.setPosition(titleform.getX(), titleform.getY() + plank.getHeight() / 5);
@@ -131,20 +138,115 @@ void EADetails::handle(const sf::Event &event)
 				return;
 			}
 
+			if (!active)
+				return;
+
 			if (titlerect.contains(x, y))
 			{
+				if (titlestr.empty())
+					titlewritten.setText(cmm::SEMPTY);
+				if (specsstr.empty())
+					specswritten.setText(specsresetstr);
 				chosen = 0;
-				setTextPosition();
+				setText();
 			}
 			else if (specsrect.contains(x, y))
 			{
+				if (titlestr.empty())
+					titlewritten.setText(titleresetstr);
+				if (specsstr.empty())
+					specswritten.setText(cmm::SEMPTY);
 				chosen = 1;
-				setTextPosition();
+				setText();
 			}
-			else if (!plank.checkCollision(x, y))
+			else
 			{
-				button.setActive(false);
-				reset();
+				if (titlestr.empty())
+					titlewritten.setText(titleresetstr);
+				if (specsstr.empty())
+					specswritten.setText(specsresetstr);
+				chosen = -1;
+				setText();
+
+				if (!plank.checkCollision(x, y))
+				{
+					button.setActive(false);
+					reset();
+				}
+			}
+		}
+	}
+
+	if (event.type == sf::Event::TextEntered)
+	{
+		if (isPossibleKey(event.text.unicode))
+		{
+			if (chosen == 0 && titlestr.size() < max_length_title)
+			{
+				titlestr += event.text.unicode;
+				titlewritten.setText(titlestr);
+				setText();
+			}
+			else if (chosen == 1 && specsstr.size() < max_length_specs)
+			{
+				specsstr += event.text.unicode;
+				specswritten.setText(specsstr);
+				setText();
+			}
+		}
+	}
+
+	if (event.type == sf::Event::KeyPressed)
+	{
+		if (event.key.code == sf::Keyboard::BackSpace)
+		{
+			if (chosen == 0 && titlestr.size() >= 1)
+			{
+				titlestr.pop_back();
+				if (titlestr.empty())	titlewritten.setText(cmm::SEMPTY);
+				else					titlewritten.setText(titlestr);
+				setText();
+			}
+			else if (chosen == 1 && specsstr.size() >= 1)
+			{
+				specsstr.pop_back();
+				if (specsstr.empty())	specswritten.setText(cmm::SEMPTY);
+				else					specswritten.setText(specsstr);
+				setText();
+			}
+		}
+		else if (event.key.code == sf::Keyboard::Enter)
+		{
+			if (chosen == 0)
+			{
+				if (titlestr.empty())
+					titlewritten.setText(titleresetstr);
+				chosen = 1;
+				setText();
+			}
+		}
+		else if (event.key.code == sf::Keyboard::Up)
+		{
+			if (chosen == 1)
+			{
+				if (titlestr.empty())
+					titlewritten.setText(cmm::SEMPTY);
+				if (specsstr.empty())
+					specswritten.setText(specsresetstr);
+				chosen = 0;
+				setText();
+			}
+		}
+		else if (event.key.code == sf::Keyboard::Down)
+		{
+			if (chosen == 0)
+			{
+				if (titlestr.empty())
+					titlewritten.setText(titleresetstr);
+				if (specsstr.empty())
+					specswritten.setText(cmm::SEMPTY);
+				chosen = 1;
+				setText();
 			}
 		}
 	}
@@ -202,11 +304,41 @@ void EADetails::mechanics(const double &elapsedTime)
 
 void EADetails::setText()
 {
-	
-	setTextPosition();
+	float specswidth = -1;
+	std::string titlebuf = titlewritten.getString();
+	if (specswritten.getRight() + plank.getWidth() / 30 > plank.getRight())
+	{
+		// manipulation...
+		std::string str = specswritten.getString();
+		std::string buf = cmm::SEMPTY;
+		std::string widthstr = "";
+		for (size_t i = 0; i < str.size(); ++i)
+		{
+			buf += str[i];
+			widthstr += str[i];
+			specswritten.setText(buf);
+			if (specswritten.getRight() + plank.getWidth() / 30 > plank.getRight())
+			{
+				buf.pop_back();
+				buf += cmm::CNEWLINE;
+				buf += str[i];
+				widthstr.clear();
+				widthstr += str[i];
+			}
+		}
+
+		if (widthstr.size() > 1)
+		{
+			titlewritten.setText(widthstr);
+			specswidth = titlewritten.getWidth();
+		}
+	}
+
+	titlewritten.setText(titlebuf);
+	setTextPosition(specswidth);
 }
 
-void EADetails::setTextPosition()
+void EADetails::setTextPosition(float specswidth)
 {
 	titlewritten.setPosition(titleform.getX(), titleform.getBot() + plank.getHeight() / 30);
 	specswritten.setPosition(specsform.getX(), specsform.getBot() + plank.getHeight() / 30);
@@ -216,5 +348,29 @@ void EADetails::setTextPosition()
 	if (chosen == 0)
 		arrow.setPosition(titlewritten.getX() + titlewritten.getWidth(), titlewritten.getY());
 	else if (chosen == 1)
-		arrow.setPosition(specswritten.getX() + specswritten.getWidth(), specswritten.getY());
+	{
+		if (specswidth == -1)
+			specswidth = specswritten.getWidth();
+		arrow.setPosition(specswritten.getX() + specswidth, specswritten.getBot() - plank.getHeight() / 30);
+	}
+}
+
+bool EADetails::isPossibleKey(const sf::Uint8 &code) const
+{
+	if (code >= 48 && code <= 57)	// 0 .. 9
+	{
+		return true;
+	}
+	else if (code >= 65 && code <= 90)	// A .. Z
+	{
+		return true;
+	}
+	else if (code >= 97 && code <= 122) // a .. z
+	{
+		return true;
+	}
+	else if (code == 32) // space
+		return true;
+
+	return false;
 }
