@@ -91,11 +91,11 @@ void EAHistory::add(const ee::Item &item)
 {
 	items.push_back(item);
 
-	content.push_back("t:" + std::to_string(item.type) + " "
-		+ "c:" + std::to_string(item.chosen) + " "
-		+ "x:" + std::to_string(item.position.x) + " "
-		+ "y:" + std::to_string(item.position.y) + " "
-		+ "id:" + std::to_string(item.ID) + " "
+	content.push_back("t:" + std::to_string(item.type) + cmm::SSPACE
+		+ "c:" + std::to_string(item.chosen) + cmm::SSPACE
+		+ "x:" + std::to_string(item.position.x) + cmm::SSPACE
+		+ "y:" + std::to_string(item.position.y) + cmm::SSPACE
+		+ "id:" + std::to_string(item.ID) + cmm::SSPACE
 		+ "ai:" + item.ai + cmm::SNEWLINE);
 	saveVersion = 1;
 }
@@ -200,11 +200,11 @@ void EAHistory::modify(const ee::Item &item)
 		int index = std::distance(items.begin(), it);
 
 		items[index].ai = item.ai;
-		std::string new_one = "t:" + std::to_string(item.type) + " "
-			+ "c:" + std::to_string(item.chosen) + " "
-			+ "x:" + std::to_string(item.position.x) + " "
-			+ "y:" + std::to_string(item.position.y) + " "
-			+ "id:" + std::to_string(item.ID) + " "
+		std::string new_one = "t:" + std::to_string(item.type) + cmm::SSPACE
+			+ "c:" + std::to_string(item.chosen) + cmm::SSPACE
+			+ "x:" + std::to_string(item.position.x) + cmm::SSPACE
+			+ "y:" + std::to_string(item.position.y) + cmm::SSPACE
+			+ "id:" + std::to_string(item.ID) + cmm::SSPACE
 			+ "ai:" + item.ai + cmm::SNEWLINE;
 		content[index] = new_one;
 
@@ -231,11 +231,11 @@ void EAHistory::modify(const ee::Item &item)
 			int index = result[0];
 			items[index].ai = item.ai;
 
-			std::string new_one = "t:" + std::to_string(item.type) + " "
-				+ "c:" + std::to_string(item.chosen) + " "
-				+ "x:" + std::to_string(item.position.x) + " "
-				+ "y:" + std::to_string(item.position.y) + " "
-				+ "id:" + std::to_string(item.ID) + " "
+			std::string new_one = "t:" + std::to_string(item.type) + cmm::SSPACE
+				+ "c:" + std::to_string(item.chosen) + cmm::SSPACE
+				+ "x:" + std::to_string(item.position.x) + cmm::SSPACE
+				+ "y:" + std::to_string(item.position.y) + cmm::SSPACE
+				+ "id:" + std::to_string(item.ID) + cmm::SSPACE
 				+ "ai:" + item.ai + cmm::SNEWLINE;
 			content[index] = new_one;
 			saveVersion = 1;

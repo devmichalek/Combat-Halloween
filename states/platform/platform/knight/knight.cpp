@@ -297,7 +297,7 @@ void pla::Knight::read(std::string &str)
 {
 	xy.x = boost::lexical_cast<int>(cmm::extractFromString(str, "x:", cmm::CSPACE)) + sprites[IDLE]->getWidth() / 2;
 	xy.y = (boost::lexical_cast<int>(cmm::extractFromString(str, "y:", cmm::CSPACE)) * -1) + screen_h;
-	if (cmm::extractFromString(str, "ai:", cmm::CNEWLINE) != "")
+	if (cmm::extractFromString(str, "ai:", cmm::CNEWLINE) != cmm::SEMPTY)
 	{
 		specs.set(specs.HEART_POINTS, boost::lexical_cast<int>(cmm::extractFromString(str, "hp:", ',')));
 		specs.set(specs.MAGIC_POINTS, boost::lexical_cast<int>(cmm::extractFromString(str, "mp:", ',')));

@@ -102,9 +102,9 @@ void EADetails::load(const float& screen_w, const float& screen_h)
 	specsform.		setAlpha(MAX_ALPHA);
 	specswritten.	setAlpha(MAX_ALPHA);
 	info.			setText("Welcome to the world's details. Here you\ncan easily change the world's title and the\ndescription of the world. Click on the text\nto change it.");
-	titleform.		setText("Title: ");
+	titleform.		setText("Title:");
 	titlewritten.	setText(titleresetstr);
-	specsform.		setText("Description");
+	specsform.		setText("Description:");
 	specswritten.	setText(specsresetstr);
 	info.setPosition(plank.getX() + screen_w / 128, plank.getY() + screen_h / 144);
 	titleform.setPosition(info.getX(), info.getBot() + plank.getHeight() / 20);
@@ -311,7 +311,7 @@ void EADetails::setText()
 		// manipulation...
 		std::string str = specswritten.getString();
 		std::string buf = cmm::SEMPTY;
-		std::string widthstr = "";
+		std::string widthstr = cmm::SEMPTY;
 		for (size_t i = 0; i < str.size(); ++i)
 		{
 			buf += str[i];

@@ -142,7 +142,7 @@ void FoeFactory::load(const float &screen_w, const float &screen_h)
 			states.push_back(boost::lexical_cast<int>(value));
 
 			// Offsets.
-			value = cmm::extractFromString(data, "offsets: ", cmm::CNEWLINE) + " ";
+			value = cmm::extractFromString(data, "offsets: ", cmm::CNEWLINE) + cmm::SSPACE;
 			std::string buf = cmm::SEMPTY;
 			for (auto jt : value)
 			{

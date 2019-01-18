@@ -105,9 +105,9 @@ void Login::load(const float &screen_w, const float &screen_h)
 	arrow.setText("|");
 	username_form.setText("Username: ");
 	password_form.setText("Password: ");
-	username_written.setText(" ");
-	password_written.setText(" ");
-	info.setText(" ");
+	username_written.setText(cmm::SSPACE);
+	password_written.setText(cmm::SSPACE);
+	info.setText(cmm::SSPACE);
 
 	// Set size.
 	size = static_cast<int>(screen_h / 20);
@@ -192,14 +192,14 @@ void Login::handle(const sf::Event &event)
 					if (state == 0 && username.size() >= 1)
 					{
 						username.pop_back();
-						if (username.empty())	username_written.setText(" ");
+						if (username.empty())	username_written.setText(cmm::SSPACE);
 						else					username_written.setText(username);
 						organizeWritten();
 					}
 					else if (state == 1 && password.size() >= 1)
 					{
 						password.pop_back();
-						if (password.empty())	password_written.setText(" ");
+						if (password.empty())	password_written.setText(cmm::SSPACE);
 						else					password_written.setText(getPassword());
 						organizeWritten();
 					}

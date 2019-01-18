@@ -30,7 +30,7 @@ public:
 
 private:
 	void resetLine();
-	void resetCounter(); 
+	void resetCounter();
 public:
 	void setFrequency(float seconds = 8);
 
