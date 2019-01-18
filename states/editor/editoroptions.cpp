@@ -173,6 +173,9 @@ void EditorOptions::handle(const sf::Event &event)
 				return;
 			}
 
+			if (!active)
+				return;
+
 			if (leftbutton.checkCollision(x, y))
 			{
 				if (isAbleToGoLeft())
