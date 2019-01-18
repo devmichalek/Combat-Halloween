@@ -17,10 +17,19 @@ class EADetails final
 	cmm::Text titlewritten;
 	cmm::Text specsform;
 	cmm::Text specswritten;
+	std::string titlestr;
+	std::string specsstr;
+	std::string titleresetstr;
+	std::string specsresetstr;
 
 	int chosen;
 	sf::IntRect titlerect;
 	sf::IntRect specsrect;
+
+	unsigned max_length_title;
+	unsigned min_length_title;
+	unsigned max_length_specs;
+	unsigned min_length_specs;
 
 	cmm::Text arrow;
 	float arrow_counter;
@@ -45,5 +54,6 @@ public:
 
 private:
 	void setText();
-	void setTextPosition();
+	void setTextPosition(float specswidth = -1);
+	bool isPossibleKey(const sf::Uint8 &code) const;
 };
