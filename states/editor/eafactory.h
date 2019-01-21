@@ -27,6 +27,7 @@ public:
 	void draw(sf::RenderWindow* &window, const sf::Vector2i &add, const bool &grid);
 	void print(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
+	void circulation(); // Look for updates, reload if needed.
 
 	bool isActive()						{ return tools.details.isActive(); }
 	bool isChange()						{ return tools.isChange(); }

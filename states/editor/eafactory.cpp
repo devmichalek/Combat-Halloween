@@ -205,23 +205,6 @@ void EAFactory::mechanics(const double &elapsedTime)
 			entities[type]->remove(position);
 	}
 
-	if (history.isNewLoadVersion())	// clear everything and reload it
-	{
-		history.clear_local();
-		history.fill_local();
-
-		for (auto &it : entities)
-			it->reset();
-
-		ee::Item item;
-		while (history.next())
-		{
-			item = history.getItem();
-			if (entities[item.type]->add(item))
-				entities[item.type]->getItem();
-		}
-	}
-
 	tools.mechanics(elapsedTime);
 
 	for (auto &it : entities)
@@ -234,11 +217,41 @@ void EAFactory::mechanics(const double &elapsedTime)
 	for (auto &it : entities)
 		if (it->isModified())
 		{
-			it->setActive(false); // to be sure
+			it->setActive(false); // To be sure.
 			ee::Item item = it->getItem();
 			history.modify(item);
 			break;
 		}
+}
+
+void EAFactory::circulation()
+{
+	if (history.isNewLoadVersion())
+	{	// Clear everything and reload it.
+		history.clear_local();
+		history.fill_local();
+
+		for (auto &it : entities)
+			it->reset();
+
+		ee::Item item;
+		while (history.next())
+		{
+			item = history.getItem();
+			if (item.type >= 0 || item.type < entities.size())
+			{
+				if (entities[item.type]->add(item))
+					entities[item.type]->getItem();
+			}
+			else
+			{	// Special cases.
+				if (item.type == tools.WORLDTITLE)
+					tools.details.setTitle(item.ai);
+				else if (item.type == tools.WORLDDESCRIPTION)
+					tools.details.setDescription(item.ai);
+			}
+		}
+	}
 }
 
 void EAFactory::add(ee::Item &data)
