@@ -304,7 +304,7 @@ bool EditorFileManager::isYes()
 void EditorFileManager::openMessageBoard()
 {
 	messageBoard.setActive();
-	messageBoard.setMessage("There is unsaved file." + cmm::SNEWLINE + "Do you want to continue?");
+	messageBoard.setMessage("There is unsaved data." + cmm::SNEWLINE + "Do you want to continue?");
 }
 
 
