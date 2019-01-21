@@ -46,9 +46,12 @@ void EAHistory::fill_local()
 		if (pos == std::string::npos)
 		{
 			pos = content[i].find("id:") + 3;
-			size_t length = content[i].find(" ai:") - pos;
-			content[i].replace(pos, length, std::to_string(id_counter));
-			++id_counter;
+			if (pos != std::string::npos)
+			{
+				size_t length = content[i].find(" ai:") - pos;
+				content[i].replace(pos, length, std::to_string(id_counter));
+				++id_counter;
+			}
 		}
 	}
 
@@ -56,13 +59,12 @@ void EAHistory::fill_local()
 	ee::Item item;
 	for (auto &it : content)
 	{
-		item.type = boost::lexical_cast<int>(cmm::extractFromString(it, "t:", cmm::CSPACE));
-		item.chosen = boost::lexical_cast<int>(cmm::extractFromString(it, "c:", cmm::CSPACE));
-		item.position.x = boost::lexical_cast<int>(cmm::extractFromString(it, "x:", cmm::CSPACE));
-		item.position.y = boost::lexical_cast<int>(cmm::extractFromString(it, "y:", cmm::CSPACE));
-		item.ID = boost::lexical_cast<int>(cmm::extractFromString(it, "id:", cmm::CSPACE));
+		item.type =			boost::lexical_cast<int>(cmm::extractFromString(it, "t:", cmm::CSPACE));
+		item.chosen =		boost::lexical_cast<int>(cmm::extractFromString(it, "c:", cmm::CSPACE));
+		item.position.x =	boost::lexical_cast<int>(cmm::extractFromString(it, "x:", cmm::CSPACE));
+		item.position.y =	boost::lexical_cast<int>(cmm::extractFromString(it, "y:", cmm::CSPACE));
+		item.ID =			boost::lexical_cast<int>(cmm::extractFromString(it, "id:", cmm::CSPACE));
 		item.ai = cmm::extractFromString(it, "ai:", cmm::CNEWLINE);
-
 		items.push_back(item);
 		++counterID;
 	}
@@ -145,7 +147,6 @@ void EAHistory::remove(const ee::Item &item)
 		content.erase(content.begin() + std::distance(items.begin(), it));
 		items.erase(it);
 		saveVersion = 1;
-		return;
 	}
 	else //  ID is unknown
 	{

@@ -223,9 +223,9 @@ void EATools::handle(const sf::Event &event, const int &amount)
 				case sf::Keyboard::Z:	(chosen > 0)			? (--chosen)	: (chosen = amount - 1);break;
 				case sf::Keyboard::X:	(chosen == 0)			? (chosen = 0)	: (chosen /= 2);		break;
 				case sf::Keyboard::C:	(chosen < amount - 1)	? (++chosen)	: (chosen = 0);			break;
-				case sf::Keyboard::A:	(type > VOID)			? (--type)		: (type = AMOUNT);		break;
+				case sf::Keyboard::A:	(type > VOID)			? (--type)		: (type = LAST);		break;
 				case sf::Keyboard::S:	(type = VOID);													break;
-				case sf::Keyboard::D:	(type < AMOUNT)			? (++type)		: (type = VOID + 1);	break;
+				case sf::Keyboard::D:	(type < LAST)			? (++type)		: (type = VOID + 1);	break;
 				default:				(change = false);												break;
 			}
 
