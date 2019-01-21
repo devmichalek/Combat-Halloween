@@ -51,6 +51,8 @@ public:
 	void draw(sf::RenderWindow* &window);
 	void mechanics(const double &elapsedTime);
 	bool isActive() { return active; };
+	void setTitle(std::string newTitle);
+	void setDescription(std::string newDescription);
 
 private:
 	void setText();

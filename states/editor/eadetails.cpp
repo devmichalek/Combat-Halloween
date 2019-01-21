@@ -18,10 +18,10 @@ void EADetails::free()
 	titleresetstr = "Yellowstone";
 	specsresetstr = "Stone is yellow.";
 	arrow_line = 0.5;	// 0.5 sec.
-	max_length_title = 25;
+	max_length_title = 90;
 	min_length_title = 1;
-	max_length_specs = 72;
-	min_length_specs = 1;
+	max_length_specs = max_length_title * 3;
+	min_length_specs = min_length_title;
 	reset();
 }
 
@@ -101,7 +101,7 @@ void EADetails::load(const float& screen_w, const float& screen_h)
 	titlewritten.	setAlpha(MAX_ALPHA);
 	specsform.		setAlpha(MAX_ALPHA);
 	specswritten.	setAlpha(MAX_ALPHA);
-	info.			setText("Welcome to the world's details. Here you\ncan easily change the world's title and the\ndescription of the world. Click on the text\nto change it.");
+	info.			setText("Welcome to the world's details. Here you\ncan easily change the title and the\ndescription of the world. Click on the text\nto change it.");
 	titleform.		setText("Title:");
 	titlewritten.	setText(titleresetstr);
 	specsform.		setText("Description:");
@@ -302,48 +302,96 @@ void EADetails::mechanics(const double &elapsedTime)
 	}
 }
 
+void EADetails::setTitle(std::string newTitle)
+{
+	titlestr = newTitle;
+	titlewritten.setText(titlestr);
+	setText();
+}
+
+void EADetails::setDescription(std::string newDescription)
+{
+	specsstr = newDescription;
+	specswritten.setText(specsstr);
+	setText();
+}
+
 void EADetails::setText()
 {
-	float specswidth = -1;
-	std::string titlebuf = titlewritten.getString();
-	if (specswritten.getRight() + plank.getWidth() / 30 > plank.getRight())
+	float width = -1;
+	float right = plank.getRight() - plank.getWidth() / 30;
+
+	// Check title.
+	if (titlewritten.getRight() > right)
 	{
-		// manipulation...
+		while (true)
+		{
+			if (titlestr.size() > 0 && titlewritten.getRight() > right)
+			{
+				titlestr.pop_back();
+				titlewritten.setText(titlestr);
+				setTextPosition(width);
+			}
+			else
+				break;
+		}
+	}
+
+	// Check description.
+	std::string titleBuffer = titlewritten.getString();
+	std::string buf = specswritten.getString();
+	std::replace(buf.begin(), buf.end(), cmm::CNEWLINE, char(0));
+	specswritten.setText(buf);
+	if (specswritten.getRight() > right)
+	{
+		// Some manipulation...
+		int stage = 0, maxStage = 2;
 		std::string str = specswritten.getString();
-		std::string buf = cmm::SEMPTY;
+		buf = cmm::SEMPTY;
 		std::string widthstr = cmm::SEMPTY;
+
 		for (size_t i = 0; i < str.size(); ++i)
 		{
 			buf += str[i];
 			widthstr += str[i];
 			specswritten.setText(buf);
-			if (specswritten.getRight() + plank.getWidth() / 30 > plank.getRight())
+			if (specswritten.getRight() > right)
 			{
+				++stage;
 				buf.pop_back();
+				widthstr.clear();
+
+				if (stage > maxStage)
+					break;
+
+				widthstr += str[i];
 				buf += cmm::CNEWLINE;
 				buf += str[i];
-				widthstr.clear();
-				widthstr += str[i];
 			}
 		}
 
+		specsstr = specswritten.getString();
+		std::replace(specsstr.begin(), specsstr.end(), cmm::CNEWLINE, char(0));
 		if (widthstr.size() > 1)
 		{
 			titlewritten.setText(widthstr);
-			specswidth = titlewritten.getWidth();
+			width = titlewritten.getWidth();
 		}
 	}
 
-	titlewritten.setText(titlebuf);
-	setTextPosition(specswidth);
+	// Set title back.
+	titlewritten.setText(titleBuffer);
+
+	// Prepare position.
+	setTextPosition(width);
 }
 
 void EADetails::setTextPosition(float specswidth)
 {
 	titlewritten.setPosition(titleform.getX(), titleform.getBot() + plank.getHeight() / 30);
 	specswritten.setPosition(specsform.getX(), specsform.getBot() + plank.getHeight() / 30);
-	titlerect = sf::IntRect(plank.getX(), titlewritten.getY(), titlewritten.getWidth(), titlewritten.getHeight());
-	specsrect = sf::IntRect(plank.getX(), specswritten.getY(), specswritten.getWidth(), specswritten.getHeight());
+	titlerect = sf::IntRect(plank.getX(), titlewritten.getY(), titlewritten.getWidth(), titlewritten.getHeight()*1.5f);
+	specsrect = sf::IntRect(plank.getX(), specswritten.getY(), specswritten.getWidth(), specswritten.getHeight()*1.5f);
 
 	if (chosen == 0)
 		arrow.setPosition(titlewritten.getX() + titlewritten.getWidth(), titlewritten.getY());
