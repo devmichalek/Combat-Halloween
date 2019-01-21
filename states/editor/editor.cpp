@@ -110,12 +110,8 @@ void Editor::mechanics(const double &elapsedTime)
 
 	if (!isState())
 	{
-		navigation.disablePlay(fileManager.isFileOpen());
-
-		if (fileManager.isFileUnsave())
-		{
-			navigation.disablePlay(false);
-		}
+		if (fileManager.isFileOpen())
+			navigation.disablePlay(!fileManager.isFileUnsave());
 
 		// Back to menu.
 		if (navigation.isHome())
@@ -159,9 +155,7 @@ void Editor::mechanics(const double &elapsedTime)
 
 		// Start test game.
 		else if (navigation.isPlay())
-		{
 			next = true;
-		}
 
 		if (options.isActive())
 			return;
@@ -179,6 +173,7 @@ void Editor::mechanics(const double &elapsedTime)
 			factory.setPosition(grid.getX(), grid.getY());
 			factory.mechanics(elapsedTime);
 		}
+		factory.circulation();
 	}
 }
 
