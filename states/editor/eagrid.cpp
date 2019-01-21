@@ -148,7 +148,7 @@ void EAGrid::draw(sf::RenderWindow* &window)
 		window->draw(lineX);
 		window->draw(lineY);
 
-		xyText.setPosition(mouseX + TILE_WIDTH / 8, mouseY - TILE_WIDTH / 4 - xyText.getHeight());
+		xyText.setPosition(mouseX - TILE_WIDTH / 8 - xyText.getWidth(), mouseY - TILE_WIDTH / 4 - xyText.getHeight());
 	}
 	else
 	{
