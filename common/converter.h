@@ -21,4 +21,5 @@ namespace cmm
 	bool removeExtension(std::string &str);
 	bool removeDoubleQuotes(std::string &str);
 	std::string extractFromString(std::string &line, std::string seek, char until);
+	void erase_all(std::string &str, char seek);
 }

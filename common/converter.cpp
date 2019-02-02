@@ -115,3 +115,15 @@ std::string cmm::extractFromString(std::string &line, std::string seek, char unt
 
 	return "";
 }
+
+void cmm::erase_all(std::string &str, char seek)
+{
+	std::string buf = "";
+	for (auto i : str)
+	{
+		if (i != seek)
+			buf += i;
+	}
+
+	str = buf;
+}
