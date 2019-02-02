@@ -2,6 +2,7 @@
 #include "loading.h"
 #include "colors.h"
 #include "definitions.h"
+#include "converter.h"
 
 EADetails::EADetails()
 {
@@ -326,7 +327,7 @@ void EADetails::setText()
 	{
 		while (true)
 		{
-			if (titlestr.size() > 0 && titlewritten.getRight() > right)
+			if (!titlestr.empty() && titlewritten.getRight() > right)
 			{
 				titlestr.pop_back();
 				titlewritten.setText(titlestr);
@@ -339,39 +340,38 @@ void EADetails::setText()
 
 	// Check description.
 	std::string titleBuffer = titlewritten.getString();
-	std::string buf = specswritten.getString();
-	std::replace(buf.begin(), buf.end(), cmm::CNEWLINE, char(0));
-	specswritten.setText(buf);
+	std::string specsbuf = specswritten.getString();
+	cmm::erase_all(specsbuf, cmm::CNEWLINE);
+	specswritten.setText(specsbuf);
 	if (specswritten.getRight() > right)
-	{
-		// Some manipulation...
+	{	// Some manipulation...
 		int stage = 0, maxStage = 2;
 		std::string str = specswritten.getString();
-		buf = cmm::SEMPTY;
+		specsbuf = cmm::SEMPTY;
 		std::string widthstr = cmm::SEMPTY;
 
 		for (size_t i = 0; i < str.size(); ++i)
 		{
-			buf += str[i];
+			specsbuf += str[i];
 			widthstr += str[i];
-			specswritten.setText(buf);
+			specswritten.setText(specsbuf);
 			if (specswritten.getRight() > right)
 			{
 				++stage;
-				buf.pop_back();
+				specsbuf.pop_back();
 				widthstr.clear();
 
 				if (stage > maxStage)
 					break;
 
 				widthstr += str[i];
-				buf += cmm::CNEWLINE;
-				buf += str[i];
+				specsbuf += cmm::CNEWLINE;
+				specsbuf += str[i];
 			}
 		}
 
 		specsstr = specswritten.getString();
-		std::replace(specsstr.begin(), specsstr.end(), cmm::CNEWLINE, char(0));
+		cmm::erase_all(specsstr, cmm::CNEWLINE);
 		if (widthstr.size() > 1)
 		{
 			titlewritten.setText(widthstr);
