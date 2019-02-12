@@ -33,6 +33,8 @@ public:
 	void push(const std::string &line);
 	void pop();
 	void optimize();
+	void decToHexContent();
+	void hexToDecContent();
 
 	void save();
 	void open();

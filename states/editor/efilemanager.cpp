@@ -143,6 +143,53 @@ void EFileManager::optimize()
 	}
 }
 
+void EFileManager::decToHexContent()
+{
+	std::stringstream stream;
+	std::string t, c, x, y;
+	int pos;
+
+	for (auto &it : content)
+	{
+		t = cmm::extractFromString(it, "t:", cmm::CSPACE);
+		stream << std::hex << std::stoi(t);
+		t = stream.str(); stream.str("");
+		c = cmm::extractFromString(it, "c:", cmm::CSPACE);
+		stream << std::hex << std::stoi(c);
+		c = stream.str(); stream.str("");
+		x = cmm::extractFromString(it, "x:", cmm::CSPACE);
+		stream << std::hex << std::stoi(x);
+		x = stream.str(); stream.str("");
+		y = cmm::extractFromString(it, "y:", cmm::CSPACE);
+		stream << std::hex << std::stoi(y);
+		y = stream.str(); stream.str("");
+
+		pos = it.find("t:") + 2; it.replace(pos, (it.find(" c:") - pos), t);
+		pos = it.find("c:") + 2; it.replace(pos, (it.find(" x:") - pos), c);
+		pos = it.find("x:") + 2; it.replace(pos, (it.find(" y:") - pos), x);
+		pos = it.find("y:") + 2; it.replace(pos, (it.find(" id:") - pos), y);
+	}
+}
+
+void EFileManager::hexToDecContent()
+{
+	std::string t, c, x, y;
+	int pos;
+
+	for (auto &it : content)
+	{
+		t = cmm::extractFromString(it, "t:", cmm::CSPACE); t = std::to_string(strtol(t.c_str(), nullptr, 16));
+		c = cmm::extractFromString(it, "c:", cmm::CSPACE); c = std::to_string(strtol(c.c_str(), nullptr, 16));
+		x = cmm::extractFromString(it, "x:", cmm::CSPACE); x = std::to_string(strtol(x.c_str(), nullptr, 16));
+		y = cmm::extractFromString(it, "y:", cmm::CSPACE); y = std::to_string(strtol(y.c_str(), nullptr, 16));
+
+		pos = it.find("t:") + 2; it.replace(pos, (it.find(" c:") - pos), t);
+		pos = it.find("c:") + 2; it.replace(pos, (it.find(" x:") - pos), c);
+		pos = it.find("x:") + 2; it.replace(pos, (it.find(" y:") - pos), x);
+		pos = it.find("y:") + 2; it.replace(pos, (it.find(" id:") - pos), y);
+	}
+}
+
 
 // ACTIONS -----------------------------------------
 void EFileManager::save()
@@ -273,8 +320,9 @@ void EFileManager::thread_save()
 	else
 	{
 		optimize(); // before saving
+		decToHexContent();
 		savePrivate(loadedFileName, content, dirPath, dirVec);
-
+		hexToDecContent();
 		if (status == SUCCESS)
 		{
 			saveVersion = 0;
@@ -304,6 +352,7 @@ void EFileManager::thread_open()
 	else
 	{
 		openPrivate(chosenFileName, content, dirPath);
+		hexToDecContent();
 		optimize(); // after loading
 
 		if (status == SUCCESS)
@@ -320,7 +369,9 @@ void EFileManager::thread_open()
 void EFileManager::thread_upload()
 {
 	optimize(); // before uploading
+	decToHexContent();
 	uploadPrivate(chosenFileName, dirPath, dirVec);
+	hexToDecContent();
 
 	if (status == SUCCESS)
 	{
