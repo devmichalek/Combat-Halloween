@@ -25,6 +25,8 @@ class EADetails final
 	int chosen;
 	sf::IntRect titlerect;
 	sf::IntRect specsrect;
+	bool newTitle;
+	bool newDescription;
 
 	unsigned max_length_title;
 	unsigned min_length_title;
@@ -53,6 +55,11 @@ public:
 	bool isActive() { return active; };
 	void setTitle(std::string newTitle);
 	void setDescription(std::string newDescription);
+
+	bool &isNewTitle();
+	bool &isNewDescription();
+	const std::string &getTitle();
+	const std::string &getDescription();
 
 private:
 	void setText();

@@ -317,6 +317,26 @@ void EADetails::setDescription(std::string newDescription)
 	setText();
 }
 
+bool &EADetails::isNewTitle()
+{
+	return newTitle;
+}
+
+bool &EADetails::isNewDescription()
+{
+	return newDescription;
+}
+
+const std::string &EADetails::getTitle()
+{
+	return titlestr;
+}
+
+const std::string &EADetails::getDescription()
+{
+	return specsstr;
+}
+
 void EADetails::setText()
 {
 	float width = -1;
