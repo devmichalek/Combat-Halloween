@@ -102,6 +102,19 @@ void EAHistory::add(const ee::Item &item)
 	saveVersion = 1;
 }
 
+bool EAHistory::force(const ee::Item &item)
+{
+	for (auto &i : items) {
+		if (i.type == item.type) {
+			modify(item);
+			return true;
+		}
+	}
+
+	add(item);
+	return false;
+}
+
 bool EAHistory::tryUndo(int &t, int &x, int &y)
 {
 	if (items.empty())
