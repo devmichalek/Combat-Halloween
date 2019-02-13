@@ -23,6 +23,7 @@ public:
 	const ee::Item &getItem();
 
 	void add(const ee::Item &item);
+	bool force(const ee::Item &item);
 	bool tryUndo(int &t, int &x, int &y);
 	std::vector<ee::Item>::iterator getIteratorByID(const int &ID);
 	void remove(const ee::Item &item);
