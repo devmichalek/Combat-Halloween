@@ -197,6 +197,14 @@ void EAFactory::mechanics(const double &elapsedTime)
 		return;
 	}
 
+	if (tools.details.isNewTitle()) {
+		history.force(tools.details.getTitleItem());
+	}
+
+	if (tools.details.isNewDescription()) {
+		history.force(tools.details.getDescriptionItem());
+	}
+
 	if (tools.isUndoKeyElapsed())
 	{
 		int type;
@@ -238,7 +246,7 @@ void EAFactory::circulation()
 		while (history.next())
 		{
 			item = history.getItem();
-			if (item.type >= 0 || item.type < entities.size())
+			if (item.type >= 0 && item.type < entities.size())
 			{
 				if (entities[item.type]->add(item))
 					entities[item.type]->getItem();
