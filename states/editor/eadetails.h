@@ -1,6 +1,8 @@
 #pragma once
 #include "text.h"
 #include "circlebutton.h"
+#include "content.h"
+#include "eeitem.h"
 #include <SFML/Graphics/RectangleShape.hpp>
 
 class EADetails final
@@ -27,6 +29,7 @@ class EADetails final
 	sf::IntRect specsrect;
 	bool newTitle;
 	bool newDescription;
+	ee::Item item;
 
 	unsigned max_length_title;
 	unsigned min_length_title;
@@ -56,10 +59,10 @@ public:
 	void setTitle(std::string newTitle);
 	void setDescription(std::string newDescription);
 
-	bool &isNewTitle();
-	bool &isNewDescription();
-	const std::string &getTitle();
-	const std::string &getDescription();
+	bool isNewTitle();
+	bool isNewDescription();
+	const ee::Item &getTitleItem();
+	const ee::Item &getDescriptionItem();
 
 private:
 	void setText();

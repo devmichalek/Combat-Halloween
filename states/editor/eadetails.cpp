@@ -16,6 +16,11 @@ EADetails::~EADetails()
 
 void EADetails::free()
 {
+	item.position.x = 0;
+	item.position.y = 0;
+	item.chosen = 0;
+	item.ID = -1;
+
 	titleresetstr = "Yellowstone";
 	specsresetstr = "Stone is yellow.";
 	arrow_line = 0.5;	// 0.5 sec.
@@ -33,6 +38,8 @@ void EADetails::reset()
 	chosen = -1;
 	arrow_counter = 0;
 	active = false;
+	newTitle = false;
+	newDescription = false;
 }
 
 void EADetails::load(const float& screen_w, const float& screen_h)
@@ -173,6 +180,9 @@ void EADetails::handle(const sf::Event &event)
 				{
 					button.setActive(false);
 					reset();
+
+					newTitle = true;
+					newDescription = true;
 				}
 			}
 		}
@@ -317,24 +327,39 @@ void EADetails::setDescription(std::string newDescription)
 	setText();
 }
 
-bool &EADetails::isNewTitle()
+bool EADetails::isNewTitle()
 {
-	return newTitle;
+	if (newTitle) {
+		newTitle = false;
+		return true;
+	}
+
+	return false;
 }
 
-bool &EADetails::isNewDescription()
+bool EADetails::isNewDescription()
 {
-	return newDescription;
+	if (newDescription) {
+		newDescription = false;
+		return true;
+	}
+
+	return false;
 }
 
-const std::string &EADetails::getTitle()
+const ee::Item &EADetails::getTitleItem()
 {
-	return titlestr;
+	item.type = cmm::Kind::WORLDTITLE;
+	item.ai = titlewritten.getString();
+	return item;
 }
 
-const std::string &EADetails::getDescription()
+const ee::Item &EADetails::getDescriptionItem()
 {
-	return specsstr;
+	item.type = cmm::Kind::WORLDDESCRIPTION;
+	item.ai = specswritten.getString();
+	cmm::erase_all(item.ai, cmm::CNEWLINE);
+	return item;
 }
 
 void EADetails::setText()
@@ -438,6 +463,15 @@ bool EADetails::isPossibleKey(const sf::Uint8 &code) const
 		return true;
 	}
 	else if (code == 32) // space
+		return true;
+
+	else if (code == 63) // ?
+		return true;
+
+	else if (code == 46) // .
+		return true;
+
+	else if (code == 44) // ,
 		return true;
 
 	return false;
