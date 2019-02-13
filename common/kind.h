@@ -15,8 +15,8 @@ namespace cmm
 			FOE,
 			LIGHTPOINT,
 			LAST,
-			WORLDTITLE = static_cast<int>(MAX_ALPHA) - 1,
-			WORLDDESCRIPTION = static_cast<int>(MAX_ALPHA),
+			WORLDTITLE = 0xFF,
+			WORLDDESCRIPTION = 0xFE,
 			AMOUNT
 		};
 
